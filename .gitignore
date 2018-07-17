@@ -1,0 +1,34 @@
+public/*.js*
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Packages
+node_modules
+jspm_packages
+
+# Binaries
+bin
+obj
+
+# Output
+build
+
+.fake/
+paket-files/
+packages/
+public/js/
+public/libs/
+
+public/*.eot
+public/*.svg
+public/*.woff2
+public/*.ttf
+public/*.woff

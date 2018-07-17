@@ -1,0 +1,23 @@
+source https://nuget.org/api/v2
+storage:none
+
+clitool dotnet-fable prerelease
+nuget Fable.Core prerelease
+nuget Fable.Import.Browser
+nuget Fable.React prerelease
+nuget Fulma prerelease
+nuget Fable.Elmish
+nuget Fable.Elmish.React prerelease
+nuget Thot.Json
+nuget Fable.PowerPack
+
+github fable-compiler/Fable src/dotnet/Fable.JS/Interfaces.fs
+
+group Build
+framework: net46
+
+    source https://nuget.org/api/v2
+    nuget FSharp.Core  redirects:force, content:none
+    nuget FAKE
+    github fsharp/FAKE modules/Octokit/Octokit.fsx
+    github fable-compiler/fake-helpers Fable.FakeHelpers.fs

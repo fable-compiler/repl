@@ -1,0 +1,115 @@
+
+$body-size: 14px;
+
+@import 'node_modules/bulma/bulma';
+@import './menu-group';
+
+$fa-font-path: "./../../../node_modules/font-awesome/fonts/";
+@import './../../../node_modules/font-awesome/scss/font-awesome';
+
+$tabs-header-height: 42px;
+
+html {
+    overflow-y: hidden;
+}
+
+.page-content {
+    height: calc(100vh - #{$navbar-height});
+    widows: 100%;
+    display: flex;
+
+    .sidebar {
+        display: block;
+        flex: none;
+        width: 250px;
+        background-color: $grey-dark;
+
+        .card-header {
+            cursor: pointer;
+        }
+    }
+
+    .main-content {
+        display: block;
+        flex-basis: 0;
+        flex-grow: 1;
+        flex-shrink: 1;
+
+        .horizontal-resize {
+            width: 6px;
+            margin-left: -3px;
+            background-color: #505050;
+            cursor: ew-resize;
+            z-index: 1000;
+        }
+
+        .vertical-resize {
+            height: 8px;
+            margin-top: -4px;
+            background-color: #505050;
+            cursor: ns-resize;
+            z-index: 1000;
+        }
+
+        .editor-container {
+            height: 100%;
+            background-color: #363636;
+
+            .card {
+                background-color: #1e1e1e;
+
+                .card-header {
+                    background-color: white;
+                    cursor: pointer;
+
+                    .icon {
+                        color: $dark;
+
+                        &:hover {
+                            color: grey;
+                        }
+                    }
+                }
+
+                .card-content {
+                    padding: 0;
+                    height: calc(100% - 3em); // Compensate the line-height: 1.5; of the header
+
+                    .editor-fsharp,
+                    .editor-html {
+                        height: 100%;
+                    }
+
+                }
+            }
+
+        }
+
+        .collapse-control {
+            position: absolute;
+            z-index: 1000;
+        }
+
+        .output-container {
+            height: 100%;
+
+            .tabs {
+                margin-bottom: 0;
+                height: $tabs-header-height;
+            }
+
+            .editor-output {
+                height: calc(100% - #{$tabs-header-height});
+            }
+
+            iframe {
+                width: 100%;
+                height: calc(100% - #{$tabs-header-height});
+            }
+        }
+    }
+}
+
+.sidebar {
+    width: 250px;
+}

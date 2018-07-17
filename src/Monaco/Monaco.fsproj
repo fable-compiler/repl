@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard1.6</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\paket-files\fable-compiler\Fable\src\dotnet\Fable.JS\Interfaces.fs">
+      <Paket>True</Paket>
+      <Link>paket-files/Interfaces.fs</Link>
+    </Compile>
+    <Compile Include="Monaco.fs" />
+    <Compile Include="Interface.fs" />
+    <Compile Include="Util.fs" />
+    <Compile Include="Editor.fs" />
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>

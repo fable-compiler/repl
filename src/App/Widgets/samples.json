@@ -1,0 +1,75 @@
+[
+    {
+        "type": "category",
+        "label": "Learn Fable",
+        "children": [
+            {
+                "type": "menu-item",
+                "label": "Basic canvas",
+                "fsharpCode": "samples/basic-canvas/basic_canvas.fs",
+                "htmlCode": "samples/basic-canvas/basic_canvas.html"
+            },
+            {
+                "type": "sub-category",
+                "label": "Interop",
+                "children": [
+                    {
+                        "type": "menu-item",
+                        "label": "Pojo",
+                        "fsharpCode": "samples/pojo.fs",
+                        "htmlCode": "default"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Mini JQuery bindings",
+                        "fsharpCode": "samples/jquery/jquery.fs",
+                        "htmlCode": "samples/jquery/jquery.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Commented Interop examples",
+                        "fsharpCode": "samples/interop-samples/interop-samples.fs",
+                        "htmlCode": "samples/interop-samples/interop-samples.html"
+                    }
+
+                ]
+            }
+        ]
+    },
+    {
+        "type": "category",
+        "label": "Samples",
+        "children": [
+            {
+                "type": "sub-category",
+                "label": "Fun and Games",
+                "children": [
+                    {
+                        "type": "menu-item",
+                        "label": "Super Fable Mario",
+                        "fsharpCode": "samples/mario/mario.fs",
+                        "htmlCode": "samples/mario/mario.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Ozmo Game",
+                        "fsharpCode": "samples/ozmo/ozmo.fs",
+                        "htmlCode": "samples/ozmo/ozmo.html"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "type": "category",
+        "label": "Visualizations",
+        "children": [
+            {
+                "type": "menu-item",
+                "label": "Mandelbrot",
+                "fsharpCode": "samples/mandelbrot/mandelbrot.fs",
+                "htmlCode": "samples/mandelbrot/mandelbrot.html"
+            }
+        ]
+    }
+]
