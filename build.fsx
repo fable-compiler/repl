@@ -1,12 +1,10 @@
-let AppveyorReplArtifactURLParams = "?branch=master"
+let AppveyorReplArtifactURLParams = "?branch=dev2.0"
 let AppveyorReplArtifactURL =
-    "https://ci.appveyor.com/api/projects/fable-compiler/Fable/artifacts/src/dotnet/Fable.JS/demo/repl/bundle.zip"
+    "https://ci.appveyor.com/api/projects/fable-compiler/Fable/artifacts/src/dotnet/Fable.JS/repl-bundle.zip"
     + AppveyorReplArtifactURLParams
-// TODO: Actually, version should come from the artifact
-let fableVersion = None // Some "1.3.14"
+
 let FCSExportFolderName = "FSharp.Compiler.Service_export"
 let FableFolderName = "Fable"
-let dotnetcliVersion = "2.1.4"
 
 // include Fake libs
 #r "./packages/build/FAKE/tools/FakeLib.dll"
@@ -99,9 +97,9 @@ let ensureRepoSetup (info : RepoSetupInfo) =
                 Repository.clone rootDir info.GithubLink info.FolderName
                 runSimpleGitCommand info.FolderPath ("checkout " + info.GithubBranch) |> ignore
             else
-                failwithf "You need to setup the %s project at %s yourself so." info.FolderName rootDir
+                failwithf "You need to setup the %s project at %s yourself." info.FolderName rootDir
         else
-            printfn "You started with auto setup mode. Installing %s for you" info.FolderName
+            printfn "You started with auto setup mode. Installing %s for you..." info.FolderName
             Repository.clone rootDir info.GithubLink info.FolderName
             runSimpleGitCommand info.FolderPath ("checkout " + info.GithubBranch) |> ignore
     else
@@ -128,7 +126,10 @@ Target "Generate.Metadata" (fun _ ->
 )
 
 Target "InstallDotNetCore" (fun _ ->
-   dotnetExePath <- DotNetCli.InstallDotNetSDK dotnetcliVersion
+    let dotnetcliVersion =
+        Path.Combine(__SOURCE_DIRECTORY__, "global.json")
+        |> findLineAndGetGroupValue "\"version\": \"(.*?)\"" 1
+    dotnetExePath <- DotNetCli.InstallDotNetSDK dotnetcliVersion
 )
 
 let libsOutput = "public" </> "libs"
@@ -180,19 +181,15 @@ Target "DownloadReplArtifact" (fun _ ->
 
 Target "UpdateVersion" (fun _ ->
     let version =
-        match fableVersion with
-        | Some v -> v
-        | None ->
-            ensureRepoSetup
-                { FolderPath = FableFolderPath
-                  FolderName = FableFolderName
-                  GithubLink = "git@github.com:fable-compiler/Fable.git"
-                  GithubBranch = "master" }
-            let release =
-                FableFolderPath </> "src/dotnet/Fable.Compiler/RELEASE_NOTES.md"
-                |> ReleaseNotesHelper.LoadReleaseNotes
-            release.NugetVersion
-
+        ensureRepoSetup
+            { FolderPath = FableFolderPath
+              FolderName = FableFolderName
+              GithubLink = "git@github.com:fable-compiler/Fable.git"
+              GithubBranch = "master" }
+        let release =
+            FableFolderPath </> "src/dotnet/Fable.Compiler/RELEASE_NOTES.md"
+            |> ReleaseNotesHelper.LoadReleaseNotes
+        release.NugetVersion
     let reg = Regex(@"\bVERSION\s*=\s*""(.*?)""")
     let mainFile = sourceDir </> "App/Widgets/About.fs"
     (reg, mainFile) ||> replaceLines (fun line m ->

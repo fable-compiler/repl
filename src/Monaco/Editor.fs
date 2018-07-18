@@ -6,7 +6,7 @@ open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Import
 open Fable.PowerPack
-open Fable.JS.Interfaces
+open Fable.JS
 
 //---------------------------------------------------
 // Features providers
@@ -14,10 +14,11 @@ open Fable.JS.Interfaces
 
 let [<Literal>] FILE_NAME = "test.fs"
 
-let FableREPL: IFableManager = importDefault "fable-repl"
+let initRepl(): IFableManager = import "init" "fable-repl"
+let FableREPL = initRepl()
 
 let getChecker(f: string[] -> (string->byte[]) -> IChecker): JS.Promise<IChecker> = importMember "./util.js"
-let runAst(jsonAst: string): string * string = importMember "./util.js"
+let runAst(ast: obj): string * string = importMember "./util.js"
 
 let mutable fcsChecker: IChecker option = None
 let mutable fcsResults: IParseResults option = None
@@ -27,10 +28,9 @@ let compileAndRunCurrentResults (ed: monaco.editor.IStandaloneCodeEditor) =
     | None -> "", ""
     | Some fcsChecker ->
         let content = ed.getModel().getValue(monaco.editor.EndOfLinePreference.TextDefined, true)
-        let res = FableREPL.ParseFSharpProject(fcsChecker, FILE_NAME, content)
-        let com = FableREPL.CreateCompiler("fable-core")
-        let jsonAst = FableREPL.CompileToBabelJsonAst(com, res, FILE_NAME)
-        runAst jsonAst
+        let parseResults = FableREPL.ParseFSharpProject(fcsChecker, FILE_NAME, content)
+        let babelAst = FableREPL.CompileToBabelAst("fable-core", parseResults, FILE_NAME, false)
+        runAst babelAst
 
 let convertGlyph glyph =
     match glyph with
@@ -181,13 +181,3 @@ let create(domElement) =
     // )) |> ignore
 
     ed
-
-// [<ExportDefault>]
-let fableEditor =
-    { new Interfaces.IExports with
-
-        member __.CreateFSharpEditor domElement = create domElement
-
-        member __.ParseEditor editor = parseEditor editor
-
-        member __.CompileAndRunCurrentResults ed = compileAndRunCurrentResults ed }

@@ -8,15 +8,15 @@ let [<Global>] private setTimeout(f: unit->unit, ms: int): unit = jsNative
 
 type GenericObservable<'T>(?disp: unit->unit) =
     let listeners = Dictionary<Guid, IObserver<'T>>()
-    member x.Trigger v =
+    member __.Trigger v =
         for lis in listeners.Values do
             lis.OnNext v
     interface IObservable<'T> with
-        member x.Subscribe w =
+        member __.Subscribe w =
             let g = Guid.NewGuid()
             listeners.Add(g, w)
             { new IDisposable with
-                member x.Dispose() =
+                member __.Dispose() =
                     match disp with
                     | Some disp -> disp()
                     | None -> ()

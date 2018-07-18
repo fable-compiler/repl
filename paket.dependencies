@@ -8,16 +8,16 @@ nuget Fable.React prerelease
 nuget Fulma prerelease
 nuget Fable.Elmish
 nuget Fable.Elmish.React prerelease
-nuget Thot.Json
+nuget Thoth.Json prerelease
 nuget Fable.PowerPack
 
-github fable-compiler/Fable src/dotnet/Fable.JS/Interfaces.fs
+github fable-compiler/Fable:dev2.0 src/dotnet/Fable.JS/Interfaces.fs
 
 group Build
 framework: net46
 
     source https://nuget.org/api/v2
-    nuget FSharp.Core  redirects:force, content:none
-    nuget FAKE
+    nuget FSharp.Core redirects:force, content:none
+    nuget FAKE ~> 4
     github fsharp/FAKE modules/Octokit/Octokit.fsx
     github fable-compiler/fake-helpers Fable.FakeHelpers.fs

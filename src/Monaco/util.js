@@ -194,6 +194,7 @@ function until(predicate, interval = 100) {
     });
 }
 
+// TODO: Show warning about Firewall if assemblies cannot be downloaded
 export function getChecker(createChecker) {
     if (checker === null) {
         return until(() => Object.getOwnPropertyNames(metadata).length >= references.length)
@@ -224,13 +225,10 @@ function babelOptions(extraPlugin) {
     };
 }
 
-export function runAst(jsonAst) {
+export function runAst(ast) {
     try {
-        var ast = JSON.parse(jsonAst);
-
         var optionsES2015 = babelOptions();
         var optionsAMD = babelOptions("transform-es2015-modules-amd");
-
 
         var codeES2015 = Babel.transformFromAst(ast, null, optionsES2015).code;
         var codeAMD = Babel.transformFromAst(ast, null, optionsAMD)

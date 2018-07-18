@@ -66,15 +66,13 @@ document.addEventListener_mousedown(fun de ->
     rectY <- de.clientY
     rectW <- 0.0
     rectH <- 0.0
-    showSet()
-    obj ())
+    showSet())
 
 document.addEventListener_mousemove(fun de ->
     if de.buttons = 1.0 then
         rectW <- de.clientX - rectX
         rectH <- de.clientY - rectY
-        showSet()
-    obj ())
+        showSet())
 
 document.addEventListener_mouseup(fun de ->
     let p1 = getCoord (int rectX, int rectY)
@@ -87,7 +85,6 @@ document.addEventListener_mouseup(fun de ->
     rectY <- 0.0
     rectW <- 0.0
     rectH <- 0.0
-    showSet()
-    obj ())
+    showSet())
 
 showSet()

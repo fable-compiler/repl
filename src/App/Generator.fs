@@ -89,17 +89,13 @@ type MimeType =
 
 let generateBlobURL content mimeType =
     let parts = [ content ] |> unbox<ResizeArray<obj>>
-
     let options =
         jsOptions<BlobPropertyBag>(fun o ->
             o.``type`` <-
                 match mimeType with
                 | Html -> Some "text/html"
-                | JavaScript -> Some "text/javascript"
-        )
-
-    Blob.Create(parts, options)
-    |> URL.createObjectURL
+                | JavaScript -> Some "text/javascript")
+    URL?createObjectURL(Blob.Create(parts, options))
 
 let generateHtmlBlobUrl (htmlCode : string) (scriptUrl : string) =
     let code =

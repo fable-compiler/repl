@@ -2,9 +2,9 @@ module Widgets.About
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
-open Fulma.Elements
+open Fulma
 
-let [<Literal>] VERSION = "1.3.14"
+let [<Literal>] VERSION = "2.0.0-alpha-030"
 
 let view =
     Content.content [ ]

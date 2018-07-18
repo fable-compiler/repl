@@ -1,11 +1,10 @@
 module Widgets.Samples
 
-open Thot.Json
-open Fulma.Components
+open Thoth.Json
+open Fulma
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
-open Fulma.Common
-open Fulma.Extra.FontAwesome
+open Fulma.FontAwesome
 open Fable.Core.JsInterop
 open Fable.PowerPack
 
@@ -13,7 +12,7 @@ open Fable.PowerPack
  // Sample def DSL  //
 /////////////////////
 
-let sampleJson : obj = importAll "./samples.json"
+let sampleJson : obj = importDefault "./samples.json"
 
 type HtmlCodeInfo =
     | Default
@@ -47,34 +46,24 @@ and MenuType =
     | MenuItem of MenuItemInfo
 
     static member DecodeMenuItem =
-        Decode.decode
-            (fun label fsharpCode htmlCode ->
-                MenuItem
-                    { Label = label
-                      FSharpCode = fsharpCode
-                      HtmlCode = htmlCode } )
-            |> Decode.required "label" Decode.string
-            |> Decode.required "fsharpCode" Decode.string
-            |> Decode.required "htmlCode" decodeHtmlCode
+        Decode.object (fun get ->
+            MenuItem
+                { Label = get.Required.Field "label" Decode.string
+                  FSharpCode = get.Required.Field "fsharpCode" Decode.string
+                  HtmlCode = get.Required.Field "htmlCode" decodeHtmlCode } )
 
     static member DecodeCategory =
-        Decode.decode
-            (fun label children ->
-                Category
-                    { Label = label
-                      Children = children } )
-            |> Decode.required "label" Decode.string
-            |> Decode.required "children" (Decode.list MenuType.DecodeSampleType)
+        Decode.object (fun get ->
+            Category
+                { Label = get.Required.Field "label" Decode.string
+                  Children = get.Required.Field "children" (Decode.list MenuType.DecodeSampleType) } )
 
     static member DecodeSubCategory =
-        Decode.decode
-            (fun label children ->
-                SubCategory
-                    { Label = label
-                      Children = children
-                      IsExpanded = false } )
-            |> Decode.required "label" Decode.string
-            |> Decode.required "children" (Decode.list MenuType.DecodeSampleType)
+        Decode.object (fun get ->
+            SubCategory
+                { Label = get.Required.Field "label" Decode.string
+                  Children = get.Required.Field "children" (Decode.list MenuType.DecodeSampleType)
+                  IsExpanded = false } )
 
     static member DecodeSampleType =
         Decode.field "type" Decode.string
@@ -119,7 +108,7 @@ type ExternalMsg =
     | LoadSample of FSharpCode : string * HtmlCode : string
 
 let init _ =
-    match Decode.decodeValue decodeSampleJson sampleJson with
+    match Decode.fromValue "$" decodeSampleJson sampleJson with
     | Ok infos ->
         { MenuInfos = infos }
     | Error error ->
@@ -128,19 +117,20 @@ let init _ =
 let rec updateSubCategoryState (path : int list) (menus : MenuType list) =
     menus
     |> List.mapi (fun index menu ->
-        if index = path.Head then
+        match path with
+        | pathHead::pathTail when index = pathHead ->
             match menu with
             | Category info ->
-                let newChildren = updateSubCategoryState path.Tail info.Children
+                let newChildren = updateSubCategoryState pathTail info.Children
                 Category { info with Children = newChildren }
 
             | SubCategory info ->
-                let newChildren = updateSubCategoryState path.Tail info.Children
+                let newChildren = updateSubCategoryState pathTail info.Children
                 SubCategory { info with Children = newChildren
                                         IsExpanded = not info.IsExpanded }
 
             | MenuItem _ -> menu // We reach the end of the branch
-        else
+        | _ ->
             // Not a branch included in the path, do nothing
             menu
     )

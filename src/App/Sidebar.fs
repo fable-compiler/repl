@@ -43,14 +43,13 @@ let update msg model =
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
-open Fulma.Components
-open Fulma.Elements
-open Fulma.Extra.FontAwesome
+open Fulma
+open Fulma.FontAwesome
 
 let private renderWidgets (states : Set<string>) dispatch (title, widget) =
     let baseView headerIcon content =
         Card.card [ ]
-            [ Card.header [ Card.Header.props [ OnClick (fun _ -> ToggleWidget title |> dispatch ) ] ]
+            [ Card.header [ Common.Props [ OnClick (fun _ -> ToggleWidget title |> dispatch ) ] ]
                 [ Card.Header.title [ ] [ str title ]
                   Card.Header.icon [ ]
                     [ Icon.faIcon [ ] [ Fa.faLg; Fa.icon headerIcon] ] ]

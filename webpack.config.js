@@ -1,33 +1,67 @@
-var path = require("path");
-var webpack = require("webpack");
-var fableUtils = require("fable-utils");
+// Template for webpack.config.js in Fable projects
+// Find latest version in https://github.com/fable-compiler/webpack-config-template
 
-function resolve(filePath) {
-  return path.join(__dirname, filePath)
+// In most cases, you'll only need to edit the CONFIG object
+// See below if you need better fine-tuning of Webpack options
+
+var CONFIG = {
+  indexHtmlTemplate: "./src/index.html",
+  fsharpEntry: "./src/App/App.fsproj",
+  cssEntry: "./src/style.sass",
+  outputDir: "./public",
+  assetsDir: "./public",
 }
 
-var babelOptions = fableUtils.resolveBabelOptions({
-  presets: [
-    ["env", { "modules": false }]
-  ],
-});
-
-const isProduction = process.argv.indexOf("-p") >= 0;
+// If we're running the webpack-dev-server, assume we're in development mode
+var isProduction = !process.argv.find(v => v.indexOf('webpack-dev-server') !== -1);
 console.log("Bundling for " + (isProduction ? "production" : "development") + "...");
 
+var path = require("path");
+var webpack = require("webpack");
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var MiniCssExtractPlugin = require("mini-css-extract-plugin");
+var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+
+// The HtmlWebpackPlugin allows us to use a template for the index.html page
+// and automatically injects <script> or <link> tags for generated bundles.
+var commonPlugins = [
+  new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: CONFIG.indexHtmlTemplate
+  })
+];
+
 module.exports = {
-  devtool: "source-map",
-  entry: resolve("./src/App/App.fsproj"),
+  entry: CONFIG.fsharpEntry,
+  // NOTE we add a hash to the output file name in production
+  // to prevent browser caching if code changes
   output: {
-    filename: "js/app.js",
-    path: resolve('./public')
+      path: path.join(__dirname, CONFIG.outputDir),
+      filename: isProduction ? '[name].[hash].js' : '[name].js'
   },
-  resolve: {
-    modules: [resolve("./node_modules/")]
-  },
+  mode: isProduction ? "production" : "development",
+  devtool: isProduction ? "source-map" : "eval-source-map",
+  plugins: isProduction ?
+    commonPlugins.concat([
+        new MiniCssExtractPlugin({ filename: 'style.css' }),
+        // Inlining is causing problems in minified code
+        // See https://github.com/mishoo/UglifyJS2/issues/2842#issuecomment-359527962
+        new UglifyJSPlugin({
+            uglifyOptions: {
+                compress: { inline: false }
+            }
+        }),
+    ])
+    : commonPlugins.concat([
+        new webpack.HotModuleReplacementPlugin(),
+    ]),
   devServer: {
-    contentBase: resolve('public'),
-    port: 8080
+    publicPath: "/",
+    contentBase: CONFIG.assetsDir,
+    port: CONFIG.devServerPort || 8080,
+    proxy: CONFIG.devServerProxy,
+    hot: true,
+    inline: true
   },
   externals: {
     "monaco": "var monaco",
@@ -39,35 +73,15 @@ module.exports = {
     rules: [
       {
         test: /\.fs(x|proj)?$/,
-        use: {
-          loader: "fable-loader",
-          options: {
-            babel: babelOptions,
-            define: isProduction ? [] : ["DEBUG"]
-          }
-        }
+        use: "fable-loader"
       },
       {
-        test: /\.js$/,
-        // Some dependencies of babel-template need to be transpiled too for proper minimification
-        // exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: babelOptions
-        },
-      },
-      {
-        test: /\.json$/,
-        loader: 'json-loader'
-      },
-      {
-        test: /\.scss$/,
+        test: /\.(sass|scss|css)$/,
         use: [
-          "style-loader",
-          "css-loader",
-          "sass-loader",
-          "postcss-loader"
-        ]
+            isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+            'css-loader',
+            'sass-loader',
+        ],
       },
       {
         test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)(\?.*$|$)/,

@@ -1,20 +1,17 @@
 module Main
 
-open System
 open Fable.Core.JsInterop
 open Fable.Import
-open Fulma.Components
-open Fulma.Elements
-open Fulma.Extra.FontAwesome
+open Fulma
+open Fulma.FontAwesome
 open Fable.Import.Browser
+open Fable.Editor.Main
 open Mouse
 
 importSideEffects "./scss/main.scss"
 
 let loadState(): string * string = importMember "./util.js"
 let saveState(code: string, html: string): unit = importMember "./util.js"
-
-let editor = Fable.Editor.Main.fableEditor
 
 // We store a reference to the editor so we can access it
 // Later we will probably wrap it inside a Cmd implementation
@@ -101,7 +98,7 @@ let updateLayouts _ =
 let update msg model =
     match msg with
     | StartCompile ->
-        { model with State = Compiling }, Cmd.performFunc editor.CompileAndRunCurrentResults editorFsharp EndCompile
+        { model with State = Compiling }, Cmd.performFunc compileAndRunCurrentResults editorFsharp EndCompile
 
     | EndCompile (codeES2015, codeAMD) ->
         { model with State = Compiled
@@ -200,7 +197,7 @@ let update msg model =
         | Sidebar.LoadSample (fsharpCode, htmlCode) ->
             editorFsharp.setValue fsharpCode
             // Force the FCS to parse the new F# code
-            editor.ParseEditor (editorFsharp.getModel())
+            parseEditor (editorFsharp.getModel())
             editorHtml.setValue htmlCode
 
         { model with Sidebar = subModel }, Cmd.map SidebarMsg cmd
@@ -227,29 +224,29 @@ let private numberToPercent number =
 let private menubar (model: Model) dispatch =
     let compileIcon =
         if model.State = Compiling then
-            Icon.faIcon [ Icon.isSmall ]
+            Icon.faIcon [ Icon.Size Size.IsSmall ]
                 [ Fa.icon Fa.I.Spinner
                   Fa.spin ]
         else
-            Icon.faIcon [ Icon.isSmall ]
+            Icon.faIcon [ Icon.Size Size.IsSmall ]
                 [ Fa.icon Fa.I.Play ]
     nav [ ClassName "navbar is-fixed-top is-dark" ]
-        [ Navbar.brand_div [ ]
+        [ Navbar.Brand.div [ ]
             [ div [ ClassName "navbar-burger"
                     Style [ Display "block" ]
                     OnClick (fun _ -> dispatch ToggleSidebar) ] // Force the burger to be always visible
                 [ span [ ] [ ]
                   span [ ] [ ]
                   span [ ] [ ] ]
-              Navbar.item_div [ ]
+              Navbar.Item.div [ ]
                 [ img [ Src "img/fable_ionide.png" ] ] ]
           Navbar.menu [ ]
-            [ Navbar.item_div [ ]
-                [ Button.button_btn [ Button.onClick (fun _ -> dispatch StartCompile) ]
+            [ Navbar.content [ ]
+                [ Button.button [ Button.OnClick (fun _ -> dispatch StartCompile) ]
                     [ compileIcon
                       span [ ]
                         [ str "Compile" ] ] ]
-              Navbar.item_div [ Navbar.Item.props [ Style [ Color "white" ] ] ]
+              Navbar.Item.div [ Navbar.Item.Props [ Style [ Color "white" ] ] ]
                 [ str "You can also press Alt+Enter from the editor" ] ] ]
 
 let private editorArea model dispatch =
@@ -282,15 +279,15 @@ let private editorArea model dispatch =
 
     div [ ClassName "editor-container"
           Style [ Width (numberToPercent model.PanelSplitRatio) ] ]
-        [ Card.card [ Card.props [ Style [ Height ("calc("+ fsharpHeight + " - 4px)") ] ] ] // We remove 4px to compensate the vertical-resize height
-            [ Card.header [ Card.Header.props [ OnClick (fun _ -> dispatch ToggleFsharpCollapse )] ]
+        [ Card.card [ Common.Props [ Style [ Height ("calc("+ fsharpHeight + " - 4px)") ] ] ] // We remove 4px to compensate the vertical-resize height
+            [ Card.header [ Common.Props [ OnClick (fun _ -> dispatch ToggleFsharpCollapse )] ]
                 [ Card.Header.title [ ]
                     [ str "F#" ]
                   Card.Header.icon [ ]
                     [ Icon.faIcon [ ]
                         [ Fa.icon fsharpAngle
                           Fa.faLg ] ] ]
-              Card.content [ Card.props [ Style [ Display fsharpDisplay ] ] ]
+              Card.content [ Common.Props [ Style [ Display fsharpDisplay ] ] ]
                 [ div [ Key "editor"
                         ClassName "editor-fsharp"
                         OnKeyDown (fun ev ->
@@ -299,10 +296,10 @@ let private editorArea model dispatch =
                         Ref (fun element ->
                               if not (isNull element) then
                                 if element.childElementCount = 0. then
-                                    editorFsharp <- editor.CreateFSharpEditor (element :?> Browser.HTMLElement)
+                                    editorFsharp <- create (element :?> Browser.HTMLElement)
                                     let code, _ = loadState()
                                     editorFsharp.setValue(code)
-                                    editor.ParseEditor (editorFsharp.getModel())
+                                    parseEditor (editorFsharp.getModel())
                                 else
                                     if isDragging then
                                         editorFsharp.layout()
@@ -310,15 +307,15 @@ let private editorArea model dispatch =
           div [ ClassName "vertical-resize"
                 OnMouseDown (fun _ -> dispatch EditorDragStarted) ]
               [ ]
-          Card.card [ Card.props [ Style [ Height htmlHeight ] ] ]
-            [ Card.header [ Card.Header.props [ OnClick (fun _ -> dispatch ToggleHtmlCollapse )] ]
+          Card.card [ Common.Props [ Style [ Height htmlHeight ] ] ]
+            [ Card.header [ Common.Props [ OnClick (fun _ -> dispatch ToggleHtmlCollapse )] ]
                 [ Card.Header.title [ ]
                     [ str "Html" ]
                   Card.Header.icon [ ]
                     [ Icon.faIcon [ ]
                         [ Fa.icon htmlAngle
                           Fa.faLg ] ] ]
-              Card.content [ Card.props [ Style [ Display htmlDisplay ] ] ]
+              Card.content [ Common.Props [ Style [ Display htmlDisplay ] ] ]
                 [ div [ ClassName "editor-html"
                         OnKeyDown (fun ev ->
                           if ev.altKey && ev.key = "Enter" then
@@ -347,26 +344,21 @@ let private editorArea model dispatch =
                         ) ] [ ] ] ] ]
 
 let private outputTabs (activeTab : ActiveTab) dispatch =
-    Tabs.tabs [ Tabs.isCentered
-                Tabs.isMedium ]
-        [ Tabs.tab [ if (activeTab = LiveTab) then
-                        yield Tabs.Tab.isActive
-                     yield Tabs.Tab.props [
+    Tabs.tabs [ Tabs.IsCentered
+                Tabs.Size Size.IsMedium ]
+        [ Tabs.tab [ Tabs.Tab.IsActive (activeTab = LiveTab)
+                     Tabs.Tab.Props [
                          OnClick (fun _ -> SetActiveTab LiveTab |> dispatch)
                      ] ]
             [ a [ ] [ str "Live sample" ] ]
-          Tabs.tab [ if (activeTab = CodeTab) then
-                        yield Tabs.Tab.isActive
-                     yield Tabs.Tab.props [
+          Tabs.tab [ Tabs.Tab.IsActive (activeTab = CodeTab)
+                     Tabs.Tab.Props [
                          OnClick (fun _ -> SetActiveTab CodeTab |> dispatch)
                      ] ]
             [ a [ ] [ str "Code" ] ] ]
 
 let private toggleDisplay cond =
-    if cond then
-        ""
-    else
-        "is-hidden"
+    if cond then "" else "is-hidden"
 
 let private viewIframe isShown url =
     iframe [ Src url
@@ -382,13 +374,11 @@ let private viewCodeEditor isShown code =
                                 let minimapOptions =  jsOptions<monaco.editor.IEditorMinimapOptions>(fun oMinimap ->
                                     oMinimap.enabled <- Some false
                                 )
-
                                 o.language <- Some "javascript"
                                 o.fontSize <- Some 14.
                                 o.theme <- Some "vs-dark"
                                 o.minimap <- Some minimapOptions
                             )
-
                             editorCode <- monaco.editor.Globals.create((element :?> Browser.HTMLElement), options)
 
                         editorCode.setValue(code)
@@ -411,7 +401,7 @@ let private outputArea model dispatch =
             [ br [ ]
               div [ ClassName "has-text-centered"
                     Style [ Width "100%" ] ]
-                [ Heading.h4 [ Heading.isSubtitle ]
+                [ Heading.h4 [ Heading.IsSubtitle ]
                     [ str "You need to compile an application first" ] ] ]
 
     div [ ClassName "output-container"
@@ -440,11 +430,8 @@ open Elmish.React
 
 let private resizeSubscription _ =
     let sub dispatch =
-        window.addEventListener_resize(Func<_,_>(fun _ ->
-            dispatch WindowResize
-            null
-        ))
-
+        window.addEventListener_resize(fun _ ->
+            dispatch WindowResize)
     Cmd.ofSub sub
 
 Program.mkProgram init update view
