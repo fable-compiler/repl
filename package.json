@@ -17,8 +17,7 @@
     "font-awesome": "^4.7.0",
     "monaco-editor": "^0.13.1",
     "react": "^16.4.1",
-    "react-dom": "^16.4.1",
-    "requirejs": "^2.3.5"
+    "react-dom": "^16.4.1"
   },
   "devDependencies": {
     "autoprefixer": "^9.0.0",

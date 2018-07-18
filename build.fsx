@@ -52,6 +52,11 @@ let runYarn dir command =
                 Command = Custom command
             })
 
+let addJsExtensionToFableCoreImports fableCorePath =
+    let reg = Regex(@"^import (.*"".*)("".*)$", RegexOptions.Multiline)
+    for file in Directory.EnumerateFiles(fableCorePath, "*.js", SearchOption.AllDirectories) do
+        File.WriteAllText(file, reg.Replace(File.ReadAllText(file), "import $1.js$2"))
+
 let downloadArtifact path (url: string) =
     let tempFile = Path.ChangeExtension(Path.GetTempFileName(), ".zip")
     use client = new WebClient()
@@ -154,11 +159,8 @@ Target "YarnInstall" (fun _ ->
 )
 
 Target "CopyModules" (fun _ ->
-    let requireJsOutput = libsOutput </> "requirejs"
     let vsOutput = libsOutput </> "vs"
-    CreateDir requireJsOutput
     CreateDir vsOutput
-    CopyFile requireJsOutput ("node_modules" </> "requirejs" </> "require.js")
     CopyDir vsOutput ("node_modules" </> "monaco-editor" </> "min" </> "vs") (fun _ -> true)
 )
 
@@ -177,6 +179,7 @@ Target "Publish.GHPages" (fun _->
 Target "DownloadReplArtifact" (fun _ ->
     let targetDir = currentDir </> "public/js/repl"
     downloadArtifact targetDir AppveyorReplArtifactURL
+    addJsExtensionToFableCoreImports (targetDir </> "fable-core")
 )
 
 Target "UpdateVersion" (fun _ ->

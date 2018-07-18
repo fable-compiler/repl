@@ -46,7 +46,6 @@ type Model =
       Url : string
       ActiveTab : ActiveTab
       CodeES2015: string
-      CodeAMD : string
       DragTarget : DragTarget
       EditorSplitRatio : float
       PanelSplitRatio : float
@@ -55,7 +54,7 @@ type Model =
 
 type Msg =
     | StartCompile
-    | EndCompile of string * string // codeES2015, codeAMD
+    | EndCompile of string
     | SetActiveTab of ActiveTab
     | SetUrl of string
     | EditorDragStarted
@@ -79,8 +78,8 @@ let generateHtmlUrl jsCode =
     let fsCode = editorFsharp.getValue()
     let htmlCode = editorHtml.getValue()
     saveState(fsCode, htmlCode)
-    let jsUrl = Generator.generateBlobURL jsCode Generator.JavaScript
-    Generator.generateHtmlBlobUrl htmlCode jsUrl
+    // let jsUrl = Generator.generateBlobURL jsCode Generator.JavaScript
+    Generator.generateHtmlBlobUrl htmlCode jsCode
 
 let clamp min max value =
     if value >= max then
@@ -100,10 +99,9 @@ let update msg model =
     | StartCompile ->
         { model with State = Compiling }, Cmd.performFunc compileAndRunCurrentResults editorFsharp EndCompile
 
-    | EndCompile (codeES2015, codeAMD) ->
+    | EndCompile codeES2015 ->
         { model with State = Compiled
-                     CodeES2015 = codeES2015
-                     CodeAMD = codeAMD }, Cmd.batch [ Cmd.performFunc generateHtmlUrl codeAMD SetUrl ]
+                     CodeES2015 = codeES2015 }, Cmd.batch [ Cmd.performFunc generateHtmlUrl codeES2015 SetUrl ]
 
     | SetUrl newUrl ->
         { model with Url = newUrl }, Cmd.none
@@ -206,7 +204,6 @@ let init _ = { State = NoState
                Url = ""
                ActiveTab = LiveTab
                CodeES2015 = ""
-               CodeAMD = ""
                DragTarget = NoTarget
                EditorSplitRatio = 0.6
                PanelSplitRatio = 0.5

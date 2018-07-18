@@ -14,6 +14,7 @@ module Keyboard =
         let keyCode = int e.keyCode
         let op = if pressed then Set.add else Set.remove
         keysPressed <- op keyCode keysPressed
+        null
 
     let init () =
         Browser.window.addEventListener_keydown(fun e -> update(e, true))

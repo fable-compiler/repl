@@ -18,14 +18,14 @@ let initRepl(): IFableManager = import "init" "fable-repl"
 let FableREPL = initRepl()
 
 let getChecker(f: string[] -> (string->byte[]) -> IChecker): JS.Promise<IChecker> = importMember "./util.js"
-let runAst(ast: obj): string * string = importMember "./util.js"
+let runAst(ast: obj): string = importMember "./util.js"
 
 let mutable fcsChecker: IChecker option = None
 let mutable fcsResults: IParseResults option = None
 
 let compileAndRunCurrentResults (ed: monaco.editor.IStandaloneCodeEditor) =
     match fcsChecker with
-    | None -> "", ""
+    | None -> ""
     | Some fcsChecker ->
         let content = ed.getModel().getValue(monaco.editor.EndOfLinePreference.TextDefined, true)
         let parseResults = FableREPL.ParseFSharpProject(fcsChecker, FILE_NAME, content)

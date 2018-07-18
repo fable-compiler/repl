@@ -1,8 +1,18 @@
 [<RequireQualifiedAccess>]
 module Generator
 
+open System.Text.RegularExpressions
 open Fable.Core.JsInterop
 open Fable.Import.Browser
+
+let [<Literal>] HOST =
+#if DEBUG
+    "http://localhost:8080"
+#else
+    "http://fable.io/repl2"
+#endif
+
+let FABLE_CORE_DIR = HOST + "/js/repl/fable-core"
 
 let defaultHtmlCode =
     """
@@ -15,18 +25,9 @@ let defaultHtmlCode =
 </html>
     """.Trim()
 
-#if DEBUG
-let private requireConfig =
+let private bubbleMouseEvents =
     """
 <body>
-    <script src="http://localhost:8080/libs/requirejs/require.js"></script>
-    <script>
-        require.config({
-        paths: {
-            'fable-core': 'http://localhost:8080/js/repl/fable-core'
-        }
-        });
-    </script>
     <script>
     (function () {
         var origin = window.location.origin;
@@ -47,41 +48,8 @@ let private requireConfig =
     })();
     </script>
     """.Trim()
-#else
-let private requireConfig =
-    """
-<body>
-    <script src="http://fable.io/repl/libs/requirejs/require.js"></script>
-    <script>
-        require.config({
-        paths: {
-            'fable-core': 'http://fable.io/repl/js/repl/fable-core'
-        }
-        });
-    </script>
-    <script>
-    (function () {
-        var origin = window.location.origin;
-        document.addEventListener("mousemove", function (ev) {
-            window.parent.postMessage({
-                type: "mousemove",
-                x: ev.screenX,
-                y: ev.screenY
-            }, origin);
-        });
 
-        document.addEventListener("mouseup", function (ev) {
-            window.parent.postMessage({
-                type: "mouseup"
-            }, origin);
-        });
-
-    })();
-    </script>
-    """.Trim()
-#endif
-
-let private bundleScriptTag url = sprintf "<script src=\"%s\"></script>\n</body>" url
+let private bundleScriptTag code = sprintf "<script type=\"module\">\n%s\n</script>\n</body>" code
 
 type MimeType =
     | Html
@@ -97,9 +65,12 @@ let generateBlobURL content mimeType =
                 | JavaScript -> Some "text/javascript")
     URL?createObjectURL(Blob.Create(parts, options))
 
-let generateHtmlBlobUrl (htmlCode : string) (scriptUrl : string) =
+let generateHtmlBlobUrl (htmlCode : string) (jsCode: string) =
+    // We need to convert import paths to absolute urls and add .js at the end
+    let reg = Regex(@"^import (.*)""fable-core(.*)""(.*)$", RegexOptions.Multiline)
+    let jsCode = reg.Replace(jsCode, sprintf "import $1\"%s$2.js\"$3" FABLE_CORE_DIR)
     let code =
         htmlCode
-            .Replace("<body>", requireConfig)
-            .Replace("</body>", bundleScriptTag scriptUrl)
+            .Replace("<body>", bubbleMouseEvents)
+            .Replace("</body>", bundleScriptTag jsCode)
     generateBlobURL code Html

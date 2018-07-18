@@ -228,15 +228,8 @@ function babelOptions(extraPlugin) {
 export function runAst(ast) {
     try {
         var optionsES2015 = babelOptions();
-        var optionsAMD = babelOptions("transform-es2015-modules-amd");
-
         var codeES2015 = Babel.transformFromAst(ast, null, optionsES2015).code;
-        var codeAMD = Babel.transformFromAst(ast, null, optionsAMD)
-                        .code
-                        .replace("define", "require")
-                        .replace('"use strict";', '"use strict"; try { exports = exports || {}; } catch (err) {}');
-
-        return [codeES2015, codeAMD];
+        return codeES2015;
     } catch (err) {
         console.error(err.message + "\n" + err.stack);
     }
