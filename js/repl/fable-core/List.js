@@ -1,4 +1,4 @@
-define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List", "./Seq", "./Map"], function (exports, _Option, _Types, _Array, _Util, _Set, _List, _Seq, _Map) {
+define(["exports", "./Option", "./Types", "./Util", "./Array", "./Set", "./List", "./Seq", "./Map"], function (exports, _Option, _Types, _Util, _Array, _Set, _List, _Seq, _Map) {
   "use strict";
 
   Object.defineProperty(exports, "__esModule", {
@@ -110,21 +110,24 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
   exports.where = where;
   function head(_arg1) {
     if (_arg1.tail != null) {
-      return _arg1.head;
+      const x = _arg1.head;
+      return x;
     } else {
       throw new Error("List was empty");
     }
   }
   function tryHead(_arg1$$1) {
     if (_arg1$$1.tail != null) {
-      return (0, _Option.some)(_arg1$$1.head);
+      const x$$1 = _arg1$$1.head;
+      return (0, _Option.some)(x$$1);
     } else {
       return null;
     }
   }
   function tail(_arg1$$2) {
     if (_arg1$$2.tail != null) {
-      return _arg1$$2.tail;
+      const xs = _arg1$$2.tail;
+      return xs;
     } else {
       throw new Error("List was empty");
     }
@@ -163,13 +166,15 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
     } else {
       const loop = function loop(xs$$4, ys$$1) {
         loop: while (true) {
-          if (xs$$4.tail != null) {
-            if (ys$$1.tail != null) {
-              const matchValue$$1 = comparer(xs$$4.head, ys$$1.head) | 0;
+          const matchValue = [xs$$4, ys$$1];
+
+          if (matchValue[0].tail != null) {
+            if (matchValue[1].tail != null) {
+              const matchValue$$1 = comparer(matchValue[0].head, matchValue[1].head) | 0;
 
               if (matchValue$$1 === 0) {
-                xs$$4 = xs$$4.tail;
-                ys$$1 = ys$$1.tail;
+                xs$$4 = matchValue[0].tail;
+                ys$$1 = matchValue[1].tail;
                 continue loop;
               } else {
                 const res = matchValue$$1 | 0;
@@ -178,7 +183,7 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
             } else {
               return 1;
             }
-          } else if (ys$$1.tail == null) {
+          } else if (matchValue[1].tail == null) {
             return 0;
           } else {
             return -1 | 0;
@@ -200,10 +205,12 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
             _arg1$$5 = $arg$$11;
 
       if (_arg1$$5.tail != null) {
+        const xs$$7 = _arg1$$5.tail;
+        const x$$5 = _arg1$$5.head;
         $arg$$8 = f;
         $arg$$9 = i + 1;
-        $arg$$10 = f(i, acc, _arg1$$5.head);
-        $arg$$11 = _arg1$$5.tail;
+        $arg$$10 = f(i, acc, x$$5);
+        $arg$$11 = xs$$7;
         continue foldIndexedAux;
       } else {
         return acc;
@@ -235,19 +242,20 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
             acc$$4 = $arg$$23,
             bs = $arg$$24,
             cs = $arg$$25;
+      const matchValue$$2 = [bs, cs];
       var $target$$26, x$$9, xs$$12, y$$1, ys$$4;
 
-      if (bs.tail != null) {
-        if (cs.tail != null) {
+      if (matchValue$$2[0].tail != null) {
+        if (matchValue$$2[1].tail != null) {
           $target$$26 = 1;
-          x$$9 = bs.head;
-          xs$$12 = bs.tail;
-          y$$1 = cs.head;
-          ys$$4 = cs.tail;
+          x$$9 = matchValue$$2[0].head;
+          xs$$12 = matchValue$$2[0].tail;
+          y$$1 = matchValue$$2[1].head;
+          ys$$4 = matchValue$$2[1].tail;
         } else {
           $target$$26 = 2;
         }
-      } else if (cs.tail == null) {
+      } else if (matchValue$$2[1].tail == null) {
         $target$$26 = 0;
       } else {
         $target$$26 = 2;
@@ -319,26 +327,27 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
             bs$$1 = $arg$$44,
             cs$$1 = $arg$$45,
             ds = $arg$$46;
+      const matchValue$$4 = [bs$$1, cs$$1, ds];
       var $target$$47, x$$13, xs$$16, y$$4, ys$$8, z, zs;
 
-      if (bs$$1.tail != null) {
-        if (cs$$1.tail != null) {
-          if (ds.tail != null) {
+      if (matchValue$$4[0].tail != null) {
+        if (matchValue$$4[1].tail != null) {
+          if (matchValue$$4[2].tail != null) {
             $target$$47 = 1;
-            x$$13 = bs$$1.head;
-            xs$$16 = bs$$1.tail;
-            y$$4 = cs$$1.head;
-            ys$$8 = cs$$1.tail;
-            z = ds.head;
-            zs = ds.tail;
+            x$$13 = matchValue$$4[0].head;
+            xs$$16 = matchValue$$4[0].tail;
+            y$$4 = matchValue$$4[1].head;
+            ys$$8 = matchValue$$4[1].tail;
+            z = matchValue$$4[2].head;
+            zs = matchValue$$4[2].tail;
           } else {
             $target$$47 = 2;
           }
         } else {
           $target$$47 = 2;
         }
-      } else if (cs$$1.tail == null) {
-        if (ds.tail == null) {
+      } else if (matchValue$$4[1].tail == null) {
+        if (matchValue$$4[2].tail == null) {
           $target$$47 = 0;
         } else {
           $target$$47 = 2;
@@ -383,7 +392,9 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
     }, seed$$7, xs$$18, ys$$10, zs$$2);
   }
   function scan(f$$12, seed$$8, xs$$19) {
-    return reverse(fold(function (acc$$10, x$$15) {
+    return function (xs$$20) {
+      return reverse(xs$$20);
+    }(fold(function (acc$$10, x$$15) {
       if (acc$$10.tail != null) {
         const y$$6 = acc$$10.head;
         return (0, _Types.L)(f$$12(y$$6, x$$15), acc$$10);
@@ -393,7 +404,9 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
     }, (0, _Types.L)(seed$$8, (0, _Types.L)()), xs$$19));
   }
   function scanBack(f$$13, xs$$21, seed$$9) {
-    return reverse(scan(function (acc$$11, x$$16) {
+    return function (xs$$22) {
+      return reverse(xs$$22);
+    }(scan(function (acc$$11, x$$16) {
       return f$$13(x$$16, acc$$11);
     }, seed$$9, reverse(xs$$21)));
   }
@@ -413,12 +426,16 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
     }, (0, _Types.L)(), reverse(xs$$25));
   }
   function map(f$$15, xs$$26) {
-    return reverse(fold(function (acc$$15, x$$19) {
+    return function (xs$$27) {
+      return reverse(xs$$27);
+    }(fold(function (acc$$15, x$$19) {
       return (0, _Types.L)(f$$15(x$$19), acc$$15);
     }, (0, _Types.L)(), xs$$26));
   }
   function mapIndexed(f$$16, xs$$28) {
-    return reverse(foldIndexed(function (i$$3, acc$$16, x$$20) {
+    return function (xs$$29) {
+      return reverse(xs$$29);
+    }(foldIndexed(function (i$$3, acc$$16, x$$20) {
       return (0, _Types.L)(f$$16(i$$3, x$$20), acc$$16);
     }, (0, _Types.L)(), xs$$28));
   }
@@ -428,33 +445,49 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
     }, xs$$30);
   }
   function map2(f$$17, xs$$31, ys$$12) {
-    return reverse(fold2(function (acc$$17, x$$22, y$$7) {
+    return function (xs$$32) {
+      return reverse(xs$$32);
+    }(fold2(function (acc$$17, x$$22, y$$7) {
       return (0, _Types.L)(f$$17(x$$22, y$$7), acc$$17);
     }, (0, _Types.L)(), xs$$31, ys$$12));
   }
   function mapIndexed2(f$$18, xs$$33, ys$$13) {
-    return reverse(foldIndexed2(function (i$$5, acc$$18, x$$23, y$$8) {
+    return function (xs$$34) {
+      return reverse(xs$$34);
+    }(foldIndexed2(function (i$$5, acc$$18, x$$23, y$$8) {
       return (0, _Types.L)(f$$18(i$$5, x$$23, y$$8), acc$$18);
     }, (0, _Types.L)(), xs$$33, ys$$13));
   }
   function map3(f$$19, xs$$35, ys$$14, zs$$3) {
-    return reverse(fold3(function (acc$$19, x$$24, y$$9, z$$2) {
+    return function (xs$$36) {
+      return reverse(xs$$36);
+    }(fold3(function (acc$$19, x$$24, y$$9, z$$2) {
       return (0, _Types.L)(f$$19(x$$24, y$$9, z$$2), acc$$19);
     }, (0, _Types.L)(), xs$$35, ys$$14, zs$$3));
   }
   function mapIndexed3(f$$20, xs$$37, ys$$15, zs$$4) {
-    return reverse(foldIndexed3(function (i$$6, acc$$20, x$$25, y$$10, z$$3) {
+    return function (xs$$38) {
+      return reverse(xs$$38);
+    }(foldIndexed3(function (i$$6, acc$$20, x$$25, y$$10, z$$3) {
       return (0, _Types.L)(f$$20(i$$6, x$$25, y$$10, z$$3), acc$$20);
     }, (0, _Types.L)(), xs$$37, ys$$15, zs$$4));
   }
   function mapFold(f$$21, s, xs$$39) {
-    const foldFn = function foldFn(tupledArg, x$$26) {
-      const patternInput = f$$21(tupledArg[1], x$$26);
-      return [(0, _Types.L)(patternInput[0], tupledArg[0]), patternInput[1]];
+    const foldFn = function foldFn(tupledArg) {
+      const nxs = tupledArg[0];
+      const fs = tupledArg[1];
+      return function (x$$26) {
+        const patternInput = f$$21(fs, x$$26);
+        const nx = patternInput[0];
+        const fs$$1 = patternInput[1];
+        return [(0, _Types.L)(nx, nxs), fs$$1];
+      };
     };
 
-    const patternInput$$1 = fold(foldFn, [(0, _Types.L)(), s], xs$$39);
-    return [reverse(patternInput$$1[0]), patternInput$$1[1]];
+    const patternInput$$1 = fold((0, _Util.uncurry)(2, foldFn), [(0, _Types.L)(), s], xs$$39);
+    const s$$1 = patternInput$$1[1];
+    const nxs$$1 = patternInput$$1[0];
+    return [reverse(nxs$$1), s$$1];
   }
   function mapFoldBack(f$$22, xs$$40, s$$2) {
     return mapFold(function (s$$3, v) {
@@ -503,12 +536,14 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
             _arg1$$11 = $arg$$102;
 
       if (_arg1$$11.tail != null) {
-        const result = f$$27(i$$9, _arg1$$11.head);
+        const xs$$46 = _arg1$$11.tail;
+        const x$$32 = _arg1$$11.head;
+        const result = f$$27(i$$9, x$$32);
 
         if (result == null) {
           $arg$$100 = f$$27;
           $arg$$101 = i$$9 + 1;
-          $arg$$102 = _arg1$$11.tail;
+          $arg$$102 = xs$$46;
           continue tryPickIndexedAux;
         } else {
           return result;
@@ -530,7 +565,8 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
     const matchValue$$5 = tryPick(f$$30, xs$$49);
 
     if (matchValue$$5 != null) {
-      return (0, _Option.value)(matchValue$$5);
+      const x$$34 = (0, _Option.value)(matchValue$$5);
+      return x$$34;
     } else {
       throw new Error("List did not contain any matching elements");
     }
@@ -549,7 +585,8 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
     const matchValue$$6 = tryFindIndexed(f$$33, xs$$52);
 
     if (matchValue$$6 != null) {
-      return (0, _Option.value)(matchValue$$6);
+      const x$$37 = (0, _Option.value)(matchValue$$6);
+      return x$$37;
     } else {
       throw new Error("List did not contain any matching elements");
     }
@@ -560,10 +597,18 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
     }, xs$$53);
   }
   function findBack(f$$35, xs$$54) {
-    return find(f$$35, reverse(xs$$54));
+    return function (xs$$56) {
+      return find(f$$35, xs$$56);
+    }(function (xs$$55) {
+      return reverse(xs$$55);
+    }(xs$$54));
   }
   function tryFindBack(f$$36, xs$$57) {
-    return tryFind(f$$36, reverse(xs$$57));
+    return function (xs$$59) {
+      return tryFind(f$$36, xs$$59);
+    }(function (xs$$58) {
+      return reverse(xs$$58);
+    }(xs$$57));
   }
   function tryFindIndex(f$$37, xs$$60) {
     return tryPickIndexed(function (i$$11, x$$39) {
@@ -571,19 +616,24 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
     }, xs$$60);
   }
   function tryFindIndexBack(f$$38, xs$$61) {
-    return (0, _Array.tryFindIndexBack)(f$$38, (0, _Array.ofList)(xs$$61, Array));
+    return function (array) {
+      return (0, _Array.tryFindIndexBack)(f$$38, array);
+    }((0, _Array.ofList)(xs$$61, Array));
   }
   function findIndex(f$$39, xs$$62) {
     const matchValue$$7 = tryFindIndex(f$$39, xs$$62);
 
     if (matchValue$$7 != null) {
-      return matchValue$$7 | 0;
+      const x$$40 = matchValue$$7 | 0;
+      return x$$40 | 0;
     } else {
       throw new Error("List did not contain any matching elements");
     }
   }
   function findIndexBack(f$$40, xs$$63) {
-    return (0, _Array.findIndexBack)(f$$40, (0, _Array.ofList)(xs$$63, Array));
+    return function (array$$1) {
+      return (0, _Array.findIndexBack)(f$$40, array$$1);
+    }((0, _Array.ofList)(xs$$63, Array));
   }
   function item(n, xs$$64) {
     return findIndexed(function (i$$12, _arg1$$15) {
@@ -601,14 +651,26 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
     }, xs$$66, (0, _Types.L)());
   }
   function partition(f$$42, xs$$67) {
-    return fold(function (tupledArg$$1, x$$42) {
-      return f$$42(x$$42) ? [(0, _Types.L)(x$$42, tupledArg$$1[0]), tupledArg$$1[1]] : [tupledArg$$1[0], (0, _Types.L)(x$$42, tupledArg$$1[1])];
-    }, [(0, _Types.L)(), (0, _Types.L)()], reverse(xs$$67));
+    return fold((0, _Util.uncurry)(2, function (tupledArg$$1) {
+      const lacc = tupledArg$$1[0];
+      const racc = tupledArg$$1[1];
+      return function (x$$42) {
+        return f$$42(x$$42) ? [(0, _Types.L)(x$$42, lacc), racc] : [lacc, (0, _Types.L)(x$$42, racc)];
+      };
+    }), [(0, _Types.L)(), (0, _Types.L)()], reverse(xs$$67));
   }
   function choose(f$$43, xs$$68) {
-    return reverse(fold(function (acc$$23, x$$43) {
+    return function (xs$$69) {
+      return reverse(xs$$69);
+    }(fold(function (acc$$23, x$$43) {
       const matchValue$$8 = f$$43(x$$43);
-      return matchValue$$8 == null ? acc$$23 : (0, _Types.L)((0, _Option.value)(matchValue$$8), acc$$23);
+
+      if (matchValue$$8 == null) {
+        return acc$$23;
+      } else {
+        const y$$13 = (0, _Option.value)(matchValue$$8);
+        return (0, _Types.L)(y$$13, acc$$23);
+      }
     }, (0, _Types.L)(), xs$$68));
   }
   function contains(value, list, eq) {
@@ -633,13 +695,17 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
     return loop$$1(list);
   }
   function except(itemsToExclude, array$$2, eq$$1) {
+    var f$$44;
+
     if (isEmpty(array$$2)) {
       return array$$2;
     } else {
       const cached = (0, _Set.createMutable)(itemsToExclude, (0, _Util.comparerFromEqualityComparer)(eq$$1));
-      return filter(function f$$44(arg00) {
+      return (f$$44 = function f$$44(arg00) {
         return (0, _Util.addToSet)(arg00, cached);
-      }, array$$2);
+      }, function (xs$$71) {
+        return filter(f$$44, xs$$71);
+      })(array$$2);
     }
   }
   function initialize(n$$2, f$$45) {
@@ -658,14 +724,18 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
   }
   function reduce(f$$46, _arg1$$18) {
     if (_arg1$$18.tail != null) {
-      return fold(f$$46, _arg1$$18.head, _arg1$$18.tail);
+      const t = _arg1$$18.tail;
+      const h = _arg1$$18.head;
+      return fold(f$$46, h, t);
     } else {
       throw new Error("List was empty");
     }
   }
   function reduceBack(f$$47, _arg1$$19) {
     if (_arg1$$19.tail != null) {
-      return foldBack(f$$47, _arg1$$19.tail, _arg1$$19.head);
+      const t$$1 = _arg1$$19.tail;
+      const h$$1 = _arg1$$19.head;
+      return foldBack(f$$47, t$$1, h$$1);
     } else {
       throw new Error("List was empty");
     }
@@ -686,11 +756,14 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
             _arg1$$20 = $arg$$147;
 
       if (_arg1$$20.tail != null) {
-        if (f$$50(_arg1$$20.head)) {
+        const xs$$75 = _arg1$$20.tail;
+        const x$$47 = _arg1$$20.head;
+
+        if (f$$50(x$$47)) {
           return true;
         } else {
           $arg$$146 = f$$50;
-          $arg$$147 = _arg1$$20.tail;
+          $arg$$147 = xs$$75;
           continue exists;
         }
       } else {
@@ -703,19 +776,20 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
       const f$$51 = $arg$$148,
             bs$$2 = $arg$$149,
             cs$$2 = $arg$$150;
+      const matchValue$$9 = [bs$$2, cs$$2];
       var $target$$151, x$$48, xs$$76, y$$15, ys$$19;
 
-      if (bs$$2.tail != null) {
-        if (cs$$2.tail != null) {
+      if (matchValue$$9[0].tail != null) {
+        if (matchValue$$9[1].tail != null) {
           $target$$151 = 1;
-          x$$48 = bs$$2.head;
-          xs$$76 = bs$$2.tail;
-          y$$15 = cs$$2.head;
-          ys$$19 = cs$$2.tail;
+          x$$48 = matchValue$$9[0].head;
+          xs$$76 = matchValue$$9[0].tail;
+          y$$15 = matchValue$$9[1].head;
+          ys$$19 = matchValue$$9[1].tail;
         } else {
           $target$$151 = 2;
         }
-      } else if (cs$$2.tail == null) {
+      } else if (matchValue$$9[1].tail == null) {
         $target$$151 = 0;
       } else {
         $target$$151 = 2;
@@ -751,14 +825,28 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
     }
   }
   function unzip(xs$$77) {
-    return foldBack(function (tupledArg$$2, tupledArg$$3) {
-      return [(0, _Types.L)(tupledArg$$2[0], tupledArg$$3[0]), (0, _Types.L)(tupledArg$$2[1], tupledArg$$3[1])];
-    }, xs$$77, [(0, _Types.L)(), (0, _Types.L)()]);
+    return foldBack((0, _Util.uncurry)(2, function (tupledArg$$2) {
+      const x$$49 = tupledArg$$2[0];
+      const y$$16 = tupledArg$$2[1];
+      return function (tupledArg$$3) {
+        const lacc$$1 = tupledArg$$3[0];
+        const racc$$1 = tupledArg$$3[1];
+        return [(0, _Types.L)(x$$49, lacc$$1), (0, _Types.L)(y$$16, racc$$1)];
+      };
+    }), xs$$77, [(0, _Types.L)(), (0, _Types.L)()]);
   }
   function unzip3(xs$$78) {
-    return foldBack(function (tupledArg$$4, tupledArg$$5) {
-      return [(0, _Types.L)(tupledArg$$4[0], tupledArg$$5[0]), (0, _Types.L)(tupledArg$$4[1], tupledArg$$5[1]), (0, _Types.L)(tupledArg$$4[2], tupledArg$$5[2])];
-    }, xs$$78, [(0, _Types.L)(), (0, _Types.L)(), (0, _Types.L)()]);
+    return foldBack((0, _Util.uncurry)(2, function (tupledArg$$4) {
+      const x$$50 = tupledArg$$4[0];
+      const y$$17 = tupledArg$$4[1];
+      const z$$4 = tupledArg$$4[2];
+      return function (tupledArg$$5) {
+        const lacc$$2 = tupledArg$$5[0];
+        const macc = tupledArg$$5[1];
+        const racc$$2 = tupledArg$$5[2];
+        return [(0, _Types.L)(x$$50, lacc$$2), (0, _Types.L)(y$$17, macc), (0, _Types.L)(z$$4, racc$$2)];
+      };
+    }), xs$$78, [(0, _Types.L)(), (0, _Types.L)(), (0, _Types.L)()]);
   }
   function zip(xs$$79, ys$$20) {
     return map2(function (x$$51, y$$18) {
@@ -771,32 +859,42 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
     }, xs$$80, ys$$21, zs$$5);
   }
   function sort(xs$$81, comparer$$2) {
-    var xs$$82;
-    return ofArray((xs$$82 = (0, _Array.ofList)(xs$$81, Array), (xs$$82.sort(function comparer$$3(x$$53, y$$20) {
+    var comparer$$3, xs$$82;
+    return function (xs$$83) {
+      return ofArray(xs$$83);
+    }((comparer$$3 = function comparer$$3(x$$53, y$$20) {
       return comparer$$2.Compare(x$$53, y$$20);
-    }), xs$$82)));
+    }, (xs$$82 = (0, _Array.ofList)(xs$$81, Array), (xs$$82.sort(comparer$$3), xs$$82))));
   }
-  function sortBy(projection, xs$$84, comparer$$5) {
-    var xs$$85;
-    return ofArray((xs$$85 = (0, _Array.ofList)(xs$$84, Array), (xs$$85.sort(function comparer$$6(x$$54, y$$21) {
-      return comparer$$5.Compare(projection(x$$54), projection(y$$21));
-    }), xs$$85)));
+  function sortBy(projection, xs$$84, comparer$$4) {
+    var comparer$$5, xs$$85;
+    return function (xs$$86) {
+      return ofArray(xs$$86);
+    }((comparer$$5 = function comparer$$5(x$$54, y$$21) {
+      return comparer$$4.Compare(projection(x$$54), projection(y$$21));
+    }, (xs$$85 = (0, _Array.ofList)(xs$$84, Array), (xs$$85.sort(comparer$$5), xs$$85))));
   }
-  function sortDescending(xs$$87, comparer$$8) {
-    var xs$$88;
-    return ofArray((xs$$88 = (0, _Array.ofList)(xs$$87, Array), (xs$$88.sort(function comparer$$9(x$$55, y$$22) {
-      return comparer$$8.Compare(x$$55, y$$22) * -1;
-    }), xs$$88)));
+  function sortDescending(xs$$87, comparer$$6) {
+    var comparer$$7, xs$$88;
+    return function (xs$$89) {
+      return ofArray(xs$$89);
+    }((comparer$$7 = function comparer$$7(x$$55, y$$22) {
+      return comparer$$6.Compare(x$$55, y$$22) * -1;
+    }, (xs$$88 = (0, _Array.ofList)(xs$$87, Array), (xs$$88.sort(comparer$$7), xs$$88))));
   }
-  function sortByDescending(projection$$1, xs$$90, comparer$$11) {
-    var xs$$91;
-    return ofArray((xs$$91 = (0, _Array.ofList)(xs$$90, Array), (xs$$91.sort(function comparer$$12(x$$56, y$$23) {
-      return comparer$$11.Compare(projection$$1(x$$56), projection$$1(y$$23)) * -1;
-    }), xs$$91)));
+  function sortByDescending(projection$$1, xs$$90, comparer$$8) {
+    var comparer$$9, xs$$91;
+    return function (xs$$92) {
+      return ofArray(xs$$92);
+    }((comparer$$9 = function comparer$$9(x$$56, y$$23) {
+      return comparer$$8.Compare(projection$$1(x$$56), projection$$1(y$$23)) * -1;
+    }, (xs$$91 = (0, _Array.ofList)(xs$$90, Array), (xs$$91.sort(comparer$$9), xs$$91))));
   }
-  function sortWith(comparer$$14, xs$$93) {
-    var xs$$94;
-    return ofArray((xs$$94 = (0, _Array.ofList)(xs$$93, Array), (xs$$94.sort(comparer$$14), xs$$94)));
+  function sortWith(comparer$$10, xs$$93) {
+    var comparer$$11, xs$$94;
+    return function (xs$$95) {
+      return ofArray(xs$$95);
+    }((comparer$$11 = comparer$$10, (xs$$94 = (0, _Array.ofList)(xs$$93, Array), (xs$$94.sort(comparer$$11), xs$$94))));
   }
   function sum(xs$$96) {
     return fold(function (x$$57, y$$24) {
@@ -808,24 +906,24 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
       return acc$$26 + f$$52(x$$58);
     }, 0, xs$$97);
   }
-  function maxBy(projection$$2, xs$$98, comparer$$17) {
+  function maxBy(projection$$2, xs$$98, comparer$$12) {
     return reduce(function (x$$59, y$$25) {
-      return comparer$$17.Compare(projection$$2(y$$25), projection$$2(x$$59)) > 0 ? y$$25 : x$$59;
+      return comparer$$12.Compare(projection$$2(y$$25), projection$$2(x$$59)) > 0 ? y$$25 : x$$59;
     }, xs$$98);
   }
-  function max(li, comparer$$18) {
+  function max(li, comparer$$13) {
     return reduce(function (x$$60, y$$26) {
-      return comparer$$18.Compare(y$$26, x$$60) > 0 ? y$$26 : x$$60;
+      return comparer$$13.Compare(y$$26, x$$60) > 0 ? y$$26 : x$$60;
     }, li);
   }
-  function minBy(projection$$3, xs$$99, comparer$$19) {
+  function minBy(projection$$3, xs$$99, comparer$$14) {
     return reduce(function (x$$61, y$$27) {
-      return comparer$$19.Compare(projection$$3(y$$27), projection$$3(x$$61)) > 0 ? x$$61 : y$$27;
+      return comparer$$14.Compare(projection$$3(y$$27), projection$$3(x$$61)) > 0 ? x$$61 : y$$27;
     }, xs$$99);
   }
-  function min(xs$$100, comparer$$20) {
+  function min(xs$$100, comparer$$15) {
     return reduce(function (x$$62, y$$28) {
-      return comparer$$20.Compare(y$$28, x$$62) > 0 ? x$$62 : y$$28;
+      return comparer$$15.Compare(y$$28, x$$62) > 0 ? x$$62 : y$$28;
     }, xs$$100);
   }
   function average(zs$$6) {
@@ -837,15 +935,25 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
     return total$$1 / (0, _List.length)(zs$$7);
   }
   function permute(f$$53, xs$$101) {
-    return ofArray((0, _Array.permute)(f$$53, (0, _Array.ofList)(xs$$101, Array)));
+    return function (xs$$102) {
+      return ofArray(xs$$102);
+    }(function (array$$3) {
+      return (0, _Array.permute)(f$$53, array$$3);
+    }(function (list$$1) {
+      return (0, _Array.ofList)(list$$1, Array);
+    }(xs$$101)));
   }
   function skip(i$$15, xs$$103) {
+    var i$$17;
+
     const skipInner = function skipInner(i$$16, xs$$104) {
       skipInner: while (true) {
-        if (i$$16 === 0) {
+        const matchValue$$10 = [i$$16, xs$$104];
+
+        if (matchValue$$10[0] === 0) {
           return xs$$104;
-        } else if (xs$$104.tail != null) {
-          const xs$$105 = xs$$104.tail;
+        } else if (matchValue$$10[1].tail != null) {
+          const xs$$105 = matchValue$$10[1].tail;
           i$$16 = i$$16 - 1;
           xs$$104 = xs$$105;
           continue skipInner;
@@ -855,25 +963,28 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
       }
     };
 
-    if (i$$15 < 0) {
+    const matchValue$$11 = [i$$15, xs$$103];
+
+    if (i$$17 = matchValue$$11[0] | 0, i$$17 < 0) {
+      const i$$18 = matchValue$$11[0] | 0;
       throw new Error("The input must be non-negative.");
     } else {
       var $target$$172, i$$19, xs$$107;
 
-      if (i$$15 === 0) {
+      if (matchValue$$11[0] === 0) {
         $target$$172 = 0;
-      } else if (i$$15 === 1) {
-        if (xs$$103.tail != null) {
+      } else if (matchValue$$11[0] === 1) {
+        if (matchValue$$11[1].tail != null) {
           $target$$172 = 1;
         } else {
           $target$$172 = 2;
-          i$$19 = i$$15;
-          xs$$107 = xs$$103;
+          i$$19 = matchValue$$11[0];
+          xs$$107 = matchValue$$11[1];
         }
       } else {
         $target$$172 = 2;
-        i$$19 = i$$15;
-        xs$$107 = xs$$103;
+        i$$19 = matchValue$$11[0];
+        xs$$107 = matchValue$$11[1];
       }
 
       switch ($target$$172) {
@@ -885,7 +996,7 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
 
         case 1:
           {
-            const xs$$106 = xs$$103.tail;
+            const xs$$106 = matchValue$$11[1].tail;
             return xs$$106;
             break;
           }
@@ -937,11 +1048,13 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
   }
   function takeSplitAux(error, i$$20, acc$$27, xs$$109) {
     takeSplitAux: while (true) {
-      if (i$$20 === 0) {
+      const matchValue$$12 = [i$$20, xs$$109];
+
+      if (matchValue$$12[0] === 0) {
         return [reverse(acc$$27), xs$$109];
-      } else if (xs$$109.tail != null) {
-        const xs$$110 = xs$$109.tail;
-        const x$$63 = xs$$109.head;
+      } else if (matchValue$$12[1].tail != null) {
+        const xs$$110 = matchValue$$12[1].tail;
+        const x$$63 = matchValue$$12[1].head;
         error = error;
         i$$20 = i$$20 - 1;
         acc$$27 = (0, _Types.L)(x$$63, acc$$27);
@@ -957,25 +1070,29 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
     }
   }
   function take(i$$21, xs$$111) {
-    if (i$$21 < 0) {
+    var i$$22;
+    const matchValue$$13 = [i$$21, xs$$111];
+
+    if (i$$22 = matchValue$$13[0] | 0, i$$22 < 0) {
+      const i$$23 = matchValue$$13[0] | 0;
       throw new Error("The input must be non-negative.");
     } else {
       var $target$$176, i$$24, xs$$112;
 
-      if (i$$21 === 0) {
+      if (matchValue$$13[0] === 0) {
         $target$$176 = 0;
-      } else if (i$$21 === 1) {
-        if (xs$$111.tail != null) {
+      } else if (matchValue$$13[0] === 1) {
+        if (matchValue$$13[1].tail != null) {
           $target$$176 = 1;
         } else {
           $target$$176 = 2;
-          i$$24 = i$$21;
-          xs$$112 = xs$$111;
+          i$$24 = matchValue$$13[0];
+          xs$$112 = matchValue$$13[1];
         }
       } else {
         $target$$176 = 2;
-        i$$24 = i$$21;
-        xs$$112 = xs$$111;
+        i$$24 = matchValue$$13[0];
+        xs$$112 = matchValue$$13[1];
       }
 
       switch ($target$$176) {
@@ -987,14 +1104,16 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
 
         case 1:
           {
-            const x$$64 = xs$$111.head;
+            const x$$64 = matchValue$$13[1].head;
             return (0, _Types.L)(x$$64, (0, _Types.L)());
             break;
           }
 
         case 2:
           {
-            return takeSplitAux(true, i$$24, (0, _Types.L)(), xs$$112)[0];
+            return function (tuple) {
+              return tuple[0];
+            }(takeSplitAux(true, i$$24, (0, _Types.L)(), xs$$112));
             break;
           }
       }
@@ -1020,25 +1139,29 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
     }
   }
   function truncate(i$$25, xs$$115) {
-    if (i$$25 < 0) {
+    var i$$26;
+    const matchValue$$14 = [i$$25, xs$$115];
+
+    if (i$$26 = matchValue$$14[0] | 0, i$$26 < 0) {
+      const i$$27 = matchValue$$14[0] | 0;
       throw new Error("The input must be non-negative.");
     } else {
       var $target$$179, i$$28, xs$$116;
 
-      if (i$$25 === 0) {
+      if (matchValue$$14[0] === 0) {
         $target$$179 = 0;
-      } else if (i$$25 === 1) {
-        if (xs$$115.tail != null) {
+      } else if (matchValue$$14[0] === 1) {
+        if (matchValue$$14[1].tail != null) {
           $target$$179 = 1;
         } else {
           $target$$179 = 2;
-          i$$28 = i$$25;
-          xs$$116 = xs$$115;
+          i$$28 = matchValue$$14[0];
+          xs$$116 = matchValue$$14[1];
         }
       } else {
         $target$$179 = 2;
-        i$$28 = i$$25;
-        xs$$116 = xs$$115;
+        i$$28 = matchValue$$14[0];
+        xs$$116 = matchValue$$14[1];
       }
 
       switch ($target$$179) {
@@ -1050,39 +1173,45 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
 
         case 1:
           {
-            const x$$67 = xs$$115.head;
+            const x$$67 = matchValue$$14[1].head;
             return (0, _Types.L)(x$$67, (0, _Types.L)());
             break;
           }
 
         case 2:
           {
-            return takeSplitAux(false, i$$28, (0, _Types.L)(), xs$$116)[0];
+            return function (tuple$$1) {
+              return tuple$$1[0];
+            }(takeSplitAux(false, i$$28, (0, _Types.L)(), xs$$116));
             break;
           }
       }
     }
   }
   function splitAt(i$$29, xs$$117) {
-    if (i$$29 < 0) {
+    var i$$30;
+    const matchValue$$15 = [i$$29, xs$$117];
+
+    if (i$$30 = matchValue$$15[0] | 0, i$$30 < 0) {
+      const i$$31 = matchValue$$15[0] | 0;
       throw new Error("The input must be non-negative.");
     } else {
       var $target$$180, i$$32, xs$$119;
 
-      if (i$$29 === 0) {
+      if (matchValue$$15[0] === 0) {
         $target$$180 = 0;
-      } else if (i$$29 === 1) {
-        if (xs$$117.tail != null) {
+      } else if (matchValue$$15[0] === 1) {
+        if (matchValue$$15[1].tail != null) {
           $target$$180 = 1;
         } else {
           $target$$180 = 2;
-          i$$32 = i$$29;
-          xs$$119 = xs$$117;
+          i$$32 = matchValue$$15[0];
+          xs$$119 = matchValue$$15[1];
         }
       } else {
         $target$$180 = 2;
-        i$$32 = i$$29;
-        xs$$119 = xs$$117;
+        i$$32 = matchValue$$15[0];
+        xs$$119 = matchValue$$15[1];
       }
 
       switch ($target$$180) {
@@ -1094,8 +1223,8 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
 
         case 1:
           {
-            const xs$$118 = xs$$117.tail;
-            const x$$68 = xs$$117.head;
+            const xs$$118 = matchValue$$15[1].tail;
+            const x$$68 = matchValue$$15[1].head;
             return [(0, _Types.L)(x$$68, (0, _Types.L)()), xs$$118];
             break;
           }
@@ -1110,7 +1239,13 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
   }
   function toSeq(xs$$120) {
     return (0, _Seq.unfold)(function (_arg1$$21) {
-      return _arg1$$21.tail != null ? [_arg1$$21.head, _arg1$$21.tail] : null;
+      if (_arg1$$21.tail != null) {
+        const xs$$121 = _arg1$$21.tail;
+        const x$$69 = _arg1$$21.head;
+        return [x$$69, xs$$121];
+      } else {
+        return null;
+      }
     }, xs$$120);
   }
   function ofSeq(xs$$122) {
@@ -1119,28 +1254,43 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
     }, xs$$122, (0, _Types.L)());
   }
   function concat(lists) {
-    return (0, _Seq.foldBack)(function (list$$2, state$$3) {
-      return (0, _List.foldBack)(function folder(x$$71, acc$$29) {
-        return (0, _Types.L)(x$$71, acc$$29);
-      }, list$$2, state$$3);
-    }, lists, (0, _Types.L)());
+    var folder;
+    return (0, _Seq.foldBack)((0, _Util.uncurry)(2, (folder = function folder(x$$71, acc$$29) {
+      return (0, _Types.L)(x$$71, acc$$29);
+    }, function (list$$2) {
+      return function (state$$3) {
+        return (0, _List.foldBack)(folder, list$$2, state$$3);
+      };
+    })), lists, (0, _Types.L)());
   }
   function slice(lower, upper, xs$$123) {
+    var f$$54;
     const lower$$1 = (0, _Option.defaultArg)(lower, -1) | 0;
     const upper$$1 = (0, _Option.defaultArg)(upper, -1) | 0;
-    return reverse(foldIndexed(function f$$54(i$$33, acc$$30, x$$72) {
+    return function (xs$$125) {
+      return reverse(xs$$125);
+    }((f$$54 = function f$$54(i$$33, acc$$30, x$$72) {
       if ((lower$$1 === -1 ? true : lower$$1 <= i$$33) ? upper$$1 === -1 ? true : i$$33 <= upper$$1 : false) {
         return (0, _Types.L)(x$$72, acc$$30);
       } else {
         return acc$$30;
       }
-    }, (0, _Types.L)(), xs$$123));
+    }, function (seed$$10) {
+      return function (xs$$124) {
+        return foldIndexed(f$$54, seed$$10, xs$$124);
+      };
+    })((0, _Types.L)())(xs$$123));
   }
   function distinctBy(projection$$4, xs$$126, eq$$2) {
+    var f$$55;
     const hashSet = (0, _Set.createMutable)([], (0, _Util.comparerFromEqualityComparer)(eq$$2));
-    return filter(function f$$55($arg$$1) {
-      return (0, _Util.addToSet)(projection$$4($arg$$1), hashSet);
-    }, xs$$126);
+    return (f$$55 = function f$$55($arg$$1) {
+      return function (arg00$$1) {
+        return (0, _Util.addToSet)(arg00$$1, hashSet);
+      }(projection$$4($arg$$1));
+    }, function (xs$$127) {
+      return filter(f$$55, xs$$127);
+    })(xs$$126);
   }
   function distinct(xs$$128, eq$$3) {
     return distinctBy(function (x$$73) {
@@ -1148,6 +1298,7 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
     }, xs$$128, eq$$3);
   }
   function groupBy(projection$$5, xs$$129, eq$$4) {
+    var mapping;
     const dict = (0, _Map.createMutable)([], (0, _Util.comparerFromEqualityComparer)(eq$$4));
     (0, _Seq.iterate)(function (v$$2) {
       const key = projection$$5(v$$2);
@@ -1158,9 +1309,13 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
         dict.set(key, (0, _Types.L)(v$$2, (0, _Types.L)()));
       }
     }, xs$$129);
-    return (0, _List.ofSeq)((0, _Seq.map)(function mapping(kv) {
+    return function (source$$1) {
+      return (0, _List.ofSeq)(source$$1);
+    }((mapping = function mapping(kv) {
       return [kv[0], reverse(kv[1])];
-    }, dict));
+    }, function (source) {
+      return (0, _Seq.map)(mapping, source);
+    })(dict));
   }
   function countBy(projection$$6, xs$$130, eq$$5) {
     const dict$$1 = (0, _Map.createMutable)([], (0, _Util.comparerFromEqualityComparer)(eq$$5));
@@ -1169,7 +1324,8 @@ define(["exports", "./Option", "./Types", "./Array", "./Util", "./Set", "./List"
       const matchValue$$16 = (0, _Util.tryGetValue)(dict$$1, key$$1, null);
 
       if (matchValue$$16[0]) {
-        matchValue$$16[1].contents = matchValue$$16[1].contents + 1;
+        const prev = matchValue$$16[1];
+        prev.contents = prev.contents + 1;
       } else {
         dict$$1.set(key$$1, new _Types.FSharpRef(1));
       }

@@ -1,7 +1,7 @@
 open Fable.Core
 open Fable.Core.JsInterop
 
-// Create an jObject manually
+// Create a JS plain object manually
 let data1 =
     createObj [
         "firstname" ==> "John"
@@ -25,18 +25,6 @@ let data3 = jsOptions<IUser>(fun o ->
     o.surname <- "Doe"
     o.age <- 25
 )
-
-// Use Pojo attribute
-[<Pojo>]
-type UserPojo =
-    { firstname : string
-      surname : string
-      age : int }
-
-let data4 =
-    { firstname = "John"
-      surname = "Doe"
-      age = 25 }
 
 // KeyValueList attribute
 type UserKV =

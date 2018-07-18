@@ -332,13 +332,8 @@ module JSTypedFable =
     (*
         There are some more useful features of Fable which can aid
         in writing expressive and typesafe code
-        The pojo, erase, and stringenum attributes in particular
+        The erase and stringenum attributes in particular
     *)
-    // The Pojo attribute ensures that the result is a plain js object
-    type [<Pojo>] MyPojoObject1 = {s1:string;i1:int}
-    // without it we get a class
-    type MyNonPojoObject1 = {s1:string;i1:int}
-
     // Erase does something similar for unions - we just get the value, not the discriminator
     [<Erase>]
     type MyErased1 =
@@ -348,6 +343,7 @@ module JSTypedFable =
     type MyUnion1 =
         | Str1 of string
         | Int1 of int
+
     // And stringenum gives us the ability to treat a string value like an enum
     // so Vertical will compile to "Vertical"
     [<StringEnum>]
@@ -356,11 +352,6 @@ module JSTypedFable =
         | [<CompiledName("Horizontal")>] Horizontal // get round automatic lowering of case of first character
 
     let init() =
-        let p1: MyPojoObject1 = {s1="a";i1=1}
-        let p2: MyNonPojoObject1 = {s1="a";i1=1}
-        // p1 is {} and p2 is a new Class()"
-        code """let p1: MyPojoObject1 = {s1="a";i1=1}
-let p2: MyNonPojoObject1 = {s1="a";i1=1} """ (p1,p2)
         // We can demonstrate the use of the Erased attribute to create js friendly unions"
         let e1: MyErased1 = EStr1 "Erased"
         let u1: MyUnion1 = Str1 "Not Erased"

@@ -22,10 +22,16 @@ define(["exports", "./Util"], function (exports, _Util) {
     };
   }
   function HashIdentity$$$Structural() {
-    return HashIdentity$$$FromFunctions(_Util.structuralHash, _Util.equals);
+    return HashIdentity$$$FromFunctions(function (obj) {
+      return (0, _Util.structuralHash)(obj);
+    }, function (e1, e2) {
+      return (0, _Util.equals)(e1, e2);
+    });
   }
   function HashIdentity$$$Reference() {
-    return HashIdentity$$$FromFunctions(_Util.identityHash, function (e1$$1, e2$$1) {
+    return HashIdentity$$$FromFunctions(function (obj$$1) {
+      return (0, _Util.identityHash)(obj$$1);
+    }, function (e1$$1, e2$$1) {
       return e1$$1 === e2$$1;
     });
   }
@@ -38,6 +44,8 @@ define(["exports", "./Util"], function (exports, _Util) {
     };
   }
   function ComparisonIdentity$$$Structural() {
-    return ComparisonIdentity$$$FromFunction(_Util.compare);
+    return ComparisonIdentity$$$FromFunction(function (e1$$2, e2$$2) {
+      return (0, _Util.compare)(e1$$2, e2$$2);
+    });
   }
 });

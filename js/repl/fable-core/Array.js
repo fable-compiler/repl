@@ -134,7 +134,9 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
     return newArray;
   }
   function filter(predicate, array) {
-    return array.filter(predicate);
+    const predicate$$1 = predicate;
+    const array$$1 = array;
+    return array$$1.filter(predicate$$1);
   }
   function fill(target, targetIndex, count, value) {
     for (let i$$2 = targetIndex; i$$2 <= targetIndex + count - 1; i$$2++) {
@@ -144,7 +146,10 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
     return target;
   }
   function getSubArray(array$$2, offset, length) {
-    return array$$2.slice(offset, offset + length);
+    const array$$3 = array$$2;
+    const begin = offset | 0;
+    const end = offset + length | 0;
+    return array$$3.slice(begin, end);
   }
   function last(array$$4) {
     if (array$$4.length === 0) {
@@ -244,8 +249,10 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
 
       for (let i$$9 = 0; i$$9 <= array$$6.length - 1; i$$9++) {
         const patternInput = mapping(acc, array$$6[i$$9]);
-        res[i$$9] = patternInput[0];
-        acc = patternInput[1];
+        const s$0027 = patternInput[1];
+        const h$0027 = patternInput[0];
+        res[i$$9] = h$0027;
+        acc = s$0027;
       }
 
       return [res, acc];
@@ -263,8 +270,10 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
 
       for (let i$$10 = array$$7.length - 1; i$$10 >= 0; i$$10--) {
         const patternInput$$1 = mapping$$1(array$$7[i$$10], acc$$1);
-        res$$1[i$$10] = patternInput$$1[0];
-        acc$$1 = patternInput$$1[1];
+        const s$0027$$1 = patternInput$$1[1];
+        const h$0027$$1 = patternInput$$1[0];
+        res$$1[i$$10] = h$0027$$1;
+        acc$$1 = s$0027$$1;
       }
 
       return [res$$1, acc$$1];
@@ -272,7 +281,9 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
   }
   function indexed(source$$2) {
     const len$$4 = source$$2.length | 0;
-    const target$$3 = new Array(len$$4);
+    let target$$3;
+    const len$$5 = len$$4 | 0;
+    target$$3 = new Array(len$$5);
 
     for (let i$$11 = 0; i$$11 <= len$$4 - 1; i$$11++) {
       target$$3[i$$11] = [i$$11, source$$2[i$$11]];
@@ -308,14 +319,25 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
   }
 
   function truncate(count$$1, array$$8) {
-    const count$$2 = (0, _Util.max)(_Util.comparePrimitives, 0, count$$1) | 0;
-    return array$$8.slice(0, count$$2);
+    const count$$2 = (0, _Util.max)(function (x, y) {
+      return (0, _Util.comparePrimitives)(x, y);
+    }, 0, count$$1) | 0;
+    const array$$9 = array$$8;
+    const begin$$1 = 0;
+    const end$$1 = count$$2 | 0;
+    return array$$9.slice(begin$$1, end$$1);
   }
   function concat(arrays$$2, cons$$10) {
-    return concatImpl(cons$$10, (0, _Array.ofSeq)(arrays$$2, Array));
+    return function (arrays$$3) {
+      return concatImpl(cons$$10, arrays$$3);
+    }(function (source$$3) {
+      return (0, _Array.ofSeq)(source$$3, Array);
+    }(arrays$$2));
   }
   function collect(mapping$$2, array$$10, cons$$11) {
-    return concatImpl(cons$$11, map(mapping$$2, array$$10, Array));
+    return function (arrays$$4) {
+      return concatImpl(cons$$11, arrays$$4);
+    }(map(mapping$$2, array$$10, Array));
   }
   function countBy(projection, array$$11, eq) {
     const dict = (0, _Map.createMutable)([], (0, _Util.comparerFromEqualityComparer)(eq));
@@ -326,13 +348,16 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
       const matchValue$$2 = (0, _Util.tryGetValue)(dict, key, 0);
 
       if (matchValue$$2[0]) {
-        dict.set(key, matchValue$$2[1] + 1);
+        const prev = matchValue$$2[1] | 0;
+        dict.set(key, prev + 1);
       } else {
         dict.set(key, 1);
       }
     }
 
-    const res$$2 = new Array(dict.size);
+    let res$$2;
+    const len$$6 = dict.size | 0;
+    res$$2 = new Array(len$$6);
     let i$$13 = 0;
     (0, _Seq.iterate)(function (group) {
       res$$2[i$$13] = [group[0], group[1]];
@@ -341,10 +366,15 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
     return res$$2;
   }
   function distinctBy(projection$$1, array$$12, eq$$1) {
+    var predicate$$2;
     const hashSet = (0, _Set.createMutable)([], (0, _Util.comparerFromEqualityComparer)(eq$$1));
-    return filter(function predicate$$2($arg$$1) {
-      return (0, _Util.addToSet)(projection$$1($arg$$1), hashSet);
-    }, array$$12);
+    return (predicate$$2 = function predicate$$2($arg$$1) {
+      return function (arg00) {
+        return (0, _Util.addToSet)(arg00, hashSet);
+      }(projection$$1($arg$$1));
+    }, function (array$$13) {
+      return filter(predicate$$2, array$$13);
+    })(array$$12);
   }
   function distinct(array$$14, eq$$2) {
     return distinctBy(function (x) {
@@ -352,7 +382,9 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
     }, array$$14, eq$$2);
   }
   function where(predicate$$3, array$$15) {
-    return array$$15.filter(predicate$$3);
+    const predicate$$4 = predicate$$3;
+    const array$$16 = array$$15;
+    return array$$16.filter(predicate$$4);
   }
   function contains(value$$2, array$$17, eq$$3) {
     const loop = function loop(i$$14) {
@@ -371,16 +403,23 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
     return loop(0);
   }
   function except(itemsToExclude, array$$18, eq$$4) {
+    var predicate$$5;
+
     if (array$$18.length === 0) {
       return array$$18;
     } else {
       const cached = (0, _Set.createMutable)(itemsToExclude, (0, _Util.comparerFromEqualityComparer)(eq$$4));
-      return array$$18.filter(function predicate$$5(arg00$$1) {
+      return (predicate$$5 = function predicate$$5(arg00$$1) {
         return (0, _Util.addToSet)(arg00$$1, cached);
-      });
+      }, function (array$$19) {
+        const predicate$$6 = predicate$$5;
+        const array$$20 = array$$19;
+        return array$$20.filter(predicate$$6);
+      })(array$$18);
     }
   }
   function groupBy(projection$$2, array$$21, cons$$12, eq$$5) {
+    var array$$22, item;
     const dict$$1 = (0, _Map.createMutable)([], (0, _Util.comparerFromEqualityComparer)(eq$$5));
 
     for (let idx$$1 = 0; idx$$1 <= array$$21.length - 1; idx$$1++) {
@@ -389,14 +428,20 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
       const matchValue$$3 = (0, _Util.tryGetValue)(dict$$1, key$$1, null);
 
       if (matchValue$$3[0]) {
-        matchValue$$3[1].push(v);
+        const prev$$1 = matchValue$$3[1];
+
+        (function (value$$3) {
+          value$$3;
+        })((array$$22 = prev$$1, (item = v, array$$22.push(item))));
       } else {
         const prev$$2 = [v];
         dict$$1.set(key$$1, prev$$2);
       }
     }
 
-    const result$$5 = new Array(dict$$1.size);
+    let result$$5;
+    const len$$7 = dict$$1.size | 0;
+    result$$5 = new Array(len$$7);
     let i$$15 = 0;
     (0, _Seq.iterate)(function (group$$1) {
       result$$5[i$$15] = [group$$1[0], cons$$12.from(group$$1[1])];
@@ -405,7 +450,8 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
     return result$$5;
   }
   function empty(cons$$13) {
-    return new cons$$13(0);
+    const cons$$14 = cons$$13;
+    return new cons$$14(0);
   }
   function singleton(value$$4, cons$$15) {
     const ar$$1 = new cons$$15(1);
@@ -430,7 +476,9 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
       return [];
     } else {
       const count$$4 = array$$23.length - 1 | 0;
-      const result$$7 = new Array(count$$4);
+      let result$$7;
+      const len$$8 = count$$4 | 0;
+      result$$7 = new Array(len$$8);
 
       for (let i$$17 = 0; i$$17 <= count$$4 - 1; i$$17++) {
         result$$7[i$$17] = [array$$23[i$$17], array$$23[i$$17 + 1]];
@@ -489,10 +537,13 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
     }
 
     if (count$$6 === array$$27.length) {
-      return new cons$$21(0);
+      const cons$$22 = cons$$21;
+      return new cons$$22(0);
     } else {
       const count$$7 = (count$$6 < 0 ? 0 : count$$6) | 0;
-      return array$$27.slice(count$$7);
+      const array$$28 = array$$27;
+      const begin$$2 = count$$7 | 0;
+      return array$$28.slice(begin$$2);
     }
   }
   function skipWhile(predicate$$7, array$$29, cons$$23) {
@@ -503,10 +554,12 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
     }
 
     if (count$$8 === array$$29.length) {
-      return new cons$$23(0);
+      const cons$$24 = cons$$23;
+      return new cons$$24(0);
     } else {
+      const array$$30 = array$$29;
       const begin$$3 = count$$8 | 0;
-      return array$$29.slice(begin$$3);
+      return array$$30.slice(begin$$3);
     }
   }
   function take(count$$9, array$$31, cons$$25) {
@@ -519,9 +572,13 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
     }
 
     if (count$$9 === 0) {
-      return new cons$$25(0);
+      const cons$$26 = cons$$25;
+      return new cons$$26(0);
     } else {
-      return array$$31.slice(0, count$$9);
+      const array$$32 = array$$31;
+      const begin$$4 = 0;
+      const end$$2 = count$$9 | 0;
+      return array$$32.slice(begin$$4, end$$2);
     }
   }
   function takeWhile(predicate$$8, array$$33, cons$$27) {
@@ -532,27 +589,40 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
     }
 
     if (count$$10 === 0) {
-      return new cons$$27(0);
+      const cons$$28 = cons$$27;
+      return new cons$$28(0);
     } else {
+      const array$$34 = array$$33;
+      const begin$$5 = 0;
       const end$$3 = count$$10 | 0;
-      return array$$33.slice(0, end$$3);
+      return array$$34.slice(begin$$5, end$$3);
     }
   }
   function addRangeInPlace(range, array$$35) {
-    var item$$1;
+    var array$$36, item$$1;
     const iter = range[Symbol.iterator]();
     let cur = iter.next();
 
     while (!cur.done) {
-      item$$1 = cur.value, array$$35.push(item$$1);
+      (function (value$$5) {
+        value$$5;
+      })((array$$36 = array$$35, (item$$1 = cur.value, array$$36.push(item$$1))));
+
       cur = iter.next();
     }
   }
   function removeInPlace(item$$2, array$$37) {
-    const i$$22 = array$$37.indexOf(item$$2);
+    var array$$39, start, deleteCount;
+    let i$$22;
+    const array$$38 = array$$37;
+    const item$$3 = item$$2;
+    i$$22 = array$$38.indexOf(item$$3);
 
     if (i$$22 > -1) {
-      array$$37.splice(i$$22, 1);
+      (function (value$$6) {
+        value$$6;
+      })((array$$39 = array$$37, (start = i$$22 | 0, (deleteCount = 1, array$$39.splice(start, deleteCount)))));
+
       return true;
     } else {
       return false;
@@ -585,20 +655,29 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
     return [res1, res2];
   }
   function find(predicate$$9, array$$40) {
-    const matchValue$$4 = array$$40.find(predicate$$9);
+    let matchValue$$4;
+    const predicate$$10 = predicate$$9;
+    const array$$41 = array$$40;
+    matchValue$$4 = array$$41.find(predicate$$10);
 
     if (matchValue$$4 == null) {
       return indexNotFound();
     } else {
-      return (0, _Option.value)(matchValue$$4);
+      const res$$6 = (0, _Option.value)(matchValue$$4);
+      return res$$6;
     }
   }
   function tryFind(predicate$$11, array$$42) {
-    return array$$42.find(predicate$$11);
+    const predicate$$12 = predicate$$11;
+    const array$$43 = array$$42;
+    return array$$43.find(predicate$$12);
   }
   function findIndex(predicate$$13, array$$44) {
     var index;
-    const matchValue$$5 = array$$44.findIndex(predicate$$13);
+    let matchValue$$5;
+    const predicate$$14 = predicate$$13;
+    const array$$45 = array$$44;
+    matchValue$$5 = array$$45.findIndex(predicate$$14);
 
     if (index = matchValue$$5 | 0, index > -1) {
       const index$$1 = matchValue$$5 | 0;
@@ -609,7 +688,10 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
   }
   function tryFindIndex(predicate$$15, array$$46) {
     var index$$2;
-    const matchValue$$6 = array$$46.findIndex(predicate$$15);
+    let matchValue$$6;
+    const predicate$$16 = predicate$$15;
+    const array$$47 = array$$46;
+    matchValue$$6 = array$$47.findIndex(predicate$$16);
 
     if (index$$2 = matchValue$$6 | 0, index$$2 > -1) {
       const index$$3 = matchValue$$6 | 0;
@@ -627,7 +709,8 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
           const matchValue$$7 = chooser(array$$48[i$$25]);
 
           if (matchValue$$7 != null) {
-            return (0, _Option.value)(matchValue$$7);
+            const res$$7 = (0, _Option.value)(matchValue$$7);
+            return res$$7;
           } else {
             i$$25 = i$$25 + 1;
             continue loop$$1;
@@ -731,7 +814,8 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
       const matchValue$$9 = f$$7(source$$6[i$$31]);
 
       if (matchValue$$9 == null) {} else {
-        res$$9[j$$2] = (0, _Option.value)(matchValue$$9);
+        const y = (0, _Option.value)(matchValue$$9);
+        res$$9[j$$2] = y;
         j$$2 = j$$2 + 1;
       }
     }
@@ -799,9 +883,12 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
     return result$$9;
   }
   function permute(f$$8, array$$60) {
+    var x$$2;
     const size = array$$60.length | 0;
     const res$$10 = new array$$60.constructor(array$$60.length);
-    const checkFlags = new Array(size);
+    let checkFlags;
+    const len$$10 = size | 0;
+    checkFlags = new Array(len$$10);
     iterateIndexed(function (i$$39, x$$1) {
       const j$$3 = f$$8(i$$39) | 0;
 
@@ -812,9 +899,9 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
       res$$10[j$$3] = x$$1;
       checkFlags[j$$3] = 1;
     }, array$$60);
-    const isValid = forAll(function (y$$1) {
-      return 1 === y$$1;
-    }, checkFlags);
+    const isValid = forAll((x$$2 = 1, function (y$$1) {
+      return x$$2 === y$$1;
+    }), checkFlags);
 
     if (!isValid) {
       throw new Error("Not a valid permutation");
@@ -823,12 +910,16 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
     return res$$10;
   }
   function setSlice(target$$5, lower, upper, source$$7) {
+    var arr$$1;
     const lower$$1 = (0, _Option.defaultArg)(lower, 0) | 0;
     const upper$$1 = (0, _Option.defaultArg)(upper, 0) | 0;
     const length$$1 = (upper$$1 > 0 ? upper$$1 : target$$5.length - 1) - lower$$1 | 0;
 
-    if (ArrayBuffer.isView(target$$5) ? source$$7.length <= length$$1 : false) {
-      return target$$5.set(source$$7, lower$$1);
+    if ((arr$$1 = target$$5, ArrayBuffer.isView(arr$$1)) ? source$$7.length <= length$$1 : false) {
+      const target$$6 = target$$5;
+      const source$$8 = source$$7;
+      const offset$$1 = lower$$1 | 0;
+      return target$$6.set(source$$8, offset$$1);
     } else {
       for (let i$$40 = 0; i$$40 <= length$$1; i$$40++) {
         target$$5[i$$40 + lower$$1] = source$$7[i$$40];
@@ -836,69 +927,83 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
     }
   }
   function sortInPlaceBy(projection$$3, xs, comparer) {
-    return xs.sort(function comparer$$1(x$$3, y$$2) {
+    xs.sort(function (x$$3, y$$2) {
       return comparer.Compare(projection$$3(x$$3), projection$$3(y$$2));
     });
   }
-  function sortInPlace(xs$$1, comparer$$2) {
-    return xs$$1.sort(function comparer$$3(x$$4, y$$3) {
-      return comparer$$2.Compare(x$$4, y$$3);
+  function sortInPlace(xs$$1, comparer$$1) {
+    xs$$1.sort(function (x$$4, y$$3) {
+      return comparer$$1.Compare(x$$4, y$$3);
     });
   }
 
-  function copyArray(array$$63) {
-    const result$$10 = new array$$63.constructor(array$$63.length);
+  function copyArray(array$$61) {
+    const result$$10 = new array$$61.constructor(array$$61.length);
 
-    for (let i$$41 = 0; i$$41 <= array$$63.length - 1; i$$41++) {
-      result$$10[i$$41] = array$$63[i$$41];
+    for (let i$$41 = 0; i$$41 <= array$$61.length - 1; i$$41++) {
+      result$$10[i$$41] = array$$61[i$$41];
     }
 
     return result$$10;
   }
 
-  function sort(xs$$2, comparer$$4) {
+  function sort(xs$$2, comparer$$2) {
+    const comparer$$3 = function comparer$$3(x$$5, y$$4) {
+      return comparer$$2.Compare(x$$5, y$$4);
+    };
+
     const xs$$3 = copyArray(xs$$2);
-    xs$$3.sort(function comparer$$5(x$$5, y$$4) {
-      return comparer$$4.Compare(x$$5, y$$4);
-    });
+    xs$$3.sort(comparer$$3);
     return xs$$3;
   }
-  function sortBy(projection$$4, xs$$4, comparer$$7) {
+  function sortBy(projection$$4, xs$$4, comparer$$4) {
+    const comparer$$5 = function comparer$$5(x$$6, y$$5) {
+      return comparer$$4.Compare(projection$$4(x$$6), projection$$4(y$$5));
+    };
+
     const xs$$5 = copyArray(xs$$4);
-    xs$$5.sort(function comparer$$8(x$$6, y$$5) {
-      return comparer$$7.Compare(projection$$4(x$$6), projection$$4(y$$5));
-    });
+    xs$$5.sort(comparer$$5);
     return xs$$5;
   }
-  function sortDescending(xs$$6, comparer$$10) {
+  function sortDescending(xs$$6, comparer$$6) {
+    const comparer$$7 = function comparer$$7(x$$7, y$$6) {
+      return comparer$$6.Compare(x$$7, y$$6) * -1;
+    };
+
     const xs$$7 = copyArray(xs$$6);
-    xs$$7.sort(function comparer$$11(x$$7, y$$6) {
-      return comparer$$10.Compare(x$$7, y$$6) * -1;
-    });
+    xs$$7.sort(comparer$$7);
     return xs$$7;
   }
-  function sortByDescending(projection$$5, xs$$8, comparer$$13) {
+  function sortByDescending(projection$$5, xs$$8, comparer$$8) {
+    const comparer$$9 = function comparer$$9(x$$8, y$$7) {
+      return comparer$$8.Compare(projection$$5(x$$8), projection$$5(y$$7)) * -1;
+    };
+
     const xs$$9 = copyArray(xs$$8);
-    xs$$9.sort(function comparer$$14(x$$8, y$$7) {
-      return comparer$$13.Compare(projection$$5(x$$8), projection$$5(y$$7)) * -1;
-    });
+    xs$$9.sort(comparer$$9);
     return xs$$9;
   }
-  function sortWith(comparer$$16, xs$$10) {
+  function sortWith(comparer$$10, xs$$10) {
+    const comparer$$11 = comparer$$10;
     const xs$$11 = copyArray(xs$$10);
-    xs$$11.sort(comparer$$16);
+    xs$$11.sort(comparer$$11);
     return xs$$11;
   }
   function unfold(generator, state$$6) {
     const res$$11 = [];
 
     const loop$$7 = function loop$$7(state$$7) {
+      var array$$62, item$$4;
       const matchValue$$10 = generator(state$$7);
 
       if (matchValue$$10 != null) {
         const x$$9 = matchValue$$10[0];
         const s$0027$$2 = matchValue$$10[1];
-        res$$11.push(x$$9);
+
+        (function (value$$7) {
+          value$$7;
+        })((array$$62 = res$$11, (item$$4 = x$$9, array$$62.push(item$$4))));
+
         loop$$7(s$0027$$2);
       }
     };
@@ -906,26 +1011,41 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
     loop$$7(state$$6);
     return res$$11;
   }
-  function unzip(array$$70) {
-    const len$$11 = array$$70.length | 0;
-    const res1$$1 = new Array(len$$11);
-    const res2$$1 = new Array(len$$11);
+  function unzip(array$$63) {
+    const len$$11 = array$$63.length | 0;
+    let res1$$1;
+    const len$$12 = len$$11 | 0;
+    res1$$1 = new Array(len$$12);
+    let res2$$1;
+    const len$$13 = len$$11 | 0;
+    res2$$1 = new Array(len$$13);
     iterateIndexed(function (i$$42, tupledArg) {
-      res1$$1[i$$42] = tupledArg[0];
-      res2$$1[i$$42] = tupledArg[1];
-    }, array$$70);
+      const item1 = tupledArg[0];
+      const item2 = tupledArg[1];
+      res1$$1[i$$42] = item1;
+      res2$$1[i$$42] = item2;
+    }, array$$63);
     return [res1$$1, res2$$1];
   }
-  function unzip3(array$$71) {
-    const len$$14 = array$$71.length | 0;
-    const res1$$2 = new Array(len$$14);
-    const res2$$2 = new Array(len$$14);
-    const res3 = new Array(len$$14);
+  function unzip3(array$$64) {
+    const len$$14 = array$$64.length | 0;
+    let res1$$2;
+    const len$$15 = len$$14 | 0;
+    res1$$2 = new Array(len$$15);
+    let res2$$2;
+    const len$$16 = len$$14 | 0;
+    res2$$2 = new Array(len$$16);
+    let res3;
+    const len$$17 = len$$14 | 0;
+    res3 = new Array(len$$17);
     iterateIndexed(function (i$$43, tupledArg$$1) {
-      res1$$2[i$$43] = tupledArg$$1[0];
-      res2$$2[i$$43] = tupledArg$$1[1];
-      res3[i$$43] = tupledArg$$1[2];
-    }, array$$71);
+      const item1$$1 = tupledArg$$1[0];
+      const item2$$1 = tupledArg$$1[1];
+      const item3 = tupledArg$$1[2];
+      res1$$2[i$$43] = item1$$1;
+      res2$$2[i$$43] = item2$$1;
+      res3[i$$43] = item3;
+    }, array$$64);
     return [res1$$2, res2$$2, res3];
   }
   function zip(array1$$3, array2$$3) {
@@ -933,7 +1053,9 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
       throw new Error("Arrays had different lengths");
     }
 
-    const result$$11 = new Array(array1$$3.length);
+    let result$$11;
+    const len$$18 = array1$$3.length | 0;
+    result$$11 = new Array(len$$18);
 
     for (let i$$44 = 0; i$$44 <= array1$$3.length - 1; i$$44++) {
       result$$11[i$$44] = [array1$$3[i$$44], array2$$3[i$$44]];
@@ -946,7 +1068,9 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
       throw new Error("Arrays had different lengths");
     }
 
-    const result$$12 = new Array(array1$$4.length);
+    let result$$12;
+    const len$$19 = array1$$4.length | 0;
+    result$$12 = new Array(len$$19);
 
     for (let i$$45 = 0; i$$45 <= array1$$4.length - 1; i$$45++) {
       result$$12[i$$45] = [array1$$4[i$$45], array2$$4[i$$45], array3[i$$45]];
@@ -954,38 +1078,49 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
 
     return result$$12;
   }
-  function chunkBySize(chunkSize, array$$72) {
+  function chunkBySize(chunkSize, array$$65) {
+    var array$$67, item$$5;
+
     if (chunkSize < 1) {
       throw new Error("The input must be positive." + "\\nParameter name: " + "size");
     }
 
-    if (array$$72.length === 0) {
+    if (array$$65.length === 0) {
       return [[]];
     } else {
       const result$$13 = [];
 
-      for (let x$$10 = 0; x$$10 <= ~~Math.ceil(array$$72.length / chunkSize) - 1; x$$10++) {
+      for (let x$$10 = 0; x$$10 <= ~~Math.ceil(array$$65.length / chunkSize) - 1; x$$10++) {
         const start$$1 = x$$10 * chunkSize | 0;
         const end$0027 = start$$1 + chunkSize | 0;
-        const slice = array$$72.slice(start$$1, end$0027);
-        result$$13.push(slice);
+        let slice;
+        const array$$66 = array$$65;
+        const begin$$6 = start$$1 | 0;
+        const end$$4 = end$0027 | 0;
+        slice = array$$66.slice(begin$$6, end$$4);
+
+        (function (value$$8) {
+          value$$8;
+        })((array$$67 = result$$13, (item$$5 = slice, array$$67.push(item$$5))));
       }
 
       return result$$13;
     }
   }
-  function splitAt(index$$4, array$$75) {
+  function splitAt(index$$4, array$$68) {
+    var array$$69, begin$$7, end$$5, array$$70, begin$$8;
+
     if (index$$4 < 0) {
       throw new Error("The input must be non-negative" + "\\nParameter name: " + "index");
     }
 
-    if (index$$4 > array$$75.length) {
+    if (index$$4 > array$$68.length) {
       throw new Error("The input sequence has an insufficient number of elements." + "\\nParameter name: " + "index");
     }
 
-    return [array$$75.slice(0, index$$4), array$$75.slice(index$$4)];
+    return [(array$$69 = array$$68, (begin$$7 = 0, (end$$5 = index$$4 | 0, array$$69.slice(begin$$7, end$$5)))), (array$$70 = array$$68, (begin$$8 = index$$4 | 0, array$$70.slice(begin$$8)))];
   }
-  function compareWith(comparer$$19, array1$$5, array2$$5) {
+  function compareWith(comparer$$12, array1$$5, array2$$5) {
     if (array1$$5 == null) {
       if (array2$$5 == null) {
         return 0;
@@ -1006,7 +1141,7 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
         return -1 | 0;
       } else {
         while (i$$46 < length1 ? result$$14 === 0 : false) {
-          result$$14 = comparer$$19(array1$$5[i$$46], array2$$5[i$$46]);
+          result$$14 = comparer$$12(array1$$5[i$$46], array2$$5[i$$46]);
           i$$46 = i$$46 + 1;
         }
 
@@ -1014,63 +1149,67 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
       }
     }
   }
-  function equalsWith(comparer$$20, array1$$6, array2$$6) {
-    return compareWith(_Util.compare, array1$$6, array2$$6) === 0;
+  function equalsWith(comparer$$13, array1$$6, array2$$6) {
+    return compareWith(function (e1, e2) {
+      return (0, _Util.compare)(e1, e2);
+    }, array1$$6, array2$$6) === 0;
   }
-  function exactlyOne(array$$78) {
-    if (array$$78.length === 1) {
-      return array$$78[0];
-    } else if (array$$78.length === 0) {
+  function exactlyOne(array$$71) {
+    if (array$$71.length === 1) {
+      return array$$71[0];
+    } else if (array$$71.length === 0) {
       throw new Error("The input sequence was empty" + "\\nParameter name: " + "array");
     } else {
       throw new Error("Input array too long" + "\\nParameter name: " + "array");
     }
   }
-  function head(array$$79) {
-    if (array$$79.length === 0) {
+  function head(array$$72) {
+    if (array$$72.length === 0) {
       throw new Error("The input array was empty" + "\\nParameter name: " + "array");
     } else {
-      return array$$79[0];
+      return array$$72[0];
     }
   }
-  function tryHead(array$$80) {
-    if (array$$80.length === 0) {
+  function tryHead(array$$73) {
+    if (array$$73.length === 0) {
       return null;
     } else {
-      return (0, _Option.some)(array$$80[0]);
+      return (0, _Option.some)(array$$73[0]);
     }
   }
-  function tail(array$$81) {
-    if (array$$81.length === 0) {
+  function tail(array$$74) {
+    if (array$$74.length === 0) {
       throw new Error("Not enough elements" + "\\nParameter name: " + "array");
     }
 
-    return array$$81.slice(1);
+    const array$$75 = array$$74;
+    const begin$$9 = 1;
+    return array$$75.slice(begin$$9);
   }
-  function item(index$$5, array$$83) {
-    return array$$83[index$$5];
+  function item(index$$5, array$$76) {
+    return array$$76[index$$5];
   }
-  function tryItem(index$$6, array$$84) {
-    if (index$$6 < 0 ? true : index$$6 >= array$$84.length) {
+  function tryItem(index$$6, array$$77) {
+    if (index$$6 < 0 ? true : index$$6 >= array$$77.length) {
       return null;
     } else {
-      return (0, _Option.some)(array$$84[index$$6]);
+      return (0, _Option.some)(array$$77[index$$6]);
     }
   }
-  function foldBackIndexed(folder$$4, array$$85, state$$8) {
+  function foldBackIndexed(folder$$4, array$$78, state$$8) {
     let acc$$4 = state$$8;
-    const size$$1 = array$$85.length | 0;
+    const size$$1 = array$$78.length | 0;
 
     for (let i$$47 = 1; i$$47 <= size$$1; i$$47++) {
-      acc$$4 = folder$$4(i$$47 - 1, array$$85[size$$1 - i$$47], acc$$4);
+      acc$$4 = folder$$4(i$$47 - 1, array$$78[size$$1 - i$$47], acc$$4);
     }
 
     return acc$$4;
   }
-  function foldBack(folder$$5, array$$86, state$$9) {
+  function foldBack(folder$$5, array$$79, state$$9) {
     return foldBackIndexed(function (_arg1, x$$11, acc$$5) {
       return folder$$5(x$$11, acc$$5);
-    }, array$$86, state$$9);
+    }, array$$79, state$$9);
   }
   function foldIndexed2(folder$$6, state$$10, array1$$7, array2$$7) {
     let acc$$6 = state$$10;
@@ -1110,22 +1249,22 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
       return f$$9(x$$13, y$$9, acc$$9);
     }, array1$$10, array2$$10, state$$13);
   }
-  function reduce(reduction, array$$87) {
-    if (array$$87.length === 0) {
+  function reduce(reduction, array$$80) {
+    if (array$$80.length === 0) {
       throw new Error("The input array was empty");
     } else {
       return foldIndexed(function (i$$50, acc$$10, x$$14) {
         return i$$50 === 0 ? x$$14 : reduction(acc$$10, x$$14);
-      }, null, array$$87);
+      }, null, array$$80);
     }
   }
-  function reduceBack(reduction$$1, array$$88) {
-    if (array$$88.length === 0) {
+  function reduceBack(reduction$$1, array$$81) {
+    if (array$$81.length === 0) {
       throw new Error("The input array was empty");
     } else {
       return foldBackIndexed(function (i$$51, x$$15, acc$$11) {
         return i$$51 === 0 ? x$$15 : reduction$$1(acc$$11, x$$15);
-      }, array$$88, null);
+      }, array$$81, null);
     }
   }
   function forAll2(predicate$$22, array1$$11, array2$$11) {
@@ -1136,23 +1275,23 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
   function existsOffset($arg$$162, $arg$$163, $arg$$164) {
     existsOffset: while (true) {
       const predicate$$23 = $arg$$162,
-            array$$89 = $arg$$163,
+            array$$82 = $arg$$163,
             index$$7 = $arg$$164;
 
-      if (index$$7 === array$$89.length) {
+      if (index$$7 === array$$82.length) {
         return false;
-      } else if (predicate$$23(array$$89[index$$7])) {
+      } else if (predicate$$23(array$$82[index$$7])) {
         return true;
       } else {
         $arg$$162 = predicate$$23;
-        $arg$$163 = array$$89;
+        $arg$$163 = array$$82;
         $arg$$164 = index$$7 + 1;
         continue existsOffset;
       }
     }
   }
-  function exists(predicate$$24, array$$90) {
-    return existsOffset(predicate$$24, array$$90, 0);
+  function exists(predicate$$24, array$$83) {
+    return existsOffset(predicate$$24, array$$83, 0);
   }
   function existsOffset2($arg$$167, $arg$$168, $arg$$169, $arg$$170) {
     existsOffset2: while (true) {
@@ -1181,59 +1320,59 @@ define(["exports", "./Option", "./Util", "./Seq", "./Array", "./Map", "./Set", "
 
     return existsOffset2(predicate$$26, array1$$13, array2$$13, 0);
   }
-  function sum(array$$91) {
+  function sum(array$$84) {
     let acc$$13 = 0;
 
-    for (let i$$52 = 0; i$$52 <= array$$91.length - 1; i$$52++) {
-      acc$$13 = acc$$13 + array$$91[i$$52];
+    for (let i$$52 = 0; i$$52 <= array$$84.length - 1; i$$52++) {
+      acc$$13 = acc$$13 + array$$84[i$$52];
     }
 
     return acc$$13;
   }
-  function sumBy(projection$$6, array$$92) {
+  function sumBy(projection$$6, array$$85) {
     let acc$$14 = 0;
 
-    for (let i$$53 = 0; i$$53 <= array$$92.length - 1; i$$53++) {
-      acc$$14 = acc$$14 + projection$$6(array$$92[i$$53]);
+    for (let i$$53 = 0; i$$53 <= array$$85.length - 1; i$$53++) {
+      acc$$14 = acc$$14 + projection$$6(array$$85[i$$53]);
     }
 
     return acc$$14;
   }
-  function maxBy(projection$$7, xs$$12, comparer$$21) {
+  function maxBy(projection$$7, xs$$12, comparer$$14) {
     return reduce(function (x$$17, y$$11) {
-      return comparer$$21.Compare(projection$$7(y$$11), projection$$7(x$$17)) > 0 ? y$$11 : x$$17;
+      return comparer$$14.Compare(projection$$7(y$$11), projection$$7(x$$17)) > 0 ? y$$11 : x$$17;
     }, xs$$12);
   }
-  function max(xs$$13, comparer$$22) {
+  function max(xs$$13, comparer$$15) {
     return reduce(function (x$$18, y$$12) {
-      return comparer$$22.Compare(y$$12, x$$18) > 0 ? y$$12 : x$$18;
+      return comparer$$15.Compare(y$$12, x$$18) > 0 ? y$$12 : x$$18;
     }, xs$$13);
   }
-  function minBy(projection$$8, xs$$14, comparer$$23) {
+  function minBy(projection$$8, xs$$14, comparer$$16) {
     return reduce(function (x$$19, y$$13) {
-      return comparer$$23.Compare(projection$$8(y$$13), projection$$8(x$$19)) > 0 ? x$$19 : y$$13;
+      return comparer$$16.Compare(projection$$8(y$$13), projection$$8(x$$19)) > 0 ? x$$19 : y$$13;
     }, xs$$14);
   }
-  function min(xs$$15, comparer$$24) {
+  function min(xs$$15, comparer$$17) {
     return reduce(function (x$$20, y$$14) {
-      return comparer$$24.Compare(y$$14, x$$20) > 0 ? x$$20 : y$$14;
+      return comparer$$17.Compare(y$$14, x$$20) > 0 ? x$$20 : y$$14;
     }, xs$$15);
   }
-  function average(array$$93) {
-    if (array$$93.length === 0) {
+  function average(array$$86) {
+    if (array$$86.length === 0) {
       throw new Error("The input array was empty" + "\\nParameter name: " + "array");
     }
 
-    const total = sum(array$$93);
-    return total / array$$93.length;
+    const total = sum(array$$86);
+    return total / array$$86.length;
   }
-  function averageBy(projection$$9, array$$94) {
-    if (array$$94.length === 0) {
+  function averageBy(projection$$9, array$$87) {
+    if (array$$87.length === 0) {
       throw new Error("The input array was empty" + "\\nParameter name: " + "array");
     }
 
-    const total$$1 = sumBy(projection$$9, array$$94);
-    return total$$1 / array$$94.length;
+    const total$$1 = sumBy(projection$$9, array$$87);
+    return total$$1 / array$$87.length;
   }
   function ofSeq(source$$9, cons$$31) {
     return cons$$31.from(source$$9);

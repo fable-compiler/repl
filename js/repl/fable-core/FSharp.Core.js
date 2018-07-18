@@ -58,7 +58,10 @@ define(["exports", "./Util", "./FSharp.Collections", "./System.Text"], function 
   }
   function PrintfModule$$$PrintFormatToStringBuilderThen(continuation, builder, format) {
     const append = function append(s) {
-      (0, _System.StringBuilder$$Append$$Z721C83C5)(builder, s);
+      (function (value) {
+        value;
+      })((0, _System.StringBuilder$$Append$$Z721C83C5)(builder, s));
+
       return continuation();
     };
 
