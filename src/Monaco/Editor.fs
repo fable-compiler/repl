@@ -109,7 +109,10 @@ let createTooltipProvider() =
                         r.endLineNumber <- float pos.lineNumber
                     )
                     return jsOptions<monaco.languages.Hover>(fun h ->
-                        h.contents <- ResizeArray (!!lines: monaco.MarkedString[])
+                        h.contents <-
+                            lines |> Array.map (fun line ->
+                                jsOptions<monaco.IMarkdownString>(fun s ->
+                                    s.value <- line)) |> ResizeArray
                         h.range <- r
                     )
                 | _ -> return createEmpty<monaco.languages.Hover>

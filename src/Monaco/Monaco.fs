@@ -180,8 +180,9 @@ module monaco =
         static member WinCtrl with get(): int = jsNative and set(v: int): unit = jsNative
         static member chord(firstPart: int, secondPart: int): int = jsNative
 
-    type MarkedString =
-        U2<string, obj>
+    type [<AllowNullLiteral>] IMarkdownString =
+        abstract value: string with get, set
+        abstract isTrusted: bool option with get, set
 
     type [<AllowNullLiteral>] IKeyboardEvent =
         abstract browserEvent: KeyboardEvent with get, set
@@ -449,8 +450,8 @@ module monaco =
         type [<AllowNullLiteral>] IModelDecorationOptions =
             abstract stickiness: TrackedRangeStickiness option with get, set
             abstract className: string option with get, set
-            abstract glyphMarginHoverMessage: U2<MarkedString, ResizeArray<MarkedString>> option with get, set
-            abstract hoverMessage: U2<MarkedString, ResizeArray<MarkedString>> option with get, set
+            abstract glyphMarginHoverMessage: U2<IMarkdownString, ResizeArray<IMarkdownString>> option with get, set
+            abstract hoverMessage: U2<IMarkdownString, ResizeArray<IMarkdownString>> option with get, set
             abstract isWholeLine: bool option with get, set
             abstract overviewRuler: IModelDecorationOverviewRulerOptions option with get, set
             abstract glyphMarginClassName: string option with get, set
@@ -1422,7 +1423,7 @@ module monaco =
             abstract equals: other: IState -> bool
 
         type [<AllowNullLiteral>] Hover =
-            abstract contents: ResizeArray<MarkedString> with get, set
+            abstract contents: ResizeArray<IMarkdownString> with get, set
             abstract range: IRange with get, set
 
         type [<AllowNullLiteral>] HoverProvider =
