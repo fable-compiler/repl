@@ -237,14 +237,15 @@ let private menubar (model: Model) dispatch =
                   span [ ] [ ] ]
               Navbar.Item.div [ ]
                 [ img [ Src "img/fable_ionide.png" ] ] ]
-          Navbar.menu [ ]
-            [ Navbar.content [ ]
-                [ Button.button [ Button.OnClick (fun _ -> dispatch StartCompile) ]
-                    [ compileIcon
-                      span [ ]
-                        [ str "Compile" ] ] ]
-              Navbar.Item.div [ Navbar.Item.Props [ Style [ Color "white" ] ] ]
-                [ str "You can also press Alt+Enter from the editor" ] ] ]
+          Navbar.Start.div [ ]
+            [ Navbar.menu [ ]
+                [ Navbar.Item.div [ ]
+                    [ Button.button [ Button.OnClick (fun _ -> dispatch StartCompile) ]
+                        [ compileIcon
+                          span [ ]
+                            [ str "Compile" ] ] ]
+                  Navbar.Item.div [ Navbar.Item.Props [ Style [ Color "white" ] ] ]
+                    [ str "You can also press Alt+Enter from the editor" ] ] ] ]
 
 let private editorArea model dispatch =
     let isDragging =
