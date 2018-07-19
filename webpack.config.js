@@ -1,15 +1,17 @@
 // Template for webpack.config.js in Fable projects
 // Find latest version in https://github.com/fable-compiler/webpack-config-template
 
-// In most cases, you'll only need to edit the CONFIG object
-// See below if you need better fine-tuning of Webpack options
-
 var CONFIG = {
   indexHtmlTemplate: "./src/index.html",
   fsharpEntry: "./src/App/App.fsproj",
-  cssEntry: "./src/style.sass",
-  outputDir: "./public",
+  cssEntry: "./src/App/scss/main.scss",
+  outputDir: "./deploy",
   assetsDir: "./public",
+  // It's important to use this port, check src/App/Generator.fs
+  devServerPort: 8080,
+  babel: {
+    presets: [ ["env", { "modules": false }] ],
+  }
 }
 
 // If we're running the webpack-dev-server, assume we're in development mode
@@ -19,8 +21,8 @@ console.log("Bundling for " + (isProduction ? "production" : "development") + ".
 var path = require("path");
 var webpack = require("webpack");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 var MiniCssExtractPlugin = require("mini-css-extract-plugin");
-var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 // The HtmlWebpackPlugin allows us to use a template for the index.html page
 // and automatically injects <script> or <link> tags for generated bundles.
@@ -32,9 +34,12 @@ var commonPlugins = [
 ];
 
 module.exports = {
-  entry: CONFIG.fsharpEntry,
-  // NOTE we add a hash to the output file name in production
-  // to prevent browser caching if code changes
+  entry: isProduction ? {
+    app: [CONFIG.fsharpEntry, CONFIG.cssEntry]
+  } : {
+    app: [CONFIG.fsharpEntry],
+    style: [CONFIG.cssEntry]
+  },
   output: {
       path: path.join(__dirname, CONFIG.outputDir),
       filename: isProduction ? '[name].[hash].js' : '[name].js'
@@ -44,13 +49,7 @@ module.exports = {
   plugins: isProduction ?
     commonPlugins.concat([
         new MiniCssExtractPlugin({ filename: 'style.css' }),
-        // Inlining is causing problems in minified code
-        // See https://github.com/mishoo/UglifyJS2/issues/2842#issuecomment-359527962
-        new UglifyJSPlugin({
-            uglifyOptions: {
-                compress: { inline: false }
-            }
-        }),
+        new CopyWebpackPlugin([{ from: CONFIG.assetsDir }]),
     ])
     : commonPlugins.concat([
         new webpack.HotModuleReplacementPlugin(),
@@ -58,7 +57,7 @@ module.exports = {
   devServer: {
     publicPath: "/",
     contentBase: CONFIG.assetsDir,
-    port: CONFIG.devServerPort || 8080,
+    port: CONFIG.devServerPort,
     proxy: CONFIG.devServerProxy,
     hot: true,
     inline: true
@@ -74,6 +73,14 @@ module.exports = {
       {
         test: /\.fs(x|proj)?$/,
         use: "fable-loader"
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+            loader: 'babel-loader',
+            options: CONFIG.babel
+        },
       },
       {
         test: /\.(sass|scss|css)$/,

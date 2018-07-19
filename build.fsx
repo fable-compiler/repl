@@ -142,6 +142,7 @@ let libsOutput = "public" </> "libs"
 Target "Clean" (fun _ ->
     !! "public/js"
     ++ libsOutput
+    ++ "deploy"
   |> CleanDirs
 )
 
@@ -173,7 +174,7 @@ Target "Build.App" (fun _ ->
 )
 
 Target "Publish.GHPages" (fun _->
-    runYarn currentDir "gh-pages -d public"
+    runYarn currentDir "gh-pages -d deploy"
 )
 
 Target "DownloadReplArtifact" (fun _ ->

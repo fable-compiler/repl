@@ -1,5 +1,6 @@
-public/*.js*
-public/index.html
+public/js
+public/libs
+deploy/
 
 # Logs
 logs
