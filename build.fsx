@@ -1,4 +1,5 @@
-let AppveyorReplArtifactURLParams = "?branch=dev2.0"
+let fableBranch = "dev2.0"
+let AppveyorReplArtifactURLParams = "?branch=" + fableBranch
 let AppveyorReplArtifactURL =
     "https://ci.appveyor.com/api/projects/fable-compiler/Fable/artifacts/src/dotnet/Fable.JS/repl-bundle.zip"
     + AppveyorReplArtifactURLParams
@@ -189,7 +190,7 @@ Target "UpdateVersion" (fun _ ->
             { FolderPath = FableFolderPath
               FolderName = FableFolderName
               GithubLink = "git@github.com:fable-compiler/Fable.git"
-              GithubBranch = "master" }
+              GithubBranch = fableBranch }
         let release =
             FableFolderPath </> "src/dotnet/Fable.Compiler/RELEASE_NOTES.md"
             |> ReleaseNotesHelper.LoadReleaseNotes

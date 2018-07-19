@@ -15,7 +15,6 @@ module Keyboard =
         let keyCode = int e.keyCode
         let op =  if pressed then Set.add else Set.remove
         keysPressed <- op keyCode keysPressed
-        null
 
     /// Returns pair with -1 for left or down and +1
     /// for right or up (0 if no or both keys are pressed)

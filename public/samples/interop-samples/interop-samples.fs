@@ -321,7 +321,6 @@ module TypedFable =
         // Now lets consider our class and its instance"
         // Since the class has a known type, our syntax is much cleaner and properly type-checked"
         myExternalClassInstance1.doit ()
-        ()
 
 module JSTypedFable =
     open Fable.Core
@@ -372,7 +371,6 @@ module JSTypedFable =
         code """let u1list = [ Str1 "One"; Int1 1]
         let u1obj = keyValueList CaseRules.LowerFirst u1list""" (u1list,u1obj)
         // u1list is a JavaScript List, but u1obj is a pojo
-        ()
 
 module MainProgram =
     VeryDirtyFable.init()
