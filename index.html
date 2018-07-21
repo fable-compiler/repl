@@ -8,20 +8,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
     <link rel="shortcut icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
-<link href="style.css" rel="stylesheet"></head>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+</head>
 <body>
     <div id="app-container"></div>
-
-    <!-- Load Fable before loader and require so it's assigned to global variable -->
-    <script src="js/repl/bundle.min.js"></script>
-
-    <!-- Babel stand-alone -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
 
     <!-- Monaco -->
     <script>var require = { paths: { 'vs': 'libs/vs' } };</script>
     <script src="libs/vs/loader.js"></script>
     <script src="libs/vs/editor/editor.main.nls.js"></script>
     <script src="libs/vs/editor/editor.main.js"></script>
-<script type="text/javascript" src="app.1d7551ba1103557eb353.js"></script></body>
+
+    <script src="style.js"></script>
+    <script src="app.js"></script>
+</body>
 </html>
