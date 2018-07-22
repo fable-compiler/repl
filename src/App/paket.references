@@ -6,6 +6,7 @@ Fulma
 Fulma.Extensions
 Fable.Elmish
 Fable.Elmish.React
+Fable.Elmish.HMR
 Thoth.Json
 Fable.PowerPack
 File: Interfaces.fs

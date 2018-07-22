@@ -9,6 +9,7 @@ nuget Fulma prerelease
 nuget Fulma.Extensions prerelease
 nuget Fable.Elmish
 nuget Fable.Elmish.React prerelease
+nuget Fable.Elmish.HMR prerelease
 nuget Thoth.Json prerelease
 nuget Fable.PowerPack
 

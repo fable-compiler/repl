@@ -263,32 +263,33 @@ let private numberToPercent number =
     string (number * 100.) + "%"
 
 let private menubar (model: Model) dispatch =
+    let smallFaIcon icon =
+        Icon.faIcon [ Icon.Size Size.IsSmall ] icon
     let compileIcon =
-        if model.State = Compiling then
-            Icon.faIcon [ Icon.Size Size.IsSmall ]
-                [ Fa.icon Fa.I.Spinner
-                  Fa.spin ]
-        else
-            Icon.faIcon [ Icon.Size Size.IsSmall ]
-                [ Fa.icon Fa.I.Play ]
-    nav [ ClassName "navbar is-fixed-top is-dark" ]
+        if model.State = Compiling
+        then smallFaIcon [ Fa.icon Fa.I.Spinner; Fa.spin ]
+        else smallFaIcon [ Fa.icon Fa.I.Play ]
+    let menuIcon =
+        if model.Sidebar.IsExpanded
+        then smallFaIcon [ Fa.icon Fa.I.EyeSlash ]
+        else smallFaIcon [ Fa.icon Fa.I.Eye ]
+    Navbar.navbar
+        [ Navbar.IsFixedTop; Navbar.Color IsDark ]
         [ Navbar.Brand.div [ ]
-            [ div [ ClassName "navbar-burger"
-                    Style [ Display "block" ]
-                    OnClick (fun _ -> dispatch ToggleSidebar) ] // Force the burger to be always visible
-                [ span [ ] [ ]
-                  span [ ] [ ]
-                  span [ ] [ ] ]
+            [ Navbar.Item.div [ ]
+                [ img [ Src "img/fable_ionide.png" ] ]
               Navbar.Item.div [ ]
-                [ img [ Src "img/fable_ionide.png" ] ] ]
+                [ Button.button
+                    [ Button.OnClick (fun _ -> dispatch ToggleSidebar) ]
+                    [ menuIcon; span [] []; str "Menu" ] ]
+              Navbar.Item.div [ ]
+                [ Button.button
+                    [ Button.OnClick (fun _ -> dispatch StartCompile) ]
+                    [ compileIcon; span [] []; str "Compile" ] ]
+            ]
           Navbar.Start.div [ ]
             [ Navbar.menu [ ]
-                [ Navbar.Item.div [ ]
-                    [ Button.button [ Button.OnClick (fun _ -> dispatch StartCompile) ]
-                        [ compileIcon
-                          span [ ]
-                            [ str "Compile" ] ] ]
-                  Navbar.Item.div [ Navbar.Item.Props [ Style [ Color "white" ] ] ]
+                [ Navbar.Item.div [ Navbar.Item.Props [ Style [ Color "white" ] ] ]
                     [ str "You can also press Alt+Enter from the editor" ] ] ] ]
 
 let private editorArea isDragging model dispatch =
@@ -469,8 +470,6 @@ let private view (model: Model) dispatch =
                                   [ ]
                       yield outputArea model dispatch ] ] ] ]
 
-open Elmish.React
-
 let private subscriptions (model: Model) =
     let sub dispatch =
         // Resize subscriptions
@@ -505,8 +504,14 @@ let private subscriptions (model: Model) =
 
     Cmd.ofSub sub
 
+open Elmish.React
+open Elmish.HMR
+
 Program.mkProgram init update view
 |> Program.withSubscription subscriptions
 // |> Program.withSubscription (Notifications.subscription NotificationsMsg)
+#if DEBUG
+|> Program.withHMR
+#endif
 |> Program.withReact "app-container"
 |> Program.run

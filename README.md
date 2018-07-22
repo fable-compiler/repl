@@ -2,9 +2,9 @@
 
 Example of how to use the `Fable.FCS` component on your web
 
-## How to add a sample ?
+## How to add a sample?
 
-*This is the documenation of how to add a sample to the REPL, please note it's still in early stage and may change in the future*
+**This is the documentation of how to add a sample to the REPL, please note it's still in early stage and may change in the future**
 
 To add a sample, you need to update the `src/samples.json` file. This file is used to generate the samples menu in the browser.
 
