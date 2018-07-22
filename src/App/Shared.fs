@@ -10,7 +10,6 @@ open System.Diagnostics
 [<RequireQualifiedAccess>]
 module Literals =
     let [<Literal>] STORAGE_KEY = "fable-repl"
-    let [<Literal>] WORKER_URL = "./worker.js"
     let [<Literal>] REPL_BUNDLE_URL = "./js/repl/bundle.min.js"
     let [<Literal>] HOST =
 #if DEBUG

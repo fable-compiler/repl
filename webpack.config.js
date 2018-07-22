@@ -4,7 +4,6 @@
 var CONFIG = {
   indexHtmlTemplate: "./src/index.html",
   fsharpEntry: "./src/App/App.fsproj",
-  workerEntry: "./src/Worker/Worker.fsproj",
   cssEntry: "./src/style/main.scss",
   outputDir: "./deploy",
   assetsDir: "./public",
@@ -20,31 +19,50 @@ var isProduction = !process.argv.find(v => v.indexOf('webpack-dev-server') !== -
 console.log("Bundling for " + (isProduction ? "production" : "development") + "...");
 
 var path = require("path");
+var webpack = require("webpack");
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
+// The HtmlWebpackPlugin allows us to use a template for the index.html page
+// and automatically injects <script> or <link> tags for generated bundles.
+var commonPlugins = [
+  new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: CONFIG.indexHtmlTemplate
+  })
+];
+
 module.exports = {
-  entry: {
+  entry: isProduction ? {
+    app: [CONFIG.fsharpEntry, CONFIG.cssEntry]
+  } : {
     app: [CONFIG.fsharpEntry],
-    worker: [CONFIG.workerEntry],
     style: [CONFIG.cssEntry]
   },
   output: {
       path: path.join(__dirname, CONFIG.outputDir),
-      filename: '[name].js'
+      filename: isProduction ? '[name].[hash].js' : '[name].js',
+      // Fix for HMR + worker: https://github.com/webpack/webpack/issues/6642#issuecomment-370222543
+      globalObject: 'this'
   },
   mode: isProduction ? "production" : "development",
   devtool: isProduction ? "source-map" : "eval-source-map",
-  plugins: isProduction ? [
+  plugins: isProduction ?
+    commonPlugins.concat([
         new MiniCssExtractPlugin({ filename: 'style.css' }),
         new CopyWebpackPlugin([{ from: CONFIG.assetsDir }]),
-    ]
-    : [],
+    ])
+    : commonPlugins.concat([
+        new webpack.HotModuleReplacementPlugin(),
+    ]),
   devServer: {
     publicPath: "/",
     contentBase: CONFIG.assetsDir,
     port: CONFIG.devServerPort,
     proxy: CONFIG.devServerProxy,
+    hot: true,
+    inline: true
   },
   externals: {
     "monaco": "var monaco",
@@ -52,6 +70,10 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.worker\.js$/,
+        use: "worker-loader"
+      },
       {
         test: /\.fs(x|proj)?$/,
         use: "fable-loader"
@@ -67,8 +89,7 @@ module.exports = {
       {
         test: /\.(sass|scss|css)$/,
         use: [
-            // isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-            'style-loader',
+            isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
             'css-loader',
             'sass-loader',
         ],

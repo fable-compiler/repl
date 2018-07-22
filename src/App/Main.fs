@@ -10,6 +10,7 @@ open Shared
 open Editor
 open Mouse
 
+let private Worker(): Browser.Worker = importDefault "worker-loader!../Worker/Worker.fsproj"
 let private loadState(_key: string): string * string = importMember "./util.js"
 let private saveState(_key: string, _code: string, _html: string): unit = importMember "./util.js"
 
@@ -238,7 +239,7 @@ let update msg model =
         { model with Sidebar = subModel }, Cmd.map SidebarMsg cmd
 
 let init () =
-    let worker = Browser.Worker.Create(Literals.WORKER_URL)
+    let worker = Worker()
     { State = Loading
       FSharpEditor = Unchecked.defaultof<IEditor>
       HtmlEditor = Unchecked.defaultof<IEditor>
