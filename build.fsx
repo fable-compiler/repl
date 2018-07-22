@@ -196,7 +196,7 @@ Target "UpdateVersion" (fun _ ->
             |> ReleaseNotesHelper.LoadReleaseNotes
         release.NugetVersion
     let reg = Regex(@"\bVERSION\s*=\s*""(.*?)""")
-    let mainFile = sourceDir </> "App/Widgets/About.fs"
+    let mainFile = sourceDir </> "App/Shared.fs"
     (reg, mainFile) ||> replaceLines (fun line m ->
         let replacement = sprintf "VERSION = \"%s\"" version
         reg.Replace(line, replacement) |> Some)

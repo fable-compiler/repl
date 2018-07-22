@@ -14,14 +14,12 @@ importScripts Literals.REPL_BUNDLE_URL
 let private getAssemblyReader(_refs: string[]): JS.Promise<string->byte[]> = importMember "./util.js"
 let private compileBabelAst(_ast: obj): string = importMember "./util.js"
 
-let measureTime f arg =
+let measureTime msg f arg =
     let before: float = self?performance?now()
     let res = f arg
     let after: float = self?performance?now()
-    after - before, res
-
-let logTime (msg: string) (time: float) =
-    Browser.console.log((msg + " (ms)").PadLeft(25), time)
+    Browser.console.log((msg + " (ms)").PadRight(25), after - before)
+    res
 
 let init() = async {
     let Fable: IFableManager = self?Fable?init()
@@ -30,8 +28,7 @@ let init() = async {
         // Create checker
         let refs = Metadata.references false
         let! reader = getAssemblyReader refs |> Async.AwaitPromise
-        let ms0, checker = measureTime Fable.CreateChecker (refs, reader) // Highly computing-expensive
-        logTime "FCS Checker creation" ms0
+        let checker = measureTime "FCS checker" Fable.CreateChecker (refs, reader) // Highly computing-expensive
         let mutable currentResults: IParseResults option = None
 
         // Send ready message and start listening
@@ -41,12 +38,11 @@ let init() = async {
                 let res = Fable.ParseFSharpProject(checker, Literals.FILE_NAME, fsharpCode)
                 currentResults <- Some res
                 ParsedCode res.Errors |> worker.Post
-            | CompileCode fsharpCode ->
-                let ms1, parseResults = measureTime Fable.ParseFSharpProject (checker, Literals.FILE_NAME, fsharpCode)
-                let ms2, babelAst = measureTime Fable.CompileToBabelAst ("fable-core", parseResults, Literals.FILE_NAME, false)
-                logTime "FCS parsing" ms1
-                logTime "Fable transform" ms2
-                compileBabelAst babelAst |> CompiledCode |> worker.Post
+            | CompileCode(fsharpCode, optimize) ->
+                let parseResults = measureTime "FCS parsing" Fable.ParseFSharpProject (checker, Literals.FILE_NAME, fsharpCode)
+                let babelAst = measureTime "Fable transform" Fable.CompileToBabelAst ("fable-core", parseResults, Literals.FILE_NAME, optimize)
+                let jsCode = measureTime "Babel generation" compileBabelAst babelAst
+                CompiledCode jsCode |> worker.Post
             | GetTooltip(line, col, lineText) ->
                 async {
                     let! tooltipLines =

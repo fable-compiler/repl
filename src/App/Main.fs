@@ -99,9 +99,9 @@ let clamp min max value =
     then min
     else value
 
-let compileEditorCode (worker: ObservableWorker<_>) (model: monaco.editor.IModel) =
+let compileEditorCode optimize (worker: ObservableWorker<_>) (model: monaco.editor.IModel) =
     let content = model.getValue(monaco.editor.EndOfLinePreference.TextDefined, true)
-    CompileCode content |> worker.Post
+    CompileCode(content, optimize) |> worker.Post
 
 let parseEditorCode (worker: ObservableWorker<_>) (model: monaco.editor.IModel) =
     let content = model.getValue (monaco.editor.EndOfLinePreference.TextDefined, true)
@@ -111,6 +111,8 @@ let updateLayouts (model: Model) =
     let updateLayoutsInner () =
         model.FSharpEditor.layout()
         model.HtmlEditor.layout()
+        if not(isNull model.JsEditor) then
+            model.JsEditor.layout()
     Browser.window.setTimeout(updateLayoutsInner, 100) |> ignore
 
 let update msg model =
@@ -140,10 +142,14 @@ let update msg model =
         model, Cmd.none
 
     | StartCompile ->
-        model.FSharpEditor.getModel() |> compileEditorCode model.Worker
-        { model with State = Compiling }, Cmd.none
+        if model.State <> Compiling then
+            model.FSharpEditor.getModel() |> compileEditorCode model.Sidebar.Options.Optimize model.Worker
+            { model with State = Compiling }, Cmd.none
+        else model, Cmd.none
 
     | EndCompile codeES2015 ->
+        if not(isNull model.JsEditor) then
+            model.JsEditor.setValue(codeES2015)
         { model with State = Compiled
                      CodeES2015 = codeES2015 }, Cmd.batch [ Cmd.performFunc (generateHtmlUrl model) codeES2015 SetUrl ]
 
@@ -151,7 +157,7 @@ let update msg model =
         { model with Url = newUrl }, Cmd.none
 
     | SetActiveTab newTab ->
-        { model with ActiveTab = newTab }, Cmd.none
+        { model with ActiveTab = newTab }, Cmd.attemptFunc updateLayouts model FailEditorsLayout
 
     | EditorDragStarted ->
         { model with DragTarget = EditorSplitter }, Cmd.none
@@ -401,41 +407,38 @@ let private viewIframe isShown url =
              ClassName (toggleDisplay isShown) ]
         [ ]
 
-let private viewCodeEditor (model: Model) dispatch =
+let private viewCodeEditor isDragging (model: Model) dispatch =
     let isShown = model.ActiveTab = CodeTab
     div [ ClassName ("editor-output " + toggleDisplay isShown)
           Ref (fun element ->
             if not (isNull element) then
-                let jsEditor =
-                    if element.childElementCount = 0. then
-                        let options = jsOptions<monaco.editor.IEditorConstructionOptions>(fun o ->
-                            let minimapOptions =  jsOptions<monaco.editor.IEditorMinimapOptions>(fun oMinimap ->
-                                oMinimap.enabled <- Some false
-                            )
-                            o.language <- Some "javascript"
-                            o.fontSize <- Some 14.
-                            o.theme <- Some "vs-dark"
-                            o.minimap <- Some minimapOptions
+                if element.childElementCount = 0. then
+                    let options = jsOptions<monaco.editor.IEditorConstructionOptions>(fun o ->
+                        let minimapOptions = jsOptions<monaco.editor.IEditorMinimapOptions>(fun oMinimap ->
+                            oMinimap.enabled <- Some false
                         )
-                        let jsEditor = monaco.editor.Globals.create(element :?> Browser.HTMLElement, options)
-                        SetJsEditor jsEditor |> dispatch
-                        jsEditor
-                    else
-                        model.JsEditor
-                jsEditor.setValue(model.CodeES2015)
-                // This is needed because Monaco doesn't itialize well when being hidden by default
-                // I believe it isn't reponsive by default and recalculate every position as needed...
-                jsEditor.layout()
+                        o.language <- Some "javascript"
+                        o.fontSize <- Some 14.
+                        o.theme <- Some "vs-dark"
+                        o.minimap <- Some minimapOptions
+                    )
+                    let jsEditor = monaco.editor.Globals.create(element :?> Browser.HTMLElement, options)
+                    jsEditor.setValue(model.CodeES2015)
+                    jsEditor.layout()
+                    SetJsEditor jsEditor |> dispatch
+                else
+                    if isDragging then
+                        model.JsEditor.layout()
             ) ]
         [ ]
 
-let private outputArea model dispatch =
+let private outputArea isDragging model dispatch =
     let content =
         match model.State with
         | Compiling | Compiled ->
             [ outputTabs model.ActiveTab dispatch
               viewIframe (model.ActiveTab = LiveTab) model.Url
-              viewCodeEditor model dispatch ]
+              viewCodeEditor isDragging model dispatch ]
         | _ ->
             [ br [ ]
               div [ ClassName "has-text-centered"
@@ -468,7 +471,7 @@ let private view (model: Model) dispatch =
                         yield div [ ClassName "horizontal-resize"
                                     OnMouseDown (fun _ -> dispatch PanelDragStarted) ]
                                   [ ]
-                      yield outputArea model dispatch ] ] ] ]
+                      yield outputArea isDragging model dispatch ] ] ] ]
 
 let private subscriptions (model: Model) =
     let sub dispatch =

@@ -14,7 +14,7 @@
     <Compile Include="Generator.fs" />
     <Compile Include="Mouse.fs" />
     <Compile Include="Widgets/Samples.fs" />
-    <Compile Include="Widgets/About.fs" />
+    <Compile Include="Widgets/Other.fs" />
     <Compile Include="Sidebar.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>

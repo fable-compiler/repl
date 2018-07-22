@@ -9,6 +9,7 @@ open System.Diagnostics
 
 [<RequireQualifiedAccess>]
 module Literals =
+    let [<Literal>] VERSION = "2.0.0-alpha-031"
     let [<Literal>] STORAGE_KEY = "fable-repl"
     let [<Literal>] REPL_BUNDLE_URL = "./js/repl/bundle.min.js"
     let [<Literal>] HOST =
@@ -28,7 +29,7 @@ let [<Global>] private setTimeout(f: unit->unit, ms: int): unit = jsNative
 
 type WorkerRequest =
     | ParseCode of fsharpCode: string
-    | CompileCode of fsharpCode: string
+    | CompileCode of fsharpCode: string * optimize: bool
     | GetTooltip of line: int * column: int * lineText: string
     | GetCompletions of line: int * column: int * lineText: string
     static member Decoder =

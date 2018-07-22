@@ -57,6 +57,18 @@
                         "htmlCode": "samples/ozmo/ozmo.html"
                     }
                 ]
+            },
+            {
+                "type": "menu-item",
+                "label": "Sudoku",
+                "fsharpCode": "samples/sudoku.fs",
+                "htmlCode": "default"
+            },
+            {
+                "type": "menu-item",
+                "label": "Ray Trace",
+                "fsharpCode": "samples/raytrace.fs",
+                "htmlCode": "default"
             }
         ]
     },

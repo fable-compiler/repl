@@ -5,10 +5,12 @@ open Elmish
 type Model =
     { IsExpanded : bool
       WidgetsState : Set<string>
-      Samples : Widgets.Samples.Model }
+      Samples : Widgets.Samples.Model
+      Options: Widgets.Options.Model }
 
 type Msg =
     | SamplesMsg of Widgets.Samples.Msg
+    | OptionsMsg of Widgets.Options.Msg
     | ToggleWidget of string
 
 type ExternalMsg =
@@ -18,7 +20,8 @@ type ExternalMsg =
 let init _ =
     { IsExpanded = false
       WidgetsState = Set.empty
-      Samples = Widgets.Samples.init () }
+      Samples = Widgets.Samples.init ()
+      Options = Widgets.Options.init () }
 
 let update msg model =
     match msg with
@@ -31,6 +34,10 @@ let update msg model =
             | Widgets.Samples.LoadSample (fsharpCode, htmlCode) -> LoadSample (fsharpCode, htmlCode)
 
         { model with Samples = samplesModel }, Cmd.map SamplesMsg samplesCmd, extraMsg
+
+    | OptionsMsg msg ->
+        let optionsModel = Widgets.Options.update msg model.Options
+        { model with Options = optionsModel }, Cmd.none, NoOp
 
     | ToggleWidget id ->
         let newWidgetsState =
@@ -63,6 +70,7 @@ let private renderWidgets (states : Set<string>) dispatch (title, widget) =
 let view (model: Model) dispatch =
     if model.IsExpanded then
         [ "Samples", Widgets.Samples.view model.Samples (SamplesMsg >> dispatch)
+          "Options", Widgets.Options.view model.Options (OptionsMsg >> dispatch)
           "About", Widgets.About.view ]
         |> List.map (renderWidgets model.WidgetsState dispatch)
         |> div [ ClassName "sidebar" ]
