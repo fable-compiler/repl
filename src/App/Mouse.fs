@@ -1,4 +1,4 @@
-module Mouse
+module Fable.Repl.Mouse
 
 open Fable.Import.Browser
 open Thoth.Json

@@ -143,7 +143,7 @@ let getCodeFromUrl (fsharpUrl, htmlInfo) =
 
         match htmlInfo with
         | Default ->
-            return fsharpCode, Generator.defaultHtmlCode
+            return fsharpCode, Fable.Repl.Generator.defaultHtmlCode
         | Url url ->
             let! htmlRes = Fetch.fetch ("" + url) []
             let! htmlCode = htmlRes.text()
@@ -155,6 +155,7 @@ let update msg model =
     | ToggleMenuState path ->
         let newMenuInfos = updateSubCategoryState path model.MenuInfos
         { model with MenuInfos = newMenuInfos }, Cmd.none, NoOp
+
     | FetchSample (fsharpUrl, htmlInfo) ->
         model, Cmd.ofPromise getCodeFromUrl (fsharpUrl, htmlInfo) FetchCodeSuccess FetchCodeError, NoOp
 

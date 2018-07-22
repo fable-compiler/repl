@@ -7,13 +7,15 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "build-app": "cd src && dotnet fable webpack-cli",
-    "start-app": "cd src && dotnet fable webpack-dev-server",
+    "build-app": "cd src/App && dotnet fable webpack-cli",
+    "start-app": "cd src/App && dotnet fable webpack-dev-server",
     "postinstall": "dotnet restore"
   },
   "dependencies": {
+    "babel-standalone": "^6.26.0",
     "babel-template": "^6.26.0",
     "bulma": "^0.7.1",
+    "bulma-pageloader": "^2.1.0",
     "font-awesome": "^4.7.0",
     "monaco-editor": "^0.13.1",
     "react": "^16.4.1",
@@ -29,7 +31,6 @@
     "fable-loader": "next",
     "file-loader": "^1.1.11",
     "gh-pages": "^1.2.0",
-    "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.4.1",
     "node-sass": "^4.9.2",
     "remotedev": "^0.2.7",

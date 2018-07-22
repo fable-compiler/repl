@@ -1,7 +1,5 @@
 // @ts-check
 
-const KEY = 'fable-repl';
-
 function parseQuery() {
     var query = window.location.hash.replace(/^\#\?/, '');
 
@@ -32,14 +30,14 @@ function updateQuery(object) {
     window.location.hash = '?' + query;
 }
 
-export function loadState() {
-    var state = JSON.parse(window.localStorage.getItem(KEY)) || {};
+export function loadState(key) {
+    var state = JSON.parse(window.localStorage.getItem(key)) || {};
     Object.assign(state, parseQuery());
     return [state.code || 'printfn "Hello World"', state.html || '<html><body></body></html>'];
 }
 
-export function saveState(code, html) {
+export function saveState(key, code, html) {
     var state = { code, html };
     updateQuery(state);
-    window.localStorage.setItem(KEY, JSON.stringify(state));
+    window.localStorage.setItem(key, JSON.stringify(state));
 }

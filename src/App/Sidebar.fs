@@ -1,4 +1,4 @@
-module Sidebar
+module Fable.Repl.Sidebar
 
 open Elmish
 

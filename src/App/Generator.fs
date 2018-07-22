@@ -1,18 +1,10 @@
 [<RequireQualifiedAccess>]
-module Generator
+module Fable.Repl.Generator
 
 open System.Text.RegularExpressions
 open Fable.Core.JsInterop
 open Fable.Import.Browser
-
-let [<Literal>] HOST =
-#if DEBUG
-    "http://localhost:8080"
-#else
-    "http://fable.io/repl2"
-#endif
-
-let FABLE_CORE_DIR = HOST + "/js/repl/fable-core"
+open Shared
 
 let defaultHtmlCode =
     """
@@ -68,7 +60,7 @@ let generateBlobURL content mimeType =
 let generateHtmlBlobUrl (htmlCode : string) (jsCode: string) =
     // We need to convert import paths to absolute urls and add .js at the end
     let reg = Regex(@"^import (.*)""fable-core(.*)""(.*)$", RegexOptions.Multiline)
-    let jsCode = reg.Replace(jsCode, sprintf "import $1\"%s$2.js\"$3" FABLE_CORE_DIR)
+    let jsCode = reg.Replace(jsCode, sprintf "import $1\"%s$2.js\"$3" Literals.FABLE_CORE_DIR)
     // Replacement function in JS is causing problems with $ symbol
     let i = htmlCode.IndexOf("</body>")
     let code =

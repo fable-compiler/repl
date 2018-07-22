@@ -1,8 +1,11 @@
+dotnet-fable
 Fable.Core
 Fable.Import.Browser
 Fable.React
 Fulma
+Fulma.Extensions
 Fable.Elmish
 Fable.Elmish.React
 Thoth.Json
 Fable.PowerPack
+File: Interfaces.fs

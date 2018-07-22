@@ -4,10 +4,11 @@
 var CONFIG = {
   indexHtmlTemplate: "./src/index.html",
   fsharpEntry: "./src/App/App.fsproj",
-  cssEntry: "./src/App/scss/main.scss",
+  workerEntry: "./src/Worker/Worker.fsproj",
+  cssEntry: "./src/style/main.scss",
   outputDir: "./deploy",
   assetsDir: "./public",
-  // It's important to use this port, check src/App/Generator.fs
+  // It's important to use this port, check src/App/Shared.fs
   devServerPort: 8080,
   babel: {
     presets: [ ["env", { "modules": false }] ],
@@ -19,54 +20,35 @@ var isProduction = !process.argv.find(v => v.indexOf('webpack-dev-server') !== -
 console.log("Bundling for " + (isProduction ? "production" : "development") + "...");
 
 var path = require("path");
-var webpack = require("webpack");
-var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-// The HtmlWebpackPlugin allows us to use a template for the index.html page
-// and automatically injects <script> or <link> tags for generated bundles.
-var commonPlugins = [
-  new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: CONFIG.indexHtmlTemplate
-  })
-];
-
 module.exports = {
-  entry: isProduction ? {
-    app: [CONFIG.fsharpEntry, CONFIG.cssEntry]
-  } : {
+  entry: {
     app: [CONFIG.fsharpEntry],
+    worker: [CONFIG.workerEntry],
     style: [CONFIG.cssEntry]
   },
   output: {
       path: path.join(__dirname, CONFIG.outputDir),
-      filename: isProduction ? '[name].[hash].js' : '[name].js'
+      filename: '[name].js'
   },
   mode: isProduction ? "production" : "development",
   devtool: isProduction ? "source-map" : "eval-source-map",
-  plugins: isProduction ?
-    commonPlugins.concat([
+  plugins: isProduction ? [
         new MiniCssExtractPlugin({ filename: 'style.css' }),
         new CopyWebpackPlugin([{ from: CONFIG.assetsDir }]),
-    ])
-    : commonPlugins.concat([
-        new webpack.HotModuleReplacementPlugin(),
-    ]),
+    ]
+    : [],
   devServer: {
     publicPath: "/",
     contentBase: CONFIG.assetsDir,
     port: CONFIG.devServerPort,
     proxy: CONFIG.devServerProxy,
-    hot: true,
-    inline: true
   },
   externals: {
     "monaco": "var monaco",
     "editor": "var editor",
-    "fable-repl": "var Fable",
-    "babel-standalone": "var Babel"
   },
   module: {
     rules: [
@@ -85,7 +67,8 @@ module.exports = {
       {
         test: /\.(sass|scss|css)$/,
         use: [
-            isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+            // isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+            'style-loader',
             'css-loader',
             'sass-loader',
         ],

@@ -6,12 +6,14 @@ nuget Fable.Core prerelease
 nuget Fable.Import.Browser
 nuget Fable.React prerelease
 nuget Fulma prerelease
+nuget Fulma.Extensions prerelease
 nuget Fable.Elmish
 nuget Fable.Elmish.React prerelease
 nuget Thoth.Json prerelease
 nuget Fable.PowerPack
 
 github fable-compiler/Fable:dev2.0 src/dotnet/Fable.JS/Interfaces.fs
+github fable-compiler/Fable:dev2.0 src/dotnet/Fable.JS/Metadata.fs
 
 group Build
 framework: net46
