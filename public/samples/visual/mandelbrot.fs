@@ -1,4 +1,4 @@
-module Program
+module Mandelbrot
 
 
 open Fable.Core

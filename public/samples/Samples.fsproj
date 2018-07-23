@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="games/mario.fs" />
+    <Compile Include="games/ozmo.fs" />
+    <Compile Include="visual/basic-canvas.fs" />
+    <Compile Include="visual/mandelbrot.fs" />
+    <Compile Include="interop/interop-samples.fs" />
+    <Compile Include="interop/jquery.fs" />
+    <Compile Include="other/parser.fs" />
+    <Compile Include="other/sudoku.fs" />
+    <Compile Include="other/raytrace.fs" />
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>

@@ -134,8 +134,8 @@ module VeryDirtyFable =
         // var localObj1 = { \"a\":\"string\",\"b\":2 }
         let localObj1 =
             createObj [
-            "a" ==> "string"
-            "b" ==> 2
+                "a" ==> "string"
+                "b" ==> 2
         ]
         code
             """

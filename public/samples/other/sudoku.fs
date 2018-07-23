@@ -1,3 +1,5 @@
+module Sudoku
+
 open System.Collections.Generic
 
 let measure f x =

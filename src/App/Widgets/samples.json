@@ -1,43 +1,6 @@
 [
     {
         "type": "category",
-        "label": "Learn Fable",
-        "children": [
-            {
-                "type": "menu-item",
-                "label": "Basic canvas",
-                "fsharpCode": "samples/basic-canvas/basic_canvas.fs",
-                "htmlCode": "samples/basic-canvas/basic_canvas.html"
-            },
-            {
-                "type": "sub-category",
-                "label": "Interop",
-                "children": [
-                    {
-                        "type": "menu-item",
-                        "label": "Pojo",
-                        "fsharpCode": "samples/pojo.fs",
-                        "htmlCode": "default"
-                    },
-                    {
-                        "type": "menu-item",
-                        "label": "Mini JQuery bindings",
-                        "fsharpCode": "samples/jquery/jquery.fs",
-                        "htmlCode": "samples/jquery/jquery.html"
-                    },
-                    {
-                        "type": "menu-item",
-                        "label": "Commented Interop examples",
-                        "fsharpCode": "samples/interop-samples/interop-samples.fs",
-                        "htmlCode": "samples/interop-samples/interop-samples.html"
-                    }
-
-                ]
-            }
-        ]
-    },
-    {
-        "type": "category",
         "label": "Samples",
         "children": [
             {
@@ -47,40 +10,82 @@
                     {
                         "type": "menu-item",
                         "label": "Super Fable Mario",
-                        "fsharpCode": "samples/mario/mario.fs",
-                        "htmlCode": "samples/mario/mario.html"
+                        "fsharpCode": "samples/games/mario.fs",
+                        "htmlCode": "samples/games/mario.html"
                     },
                     {
                         "type": "menu-item",
                         "label": "Ozmo Game",
-                        "fsharpCode": "samples/ozmo/ozmo.fs",
-                        "htmlCode": "samples/ozmo/ozmo.html"
+                        "fsharpCode": "samples/games/ozmo.fs",
+                        "htmlCode": "samples/games/ozmo.html"
                     }
                 ]
             },
             {
-                "type": "menu-item",
-                "label": "Sudoku",
-                "fsharpCode": "samples/sudoku.fs",
-                "htmlCode": "default"
+                "type": "sub-category",
+                "label": "Visualizations",
+                "children": [
+                    {
+                        "type": "menu-item",
+                        "label": "Basic canvas",
+                        "fsharpCode": "samples/visual/basic-canvas.fs",
+                        "htmlCode": "samples/visual/basic-canvas.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Mandelbrot",
+                        "fsharpCode": "samples/visual/mandelbrot.fs",
+                        "htmlCode": "samples/visual/mandelbrot.html"
+                    }
+                ]
             },
             {
-                "type": "menu-item",
-                "label": "Ray Trace",
-                "fsharpCode": "samples/raytrace.fs",
-                "htmlCode": "default"
+                "type": "sub-category",
+                "label": "Other",
+                "children": [
+                    {
+                        "type": "menu-item",
+                        "label": "Sudoku",
+                        "fsharpCode": "samples/other/sudoku.fs",
+                        "htmlCode": "default"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Parser Libray",
+                        "fsharpCode": "samples/other/parser.fs",
+                        "htmlCode": "default"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Ray Trace",
+                        "fsharpCode": "samples/other/raytrace.fs",
+                        "htmlCode": "default"
+                    }
+                ]
             }
         ]
     },
     {
         "type": "category",
-        "label": "Visualizations",
+        "label": "Learn",
         "children": [
             {
-                "type": "menu-item",
-                "label": "Mandelbrot",
-                "fsharpCode": "samples/mandelbrot/mandelbrot.fs",
-                "htmlCode": "samples/mandelbrot/mandelbrot.html"
+                "type": "sub-category",
+                "label": "Interop with JS",
+                "children": [
+                    {
+                        "type": "menu-item",
+                        "label": "Mini JQuery bindings",
+                        "fsharpCode": "samples/interop/jquery.fs",
+                        "htmlCode": "samples/interop/jquery.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Commented Interop examples",
+                        "fsharpCode": "samples/interop/interop-samples.fs",
+                        "htmlCode": "samples/interop/interop-samples.html"
+                    }
+                ]
             }
         ]
     }

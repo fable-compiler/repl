@@ -1,4 +1,4 @@
-module Demo
+module JQuery
 
 // Ported from:
 // F# Interop with Javascript in Fable: The Complete Guide
