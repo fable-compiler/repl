@@ -166,11 +166,6 @@ export function fsFormat(str) {
     };
 }
 export function format(str, ...args) {
-    if (typeof str === "object" && args.length > 0) {
-        // Called with culture info
-        str = args[0];
-        args.shift();
-    }
     return str.replace(formatRegExp, (match, idx, pad, pattern) => {
         let rep = args[idx];
         let padSymbol = " ";

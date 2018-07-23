@@ -37,8 +37,7 @@ export function fill(target, targetIndex, count, value) {
   return target;
 }
 export function getSubArray(array$$2, offset, length) {
-  const end = offset + length | 0;
-  return array$$2.slice(offset, end);
+  return array$$2.slice(offset, offset + length);
 }
 export function last(array$$4) {
   if (array$$4.length === 0) {
@@ -138,10 +137,8 @@ export function mapFold(mapping, state, array$$6, cons$$7) {
 
     for (let i$$9 = 0; i$$9 <= array$$6.length - 1; i$$9++) {
       const patternInput = mapping(acc, array$$6[i$$9]);
-      const s$0027 = patternInput[1];
-      const h$0027 = patternInput[0];
-      res[i$$9] = h$0027;
-      acc = s$0027;
+      res[i$$9] = patternInput[0];
+      acc = patternInput[1];
     }
 
     return [res, acc];
@@ -159,10 +156,8 @@ export function mapFoldBack(mapping$$1, array$$7, state$$1, cons$$8) {
 
     for (let i$$10 = array$$7.length - 1; i$$10 >= 0; i$$10--) {
       const patternInput$$1 = mapping$$1(array$$7[i$$10], acc$$1);
-      const s$0027$$1 = patternInput$$1[1];
-      const h$0027$$1 = patternInput$$1[0];
-      res$$1[i$$10] = h$0027$$1;
-      acc$$1 = s$0027$$1;
+      res$$1[i$$10] = patternInput$$1[0];
+      acc$$1 = patternInput$$1[1];
     }
 
     return [res$$1, acc$$1];
@@ -224,16 +219,13 @@ export function countBy(projection, array$$11, eq) {
     const matchValue$$2 = tryGetValue(dict, key, 0);
 
     if (matchValue$$2[0]) {
-      const prev = matchValue$$2[1] | 0;
-      dict.set(key, prev + 1);
+      dict.set(key, matchValue$$2[1] + 1);
     } else {
       dict.set(key, 1);
     }
   }
 
-  let res$$2;
-  const len$$6 = dict.size | 0;
-  res$$2 = new Array(len$$6);
+  const res$$2 = new Array(dict.size);
   let i$$13 = 0;
   iterate$$1(function (group) {
     res$$2[i$$13] = [group[0], group[1]];
@@ -290,17 +282,14 @@ export function groupBy(projection$$2, array$$21, cons$$12, eq$$5) {
     const matchValue$$3 = tryGetValue(dict$$1, key$$1, null);
 
     if (matchValue$$3[0]) {
-      const prev$$1 = matchValue$$3[1];
-      prev$$1.push(v);
+      matchValue$$3[1].push(v);
     } else {
       const prev$$2 = [v];
       dict$$1.set(key$$1, prev$$2);
     }
   }
 
-  let result$$5;
-  const len$$7 = dict$$1.size | 0;
-  result$$5 = new Array(len$$7);
+  const result$$5 = new Array(dict$$1.size);
   let i$$15 = 0;
   iterate$$1(function (group$$1) {
     result$$5[i$$15] = [group$$1[0], cons$$12.from(group$$1[1])];
@@ -409,8 +398,7 @@ export function skipWhile(predicate$$7, array$$29, cons$$23) {
   if (count$$8 === array$$29.length) {
     return new cons$$23(0);
   } else {
-    const begin$$3 = count$$8 | 0;
-    return array$$29.slice(begin$$3);
+    return array$$29.slice(count$$8);
   }
 }
 export function take(count$$9, array$$31, cons$$25) {
@@ -438,17 +426,15 @@ export function takeWhile(predicate$$8, array$$33, cons$$27) {
   if (count$$10 === 0) {
     return new cons$$27(0);
   } else {
-    const end$$3 = count$$10 | 0;
-    return array$$33.slice(0, end$$3);
+    return array$$33.slice(0, count$$10);
   }
 }
 export function addRangeInPlace(range, array$$35) {
-  var item$$2;
   const iter = range[Symbol.iterator]();
   let cur = iter.next();
 
   while (!cur.done) {
-    item$$2 = cur.value, array$$35.push(item$$2);
+    array$$35.push(cur.value);
     cur = iter.next();
   }
 }
@@ -818,10 +804,8 @@ export function unzip(array$$63) {
   const res1$$1 = new Array(len$$11);
   const res2$$1 = new Array(len$$11);
   iterateIndexed(function (i$$42, tupledArg) {
-    const item1 = tupledArg[0];
-    const item2 = tupledArg[1];
-    res1$$1[i$$42] = item1;
-    res2$$1[i$$42] = item2;
+    res1$$1[i$$42] = tupledArg[0];
+    res2$$1[i$$42] = tupledArg[1];
   }, array$$63);
   return [res1$$1, res2$$1];
 }
@@ -831,12 +815,9 @@ export function unzip3(array$$64) {
   const res2$$2 = new Array(len$$14);
   const res3 = new Array(len$$14);
   iterateIndexed(function (i$$43, tupledArg$$1) {
-    const item1$$1 = tupledArg$$1[0];
-    const item2$$1 = tupledArg$$1[1];
-    const item3 = tupledArg$$1[2];
-    res1$$2[i$$43] = item1$$1;
-    res2$$2[i$$43] = item2$$1;
-    res3[i$$43] = item3;
+    res1$$2[i$$43] = tupledArg$$1[0];
+    res2$$2[i$$43] = tupledArg$$1[1];
+    res3[i$$43] = tupledArg$$1[2];
   }, array$$64);
   return [res1$$2, res2$$2, res3];
 }
@@ -845,9 +826,7 @@ export function zip(array1$$3, array2$$3) {
     throw new Error("Arrays had different lengths");
   }
 
-  let result$$11;
-  const len$$18 = array1$$3.length | 0;
-  result$$11 = new Array(len$$18);
+  const result$$11 = new Array(array1$$3.length);
 
   for (let i$$44 = 0; i$$44 <= array1$$3.length - 1; i$$44++) {
     result$$11[i$$44] = [array1$$3[i$$44], array2$$3[i$$44]];
@@ -860,9 +839,7 @@ export function zip3(array1$$4, array2$$4, array3) {
     throw new Error("Arrays had different lengths");
   }
 
-  let result$$12;
-  const len$$19 = array1$$4.length | 0;
-  result$$12 = new Array(len$$19);
+  const result$$12 = new Array(array1$$4.length);
 
   for (let i$$45 = 0; i$$45 <= array1$$4.length - 1; i$$45++) {
     result$$12[i$$45] = [array1$$4[i$$45], array2$$4[i$$45], array3[i$$45]];

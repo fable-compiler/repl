@@ -1,8 +1,8 @@
 import { defaultArg, value as value$$1, some } from "./Option.js";
 import { FSharpRef, L } from "./Types.js";
-import { tryGetValue, addToSet, comparerFromEqualityComparer, uncurry } from "./Util.js";
 import { permute as permute$$1, ofList as ofList$$1, findIndexBack as findIndexBack$$1, tryFindIndexBack as tryFindIndexBack$$1, foldBack as foldBack$$1 } from "./Array.js";
 import { ofList } from "./Array.js";
+import { tryGetValue, addToSet, comparerFromEqualityComparer } from "./Util.js";
 import { createMutable } from "./Set.js";
 import { ofSeq as ofSeq$$1, foldBack as foldBack$$3, length as length$$1 } from "./List.js";
 import { map as map$$1, iterate as iterate$$1, foldBack as foldBack$$2, unfold as unfold$$1 } from "./Seq.js";
@@ -65,13 +65,15 @@ export function compareWith(comparer, xs$$3, ys) {
   } else {
     const loop = function loop(xs$$4, ys$$1) {
       loop: while (true) {
-        if (xs$$4.tail != null) {
-          if (ys$$1.tail != null) {
-            const matchValue$$1 = comparer(xs$$4.head, ys$$1.head) | 0;
+        const matchValue = [xs$$4, ys$$1];
+
+        if (matchValue[0].tail != null) {
+          if (matchValue[1].tail != null) {
+            const matchValue$$1 = comparer(matchValue[0].head, matchValue[1].head) | 0;
 
             if (matchValue$$1 === 0) {
-              xs$$4 = xs$$4.tail;
-              ys$$1 = ys$$1.tail;
+              xs$$4 = matchValue[0].tail;
+              ys$$1 = matchValue[1].tail;
               continue loop;
             } else {
               const res = matchValue$$1 | 0;
@@ -80,7 +82,7 @@ export function compareWith(comparer, xs$$3, ys) {
           } else {
             return 1;
           }
-        } else if (ys$$1.tail == null) {
+        } else if (matchValue[1].tail == null) {
           return 0;
         } else {
           return -1 | 0;
@@ -139,19 +141,20 @@ export function foldIndexed2Aux($arg$$21, $arg$$22, $arg$$23, $arg$$24, $arg$$25
           acc$$4 = $arg$$23,
           bs = $arg$$24,
           cs = $arg$$25;
+    const matchValue$$2 = [bs, cs];
     var $target$$26, x$$9, xs$$12, y$$1, ys$$4;
 
-    if (bs.tail != null) {
-      if (cs.tail != null) {
+    if (matchValue$$2[0].tail != null) {
+      if (matchValue$$2[1].tail != null) {
         $target$$26 = 1;
-        x$$9 = bs.head;
-        xs$$12 = bs.tail;
-        y$$1 = cs.head;
-        ys$$4 = cs.tail;
+        x$$9 = matchValue$$2[0].head;
+        xs$$12 = matchValue$$2[0].tail;
+        y$$1 = matchValue$$2[1].head;
+        ys$$4 = matchValue$$2[1].tail;
       } else {
         $target$$26 = 2;
       }
-    } else if (cs.tail == null) {
+    } else if (matchValue$$2[1].tail == null) {
       $target$$26 = 0;
     } else {
       $target$$26 = 2;
@@ -223,26 +226,27 @@ export function foldIndexed3Aux($arg$$41, $arg$$42, $arg$$43, $arg$$44, $arg$$45
           bs$$1 = $arg$$44,
           cs$$1 = $arg$$45,
           ds = $arg$$46;
+    const matchValue$$4 = [bs$$1, cs$$1, ds];
     var $target$$47, x$$13, xs$$16, y$$4, ys$$8, z, zs;
 
-    if (bs$$1.tail != null) {
-      if (cs$$1.tail != null) {
-        if (ds.tail != null) {
+    if (matchValue$$4[0].tail != null) {
+      if (matchValue$$4[1].tail != null) {
+        if (matchValue$$4[2].tail != null) {
           $target$$47 = 1;
-          x$$13 = bs$$1.head;
-          xs$$16 = bs$$1.tail;
-          y$$4 = cs$$1.head;
-          ys$$8 = cs$$1.tail;
-          z = ds.head;
-          zs = ds.tail;
+          x$$13 = matchValue$$4[0].head;
+          xs$$16 = matchValue$$4[0].tail;
+          y$$4 = matchValue$$4[1].head;
+          ys$$8 = matchValue$$4[1].tail;
+          z = matchValue$$4[2].head;
+          zs = matchValue$$4[2].tail;
         } else {
           $target$$47 = 2;
         }
       } else {
         $target$$47 = 2;
       }
-    } else if (cs$$1.tail == null) {
-      if (ds.tail == null) {
+    } else if (matchValue$$4[1].tail == null) {
+      if (matchValue$$4[2].tail == null) {
         $target$$47 = 0;
       } else {
         $target$$47 = 2;
@@ -352,21 +356,13 @@ export function mapIndexed3(f$$20, xs$$37, ys$$15, zs$$4) {
   }, L(), xs$$37, ys$$15, zs$$4));
 }
 export function mapFold(f$$21, s, xs$$39) {
-  const foldFn = function foldFn(tupledArg) {
-    const nxs = tupledArg[0];
-    const fs = tupledArg[1];
-    return function (x$$26) {
-      const patternInput = f$$21(fs, x$$26);
-      const nx = patternInput[0];
-      const fs$$1 = patternInput[1];
-      return [L(nx, nxs), fs$$1];
-    };
+  const foldFn = function foldFn(tupledArg, x$$26) {
+    const patternInput = f$$21(tupledArg[1], x$$26);
+    return [L(patternInput[0], tupledArg[0]), patternInput[1]];
   };
 
-  const patternInput$$1 = fold(uncurry(2, foldFn), [L(), s], xs$$39);
-  const s$$1 = patternInput$$1[1];
-  const nxs$$1 = patternInput$$1[0];
-  return [reverse(nxs$$1), s$$1];
+  const patternInput$$1 = fold(foldFn, [L(), s], xs$$39);
+  return [reverse(patternInput$$1[0]), patternInput$$1[1]];
 }
 export function mapFoldBack(f$$22, xs$$40, s$$2) {
   return mapFold(function (s$$3, v) {
@@ -518,13 +514,9 @@ export function filter(f$$41, xs$$66) {
   }, xs$$66, L());
 }
 export function partition(f$$42, xs$$67) {
-  return fold(uncurry(2, function (tupledArg$$1) {
-    const lacc = tupledArg$$1[0];
-    const racc = tupledArg$$1[1];
-    return function (x$$42) {
-      return f$$42(x$$42) ? [L(x$$42, lacc), racc] : [lacc, L(x$$42, racc)];
-    };
-  }), [L(), L()], reverse(xs$$67));
+  return fold(function (tupledArg$$1, x$$42) {
+    return f$$42(x$$42) ? [L(x$$42, tupledArg$$1[0]), tupledArg$$1[1]] : [tupledArg$$1[0], L(x$$42, tupledArg$$1[1])];
+  }, [L(), L()], reverse(xs$$67));
 }
 export function choose(f$$43, xs$$68) {
   return reverse(fold(function (acc$$23, x$$43) {
@@ -637,19 +629,20 @@ export function exists2($arg$$148, $arg$$149, $arg$$150) {
     const f$$51 = $arg$$148,
           bs$$2 = $arg$$149,
           cs$$2 = $arg$$150;
+    const matchValue$$9 = [bs$$2, cs$$2];
     var $target$$151, x$$48, xs$$76, y$$15, ys$$19;
 
-    if (bs$$2.tail != null) {
-      if (cs$$2.tail != null) {
+    if (matchValue$$9[0].tail != null) {
+      if (matchValue$$9[1].tail != null) {
         $target$$151 = 1;
-        x$$48 = bs$$2.head;
-        xs$$76 = bs$$2.tail;
-        y$$15 = cs$$2.head;
-        ys$$19 = cs$$2.tail;
+        x$$48 = matchValue$$9[0].head;
+        xs$$76 = matchValue$$9[0].tail;
+        y$$15 = matchValue$$9[1].head;
+        ys$$19 = matchValue$$9[1].tail;
       } else {
         $target$$151 = 2;
       }
-    } else if (cs$$2.tail == null) {
+    } else if (matchValue$$9[1].tail == null) {
       $target$$151 = 0;
     } else {
       $target$$151 = 2;
@@ -685,28 +678,14 @@ export function exists2($arg$$148, $arg$$149, $arg$$150) {
   }
 }
 export function unzip(xs$$77) {
-  return foldBack(uncurry(2, function (tupledArg$$2) {
-    const x$$49 = tupledArg$$2[0];
-    const y$$16 = tupledArg$$2[1];
-    return function (tupledArg$$3) {
-      const lacc$$1 = tupledArg$$3[0];
-      const racc$$1 = tupledArg$$3[1];
-      return [L(x$$49, lacc$$1), L(y$$16, racc$$1)];
-    };
-  }), xs$$77, [L(), L()]);
+  return foldBack(function (tupledArg$$2, tupledArg$$3) {
+    return [L(tupledArg$$2[0], tupledArg$$3[0]), L(tupledArg$$2[1], tupledArg$$3[1])];
+  }, xs$$77, [L(), L()]);
 }
 export function unzip3(xs$$78) {
-  return foldBack(uncurry(2, function (tupledArg$$4) {
-    const x$$50 = tupledArg$$4[0];
-    const y$$17 = tupledArg$$4[1];
-    const z$$4 = tupledArg$$4[2];
-    return function (tupledArg$$5) {
-      const lacc$$2 = tupledArg$$5[0];
-      const macc = tupledArg$$5[1];
-      const racc$$2 = tupledArg$$5[2];
-      return [L(x$$50, lacc$$2), L(y$$17, macc), L(z$$4, racc$$2)];
-    };
-  }), xs$$78, [L(), L(), L()]);
+  return foldBack(function (tupledArg$$4, tupledArg$$5) {
+    return [L(tupledArg$$4[0], tupledArg$$5[0]), L(tupledArg$$4[1], tupledArg$$5[1]), L(tupledArg$$4[2], tupledArg$$5[2])];
+  }, xs$$78, [L(), L(), L()]);
 }
 export function zip(xs$$79, ys$$20) {
   return map2(function (x$$51, y$$18) {
@@ -788,14 +767,14 @@ export function permute(f$$53, xs$$101) {
   return ofArray(permute$$1(f$$53, ofList(xs$$101, Array)));
 }
 export function skip(i$$15, xs$$103) {
-  var i$$17;
-
   const skipInner = function skipInner(i$$16, xs$$104) {
     skipInner: while (true) {
-      if (i$$16 === 0) {
+      const matchValue$$10 = [i$$16, xs$$104];
+
+      if (matchValue$$10[0] === 0) {
         return xs$$104;
-      } else if (xs$$104.tail != null) {
-        const xs$$105 = xs$$104.tail;
+      } else if (matchValue$$10[1].tail != null) {
+        const xs$$105 = matchValue$$10[1].tail;
         i$$16 = i$$16 - 1;
         xs$$104 = xs$$105;
         continue skipInner;
@@ -805,26 +784,27 @@ export function skip(i$$15, xs$$103) {
     }
   };
 
-  if (i$$17 = i$$15 | 0, i$$17 < 0) {
-    const i$$18 = i$$15 | 0;
+  const matchValue$$11 = [i$$15, xs$$103];
+
+  if (matchValue$$11[0] < 0) {
     throw new Error("The input must be non-negative.");
   } else {
     var $target$$172, i$$19, xs$$107;
 
-    if (i$$15 === 0) {
+    if (matchValue$$11[0] === 0) {
       $target$$172 = 0;
-    } else if (i$$15 === 1) {
-      if (xs$$103.tail != null) {
+    } else if (matchValue$$11[0] === 1) {
+      if (matchValue$$11[1].tail != null) {
         $target$$172 = 1;
       } else {
         $target$$172 = 2;
-        i$$19 = i$$15;
-        xs$$107 = xs$$103;
+        i$$19 = matchValue$$11[0];
+        xs$$107 = matchValue$$11[1];
       }
     } else {
       $target$$172 = 2;
-      i$$19 = i$$15;
-      xs$$107 = xs$$103;
+      i$$19 = matchValue$$11[0];
+      xs$$107 = matchValue$$11[1];
     }
 
     switch ($target$$172) {
@@ -836,7 +816,7 @@ export function skip(i$$15, xs$$103) {
 
       case 1:
         {
-          const xs$$106 = xs$$103.tail;
+          const xs$$106 = matchValue$$11[1].tail;
           return xs$$106;
           break;
         }
@@ -888,11 +868,13 @@ export function skipWhile($arg$$173, $arg$$174) {
 }
 export function takeSplitAux(error, i$$20, acc$$27, xs$$109) {
   takeSplitAux: while (true) {
-    if (i$$20 === 0) {
+    const matchValue$$12 = [i$$20, xs$$109];
+
+    if (matchValue$$12[0] === 0) {
       return [reverse(acc$$27), xs$$109];
-    } else if (xs$$109.tail != null) {
-      const xs$$110 = xs$$109.tail;
-      const x$$63 = xs$$109.head;
+    } else if (matchValue$$12[1].tail != null) {
+      const xs$$110 = matchValue$$12[1].tail;
+      const x$$63 = matchValue$$12[1].head;
       error = error;
       i$$20 = i$$20 - 1;
       acc$$27 = L(x$$63, acc$$27);
@@ -908,28 +890,27 @@ export function takeSplitAux(error, i$$20, acc$$27, xs$$109) {
   }
 }
 export function take(i$$21, xs$$111) {
-  var i$$22;
+  const matchValue$$13 = [i$$21, xs$$111];
 
-  if (i$$22 = i$$21 | 0, i$$22 < 0) {
-    const i$$23 = i$$21 | 0;
+  if (matchValue$$13[0] < 0) {
     throw new Error("The input must be non-negative.");
   } else {
     var $target$$176, i$$24, xs$$112;
 
-    if (i$$21 === 0) {
+    if (matchValue$$13[0] === 0) {
       $target$$176 = 0;
-    } else if (i$$21 === 1) {
-      if (xs$$111.tail != null) {
+    } else if (matchValue$$13[0] === 1) {
+      if (matchValue$$13[1].tail != null) {
         $target$$176 = 1;
       } else {
         $target$$176 = 2;
-        i$$24 = i$$21;
-        xs$$112 = xs$$111;
+        i$$24 = matchValue$$13[0];
+        xs$$112 = matchValue$$13[1];
       }
     } else {
       $target$$176 = 2;
-      i$$24 = i$$21;
-      xs$$112 = xs$$111;
+      i$$24 = matchValue$$13[0];
+      xs$$112 = matchValue$$13[1];
     }
 
     switch ($target$$176) {
@@ -941,7 +922,7 @@ export function take(i$$21, xs$$111) {
 
       case 1:
         {
-          const x$$64 = xs$$111.head;
+          const x$$64 = matchValue$$13[1].head;
           return L(x$$64, L());
           break;
         }
@@ -974,28 +955,27 @@ export function takeWhile(predicate$$1, xs$$113) {
   }
 }
 export function truncate(i$$25, xs$$115) {
-  var i$$26;
+  const matchValue$$14 = [i$$25, xs$$115];
 
-  if (i$$26 = i$$25 | 0, i$$26 < 0) {
-    const i$$27 = i$$25 | 0;
+  if (matchValue$$14[0] < 0) {
     throw new Error("The input must be non-negative.");
   } else {
     var $target$$179, i$$28, xs$$116;
 
-    if (i$$25 === 0) {
+    if (matchValue$$14[0] === 0) {
       $target$$179 = 0;
-    } else if (i$$25 === 1) {
-      if (xs$$115.tail != null) {
+    } else if (matchValue$$14[0] === 1) {
+      if (matchValue$$14[1].tail != null) {
         $target$$179 = 1;
       } else {
         $target$$179 = 2;
-        i$$28 = i$$25;
-        xs$$116 = xs$$115;
+        i$$28 = matchValue$$14[0];
+        xs$$116 = matchValue$$14[1];
       }
     } else {
       $target$$179 = 2;
-      i$$28 = i$$25;
-      xs$$116 = xs$$115;
+      i$$28 = matchValue$$14[0];
+      xs$$116 = matchValue$$14[1];
     }
 
     switch ($target$$179) {
@@ -1007,7 +987,7 @@ export function truncate(i$$25, xs$$115) {
 
       case 1:
         {
-          const x$$67 = xs$$115.head;
+          const x$$67 = matchValue$$14[1].head;
           return L(x$$67, L());
           break;
         }
@@ -1021,28 +1001,27 @@ export function truncate(i$$25, xs$$115) {
   }
 }
 export function splitAt(i$$29, xs$$117) {
-  var i$$30;
+  const matchValue$$15 = [i$$29, xs$$117];
 
-  if (i$$30 = i$$29 | 0, i$$30 < 0) {
-    const i$$31 = i$$29 | 0;
+  if (matchValue$$15[0] < 0) {
     throw new Error("The input must be non-negative.");
   } else {
     var $target$$180, i$$32, xs$$119;
 
-    if (i$$29 === 0) {
+    if (matchValue$$15[0] === 0) {
       $target$$180 = 0;
-    } else if (i$$29 === 1) {
-      if (xs$$117.tail != null) {
+    } else if (matchValue$$15[0] === 1) {
+      if (matchValue$$15[1].tail != null) {
         $target$$180 = 1;
       } else {
         $target$$180 = 2;
-        i$$32 = i$$29;
-        xs$$119 = xs$$117;
+        i$$32 = matchValue$$15[0];
+        xs$$119 = matchValue$$15[1];
       }
     } else {
       $target$$180 = 2;
-      i$$32 = i$$29;
-      xs$$119 = xs$$117;
+      i$$32 = matchValue$$15[0];
+      xs$$119 = matchValue$$15[1];
     }
 
     switch ($target$$180) {
@@ -1054,8 +1033,8 @@ export function splitAt(i$$29, xs$$117) {
 
       case 1:
         {
-          const xs$$118 = xs$$117.tail;
-          const x$$68 = xs$$117.head;
+          const xs$$118 = matchValue$$15[1].tail;
+          const x$$68 = matchValue$$15[1].head;
           return [L(x$$68, L()), xs$$118];
           break;
         }
@@ -1135,8 +1114,7 @@ export function countBy(projection$$6, xs$$130, eq$$5) {
     const matchValue$$16 = tryGetValue(dict$$1, key$$1, null);
 
     if (matchValue$$16[0]) {
-      const prev = matchValue$$16[1];
-      prev.contents = prev.contents + 1;
+      matchValue$$16[1].contents = matchValue$$16[1].contents + 1;
     } else {
       dict$$1.set(key$$1, new FSharpRef(1));
     }

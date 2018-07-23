@@ -1,19 +1,4 @@
-/**
- * DateTimeOffset functions.
- *
- * Note: DateOffset instances are always DateObjects in local
- * timezone (because JS dates are all kinds of messed up).
- * A local date returns UTC epoc when `.getTime()` is called.
- *
- * However, this means that in order to construct an UTC date
- * from a DateOffset with offset of +5 hours, you first need
- * to subtract those 5 hours, than add the "local" offset.
- * As said, all kinds of messed up.
- *
- * Basically; invariant: date.getTime() always return UTC time.
- */
 import { compare as compareDates, create as createDate, daysInMonth, offsetRegex, offsetToString, padWithZeros, parseRaw } from "./Date.js";
-import { fromValue, ticksToUnixEpochMilliseconds, unixEpochMillisecondsToTicks } from "./Long.js";
 export default function DateTimeOffset(value, offset) {
     const d = new Date(value);
     d.offset = offset != null ? offset : new Date().getTimezoneOffset() * -60000;
@@ -28,14 +13,6 @@ export function fromDate(date, offset) {
             : "The UTC Offset of the local dateTime parameter does not match the offset argument.");
     }
     return DateTimeOffset(date.getTime(), offset2);
-}
-export function fromTicks(ticks, offset) {
-    ticks = fromValue(ticks);
-    const epoc = ticksToUnixEpochMilliseconds(ticks) - offset;
-    return DateTimeOffset(epoc, offset);
-}
-export function getUtcTicks(date) {
-    return unixEpochMillisecondsToTicks(date.getTime(), 0);
 }
 export function minValue() {
     // This is "0001-01-01T00:00:00.000Z", actual JS min value is -8640000000000000
@@ -103,12 +80,10 @@ export function create(year, month, day, h, m, s, ms, offset) {
 }
 export function now() {
     const date = new Date();
-    const offset = date.getTimezoneOffset() * -60000;
-    return DateTimeOffset(date.getTime(), offset);
+    return DateTimeOffset(date.getTime(), date.getTimezoneOffset() * -60000);
 }
 export function utcNow() {
-    const date = now();
-    return DateTimeOffset(date.getTime(), 0);
+    return DateTimeOffset(Date.now(), 0);
 }
 export function toUniversalTime(date) {
     return DateTimeOffset(date.getTime(), 0);
