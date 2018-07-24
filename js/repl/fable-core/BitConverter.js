@@ -8,7 +8,7 @@ export function getBytesBoolean(value) {
     new DataView(bytes.buffer).setUint8(0, value ? 1 : 0);
     return bytes;
 }
-export function getBytesChar(value) {
+export function getBytesString(value) {
     const bytes = new Uint8Array(2);
     new DataView(bytes.buffer).setUint16(0, value.charCodeAt(0), littleEndian);
     return bytes;
@@ -72,8 +72,7 @@ export function toBoolean(bytes, offset) {
     return new DataView(bytes.buffer).getUint8(offset) === 1 ? true : false;
 }
 export function toChar(bytes, offset) {
-    const code = new DataView(bytes.buffer).getUint16(offset, littleEndian);
-    return String.fromCharCode(code);
+    return new DataView(bytes.buffer).getUint16(offset, littleEndian);
 }
 export function toInt16(bytes, offset) {
     return new DataView(bytes.buffer).getInt16(offset, littleEndian);

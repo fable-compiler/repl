@@ -1,3 +1,13 @@
+/**
+ * DateTimeOffset functions.
+ *
+ * Note: Date instances are always DateObjects in local
+ * timezone (because JS dates are all kinds of messed up).
+ * A local date returns UTC epoc when `.getTime()` is called.
+ *
+ * Basically; invariant: date.getTime() always return UTC time.
+ */
+import { fromValue, ticksToUnixEpochMilliseconds, unixEpochMillisecondsToTicks } from "./Long.js";
 export const offsetRegex = /(?:Z|[+-](\d+):?([0-5]?\d)?)\s*$/;
 export function padWithZeros(i, length) {
     let str = i.toString(10);
@@ -78,7 +88,7 @@ function toStringWithCustomFormat(date, format, utc) {
 }
 export function toStringWithOffset(date, format) {
     const d = new Date(date.getTime() + date.offset);
-    if (!format) {
+    if (typeof format !== "string") {
         return d.toISOString().replace(/\.\d+/, "").replace(/[A-Z]|\.\d+/g, " ") + offsetToString(date.offset);
     }
     else if (format.length === 1) {
@@ -98,7 +108,7 @@ export function toStringWithOffset(date, format) {
 }
 export function toStringWithKind(date, format) {
     const utc = date.kind === 1 /* UTC */;
-    if (!format) {
+    if (typeof format !== "string") {
         return utc ? date.toUTCString() : date.toLocaleString();
     }
     else if (format.length === 1) {
@@ -129,6 +139,30 @@ export default function DateTime(value, kind) {
     const d = new Date(value);
     d.kind = (kind == null ? 0 /* Unspecified */ : kind) | 0;
     return d;
+}
+export function fromTicks(ticks, kind) {
+    ticks = fromValue(ticks);
+    kind = kind != null ? kind : 0 /* Unspecified */;
+    let date = DateTime(ticksToUnixEpochMilliseconds(ticks), kind);
+    // Ticks are local to offset (in this case, either UTC or Local/Unknown).
+    // If kind is anything but UTC, that means that the tick number was not
+    // in utc, thus getTime() cannot return UTC, and needs to be shifted.
+    if (kind !== 1 /* UTC */) {
+        date = DateTime(date.getTime() - offset(date), kind);
+    }
+    return date;
+}
+export function fromDateTimeOffset(date, kind) {
+    switch (kind) {
+        case 1 /* UTC */: return DateTime(date.getTime(), 1 /* UTC */);
+        case 2 /* Local */: return DateTime(date.getTime(), 2 /* Local */);
+        default:
+            const d = DateTime(date.getTime() + date.offset, kind);
+            return DateTime(d.getTime() - offset(d), kind);
+    }
+}
+export function getTicks(date) {
+    return unixEpochMillisecondsToTicks(date.getTime(), offset(date));
 }
 export function minValue() {
     // This is "0001-01-01T00:00:00.000Z", actual JS min value is -8640000000000000
@@ -357,8 +391,17 @@ export function equals(d1, d2) {
     return d1.getTime() === d2.getTime();
 }
 export function compare(x, y) {
-    const xtime = x.getTime();
-    const ytime = y.getTime();
+    let xtime;
+    let ytime;
+    // DateTimeOffset and DateTime deals with equality differently.
+    if ("offset" in x && "offset" in y) {
+        xtime = x.getTime();
+        ytime = y.getTime();
+    }
+    else {
+        xtime = x.getTime() + offset(x);
+        ytime = y.getTime() + offset(y);
+    }
     return xtime === ytime ? 0 : (xtime < ytime ? -1 : 1);
 }
 export const compareTo = compare;

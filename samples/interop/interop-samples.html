@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Fable Interop Examples by Gary Bilkus</title>
+	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" href="fable.ico" />
+	<script src="https://cdn.polyfill.io/v2/polyfill.js?features=es6,fetch"></script>
+</head>
+
+<body>
+	<!-- The script below allows us to display the result of console logs to a div -->
+	<style>
+		.console-log-div {
+			border: 1px solid gray;
+			padding: 5px 10px;
+			border-radius: 5px;
+			width: 90% !important;
+			height: 600px !important;
+			background-color: #efefef;
+			overflow-y: scroll;
+		}
+	</style>
+	<section>
+		<h2>
+			The section below contains the console output from running the program.
+		</h2>
+		<h4>
+			What's most interesting is the generated code, so switch to that tab and compare with the original program.
+		</h4>
+		<p>Version 1.1 March 2018</p>
+	</section>
+	<section>
+		<div id="console-log-div"></div>
+	</section>
+	<script src="https://rawgit.com/bahmutov/console-log-div/master/console-log-div.js"></script>
+	<script>
+
+		// First some globals for us to interact with
+		function boringFunction(a, b) {
+			console.log(a);
+			console.log(b);
+			return "boring"
+		}
+		function callbackFunction(c, d) {
+			return c(d); // demonstrates ability to use a callback function
+		}
+		var boringInt = 23;
+		var boringString = "Forty-two"
+
+		var boringObj = { "string1": "aString", "int1": 123, "func": (x) => (x + 1) };
+
+		var boringArr = [1, 2, "three"];
+
+		class ExternalClass {
+			doit() {
+				console.log("External class doit")
+			}
+		}
+
+		var myExternalClassInstance = new ExternalClass()
+		function nully(a) {
+			if (a === 0) {
+				return null;
+			}
+			return a;
+		}
+	</script>
+</body>
+
+</html>
