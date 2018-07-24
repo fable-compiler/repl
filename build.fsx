@@ -67,7 +67,6 @@ let downloadArtifact path (url: string) =
     File.Delete tempFile
 
 let currentDir = __SOURCE_DIRECTORY__
-let sourceDir = currentDir </> "src"
 let rootDir = currentDir </> ".."
 let FCSExportFolderPath = rootDir </> FCSExportFolderName
 let FableFolderPath = rootDir </> FableFolderName
@@ -111,7 +110,7 @@ let ensureRepoSetup (info : RepoSetupInfo) =
     else
         printfn "Directory %s found" info.FolderName
 
-Target "Build.FCS_Export" (fun _ ->
+Target "BuildFcsExport" (fun _ ->
     ensureRepoSetup
         { FolderPath = FCSExportFolderPath
           FolderName = FCSExportFolderName
@@ -121,7 +120,7 @@ Target "Build.FCS_Export" (fun _ ->
     runScript FCSExportFolderPath "fcs\\build" "Export.Metadata"
 )
 
-Target "Generate.Metadata" (fun _ ->
+Target "GenerateMetadata" (fun _ ->
     let destination = currentDir </> "public" </> "metadata2"
     CleanDir destination
     CopyDir destination (FCSExportFolderPath </> "temp" </> "metadata2") (fun _ -> true)
@@ -166,15 +165,15 @@ Target "CopyModules" (fun _ ->
     CopyDir vsOutput ("node_modules" </> "monaco-editor" </> "min" </> "vs") (fun _ -> true)
 )
 
-Target "Watch.App" (fun _ ->
-    runYarn sourceDir "start-app"
+Target "WatchApp" (fun _ ->
+    runYarn currentDir "start-app"
 )
 
-Target "Build.App" (fun _ ->
-    runYarn sourceDir "build-app"
+Target "BuildApp" (fun _ ->
+    runYarn currentDir "build-app"
 )
 
-Target "Publish.GHPages" (fun _->
+Target "PublishGithubPages" (fun _->
     runYarn currentDir "gh-pages -d deploy"
 )
 
@@ -182,6 +181,14 @@ Target "DownloadReplArtifact" (fun _ ->
     let targetDir = currentDir </> "public/js/repl"
     downloadArtifact targetDir AppveyorReplArtifactURL
     addJsExtensionToFableCoreImports (targetDir </> "fable-core")
+)
+
+Target "BuildLib" (fun _ ->
+    // fable-splitter will adjust the fable-core path
+    let fableCoreDir = "force:${outDir}../fable-core"
+    let splitterArgs = "src/Lib/Fable.Repl.Lib.fsproj -o public/js/repl/lib --allFiles"
+    runDotnet (currentDir </> "src/App")
+        (sprintf "fable fable-splitter --fable-core %s -- %s" fableCoreDir splitterArgs)
 )
 
 Target "UpdateVersion" (fun _ ->
@@ -196,7 +203,7 @@ Target "UpdateVersion" (fun _ ->
             |> ReleaseNotesHelper.LoadReleaseNotes
         release.NugetVersion
     let reg = Regex(@"\bVERSION\s*=\s*""(.*?)""")
-    let mainFile = sourceDir </> "App/Shared.fs"
+    let mainFile = currentDir </> "src/App/Shared.fs"
     (reg, mainFile) ||> replaceLines (fun line m ->
         let replacement = sprintf "VERSION = \"%s\"" version
         reg.Replace(line, replacement) |> Some)
@@ -212,14 +219,14 @@ Target "All" DoNothing
     ==> "CopyModules"
     ==> "DownloadReplArtifact"
     ==> "UpdateVersion"
-    ==> "Build.App"
+    ==> "BuildApp"
     ==> "All"
 
-"Build.FCS_Export"
-    ==> "Generate.Metadata"
+"BuildFcsExport"
+    ==> "GenerateMetadata"
 
-"Publish.GHPages"
-    <== [ "Build.App" ]
+"PublishGithubPages"
+    <== [ "BuildApp" ]
 
 // start build
 RunTargetOrDefault "All"
