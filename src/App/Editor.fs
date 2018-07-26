@@ -47,10 +47,10 @@ let createCompletionProvider getCompletions =
             async {
                 let lineText = model.getLineContent(position.lineNumber)
                 let! completions = getCompletions position.lineNumber position.column lineText
-                return completions |> Array.map (fun (name, glyph: string) ->
+                return completions |> Array.map (fun (c: Completion) ->
                     jsOptions<monaco.languages.CompletionItem>(fun ci ->
-                        ci.label <- name
-                        ci.kind <- convertGlyph !!glyph
+                        ci.label <- c.Name
+                        ci.kind <- convertGlyph c.Glyph
                         // ci.insertText <- Some !^d.ReplacementText
                     ))
             } |> Async.StartAsPromise |> U4.Case2

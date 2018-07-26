@@ -19,6 +19,7 @@ module Literals =
         "http://fable.io/repl2"
 #endif
     let [<Literal>] FABLE_CORE_DIR = HOST + "/js/repl/fable-core"
+    let [<Literal>] FABLE_REPL_LIB_DIR = HOST + "/js/repl/lib"
     /// This is the name of the source code file passed to FCS
     let [<Literal>] FILE_NAME = "test.fs"
     /// 46px = 42px + 4px (card-header height + vertical-resize height)
@@ -41,7 +42,7 @@ type WorkerAnswer =
     | ParsedCode of errors: Fable.JS.Error[]
     | CompiledCode of jsCode: string
     | FoundTooltip of lines: string[]
-    | FoundCompletions of (string*string)[]
+    | FoundCompletions of Fable.JS.Completion[]
     static member Decoder =
         Decode.Auto.generateDecoder<WorkerAnswer>()
 

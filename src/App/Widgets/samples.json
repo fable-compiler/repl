@@ -45,6 +45,12 @@
                 "children": [
                     {
                         "type": "menu-item",
+                        "label": "Elmish Counter",
+                        "fsharpCode": "samples/other/elmish-counter.fs",
+                        "htmlCode": "samples/other/elmish-counter.html"
+                    },
+                    {
+                        "type": "menu-item",
                         "label": "Sudoku",
                         "fsharpCode": "samples/other/sudoku.fs",
                         "htmlCode": "default"

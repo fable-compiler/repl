@@ -1,4 +1,4 @@
-module React
+module Fable.Repl.Lib.React
 
 open Fable.Core
 open Fable.Core.JsInterop

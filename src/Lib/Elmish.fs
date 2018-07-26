@@ -1,4 +1,4 @@
-namespace Elmish
+module Fable.Repl.Lib.Elmish
 
 open Fable.Import.JS
 

@@ -26,7 +26,7 @@ let init() = async {
     let worker = ObservableWorker<WorkerRequest>(self, WorkerRequest.Decoder, name="WORKER")
     try
         // Create checker
-        let refs = Metadata.references false
+        let refs = [| yield! Metadata.references false; yield "Fable.Repl.Lib" |]
         let! reader = getAssemblyReader refs |> Async.AwaitPromise
         let checker = measureTime "FCS checker" Fable.CreateChecker (refs, reader) // Highly computing-expensive
         let mutable currentResults: IParseResults option = None
@@ -57,7 +57,7 @@ let init() = async {
                         match currentResults with
                         | None -> async.Return [||]
                         | Some res -> Fable.GetCompletionsAtLocation(res, line, col, lineText)
-                    completions |> Array.map (fun c -> c.Name, string c.Glyph) |> FoundCompletions |> worker.Post
+                    FoundCompletions completions |> worker.Post
                 } |> Async.StartImmediate
         )
     with _ ->

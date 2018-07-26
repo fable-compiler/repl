@@ -59,8 +59,13 @@ let generateBlobURL content mimeType =
 
 let generateHtmlBlobUrl (htmlCode : string) (jsCode: string) =
     // We need to convert import paths to absolute urls and add .js at the end
-    let reg = Regex(@"^import (.*)""fable-core(.*)""(.*)$", RegexOptions.Multiline)
-    let jsCode = reg.Replace(jsCode, sprintf "import $1\"%s$2.js\"$3" Literals.FABLE_CORE_DIR)
+    let reg = Regex(@"^import (.*)""(fable-core|fable-repl-lib)(.*)""(.*)$", RegexOptions.Multiline)
+    let jsCode = reg.Replace(jsCode, fun m ->
+        let baseDir =
+            if m.Groups.[2].Value = "fable-repl-lib"
+            then Literals.FABLE_REPL_LIB_DIR
+            else Literals.FABLE_CORE_DIR
+        sprintf "import %s\"%s%s.js\"%s" m.Groups.[1].Value baseDir m.Groups.[3].Value m.Groups.[4].Value)
     // Replacement function in JS is causing problems with $ symbol
     let i = htmlCode.IndexOf("</body>")
     let code =

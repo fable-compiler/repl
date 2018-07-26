@@ -1,6 +1,7 @@
 public/js
 public/libs
 deploy/
+temp/
 
 # Logs
 logs

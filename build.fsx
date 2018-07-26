@@ -186,9 +186,32 @@ Target "DownloadReplArtifact" (fun _ ->
 Target "BuildLib" (fun _ ->
     // fable-splitter will adjust the fable-core path
     let fableCoreDir = "force:${outDir}../fable-core"
-    let splitterArgs = "src/Lib/Fable.Repl.Lib.fsproj -o public/js/repl/lib --allFiles"
+    let libProj = "src/Lib/Fable.Repl.Lib.fsproj"
+    let outDir = "public/js/repl/lib"
+    let splitterArgs = sprintf "%s -o %s --allFiles" libProj outDir
     runDotnet (currentDir </> "src/App")
         (sprintf "fable fable-splitter --fable-core %s -- %s" fableCoreDir splitterArgs)
+
+    // Ensure that all imports end with .js
+    let reg = Regex(@"^import.+?""[^""]+")
+    for file in Directory.EnumerateFiles(currentDir </> outDir, "*.js", SearchOption.AllDirectories) do
+        let newLines =
+            File.ReadLines file
+            |> Seq.map (fun line -> reg.Replace(line, fun m ->
+                if m.Value.EndsWith(".js") then m.Value else m.Value + ".js" ))
+            |> Seq.toArray
+        File.WriteAllLines(file, newLines)
+)
+
+// Test samples build correctly
+Target "BuildSamples" (fun _ ->
+    // fable-splitter will adjust the fable-core path
+    let fableCoreDir = "force:${outDir}../fable-core"
+    let libProj = "public/samples/Samples.fsproj"
+    let outDir = "temp"
+    let splitterArgs = sprintf "%s -o %s --allFiles" libProj outDir
+    runDotnet currentDir
+        (sprintf "run -c Release -p ../fable/src/dotnet/Fable.Compiler fable-splitter --fable-core %s --args \"%s\"" fableCoreDir splitterArgs)
 )
 
 Target "UpdateVersion" (fun _ ->
