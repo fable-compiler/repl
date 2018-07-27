@@ -12,6 +12,7 @@ type Msg =
     | SamplesMsg of Widgets.Samples.Msg
     | OptionsMsg of Widgets.Options.Msg
     | ToggleWidget of string
+    | ToggleState
 
 type ExternalMsg =
     | LoadSample of string * string
@@ -48,33 +49,90 @@ let update msg model =
 
         { model with WidgetsState = newWidgetsState }, Cmd.none, NoOp
 
+    | ToggleState ->
+        printfn "togle state triggerd"
+        { model with IsExpanded = not model.IsExpanded }, Cmd.none, NoOp
+
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
 open Fulma
 open Fulma.FontAwesome
 
-let private renderWidgets (states : Set<string>) dispatch (title, widget) =
+let private renderExpandedWidgets (states : Set<string>) dispatch (title, icon, widget, maxHeight) =
     let baseView headerIcon content =
         Card.card [ ]
             [ Card.header [ Common.Props [ OnClick (fun _ -> ToggleWidget title |> dispatch ) ] ]
-                [ Card.Header.title [ ] [ str title ]
+                [ Card.Header.title [ ]
+                    [ Icon.faIcon [ Icon.Props [ Style [ MarginRight ".5em" ] ] ]
+                        [ Fa.faLg
+                          Fa.icon icon ]
+                      str title ]
                   Card.Header.icon [ ]
                     [ Icon.faIcon [ ] [ Fa.faLg; Fa.icon headerIcon] ] ]
               ofOption content ]
 
     if states.Contains title then
-        baseView Fa.I.AngleDown None
-    else
-        baseView Fa.I.AngleUp (Some (Card.content [ ] [ widget ]))
+            baseView Fa.I.AngleDown None
+        else
+            let props =
+                match maxHeight with
+                | Some maxHeight ->
+                    [ Props [ Style [ MaxHeight maxHeight
+                                      OverflowY "auto" ] ] ]
+                | None -> [ ]
+            baseView Fa.I.AngleUp (Some (Card.content props [ widget ]))
+
+let renderCollapsedWidgets dispatch (title, icon, widget, maxHeight) =
+    div [ Class "item" ]
+        [ Icon.faIcon [ Icon.Size IsLarge ]
+            [ Fa.faLg
+              Fa.icon icon ]
+          Card.card [ CustomClass "item-content" ]
+            [ Card.header [ Common.Props [ OnClick (fun _ -> ToggleWidget title |> dispatch ) ] ]
+                [ Card.Header.title [ ]
+                    [ str title ] ]
+              Card.content [ ]
+                [ widget ] ] ]
+
+let private renderWidgets model dispatch (title, icon, widget, maxHeight) =
+    match model.IsExpanded with
+    | true ->
+        renderExpandedWidgets model.WidgetsState dispatch (title, icon, widget, maxHeight)
+    | false ->
+        renderCollapsedWidgets dispatch (title, icon, widget, maxHeight)
+
+let private collapseButton dispatch =
+    Card.card [ Props [ OnClick (fun _ -> dispatch ToggleState ) ] ]
+        [ Card.header [ ]
+            [ Card.Header.title [ ] [ str "Collapse sidebar" ]
+              Card.Header.icon [ ]
+                [ Icon.faIcon [ ] [ Fa.faLg; Fa.icon Fa.I.AngleDoubleLeft] ] ] ]
+
+let private sidebarContainer dispatch sections =
+    div [ ClassName "sidebar is-expanded" ]
+        [ yield! sections
+          yield div [ Style [ Flex "1"
+                              BackgroundColor "white" ] ] [ ]
+          yield collapseButton dispatch ]
+
+let private expandButton dispatch =
+    Card.card [ Props [ OnClick (fun _ -> dispatch ToggleState ) ] ]
+        [ Icon.faIcon [ Icon.Size IsLarge ]
+            [ Fa.faLg
+              Fa.icon Fa.I.AngleDoubleRight ] ]
 
 let view (model: Model) dispatch =
+    let widgets =
+        [ "Samples", Fa.I.Book, Widgets.Samples.view model.Samples (SamplesMsg >> dispatch), Some "500px"
+          "Options", Fa.I.Cog, Widgets.Options.view model.Options (OptionsMsg >> dispatch), None
+          "About", Fa.I.Info, Widgets.About.view, None ]
+        |> List.map (renderWidgets model dispatch)
+
     if model.IsExpanded then
-        [ "Samples", Widgets.Samples.view model.Samples (SamplesMsg >> dispatch)
-          "Options", Widgets.Options.view model.Options (OptionsMsg >> dispatch)
-          "About", Widgets.About.view ]
-        |> List.map (renderWidgets model.WidgetsState dispatch)
-        |> div [ ClassName "sidebar" ]
-        |> Some
+        sidebarContainer dispatch widgets
     else
-        None
-    |> ofOption
+        div [ ClassName "sidebar is-collapse" ]
+            [ yield! widgets
+              yield div [ Style [ Flex "1"
+                                  BackgroundColor "white" ] ] [ ]
+              yield expandButton dispatch ]

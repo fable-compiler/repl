@@ -20,10 +20,32 @@ html {
     display: flex;
 
     .sidebar {
-        display: block;
+        display: flex;
+        flex-direction: column;
         flex: none;
-        width: 250px;
-        background-color: $grey-dark;
+
+        &.is-expanded {
+            width: 250px;
+        }
+
+        .item {
+            &:hover {
+                background-color: whitesmoke;
+
+                .item-content {
+                    display: block;
+                    transform: translate3d(42px, -42px, 0);
+                    position: fixed;
+                    z-index: 2;
+                }
+            }
+
+            .item-content {
+                display: none;
+                width: 250px;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+            }
+        }
 
         .card-header {
             cursor: pointer;
@@ -109,8 +131,4 @@ html {
             }
         }
     }
-}
-
-.sidebar {
-    width: 250px;
 }

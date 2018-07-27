@@ -80,7 +80,6 @@ type Msg =
     | MouseMove of Mouse.Position
     | ToggleFsharpCollapse
     | ToggleHtmlCollapse
-    | ToggleSidebar
     | SidebarMsg of Sidebar.Msg
     | ChangeFsharpCode of string
     | ChangeHtmlCode of string
@@ -206,10 +205,6 @@ let update msg model =
             | HtmlOnly -> FSharpOnly
         { model with EditorCollapse = newState }, Cmd.none
 
-    | ToggleSidebar ->
-        let sideBar = { model.Sidebar with IsExpanded = not model.Sidebar.IsExpanded }
-        { model with Sidebar = sideBar }, Cmd.none
-
     | SidebarMsg msg ->
         let (subModel, cmd, externalMsg) = Sidebar.update msg model.Sidebar
         let newModel, extraCmd =
@@ -260,19 +255,11 @@ let private menubar (model: Model) dispatch =
         if model.State = Compiling
         then smallFaIcon [ Fa.icon Fa.I.Spinner; Fa.spin ]
         else smallFaIcon [ Fa.icon Fa.I.Play ]
-    let menuIcon =
-        if model.Sidebar.IsExpanded
-        then smallFaIcon [ Fa.icon Fa.I.EyeSlash ]
-        else smallFaIcon [ Fa.icon Fa.I.Eye ]
     Navbar.navbar
         [ Navbar.IsFixedTop; Navbar.Color IsDark ]
         [ Navbar.Brand.div [ ]
             [ Navbar.Item.div [ ]
                 [ img [ Src "img/fable_ionide.png" ] ]
-              Navbar.Item.div [ ]
-                [ Button.button
-                    [ Button.OnClick (fun _ -> dispatch ToggleSidebar) ]
-                    [ menuIcon; span [] []; str "Menu" ] ]
               Navbar.Item.div [ ]
                 [ Button.button
                     [ Button.OnClick (fun _ -> dispatch StartCompile) ]
