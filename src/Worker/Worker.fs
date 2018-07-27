@@ -48,7 +48,7 @@ let init() = async {
                     let! tooltipLines =
                         match currentResults with
                         | None -> async.Return [||]
-                        | Some res -> Fable.GetToolTipText(res, line, col, lineText)
+                        | Some res -> Fable.GetToolTipText(res, int line, int col, lineText)
                     FoundTooltip tooltipLines |> worker.Post
                 } |> Async.StartImmediate
             | GetCompletions(line, col, lineText) ->
@@ -56,7 +56,7 @@ let init() = async {
                     let! completions =
                         match currentResults with
                         | None -> async.Return [||]
-                        | Some res -> Fable.GetCompletionsAtLocation(res, line, col, lineText)
+                        | Some res -> Fable.GetCompletionsAtLocation(res, int line, int col, lineText)
                     FoundCompletions completions |> worker.Post
                 } |> Async.StartImmediate
         )

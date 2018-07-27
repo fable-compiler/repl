@@ -14,7 +14,7 @@ let private Worker(): Browser.Worker = importDefault "worker-loader!../Worker/Wo
 let private loadState(_key: string): string * string = importMember "./util.js"
 let private saveState(_key: string, _code: string, _html: string): unit = importMember "./util.js"
 
-type IEditor = monaco.editor.IStandaloneCodeEditor
+type IEditor = Monaco.Editor.IStandaloneCodeEditor
 
 type State =
     | Loading
@@ -47,13 +47,14 @@ type EditorCollapse =
 
 type Model =
     { FSharpEditor: IEditor
-      HtmlEditor: IEditor
-      JsEditor: IEditor
       Worker: ObservableWorker<WorkerAnswer>
       State: State
       Url : string
       ActiveTab : ActiveTab
       CodeES2015: string
+      FSharpCode : string
+      FSharpErrors : ResizeArray<Monaco.Editor.IMarkerData>
+      HtmlCode: string
       DragTarget : DragTarget
       EditorSplitRatio : float
       PanelSplitRatio : float
@@ -62,8 +63,6 @@ type Model =
 
 type Msg =
     | SetFSharpEditor of IEditor
-    | SetHmlEditor of IEditor
-    | SetJsEditor of IEditor
     | LoadSuccess
     | LoadFail
     | MarkEditorErrors of Fable.JS.Error[]
@@ -82,15 +81,13 @@ type Msg =
     | ToggleFsharpCollapse
     | ToggleHtmlCollapse
     | ToggleSidebar
-    | FailEditorsLayout of exn
-    | WindowResize
     | SidebarMsg of Sidebar.Msg
+    | ChangeFsharpCode of string
+    | ChangeHtmlCode of string
 
 let generateHtmlUrl (model: Model) jsCode =
-    let fsCode = model.FSharpEditor.getValue()
-    let htmlCode = model.HtmlEditor.getValue()
-    saveState(Literals.STORAGE_KEY, fsCode, htmlCode)
-    Generator.generateHtmlBlobUrl htmlCode jsCode
+    saveState(Literals.STORAGE_KEY, model.FSharpCode, model.HtmlCode)
+    Generator.generateHtmlBlobUrl model.HtmlCode jsCode
 
 let clamp min max value =
     if value >= max
@@ -99,26 +96,17 @@ let clamp min max value =
     then min
     else value
 
-let compileEditorCode optimize (worker: ObservableWorker<_>) (model: monaco.editor.IModel) =
-    let content = model.getValue(monaco.editor.EndOfLinePreference.TextDefined, true)
+let compileEditorCode optimize (worker: ObservableWorker<_>) (model: Monaco.Editor.IModel) =
+    let content = model.getValue(Monaco.Editor.EndOfLinePreference.TextDefined, true)
     CompileCode(content, optimize) |> worker.Post
 
-let parseEditorCode (worker: ObservableWorker<_>) (model: monaco.editor.IModel) =
-    let content = model.getValue (monaco.editor.EndOfLinePreference.TextDefined, true)
+let parseEditorCode (worker: ObservableWorker<_>) (model: Monaco.Editor.IModel) =
+    let content = model.getValue (Monaco.Editor.EndOfLinePreference.TextDefined, true)
     ParseCode content |> worker.Post
-
-let updateLayouts (model: Model) =
-    let updateLayoutsInner () =
-        model.FSharpEditor.layout()
-        model.HtmlEditor.layout()
-        if not(isNull model.JsEditor) then
-            model.JsEditor.layout()
-    Browser.window.setTimeout(updateLayoutsInner, 100) |> ignore
 
 let update msg model =
     match msg with
     | LoadSuccess ->
-        updateLayouts model
         // Parse code every X seconds.
         let md = model.FSharpEditor.getModel()
         let obs =
@@ -127,29 +115,25 @@ let update msg model =
         debounce 1000 obs
         |> Observable.add (parseEditorCode model.Worker)
         obs.Trigger md
-        model, Cmd.ofMsg StartCompile
+        { model with State = Idle }, Cmd.ofMsg StartCompile
 
     | LoadFail ->
         let err = "Assemblies couldn't be loaded. Some firewalls prevent download of binary files, please check."
         { model with State = State.Errored err }, Cmd.none
 
     | SetFSharpEditor ed -> { model with FSharpEditor = ed }, Cmd.none
-    | SetHmlEditor ed -> { model with HtmlEditor = ed }, Cmd.none
-    | SetJsEditor ed -> { model with JsEditor = ed }, Cmd.none
 
     | MarkEditorErrors errors ->
-        model.FSharpEditor.getModel() |> markEditorErrors errors
-        model, Cmd.none
+        { model with FSharpErrors = mapErrorToMarker errors }, Cmd.none
 
     | StartCompile ->
         if model.State <> Compiling then
             model.FSharpEditor.getModel() |> compileEditorCode model.Sidebar.Options.Optimize model.Worker
             { model with State = Compiling }, Cmd.none
-        else model, Cmd.none
+        else
+         model, Cmd.none
 
     | EndCompile codeES2015 ->
-        if not(isNull model.JsEditor) then
-            model.JsEditor.setValue(codeES2015)
         { model with State = Compiled
                      CodeES2015 = codeES2015 }, Cmd.batch [ Cmd.performFunc (generateHtmlUrl model) codeES2015 SetUrl ]
 
@@ -157,7 +141,7 @@ let update msg model =
         { model with Url = newUrl }, Cmd.none
 
     | SetActiveTab newTab ->
-        { model with ActiveTab = newTab }, Cmd.attemptFunc updateLayouts model FailEditorsLayout
+        { model with ActiveTab = newTab }, Cmd.none
 
     | EditorDragStarted ->
         { model with DragTarget = EditorSplitter }, Cmd.none
@@ -212,7 +196,7 @@ let update msg model =
             | BothExtended -> HtmlOnly
             | FSharpOnly -> HtmlOnly
             | HtmlOnly -> BothExtended
-        { model with EditorCollapse = newState }, Cmd.attemptFunc updateLayouts model FailEditorsLayout
+        { model with EditorCollapse = newState }, Cmd.none
 
     | ToggleHtmlCollapse ->
         let newState =
@@ -220,40 +204,41 @@ let update msg model =
             | BothExtended -> FSharpOnly
             | FSharpOnly -> BothExtended
             | HtmlOnly -> FSharpOnly
-        { model with EditorCollapse = newState }, Cmd.attemptFunc updateLayouts model FailEditorsLayout
+        { model with EditorCollapse = newState }, Cmd.none
 
     | ToggleSidebar ->
         let sideBar = { model.Sidebar with IsExpanded = not model.Sidebar.IsExpanded }
-        { model with Sidebar = sideBar }, Cmd.attemptFunc updateLayouts model FailEditorsLayout
-
-    | WindowResize ->
-        model, Cmd.attemptFunc updateLayouts model FailEditorsLayout
-
-    | FailEditorsLayout error ->
-        Browser.console.log error.Message
-        model, Cmd.none
+        { model with Sidebar = sideBar }, Cmd.none
 
     | SidebarMsg msg ->
         let (subModel, cmd, externalMsg) = Sidebar.update msg model.Sidebar
-        match externalMsg with
-        | Sidebar.NoOp -> ()
-        | Sidebar.LoadSample (fsharpCode, htmlCode) ->
-            model.FSharpEditor.setValue fsharpCode
-            model.HtmlEditor.setValue htmlCode
-            // Force the FCS to parse the new F# code
-            model.FSharpEditor.getModel() |> parseEditorCode model.Worker
-        { model with Sidebar = subModel }, Cmd.map SidebarMsg cmd
+        let newModel, extraCmd =
+            match externalMsg with
+            | Sidebar.NoOp -> model, Cmd.none
+            | Sidebar.LoadSample (fsharpCode, htmlCode) ->
+                { model with FSharpCode = fsharpCode
+                             HtmlCode = htmlCode }, Cmd.ofMsg StartCompile // Trigger a new compilation
+        { newModel with Sidebar = subModel }, Cmd.batch [ Cmd.map SidebarMsg cmd
+                                                          extraCmd ]
+
+    | ChangeFsharpCode newCode ->
+        { model with FSharpCode = newCode }, Cmd.none
+
+    | ChangeHtmlCode newCode ->
+        { model with HtmlCode = newCode }, Cmd.none
 
 let init () =
     let worker = Worker()
+    let fsharpCode, htmlCode = loadState(Literals.STORAGE_KEY)
     { State = Loading
       FSharpEditor = Unchecked.defaultof<IEditor>
-      HtmlEditor = Unchecked.defaultof<IEditor>
-      JsEditor = Unchecked.defaultof<IEditor>
-      Worker = ObservableWorker(worker, WorkerAnswer.Decoder)
+      Worker =  ObservableWorker(worker, WorkerAnswer.Decoder)
       Url = ""
       ActiveTab = LiveTab
       CodeES2015 = ""
+      FSharpCode = fsharpCode
+      FSharpErrors = ResizeArray [||]
+      HtmlCode = htmlCode
       DragTarget = NoTarget
       EditorSplitRatio = 0.6
       PanelSplitRatio = 0.5
@@ -298,7 +283,29 @@ let private menubar (model: Model) dispatch =
                 [ Navbar.Item.div [ Navbar.Item.Props [ Style [ Color "white" ] ] ]
                     [ str "You can also press Alt+Enter from the editor" ] ] ] ]
 
-let private editorArea isDragging model dispatch =
+let htmlEditorOptions =
+    jsOptions<Monaco.Editor.IEditorConstructionOptions>(fun o ->
+        let minimapOptions =  jsOptions<Monaco.Editor.IEditorMinimapOptions>(fun oMinimap ->
+            oMinimap.enabled <- Some false
+        )
+        o.language <- Some "html"
+        o.fontSize <- Some 14.
+        o.theme <- Some "vs-dark"
+        o.minimap <- Some minimapOptions
+    )
+
+let fsharpEditorOptions =
+    jsOptions<Monaco.Editor.IEditorConstructionOptions>(fun o ->
+        let minimapOptions = jsOptions<Monaco.Editor.IEditorMinimapOptions>(fun oMinimap ->
+            oMinimap.enabled <- Some false
+        )
+        o.language <- Some "fsharp"
+        o.fontSize <- Some 14.
+        o.theme <- Some "vs-dark"
+        o.minimap <- Some minimapOptions
+    )
+
+let private editorArea model dispatch =
     let fsharpAngle, htmlAngle =
         match model.EditorCollapse with
         | BothExtended -> Fa.I.Compress, Fa.I.Compress
@@ -331,22 +338,41 @@ let private editorArea isDragging model dispatch =
                         [ Fa.icon fsharpAngle
                           Fa.faLg ] ] ]
               Card.content [ Common.Props [ Style [ Display fsharpDisplay ] ] ]
-                [ div [ Key "editor"
-                        ClassName "editor-fsharp"
-                        OnKeyDown (fun ev ->
-                            if ev.altKey && ev.key = "Enter" then
-                                dispatch StartCompile)
-                        Ref (fun element ->
-                            if not (isNull element) then
-                                if element.childElementCount = 0. then
-                                    let fsharpEditor = createEditor (element :?> Browser.HTMLElement)
-                                    let code, _ = loadState(Literals.STORAGE_KEY)
-                                    fsharpEditor.setValue(code)
-                                    SetFSharpEditor fsharpEditor |> dispatch
-                                else
-                                    if isDragging then
-                                        model.FSharpEditor.layout()
-                          ) ] [ ] ] ]
+                [ ReactEditor.editor [ ReactEditor.Options fsharpEditorOptions
+                                       ReactEditor.Value model.FSharpCode
+                                       ReactEditor.OnChange (ChangeFsharpCode >> dispatch)
+                                       ReactEditor.Errors model.FSharpErrors
+                                       ReactEditor.EditorDidMount (fun editor monacoModule ->
+                                        if not (isNull editor) then
+                                            dispatch (SetFSharpEditor editor)
+
+                                            // Because we have access to the monacoModule here,
+                                            // register the different provider needed for F# editor
+                                            let getTooltip line column lineText =
+                                                async {
+                                                    let! res = model.Worker.PostAndAwaitResponse(GetTooltip(line, column, lineText))
+                                                    match res with
+                                                    | FoundTooltip lines -> return lines
+                                                    | _ -> return [||]
+                                                }
+
+                                            let tooltipProvider = Editor.createTooltipProvider getTooltip
+                                            monacoModule.languages.registerHoverProvider("fsharp", tooltipProvider) |> ignore
+
+                                            let getCompletion line column lineText =
+                                                async {
+                                                    let! res = model.Worker.PostAndAwaitResponse(GetCompletions(line, column, lineText))
+                                                    match res with
+                                                    | FoundCompletions lines -> return lines
+                                                    | _ -> return [||]
+                                                }
+
+                                            let completionProvider = Editor.createCompletionProvider getCompletion
+                                            monacoModule.languages.registerCompletionItemProvider("fsharp", completionProvider) |> ignore
+
+                                       ) ]
+
+                           ] ]
           div [ ClassName "vertical-resize"
                 OnMouseDown (fun _ -> dispatch EditorDragStarted) ]
               [ ]
@@ -359,31 +385,10 @@ let private editorArea isDragging model dispatch =
                         [ Fa.icon htmlAngle
                           Fa.faLg ] ] ]
               Card.content [ Common.Props [ Style [ Display htmlDisplay ] ] ]
-                [ div [ ClassName "editor-html"
-                        OnKeyDown (fun ev ->
-                            if ev.altKey && ev.key = "Enter" then
-                                dispatch StartCompile)
-                        Ref (fun element ->
-                            if not (isNull element) then
-                                if element.childElementCount = 0. then
-                                    let options = jsOptions<monaco.editor.IEditorConstructionOptions>(fun o ->
-                                        let minimapOptions =  jsOptions<monaco.editor.IEditorMinimapOptions>(fun oMinimap ->
-                                            oMinimap.enabled <- Some false
-                                        )
-                                        o.language <- Some "html"
-                                        o.fontSize <- Some 14.
-                                        o.theme <- Some "vs-dark"
-                                        o.value <- Some Generator.defaultHtmlCode
-                                        o.minimap <- Some minimapOptions
-                                    )
-                                    let htmlEditor = monaco.editor.Globals.create(element :?> Browser.HTMLElement, options)
-                                    let _, html = loadState(Literals.STORAGE_KEY)
-                                    htmlEditor.setValue(html)
-                                    SetHmlEditor htmlEditor |> dispatch
-                                else
-                                    if isDragging then
-                                        model.HtmlEditor.layout()
-                        ) ] [ ] ] ] ]
+                [ ReactEditor.editor [ ReactEditor.Options htmlEditorOptions
+                                       ReactEditor.Value model.HtmlCode
+                                       ReactEditor.OnChange (ChangeHtmlCode >> dispatch) ]
+                         ] ] ]
 
 let private outputTabs (activeTab : ActiveTab) dispatch =
     Tabs.tabs [ Tabs.IsCentered
@@ -407,38 +412,27 @@ let private viewIframe isShown url =
              ClassName (toggleDisplay isShown) ]
         [ ]
 
-let private viewCodeEditor isDragging (model: Model) dispatch =
-    let isShown = model.ActiveTab = CodeTab
-    div [ ClassName ("editor-output " + toggleDisplay isShown)
-          Ref (fun element ->
-            if not (isNull element) then
-                if element.childElementCount = 0. then
-                    let options = jsOptions<monaco.editor.IEditorConstructionOptions>(fun o ->
-                        let minimapOptions = jsOptions<monaco.editor.IEditorMinimapOptions>(fun oMinimap ->
+let private viewCodeEditor (model: Model) =
+    let options = jsOptions<Monaco.Editor.IEditorConstructionOptions>(fun o ->
+                        let minimapOptions = jsOptions<Monaco.Editor.IEditorMinimapOptions>(fun oMinimap ->
                             oMinimap.enabled <- Some false
                         )
                         o.language <- Some "javascript"
                         o.fontSize <- Some 14.
                         o.theme <- Some "vs-dark"
                         o.minimap <- Some minimapOptions
+                        o.readOnly <- Some true
                     )
-                    let jsEditor = monaco.editor.Globals.create(element :?> Browser.HTMLElement, options)
-                    jsEditor.setValue(model.CodeES2015)
-                    jsEditor.layout()
-                    SetJsEditor jsEditor |> dispatch
-                else
-                    if isDragging then
-                        model.JsEditor.layout()
-            ) ]
-        [ ]
+    ReactEditor.editor [ ReactEditor.Options options
+                         ReactEditor.Value model.CodeES2015 ]
 
-let private outputArea isDragging model dispatch =
+let private outputArea model dispatch =
     let content =
         match model.State with
         | Compiling | Compiled ->
             [ outputTabs model.ActiveTab dispatch
               viewIframe (model.ActiveTab = LiveTab) model.Url
-              viewCodeEditor isDragging model dispatch ]
+              viewCodeEditor model ]
         | _ ->
             [ br [ ]
               div [ ClassName "has-text-centered"
@@ -456,8 +450,10 @@ let private view (model: Model) dispatch =
         | EditorSplitter | PanelSplitter -> true
         | NoTarget -> false
     div [ classList [ "is-unselectable", isDragging ] ]
-        [ PageLoader.pageLoader [ PageLoader.Color IsInfo
-                                  PageLoader.IsActive (model.State = Loading) ] [ ]
+        [ PageLoader.pageLoader [ PageLoader.Color IsWhite
+                                  PageLoader.IsActive (model.State = Loading) ]
+                                [ span [ Class "title" ]
+                                    [ str "We are getting everything ready for you" ] ]
           Modal.modal [ Modal.IsActive model.State.HasError ]
             [ Modal.background [ ] [ ]
               Modal.content [ ] [ Box.box' [ ] [ str model.State.ErrorMessage ] ] ]
@@ -466,22 +462,19 @@ let private view (model: Model) dispatch =
             [ Sidebar.view model.Sidebar (SidebarMsg >> dispatch)
               div [ ClassName "main-content" ]
                 [ div [ ClassName "page-content" ]
-                    [ yield editorArea isDragging model dispatch
+                    [ yield editorArea model dispatch
                       if not model.State.HasError then
                         yield div [ ClassName "horizontal-resize"
                                     OnMouseDown (fun _ -> dispatch PanelDragStarted) ]
                                   [ ]
-                      yield outputArea isDragging model dispatch ] ] ] ]
+                      yield outputArea model dispatch ] ] ] ]
 
 let private subscriptions (model: Model) =
     let sub dispatch =
-        // Resize subscriptions
-        Browser.window.addEventListener_resize(fun _ ->
-            dispatch WindowResize)
-
         // Worker subscriptions
         model.Worker |> Observable.add (function
-            | Loaded -> LoadSuccess |> dispatch
+            | Loaded ->
+                LoadSuccess |> dispatch
             | LoadFailed -> LoadFail |> dispatch
             | ParsedCode errors -> MarkEditorErrors errors |> dispatch
             | CompiledCode jsCode -> EndCompile jsCode |> dispatch
@@ -490,21 +483,6 @@ let private subscriptions (model: Model) =
             | FoundCompletions _ -> ()
         )
 
-        // Register providers
-        registerTooltipProvider <| fun line column lineText -> async {
-            let! res = model.Worker.PostAndAwaitResponse(GetTooltip(line, column, lineText))
-            match res with
-            | FoundTooltip lines -> return lines
-            | _ -> return [||]
-        }
-
-        registerCompletionProvider <| fun line column lineText -> async {
-            let! res = model.Worker.PostAndAwaitResponse(GetCompletions(line, column, lineText))
-            match res with
-            | FoundCompletions lines -> return lines
-            | _ -> return [||]
-        }
-
     Cmd.ofSub sub
 
 open Elmish.React
@@ -512,7 +490,6 @@ open Elmish.HMR
 
 Program.mkProgram init update view
 |> Program.withSubscription subscriptions
-// |> Program.withSubscription (Notifications.subscription NotificationsMsg)
 #if DEBUG
 |> Program.withHMR
 #endif

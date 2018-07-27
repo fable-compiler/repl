@@ -2,7 +2,7 @@
 
 import * as Babel from "babel-standalone";
 import BabelTemplate from "babel-template";
-import * as BabelPlugins from "../../../Fable/src/js/fable-utils/babel-plugins";
+import * as BabelPlugins from "fable-utils/babel-plugins";
 
 function getBlobUrl(name) {
     // .txt extension is used to enable gzipping in Github Pages
