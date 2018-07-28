@@ -12,103 +12,113 @@ open Fable.JS
 // Features providers
 //---------------------------------------------------
 
-let markEditorErrors (errors: Error[]) (model: monaco.editor.IModel) =
-    let markers =
-        errors |> Array.map (fun err ->
-            jsOptions<monaco.editor.IMarkerData>(fun m ->
-                m.startLineNumber <- err.StartLineAlternate
-                m.endLineNumber <- err.EndLineAlternate
-                m.startColumn <- err.StartColumn + 1
-                m.endColumn <- err.EndColumn + 1
-                m.message <- err.Message
-                m.severity <-
-                    match err.IsWarning with
-                    | false -> monaco.Severity.Error
-                    | true -> monaco.Severity.Warning))
-    monaco.editor.Globals.setModelMarkers(model, "test", markers)
 
+
+/// **Description**
+/// Convert `Fable.JS.Glyph` type into the `Monaco.Languages.CompletionItemKind`
+/// **Parameters**
+///   * `glyph` - parameter of type `Glyph`
+///
+/// **Output Type**
+///   * `Monaco.Languages.CompletionItemKind`
+///
+/// **Exceptions**
+///
 let convertGlyph glyph =
     match glyph with
-    | Glyph.Class -> monaco.languages.CompletionItemKind.Class
-    | Glyph.Enum -> monaco.languages.CompletionItemKind.Enum
-    | Glyph.Value -> monaco.languages.CompletionItemKind.Value
-    | Glyph.Variable -> monaco.languages.CompletionItemKind.Variable
-    | Glyph.Interface -> monaco.languages.CompletionItemKind.Interface
-    | Glyph.Module -> monaco.languages.CompletionItemKind.Module
-    | Glyph.Method -> monaco.languages.CompletionItemKind.Method
-    | Glyph.Property -> monaco.languages.CompletionItemKind.Property
-    | Glyph.Field -> monaco.languages.CompletionItemKind.Field
-    | Glyph.Function -> monaco.languages.CompletionItemKind.Function
-    | Glyph.Error | Glyph.Event -> monaco.languages.CompletionItemKind.Text
+    | Glyph.Class -> Monaco.Languages.CompletionItemKind.Class
+    | Glyph.Enum -> Monaco.Languages.CompletionItemKind.Enum
+    | Glyph.Value -> Monaco.Languages.CompletionItemKind.Value
+    | Glyph.Variable -> Monaco.Languages.CompletionItemKind.Variable
+    | Glyph.Interface -> Monaco.Languages.CompletionItemKind.Interface
+    | Glyph.Module -> Monaco.Languages.CompletionItemKind.Module
+    | Glyph.Method -> Monaco.Languages.CompletionItemKind.Method
+    | Glyph.Property -> Monaco.Languages.CompletionItemKind.Property
+    | Glyph.Field -> Monaco.Languages.CompletionItemKind.Field
+    | Glyph.Function -> Monaco.Languages.CompletionItemKind.Function
+    | Glyph.Error | Glyph.Event -> Monaco.Languages.CompletionItemKind.Text
+
 
 let createCompletionProvider getCompletions =
-    { new monaco.languages.CompletionItemProvider with
-        member __.provideCompletionItems(model, position, _token) =
+    { new Monaco.Languages.CompletionItemProvider with
+        member __.provideCompletionItems(model, position, _token, _context) =
             async {
                 let lineText = model.getLineContent(position.lineNumber)
                 let! completions = getCompletions position.lineNumber position.column lineText
-                return completions |> Array.map (fun (c: Completion) ->
-                    jsOptions<monaco.languages.CompletionItem>(fun ci ->
-                        ci.label <- c.Name
-                        ci.kind <- convertGlyph c.Glyph
-                        // ci.insertText <- Some !^d.ReplacementText
-                    ))
-            } |> Async.StartAsPromise |> U4.Case2
+                return
+                    completions
+                    |> Array.map (fun (c: Fable.JS.Completion) ->
+                        jsOptions<Monaco.Languages.CompletionItem>(fun ci ->
+                            ci.label <- c.Name
+                            ci.kind <- convertGlyph c.Glyph
+                            // ci.insertText <- Some !^d.ReplacementText
+                        ))
+                    |> ResizeArray
+            }
+            |> Async.StartAsPromise
+            |> Promise.toThenable
+            |> U4.Case2
 
         member __.resolveCompletionItem(item, _token) = !^item
 
         member __.triggerCharacters
-            with get () = Some [|"."|]
+            with get () = Some (ResizeArray([|"."|]))
             and set _ = ()
     }
 
 let createTooltipProvider getTooltip =
-    { new monaco.languages.HoverProvider with
+    { new Monaco.Languages.HoverProvider with
         member __.provideHover(doc, pos, _ ) =
             async {
                 match doc.getWordAtPosition !!pos |> Option.ofObj with
                 | Some w ->
                     let lineText = doc.getLineContent(pos.lineNumber)
                     let! lines = getTooltip pos.lineNumber pos.column lineText
-                    let r: monaco.IRange = jsOptions(fun r ->
+                    let r: Monaco.IRange = jsOptions(fun r ->
                         r.startColumn <- w.startColumn
                         r.endColumn <- w.endColumn
-                        r.startLineNumber <- float pos.lineNumber
-                        r.endLineNumber <- float pos.lineNumber
+                        r.startLineNumber <- pos.lineNumber
+                        r.endLineNumber <- pos.lineNumber
                     )
-                    return jsOptions<monaco.languages.Hover>(fun h ->
-                        h.contents <- lines |> Array.map (fun line ->
-                            jsOptions<monaco.IMarkdownString>(fun s ->
+                    return jsOptions<Monaco.Languages.Hover>(fun h ->
+                        h.contents <-
+                            lines
+                            |> Array.map (fun line ->
+                                jsOptions<Monaco.IMarkdownString>(fun s ->
                                 s.value <- line))
-                        h.range <- r
+                            |> ResizeArray
+                        h.range <- Some r
                     )
-                | None -> return createEmpty<monaco.languages.Hover>
-            } |> Async.StartAsPromise |> U2.Case2
+                | None -> return createEmpty<Monaco.Languages.Hover>
+            }
+            |> Async.StartAsPromise
+            |> Promise.toThenable
+            |> U2.Case2
     }
 
-//---------------------------------------------------
-// Register providers
-//---------------------------------------------------
-let registerCompletionProvider getCompletions =
-    let provider = createCompletionProvider getCompletions
-    monaco.languages.Globals.registerCompletionItemProvider("fsharp", provider) |> ignore
 
-let registerTooltipProvider getTooltip =
-    let provider = createTooltipProvider getTooltip
-    monaco.languages.Globals.registerHoverProvider("fsharp", provider) |> ignore
 
-//---------------------------------------------------
-// Create editor
-//---------------------------------------------------
-let createEditor domElement =
-    let options = jsOptions<monaco.editor.IEditorConstructionOptions>(fun o ->
-        let minimapOptions = jsOptions<monaco.editor.IEditorMinimapOptions>(fun oMinimap ->
-            oMinimap.enabled <- Some false
-        )
-        o.language <- Some "fsharp"
-        o.fontSize <- Some 14.
-        o.theme <- Some "vs-dark"
-        o.minimap <- Some minimapOptions
-    )
-    let services = createEmpty<monaco.editor.IEditorOverrideServices>
-    monaco.editor.Globals.create(domElement, options, services)
+/// **Description**
+/// Map the Fable errors into Marker type used by Monaco
+/// **Parameters**
+///   * `errors` - parameter of type `Error []`
+///
+/// **Output Type**
+///   * `ResizeArray<Monaco.Editor.IMarkerData>`
+///
+/// **Exceptions**
+///
+let mapErrorToMarker (errors: Error[]) =
+    errors
+    |> Array.map (fun err ->
+        jsOptions<Monaco.Editor.IMarkerData>(fun m ->
+            m.startLineNumber <- err.StartLineAlternate
+            m.endLineNumber <- err.EndLineAlternate
+            m.startColumn <- err.StartColumn + 1
+            m.endColumn <- err.EndColumn + 1
+            m.message <- err.Message
+            m.severity <-
+                match err.IsWarning with
+                | false -> Monaco.MarkerSeverity.Error
+                | true -> Monaco.MarkerSeverity.Warning))
+    |> ResizeArray

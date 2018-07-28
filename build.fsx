@@ -70,6 +70,7 @@ let currentDir = __SOURCE_DIRECTORY__
 let rootDir = currentDir </> ".."
 let FCSExportFolderPath = rootDir </> FCSExportFolderName
 let FableFolderPath = rootDir </> FableFolderName
+let appDir = currentDir </> "src" </> "App"
 
 let rec waitUserResponse _ =
     let userInput = Console.ReadLine()
@@ -166,11 +167,11 @@ Target "CopyModules" (fun _ ->
 )
 
 Target "WatchApp" (fun _ ->
-    runYarn currentDir "start-app"
+    runDotnet appDir "fable webpack-dev-server"
 )
 
 Target "BuildApp" (fun _ ->
-    runYarn currentDir "build-app"
+    runDotnet appDir "fable webpack-cli"
 )
 
 Target "PublishGithubPages" (fun _->
@@ -250,6 +251,9 @@ Target "All" DoNothing
 
 "PublishGithubPages"
     <== [ "BuildApp" ]
+
+"DownloadReplArtifact"
+    ==> "WatchApp"
 
 // start build
 RunTargetOrDefault "All"

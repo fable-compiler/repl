@@ -8,14 +8,16 @@
       <Paket>True</Paket>
       <Link>paket-files/Interfaces.fs</Link>
     </Compile>
-    <Compile Include="Shared.fs" />
     <Compile Include="Monaco.fs" />
+    <Compile Include="Shared.fs" />
+    <Compile Include="Helpers.fs" />
     <Compile Include="Editor.fs" />
     <Compile Include="Generator.fs" />
     <Compile Include="Mouse.fs" />
     <Compile Include="Widgets/Samples.fs" />
     <Compile Include="Widgets/Other.fs" />
     <Compile Include="Sidebar.fs" />
+    <Compile Include="ReactEditor.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
