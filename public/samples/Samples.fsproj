@@ -7,13 +7,14 @@
     <Reference Include="../../src/Lib/bin/Debug/netstandard2.0/Fable.Repl.Lib.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="elmish/counter.fs" />
+    <Compile Include="elmish/clock.fs" />
     <Compile Include="games/mario.fs" />
     <Compile Include="games/ozmo.fs" />
     <Compile Include="visual/basic-canvas.fs" />
     <Compile Include="visual/mandelbrot.fs" />
     <Compile Include="interop/interop-samples.fs" />
     <Compile Include="interop/jquery.fs" />
-    <Compile Include="other/elmish-counter.fs" />
     <Compile Include="other/parser.fs" />
     <Compile Include="other/sudoku.fs" />
     <Compile Include="other/raytrace.fs" />

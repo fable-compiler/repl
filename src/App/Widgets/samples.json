@@ -5,6 +5,24 @@
         "children": [
             {
                 "type": "sub-category",
+                "label": "Elmish",
+                "children": [
+                    {
+                        "type": "menu-item",
+                        "label": "Counter",
+                        "fsharpCode": "samples/elmish/counter.fs",
+                        "htmlCode": "samples/elmish/counter.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Clock",
+                        "fsharpCode": "samples/elmish/clock.fs",
+                        "htmlCode": "samples/elmish/clock.html"
+                    }
+                ]
+            },
+            {
+                "type": "sub-category",
                 "label": "Fun and Games",
                 "children": [
                     {
@@ -43,12 +61,6 @@
                 "type": "sub-category",
                 "label": "Other",
                 "children": [
-                    {
-                        "type": "menu-item",
-                        "label": "Elmish Counter",
-                        "fsharpCode": "samples/other/elmish-counter.fs",
-                        "htmlCode": "samples/other/elmish-counter.html"
-                    },
                     {
                         "type": "menu-item",
                         "label": "Sudoku",

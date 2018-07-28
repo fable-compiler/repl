@@ -2,9 +2,9 @@ module Elmish.Counter
 
 (**
  The famous Increment/Decrement ported from Elm.
- Please note the API in Fable's REPL Lib may differ a bit from Elmish, Fable.React... nuget libraries.
- Also, the generated code is not as optimized as when using dotnet-fable.
- You can find more info and Fable Elmish samples in https://elmish.github.io/
+ You can find more info about Emish architecture and samples at https://elmish.github.io/
+ NOTE: The API in Fable's REPL may differ from Fable.Elmish & Fable.React nuget libraries.
+       The generated JS code won't be as optimized as when using dotnet-fable.
 *)
 
 open Fable.Repl.Lib
@@ -34,9 +34,9 @@ let update (msg:Msg) (model:Model) =
 let view model dispatch =
 
   div []
-      [ button [ OnClick (fun _ -> dispatch Decrement) ] [ str "-" ]
-        div [] [ str (sprintf "%A" model) ]
-        button [ OnClick (fun _ -> dispatch Increment) ] [ str "+" ] ]
+      [ button [ OnClick (fun _ -> dispatch Increment) ] [ str "+" ]
+        div [] [ str (string model) ]
+        button [ OnClick (fun _ -> dispatch Decrement) ] [ str "-" ] ]
 
 // App
 Program.mkSimple init update view
