@@ -182,12 +182,16 @@ let update msg model =
         { model with DragTarget = NoTarget }, Cmd.none
 
     | PanelDrag position ->
-        let offset = if model.Sidebar.IsExpanded then 250. else 0.
-        { model with PanelSplitRatio =
-                        position
-                        |> (fun p -> p.X - offset)
-                        |> (fun w -> w / (Browser.window.innerWidth - offset))
-                        |> clamp 0.2 0.8 }, Cmd.none
+        let offset =
+            if model.Sidebar.IsExpanded then 250. else 0.
+        let splitRatio =
+            position
+            |> (fun p -> p.X - offset)
+            |> (fun w -> w / (Browser.window.innerWidth - offset))
+            |> clamp 0.2 0.8
+        // printfn "PANELDRAG: x %f offset %f innerWidth %f splitRatio %f"
+        //     position.X offset Browser.window.innerWidth splitRatio
+        { model with PanelSplitRatio = splitRatio }, Cmd.none
 
     | ToggleFsharpCollapse ->
         let newState =
@@ -450,13 +454,12 @@ let private view (model: Model) dispatch =
           div [ Class "page-content" ]
             [ Sidebar.view model.Sidebar (SidebarMsg >> dispatch)
               div [ Class "main-content" ]
-                [ div [ Class "page-content" ]
-                    [ yield editorArea model dispatch
-                      if not model.State.HasError then
-                        yield div [ Class "horizontal-resize"
-                                    OnMouseDown (fun _ -> dispatch PanelDragStarted) ]
-                                  [ ]
-                      yield outputArea model dispatch ] ] ] ]
+                [ yield editorArea model dispatch
+                  if not model.State.HasError then
+                    yield div [ Class "horizontal-resize"
+                                OnMouseDown (fun _ -> dispatch PanelDragStarted) ]
+                              [ ]
+                  yield outputArea model dispatch ] ] ]
 
 let private subscriptions (model: Model) =
     let sub dispatch =

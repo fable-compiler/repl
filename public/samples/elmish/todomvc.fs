@@ -1,7 +1,7 @@
 module Elmish.TodoMVC
 
 (**
- Classic Memory game, by Zaid Ajaj.
+ TodoMVC app ported to Elm.
  You can find more info about Emish architecture and samples at https://elmish.github.io/
  NOTE: The API in Fable's REPL may differ from Fable.Elmish & Fable.React nuget libraries.
        The generated JS code won't be as optimized as when using dotnet-fable.

@@ -16,7 +16,7 @@ html {
 
 .page-content {
     height: calc(100vh - #{$navbar-height});
-    widows: 100%;
+    width: 100%;
     display: flex;
 
     .sidebar {
@@ -53,10 +53,8 @@ html {
     }
 
     .main-content {
-        display: block;
-        flex-basis: 0;
-        flex-grow: 1;
-        flex-shrink: 1;
+        display: flex;
+        width: 100%;
 
         .horizontal-resize {
             width: 6px;
