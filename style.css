@@ -12868,7 +12868,7 @@ html {
 
 .page-content {
   height: calc(100vh - 3.25rem);
-  widows: 100%;
+  width: 100%;
   display: flex; }
   .page-content .sidebar {
     display: flex;
@@ -12890,10 +12890,8 @@ html {
     .page-content .sidebar .card-header {
       cursor: pointer; }
   .page-content .main-content {
-    display: block;
-    flex-basis: 0;
-    flex-grow: 1;
-    flex-shrink: 1; }
+    display: flex;
+    width: 100%; }
     .page-content .main-content .horizontal-resize {
       width: 6px;
       margin-left: -3px;
