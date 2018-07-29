@@ -97,7 +97,10 @@ open Canvas
 open Physics
 open Fable.Import.Browser
 
-let origin = window.location.origin + "/repl/"
+let origin =
+    // Sample is running in an iframe, so get the location of parent
+    let topLocation = window.top.location
+    topLocation.origin + topLocation.pathname
 
 let render (w,h) (mario: MarioModel) =
     (0., 0., w, h) |> filled (rgb 174 238 238)
@@ -108,7 +111,7 @@ let render (w,h) (mario: MarioModel) =
         if mario.y > 0. then "jump"
         elif mario.vx <> 0. then "walk"
         else "stand"
-    origin + "/img/mario/mario" + verb + mario.dir + ".gif"
+    origin + "img/mario/mario" + verb + mario.dir + ".gif"
     |> image
     |> position (w/2.-16.+mario.x,  h-50.-31.-mario.y)
 

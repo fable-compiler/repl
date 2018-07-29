@@ -109,7 +109,7 @@ let private collapseButton dispatch =
                 [ Icon.faIcon [ ] [ Fa.faLg; Fa.icon Fa.I.AngleDoubleLeft] ] ] ]
 
 let private sidebarContainer dispatch sections =
-    div [ ClassName "sidebar is-expanded" ]
+    div [ Class "sidebar is-expanded" ]
         [ yield! sections
           yield div [ Style [ Flex "1"
                               BackgroundColor "white" ] ] [ ]
@@ -131,7 +131,7 @@ let view (model: Model) dispatch =
     if model.IsExpanded then
         sidebarContainer dispatch widgets
     else
-        div [ ClassName "sidebar is-collapse" ]
+        div [ Class "sidebar is-collapse" ]
             [ yield! widgets
               yield div [ Style [ Flex "1"
                                   BackgroundColor "white" ] ] [ ]

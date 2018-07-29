@@ -18,6 +18,24 @@
                         "label": "Clock",
                         "fsharpCode": "samples/elmish/clock.fs",
                         "htmlCode": "samples/elmish/clock.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Calculator",
+                        "fsharpCode": "samples/elmish/calculator.fs",
+                        "htmlCode": "samples/elmish/calculator.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Memory",
+                        "fsharpCode": "samples/elmish/memory.fs",
+                        "htmlCode": "samples/elmish/memory.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "TodoMVC",
+                        "fsharpCode": "samples/elmish/todomvc.fs",
+                        "htmlCode": "samples/elmish/todomvc.html"
                     }
                 ]
             },

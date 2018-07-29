@@ -66,7 +66,7 @@ type Msg =
     | LoadSuccess
     | LoadFail
     | MarkEditorErrors of Fable.JS.Error[]
-    | StartCompile
+    | StartCompile of string option
     | EndCompile of string
     | SetActiveTab of ActiveTab
     | SetUrl of string
@@ -95,10 +95,6 @@ let clamp min max value =
     then min
     else value
 
-let compileEditorCode optimize (worker: ObservableWorker<_>) (model: Monaco.Editor.IModel) =
-    let content = model.getValue(Monaco.Editor.EndOfLinePreference.TextDefined, true)
-    CompileCode(content, optimize) |> worker.Post
-
 let parseEditorCode (worker: ObservableWorker<_>) (model: Monaco.Editor.IModel) =
     let content = model.getValue (Monaco.Editor.EndOfLinePreference.TextDefined, true)
     ParseCode content |> worker.Post
@@ -114,7 +110,7 @@ let update msg model =
         debounce 1000 obs
         |> Observable.add (parseEditorCode model.Worker)
         obs.Trigger md
-        { model with State = Idle }, Cmd.ofMsg StartCompile
+        { model with State = Idle }, Cmd.ofMsg (StartCompile None)
 
     | LoadFail ->
         let err = "Assemblies couldn't be loaded. Some firewalls prevent download of binary files, please check."
@@ -125,9 +121,13 @@ let update msg model =
     | MarkEditorErrors errors ->
         { model with FSharpErrors = mapErrorToMarker errors }, Cmd.none
 
-    | StartCompile ->
+    | StartCompile code ->
         if model.State <> Compiling then
-            model.FSharpEditor.getModel() |> compileEditorCode model.Sidebar.Options.Optimize model.Worker
+            let code =
+                match code with
+                | Some code -> code
+                | None -> model.FSharpEditor.getModel().getValue(Monaco.Editor.EndOfLinePreference.TextDefined, true)
+            CompileCode(code, model.Sidebar.Options.Optimize) |> model.Worker.Post
             { model with State = Compiling }, Cmd.none
         else
          model, Cmd.none
@@ -212,7 +212,7 @@ let update msg model =
             | Sidebar.NoOp -> model, Cmd.none
             | Sidebar.LoadSample (fsharpCode, htmlCode) ->
                 { model with FSharpCode = fsharpCode
-                             HtmlCode = htmlCode }, Cmd.ofMsg StartCompile // Trigger a new compilation
+                             HtmlCode = htmlCode }, Cmd.ofMsg (StartCompile (Some fsharpCode)) // Trigger a new compilation
         { newModel with Sidebar = subModel }, Cmd.batch [ Cmd.map SidebarMsg cmd
                                                           extraCmd ]
 
@@ -259,10 +259,10 @@ let private menubar (model: Model) dispatch =
         [ Navbar.IsFixedTop; Navbar.Color IsDark ]
         [ Navbar.Brand.div [ ]
             [ Navbar.Item.div [ ]
-                [ img [ Src "img/fable_ionide.png" ] ]
+                [ img [ Src "img/fable-ionide.png" ] ]
               Navbar.Item.div [ ]
                 [ Button.button
-                    [ Button.OnClick (fun _ -> dispatch StartCompile) ]
+                    [ Button.OnClick (fun _ -> dispatch (StartCompile None)) ]
                     [ compileIcon; span [] []; str "Compile" ] ]
             ]
           Navbar.Start.div [ ]
@@ -314,7 +314,7 @@ let private editorArea model dispatch =
         | HtmlOnly ->
             Literals.EDITOR_COLLAPSED_HEIGHT, Literals.EDITOR_UNCOLLAPSED_HEIGHT
 
-    div [ ClassName "editor-container"
+    div [ Class "editor-container"
           Style [ Width (numberToPercent model.PanelSplitRatio) ] ]
         [ Card.card [ Common.Props [ Style [ Height ("calc("+ fsharpHeight + " - 4px)") ] ] ] // We remove 4px to compensate the vertical-resize height
             [ Card.header [ Common.Props [ OnClick (fun _ -> dispatch ToggleFsharpCollapse )] ]
@@ -360,7 +360,7 @@ let private editorArea model dispatch =
                                        ) ]
 
                            ] ]
-          div [ ClassName "vertical-resize"
+          div [ Class "vertical-resize"
                 OnMouseDown (fun _ -> dispatch EditorDragStarted) ]
               [ ]
           Card.card [ Common.Props [ Style [ Height htmlHeight ] ] ]
@@ -396,7 +396,7 @@ let private toggleDisplay cond =
 
 let private viewIframe isShown url =
     iframe [ Src url
-             ClassName (toggleDisplay isShown) ]
+             Class (toggleDisplay isShown) ]
         [ ]
 
 let private viewCodeEditor (model: Model) =
@@ -422,12 +422,12 @@ let private outputArea model dispatch =
               viewCodeEditor model ]
         | _ ->
             [ br [ ]
-              div [ ClassName "has-text-centered"
+              div [ Class "has-text-centered"
                     Style [ Width "100%" ] ]
                 [ Heading.h4 [ Heading.IsSubtitle ]
                     [ str "You need to compile an application first" ] ] ]
 
-    div [ ClassName "output-container"
+    div [ Class "output-container"
           Style [ Width (numberToPercent (1. - model.PanelSplitRatio)) ] ]
         content
 
@@ -445,13 +445,13 @@ let private view (model: Model) dispatch =
             [ Modal.background [ ] [ ]
               Modal.content [ ] [ Box.box' [ ] [ str model.State.ErrorMessage ] ] ]
           menubar model dispatch
-          div [ ClassName "page-content" ]
+          div [ Class "page-content" ]
             [ Sidebar.view model.Sidebar (SidebarMsg >> dispatch)
-              div [ ClassName "main-content" ]
-                [ div [ ClassName "page-content" ]
+              div [ Class "main-content" ]
+                [ div [ Class "page-content" ]
                     [ yield editorArea model dispatch
                       if not model.State.HasError then
-                        yield div [ ClassName "horizontal-resize"
+                        yield div [ Class "horizontal-resize"
                                     OnMouseDown (fun _ -> dispatch PanelDragStarted) ]
                                   [ ]
                       yield outputArea model dispatch ] ] ] ]
