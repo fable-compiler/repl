@@ -18,7 +18,7 @@ module Monaco =
         abstract Promise: PromiseStatic
         abstract CancellationTokenSource: CancellationTokenSourceStatic
         abstract Uri: UriStatic
-        abstract KeyMod: KeyModStatic
+        abstract KeyMod: KeyMod
         abstract Position: PositionStatic
         abstract Range: RangeStatic
         abstract Selection: SelectionStatic
@@ -305,10 +305,10 @@ module Monaco =
         | MAX_VALUE = 112
 
     type [<AllowNullLiteral>] KeyMod =
-        abstract CtrlCmd: float
-        abstract Shift: float
-        abstract Alt: float
-        abstract WinCtrl: float
+        abstract CtrlCmd: int
+        abstract Shift: int
+        abstract Alt: int
+        abstract WinCtrl: int
 
     type [<AllowNullLiteral>] KeyModStatic =
         [<Emit "new $0($1...)">] abstract Create: unit -> KeyMod
@@ -724,7 +724,7 @@ module Monaco =
 
         type [<AllowNullLiteral>] IStandaloneCodeEditor =
             inherit ICodeEditor
-            abstract addCommand: keybinding: float * handler: ICommandHandler * context: string -> string
+            abstract addCommand: keybinding: int * handler: (unit->unit) * ?context: string -> string
             abstract createContextKey: key: string * defaultValue: 'T -> IContextKey<'T>
             abstract addAction: descriptor: IActionDescriptor -> IDisposable
 

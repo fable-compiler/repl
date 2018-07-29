@@ -357,6 +357,8 @@ let private editorArea model dispatch =
                                             let completionProvider = Editor.createCompletionProvider getCompletion
                                             monacoModule.languages.registerCompletionItemProvider("fsharp", completionProvider) |> ignore
 
+                                            editor.addCommand(monacoModule.KeyMod.Alt ||| int Monaco.KeyCode.Enter, (fun () ->
+                                                StartCompile None |> dispatch)) |> ignore
                                        ) ]
 
                            ] ]
