@@ -1,7 +1,7 @@
 module SpreadSheet
 
 // Build your own Excel 365 in an hour with F# by Tomas Petricek!
-// See the video of the talk here: https://www.youtube.com/watch?v=Bnm71YEt_lI
+// Watch the video of the talk here: https://www.youtube.com/watch?v=Bnm71YEt_lI
 
 module Elmish =
     open Fable.Core
