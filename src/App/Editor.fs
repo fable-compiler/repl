@@ -8,11 +8,12 @@ open Fable.Import
 open Fable.PowerPack
 open Fable.JS
 
+let getEditorContent (ed: Monaco.Editor.IStandaloneCodeEditor) =
+    ed.getModel().getValue(Monaco.Editor.EndOfLinePreference.TextDefined, true)
+
 //---------------------------------------------------
 // Features providers
 //---------------------------------------------------
-
-
 
 /// **Description**
 /// Convert `Fable.JS.Glyph` type into the `Monaco.Languages.CompletionItemKind`

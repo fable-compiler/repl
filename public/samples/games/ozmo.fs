@@ -1,5 +1,9 @@
 module Ozmo
 
+// Phil Trelford's classic Ozmo game ported to Fable!
+// Shows how to handle keyboard events and use HTML5 canvas.
+// You can also get it (as a JavaScript app) from the Windows Store.
+
 module Keyboard =
 
     open Fable.Import

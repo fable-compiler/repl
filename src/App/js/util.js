@@ -22,7 +22,8 @@ function parseQuery() {
     }, {});
 }
 
-function updateQuery(object) {
+export function updateQuery(code) {
+    var object = { code };
     var query = Object.keys(object).map(function(key){
       return key + '=' + encodeURIComponent(object[key]);
     }).join('&');
@@ -37,7 +38,5 @@ export function loadState(key) {
 }
 
 export function saveState(key, code, html) {
-    var state = { code, html };
-    updateQuery(state);
-    window.localStorage.setItem(key, JSON.stringify(state));
+    window.localStorage.setItem(key, JSON.stringify({ code, html }));
 }

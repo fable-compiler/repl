@@ -54,6 +54,12 @@
                         "label": "Ozmo Game",
                         "fsharpCode": "samples/games/ozmo.fs",
                         "htmlCode": "samples/games/ozmo.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Pacman",
+                        "fsharpCode": "samples/games/pacman.fs",
+                        "htmlCode": "samples/games/pacman.html"
                     }
                 ]
             },
@@ -72,6 +78,12 @@
                         "label": "Mandelbrot",
                         "fsharpCode": "samples/visual/mandelbrot.fs",
                         "htmlCode": "samples/visual/mandelbrot.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Hokusai",
+                        "fsharpCode": "samples/visual/hokusai.fs",
+                        "htmlCode": "samples/visual/hokusai.html"
                     }
                 ]
             },

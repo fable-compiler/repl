@@ -11,8 +11,9 @@ open Editor
 open Mouse
 
 let private Worker(): Browser.Worker = importDefault "worker-loader!../Worker/Worker.fsproj"
-let private loadState(_key: string): string * string = importMember "./util.js"
-let private saveState(_key: string, _code: string, _html: string): unit = importMember "./util.js"
+let private loadState(_key: string): string * string = importMember "./js/util.js"
+let private saveState(_key: string, _code: string, _html: string): unit = importMember "./js/util.js"
+let private updateQuery(_code: string): unit = importMember "./js/util.js"
 
 type IEditor = Monaco.Editor.IStandaloneCodeEditor
 
@@ -49,7 +50,8 @@ type Model =
     { FSharpEditor: IEditor
       Worker: ObservableWorker<WorkerAnswer>
       State: State
-      Url : string
+      InfoMessage: string
+      IFrameUrl : string
       ActiveTab : ActiveTab
       CodeES2015: string
       FSharpCode : string
@@ -68,8 +70,9 @@ type Msg =
     | MarkEditorErrors of Fable.JS.Error[]
     | StartCompile of string option
     | EndCompile of string
+    | ShareCode
     | SetActiveTab of ActiveTab
-    | SetUrl of string
+    | SetIFrameUrl of string
     | EditorDragStarted
     | EditorDrag of Position
     | EditorDragEnded
@@ -126,7 +129,7 @@ let update msg model =
             let code =
                 match code with
                 | Some code -> code
-                | None -> model.FSharpEditor.getModel().getValue(Monaco.Editor.EndOfLinePreference.TextDefined, true)
+                | None -> getEditorContent model.FSharpEditor
             CompileCode(code, model.Sidebar.Options.Optimize) |> model.Worker.Post
             { model with State = Compiling }, Cmd.none
         else
@@ -134,10 +137,14 @@ let update msg model =
 
     | EndCompile codeES2015 ->
         { model with State = Compiled
-                     CodeES2015 = codeES2015 }, Cmd.batch [ Cmd.performFunc (generateHtmlUrl model) codeES2015 SetUrl ]
+                     CodeES2015 = codeES2015 }, Cmd.batch [ Cmd.performFunc (generateHtmlUrl model) codeES2015 SetIFrameUrl ]
 
-    | SetUrl newUrl ->
-        { model with Url = newUrl }, Cmd.none
+    | ShareCode ->
+        getEditorContent model.FSharpEditor |> updateQuery
+        { model with InfoMessage = "Shareable link now in address bar" }, Cmd.none
+
+    | SetIFrameUrl newUrl ->
+        { model with IFrameUrl = newUrl }, Cmd.none
 
     | SetActiveTab newTab ->
         { model with ActiveTab = newTab }, Cmd.none
@@ -232,7 +239,8 @@ let init () =
     { State = Loading
       FSharpEditor = Unchecked.defaultof<IEditor>
       Worker =  ObservableWorker(worker, WorkerAnswer.Decoder)
-      Url = ""
+      InfoMessage = "Fable REPL fully works on the browser, no code is sent to any server (compile shortcut: Alt+Enter)"
+      IFrameUrl = ""
       ActiveTab = LiveTab
       CodeES2015 = ""
       FSharpCode = fsharpCode
@@ -268,11 +276,15 @@ let private menubar (model: Model) dispatch =
                 [ Button.button
                     [ Button.OnClick (fun _ -> dispatch (StartCompile None)) ]
                     [ compileIcon; span [] []; str "Compile" ] ]
+              Navbar.Item.div [ ]
+                [ Button.button
+                    [ Button.OnClick (fun _ -> dispatch ShareCode) ]
+                    [ smallFaIcon [ Fa.icon Fa.I.Share ]; span [] []; str "Share" ] ]
             ]
           Navbar.Start.div [ ]
             [ Navbar.menu [ ]
                 [ Navbar.Item.div [ Navbar.Item.Props [ Style [ Color "white" ] ] ]
-                    [ str "You can also press Alt+Enter from the editor" ] ] ] ]
+                    [ str model.InfoMessage ] ] ] ]
 
 let htmlEditorOptions =
     jsOptions<Monaco.Editor.IEditorConstructionOptions>(fun o ->
@@ -424,7 +436,7 @@ let private outputArea model dispatch =
         match model.State with
         | Compiling | Compiled ->
             [ outputTabs model.ActiveTab dispatch
-              viewIframe (model.ActiveTab = LiveTab) model.Url
+              viewIframe (model.ActiveTab = LiveTab) model.IFrameUrl
               viewCodeEditor model ]
         | _ ->
             [ br [ ]
