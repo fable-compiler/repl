@@ -10,32 +10,32 @@
                     {
                         "type": "menu-item",
                         "label": "Counter",
-                        "fsharpCode": "samples/elmish/counter.fs",
-                        "htmlCode": "samples/elmish/counter.html"
+                        "fsharpCode": "elmish/counter.fs",
+                        "htmlCode": "elmish/counter.html"
                     },
                     {
                         "type": "menu-item",
                         "label": "Clock",
-                        "fsharpCode": "samples/elmish/clock.fs",
-                        "htmlCode": "samples/elmish/clock.html"
+                        "fsharpCode": "elmish/clock.fs",
+                        "htmlCode": "elmish/clock.html"
                     },
                     {
                         "type": "menu-item",
                         "label": "Calculator",
-                        "fsharpCode": "samples/elmish/calculator.fs",
-                        "htmlCode": "samples/elmish/calculator.html"
+                        "fsharpCode": "elmish/calculator.fs",
+                        "htmlCode": "elmish/calculator.html"
                     },
                     {
                         "type": "menu-item",
                         "label": "Memory",
-                        "fsharpCode": "samples/elmish/memory.fs",
-                        "htmlCode": "samples/elmish/memory.html"
+                        "fsharpCode": "elmish/memory.fs",
+                        "htmlCode": "elmish/memory.html"
                     },
                     {
                         "type": "menu-item",
                         "label": "TodoMVC",
-                        "fsharpCode": "samples/elmish/todomvc.fs",
-                        "htmlCode": "samples/elmish/todomvc.html"
+                        "fsharpCode": "elmish/todomvc.fs",
+                        "htmlCode": "elmish/todomvc.html"
                     }
                 ]
             },
@@ -46,20 +46,20 @@
                     {
                         "type": "menu-item",
                         "label": "Super Fable Mario",
-                        "fsharpCode": "samples/games/mario.fs",
-                        "htmlCode": "samples/games/mario.html"
+                        "fsharpCode": "games/mario.fs",
+                        "htmlCode": "games/mario.html"
                     },
                     {
                         "type": "menu-item",
                         "label": "Ozmo Game",
-                        "fsharpCode": "samples/games/ozmo.fs",
-                        "htmlCode": "samples/games/ozmo.html"
+                        "fsharpCode": "games/ozmo.fs",
+                        "htmlCode": "games/ozmo.html"
                     },
                     {
                         "type": "menu-item",
                         "label": "Pacman",
-                        "fsharpCode": "samples/games/pacman.fs",
-                        "htmlCode": "samples/games/pacman.html"
+                        "fsharpCode": "games/pacman.fs",
+                        "htmlCode": "games/pacman.html"
                     }
                 ]
             },
@@ -70,20 +70,20 @@
                     {
                         "type": "menu-item",
                         "label": "Basic canvas",
-                        "fsharpCode": "samples/visual/basic-canvas.fs",
-                        "htmlCode": "samples/visual/basic-canvas.html"
+                        "fsharpCode": "visual/basic-canvas.fs",
+                        "htmlCode": "visual/basic-canvas.html"
                     },
                     {
                         "type": "menu-item",
                         "label": "Mandelbrot",
-                        "fsharpCode": "samples/visual/mandelbrot.fs",
-                        "htmlCode": "samples/visual/mandelbrot.html"
+                        "fsharpCode": "visual/mandelbrot.fs",
+                        "htmlCode": "visual/mandelbrot.html"
                     },
                     {
                         "type": "menu-item",
                         "label": "Hokusai",
-                        "fsharpCode": "samples/visual/hokusai.fs",
-                        "htmlCode": "samples/visual/hokusai.html"
+                        "fsharpCode": "visual/hokusai.fs",
+                        "htmlCode": "visual/hokusai.html"
                     }
                 ]
             },
@@ -94,19 +94,19 @@
                     {
                         "type": "menu-item",
                         "label": "Sudoku",
-                        "fsharpCode": "samples/other/sudoku.fs",
+                        "fsharpCode": "other/sudoku.fs",
                         "htmlCode": "default"
                     },
                     {
                         "type": "menu-item",
                         "label": "Parser Libray",
-                        "fsharpCode": "samples/other/parser.fs",
+                        "fsharpCode": "other/parser.fs",
                         "htmlCode": "default"
                     },
                     {
                         "type": "menu-item",
                         "label": "Ray Trace",
-                        "fsharpCode": "samples/other/raytrace.fs",
+                        "fsharpCode": "other/raytrace.fs",
                         "htmlCode": "default"
                     }
                 ]
@@ -124,14 +124,14 @@
                     {
                         "type": "menu-item",
                         "label": "Mini JQuery bindings",
-                        "fsharpCode": "samples/interop/jquery.fs",
-                        "htmlCode": "samples/interop/jquery.html"
+                        "fsharpCode": "interop/jquery.fs",
+                        "htmlCode": "interop/jquery.html"
                     },
                     {
                         "type": "menu-item",
                         "label": "Commented Interop examples",
-                        "fsharpCode": "samples/interop/interop-samples.fs",
-                        "htmlCode": "samples/interop/interop-samples.html"
+                        "fsharpCode": "interop/interop-samples.fs",
+                        "htmlCode": "interop/interop-samples.html"
                     }
                 ]
             }

@@ -18,11 +18,12 @@ type ExternalMsg =
     | LoadSample of string * string
     | NoOp
 
-let init _ =
+let init sampleUrl =
+    let samplesModel, samplesCmd = Widgets.Samples.init sampleUrl
     { IsExpanded = false
       WidgetsState = Set.empty
-      Samples = Widgets.Samples.init ()
-      Options = Widgets.Options.init () }
+      Samples = samplesModel
+      Options = Widgets.Options.init () }, Cmd.map SamplesMsg samplesCmd
 
 let update msg model =
     match msg with

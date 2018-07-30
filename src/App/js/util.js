@@ -32,9 +32,13 @@ export function updateQuery(code) {
 }
 
 export function loadState(key) {
-    var state = JSON.parse(window.localStorage.getItem(key)) || {};
-    Object.assign(state, parseQuery());
-    return [state.code || 'printfn "Hello World"', state.html || '<html><body></body></html>'];
+    return Object.assign({
+        code: 'printfn "Hello World"',
+        html: '<html><body></body></html>'
+      },
+      JSON.parse(window.localStorage.getItem(key)) || {},
+      parseQuery()
+    );
 }
 
 export function saveState(key, code, html) {

@@ -107,13 +107,6 @@ type ExternalMsg =
     | NoOp
     | LoadSample of FSharpCode : string * HtmlCode : string
 
-let init _ =
-    match Decode.fromValue "$" decodeSampleJson sampleJson with
-    | Ok infos ->
-        { MenuInfos = infos }
-    | Error error ->
-        failwith error
-
 let rec updateSubCategoryState (path : int list) (menus : MenuType list) =
     menus
     |> List.mapi (fun index menu ->
@@ -137,7 +130,7 @@ let rec updateSubCategoryState (path : int list) (menus : MenuType list) =
 
 let getCodeFromUrl (fsharpUrl, htmlInfo) =
     promise {
-        let url = "" + fsharpUrl
+        let url = "samples/" + fsharpUrl
         let! fsharpRes = Fetch.fetch url []
         let! fsharpCode = fsharpRes.text()
 
@@ -145,10 +138,26 @@ let getCodeFromUrl (fsharpUrl, htmlInfo) =
         | Default ->
             return fsharpCode, Fable.Repl.Generator.defaultHtmlCode
         | Url url ->
-            let! htmlRes = Fetch.fetch ("" + url) []
+            let! htmlRes = Fetch.fetch ("samples/" + url) []
             let! htmlCode = htmlRes.text()
             return fsharpCode, htmlCode
     }
+
+let init (sampleUrl: string option) =
+    match Decode.fromValue "$" decodeSampleJson sampleJson with
+    | Ok infos ->
+        let model = { MenuInfos = infos }
+        match sampleUrl with
+        | None -> model, Cmd.none
+        | Some url ->
+            let urls = url.Split('+')
+            let fsharpUrl, htmlInfo =
+                if urls.Length > 1
+                then urls.[0], HtmlCodeInfo.Url urls.[1]
+                else urls.[0], HtmlCodeInfo.Default
+            model, Cmd.ofPromise getCodeFromUrl (fsharpUrl, htmlInfo) FetchCodeSuccess FetchCodeError
+    | Error error ->
+        failwith error
 
 let update msg model =
     match msg with

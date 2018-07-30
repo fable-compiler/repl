@@ -10,8 +10,13 @@ open Shared
 open Editor
 open Mouse
 
+type ISavedState =
+    abstract code: string
+    abstract html: string
+    abstract sample: string option
+
 let private Worker(): Browser.Worker = importDefault "worker-loader!../Worker/Worker.fsproj"
-let private loadState(_key: string): string * string = importMember "./js/util.js"
+let private loadState(_key: string): ISavedState = importMember "./js/util.js"
 let private saveState(_key: string, _code: string, _html: string): unit = importMember "./js/util.js"
 let private updateQuery(_code: string): unit = importMember "./js/util.js"
 
@@ -222,8 +227,12 @@ let update msg model =
             match externalMsg with
             | Sidebar.NoOp -> model, Cmd.none
             | Sidebar.LoadSample (fsharpCode, htmlCode) ->
+                let cmd =
+                    match model.State with
+                    | Loading -> Cmd.none
+                    | _ -> Cmd.ofMsg (StartCompile (Some fsharpCode)) // Trigger a new compilation
                 { model with FSharpCode = fsharpCode
-                             HtmlCode = htmlCode }, Cmd.ofMsg (StartCompile (Some fsharpCode)) // Trigger a new compilation
+                             HtmlCode = htmlCode }, cmd
         { newModel with Sidebar = subModel }, Cmd.batch [ Cmd.map SidebarMsg cmd
                                                           extraCmd ]
 
@@ -235,7 +244,13 @@ let update msg model =
 
 let init () =
     let worker = Worker()
-    let fsharpCode, htmlCode = loadState(Literals.STORAGE_KEY)
+    let saved = loadState(Literals.STORAGE_KEY)
+    let sidebarModel, sidebarCmd = Sidebar.init saved.sample
+    let cmd = Cmd.batch [
+                Cmd.ups MouseUp
+                Cmd.move MouseMove
+                Cmd.iframeMessage MouseMove MouseUp
+                Cmd.map SidebarMsg sidebarCmd ]
     { State = Loading
       FSharpEditor = Unchecked.defaultof<IEditor>
       Worker =  ObservableWorker(worker, WorkerAnswer.Decoder)
@@ -243,16 +258,14 @@ let init () =
       IFrameUrl = ""
       ActiveTab = LiveTab
       CodeES2015 = ""
-      FSharpCode = fsharpCode
+      FSharpCode = saved.code
       FSharpErrors = ResizeArray [||]
-      HtmlCode = htmlCode
+      HtmlCode = saved.html
       DragTarget = NoTarget
       EditorSplitRatio = 0.6
       PanelSplitRatio = 0.5
       EditorCollapse = BothExtended
-      Sidebar = Sidebar.init () }, Cmd.batch [ Cmd.ups MouseUp
-                                               Cmd.move MouseMove
-                                               Cmd.iframeMessage MouseMove MouseUp ]
+      Sidebar = sidebarModel }, cmd
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
