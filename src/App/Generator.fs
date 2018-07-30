@@ -37,6 +37,10 @@ let private bubbleMouseEvents =
             }, origin);
         });
 
+        // Tab key presses change focus to JS code view and cause glitches
+        document.addEventListener("keydown", function (ev) {
+            if (ev.keyCode === 9) ev.preventDefault();
+        });
     })();
     </script>
     """.Trim()
