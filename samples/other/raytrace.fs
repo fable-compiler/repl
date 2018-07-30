@@ -1,3 +1,4 @@
+// NOTE: Takes several seconds to compile
 // Big script file mainly intended to test REPL performance
 // Source: http://www.tryfsharp.org/create/cpoulain/shared/raytracer.fsx
 
