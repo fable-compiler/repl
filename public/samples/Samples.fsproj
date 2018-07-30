@@ -12,6 +12,7 @@
     <Compile Include="elmish/calculator.fs" />
     <Compile Include="elmish/todomvc.fs" />
     <Compile Include="elmish/memory.fs" />
+    <Compile Include="elmish/spreadsheet.fs" />
     <Compile Include="games/mario.fs" />
     <Compile Include="games/ozmo.fs" />
     <Compile Include="games/pacman.fs" />

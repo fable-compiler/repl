@@ -36,7 +36,14 @@
                         "label": "TodoMVC",
                         "fsharpCode": "elmish/todomvc.fs",
                         "htmlCode": "elmish/todomvc.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Spreadsheet",
+                        "fsharpCode": "elmish/spreadsheet.fs",
+                        "htmlCode": "elmish/spreadsheet.html"
                     }
+
                 ]
             },
             {
