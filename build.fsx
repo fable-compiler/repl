@@ -242,17 +242,18 @@ Target "All" DoNothing
     ==> "YarnInstall"
     ==> "CopyModules"
     ==> "DownloadReplArtifact"
-    ==> "UpdateVersion"
+    ==> "BuildLib"
     ==> "BuildApp"
     ==> "All"
 
 "BuildFcsExport"
     ==> "GenerateMetadata"
 
-"PublishGithubPages"
-    <== [ "BuildApp" ]
+"BuildApp"
+    ==> "UpdateVersion"
+    ==> "PublishGithubPages"
 
-"DownloadReplArtifact"
+"BuildLib"
     ==> "WatchApp"
 
 // start build
