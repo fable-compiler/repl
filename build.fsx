@@ -1,5 +1,5 @@
 let fableBranch = "dev2.0"
-let AppveyorReplArtifactURLParams = "?branch=" + fableBranch
+let AppveyorReplArtifactURLParams = "?branch=" + fableBranch + "&pr=false"
 let AppveyorReplArtifactURL =
     "https://ci.appveyor.com/api/projects/fable-compiler/Fable/artifacts/src/dotnet/Fable.JS/repl-bundle.zip"
     + AppveyorReplArtifactURLParams

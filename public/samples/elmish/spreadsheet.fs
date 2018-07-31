@@ -308,7 +308,7 @@ let rec evaluate refs cells = function
       None
 
   | Reference(pos) ->
-      Map.tryFind pos cells |> Option.bind (fun (code: string) ->
+      Map.tryFind pos cells |> Option.bind (fun code ->
         run equation code |> Option.bind (fun parsed ->
           evaluate (Set.add pos refs) cells parsed))
 
