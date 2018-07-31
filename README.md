@@ -1,20 +1,22 @@
-# Fable.FCS component
+# Fable REPL
 
-Example of how to use the `Fable.FCS` component on your web
+## Building locally
 
-## How to add a sample?
+To develop the REPL locally, run the `WatchApp` FAKE target and then open `localhost:8080` in your browser.
 
-**This is the documentation of how to add a sample to the REPL, please note it's still in early stage and may change in the future**
+## How to add a sample
 
-To add a sample, you need to update the `src/samples.json` file. This file is used to generate the samples menu in the browser.
+To add a sample, you need to add an .fs file to the `public/samples/Samples.fsproj` project (and a corresponding .html file if necessary), the update `public/samples/samples.json`. This file is used to generate the samples menu in the browser.
 
-You can add 3 types or entries:
+> If you just want to update on the existing samples, you can do it directly using Github UI and send a PR automatically.
 
-- Category: adds a title entry to the menu
-- SubCategory: adds an entry under a category, and make it collapsible
-- MenuItem: adds a classic item which when clicked will load the sample into the REPL
+You can add three types of entries:
 
-**Category**
+- Category: Adds a title entry to the menu
+- SubCategory: Adds an entry under a category, and make it collapsible
+- MenuItem: Adds a classic item which when clicked will load the sample into the REPL
+
+### Category
 
 ```json
 {
@@ -28,7 +30,8 @@ You can add 3 types or entries:
 - label: Will be displayed as the title of the category
 - children: A list of `SubCategory` or `MenuItem`
 
-**SubCategory**
+### SubCategory
+
 ```json
 {
     "type": "sub-category",
@@ -41,31 +44,19 @@ You can add 3 types or entries:
 - label: Will be displayed as the title of the SubCategory
 - children: A list of `MenuItem`
 
-**SubCategory**
+### MenuItem
+
 ```json
 {
     "type": "menu-item",
     "label": "Basic canvas",
-    "fsharpCode": "samples/basic-canvas/basic_canvas.fs",
-    "htmlCode": "samples/basic-canvas/basic_canvas.html"
+    "fsharpCode": "basic-canvas/basic_canvas.fs",
+    "htmlCode": "basic-canvas/basic_canvas.html"
 }
 ```
 
 - label: Name to display in the menu item
 - fsharpCode: Relative url of the F# code
-- htmlCode:
-    - If it's `default`, then we will add a minimal html code:
+- htmlCode: If it's `default`, then we will add a minimal html code. Otherwise, you need to set the relative url of the html code to load.
 
-        ```html
-        <html>
-            <head>
-                <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-            </head>
-            <body>
-            </body>
-        </html>
-        ```
-
-    - Otherwise, you need to set the relative url of the html code to load
-
-All the urls for `fsharpCode`, `htmlCode` are relative to the `public` folder.
+All the urls for `fsharpCode`, `htmlCode` are relative to the `public/samples` folder.

@@ -12,6 +12,7 @@ module Literals =
     let [<Literal>] VERSION = "2.0.0-alpha-032"
     let [<Literal>] STORAGE_KEY = "fable-repl"
     let [<Literal>] REPL_BUNDLE_URL = "./js/repl/bundle.min.js"
+    let [<Literal>] SAMPLES_JSON_URL = "./samples/samples.json"
     let [<Literal>] HOST =
 #if DEBUG
         "http://localhost:8080"

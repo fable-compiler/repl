@@ -5,14 +5,13 @@ open Fulma
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
 open Fulma.FontAwesome
-open Fable.Core.JsInterop
+open Fable.Import
 open Fable.PowerPack
+open Fable.Repl.Shared
 
   /////////////////////
  // Sample def DSL  //
 /////////////////////
-
-let sampleJson : obj = importDefault "./samples.json"
 
 type HtmlCodeInfo =
     | Default
@@ -98,6 +97,8 @@ type Model =
     { MenuInfos : MenuType list }
 
 type Msg =
+    | FetchSamplesSuccess of obj
+    | FetchSamplesError of exn
     | ToggleMenuState of int list
     | FetchSample of string * HtmlCodeInfo
     | FetchCodeSuccess of string * string
@@ -143,36 +144,49 @@ let getCodeFromUrl (fsharpUrl, htmlInfo) =
             return fsharpCode, htmlCode
     }
 
+let fetchSamples () =
+    Fetch.fetch Literals.SAMPLES_JSON_URL []
+    |> Promise.bind (fun res -> res.json())
+
+let fetchSamplesCmd () =
+    Cmd.ofPromise fetchSamples () FetchSamplesSuccess FetchSamplesError
+
+let fetchCodeCmd (fsharpUrl, htmlInfo) =
+    Cmd.ofPromise getCodeFromUrl (fsharpUrl, htmlInfo) FetchCodeSuccess FetchCodeError
+
 let init (sampleUrl: string option) =
-    match Decode.fromValue "$" decodeSampleJson sampleJson with
-    | Ok infos ->
-        let model = { MenuInfos = infos }
-        match sampleUrl with
-        | None -> model, Cmd.none
-        | Some url ->
-            let urls = url.Split('+')
-            let fsharpUrl, htmlInfo =
-                if urls.Length > 1
-                then urls.[0], HtmlCodeInfo.Url urls.[1]
-                else urls.[0], HtmlCodeInfo.Default
-            model, Cmd.ofPromise getCodeFromUrl (fsharpUrl, htmlInfo) FetchCodeSuccess FetchCodeError
-    | Error error ->
-        failwith error
+    let model = { MenuInfos = [] }
+    let cmd = fetchSamplesCmd()
+    match sampleUrl with
+    | None -> model, cmd
+    | Some url ->
+        let urls = url.Split('+')
+        let fsharpUrl, htmlInfo =
+            if urls.Length > 1
+            then urls.[0], HtmlCodeInfo.Url urls.[1]
+            else urls.[0], HtmlCodeInfo.Default
+        model, Cmd.batch [cmd; fetchCodeCmd (fsharpUrl, htmlInfo)]
 
 let update msg model =
     match msg with
+    | FetchSamplesSuccess sampleJson ->
+        match Decode.fromValue "$" decodeSampleJson sampleJson with
+        | Ok infos -> { MenuInfos = infos }, Cmd.none, NoOp
+        | Error error -> Browser.console.error error; model, Cmd.none, NoOp
+
     | ToggleMenuState path ->
         let newMenuInfos = updateSubCategoryState path model.MenuInfos
         { model with MenuInfos = newMenuInfos }, Cmd.none, NoOp
 
     | FetchSample (fsharpUrl, htmlInfo) ->
-        model, Cmd.ofPromise getCodeFromUrl (fsharpUrl, htmlInfo) FetchCodeSuccess FetchCodeError, NoOp
+        model, fetchCodeCmd (fsharpUrl, htmlInfo), NoOp
 
     | FetchCodeSuccess (fsharpCode, htmlCode) ->
         model, Cmd.none, LoadSample (fsharpCode, htmlCode)
 
+    | FetchSamplesError error
     | FetchCodeError error ->
-        Fable.Import.Browser.console.error error
+        Browser.console.error error
         model, Cmd.none, NoOp
 
 let inline genKey key = Props [ Key key ]
@@ -230,7 +244,15 @@ let rec private render (path : int list) index (sample : MenuType) dispatch =
         menuItem info dispatch
 
 let view model dispatch =
-    Menu.menu [ ]
-        (model.MenuInfos
-            |> List.mapi (fun index sample ->
-                render [] index sample dispatch))
+    let menus =
+        model.MenuInfos |> List.mapi (fun index sample ->
+            render [] index sample dispatch)
+#if DEBUG
+    let fetchSamplesMsg _ =
+        fetchSamples () |> Promise.eitherEnd
+            (FetchSamplesSuccess >> dispatch)
+            (FetchSamplesError >> dispatch)
+    let menus = (button [OnClick fetchSamplesMsg] [str "Refresh"])::menus
+#endif
+
+    Menu.menu [] menus
