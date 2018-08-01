@@ -11,6 +11,7 @@ nuget Fable.Elmish
 nuget Fable.Elmish.React
 nuget Fable.Elmish.HMR
 nuget Thoth.Json prerelease
+nuget Thoth.Elmish.Toast
 nuget Fable.PowerPack
 
 github fable-compiler/Fable:dev2.0 src/dotnet/Fable.JS/Interfaces.fs

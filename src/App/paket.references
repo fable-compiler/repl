@@ -8,5 +8,6 @@ Fable.Elmish
 Fable.Elmish.React
 Fable.Elmish.HMR
 Thoth.Json
+Thoth.Elmish.Toast
 Fable.PowerPack
 File: Interfaces.fs

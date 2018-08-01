@@ -6,6 +6,7 @@ open Fulma
 open Fulma.FontAwesome
 open Fulma.Extensions
 open Elmish
+open Thoth.Elmish
 open Shared
 open Editor
 open Mouse
@@ -24,18 +25,9 @@ type IEditor = Monaco.Editor.IStandaloneCodeEditor
 
 type State =
     | Loading
-    | Errored of msg: string
     | Idle
     | Compiling
     | Compiled
-    member this.HasError =
-        match this with
-        | Errored _ -> true
-        | _ -> false
-    member this.ErrorMessage =
-        match this with
-        | Errored msg -> msg
-        | _ -> ""
 
 type ActiveTab =
     | CodeTab
@@ -74,7 +66,7 @@ type Msg =
     | LoadFail
     | MarkEditorErrors of Fable.JS.Error[]
     | StartCompile of string option
-    | EndCompile of string
+    | EndCompile of Result<string, string>
     | ShareCode
     | SetActiveTab of ActiveTab
     | SetIFrameUrl of string
@@ -107,6 +99,15 @@ let parseEditorCode (worker: ObservableWorker<_>) (model: Monaco.Editor.IModel) 
     let content = model.getValue (Monaco.Editor.EndOfLinePreference.TextDefined, true)
     ParseCode content |> worker.Post
 
+let showErrorToast msg =
+    Toast.message msg
+    |> Toast.title "Error"
+    |> Toast.position Toast.TopRight
+    |> Toast.icon "fa fa-exclamation"
+    |> Toast.noTimeout
+    |> Toast.withCloseButton
+    |> Toast.error
+
 let update msg model =
     match msg with
     | LoadSuccess ->
@@ -121,8 +122,8 @@ let update msg model =
         { model with State = Idle }, Cmd.ofMsg (StartCompile None)
 
     | LoadFail ->
-        let err = "Assemblies couldn't be loaded. Some firewalls prevent download of binary files, please check."
-        { model with State = State.Errored err }, Cmd.none
+        let msg = "Assemblies couldn't be loaded. Some firewalls prevent download of binary files, please check."
+        { model with State = Idle }, showErrorToast msg
 
     | SetFSharpEditor ed -> { model with FSharpEditor = ed }, Cmd.none
 
@@ -140,9 +141,14 @@ let update msg model =
         else
          model, Cmd.none
 
-    | EndCompile codeES2015 ->
-        { model with State = Compiled
-                     CodeES2015 = codeES2015 }, Cmd.batch [ Cmd.performFunc (generateHtmlUrl model) codeES2015 SetIFrameUrl ]
+    | EndCompile result ->
+        match result with
+        | Ok codeES2015 ->
+            let model = { model with State = Compiled; CodeES2015 = codeES2015 }
+            let cmd = Cmd.performFunc (generateHtmlUrl model) codeES2015 SetIFrameUrl
+            model, cmd
+        | Error msg ->
+            { model with State = Compiled }, showErrorToast msg
 
     | ShareCode ->
         getEditorContent model.FSharpEditor |> updateQuery
@@ -472,19 +478,15 @@ let private view (model: Model) dispatch =
                                   PageLoader.IsActive (model.State = Loading) ]
                                 [ span [ Class "title" ]
                                     [ str "We are getting everything ready for you" ] ]
-          Modal.modal [ Modal.IsActive model.State.HasError ]
-            [ Modal.background [ ] [ ]
-              Modal.content [ ] [ Box.box' [ ] [ str model.State.ErrorMessage ] ] ]
           menubar model dispatch
           div [ Class "page-content" ]
             [ Sidebar.view model.Sidebar (SidebarMsg >> dispatch)
               div [ Class "main-content" ]
-                [ yield editorArea model dispatch
-                  if not model.State.HasError then
-                    yield div [ Class "horizontal-resize"
-                                OnMouseDown (fun _ -> dispatch PanelDragStarted) ]
-                              [ ]
-                  yield outputArea model dispatch ] ] ]
+                [ editorArea model dispatch
+                  div [ Class "horizontal-resize"
+                        OnMouseDown (fun _ -> dispatch PanelDragStarted) ]
+                      [ ]
+                  outputArea model dispatch ] ] ]
 
 let private subscriptions (model: Model) =
     let sub dispatch =
@@ -494,7 +496,8 @@ let private subscriptions (model: Model) =
                 LoadSuccess |> dispatch
             | LoadFailed -> LoadFail |> dispatch
             | ParsedCode errors -> MarkEditorErrors errors |> dispatch
-            | CompiledCode jsCode -> EndCompile jsCode |> dispatch
+            | CompiledCode jsCode -> Ok jsCode |> EndCompile |> dispatch
+            | CompilationFailed msg -> Error msg |> EndCompile |> dispatch
             // Do nothing, these will be handled by .PostAndAwaitResponse
             | FoundTooltip _ -> ()
             | FoundCompletions _ -> ()
@@ -507,6 +510,7 @@ open Elmish.HMR
 
 Program.mkProgram init update view
 |> Program.withSubscription subscriptions
+|> Toast.Program.withToast Toast.render
 #if DEBUG
 |> Program.withHMR
 #endif

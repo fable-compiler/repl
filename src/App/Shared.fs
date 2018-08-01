@@ -9,7 +9,7 @@ open System.Diagnostics
 
 [<RequireQualifiedAccess>]
 module Literals =
-    let [<Literal>] VERSION = "2.0.0-alpha-032"
+    let [<Literal>] VERSION = "2.0.0-beta-001"
     let [<Literal>] STORAGE_KEY = "fable-repl"
     let [<Literal>] REPL_BUNDLE_URL = "./js/repl/bundle.min.js"
     let [<Literal>] SAMPLES_JSON_URL = "./samples/samples.json"
@@ -42,6 +42,7 @@ type WorkerAnswer =
     | LoadFailed
     | ParsedCode of errors: Fable.JS.Error[]
     | CompiledCode of jsCode: string
+    | CompilationFailed of message: string
     | FoundTooltip of lines: string[]
     | FoundCompletions of Fable.JS.Completion[]
     static member Decoder =
