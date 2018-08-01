@@ -50,10 +50,10 @@ let solve (state : Input list) =
   | _ -> None
 
 
-/// Given two integers, concat their string representation and parse as an integer
+/// Given two integers, append the second on the first
 /// concatInts 3 5 -> 35
 /// concatInts 1 1 -> 11
-let concatInts x y = int (sprintf "%d%d" x y)
+let concatInts x y = x * 10 + y * (sign x)
 
 let initialState() : Model = InputStack []
 

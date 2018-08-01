@@ -466,8 +466,7 @@ export function tspan(b$$131, c$$115) {
 export function classBaseList(std, classes) {
   return new Props$002EHTMLAttr(22, "ClassName", fold(function folder(complete, _arg1) {
     if (_arg1[1]) {
-      const name = _arg1[0];
-      return complete + " " + name;
+      return complete + " " + _arg1[0];
     } else {
       return complete;
     }

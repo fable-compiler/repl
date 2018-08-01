@@ -1,0 +1,147 @@
+[
+    {
+        "type": "category",
+        "label": "Samples",
+        "children": [
+            {
+                "type": "sub-category",
+                "label": "Elmish",
+                "children": [
+                    {
+                        "type": "menu-item",
+                        "label": "Counter",
+                        "fsharpCode": "elmish/counter.fs",
+                        "htmlCode": "elmish/counter.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Clock",
+                        "fsharpCode": "elmish/clock.fs",
+                        "htmlCode": "elmish/clock.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Calculator",
+                        "fsharpCode": "elmish/calculator.fs",
+                        "htmlCode": "elmish/calculator.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Memory",
+                        "fsharpCode": "elmish/memory.fs",
+                        "htmlCode": "elmish/memory.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "TodoMVC",
+                        "fsharpCode": "elmish/todomvc.fs",
+                        "htmlCode": "elmish/todomvc.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Spreadsheet",
+                        "fsharpCode": "elmish/spreadsheet.fs",
+                        "htmlCode": "elmish/spreadsheet.html"
+                    }
+
+                ]
+            },
+            {
+                "type": "sub-category",
+                "label": "Fun and Games",
+                "children": [
+                    {
+                        "type": "menu-item",
+                        "label": "Super Fable Mario",
+                        "fsharpCode": "games/mario.fs",
+                        "htmlCode": "games/mario.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Ozmo Game",
+                        "fsharpCode": "games/ozmo.fs",
+                        "htmlCode": "games/ozmo.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Pacman",
+                        "fsharpCode": "games/pacman.fs",
+                        "htmlCode": "games/pacman.html"
+                    }
+                ]
+            },
+            {
+                "type": "sub-category",
+                "label": "Visualizations",
+                "children": [
+                    {
+                        "type": "menu-item",
+                        "label": "Basic canvas",
+                        "fsharpCode": "visual/basic-canvas.fs",
+                        "htmlCode": "visual/basic-canvas.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Mandelbrot",
+                        "fsharpCode": "visual/mandelbrot.fs",
+                        "htmlCode": "visual/mandelbrot.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Hokusai",
+                        "fsharpCode": "visual/hokusai.fs",
+                        "htmlCode": "visual/hokusai.html"
+                    }
+                ]
+            },
+            {
+                "type": "sub-category",
+                "label": "Other",
+                "children": [
+                    {
+                        "type": "menu-item",
+                        "label": "Sudoku",
+                        "fsharpCode": "other/sudoku.fs",
+                        "htmlCode": "default"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Parser Libray",
+                        "fsharpCode": "other/parser.fs",
+                        "htmlCode": "default"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Ray Trace",
+                        "fsharpCode": "other/raytrace.fs",
+                        "htmlCode": "default"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "type": "category",
+        "label": "Learn",
+        "children": [
+            {
+                "type": "sub-category",
+                "label": "Interop with JS",
+                "children": [
+                    {
+                        "type": "menu-item",
+                        "label": "Mini JQuery bindings",
+                        "fsharpCode": "interop/jquery.fs",
+                        "htmlCode": "interop/jquery.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Commented Interop examples",
+                        "fsharpCode": "interop/interop-samples.fs",
+                        "htmlCode": "interop/interop-samples.html"
+                    }
+                ]
+            }
+        ]
+    }
+]

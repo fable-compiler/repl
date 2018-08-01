@@ -120,19 +120,15 @@ export function Program$$$withSubscription(subscribe, program) {
 export function Program$$$withConsoleTrace(program$$1) {
   const traceInit = function traceInit(arg$$4) {
     const patternInput = program$$1.init(arg$$4);
-    const initModel = patternInput[0];
-    const cmd$$1 = patternInput[1];
-    Log$$$toConsole("Initial state:", initModel);
-    return [initModel, cmd$$1];
+    Log$$$toConsole("Initial state:", patternInput[0]);
+    return [patternInput[0], patternInput[1]];
   };
 
   const traceUpdate = function traceUpdate(msg$$2, model$$3) {
     Log$$$toConsole("New message:", msg$$2);
     const patternInput$$1 = program$$1.update(msg$$2, model$$3);
-    const newModel = patternInput$$1[0];
-    const cmd$$2 = patternInput$$1[1];
-    Log$$$toConsole("Updated state:", newModel);
-    return [newModel, cmd$$2];
+    Log$$$toConsole("Updated state:", patternInput$$1[0]);
+    return [patternInput$$1[0], patternInput$$1[1]];
   };
 
   return new Program$00604(traceInit, traceUpdate, program$$1.subscribe, program$$1.view, program$$1.setState, program$$1.onError);
@@ -148,8 +144,6 @@ export function Program$$$withErrorHandler(onError, program$$3) {
 }
 export function Program$$$runWith(arg$$5, program$$4) {
   const patternInput$$2 = program$$4.init(arg$$5);
-  const model$$5 = patternInput$$2[0];
-  const cmd$$3 = patternInput$$2[1];
   const inbox = start(function (mb) {
     const loop = function loop(state$$2) {
       const builder$0040$$1 = singleton;
@@ -160,17 +154,15 @@ export function Program$$$runWith(arg$$5, program$$4) {
 
           try {
             const patternInput$$3 = program$$4.update(msg$$4, state$$2);
-            const model$0027 = patternInput$$3[0];
-            const cmd$0027 = patternInput$$3[1];
-            program$$4.setState(model$0027, function (arg00$$2) {
+            program$$4.setState(patternInput$$3[0], function (arg00$$2) {
               post(mb, arg00$$2);
             });
             iterate(function action(sub$$2) {
               sub$$2(function (arg00$$3) {
                 post(mb, arg00$$3);
               });
-            }, cmd$0027);
-            newState = model$0027;
+            }, patternInput$$3[1]);
+            newState = patternInput$$3[0];
           } catch (ex$$3) {
             program$$4.onError(["Unable to process a message:", ex$$3]);
             newState = state$$2;
@@ -181,15 +173,15 @@ export function Program$$$runWith(arg$$5, program$$4) {
       });
     };
 
-    return loop(model$$5);
+    return loop(patternInput$$2[0]);
   });
-  program$$4.setState(model$$5, function (arg00$$4) {
+  program$$4.setState(patternInput$$2[0], function (arg00$$4) {
     post(inbox, arg00$$4);
   });
   let sub$$3;
 
   try {
-    sub$$3 = program$$4.subscribe(model$$5);
+    sub$$3 = program$$4.subscribe(patternInput$$2[0]);
   } catch (ex$$4) {
     program$$4.onError(["Unable to subscribe:", ex$$4]);
     sub$$3 = Cmd$$$none();
@@ -199,7 +191,7 @@ export function Program$$$runWith(arg$$5, program$$4) {
     sub$$4(function (arg00$$5) {
       post(inbox, arg00$$5);
     });
-  }, append(sub$$3, cmd$$3));
+  }, append(sub$$3, patternInput$$2[1]));
 }
 export function Program$$$run(program$$5) {
   Program$$$runWith(null, program$$5);

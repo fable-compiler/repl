@@ -6,11 +6,14 @@ function asString(x) {
 }
 export function toCharArray(str) {
     const len = str.length;
-    const ar = new Array(len);
+    const ar = new Uint16Array(len);
     for (let i = 0; i < len; i++) {
         ar[i] = str.charCodeAt(i);
     }
     return ar;
+}
+export function toCharIterable(source) {
+    return typeof source === "string" ? toCharArray(source) : source;
 }
 export function fromCharArray(ar, startIndex, count) {
     const ar2 = startIndex == null
@@ -505,5 +508,10 @@ export function mapIndexed(f, str) {
     return fromCharArray(toCharArray(str).map((c, i) => f(i, c)));
 }
 export function collect(f, str) {
-    return toCharArray(str).map(f).join("");
+    const ar1 = toCharArray(str);
+    const ar2 = new Array(ar1.length);
+    for (let i = 0; i < ar1.length; i++) {
+        ar2[i] = f(ar1[i]);
+    }
+    return ar2.join("");
 }
