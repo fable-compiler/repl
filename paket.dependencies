@@ -5,7 +5,7 @@ clitool dotnet-fable prerelease
 nuget Fable.Core prerelease
 nuget Fable.Import.Browser
 nuget Fable.React prerelease
-nuget Fulma prerelease
+nuget Fulma 1.0.0-beta-026
 nuget Fulma.Extensions prerelease
 nuget Fable.Elmish
 nuget Fable.Elmish.React
