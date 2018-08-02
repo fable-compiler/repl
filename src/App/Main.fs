@@ -19,7 +19,7 @@ type ISavedState =
 let private Worker(): Browser.Worker = importDefault "worker-loader!../Worker/Worker.fsproj"
 let private loadState(_key: string): ISavedState = importMember "./js/util.js"
 let private saveState(_key: string, _code: string, _html: string): unit = importMember "./js/util.js"
-let private updateQuery(_code: string): unit = importMember "./js/util.js"
+let private updateQuery(_fsharpCode : string, _htmlCode : string): unit = importMember "./js/util.js"
 
 type IEditor = Monaco.Editor.IStandaloneCodeEditor
 
@@ -151,7 +151,8 @@ let update msg model =
             { model with State = Compiled }, showErrorToast msg
 
     | ShareCode ->
-        getEditorContent model.FSharpEditor |> updateQuery
+        (getEditorContent model.FSharpEditor, model.HtmlCode )
+        |> updateQuery
         { model with InfoMessage = "Shareable link now in address bar" }, Cmd.none
 
     | SetIFrameUrl newUrl ->
@@ -239,6 +240,17 @@ let update msg model =
                     | _ -> Cmd.ofMsg (StartCompile (Some fsharpCode)) // Trigger a new compilation
                 { model with FSharpCode = fsharpCode
                              HtmlCode = htmlCode }, cmd
+            | Sidebar.Share ->
+                model, Cmd.ofMsg ShareCode
+            | Sidebar.Reset ->
+                Browser.window.localStorage.removeItem(Literals.STORAGE_KEY)
+                Browser.window.location.hash <- ""
+                let saved = loadState(Literals.STORAGE_KEY)
+                { model with FSharpCode = saved.code
+                             HtmlCode = saved.html
+                             CodeES2015 = ""
+                             IFrameUrl = "" }, Cmd.none
+
         { newModel with Sidebar = subModel }, Cmd.batch [ Cmd.map SidebarMsg cmd
                                                           extraCmd ]
 
@@ -287,22 +299,19 @@ let private menubar (model: Model) dispatch =
         then smallFaIcon [ Fa.icon Fa.I.Spinner; Fa.spin ]
         else smallFaIcon [ Fa.icon Fa.I.Play ]
     Navbar.navbar
-        [ Navbar.IsFixedTop; Navbar.Color IsDark ]
+        [ Navbar.IsFixedTop ]
         [ Navbar.Brand.div [ ]
             [ Navbar.Item.div [ ]
                 [ img [ Src "img/fable-ionide.png" ] ]
               Navbar.Item.div [ ]
                 [ Button.button
                     [ Button.OnClick (fun _ -> dispatch (StartCompile None)) ]
-                    [ compileIcon; span [] []; str "Compile" ] ]
-              Navbar.Item.div [ ]
-                [ Button.button
-                    [ Button.OnClick (fun _ -> dispatch ShareCode) ]
-                    [ smallFaIcon [ Fa.icon Fa.I.Share ]; span [] []; str "Share" ] ]
-            ]
+                      [ compileIcon
+                        Text.span []
+                           [ str "Compile" ] ] ] ]
           Navbar.Start.div [ ]
             [ Navbar.menu [ ]
-                [ Navbar.Item.div [ Navbar.Item.Props [ Style [ Color "white" ] ] ]
+                [ Navbar.Item.div [ ]
                     [ str model.InfoMessage ] ] ] ]
 
 let htmlEditorOptions =
@@ -416,7 +425,8 @@ let private editorArea model dispatch =
 
 let private outputTabs (activeTab : ActiveTab) dispatch =
     Tabs.tabs [ Tabs.IsCentered
-                Tabs.Size Size.IsMedium ]
+                Tabs.Size Size.IsMedium
+                Tabs.IsToggle ]
         [ Tabs.tab [ Tabs.Tab.IsActive (activeTab = LiveTab)
                      Tabs.Tab.Props [
                          OnClick (fun _ -> SetActiveTab LiveTab |> dispatch)
@@ -459,8 +469,8 @@ let private outputArea model dispatch =
               viewCodeEditor model ]
         | _ ->
             [ br [ ]
-              div [ Class "has-text-centered"
-                    Style [ Width "100%" ] ]
+              Text.div [ Modifiers [ Modifier.TextAlignment (Screen.All, TextAlignment.Centered) ]
+                         Props [ Style [ Width "100%" ] ] ]
                 [ Heading.h4 [ Heading.IsSubtitle ]
                     [ str "You need to compile an application first" ] ] ]
 

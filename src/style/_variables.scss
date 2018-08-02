@@ -1,0 +1,35 @@
+$info: #1177bb;
+$primary: #1e1e1e;
+$success: #73c991;
+$danger: #c74e39;
+$dark: #252526;
+$gray-darker: rgba(128, 128, 128, 0.2);
+
+$body-size: 14px;
+$body-background-color: $primary;
+$text: #d4d4d4;
+$navbar-background-color: $dark;
+$link: $text;
+$link-hover: lighten($text, 50);
+
+$subtitle-color: $text;
+$navbar-item-color: $text;
+
+$card-background-color: $dark;
+$card-color: $text;
+$card-header-color: $text;
+$card-header-background-color: $gray-darker;
+
+$input-hover-color: $link-hover;
+
+$button-background-color: $gray-darker;
+$button-color: $text;
+
+$tabs-toggle-link-border-style: none;
+$tabs-toggle-link-active-background-color: $gray-darker;
+$tabs-toggle-link-hover-background-color: $text;
+
+$label-color: $text;
+
+// custom
+$resize-background: #414141;

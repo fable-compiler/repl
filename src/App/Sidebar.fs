@@ -6,22 +6,27 @@ type Model =
     { IsExpanded : bool
       WidgetsState : Set<string>
       Samples : Widgets.Samples.Model
-      Options: Widgets.Options.Model }
+      Options : Widgets.Options.Model
+      General : Widgets.General.Model }
 
 type Msg =
     | SamplesMsg of Widgets.Samples.Msg
     | OptionsMsg of Widgets.Options.Msg
+    | GeneralMsg of Widgets.General.Msg
     | ToggleWidget of string
     | ToggleState
 
 type ExternalMsg =
     | LoadSample of string * string
     | NoOp
+    | Reset
+    | Share
 
 let init sampleUrl =
     let samplesModel, samplesCmd = Widgets.Samples.init sampleUrl
     { IsExpanded = false
       WidgetsState = Set.empty
+      General = Widgets.General.init()
       Samples = samplesModel
       Options = Widgets.Options.init () }, Cmd.map SamplesMsg samplesCmd
 
@@ -40,6 +45,17 @@ let update msg model =
     | OptionsMsg msg ->
         let optionsModel = Widgets.Options.update msg model.Options
         { model with Options = optionsModel }, Cmd.none, NoOp
+
+    | GeneralMsg msg ->
+        let (generalModel, externalMsg) = Widgets.General.update msg model.General
+
+        let externalMsg =
+            match externalMsg with
+            | Widgets.General.NoOp -> NoOp
+            | Widgets.General.Reset -> Reset
+            | Widgets.General.ExternalMessage.Share -> Share
+
+        { model with General = generalModel }, Cmd.none, externalMsg
 
     | ToggleWidget id ->
         let newWidgetsState =
@@ -83,6 +99,7 @@ let private renderExpandedWidgets (states : Set<string>) dispatch (title, icon, 
                 | None -> [ ]
             baseView Fa.I.AngleUp (Some (Card.content props [ widget ]))
 
+
 let renderCollapsedWidgets dispatch (title, icon, widget, maxHeight) =
     div [ Class "item" ]
         [ Icon.faIcon [ Icon.Size IsLarge ]
@@ -112,19 +129,21 @@ let private collapseButton dispatch =
 let private sidebarContainer dispatch sections =
     div [ Class "sidebar is-expanded" ]
         [ yield! sections
-          yield div [ Style [ Flex "1"
-                              BackgroundColor "white" ] ] [ ]
+          yield div [ Style [ Flex "1" ] ] [ ]
           yield collapseButton dispatch ]
 
 let private expandButton dispatch =
     Card.card [ Props [ OnClick (fun _ -> dispatch ToggleState ) ] ]
-        [ Icon.faIcon [ Icon.Size IsLarge ]
-            [ Fa.faLg
-              Fa.icon Fa.I.AngleDoubleRight ] ]
+        [ Card.header [ ]
+            [ Card.Header.icon [ ]
+                [ Icon.faIcon [ ]
+                    [ Fa.faLg
+                      Fa.icon Fa.I.AngleDoubleRight ] ] ] ]
 
 let view (model: Model) dispatch =
     let widgets =
-        [ "Samples", Fa.I.Book, Widgets.Samples.view model.Samples (SamplesMsg >> dispatch), Some "500px"
+        [ "General", Fa.I.Th, Widgets.General.view model.General (GeneralMsg >> dispatch), None
+          "Samples", Fa.I.Book, Widgets.Samples.view model.Samples (SamplesMsg >> dispatch), Some "500px"
           "Options", Fa.I.Cog, Widgets.Options.view model.Options (OptionsMsg >> dispatch), None
           "About", Fa.I.Info, Widgets.About.view, None ]
         |> List.map (renderWidgets model dispatch)
@@ -134,6 +153,5 @@ let view (model: Model) dispatch =
     else
         div [ Class "sidebar is-collapse" ]
             [ yield! widgets
-              yield div [ Style [ Flex "1"
-                                  BackgroundColor "white" ] ] [ ]
+              yield div [ Style [ Flex "1" ] ] [ ]
               yield expandButton dispatch ]
