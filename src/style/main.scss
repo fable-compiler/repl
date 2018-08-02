@@ -1,6 +1,4 @@
-
-$body-size: 14px;
-
+@import './_variables';
 @import '~bulma/bulma';
 @import '~bulma-pageloader';
 @import './menu-group';
@@ -23,6 +21,7 @@ html {
         display: flex;
         flex-direction: column;
         flex: none;
+        background-color: $card-header-background-color;
 
         &.is-expanded {
             width: 250px;
@@ -30,7 +29,8 @@ html {
 
         .item {
             &:hover {
-                background-color: whitesmoke;
+                background-color: $info;
+                color: $white;
 
                 .item-content {
                     display: block;
@@ -57,37 +57,37 @@ html {
         width: 100%;
 
         .horizontal-resize {
-            width: 6px;
-            margin-left: -3px;
-            background-color: #505050;
+            width: 4px;
+            margin-left: -2px;
+            background-color: $resize-background;
             cursor: ew-resize;
             z-index: 1000;
         }
 
         .vertical-resize {
-            height: 8px;
-            margin-top: -4px;
-            background-color: #505050;
+            height: 6px;
+            margin-top: -3px;
+            background-color: $resize-background;
             cursor: ns-resize;
             z-index: 1000;
         }
 
         .editor-container {
             height: 100%;
-            background-color: #363636;
+            // background-color: #363636;
 
             .card {
-                background-color: #1e1e1e;
+                // background-color: #1e1e1e;
 
                 .card-header {
-                    background-color: white;
+                    // background-color: white;
                     cursor: pointer;
 
                     .icon {
-                        color: $dark;
+                        // color: $dark;
 
                         &:hover {
-                            color: grey;
+                            // color: grey;
                         }
                     }
                 }

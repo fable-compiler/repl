@@ -22,8 +22,10 @@ function parseQuery() {
     }, {});
 }
 
-export function updateQuery(code) {
-    var object = { code };
+export function updateQuery(code, html) {
+    var object =
+        { code : code,
+          html : html };
     var query = Object.keys(object).map(function(key){
       return key + '=' + encodeURIComponent(object[key]);
     }).join('&');

@@ -252,7 +252,12 @@ let view model dispatch =
         fetchSamples () |> Promise.eitherEnd
             (FetchSamplesSuccess >> dispatch)
             (FetchSamplesError >> dispatch)
-    let menus = (button [OnClick fetchSamplesMsg] [str "Refresh"])::menus
+    let menus =
+        (Button.button [ Button.OnClick fetchSamplesMsg ]
+            [ Icon.faIcon [ Icon.Size IsSmall]
+                [ Fa.icon Fa.I.Refresh ]
+              Text.span [ ]
+                [ str "Refresh samples" ] ])::menus
 #endif
 
     Menu.menu [] menus
