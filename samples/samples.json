@@ -91,6 +91,12 @@
                         "label": "Hokusai",
                         "fsharpCode": "visual/hokusai.fs",
                         "htmlCode": "visual/hokusai.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Color Fountain",
+                        "fsharpCode": "visual/color-fountain.fs",
+                        "htmlCode": "visual/color-fountain.html"
                     }
                 ]
             },
