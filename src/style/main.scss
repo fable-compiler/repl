@@ -130,3 +130,27 @@ html {
         }
     }
 }
+
+.tabs {
+
+    ul {
+        border-bottom-color: unset;
+    }
+
+    li {
+        a {
+            color: $white;
+
+            &:hover {
+                color: $grey;
+            }
+        }
+
+        &.is-active {
+            a {
+                color: $info;
+            }
+        }
+    }
+
+}

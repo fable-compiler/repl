@@ -287,7 +287,8 @@ let private menubar (model: Model) dispatch =
         then smallFaIcon [ Fa.icon Fa.I.Spinner; Fa.spin ]
         else smallFaIcon [ Fa.icon Fa.I.Play ]
     Navbar.navbar
-        [ Navbar.IsFixedTop; Navbar.Color IsDark ]
+        [ Navbar.IsFixedTop
+          Navbar.Color IsDark ]
         [ Navbar.Brand.div [ ]
             [ Navbar.Item.div [ ]
                 [ img [ Src "img/fable-ionide.png" ] ]
@@ -352,11 +353,12 @@ let private editorArea model dispatch =
     div [ Class "editor-container"
           Style [ Width (numberToPercent model.PanelSplitRatio) ] ]
         [ Card.card [ Common.Props [ Style [ Height ("calc("+ fsharpHeight + " - 4px)") ] ] ] // We remove 4px to compensate the vertical-resize height
-            [ Card.header [ Common.Props [ OnClick (fun _ -> dispatch ToggleFsharpCollapse )] ]
-                [ Card.Header.title [ ]
+            [ Card.header [ Common.Props [ OnClick (fun _ -> dispatch ToggleFsharpCollapse ) ]
+                            Modifiers [ Modifier.BackgroundColor IsGreyDark ] ]
+                [ Card.Header.title [ Card.Header.Title.Modifiers [ Modifier.TextColor IsWhite ] ]
                     [ str "F#" ]
                   Card.Header.icon [ ]
-                    [ Icon.faIcon [ ]
+                    [ Icon.faIcon [ Icon.Modifiers [ Modifier.TextColor IsWhite ] ]
                         [ Fa.icon fsharpAngle
                           Fa.faLg ] ] ]
               Card.content [ Common.Props [ Style [ Display fsharpDisplay ] ] ]
@@ -401,11 +403,12 @@ let private editorArea model dispatch =
                 OnMouseDown (fun _ -> dispatch EditorDragStarted) ]
               [ ]
           Card.card [ Common.Props [ Style [ Height htmlHeight ] ] ]
-            [ Card.header [ Common.Props [ OnClick (fun _ -> dispatch ToggleHtmlCollapse )] ]
-                [ Card.Header.title [ ]
+            [ Card.header [ Common.Props [ OnClick (fun _ -> dispatch ToggleHtmlCollapse )]
+                            Modifiers [ Modifier.BackgroundColor IsGreyDark ] ]
+                [ Card.Header.title [ Card.Header.Title.Modifiers [ Modifier.TextColor IsWhite ] ]
                     [ str "Html" ]
                   Card.Header.icon [ ]
-                    [ Icon.faIcon [ ]
+                    [ Icon.faIcon [ Icon.Modifiers [ Modifier.TextColor IsWhite ] ]
                         [ Fa.icon htmlAngle
                           Fa.faLg ] ] ]
               Card.content [ Common.Props [ Style [ Display htmlDisplay ] ] ]
@@ -416,7 +419,8 @@ let private editorArea model dispatch =
 
 let private outputTabs (activeTab : ActiveTab) dispatch =
     Tabs.tabs [ Tabs.IsCentered
-                Tabs.Size Size.IsMedium ]
+                Tabs.Size Size.IsMedium
+                Tabs.Modifiers [ Modifier.BackgroundColor IsGreyDark ]  ]
         [ Tabs.tab [ Tabs.Tab.IsActive (activeTab = LiveTab)
                      Tabs.Tab.Props [
                          OnClick (fun _ -> SetActiveTab LiveTab |> dispatch)
