@@ -11,6 +11,11 @@ $text: #d4d4d4;
 $navbar-background-color: $dark;
 $link: $text;
 $link-hover: lighten($text, 50);
+$link-focus: lighten($text, 50);
+$link-active: lighten($text, 50);
+$link-focus-border: $info;
+$link-active-border: lighten($text, 50);
+$link-hover-border: lighten($text, 50);
 
 $subtitle-color: $text;
 $navbar-item-color: $text;
