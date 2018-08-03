@@ -1,9 +1,7 @@
-(*
-ParserLibrary.fsx
-Final version of a parser library.
-Related blog post: http://fsharpforfunandprofit.com/posts/understanding-parser-combinators-3/
-*)
 namespace Parser
+
+// Parser Library by Scott Wlaschin
+// Related blog post: http://fsharpforfunandprofit.com/posts/understanding-parser-combinators-3/
 
 module TextInput =
     open System

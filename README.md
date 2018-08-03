@@ -6,7 +6,7 @@ To develop the REPL locally, run the `WatchApp` FAKE target and then open `local
 
 ## How to add a sample
 
-To add a sample, you need to add an .fs file to the `public/samples/Samples.fsproj` project (and a corresponding .html file if necessary), the update `public/samples/samples.json`. This file is used to generate the samples menu in the browser.
+To add a sample, you need to add an .fs file to the `public/samples/Samples.fsproj` project (and a corresponding .html file if necessary), then update `public/samples/samples.json`. This file is used to generate the samples menu in the browser. [This commit](https://github.com/fable-compiler/repl2/commit/860243166459e10e47919815dffcc94ddbbd73b7) is a good example of adding a sample (pun intended).
 
 > If you just want to update on the existing samples, you can do it directly using Github UI and send a PR automatically.
 
