@@ -18,13 +18,13 @@
     <Compile Include="games/pacman.fs" />
     <Compile Include="visual/basic-canvas.fs" />
     <Compile Include="visual/mandelbrot.fs" />
+    <Compile Include="visual/raytracer.fs" />
     <Compile Include="visual/hokusai.fs" />
     <Compile Include="visual/color-fountain.fs" />
     <Compile Include="interop/interop-samples.fs" />
     <Compile Include="interop/jquery.fs" />
     <Compile Include="other/parser.fs" />
     <Compile Include="other/sudoku.fs" />
-    <Compile Include="other/raytrace.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
