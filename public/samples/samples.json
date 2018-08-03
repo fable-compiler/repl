@@ -88,6 +88,12 @@
                     },
                     {
                         "type": "menu-item",
+                        "label": "Ray Tracer",
+                        "fsharpCode": "visual/raytracer.fs",
+                        "htmlCode": "visual/raytracer.html"
+                    },
+                    {
+                        "type": "menu-item",
                         "label": "Hokusai",
                         "fsharpCode": "visual/hokusai.fs",
                         "htmlCode": "visual/hokusai.html"
@@ -114,12 +120,6 @@
                         "type": "menu-item",
                         "label": "Parser Libray",
                         "fsharpCode": "other/parser.fs",
-                        "htmlCode": "default"
-                    },
-                    {
-                        "type": "menu-item",
-                        "label": "Ray Trace",
-                        "fsharpCode": "other/raytrace.fs",
                         "htmlCode": "default"
                     }
                 ]
