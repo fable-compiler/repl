@@ -1,7 +1,6 @@
 module JQuery
 
-// Ported from:
-// F# Interop with Javascript in Fable: The Complete Guide
+// Ported from: F# Interop with Javascript in Fable: The Complete Guide
 // https://medium.com/@zaid.naom/f-interop-with-javascript-in-fable-the-complete-guide-ccc5b896a59f
 
 open Fable.Import.Browser

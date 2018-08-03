@@ -141,6 +141,7 @@ let calcStyle =
       Border "2px black solid"
       BorderRadius "15px"
       Padding "10px"
+      BackgroundColor "white"
     ]
 
 let inputToString = function
