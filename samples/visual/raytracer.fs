@@ -7,13 +7,11 @@ module RayTracer
 open System
 
 [<Struct>]
-type Vector (x:float, y:float, z:float) =
-    member this.X = x
-    member this.Y = y
-    member this.Z = z
-    static member ( * ) (k, v: Vector) = Vector (k * v.X, k * v.Y, k * v.Z)
-    static member ( - ) (v1: Vector, v2: Vector) = Vector (v1.X - v2.X, v1.Y - v2.Y, v1.Z - v2.Z)
-    static member ( + ) (v1: Vector, v2: Vector) = Vector (v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z)
+type Vector =
+    { X: float; Y: float; Z: float }
+    static member (*) (k, v: Vector) = { X = k * v.X; Y = k * v.Y; Z = k * v.Z }
+    static member (-) (v1: Vector, v2: Vector) = { X = v1.X - v2.X; Y = v1.Y - v2.Y; Z = v1.Z - v2.Z }
+    static member (+) (v1: Vector, v2: Vector) = { X = v1.X + v2.X; Y = v1.Y + v2.Y; Z = v1.Z + v2.Z }
     static member Dot (v1: Vector, v2: Vector) = v1.X * v2.X + v1.Y * v2.Y + v1.Z * v2.Z
     static member Mag (v: Vector) = sqrt (v.X * v.X + v.Y * v.Y + v.Z * v.Z)
     static member Norm (v: Vector) =
@@ -21,27 +19,25 @@ type Vector (x:float, y:float, z:float) =
         let div = if mag = 0.0 then infinity else 1.0/mag
         div * v
     static member Cross (v1: Vector, v2: Vector) =
-        Vector (v1.Y * v2.Z - v1.Z * v2.Y,
-                v1.Z * v2.X - v1.X * v2.Z,
-                v1.X * v2.Y - v1.Y * v2.X)
+        { X = v1.Y * v2.Z - v1.Z * v2.Y
+        ; Y = v1.Z * v2.X - v1.X * v2.Z
+        ; Z = v1.X * v2.Y - v1.Y * v2.X }
 
 [<Struct>]
-type Color (r:float, g:float, b:float) =
-    member this.R = r
-    member this.G = g
-    member this.B = b
-    static member Scale (k, v: Color) = Color (k * v.R, k * v.G, k * v.B)
-    static member ( + ) (v1: Color, v2: Color) = Color (v1.R + v2.R, v1.G + v2.G, v1.B + v2.B)
-    static member ( * ) (v1: Color, v2: Color) = Color (v1.R * v2.R, v1.G * v2.G, v1.B * v2.B)
-    static member White = Color (1.0, 1.0, 1.0)
-    static member Grey = Color (0.5, 0.5, 0.5)
-    static member Black = Color (0.0, 0.0, 0.0)
+type Color =
+    { R: float; G: float; B: float }
+    static member Scale (k, v: Color) = { R = k * v.R; G = k * v.G; B = k * v.B }
+    static member (+) (v1: Color, v2: Color) = { R = v1.R + v2.R; G = v1.G + v2.G; B = v1.B + v2.B }
+    static member (*) (v1: Color, v2: Color) = { R = v1.R * v2.R; G = v1.G * v2.G; B = v1.B * v2.B }
+    static member White = { R = 1.0; G = 1.0; B = 1.0 }
+    static member Grey = { R = 0.5; G = 0.5; B = 0.5 }
+    static member Black = { R = 0.0; G = 0.0; B = 0.0 }
     static member Background = Color.Black
     static member DefaultColor = Color.Black
 
 type Camera (pos: Vector, lookAt: Vector) =
     let forward = Vector.Norm (lookAt - pos)
-    let down = Vector (0.0, -1.0, 0.0)
+    let down = { X = 0.0; Y = -1.0; Z = 0.0 }
     let right = 1.5 * Vector.Norm (Vector.Cross (forward, down))
     let up = 1.5 * Vector.Norm (Vector.Cross (forward, right))
     member c.Pos     = pos
@@ -119,7 +115,7 @@ module RayTracer =
         let reflectDir = d - 2.0 * Vector.Dot (normal, d) * normal
         let naturalcolor = Color.DefaultColor + (GetNaturalColor isect.Thing pos normal reflectDir scene)
         let reflectedColor =
-            if depth >= maxDepth then Color(0.5, 0.5, 0.5)
+            if depth >= maxDepth then Color.Grey
             else GetReflectionColor (isect.Thing, pos + (0.001*reflectDir), normal, reflectDir, scene, depth)
         naturalcolor + reflectedColor
 
@@ -233,14 +229,14 @@ module Surfaces =
 module Scenes =
 
     let TwoSpheresOnACheckerboard =
-        { Things = [ SceneObjects.Plane (Vector (0.0, 1.0, 0.0), 0.0, Surfaces.Checkerboard);
-                     SceneObjects.Sphere (Vector (0.0, 1.0, -0.25), 1.0, Surfaces.Shiny)
-                     SceneObjects.Sphere (Vector (-1.0, 0.5, 1.5), 0.5, Surfaces.Shiny) ];
-          Lights = [ { Pos = Vector (-2.0, 2.5, 0.0); Color = Color (0.49, 0.07, 0.07) };
-                     { Pos = Vector (1.5, 2.5, 1.5); Color = Color (0.07, 0.07, 0.49) };
-                     { Pos = Vector (1.5, 2.5, -1.5); Color = Color (0.07, 0.49, 0.071) };
-                     { Pos = Vector (0.0, 3.5, 0.0); Color = Color (0.21, 0.21, 0.35) } ];
-          Camera = Camera (Vector (3.0, 2.0, 4.0), Vector (-1.0, 0.5, 0.0)) }
+        { Things = [ SceneObjects.Plane ({ X = 0.0; Y = 1.0; Z = 0.0 }, 0.0, Surfaces.Checkerboard);
+                     SceneObjects.Sphere ({ X = 0.0; Y = 1.0; Z = -0.25 }, 1.0, Surfaces.Shiny)
+                     SceneObjects.Sphere ({ X = -1.0; Y = 0.5; Z = 1.5 }, 0.5, Surfaces.Shiny) ];
+          Lights = [ { Pos = { X = -2.0; Y = 2.0; Z = 0.0 }; Color = { R = 0.49; G = 0.07; B = 0.07 } };
+                     { Pos = { X = 1.5; Y = 2.5; Z = 1.5 }; Color = { R = 0.07; G = 0.07; B = 0.49 } };
+                     { Pos = { X = 1.5; Y = 2.5; Z = -1.5 }; Color = { R = 0.07; G = 0.49; B = 0.071 } };
+                     { Pos = { X = 0.0; Y = 3.5; Z = 0.0 }; Color = { R = 0.21; G = 0.21; B = 0.35 } } ];
+          Camera = Camera ({ X = 3.0; Y = 2.0; Z = 4.0 }, { X = -1.0; Y = 0.5; Z = 0.0 }) }
 
 
 open Fable.Import.Browser

@@ -4692,16 +4692,16 @@ a.box:active {
     margin-left: calc(-0.375em - 1px);
     margin-right: calc(-0.375em - 1px); }
   .button:hover, .button.is-hovered {
-    border-color: #b5b5b5;
+    border-color: white;
     color: white; }
   .button:focus, .button.is-focused {
-    border-color: #3273dc;
-    color: #363636; }
+    border-color: #1177bb;
+    color: white; }
     .button:focus:not(:active), .button.is-focused:not(:active) {
       box-shadow: 0 0 0 0.125em rgba(212, 212, 212, 0.25); }
   .button:active, .button.is-active {
-    border-color: #4a4a4a;
-    color: #363636; }
+    border-color: white;
+    color: white; }
   .button.is-text {
     background-color: transparent;
     border-color: transparent;
@@ -8295,12 +8295,12 @@ a.navbar-item,
   .pagination-previous:hover,
   .pagination-next:hover,
   .pagination-link:hover {
-    border-color: #b5b5b5;
+    border-color: white;
     color: white; }
   .pagination-previous:focus,
   .pagination-next:focus,
   .pagination-link:focus {
-    border-color: #3273dc; }
+    border-color: #1177bb; }
   .pagination-previous:active,
   .pagination-next:active,
   .pagination-link:active {
@@ -8405,8 +8405,8 @@ a.navbar-item,
     margin-bottom: -1px;
     padding: 0.5em; }
     .panel-tabs a.is-active {
-      border-bottom-color: #4a4a4a;
-      color: #363636; }
+      border-bottom-color: white;
+      color: white; }
 
 .panel-list a {
   color: #d4d4d4; }
@@ -8429,7 +8429,7 @@ a.navbar-item,
     flex-wrap: wrap; }
   .panel-block.is-active {
     border-left-color: #d4d4d4;
-    color: #363636; }
+    color: white; }
     .panel-block.is-active .panel-icon {
       color: #d4d4d4; }
 
