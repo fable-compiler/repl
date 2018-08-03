@@ -64,6 +64,7 @@ type Msg =
     | SetFSharpEditor of IEditor
     | LoadSuccess
     | LoadFail
+    | UrlHashChange
     | MarkEditorErrors of Fable.JS.Error[]
     | StartCompile of string option
     | EndCompile of Result<string, string>
@@ -126,6 +127,10 @@ let update msg model =
         { model with State = Idle }, showErrorToast msg
 
     | SetFSharpEditor ed -> { model with FSharpEditor = ed }, Cmd.none
+
+    | UrlHashChange ->
+        let parsed = loadState(Literals.STORAGE_KEY)
+        { model with FSharpCode = parsed.code; HtmlCode = parsed.html }, Cmd.ofMsg (StartCompile (Some parsed.code))
 
     | MarkEditorErrors errors ->
         { model with FSharpErrors = mapErrorToMarker errors }, Cmd.none
@@ -512,6 +517,10 @@ let private subscriptions (model: Model) =
             | FoundTooltip _ -> ()
             | FoundCompletions _ -> ()
         )
+
+        // Subscribe to URL hash change events
+        Browser.window.addEventListener_hashchange(fun _ ->
+            dispatch UrlHashChange)
 
     Cmd.ofSub sub
 

@@ -1,5 +1,7 @@
 // @ts-check
 
+import * as lzString from "lz-string";
+
 function parseQuery() {
     var query = window.location.hash.replace(/^\#\?/, '');
 
@@ -16,7 +18,10 @@ function parseQuery() {
       };
     }).reduce(function(params, param){
       if (param.key && param.value) {
-        params[param.key] = decodeURIComponent(param.value);
+        params[param.key] =
+          param.key === "code" || param.key === "html"
+            ? lzString.decompressFromEncodedURIComponent(param.value)
+            : decodeURIComponent(param.value);
       }
       return params;
     }, {});
@@ -24,10 +29,10 @@ function parseQuery() {
 
 export function updateQuery(code, html) {
     var object =
-        { code : code,
-          html : html };
-    var query = Object.keys(object).map(function(key){
-      return key + '=' + encodeURIComponent(object[key]);
+        { code : lzString.compressToEncodedURIComponent(code),
+          html : lzString.compressToEncodedURIComponent(html) };
+    var query = Object.keys(object).map(function(key) {
+      return key + '=' + object[key];
     }).join('&');
 
     window.location.hash = '?' + query;
