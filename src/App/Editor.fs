@@ -84,9 +84,12 @@ let createTooltipProvider getTooltip =
                     return jsOptions<Monaco.Languages.Hover>(fun h ->
                         h.contents <-
                             lines
-                            |> Array.map (fun line ->
+                            |> String.concat "\n"
+                            |> Tooltip.replaceXml
+                            |> (fun line ->
                                 jsOptions<Monaco.IMarkdownString>(fun s ->
                                 s.value <- line))
+                            |> Array.singleton
                             |> ResizeArray
                         h.range <- Some r
                     )

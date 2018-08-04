@@ -8,7 +8,12 @@ $gray-darker: rgba(128, 128, 128, 0.2);
 $body-size: 14px;
 $body-background-color: $primary;
 $text: #d4d4d4;
+$text-strong: $text;
 $navbar-background-color: $dark;
+
+$code: $grey-lighter;
+$code-background: $dark;
+
 $link: $text;
 $link-hover: lighten($text, 50);
 $link-focus: lighten($text, 50);
