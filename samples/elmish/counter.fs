@@ -33,7 +33,7 @@ let update (msg:Msg) (model:Model) =
 
 let view model dispatch =
 
-  div [ Style [BackgroundColor "white"] ]
+  div [ ]
       [ button [ OnClick (fun _ -> dispatch Increment) ] [ str "+" ]
         div [] [ str (string model) ]
         button [ OnClick (fun _ -> dispatch Decrement) ] [ str "-" ] ]
