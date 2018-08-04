@@ -53,11 +53,6 @@ let runYarn dir command =
                 Command = Custom command
             })
 
-let addJsExtensionToFableCoreImports fableCorePath =
-    let reg = Regex(@"^import (.*"".*)("".*)$", RegexOptions.Multiline)
-    for file in Directory.EnumerateFiles(fableCorePath, "*.js", SearchOption.AllDirectories) do
-        File.WriteAllText(file, reg.Replace(File.ReadAllText(file), "import $1.js$2"))
-
 let downloadArtifact path (url: string) =
     let tempFile = Path.ChangeExtension(Path.GetTempFileName(), ".zip")
     use client = new WebClient()
@@ -178,10 +173,13 @@ Target "PublishGithubPages" (fun _->
     runYarn currentDir "gh-pages -d deploy"
 )
 
-Target "DownloadReplArtifact" (fun _ ->
-    let targetDir = currentDir </> "public/js/repl"
-    downloadArtifact targetDir AppveyorReplArtifactURL
-    addJsExtensionToFableCoreImports (targetDir </> "fable-core")
+Target "GetBundleFromAppveyor" (fun _ ->
+    downloadArtifact (currentDir </> "public/js/repl") AppveyorReplArtifactURL
+)
+
+// Assume the bundle has been built in a sibling Fable repo
+Target "GetBundleLocally" (fun _ ->
+    FileUtils.cp_r (currentDir </> "../fable/src/dotnet/Fable.JS/bundle") (currentDir </> "public/js/repl")
 )
 
 Target "BuildLib" (fun _ ->
@@ -216,16 +214,7 @@ Target "BuildSamples" (fun _ ->
 )
 
 Target "UpdateVersion" (fun _ ->
-    let version =
-        ensureRepoSetup
-            { FolderPath = FableFolderPath
-              FolderName = FableFolderName
-              GithubLink = "git@github.com:fable-compiler/Fable.git"
-              GithubBranch = fableBranch }
-        let release =
-            FableFolderPath </> "src/dotnet/Fable.Compiler/RELEASE_NOTES.md"
-            |> ReleaseNotesHelper.LoadReleaseNotes
-        release.NugetVersion
+    let version = File.ReadAllText(currentDir </> "public/js/repl/version.txt")
     let reg = Regex(@"\bVERSION\s*=\s*""(.*?)""")
     let mainFile = currentDir </> "src/App/Shared.fs"
     (reg, mainFile) ||> replaceLines (fun line m ->
@@ -241,7 +230,7 @@ Target "All" DoNothing
     ==> "Restore"
     ==> "YarnInstall"
     ==> "CopyModules"
-    ==> "DownloadReplArtifact"
+    ==> "GetBundleFromAppveyor"
     ==> "BuildLib"
     ==> "BuildApp"
     ==> "All"
