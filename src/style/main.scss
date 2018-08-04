@@ -126,6 +126,7 @@ html {
             iframe {
                 width: 100%;
                 height: calc(100% - #{$tabs-header-height});
+                background-color: white;
             }
         }
     }
