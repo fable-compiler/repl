@@ -6,8 +6,7 @@
   "keywords": [],
   "author": "",
   "license": "MIT",
-  "scripts": {
-  },
+  "scripts": {},
   "dependencies": {
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-react": "^6.24.1",
@@ -16,6 +15,7 @@
     "bulma": "^0.7.1",
     "bulma-pageloader": "^2.1.0",
     "font-awesome": "^4.7.0",
+    "lz-string": "^1.4.4",
     "monaco-editor": "^0.13.1",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
