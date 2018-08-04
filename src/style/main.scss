@@ -1,5 +1,7 @@
+@import '~bulma/sass/utilities/_all';
 @import './_variables';
 @import '~bulma/bulma';
+@import './monaco-editor-hover-content.sass';
 @import '~bulma-pageloader';
 @import './menu-group';
 
