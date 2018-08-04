@@ -135,6 +135,6 @@ module About =
         Content.content [ ]
             [ str ("Version: " + Literals.VERSION)
               br [ ]
-              a [ Href "https://github.com/fable-compiler/repl/issues/new" ]
+              a [ Href "https://github.com/fable-compiler/repl2/issues/new" ]
                 [ Text.span [ Modifiers [ Modifier.TextTransform TextTransform.Italic ] ]
                     [ str "Found a bug ?" ] ] ]
