@@ -5,6 +5,24 @@
         "children": [
             {
                 "type": "sub-category",
+                "label": "Basic",
+                "children": [
+                    {
+                        "type": "menu-item",
+                        "label": "Hello World (console)",
+                        "fsharpCode": "basic/hello-world-console.fs",
+                        "htmlCode": "default"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Hello World (HTML)",
+                        "fsharpCode": "basic/hello-world-html.fs",
+                        "htmlCode": "basic/hello-world-html.html"
+                    }
+                ]
+            },
+            {
+                "type": "sub-category",
                 "label": "Elmish",
                 "children": [
                     {

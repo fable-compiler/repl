@@ -40,7 +40,7 @@ export function updateQuery(code, html) {
 
 export function loadState(key) {
     return Object.assign({
-        code: 'printfn "Hello World"',
+        code: 'printfn "Hello World" // writes to the dev tools console',
         html: '<html><body></body></html>'
       },
       JSON.parse(window.localStorage.getItem(key)) || {},
