@@ -20,3 +20,7 @@ export function parse(s, radix = 10) {
         throw new Error("Input string was not in a correct format.");
     }
 }
+// JS Number.isFinite function evals false for NaN
+export function isInfinity(x) {
+    return x === Number.POSITIVE_INFINITY || x === Number.NEGATIVE_INFINITY;
+}
