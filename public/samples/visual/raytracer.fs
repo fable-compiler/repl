@@ -96,7 +96,7 @@ module RayTracer =
         match NearestIntersection ray scene with
         | None -> None
         | Some isect ->
-            if Double.IsInfinity (isect.Dist)
+            if isect.Dist = infinity
             then None
             else Some isect.Dist
 
@@ -104,7 +104,7 @@ module RayTracer =
         match NearestIntersection ray scene with
         | None -> Color.Background
         | Some isect ->
-            if Double.IsInfinity (isect.Dist)
+            if isect.Dist = infinity
             then Color.Background
             else Shade isect scene depth
 
@@ -153,16 +153,16 @@ module RayTracer =
                 color <- addLight thing pos normal rd scene color light
             color
 
-    let inline GetPoint x y width height (camera: Camera) =
+    let GetPoint x y width height (camera: Camera) =
         let RecenterX x =  (float x - (float width / 2.0))  / (2.0 * float width)
         let RecenterY y = -(float y - (float height / 2.0)) / (2.0 * float height)
         Vector.Norm (camera.Forward + RecenterX (x) * camera.Right + RecenterY (y) * camera.Up)
 
-    let Render scene (data: Fable.Import.JS.Uint8ClampedArray) width height =
-        let inline clamp v = Math.Floor (255.0 * Math.Min(v, 1.0))
-        for y = 0 to  height-1 do
+    let Render scene (data: Fable.Import.JS.Uint8ClampedArray) (x, y, width, height) =
+        let clamp v = Math.Floor (255.0 * Math.Min(v, 1.0))
+        for y = y to height-1 do
             let stride = y * width
-            for x = 0 to width-1 do
+            for x = x to width-1 do
                 let index = (x + stride) * 4
                 let dir = GetPoint x y width height scene.Camera
                 let ray = { Start = scene.Camera.Pos; Dir = dir }
@@ -244,8 +244,8 @@ open Fable.Import.Browser
 let renderScene scene (x, y, width, height) =
     let ctx = document.getElementsByTagName_canvas().[0].getContext_2d()
     let img = ctx.createImageData(Fable.Core.U2.Case1 (float width), float height)
-    RayTracer.Render scene img.data width height
-    ctx.putImageData(img, float x, float y)
+    RayTracer.Render scene img.data (x, y, width, height)
+    ctx.putImageData(img, float -x, float -y)
 
 let measure f x y =
     let dtStart = window.performance.now()
@@ -253,6 +253,6 @@ let measure f x y =
     let elapsed = window.performance.now() - dtStart
     res, elapsed
 
-let x,y,w,h = 0, 0, 500, 500
-let _, elapsed = measure renderScene Scenes.TwoSpheresOnACheckerboard (x,y,w,h)
+let x, y, w, h = (0, 0, 500, 500)
+let _, elapsed = measure renderScene Scenes.TwoSpheresOnACheckerboard (x, y, w, h)
 printfn "Ray tracing:\n - rendered image size: (%dx%d)\n - elapsed: %f ms" w h elapsed
