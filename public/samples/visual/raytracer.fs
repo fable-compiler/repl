@@ -96,7 +96,7 @@ module RayTracer =
         match NearestIntersection ray scene with
         | None -> None
         | Some isect ->
-            if Double.IsInfinity (isect.Dist)
+            if isect.Dist = infinity
             then None
             else Some isect.Dist
 
@@ -104,7 +104,7 @@ module RayTracer =
         match NearestIntersection ray scene with
         | None -> Color.Background
         | Some isect ->
-            if Double.IsInfinity (isect.Dist)
+            if isect.Dist = infinity
             then Color.Background
             else Shade isect scene depth
 
@@ -153,13 +153,13 @@ module RayTracer =
                 color <- addLight thing pos normal rd scene color light
             color
 
-    let inline GetPoint x y width height (camera: Camera) =
+    let GetPoint x y width height (camera: Camera) =
         let RecenterX x =  (float x - (float width / 2.0))  / (2.0 * float width)
         let RecenterY y = -(float y - (float height / 2.0)) / (2.0 * float height)
         Vector.Norm (camera.Forward + RecenterX (x) * camera.Right + RecenterY (y) * camera.Up)
 
     let Render scene (data: Fable.Import.JS.Uint8ClampedArray) width height =
-        let inline clamp v = Math.Floor (255.0 * Math.Min(v, 1.0))
+        let clamp v = Math.Floor (255.0 * Math.Min(v, 1.0))
         for y = 0 to  height-1 do
             let stride = y * width
             for x = 0 to width-1 do
