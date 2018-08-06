@@ -158,11 +158,11 @@ module RayTracer =
         let RecenterY y = -(float y - (float height / 2.0)) / (2.0 * float height)
         Vector.Norm (camera.Forward + RecenterX (x) * camera.Right + RecenterY (y) * camera.Up)
 
-    let Render scene (data: Fable.Import.JS.Uint8ClampedArray) width height =
+    let Render scene (data: Fable.Import.JS.Uint8ClampedArray) (x, y, width, height) =
         let clamp v = Math.Floor (255.0 * Math.Min(v, 1.0))
-        for y = 0 to  height-1 do
+        for y = y to height-1 do
             let stride = y * width
-            for x = 0 to width-1 do
+            for x = x to width-1 do
                 let index = (x + stride) * 4
                 let dir = GetPoint x y width height scene.Camera
                 let ray = { Start = scene.Camera.Pos; Dir = dir }
@@ -244,8 +244,8 @@ open Fable.Import.Browser
 let renderScene scene (x, y, width, height) =
     let ctx = document.getElementsByTagName_canvas().[0].getContext_2d()
     let img = ctx.createImageData(Fable.Core.U2.Case1 (float width), float height)
-    RayTracer.Render scene img.data width height
-    ctx.putImageData(img, float x, float y)
+    RayTracer.Render scene img.data (x, y, width, height)
+    ctx.putImageData(img, float -x, float -y)
 
 let measure f x y =
     let dtStart = window.performance.now()
@@ -253,6 +253,6 @@ let measure f x y =
     let elapsed = window.performance.now() - dtStart
     res, elapsed
 
-let x,y,w,h = 0, 0, 500, 500
-let _, elapsed = measure renderScene Scenes.TwoSpheresOnACheckerboard (x,y,w,h)
+let x, y, w, h = (0, 0, 500, 500)
+let _, elapsed = measure renderScene Scenes.TwoSpheresOnACheckerboard (x, y, w, h)
 printfn "Ray tracing:\n - rendered image size: (%dx%d)\n - elapsed: %f ms" w h elapsed
