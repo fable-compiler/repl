@@ -524,6 +524,8 @@ let private subscriptions (model: Model) =
 
     Cmd.ofSub sub
 
+Browser.navigator.serviceWorker.register("/service-worker.js") |> ignore
+
 open Elmish.React
 open Elmish.HMR
 
