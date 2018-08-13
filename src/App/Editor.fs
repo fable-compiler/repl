@@ -85,9 +85,11 @@ let createTooltipProvider getTooltip =
                         h.contents <-
                             lines
                             |> Seq.map Tooltip.replaceXml
-                            |> Seq.map (fun line ->
+                            |> Seq.mapi (fun i line ->
                                 jsOptions<Monaco.IMarkdownString>(fun s ->
-                                    s.value <- line))
+                                    if i = 0 then
+                                        s.value <- "```fsharp\n" + line + "\n```\n"
+                                    else s.value <- line ))
                             |> ResizeArray
                         h.range <- Some r
                     )

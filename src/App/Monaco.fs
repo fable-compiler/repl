@@ -1,7 +1,7 @@
-// Type definitions for monaco-editor v0.10.0
+// Type definitions for monaco-editor v0.14.2
 // generated with ts2fable from /node_modules/monaco-editor/monaco.d.ts
 
-// ts2fable 0.6.
+// ts2fable 0.6.1
 namespace rec Fable.Import
 
 module Monaco =
@@ -15,14 +15,14 @@ module Monaco =
 
     type [<AllowNullLiteral>] IExports =
         abstract Emitter: EmitterStatic
-        abstract Promise: PromiseStatic
-        abstract CancellationTokenSource: CancellationTokenSourceStatic
-        abstract Uri: UriStatic
+        abstract Promise: Promise
+        abstract CancellationTokenSource: CancellationTokenSource
+        abstract Uri: Uri
         abstract KeyMod: KeyMod
-        abstract Position: PositionStatic
-        abstract Range: RangeStatic
-        abstract Selection: SelectionStatic
-        abstract Token: TokenStatic
+        abstract Position: Position
+        abstract Range: Range
+        abstract Selection: Selection
+        abstract Token: Token
         abstract languages : Languages.IExports
         abstract editor : Editor.IExports
 
@@ -45,11 +45,8 @@ module Monaco =
     type [<AllowNullLiteral>] EmitterStatic =
         [<Emit "new $0($1...)">] abstract Create: unit -> Emitter<'T>
 
-    type [<RequireQualifiedAccess>] Severity =
-        | Ignore = 0
-        | Info = 1
-        | Warning = 2
-        | Error = 3
+    type [<RequireQualifiedAccess>] MarkerTag =
+        | Unnecessary = 1
 
     type [<RequireQualifiedAccess>] MarkerSeverity =
         | Hint = 1
@@ -91,13 +88,9 @@ module Monaco =
         abstract timeout: delay: float -> Promise<unit>
         abstract join: promises: U2<'T1, PromiseLike<'T1>> * U2<'T2, PromiseLike<'T2>> -> Promise<'T1 * 'T2>
         abstract join: promises: ResizeArray<U2<'T, PromiseLike<'T>>> -> Promise<ResizeArray<'T>>
-        abstract join: promises: PromiseStaticJoinPromises -> Promise<obj>
         abstract any: promises: ResizeArray<U2<'T, PromiseLike<'T>>> -> Promise<obj>
         abstract wrap: value: U2<'T, PromiseLike<'T>> -> Promise<'T>
         abstract wrapError: error: Error -> Promise<'T>
-
-    type [<AllowNullLiteral>] PromiseStaticJoinPromises =
-        [<Emit "$0[$1]{{=$2}}">] abstract Item: n: string -> U2<'T, PromiseLike<'T>> with get, set
 
     type [<AllowNullLiteral>] CancellationTokenSource =
         abstract token: CancellationToken
@@ -116,7 +109,7 @@ module Monaco =
     /// This class is a simple parser which creates the basic component paths
     /// (http://tools.ietf.org/html/rfc3986#section-3) with minimal validation
     /// and encoding.
-    ///
+    /// 
     ///        foo://example.com:8042/over/there?name=ferret#nose
     ///        \_/   \______________/\_________/ \_________/ \__/
     ///         |           |            |            |        |
@@ -159,7 +152,7 @@ module Monaco =
     /// This class is a simple parser which creates the basic component paths
     /// (http://tools.ietf.org/html/rfc3986#section-3) with minimal validation
     /// and encoding.
-    ///
+    /// 
     ///        foo://example.com:8042/over/there?name=ferret#nose
     ///        \_/   \______________/\_________/ \_________/ \__/
     ///         |           |            |            |        |
@@ -474,6 +467,8 @@ module Monaco =
         abstract isIRange: obj: obj option -> bool
         /// Test if the two ranges are touching in any way.
         abstract areIntersectingOrTouching: a: IRange * b: IRange -> bool
+        /// Test if the two ranges are intersecting. If the ranges are touching it returns true.
+        abstract areIntersecting: a: IRange * b: IRange -> bool
         /// A function that compares ranges, useful for sorting ranges
         /// It will first compare ranges on the startPosition and then on the endPosition
         abstract compareRangesUsingStarts: a: IRange * b: IRange -> float
@@ -572,7 +567,7 @@ module Monaco =
             /// You can specify the language that should be set for this model or let the language be inferred from the `uri`.
             abstract createModel: value: string * ?language: string * ?uri: Uri -> ITextModel
             /// Change the language for a model.
-            abstract setModelLanguage: model: ITextModel * language: string -> unit
+            abstract setModelLanguage: model: ITextModel * languageId: string -> unit
             /// Set the markers for a model.
             abstract setModelMarkers: model: ITextModel * owner: string * markers: ResizeArray<IMarkerData> -> unit
             /// <summary>Get markers for owner and/or resource</summary>
@@ -599,7 +594,7 @@ module Monaco =
             abstract colorizeModelLine: model: ITextModel * lineNumber: float * ?tabSize: float -> string
             /// Tokenize `text` using language `languageId`
             abstract tokenize: text: string * languageId: string -> ResizeArray<ResizeArray<Token>>
-            /// Define a new theme.
+            /// Define a new theme or update an existing theme.
             abstract defineTheme: themeName: string * themeData: IStandaloneThemeData -> unit
             /// Switches to a theme.
             abstract setTheme: themeName: string -> unit
@@ -635,6 +630,7 @@ module Monaco =
             abstract ``base``: BuiltinTheme with get, set
             abstract ``inherit``: bool with get, set
             abstract rules: ResizeArray<ITokenThemeRule> with get, set
+            abstract encodedTokensColors: ResizeArray<string> option with get, set
             abstract colors: IColors with get, set
 
         type [<AllowNullLiteral>] IColors =
@@ -709,7 +705,7 @@ module Monaco =
             abstract theme: string option with get, set
             /// An URL to open when Ctrl+H (Windows and Linux) or Cmd+H (OSX) is pressed in
             /// the accessibility help dialog in the editor.
-            ///
+            /// 
             /// Defaults to "https://go.microsoft.com/fwlink/?linkid=852450"
             abstract accessibilityHelpUrl: string option with get, set
 
@@ -724,7 +720,7 @@ module Monaco =
 
         type [<AllowNullLiteral>] IStandaloneCodeEditor =
             inherit ICodeEditor
-            abstract addCommand: keybinding: int * handler: (unit->unit) * ?context: string -> string
+            abstract addCommand: keybinding: int * handler: (unit->unit) * context: string -> string
             abstract createContextKey: key: string * defaultValue: 'T -> IContextKey<'T>
             abstract addAction: descriptor: IActionDescriptor -> IDisposable
 
@@ -759,6 +755,7 @@ module Monaco =
             abstract endLineNumber: int with get, set
             abstract endColumn: int with get, set
             abstract relatedInformation: ResizeArray<IRelatedInformation> option with get, set
+            abstract tags: ResizeArray<MarkerTag> option with get, set
 
         /// A structure defining a problem/warning/etc.
         type [<AllowNullLiteral>] IMarkerData =
@@ -771,6 +768,7 @@ module Monaco =
             abstract endLineNumber: int with get, set
             abstract endColumn: int with get, set
             abstract relatedInformation: ResizeArray<IRelatedInformation> option with get, set
+            abstract tags: ResizeArray<MarkerTag> option with get, set
 
         type [<AllowNullLiteral>] IRelatedInformation =
             abstract resource: Uri with get, set
@@ -993,8 +991,6 @@ module Monaco =
             abstract getLinesContent: unit -> ResizeArray<string>
             /// Get the end of line sequence predominantly used in the text buffer.
             abstract getEOL: unit -> string
-            /// Change the end of line sequence used in the text buffer.
-            abstract setEOL: eol: EndOfLineSequence -> unit
             /// Get the minimum legal column for line at `lineNumber`
             abstract getLineMinColumn: lineNumber: float -> float
             /// Get the maximum legal column for line at `lineNumber`
@@ -1009,17 +1005,17 @@ module Monaco =
             abstract validatePosition: position: IPosition -> Position
             /// Advances the given position by the given offest (negative offsets are also accepted)
             /// and returns it as a new valid position.
-            ///
+            /// 
             /// If the offset and position are such that their combination goes beyond the beginning or
             /// end of the model, throws an exception.
-            ///
+            /// 
             /// If the ofsset is such that the new position would be in the middle of a multi-byte
             /// line terminator, throws an exception.
             abstract modifyPosition: position: IPosition * offset: float -> Position
             /// Create a valid range.
             abstract validateRange: range: IRange -> Range
             /// <summary>Converts the position to a zero-based offset.
-            ///
+            /// 
             /// The position will be [adjusted](#TextDocument.validatePosition).</summary>
             /// <param name="position">A position.</param>
             abstract getOffsetAt: position: IPosition -> float
@@ -1128,10 +1124,16 @@ module Monaco =
             /// <param name="editOperations">The edit operations.</param>
             /// <param name="cursorStateComputer">A callback that can compute the resulting cursors state after the edit operations have been executed.</param>
             abstract pushEditOperations: beforeCursorState: ResizeArray<Selection> * editOperations: ResizeArray<IIdentifiedSingleEditOperation> * cursorStateComputer: ICursorStateComputer -> ResizeArray<Selection>
+            /// Change the end of line sequence. This is the preferred way of
+            /// changing the eol sequence. This will land on the undo stack.
+            abstract pushEOL: eol: EndOfLineSequence -> unit
             /// <summary>Edit the model without adding the edits to the undo stack.
             /// This can have dire consequences on the undo stack! See @pushEditOperations for the preferred way.</summary>
             /// <param name="operations">The edit operations.</param>
             abstract applyEdits: operations: ResizeArray<IIdentifiedSingleEditOperation> -> ResizeArray<IIdentifiedSingleEditOperation>
+            /// Change the end of line sequence without recording in the undo stack.
+            /// This can have dire consequences on the undo stack! See @pushEOL for the preferred way.
+            abstract setEOL: eol: EndOfLineSequence -> unit
             /// An event emitted when the contents of the model have changed.
             abstract onDidChangeContent: listener: (IModelContentChangedEvent -> unit) -> IDisposable
             /// An event emitted when decorations of the model have changed.
@@ -1255,9 +1257,9 @@ module Monaco =
 
         /// A (serializable) state of the view.
         type [<AllowNullLiteral>] IViewState =
-            /// written by previous versions
+            /// written by previous versions 
             abstract scrollTop: float option with get, set
-            /// written by previous versions
+            /// written by previous versions 
             abstract scrollTopWithoutViewZones: float option with get, set
             abstract scrollLeft: float with get, set
             abstract firstPosition: IPosition with get, set
@@ -1308,8 +1310,8 @@ module Monaco =
             abstract layout: ?dimension: IDimension -> unit
             /// Brings browser focus to the editor text
             abstract focus: unit -> unit
-            /// Returns true if this editor has keyboard focus (e.g. cursor is blinking).
-            abstract isFocused: unit -> bool
+            /// Returns true if the text inside this editor is focused (i.e. cursor is blinking).
+            abstract hasTextFocus: unit -> bool
             /// Returns all actions associated with this editor.
             abstract getSupportedActions: unit -> ResizeArray<IEditorAction>
             /// Saves current view state of the editor in a serializable object.
@@ -1374,14 +1376,14 @@ module Monaco =
             /// <param name="payload">Extra data to be sent to the handler.</param>
             abstract trigger: source: string * handlerId: string * payload: obj option -> unit
             /// Gets the current model attached to this editor.
-            abstract getModel: unit -> IEditorModel
+            abstract getModel: unit -> IEditorModel option
             /// Sets the current model attached to this editor.
             /// If the previous model was created by the editor via the value key in the options
             /// literal object, it will be destroyed. Otherwise, if the previous model was set
             /// via setModel, or the model key in the options literal object, the previous model
             /// will not be destroyed.
             /// It is safe to call setModel(null) to simply detach the current model from the editor.
-            abstract setModel: model: IEditorModel -> unit
+            abstract setModel: model: IEditorModel option -> unit
 
         /// An editor contribution that gets created every time a new editor gets created and gets disposed when the editor gets disposed.
         type [<AllowNullLiteral>] IEditorContribution =
@@ -1543,6 +1545,24 @@ module Monaco =
             /// Defaults to true.
             abstract enabled: bool option with get, set
 
+        /// Configuration options for editor hover
+        type [<AllowNullLiteral>] IEditorHoverOptions =
+            /// Enable the hover.
+            /// Defaults to true.
+            abstract enabled: bool option with get, set
+            /// Delay for showing the hover.
+            /// Defaults to 300.
+            abstract delay: float option with get, set
+            /// Is the hover sticky such that it can be clicked and its contents selected?
+            /// Defaults to true.
+            abstract sticky: bool option with get, set
+
+        type [<AllowNullLiteral>] ISuggestOptions =
+            /// Enable graceful matching. Defaults to true.
+            abstract filterGraceful: bool option with get, set
+            /// Prevent quick suggestions when a snippet is active. Defaults to true.
+            abstract snippetsPreventQuickSuggestions: bool option with get, set
+
         /// Configuration map for codeActionsOnSave
         type [<AllowNullLiteral>] ICodeActionsOnSaveOptions =
             [<Emit "$0[$1]{{=$2}}">] abstract Item: kind: string -> bool with get, set
@@ -1634,6 +1654,9 @@ module Monaco =
             /// Enable that scrolling can go one screen size after the last line.
             /// Defaults to true.
             abstract scrollBeyondLastLine: bool option with get, set
+            /// Enable that scrolling can go beyond the last column by a number of columns.
+            /// Defaults to 5.
+            abstract scrollBeyondLastColumn: float option with get, set
             /// Enable that the editor animates scrolling to a position.
             /// Defaults to false.
             abstract smoothScrolling: bool option with get, set
@@ -1658,7 +1681,7 @@ module Monaco =
             /// Force word wrapping when the text appears to be of a minified/generated file.
             /// Defaults to true.
             abstract wordWrapMinified: bool option with get, set
-            /// Control indentation of wrapped lines. Can be: 'none', 'same' or 'indent'.
+            /// Control indentation of wrapped lines. Can be: 'none', 'same', 'indent' or 'deepIndent'.
             /// Defaults to 'same' in vscode and to 'none' in monaco-editor.
             abstract wrappingIndent: string option with get, set
             /// Configure word wrapping characters. A break will be introduced before these characters.
@@ -1674,9 +1697,8 @@ module Monaco =
             /// Defaults to 10000.
             /// Use -1 to never stop rendering
             abstract stopRenderingLineAfter: float option with get, set
-            /// Enable hover.
-            /// Defaults to true.
-            abstract hover: bool option with get, set
+            /// Configure the editor's hover.
+            abstract hover: IEditorHoverOptions option with get, set
             /// Enable detecting links and making them clickable.
             /// Defaults to true.
             abstract links: bool option with get, set
@@ -1697,6 +1719,8 @@ module Monaco =
             /// Configure the editor's accessibility support.
             /// Defaults to 'auto'. It is best to leave this to 'auto'.
             abstract accessibilitySupport: U3<string, string, string> option with get, set
+            /// Suggest options.
+            abstract suggest: ISuggestOptions option with get, set
             /// Enable quick suggestions (shadow suggestions)
             /// Defaults to true.
             abstract quickSuggestions: U2<bool, obj> option with get, set
@@ -1780,8 +1804,11 @@ module Monaco =
             /// Defaults to false.
             abstract renderControlCharacters: bool option with get, set
             /// Enable rendering of indent guides.
-            /// Defaults to false.
+            /// Defaults to true.
             abstract renderIndentGuides: bool option with get, set
+            /// Enable highlighting of the active indent guide.
+            /// Defaults to true.
+            abstract highlightActiveIndentGuide: bool option with get, set
             /// Enable rendering of current line highlight.
             /// Defaults to all.
             abstract renderLineHighlight: U4<string, string, string, string> option with get, set
@@ -1797,6 +1824,8 @@ module Monaco =
             abstract lineHeight: float option with get, set
             /// The letter spacing
             abstract letterSpacing: float option with get, set
+            /// Controls fading out of unused variables.
+            abstract showUnused: bool option with get, set
 
         /// Configuration options for the diff editor.
         type [<AllowNullLiteral>] IDiffEditorOptions =
@@ -1828,6 +1857,7 @@ module Monaco =
             | None = 0
             | Same = 1
             | Indent = 2
+            | DeepIndent = 3
 
         type [<RequireQualifiedAccess>] TextEditorCursorBlinkingStyle =
             | Hidden = 0
@@ -1870,6 +1900,16 @@ module Monaco =
             abstract seedSearchStringFromSelection: bool
             abstract autoFindInSelection: bool
 
+        type [<AllowNullLiteral>] InternalEditorHoverOptions =
+            abstract enabled: bool
+            abstract delay: float
+            abstract sticky: bool
+
+        type [<AllowNullLiteral>] InternalSuggestOptions =
+            abstract filterGraceful: bool
+            abstract snippets: U4<string, string, string, string>
+            abstract snippetsPreventQuickSuggestions: bool
+
         type [<AllowNullLiteral>] EditorWrappingInfo =
             abstract inDiffEditor: bool
             abstract isDominatedByLongLines: bool
@@ -1907,12 +1947,14 @@ module Monaco =
             abstract cursorWidth: float
             abstract hideCursorInOverviewRuler: bool
             abstract scrollBeyondLastLine: bool
+            abstract scrollBeyondLastColumn: float
             abstract smoothScrolling: bool
             abstract stopRenderingLineAfter: float
             abstract renderWhitespace: U3<string, string, string>
             abstract renderControlCharacters: bool
             abstract fontLigatures: bool
             abstract renderIndentGuides: bool
+            abstract highlightActiveIndentGuide: bool
             abstract renderLineHighlight: U4<string, string, string, string>
             abstract scrollbar: InternalEditorScrollbarOptions
             abstract minimap: InternalEditorMinimapOptions
@@ -1920,7 +1962,7 @@ module Monaco =
 
         type [<AllowNullLiteral>] EditorContribOptions =
             abstract selectionClipboard: bool
-            abstract hover: bool
+            abstract hover: InternalEditorHoverOptions
             abstract links: bool
             abstract contextmenu: bool
             abstract quickSuggestions: U2<bool, obj>
@@ -1932,11 +1974,11 @@ module Monaco =
             abstract suggestOnTriggerCharacters: bool
             abstract acceptSuggestionOnEnter: U3<string, string, string>
             abstract acceptSuggestionOnCommitCharacter: bool
-            abstract snippetSuggestions: U4<string, string, string, string>
             abstract wordBasedSuggestions: bool
             abstract suggestSelection: U3<string, string, string>
             abstract suggestFontSize: float
             abstract suggestLineHeight: float
+            abstract suggest: InternalSuggestOptions
             abstract selectionHighlight: bool
             abstract occurrencesHighlight: bool
             abstract codeLens: bool
@@ -1960,6 +2002,7 @@ module Monaco =
             abstract readOnly: bool
             abstract multiCursorModifier: U3<string, string, string>
             abstract multiCursorMergeOverlapping: bool
+            abstract showUnused: bool
             abstract wordSeparators: string
             abstract autoClosingBrackets: bool
             abstract autoIndent: bool
@@ -2077,6 +2120,9 @@ module Monaco =
             /// If this is set, the editor will give preference to it rather than `heightInLines` above.
             /// If neither `heightInPx` nor `heightInLines` is specified, a default of `heightInLines` = 1 will be chosen.
             abstract heightInPx: float option with get, set
+            /// The minimum width in px of the view zone.
+            /// If this is set, the editor will ensure that the scroll width is >= than this value.
+            abstract minWidthInPx: float option with get, set
             /// The dom node of the view zone
             abstract domNode: HTMLElement with get, set
             /// An optional dom node for the view zone that will be placed in the margin area.
@@ -2201,14 +2247,14 @@ module Monaco =
             abstract onDidChangeModel: listener: (IModelChangedEvent -> unit) -> IDisposable
             /// An event emitted when the decorations of the current model have changed.
             abstract onDidChangeModelDecorations: listener: (IModelDecorationsChangedEvent -> unit) -> IDisposable
-            /// An event emitted when the text inside this editor gained focus (i.e. cursor blinking).
+            /// An event emitted when the text inside this editor gained focus (i.e. cursor starts blinking).
             abstract onDidFocusEditorText: listener: (unit -> unit) -> IDisposable
-            /// An event emitted when the text inside this editor lost focus.
+            /// An event emitted when the text inside this editor lost focus (i.e. cursor stops blinking).
             abstract onDidBlurEditorText: listener: (unit -> unit) -> IDisposable
             /// An event emitted when the text inside this editor or an editor widget gained focus.
-            abstract onDidFocusEditor: listener: (unit -> unit) -> IDisposable
+            abstract onDidFocusEditorWidget: listener: (unit -> unit) -> IDisposable
             /// An event emitted when the text inside this editor or an editor widget lost focus.
-            abstract onDidBlurEditor: listener: (unit -> unit) -> IDisposable
+            abstract onDidBlurEditorWidget: listener: (unit -> unit) -> IDisposable
             /// An event emitted on a "mouseup".
             abstract onMouseUp: listener: (IEditorMouseEvent -> unit) -> IDisposable
             /// An event emitted on a "mousedown".
@@ -2231,7 +2277,7 @@ module Monaco =
             abstract saveViewState: unit -> ICodeEditorViewState
             /// Restores the view state of the editor from a serializable object generated by `saveViewState`.
             abstract restoreViewState: state: ICodeEditorViewState -> unit
-            /// Returns true if this editor or one of its widgets has keyboard focus.
+            /// Returns true if the text inside this editor or an editor widget has focus.
             abstract hasWidgetFocus: unit -> bool
             /// Get a contribution of this editor.
             abstract getContribution: id: string -> 'T
@@ -2270,8 +2316,8 @@ module Monaco =
             /// The edits will land on the undo-redo stack, but no "undo stop" will be pushed.</summary>
             /// <param name="source">The source of the call.</param>
             /// <param name="edits">The edits to execute.</param>
-            /// <param name="endCursoState">Cursor state after the edits were applied.</param>
-            abstract executeEdits: source: string * edits: ResizeArray<IIdentifiedSingleEditOperation> * ?endCursoState: ResizeArray<Selection> -> bool
+            /// <param name="endCursorState">Cursor state after the edits were applied.</param>
+            abstract executeEdits: source: string * edits: ResizeArray<IIdentifiedSingleEditOperation> * ?endCursorState: ResizeArray<Selection> -> bool
             /// <summary>Execute multiple (concommitent) commands on the editor.</summary>
             /// <param name="source">The source of the call.</param>
             abstract executeCommands: source: string * commands: ResizeArray<ICommand> -> unit
@@ -2388,6 +2434,17 @@ module Monaco =
         type IModel =
             ITextModel
 
+    module Worker =
+
+        type [<AllowNullLiteral>] IMirrorModel =
+            abstract uri: Uri
+            abstract version: float
+            abstract getValue: unit -> string
+
+        type [<AllowNullLiteral>] IWorkerContext =
+            /// Get all available mirror models in this worker.
+            abstract getMirrorModels: unit -> ResizeArray<IMirrorModel>
+
     module Languages =
 
         type [<AllowNullLiteral>] IExports =
@@ -2395,12 +2452,13 @@ module Monaco =
             abstract register: language: ILanguageExtensionPoint -> unit
             /// Get the information of all the registered languages.
             abstract getLanguages: unit -> ResizeArray<ILanguageExtensionPoint>
+            abstract getEncodedLanguageId: languageId: string -> float
             /// An event emitted when a language is first time needed (e.g. a model has it set).
             abstract onLanguage: languageId: string * callback: (unit -> unit) -> IDisposable
             /// Set the editing configuration for a language.
             abstract setLanguageConfiguration: languageId: string * configuration: LanguageConfiguration -> IDisposable
             /// Set the tokens provider for a language (manual implementation).
-            abstract setTokensProvider: languageId: string * provider: TokensProvider -> IDisposable
+            abstract setTokensProvider: languageId: string * provider: U2<TokensProvider, EncodedTokensProvider> -> IDisposable
             /// Set the tokens provider for a language (monarch implementation).
             abstract setMonarchTokensProvider: languageId: string * languageDef: IMonarchLanguage -> IDisposable
             /// Register a reference provider (used by e.g. reference search).
@@ -2454,12 +2512,44 @@ module Monaco =
             /// A pointer will be held to this and the object should not be modified by the tokenizer after the pointer is returned.
             abstract endState: IState with get, set
 
+        /// The result of a line tokenization.
+        type [<AllowNullLiteral>] IEncodedLineTokens =
+            /// The tokens on the line in a binary, encoded format. Each token occupies two array indices. For token i:
+            ///   - at offset 2*i => startIndex
+            ///   - at offset 2*i + 1 => metadata
+            /// Meta data is in binary format:
+            /// - -------------------------------------------
+            ///      3322 2222 2222 1111 1111 1100 0000 0000
+            ///      1098 7654 3210 9876 5432 1098 7654 3210
+            /// - -------------------------------------------
+            ///      bbbb bbbb bfff ffff ffFF FTTT LLLL LLLL
+            /// - -------------------------------------------
+            ///   - L = EncodedLanguageId (8 bits): Use `getEncodedLanguageId` to get the encoded ID of a language.
+            ///   - T = StandardTokenType (3 bits): Other = 0, Comment = 1, String = 2, RegEx = 4.
+            ///   - F = FontStyle (3 bits): None = 0, Italic = 1, Bold = 2, Underline = 4.
+            ///   - f = foreground ColorId (9 bits)
+            ///   - b = background ColorId (9 bits)
+            ///   - The color value for each colorId is defined in IStandaloneThemeData.customTokenColors:
+            /// e.g colorId = 1 is stored in IStandaloneThemeData.customTokenColors[1]. Color id = 0 means no color,
+            /// id = 1 is for the default foreground color, id = 2 for the default background.
+            abstract tokens: Uint32Array with get, set
+            /// The tokenization end state.
+            /// A pointer will be held to this and the object should not be modified by the tokenizer after the pointer is returned.
+            abstract endState: IState with get, set
+
         /// A "manual" provider of tokens.
         type [<AllowNullLiteral>] TokensProvider =
             /// The initial state of a language. Will be the state passed in to tokenize the first line.
             abstract getInitialState: unit -> IState
             /// Tokenize a line given the state at the beginning of the line.
             abstract tokenize: line: string * state: IState -> ILineTokens
+
+        /// A "manual" provider of tokens, returning tokens in a binary form.
+        type [<AllowNullLiteral>] EncodedTokensProvider =
+            /// The initial state of a language. Will be the state passed in to tokenize the first line.
+            abstract getInitialState: unit -> IState
+            /// Tokenize a line given the state at the beginning of the line.
+            abstract tokenizeEncoded: line: string * state: IState -> IEncodedLineTokens
 
         /// Contains additional diagnostic information about the context in which
         /// a [code action](#CodeActionProvider.provideCodeActions) is run.
@@ -2498,7 +2588,7 @@ module Monaco =
 
         /// A snippet string is a template which allows to insert text
         /// and to control the editor cursor when insertion happens.
-        ///
+        /// 
         /// A snippet can define tab stops and placeholders with `$1`, `$2`
         /// and `${3:foo}`. `$0` defines the final tab stop, it defaults to
         /// the end of the snippet. Variables are defined with `$name` and
@@ -2538,10 +2628,10 @@ module Monaco =
             /// is used.
             abstract insertText: U2<string, SnippetString> option with get, set
             /// A range of text that should be replaced by this completion item.
-            ///
+            /// 
             /// Defaults to a range from the start of the [current word](#TextDocument.getWordRangeAtPosition) to the
             /// current position.
-            ///
+            /// 
             /// *Note:* The range must be a [single line](#Range.isSingleLine) and it must
             /// [contain](#Range.contains) the position at which completion has been [requested](#CompletionItemProvider.provideCompletionItems).
             abstract range: Range option with get, set
@@ -2570,13 +2660,13 @@ module Monaco =
             /// How the completion was triggered.
             abstract triggerKind: SuggestTriggerKind with get, set
             /// Character that triggered the completion item provider.
-            ///
+            /// 
             /// `undefined` if provider was not triggered by a character.
             abstract triggerCharacter: string option with get, set
 
         /// The completion item provider interface defines the contract between extensions and
         /// the [IntelliSense](https://code.visualstudio.com/docs/editor/intellisense).
-        ///
+        /// 
         /// When computing *complete* completion items is expensive, providers can optionally implement
         /// the `resolveCompletionItem`-function. In that case it is enough to return completion
         /// items with a [label](#CompletionItem.label) from the
@@ -2589,7 +2679,7 @@ module Monaco =
             abstract provideCompletionItems: document: Editor.ITextModel * position: Position * token: CancellationToken * context: CompletionContext -> U4<ResizeArray<CompletionItem>, Thenable<ResizeArray<CompletionItem>>, CompletionList, Thenable<CompletionList>>
             /// Given a completion item fill in more data, like [doc-comment](#CompletionItem.documentation)
             /// or [details](#CompletionItem.detail).
-            ///
+            /// 
             /// The editor will only resolve a completion item once.
             abstract resolveCompletionItem: item: CompletionItem * token: CancellationToken -> U2<CompletionItem, Thenable<CompletionItem>>
 
@@ -2837,24 +2927,30 @@ module Monaco =
             let isLocationArray (v: Definition) = match v with U2.Case2 _ -> true | _ -> false
             let asLocationArray (v: Definition) = match v with U2.Case2 o -> Some o | _ -> None
 
+        type [<AllowNullLiteral>] DefinitionLink =
+            abstract origin: IRange option with get, set
+            abstract uri: Uri with get, set
+            abstract range: IRange with get, set
+            abstract selectionRange: IRange option with get, set
+
         /// The definition provider interface defines the contract between extensions and
         /// the [go to definition](https://code.visualstudio.com/docs/editor/editingevolved#_go-to-definition)
         /// and peek definition features.
         type [<AllowNullLiteral>] DefinitionProvider =
             /// Provide the definition of the symbol at the given position and document.
-            abstract provideDefinition: model: Editor.ITextModel * position: Position * token: CancellationToken -> U2<Definition, Thenable<Definition>>
+            abstract provideDefinition: model: Editor.ITextModel * position: Position * token: CancellationToken -> U3<Definition, ResizeArray<DefinitionLink>, Thenable<U2<Definition, ResizeArray<DefinitionLink>>>>
 
         /// The implementation provider interface defines the contract between extensions and
         /// the go to implementation feature.
         type [<AllowNullLiteral>] ImplementationProvider =
             /// Provide the implementation of the symbol at the given position and document.
-            abstract provideImplementation: model: Editor.ITextModel * position: Position * token: CancellationToken -> U2<Definition, Thenable<Definition>>
+            abstract provideImplementation: model: Editor.ITextModel * position: Position * token: CancellationToken -> U3<Definition, ResizeArray<DefinitionLink>, Thenable<U2<Definition, ResizeArray<DefinitionLink>>>>
 
         /// The type definition provider interface defines the contract between extensions and
         /// the go to type definition feature.
         type [<AllowNullLiteral>] TypeDefinitionProvider =
             /// Provide the type definition of the symbol at the given position and document.
-            abstract provideTypeDefinition: model: Editor.ITextModel * position: Position * token: CancellationToken -> U2<Definition, Thenable<Definition>>
+            abstract provideTypeDefinition: model: Editor.ITextModel * position: Position * token: CancellationToken -> U3<Definition, ResizeArray<DefinitionLink>, Thenable<U2<Definition, ResizeArray<DefinitionLink>>>>
 
         type [<RequireQualifiedAccess>] SymbolKind =
             | File = 0
@@ -2884,23 +2980,21 @@ module Monaco =
             | Operator = 24
             | TypeParameter = 25
 
-        /// Represents information about programming constructs like variables, classes,
-        /// interfaces etc.
-        type [<AllowNullLiteral>] SymbolInformation =
-            /// The name of this symbol.
+        type [<AllowNullLiteral>] DocumentSymbol =
             abstract name: string with get, set
-            /// The name of the symbol containing this symbol.
-            abstract containerName: string option with get, set
-            /// The kind of this symbol.
+            abstract detail: string with get, set
             abstract kind: SymbolKind with get, set
-            /// The location of this symbol.
-            abstract location: Location with get, set
+            abstract containerName: string option with get, set
+            abstract range: IRange with get, set
+            abstract selectionRange: IRange with get, set
+            abstract children: ResizeArray<DocumentSymbol> option with get, set
 
         /// The document symbol provider interface defines the contract between extensions and
         /// the [go to symbol](https://code.visualstudio.com/docs/editor/editingevolved#_goto-symbol)-feature.
         type [<AllowNullLiteral>] DocumentSymbolProvider =
+            abstract displayName: string option with get, set
             /// Provide symbol information for the given document.
-            abstract provideDocumentSymbols: model: Editor.ITextModel * token: CancellationToken -> U2<ResizeArray<SymbolInformation>, Thenable<ResizeArray<SymbolInformation>>>
+            abstract provideDocumentSymbols: model: Editor.ITextModel * token: CancellationToken -> U2<ResizeArray<DocumentSymbol>, Thenable<ResizeArray<DocumentSymbol>>>
 
         type [<AllowNullLiteral>] TextEdit =
             abstract range: IRange with get, set
@@ -2924,7 +3018,7 @@ module Monaco =
         /// the formatting-feature.
         type [<AllowNullLiteral>] DocumentRangeFormattingEditProvider =
             /// Provide formatting edits for a range in a document.
-            ///
+            /// 
             /// The given range is a hint and providers can decide to format a smaller
             /// or larger range. Often this is done by adjusting the start and end
             /// of the range to full syntax nodes.
@@ -2935,7 +3029,7 @@ module Monaco =
         type [<AllowNullLiteral>] OnTypeFormattingEditProvider =
             abstract autoFormatTriggerCharacters: ResizeArray<string> with get, set
             /// Provide formatting edits after a character has been typed.
-            ///
+            /// 
             /// The given position and character should hint to the provider
             /// what range the position to expand to, like find the matching `{`
             /// when `}` has been entered.
@@ -2998,9 +3092,9 @@ module Monaco =
             abstract provideFoldingRanges: model: Editor.ITextModel * context: FoldingContext * token: CancellationToken -> U2<ResizeArray<FoldingRange>, Thenable<ResizeArray<FoldingRange>>>
 
         type [<AllowNullLiteral>] FoldingRange =
-            /// The zero-based start line of the range to fold. The folded area starts after the line's last character.
+            /// The one-based start line of the range to fold. The folded area starts after the line's last character.
             abstract start: float with get, set
-            /// The zero-based end line of the range to fold. The folded area ends with the line's last character.
+            /// The one-based end line of the range to fold. The folded area ends with the line's last character.
             abstract ``end``: float with get, set
             /// Describes the [Kind](#FoldingRangeKind) of the folding range such as [Comment](#FoldingRangeKind.Comment) or
             /// [Region](#FoldingRangeKind.Region). The kind is used to categorize folding ranges and used by commands
@@ -3026,6 +3120,7 @@ module Monaco =
         type [<AllowNullLiteral>] ResourceFileEdit =
             abstract oldUri: Uri with get, set
             abstract newUri: Uri with get, set
+            abstract options: obj with get, set
 
         type [<AllowNullLiteral>] ResourceTextEdit =
             abstract resource: Uri with get, set
@@ -3068,7 +3163,7 @@ module Monaco =
             abstract firstLine: string option with get, set
             abstract aliases: ResizeArray<string> option with get, set
             abstract mimetypes: ResizeArray<string> option with get, set
-            abstract configuration: string option with get, set
+            abstract configuration: Uri option with get, set
 
         /// A Monarch language definition
         type [<AllowNullLiteral>] IMonarchLanguage =
@@ -3083,18 +3178,39 @@ module Monaco =
             /// start symbol in the tokenizer (by default the first entry is used)
             abstract start: string option with get, set
             /// attach this to every token class (by default '.' + name)
-            abstract tokenPostfix: string with get, set
+            abstract tokenPostfix: string option with get, set
+
+        type IShortMonarchLanguageRule1 =
+            RegExp * U2<string, IMonarchLanguageAction>
+
+        type IShortMonarchLanguageRule2 =
+            RegExp * U2<string, IMonarchLanguageAction> * string
 
         /// A rule is either a regular expression and an action
         ///  		shorthands: [reg,act] == { regex: reg, action: act}
         /// 		and       : [reg,act,nxt] == { regex: reg, action: act{ next: nxt }}
-        type [<AllowNullLiteral>] IMonarchLanguageRule =
+        type [<AllowNullLiteral>] IExpandedMonarchLanguageRule =
             /// match tokens
             abstract regex: U2<string, RegExp> option with get, set
             /// action to take on match
             abstract action: IMonarchLanguageAction option with get, set
             /// or an include rule. include all rules from the included state
             abstract ``include``: string option with get, set
+
+        type IMonarchLanguageRule =
+            U3<IShortMonarchLanguageRule1, IShortMonarchLanguageRule2, IExpandedMonarchLanguageRule>
+
+        [<RequireQualifiedAccess; CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+        module IMonarchLanguageRule =
+            let ofIShortMonarchLanguageRule1 v: IMonarchLanguageRule = v |> U3.Case1
+            let isIShortMonarchLanguageRule1 (v: IMonarchLanguageRule) = match v with U3.Case1 _ -> true | _ -> false
+            let asIShortMonarchLanguageRule1 (v: IMonarchLanguageRule) = match v with U3.Case1 o -> Some o | _ -> None
+            let ofIShortMonarchLanguageRule2 v: IMonarchLanguageRule = v |> U3.Case2
+            let isIShortMonarchLanguageRule2 (v: IMonarchLanguageRule) = match v with U3.Case2 _ -> true | _ -> false
+            let asIShortMonarchLanguageRule2 (v: IMonarchLanguageRule) = match v with U3.Case2 o -> Some o | _ -> None
+            let ofIExpandedMonarchLanguageRule v: IMonarchLanguageRule = v |> U3.Case3
+            let isIExpandedMonarchLanguageRule (v: IMonarchLanguageRule) = match v with U3.Case3 _ -> true | _ -> false
+            let asIExpandedMonarchLanguageRule (v: IMonarchLanguageRule) = match v with U3.Case3 o -> Some o | _ -> None
 
         /// An action is either an array of actions...
         /// ... or a case statement with guards...
@@ -3127,241 +3243,260 @@ module Monaco =
             /// token class
             abstract token: string with get, set
 
-    module Worker =
+    // module Languages =
+        let [<Import("typescript","monaco/languages")>] typescript: Typescript.IExports = jsNative
 
-        type [<AllowNullLiteral>] IMirrorModel =
-            abstract uri: Uri
-            abstract version: float
-            abstract getValue: unit -> string
+        module Typescript =
 
-        type [<AllowNullLiteral>] IWorkerContext =
-            /// Get all available mirror models in this worker.
-            abstract getMirrorModels: unit -> ResizeArray<IMirrorModel>
+            type [<AllowNullLiteral>] IExports =
+                abstract typescriptDefaults: LanguageServiceDefaults
+                abstract javascriptDefaults: LanguageServiceDefaults
+                abstract getTypeScriptWorker: (unit -> Promise<obj option>)
+                abstract getJavaScriptWorker: (unit -> Promise<obj option>)
+
+            type [<RequireQualifiedAccess>] ModuleKind =
+                | None = 0
+                | CommonJS = 1
+                | AMD = 2
+                | UMD = 3
+                | System = 4
+                | ES2015 = 5
+                | ESNext = 6
+
+            type [<RequireQualifiedAccess>] JsxEmit =
+                | None = 0
+                | Preserve = 1
+                | React = 2
+                | ReactNative = 3
+
+            type [<RequireQualifiedAccess>] NewLineKind =
+                | CarriageReturnLineFeed = 0
+                | LineFeed = 1
+
+            type [<RequireQualifiedAccess>] ScriptTarget =
+                | ES3 = 0
+                | ES5 = 1
+                | ES2015 = 2
+                | ES2016 = 3
+                | ES2017 = 4
+                | ES2018 = 5
+                | ESNext = 6
+                | JSON = 100
+                | Latest = 6
+
+            type [<RequireQualifiedAccess>] ModuleResolutionKind =
+                | Classic = 1
+                | NodeJs = 2
+
+            type [<AllowNullLiteral>] MapLike<'T> =
+                [<Emit "$0[$1]{{=$2}}">] abstract Item: index: string -> 'T with get, set
+
+            type CompilerOptionsValue =
+                U6<string, float, bool, ResizeArray<U2<string, float>>, ResizeArray<string>, MapLike<ResizeArray<string>>> option
+
+            [<RequireQualifiedAccess; CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+            module CompilerOptionsValue =
+                let ofStringOption v: CompilerOptionsValue = v |> Microsoft.FSharp.Core.Option.map U6.Case1
+                let ofString v: CompilerOptionsValue = v |> U6.Case1 |> Some
+                let isString (v: CompilerOptionsValue) = match v with None -> false | Some o -> match o with U6.Case1 _ -> true | _ -> false
+                let asString (v: CompilerOptionsValue) = match v with None -> None | Some o -> match o with U6.Case1 o -> Some o | _ -> None
+                let ofFloatOption v: CompilerOptionsValue = v |> Microsoft.FSharp.Core.Option.map U6.Case2
+                let ofFloat v: CompilerOptionsValue = v |> U6.Case2 |> Some
+                let isFloat (v: CompilerOptionsValue) = match v with None -> false | Some o -> match o with U6.Case2 _ -> true | _ -> false
+                let asFloat (v: CompilerOptionsValue) = match v with None -> None | Some o -> match o with U6.Case2 o -> Some o | _ -> None
+                let ofBoolOption v: CompilerOptionsValue = v |> Microsoft.FSharp.Core.Option.map U6.Case3
+                let ofBool v: CompilerOptionsValue = v |> U6.Case3 |> Some
+                let isBool (v: CompilerOptionsValue) = match v with None -> false | Some o -> match o with U6.Case3 _ -> true | _ -> false
+                let asBool (v: CompilerOptionsValue) = match v with None -> None | Some o -> match o with U6.Case3 o -> Some o | _ -> None
+                let ofCase4Option v: CompilerOptionsValue = v |> Microsoft.FSharp.Core.Option.map U6.Case4
+                let ofCase4 v: CompilerOptionsValue = v |> U6.Case4 |> Some
+                let isCase4 (v: CompilerOptionsValue) = match v with None -> false | Some o -> match o with U6.Case4 _ -> true | _ -> false
+                let asCase4 (v: CompilerOptionsValue) = match v with None -> None | Some o -> match o with U6.Case4 o -> Some o | _ -> None
+                let ofStringArrayOption v: CompilerOptionsValue = v |> Microsoft.FSharp.Core.Option.map U6.Case5
+                let ofStringArray v: CompilerOptionsValue = v |> U6.Case5 |> Some
+                let isStringArray (v: CompilerOptionsValue) = match v with None -> false | Some o -> match o with U6.Case5 _ -> true | _ -> false
+                let asStringArray (v: CompilerOptionsValue) = match v with None -> None | Some o -> match o with U6.Case5 o -> Some o | _ -> None
+                let ofMapLikeOption v: CompilerOptionsValue = v |> Microsoft.FSharp.Core.Option.map U6.Case6
+                let ofMapLike v: CompilerOptionsValue = v |> U6.Case6 |> Some
+                let isMapLike (v: CompilerOptionsValue) = match v with None -> false | Some o -> match o with U6.Case6 _ -> true | _ -> false
+                let asMapLike (v: CompilerOptionsValue) = match v with None -> None | Some o -> match o with U6.Case6 o -> Some o | _ -> None
+
+            type [<AllowNullLiteral>] CompilerOptions =
+                abstract allowJs: bool option with get, set
+                abstract allowSyntheticDefaultImports: bool option with get, set
+                abstract allowUnreachableCode: bool option with get, set
+                abstract allowUnusedLabels: bool option with get, set
+                abstract alwaysStrict: bool option with get, set
+                abstract baseUrl: string option with get, set
+                abstract charset: string option with get, set
+                abstract checkJs: bool option with get, set
+                abstract declaration: bool option with get, set
+                abstract declarationMap: bool option with get, set
+                abstract emitDeclarationOnly: bool option with get, set
+                abstract declarationDir: string option with get, set
+                abstract disableSizeLimit: bool option with get, set
+                abstract downlevelIteration: bool option with get, set
+                abstract emitBOM: bool option with get, set
+                abstract emitDecoratorMetadata: bool option with get, set
+                abstract experimentalDecorators: bool option with get, set
+                abstract forceConsistentCasingInFileNames: bool option with get, set
+                abstract importHelpers: bool option with get, set
+                abstract inlineSourceMap: bool option with get, set
+                abstract inlineSources: bool option with get, set
+                abstract isolatedModules: bool option with get, set
+                abstract jsx: JsxEmit option with get, set
+                abstract keyofStringsOnly: bool option with get, set
+                abstract lib: ResizeArray<string> option with get, set
+                abstract locale: string option with get, set
+                abstract mapRoot: string option with get, set
+                abstract maxNodeModuleJsDepth: float option with get, set
+                abstract ``module``: ModuleKind option with get, set
+                abstract moduleResolution: ModuleResolutionKind option with get, set
+                abstract newLine: NewLineKind option with get, set
+                abstract noEmit: bool option with get, set
+                abstract noEmitHelpers: bool option with get, set
+                abstract noEmitOnError: bool option with get, set
+                abstract noErrorTruncation: bool option with get, set
+                abstract noFallthroughCasesInSwitch: bool option with get, set
+                abstract noImplicitAny: bool option with get, set
+                abstract noImplicitReturns: bool option with get, set
+                abstract noImplicitThis: bool option with get, set
+                abstract noStrictGenericChecks: bool option with get, set
+                abstract noUnusedLocals: bool option with get, set
+                abstract noUnusedParameters: bool option with get, set
+                abstract noImplicitUseStrict: bool option with get, set
+                abstract noLib: bool option with get, set
+                abstract noResolve: bool option with get, set
+                abstract out: string option with get, set
+                abstract outDir: string option with get, set
+                abstract outFile: string option with get, set
+                abstract paths: MapLike<ResizeArray<string>> option with get, set
+                abstract preserveConstEnums: bool option with get, set
+                abstract preserveSymlinks: bool option with get, set
+                abstract project: string option with get, set
+                abstract reactNamespace: string option with get, set
+                abstract jsxFactory: string option with get, set
+                abstract composite: bool option with get, set
+                abstract removeComments: bool option with get, set
+                abstract rootDir: string option with get, set
+                abstract rootDirs: ResizeArray<string> option with get, set
+                abstract skipLibCheck: bool option with get, set
+                abstract skipDefaultLibCheck: bool option with get, set
+                abstract sourceMap: bool option with get, set
+                abstract sourceRoot: string option with get, set
+                abstract strict: bool option with get, set
+                abstract strictFunctionTypes: bool option with get, set
+                abstract strictNullChecks: bool option with get, set
+                abstract strictPropertyInitialization: bool option with get, set
+                abstract suppressExcessPropertyErrors: bool option with get, set
+                abstract suppressImplicitAnyIndexErrors: bool option with get, set
+                abstract target: ScriptTarget option with get, set
+                abstract traceResolution: bool option with get, set
+                abstract resolveJsonModule: bool option with get, set
+                abstract types: ResizeArray<string> option with get, set
+                /// Paths used to compute primary types search locations 
+                abstract typeRoots: ResizeArray<string> option with get, set
+                abstract esModuleInterop: bool option with get, set
+                [<Emit "$0[$1]{{=$2}}">] abstract Item: option: string -> CompilerOptionsValue option with get, set
+
+            type [<AllowNullLiteral>] DiagnosticsOptions =
+                abstract noSemanticValidation: bool option with get, set
+                abstract noSyntaxValidation: bool option with get, set
+
+            type [<AllowNullLiteral>] LanguageServiceDefaults =
+                /// <summary>Add an additional source file to the language service. Use this
+                /// for typescript (definition) files that won't be loaded as editor
+                /// document, like `jquery.d.ts`.</summary>
+                /// <param name="content">The file content</param>
+                /// <param name="filePath">An optional file path</param>
+                abstract addExtraLib: content: string * ?filePath: string -> IDisposable
+                /// Set TypeScript compiler options.
+                abstract setCompilerOptions: options: CompilerOptions -> unit
+                /// Configure whether syntactic and/or semantic validation should
+                /// be performed
+                abstract setDiagnosticsOptions: options: DiagnosticsOptions -> unit
+                /// <summary>Configure when the worker shuts down. By default that is 2mins.</summary>
+                /// <param name="value">The maximum idle time in milliseconds. Values less than one
+                /// mean never shut down.</param>
+                abstract setMaximumWorkerIdleTime: value: float -> unit
+                /// Configure if all existing models should be eagerly sync'd
+                /// to the worker on start or restart.
+                abstract setEagerModelSync: value: bool -> unit
 
     // module Languages =
-    //     let [<Import("typescript","monaco/languages")>] typescript: Typescript.IExports = jsNative
+        let [<Import("css","monaco/languages")>] css: Css.IExports = jsNative
 
-    //     module Typescript =
+        module Css =
 
-    //         type [<AllowNullLiteral>] IExports =
-    //             abstract typescriptDefaults: LanguageServiceDefaults
-    //             abstract javascriptDefaults: LanguageServiceDefaults
-    //             abstract getTypeScriptWorker: (unit -> Promise<obj option>)
-    //             abstract getJavaScriptWorker: (unit -> Promise<obj option>)
+            type [<AllowNullLiteral>] IExports =
+                abstract cssDefaults: LanguageServiceDefaults
+                abstract lessDefaults: LanguageServiceDefaults
+                abstract scssDefaults: LanguageServiceDefaults
 
-    //         type [<RequireQualifiedAccess>] ModuleKind =
-    //             | None = 0
-    //             | CommonJS = 1
-    //             | AMD = 2
-    //             | UMD = 3
-    //             | System = 4
-    //             | ES2015 = 5
+            type [<AllowNullLiteral>] DiagnosticsOptions =
+                abstract validate: bool option
+                abstract lint: obj option
 
-    //         type [<RequireQualifiedAccess>] JsxEmit =
-    //             | None = 0
-    //             | Preserve = 1
-    //             | React = 2
-
-    //         type [<RequireQualifiedAccess>] NewLineKind =
-    //             | CarriageReturnLineFeed = 0
-    //             | LineFeed = 1
-
-    //         type [<RequireQualifiedAccess>] ScriptTarget =
-    //             | ES3 = 0
-    //             | ES5 = 1
-    //             | ES2015 = 2
-    //             | ES2016 = 3
-    //             | ES2017 = 4
-    //             | ESNext = 5
-    //             | Latest = 5
-
-    //         type [<RequireQualifiedAccess>] ModuleResolutionKind =
-    //             | Classic = 1
-    //             | NodeJs = 2
-
-    //         type CompilerOptionsValue =
-    //             U5<string, float, bool, ResizeArray<U2<string, float>>, ResizeArray<string>>
-
-    //         [<RequireQualifiedAccess; CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-    //         module CompilerOptionsValue =
-    //             let ofString v: CompilerOptionsValue = v |> U5.Case1
-    //             let isString (v: CompilerOptionsValue) = match v with U5.Case1 _ -> true | _ -> false
-    //             let asString (v: CompilerOptionsValue) = match v with U5.Case1 o -> Some o | _ -> None
-    //             let ofFloat v: CompilerOptionsValue = v |> U5.Case2
-    //             let isFloat (v: CompilerOptionsValue) = match v with U5.Case2 _ -> true | _ -> false
-    //             let asFloat (v: CompilerOptionsValue) = match v with U5.Case2 o -> Some o | _ -> None
-    //             let ofBool v: CompilerOptionsValue = v |> U5.Case3
-    //             let isBool (v: CompilerOptionsValue) = match v with U5.Case3 _ -> true | _ -> false
-    //             let asBool (v: CompilerOptionsValue) = match v with U5.Case3 o -> Some o | _ -> None
-    //             let ofCase4 v: CompilerOptionsValue = v |> U5.Case4
-    //             let isCase4 (v: CompilerOptionsValue) = match v with U5.Case4 _ -> true | _ -> false
-    //             let asCase4 (v: CompilerOptionsValue) = match v with U5.Case4 o -> Some o | _ -> None
-    //             let ofStringArray v: CompilerOptionsValue = v |> U5.Case5
-    //             let isStringArray (v: CompilerOptionsValue) = match v with U5.Case5 _ -> true | _ -> false
-    //             let asStringArray (v: CompilerOptionsValue) = match v with U5.Case5 o -> Some o | _ -> None
-
-    //         type [<AllowNullLiteral>] CompilerOptions =
-    //             abstract allowJs: bool option with get, set
-    //             abstract allowSyntheticDefaultImports: bool option with get, set
-    //             abstract allowUnreachableCode: bool option with get, set
-    //             abstract allowUnusedLabels: bool option with get, set
-    //             abstract alwaysStrict: bool option with get, set
-    //             abstract baseUrl: string option with get, set
-    //             abstract charset: string option with get, set
-    //             abstract declaration: bool option with get, set
-    //             abstract declarationDir: string option with get, set
-    //             abstract disableSizeLimit: bool option with get, set
-    //             abstract emitBOM: bool option with get, set
-    //             abstract emitDecoratorMetadata: bool option with get, set
-    //             abstract experimentalDecorators: bool option with get, set
-    //             abstract forceConsistentCasingInFileNames: bool option with get, set
-    //             abstract importHelpers: bool option with get, set
-    //             abstract inlineSourceMap: bool option with get, set
-    //             abstract inlineSources: bool option with get, set
-    //             abstract isolatedModules: bool option with get, set
-    //             abstract jsx: JsxEmit option with get, set
-    //             abstract lib: ResizeArray<string> option with get, set
-    //             abstract locale: string option with get, set
-    //             abstract mapRoot: string option with get, set
-    //             abstract maxNodeModuleJsDepth: float option with get, set
-    //             abstract ``module``: ModuleKind option with get, set
-    //             abstract moduleResolution: ModuleResolutionKind option with get, set
-    //             abstract newLine: NewLineKind option with get, set
-    //             abstract noEmit: bool option with get, set
-    //             abstract noEmitHelpers: bool option with get, set
-    //             abstract noEmitOnError: bool option with get, set
-    //             abstract noErrorTruncation: bool option with get, set
-    //             abstract noFallthroughCasesInSwitch: bool option with get, set
-    //             abstract noImplicitAny: bool option with get, set
-    //             abstract noImplicitReturns: bool option with get, set
-    //             abstract noImplicitThis: bool option with get, set
-    //             abstract noUnusedLocals: bool option with get, set
-    //             abstract noUnusedParameters: bool option with get, set
-    //             abstract noImplicitUseStrict: bool option with get, set
-    //             abstract noLib: bool option with get, set
-    //             abstract noResolve: bool option with get, set
-    //             abstract out: string option with get, set
-    //             abstract outDir: string option with get, set
-    //             abstract outFile: string option with get, set
-    //             abstract preserveConstEnums: bool option with get, set
-    //             abstract project: string option with get, set
-    //             abstract reactNamespace: string option with get, set
-    //             abstract jsxFactory: string option with get, set
-    //             abstract removeComments: bool option with get, set
-    //             abstract rootDir: string option with get, set
-    //             abstract rootDirs: ResizeArray<string> option with get, set
-    //             abstract skipLibCheck: bool option with get, set
-    //             abstract skipDefaultLibCheck: bool option with get, set
-    //             abstract sourceMap: bool option with get, set
-    //             abstract sourceRoot: string option with get, set
-    //             abstract strictNullChecks: bool option with get, set
-    //             abstract suppressExcessPropertyErrors: bool option with get, set
-    //             abstract suppressImplicitAnyIndexErrors: bool option with get, set
-    //             abstract target: ScriptTarget option with get, set
-    //             abstract traceResolution: bool option with get, set
-    //             abstract types: ResizeArray<string> option with get, set
-    //             /// Paths used to compute primary types search locations
-    //             abstract typeRoots: ResizeArray<string> option with get, set
-    //             [<Emit "$0[$1]{{=$2}}">] abstract Item: option: string -> CompilerOptionsValue option with get, set
-
-    //         type [<AllowNullLiteral>] DiagnosticsOptions =
-    //             abstract noSemanticValidation: bool option with get, set
-    //             abstract noSyntaxValidation: bool option with get, set
-
-    //         type [<AllowNullLiteral>] LanguageServiceDefaults =
-    //             /// <summary>Add an additional source file to the language service. Use this
-    //             /// for typescript (definition) files that won't be loaded as editor
-    //             /// document, like `jquery.d.ts`.</summary>
-    //             /// <param name="content">The file content</param>
-    //             /// <param name="filePath">An optional file path</param>
-    //             abstract addExtraLib: content: string * ?filePath: string -> IDisposable
-    //             /// Set TypeScript compiler options.
-    //             abstract setCompilerOptions: options: CompilerOptions -> unit
-    //             /// Configure whether syntactic and/or semantic validation should
-    //             /// be performed
-    //             abstract setDiagnosticsOptions: options: DiagnosticsOptions -> unit
-    //             /// <summary>Configure when the worker shuts down. By default that is 2mins.</summary>
-    //             /// <param name="value">The maximum idle time in milliseconds. Values less than one
-    //             /// mean never shut down.</param>
-    //             abstract setMaximumWorkerIdleTime: value: float -> unit
-    //             /// Configure if all existing models should be eagerly sync'd
-    //             /// to the worker on start or restart.
-    //             abstract setEagerModelSync: value: bool -> unit
+            type [<AllowNullLiteral>] LanguageServiceDefaults =
+                abstract onDidChange: IEvent<LanguageServiceDefaults>
+                abstract diagnosticsOptions: DiagnosticsOptions
+                abstract setDiagnosticsOptions: options: DiagnosticsOptions -> unit
 
     // module Languages =
-    //     let [<Import("css","monaco/languages")>] css: Css.IExports = jsNative
+        let [<Import("json","monaco/languages")>] json: Json.IExports = jsNative
 
-    //     module Css =
+        module Json =
 
-    //         type [<AllowNullLiteral>] IExports =
-    //             abstract cssDefaults: LanguageServiceDefaults
-    //             abstract lessDefaults: LanguageServiceDefaults
-    //             abstract scssDefaults: LanguageServiceDefaults
+            type [<AllowNullLiteral>] IExports =
+                abstract jsonDefaults: LanguageServiceDefaults
 
-    //         type [<AllowNullLiteral>] DiagnosticsOptions =
-    //             abstract validate: bool option
-    //             abstract lint: obj option
+            type [<AllowNullLiteral>] DiagnosticsOptions =
+                /// If set, the validator will be enabled and perform syntax validation as well as schema based validation.
+                abstract validate: bool option
+                /// If set, comments are tolerated. If set to false, syntax errors will be emmited for comments.
+                abstract allowComments: bool option
+                /// A list of known schemas and/or associations of schemas to file names.
+                abstract schemas: ResizeArray<obj> option
 
-    //         type [<AllowNullLiteral>] LanguageServiceDefaults =
-    //             abstract onDidChange: IEvent<LanguageServiceDefaults>
-    //             abstract diagnosticsOptions: DiagnosticsOptions
-    //             abstract setDiagnosticsOptions: options: DiagnosticsOptions -> unit
-
-    // module Languages =
-    //     let [<Import("json","monaco/languages")>] json: Json.IExports = jsNative
-
-    //     module Json =
-
-    //         type [<AllowNullLiteral>] IExports =
-    //             abstract jsonDefaults: LanguageServiceDefaults
-
-    //         type [<AllowNullLiteral>] DiagnosticsOptions =
-    //             /// If set, the validator will be enabled and perform syntax validation as well as schema based validation.
-    //             abstract validate: bool option
-    //             /// If set, comments are tolerated. If set to false, syntax errors will be emmited for comments.
-    //             abstract allowComments: bool option
-    //             /// A list of known schemas and/or associations of schemas to file names.
-    //             abstract schemas: ResizeArray<obj> option
-
-    //         type [<AllowNullLiteral>] LanguageServiceDefaults =
-    //             abstract onDidChange: IEvent<LanguageServiceDefaults>
-    //             abstract diagnosticsOptions: DiagnosticsOptions
-    //             abstract setDiagnosticsOptions: options: DiagnosticsOptions -> unit
+            type [<AllowNullLiteral>] LanguageServiceDefaults =
+                abstract onDidChange: IEvent<LanguageServiceDefaults>
+                abstract diagnosticsOptions: DiagnosticsOptions
+                abstract setDiagnosticsOptions: options: DiagnosticsOptions -> unit
 
     // module Languages =
-    //     let [<Import("html","monaco/languages")>] html: Html.IExports = jsNative
+        let [<Import("html","monaco/languages")>] html: Html.IExports = jsNative
 
-    //     module Html =
+        module Html =
 
-    //         type [<AllowNullLiteral>] IExports =
-    //             abstract htmlDefaults: LanguageServiceDefaults
-    //             abstract handlebarDefaults: LanguageServiceDefaults
-    //             abstract razorDefaults: LanguageServiceDefaults
+            type [<AllowNullLiteral>] IExports =
+                abstract htmlDefaults: LanguageServiceDefaults
+                abstract handlebarDefaults: LanguageServiceDefaults
+                abstract razorDefaults: LanguageServiceDefaults
 
-    //         type [<AllowNullLiteral>] HTMLFormatConfiguration =
-    //             abstract tabSize: float
-    //             abstract insertSpaces: bool
-    //             abstract wrapLineLength: float
-    //             abstract unformatted: string
-    //             abstract contentUnformatted: string
-    //             abstract indentInnerHtml: bool
-    //             abstract preserveNewLines: bool
-    //             abstract maxPreserveNewLines: float
-    //             abstract indentHandlebars: bool
-    //             abstract endWithNewline: bool
-    //             abstract extraLiners: string
-    //             abstract wrapAttributes: U4<string, string, string, string>
+            type [<AllowNullLiteral>] HTMLFormatConfiguration =
+                abstract tabSize: float
+                abstract insertSpaces: bool
+                abstract wrapLineLength: float
+                abstract unformatted: string
+                abstract contentUnformatted: string
+                abstract indentInnerHtml: bool
+                abstract preserveNewLines: bool
+                abstract maxPreserveNewLines: float
+                abstract indentHandlebars: bool
+                abstract endWithNewline: bool
+                abstract extraLiners: string
+                abstract wrapAttributes: U4<string, string, string, string>
 
-    //         type [<AllowNullLiteral>] CompletionConfiguration =
-    //             [<Emit "$0[$1]{{=$2}}">] abstract Item: provider: string -> bool with get, set
+            type [<AllowNullLiteral>] CompletionConfiguration =
+                [<Emit "$0[$1]{{=$2}}">] abstract Item: provider: string -> bool with get, set
 
-    //         type [<AllowNullLiteral>] Options =
-    //             /// If set, comments are tolerated. If set to false, syntax errors will be emmited for comments.
-    //             abstract format: HTMLFormatConfiguration option
-    //             /// A list of known schemas and/or associations of schemas to file names.
-    //             abstract suggest: CompletionConfiguration option
+            type [<AllowNullLiteral>] Options =
+                /// If set, comments are tolerated. If set to false, syntax errors will be emmited for comments.
+                abstract format: HTMLFormatConfiguration option
+                /// A list of known schemas and/or associations of schemas to file names.
+                abstract suggest: CompletionConfiguration option
 
-    //         type [<AllowNullLiteral>] LanguageServiceDefaults =
-    //             abstract onDidChange: IEvent<LanguageServiceDefaults>
-    //             abstract options: Options
-    //             abstract setOptions: options: Options -> unit
+            type [<AllowNullLiteral>] LanguageServiceDefaults =
+                abstract onDidChange: IEvent<LanguageServiceDefaults>
+                abstract options: Options
+                abstract setOptions: options: Options -> unit
