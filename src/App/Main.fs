@@ -524,7 +524,8 @@ let private subscriptions (model: Model) =
 
     Cmd.ofSub sub
 
-Browser.navigator.serviceWorker.register("/service-worker.js") |> ignore
+// TODO: Service worker not working atm because https is not used. Revisit after enabling it.
+// Browser.navigator.serviceWorker.register("/service-worker.js") |> ignore
 
 open Elmish.React
 open Elmish.HMR
