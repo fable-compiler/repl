@@ -41,7 +41,7 @@ type WorkerAnswer =
     | Loaded
     | LoadFailed
     | ParsedCode of errors: Fable.JS.Error[]
-    | CompiledCode of jsCode: string
+    | CompiledCode of jsCode: string * errors: Fable.JS.Error[]
     | CompilationFailed of message: string
     | FoundTooltip of lines: string[]
     | FoundCompletions of Fable.JS.Completion[]

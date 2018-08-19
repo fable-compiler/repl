@@ -511,7 +511,9 @@ let private subscriptions (model: Model) =
                 LoadSuccess |> dispatch
             | LoadFailed -> LoadFail |> dispatch
             | ParsedCode errors -> MarkEditorErrors errors |> dispatch
-            | CompiledCode jsCode -> Ok jsCode |> EndCompile |> dispatch
+            | CompiledCode(jsCode, errors) ->
+                MarkEditorErrors errors |> dispatch
+                Ok jsCode |> EndCompile |> dispatch
             | CompilationFailed msg -> Error msg |> EndCompile |> dispatch
             // Do nothing, these will be handled by .PostAndAwaitResponse
             | FoundTooltip _ -> ()

@@ -48,7 +48,7 @@ var commonPlugins = [
             "fsharp",
             "html",
             "css",
-            "javascript"
+            "typescript" // Using "javascript" triggers an error with latest Monaco
         ],
         features: [
             'accessibilityHelp',

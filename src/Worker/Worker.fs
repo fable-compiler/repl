@@ -41,9 +41,9 @@ let init() = async {
             | CompileCode(fsharpCode, optimize) ->
                 try
                     let parseResults = measureTime "FCS parsing" Fable.ParseFSharpProject (checker, Literals.FILE_NAME, fsharpCode)
-                    let babelAst = measureTime "Fable transform" Fable.CompileToBabelAst ("fable-core", parseResults, Literals.FILE_NAME, optimize)
+                    let babelAst, errors = measureTime "Fable transform" Fable.CompileToBabelAst ("fable-core", parseResults, Literals.FILE_NAME, optimize)
                     let jsCode = measureTime "Babel generation" compileBabelAst babelAst
-                    CompiledCode jsCode |> worker.Post
+                    CompiledCode(jsCode, errors) |> worker.Post
                 with er ->
                     CompilationFailed er.Message |> worker.Post
             | GetTooltip(line, col, lineText) ->
