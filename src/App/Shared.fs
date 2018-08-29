@@ -9,7 +9,7 @@ open System.Diagnostics
 
 [<RequireQualifiedAccess>]
 module Literals =
-    let [<Literal>] VERSION = "2.0.0-beta-001"
+    let [<Literal>] VERSION = "2.0.0-beta-002"
     let [<Literal>] STORAGE_KEY = "fable-repl"
     let [<Literal>] REPL_BUNDLE_URL = "./js/repl/bundle.min.js"
     let [<Literal>] SAMPLES_JSON_URL = "./samples/samples.json"
@@ -64,14 +64,14 @@ type ObservableWorker<'InMsg>(worker: Browser.Worker, decoder: Decode.Decoder<'I
     member __.HasListeners =
         listeners.Count > 0
     member __.Post msg =
-        worker.postMessage(Encode.Auto.toString 0 msg)
+        worker.postMessage(Encode.Auto.toString(0, msg))
     member this.PostAndAwaitResponse msg =
         Async.FromContinuations(fun (cont, err, cancel) ->
             let mutable disp = Unchecked.defaultof<IDisposable>
             disp <- this |> Observable.subscribe(fun msg ->
                 disp.Dispose()
                 cont msg)
-            worker.postMessage(Encode.Auto.toString 0 msg)
+            worker.postMessage(Encode.Auto.toString(0, msg))
         )
     member __.Subscribe obs =
         let id = Guid.NewGuid()

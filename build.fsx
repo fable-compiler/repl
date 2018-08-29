@@ -1,4 +1,4 @@
-let fableBranch = "dev2.0"
+let fableBranch = "master"
 let AppveyorReplArtifactURLParams = "?branch=" + fableBranch + "&pr=false"
 let AppveyorReplArtifactURL =
     "https://ci.appveyor.com/api/projects/fable-compiler/Fable/artifacts/src/dotnet/Fable.JS/repl-bundle.zip"
@@ -56,10 +56,12 @@ let runYarn dir command =
 let downloadArtifact path (url: string) =
     let tempFile = Path.ChangeExtension(Path.GetTempFileName(), ".zip")
     use client = new WebClient()
+    printfn "GET %s" url
     client.DownloadFile(Uri url, tempFile)
     CleanDir path
     Unzip path tempFile
     File.Delete tempFile
+    printfn "Artifact unzipped at %s" path
 
 let currentDir = __SOURCE_DIRECTORY__
 let rootDir = currentDir </> ".."
