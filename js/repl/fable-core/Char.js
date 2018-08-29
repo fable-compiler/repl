@@ -29,7 +29,8 @@ function getCategory() {
         categories[i / 2] = unicodeDeltas[i + 1];
     }
     // binary search in unicode ranges
-    return (cp) => {
+    return (s, index) => {
+        const cp = s.charCodeAt(index || 0);
         let hi = codepoints.length;
         let lo = 0;
         while (hi - lo > 1) {
@@ -86,68 +87,71 @@ const isWhiteSpaceMask = 0
     | 1 << 12 /* LineSeparator */
     | 1 << 13 /* ParagraphSeparator */;
 export const getUnicodeCategory = getCategory();
-export function isControl(cp) {
-    const test = 1 << getUnicodeCategory(cp);
+export function isControl(s, index) {
+    const test = 1 << getUnicodeCategory(s, index);
     return (test & isControlMask) !== 0;
 }
-export function isDigit(cp) {
-    const test = 1 << getUnicodeCategory(cp);
+export function isDigit(s, index) {
+    const test = 1 << getUnicodeCategory(s, index);
     return (test & isDigitMask) !== 0;
 }
-export function isLetter(cp) {
-    const test = 1 << getUnicodeCategory(cp);
+export function isLetter(s, index) {
+    const test = 1 << getUnicodeCategory(s, index);
     return (test & isLetterMask) !== 0;
 }
-export function isLetterOrDigit(cp) {
-    const test = 1 << getUnicodeCategory(cp);
+export function isLetterOrDigit(s, index) {
+    const test = 1 << getUnicodeCategory(s, index);
     return (test & isLetterOrDigitMask) !== 0;
 }
-export function isUpper(cp) {
-    const test = 1 << getUnicodeCategory(cp);
+export function isUpper(s, index) {
+    const test = 1 << getUnicodeCategory(s, index);
     return (test & isUpperMask) !== 0;
 }
-export function isLower(cp) {
-    const test = 1 << getUnicodeCategory(cp);
+export function isLower(s, index) {
+    const test = 1 << getUnicodeCategory(s, index);
     return (test & isLowerMask) !== 0;
 }
-export function isNumber(cp) {
-    const test = 1 << getUnicodeCategory(cp);
+export function isNumber(s, index) {
+    const test = 1 << getUnicodeCategory(s, index);
     return (test & isNumberMask) !== 0;
 }
-export function isPunctuation(cp) {
-    const test = 1 << getUnicodeCategory(cp);
+export function isPunctuation(s, index) {
+    const test = 1 << getUnicodeCategory(s, index);
     return (test & isPunctuationMask) !== 0;
 }
-export function isSeparator(cp) {
-    const test = 1 << getUnicodeCategory(cp);
+export function isSeparator(s, index) {
+    const test = 1 << getUnicodeCategory(s, index);
     return (test & isSeparatorMask) !== 0;
 }
-export function isSymbol(cp) {
-    const test = 1 << getUnicodeCategory(cp);
+export function isSymbol(s, index) {
+    const test = 1 << getUnicodeCategory(s, index);
     return (test & isSymbolMask) !== 0;
 }
-export function isWhiteSpace(cp) {
-    const test = 1 << getUnicodeCategory(cp);
-    return ((test & isWhiteSpaceMask) !== 0)
-        || (0x09 <= cp && cp <= 0x0D) || cp === 0x85 || cp === 0xA0;
+export function isWhiteSpace(s, index) {
+    const test = 1 << getUnicodeCategory(s, index);
+    if ((test & isWhiteSpaceMask) !== 0) {
+        return true;
+    }
+    const cp = s.charCodeAt(index || 0);
+    return (0x09 <= cp && cp <= 0x0D) || cp === 0x85 || cp === 0xA0;
 }
-export function isHighSurrogate(cp) {
-    return 0xD800 <= cp && cp <= 0xDBFF;
+export function isHighSurrogate(s, index) {
+    return /[\uD800-\uDBFF]/.test(s.charAt(index || 0));
 }
-export function isLowSurrogate(cp) {
-    return 0xDC00 <= cp && cp <= 0xDFFF;
+export function isLowSurrogate(s, index) {
+    return /[\uDC00-\uDFFF]/.test(s.charAt(index || 0));
 }
-export function isSurrogate(cp) {
-    return 0xD800 <= cp && cp <= 0xDFFF;
+export function isSurrogate(s, index) {
+    return /[\uD800-\uDFFF]/.test(s.charAt(index || 0));
 }
 export function isSurrogatePair(s, index) {
-    return typeof s === "string"
-        ? isHighSurrogate(s.charCodeAt(index)) && isLowSurrogate(s.charCodeAt(index + 1))
+    return typeof index === "number"
+        ? isHighSurrogate(s, index) && isLowSurrogate(s, index + 1)
         : isHighSurrogate(s) && isLowSurrogate(index);
 }
 export function parse(input) {
     if (input.length === 1) {
-        return input.charCodeAt(0);
+        return input[0];
     }
     else {
         throw Error("String must be exactly one character long.");

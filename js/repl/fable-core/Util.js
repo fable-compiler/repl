@@ -409,6 +409,7 @@ export function createObj(fields, caseRule = CaseRules.None) {
         if (kvPair == null) {
             fail(kvPair);
         }
+        kvPair = downcast(kvPair); // The item may be casted to an interface
         if (typeof kvPair.toJSON === "function") { // Deflate unions
             kvPair = kvPair.toJSON();
         }

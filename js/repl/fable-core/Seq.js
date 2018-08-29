@@ -469,7 +469,7 @@ export function rangeStep(first, step, last) {
     return delay(() => unfold((x) => step > 0 && x <= last || step < 0 && x >= last ? [x, x + step] : null, first));
 }
 export function rangeChar(first, last) {
-    return delay(() => unfold((x) => x <= last ? [x, x + 1] : null, first));
+    return delay(() => unfold((x) => x <= last ? [x, String.fromCharCode(x.charCodeAt(0) + 1)] : null, first));
 }
 export function range(first, last) {
     return rangeStep(first, 1, last);

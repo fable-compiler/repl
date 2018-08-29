@@ -31,5 +31,5 @@ export function StringBuilder$$AppendFormat$$433E080(x$$1, fmt, o) {
 
 StringBuilder.prototype.toString = function () {
   const __ = this;
-  return join("", __.buf);
+  return join("", ...__.buf);
 };

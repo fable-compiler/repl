@@ -1,30 +1,7 @@
 import { toString as dateToString } from "./Date.js";
+import Long, { fromBytes as longFromBytes, toBytes as longToBytes, toString as longToString } from "./Long.js";
 import { escape } from "./RegExp.js";
-import { isArray, toString } from "./Util.js";
-function asString(x) {
-    return typeof x === "number" ? String.fromCharCode(x) : x;
-}
-export function toCharArray(str) {
-    const len = str.length;
-    const ar = new Uint16Array(len);
-    for (let i = 0; i < len; i++) {
-        ar[i] = str.charCodeAt(i);
-    }
-    return ar;
-}
-export function toCharIterable(source) {
-    return typeof source === "string" ? toCharArray(source) : source;
-}
-export function fromCharArray(ar, startIndex, count) {
-    const ar2 = startIndex == null
-        ? ar
-        // If count arg is undefined, startIndex becomes the count and startIndex is 0
-        : (count == null ? ar.slice(0, startIndex) : ar.slice(startIndex, startIndex + count));
-    return String.fromCharCode(...ar2);
-}
-export function fromChar(char, count) {
-    return String.fromCharCode(char).repeat(count);
-}
+import { toString } from "./Util.js";
 const fsFormatRegExp = /(^|[^%])%([0+ ]*)(-?\d+)?(?:\.(\d+))?(\w)/;
 const formatRegExp = /\{(\d+)(,-?\d+)?(?:\:(.+?))?\}/g;
 // From https://stackoverflow.com/a/13653180/3922220
@@ -101,17 +78,20 @@ export function indexOfAny(str, anyOf, ...args) {
     }
     str = str.substr(startIndex, length);
     for (const c of anyOf) {
-        const index = str.indexOf(String.fromCharCode(c));
+        const index = str.indexOf(c);
         if (index > -1) {
             return index + startIndex;
         }
     }
     return -1;
 }
-function toHex(value) {
-    return value < 0
-        ? "ff" + (16777215 - (Math.abs(value) - 1)).toString(16)
-        : value.toString(16);
+function toHex(x) {
+    if (x instanceof Long) {
+        return longToString(x.unsigned ? x : longFromBytes(longToBytes(x), true), 16);
+    }
+    else {
+        return (Number(x) >>> 0).toString(16);
+    }
 }
 export function printf(input) {
     return {
@@ -154,16 +134,16 @@ function formatOnce(str2, rep) {
                 rep = toString(rep, true);
                 break;
             case "x":
-                rep = toHex(Number(rep));
+                rep = toHex(rep);
                 break;
             case "X":
-                rep = toHex(Number(rep)).toUpperCase();
+                rep = toHex(rep).toUpperCase();
                 break;
         }
         const plusPrefix = flags.indexOf("+") >= 0 && parseInt(rep, 10) >= 0;
         pad = parseInt(pad, 10);
         if (!isNaN(pad)) {
-            const ch = pad >= 0 && flags.indexOf("0") >= 0 ? 48 : 32; // "0" : " ";
+            const ch = pad >= 0 && flags.indexOf("0") >= 0 ? "0" : " ";
             rep = padLeft(String(rep), Math.abs(pad) - (plusPrefix ? 1 : 0), ch, pad < 0);
         }
         const once = prefix + (plusPrefix ? "+" + rep : rep);
@@ -197,8 +177,8 @@ export function format(str, ...args) {
     }
     return str.replace(formatRegExp, (match, idx, pad, pattern) => {
         let rep = args[idx];
-        let padSymbol = 32; // " ";
-        if (typeof rep === "number") {
+        let padSymbol = " ";
+        if (typeof rep === "number" || rep instanceof Long) {
             switch ((pattern || "").substring(0, 1)) {
                 case "f":
                 case "F":
@@ -230,7 +210,7 @@ export function format(str, ...args) {
                             rep = rep.toFixed(decs = m[2].length - 1);
                         }
                         pad = "," + (m[1].length + (decs ? decs + 1 : 0)).toString();
-                        padSymbol = 48; // "0";
+                        padSymbol = "0";
                     }
                     else if (pattern) {
                         rep = pattern;
@@ -273,23 +253,19 @@ export function isNullOrEmpty(str) {
 export function isNullOrWhiteSpace(str) {
     return typeof str !== "string" || /^\s*$/.test(str);
 }
-export function join(delimiter, xs) {
-    let xs2 = typeof xs === "string" ? [xs] : xs;
-    const len = arguments.length;
-    if (len > 2) {
-        xs2 = Array(len - 1);
-        for (let key = 1; key < len; key++) {
-            xs2[key - 1] = arguments[key];
-        }
+export function join(delimiter, ...xs) {
+    return xs.map((x) => String(x)).join(delimiter);
+}
+export function joinWithIndices(delimiter, xs, startIndex, count) {
+    const endIndexPlusOne = startIndex + count;
+    if (endIndexPlusOne > xs.length) {
+        throw new Error("Index and count must refer to a location within the buffer.");
     }
-    else if (!Array.isArray(xs2)) {
-        xs2 = Array.from(xs2);
-    }
-    return xs2.map((x) => toString(x)).join(asString(delimiter));
+    return join(delimiter, ...xs.slice(startIndex, endIndexPlusOne));
 }
 /** Validates UUID as specified in RFC4122 (versions 1-5). Trims braces. */
 export function validateGuid(str, doNotThrow) {
-    const trimmed = trim(str, 123, 125); // "{","}"
+    const trimmed = trim(str, "{", "}");
     if (guidRegex.test(trimmed)) {
         return doNotThrow ? [true, trimmed] : trimmed;
     }
@@ -401,16 +377,16 @@ export function fromBase64String(b64Encoded) {
     }
     return bytes;
 }
-export function padLeft(str, len, char, isRight) {
-    const ch = char == null ? " " : String.fromCharCode(char);
+export function padLeft(str, len, ch, isRight) {
+    ch = ch || " ";
     len = len - str.length;
     for (let i = 0; i < len; i++) {
         str = isRight ? str + ch : ch + str;
     }
     return str;
 }
-export function padRight(str, len, char) {
-    return padLeft(str, len, char, true);
+export function padRight(str, len, ch) {
+    return padLeft(str, len, ch, true);
 }
 export function remove(str, startIndex, count) {
     if (startIndex >= str.length) {
@@ -422,7 +398,7 @@ export function remove(str, startIndex, count) {
     return str.slice(0, startIndex) + (typeof count === "number" ? str.substr(startIndex + count) : "");
 }
 export function replace(str, search, replace) {
-    return str.replace(new RegExp(escape(asString(search)), "g"), asString(replace));
+    return str.replace(new RegExp(escape(search), "g"), replace);
 }
 export function replicate(n, x) {
     return initialize(n, () => x);
@@ -431,7 +407,7 @@ export function getCharAtIndex(input, index) {
     if (index < 0 || index >= input.length) {
         throw new Error("Index was outside the bounds of the array.");
     }
-    return input.charCodeAt(index);
+    return input[index];
 }
 export function split(str, splitters, count, removeEmpty) {
     count = typeof count === "number" ? count : null;
@@ -442,9 +418,9 @@ export function split(str, splitters, count, removeEmpty) {
     if (count === 0) {
         return [];
     }
-    if (!isArray(splitters)) {
+    if (!Array.isArray(splitters)) {
         if (removeEmpty === 0) {
-            return str.split(asString(splitters), count);
+            return str.split(splitters, count);
         }
         const len = arguments.length;
         splitters = Array(len - 1);
@@ -452,19 +428,11 @@ export function split(str, splitters, count, removeEmpty) {
             splitters[key - 1] = arguments[key];
         }
     }
-    let pattern = " ";
-    const splittersLen = splitters.length;
-    if (splittersLen > 0) {
-        const temp = new Array(splittersLen);
-        // splitters may be an Uint16TypedArray of chars, we cannot use .map
-        for (let i = 0; i < splittersLen; i++) {
-            temp[i] = escape(asString(splitters[i]));
-        }
-        pattern = temp.join("|");
-    }
-    const reg = new RegExp(pattern, "g");
-    const splits = [];
+    splitters = splitters.map((x) => escape(x));
+    splitters = splitters.length > 0 ? splitters : [" "];
     let i = 0;
+    const splits = [];
+    const reg = new RegExp(splitters.join("|"), "g");
     while (count == null || count > 1) {
         const m = reg.exec(str);
         if (m === null) {
@@ -485,33 +453,19 @@ export function trim(str, ...chars) {
     if (chars.length === 0) {
         return str.trim();
     }
-    const pattern = "[" + escape(String.fromCharCode(...chars)) + "]+";
+    const pattern = "[" + escape(chars.join("")) + "]+";
     return str.replace(new RegExp("^" + pattern), "").replace(new RegExp(pattern + "$"), "");
 }
 export function trimStart(str, ...chars) {
     return chars.length === 0
         ? str.trimStart()
-        : str.replace(new RegExp("^[" + escape(String.fromCharCode(...chars)) + "]+"), "");
+        : str.replace(new RegExp("^[" + escape(chars.join("")) + "]+"), "");
 }
 export function trimEnd(str, ...chars) {
     return chars.length === 0
         ? str.trimEnd()
-        : str.replace(new RegExp("[" + escape(String.fromCharCode(...chars)) + "]+$"), "");
+        : str.replace(new RegExp("[" + escape(chars.join("")) + "]+$"), "");
 }
-export function filter(pred, str) {
-    return fromCharArray(toCharArray(str).filter(pred));
-}
-export function map(f, str) {
-    return fromCharArray(toCharArray(str).map(f));
-}
-export function mapIndexed(f, str) {
-    return fromCharArray(toCharArray(str).map((c, i) => f(i, c)));
-}
-export function collect(f, str) {
-    const ar1 = toCharArray(str);
-    const ar2 = new Array(ar1.length);
-    for (let i = 0; i < ar1.length; i++) {
-        ar2[i] = f(ar1[i]);
-    }
-    return ar2.join("");
+export function filter(pred, x) {
+    return x.split("").filter(pred).join("");
 }

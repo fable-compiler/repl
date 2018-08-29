@@ -1,11 +1,11 @@
 import { defaultArg, value as value$$1, some } from "./Option.js";
 import { FSharpRef, L } from "./Types.js";
+import { iterate as iterate$$1, collect as collect$$1, scanBack as scanBack$$1, scan as scan$$1, foldBack2 as foldBack2$$1, fold2 as fold2$$1, fold as fold$$1, map as map$$1 } from "./Seq.js";
 import { permute as permute$$1, ofList as ofList$$1, findIndexBack as findIndexBack$$1, tryFindIndexBack as tryFindIndexBack$$1, foldBack as foldBack$$1 } from "./Array.js";
 import { ofList } from "./Array.js";
 import { tryGetValue, addToSet, comparerFromEqualityComparer } from "./Util.js";
 import { createMutable } from "./Set.js";
-import { ofSeq as ofSeq$$1, foldBack as foldBack$$3, length as length$$1 } from "./List.js";
-import { map as map$$1, iterate as iterate$$1, foldBack as foldBack$$2, unfold as unfold$$1 } from "./Seq.js";
+import { ofSeq as ofSeq$$1, length as length$$1 } from "./List.js";
 import { createMutable as createMutable$$1 } from "./Map.js";
 export function head(_arg1) {
   if (_arg1.tail != null) {
@@ -116,39 +116,69 @@ export function foldIndexedAux($arg$$8, $arg$$9, $arg$$10, $arg$$11) {
     }
   }
 }
-export function foldIndexed(f$$1, seed, xs$$8) {
-  return foldIndexedAux(f$$1, 0, seed, xs$$8);
+export function foldIndexed(f$$1, state, xs$$8) {
+  return foldIndexedAux(f$$1, 0, state, xs$$8);
 }
-export function fold(f$$2, seed$$1, xs$$9) {
-  return foldIndexed(function (_arg1$$6, acc$$1, x$$6) {
-    return f$$2(acc$$1, x$$6);
-  }, seed$$1, xs$$9);
+export function fold($arg$$15, $arg$$16, $arg$$17) {
+  fold: while (true) {
+    const f$$2 = $arg$$15,
+          state$$1 = $arg$$16,
+          xs$$9 = $arg$$17;
+
+    if (xs$$9.tail != null) {
+      const t = xs$$9.tail;
+      const h = xs$$9.head;
+      $arg$$15 = f$$2;
+      $arg$$16 = f$$2(state$$1, h);
+      $arg$$17 = t;
+      continue fold;
+    } else {
+      return state$$1;
+    }
+  }
 }
 export function reverse(xs$$10) {
-  return fold(function (acc$$2, x$$7) {
-    return L(x$$7, acc$$2);
+  return fold(function (acc$$1, x$$6) {
+    return L(x$$6, acc$$1);
   }, L(), xs$$10);
 }
-export function foldBack(f$$3, xs$$11, seed$$2) {
-  return fold(function (acc$$3, x$$8) {
-    return f$$3(x$$8, acc$$3);
-  }, seed$$2, reverse(xs$$11));
+export function foldBack(f$$3, xs$$11, state$$2) {
+  return fold(function (acc$$2, x$$7) {
+    return f$$3(x$$7, acc$$2);
+  }, state$$2, reverse(xs$$11));
+}
+export function toSeq(xs$$12) {
+  return map$$1(function (x$$8) {
+    return x$$8;
+  }, xs$$12);
+}
+export function ofSeq(xs$$13) {
+  return reverse(fold$$1(function (acc$$3, x$$9) {
+    return L(x$$9, acc$$3);
+  }, L(), xs$$13));
+}
+export function concat(lists) {
+  return reverse(fold$$1(function (state$$3, xs$$15) {
+    return fold(function f$$4(acc$$4, x$$10) {
+      return L(x$$10, acc$$4);
+    }, state$$3, xs$$15);
+  }, L(), lists));
 }
 export function foldIndexed2Aux($arg$$21, $arg$$22, $arg$$23, $arg$$24, $arg$$25) {
   foldIndexed2Aux: while (true) {
-    const f$$4 = $arg$$21,
+    const f$$5 = $arg$$21,
           i$$1 = $arg$$22,
-          acc$$4 = $arg$$23,
+          acc$$5 = $arg$$23,
           bs = $arg$$24,
           cs = $arg$$25;
     const matchValue$$2 = [bs, cs];
-    var $target$$26, x$$9, xs$$12, y$$1, ys$$4;
+    var $target$$26, x$$11, xs$$17, y$$1, ys$$4;
 
     if (matchValue$$2[0].tail != null) {
       if (matchValue$$2[1].tail != null) {
         $target$$26 = 1;
-        x$$9 = matchValue$$2[0].head;
-        xs$$12 = matchValue$$2[0].tail;
+        x$$11 = matchValue$$2[0].head;
+        xs$$17 = matchValue$$2[0].tail;
         y$$1 = matchValue$$2[1].head;
         ys$$4 = matchValue$$2[1].tail;
       } else {
@@ -163,79 +193,72 @@ export function foldIndexed2Aux($arg$$21, $arg$$22, $arg$$23, $arg$$24, $arg$$25
     switch ($target$$26) {
       case 0:
         {
-          return acc$$4;
-          break;
+          return acc$$5;
         }
 
       case 1:
         {
-          $arg$$21 = f$$4;
+          $arg$$21 = f$$5;
           $arg$$22 = i$$1 + 1;
-          $arg$$23 = f$$4(i$$1, acc$$4, x$$9, y$$1);
-          $arg$$24 = xs$$12;
+          $arg$$23 = f$$5(i$$1, acc$$5, x$$11, y$$1);
+          $arg$$24 = xs$$17;
           $arg$$25 = ys$$4;
           continue foldIndexed2Aux;
-          break;
         }
 
       case 2:
         {
           throw new Error("Lists had different lengths");
-          break;
         }
     }
   }
 }
-export function foldIndexed2(f$$5, seed$$3, xs$$13, ys$$5) {
-  return foldIndexed2Aux(f$$5, 0, seed$$3, xs$$13, ys$$5);
+export function foldIndexed2(f$$6, state$$4, xs$$18, ys$$5) {
+  return foldIndexed2Aux(f$$6, 0, state$$4, xs$$18, ys$$5);
 }
-export function fold2(f$$6, seed$$4, xs$$14, ys$$6) {
-  return foldIndexed2(function (_arg1$$7, acc$$5, x$$10, y$$2) {
-    return f$$6(acc$$5, x$$10, y$$2);
-  }, seed$$4, xs$$14, ys$$6);
+export function fold2(f$$7, state$$5, xs$$19, ys$$6) {
+  return fold2$$1(f$$7, state$$5, xs$$19, ys$$6);
 }
-export function foldBack2(f$$7, xs$$15, ys$$7, seed$$5) {
-  return fold2(function (acc$$6, x$$11, y$$3) {
-    return f$$7(x$$11, y$$3, acc$$6);
-  }, seed$$5, reverse(xs$$15), reverse(ys$$7));
+export function foldBack2(f$$8, xs$$20, ys$$7, state$$6) {
+  return foldBack2$$1(f$$8, xs$$20, ys$$7, state$$6);
 }
-export function unfold(f$$8, state) {
-  const unfoldInner = function unfoldInner(acc$$7, state$$1) {
+export function unfold(f$$9, state$$7) {
+  const unfoldInner = function unfoldInner(acc$$6, state$$8) {
     unfoldInner: while (true) {
-      const matchValue$$3 = f$$8(state$$1);
+      const matchValue$$3 = f$$9(state$$8);
 
       if (matchValue$$3 != null) {
         const x$$12 = matchValue$$3[0];
-        const state$$2 = matchValue$$3[1];
-        acc$$7 = L(x$$12, acc$$7);
-        state$$1 = state$$2;
+        const state$$9 = matchValue$$3[1];
+        acc$$6 = L(x$$12, acc$$6);
+        state$$8 = state$$9;
         continue unfoldInner;
       } else {
-        return reverse(acc$$7);
+        return reverse(acc$$6);
       }
     }
   };
 
-  return unfoldInner(L(), state);
+  return unfoldInner(L(), state$$7);
 }
 export function foldIndexed3Aux($arg$$41, $arg$$42, $arg$$43, $arg$$44, $arg$$45, $arg$$46) {
   foldIndexed3Aux: while (true) {
-    const f$$9 = $arg$$41,
+    const f$$10 = $arg$$41,
           i$$2 = $arg$$42,
-          acc$$8 = $arg$$43,
+          acc$$7 = $arg$$43,
           bs$$1 = $arg$$44,
           cs$$1 = $arg$$45,
           ds = $arg$$46;
     const matchValue$$4 = [bs$$1, cs$$1, ds];
-    var $target$$47, x$$13, xs$$16, y$$4, ys$$8, z, zs;
+    var $target$$47, x$$13, xs$$21, y$$2, ys$$8, z, zs;
 
     if (matchValue$$4[0].tail != null) {
       if (matchValue$$4[1].tail != null) {
         if (matchValue$$4[2].tail != null) {
           $target$$47 = 1;
           x$$13 = matchValue$$4[0].head;
-          xs$$16 = matchValue$$4[0].tail;
-          y$$4 = matchValue$$4[1].head;
+          xs$$21 = matchValue$$4[0].tail;
+          y$$2 = matchValue$$4[1].head;
           ys$$8 = matchValue$$4[1].tail;
           z = matchValue$$4[2].head;
           zs = matchValue$$4[2].tail;
@@ -258,147 +281,133 @@ export function foldIndexed3Aux($arg$$41, $arg$$42, $arg$$43, $arg$$44, $arg$$45
     switch ($target$$47) {
       case 0:
         {
-          return acc$$8;
-          break;
+          return acc$$7;
         }
 
       case 1:
         {
-          $arg$$41 = f$$9;
+          $arg$$41 = f$$10;
           $arg$$42 = i$$2 + 1;
-          $arg$$43 = f$$9(i$$2, acc$$8, x$$13, y$$4, z);
-          $arg$$44 = xs$$16;
+          $arg$$43 = f$$10(i$$2, acc$$7, x$$13, y$$2, z);
+          $arg$$44 = xs$$21;
           $arg$$45 = ys$$8;
           $arg$$46 = zs;
           continue foldIndexed3Aux;
-          break;
         }
 
       case 2:
         {
           throw new Error("Lists had different lengths");
-          break;
         }
     }
   }
 }
-export function foldIndexed3(f$$10, seed$$6, xs$$17, ys$$9, zs$$1) {
-  return foldIndexed3Aux(f$$10, 0, seed$$6, xs$$17, ys$$9, zs$$1);
+export function foldIndexed3(f$$11, seed, xs$$22, ys$$9, zs$$1) {
+  return foldIndexed3Aux(f$$11, 0, seed, xs$$22, ys$$9, zs$$1);
 }
-export function fold3(f$$11, seed$$7, xs$$18, ys$$10, zs$$2) {
-  return foldIndexed3(function (_arg1$$8, acc$$9, x$$14, y$$5, z$$1) {
-    return f$$11(acc$$9, x$$14, y$$5, z$$1);
-  }, seed$$7, xs$$18, ys$$10, zs$$2);
+export function fold3(f$$12, state$$10, xs$$23, ys$$10, zs$$2) {
+  return foldIndexed3(function (_arg1$$6, acc$$8, x$$14, y$$3, z$$1) {
+    return f$$12(acc$$8, x$$14, y$$3, z$$1);
+  }, state$$10, xs$$23, ys$$10, zs$$2);
 }
-export function scan(f$$12, seed$$8, xs$$19) {
-  return reverse(fold(function (acc$$10, x$$15) {
-    if (acc$$10.tail != null) {
-      const y$$6 = acc$$10.head;
-      return L(f$$12(y$$6, x$$15), acc$$10);
-    } else {
-      throw new Error("never");
-    }
-  }, L(seed$$8, L()), xs$$19));
+export function scan(f$$13, state$$11, xs$$24) {
+  return ofSeq(scan$$1(f$$13, state$$11, xs$$24));
 }
-export function scanBack(f$$13, xs$$21, seed$$9) {
-  return reverse(scan(function (acc$$11, x$$16) {
-    return f$$13(x$$16, acc$$11);
-  }, seed$$9, reverse(xs$$21)));
+export function scanBack(f$$14, xs$$26, state$$12) {
+  return ofSeq(scanBack$$1(f$$14, xs$$26, state$$12));
 }
-export function length(xs$$23) {
-  return fold(function (acc$$12, _arg1$$9) {
-    return acc$$12 + 1;
-  }, 0, xs$$23);
+export function length(xs$$28) {
+  return fold(function (acc$$9, _arg1$$7) {
+    return acc$$9 + 1;
+  }, 0, xs$$28);
 }
-export function append(xs$$24, ys$$11) {
-  return fold(function (acc$$13, x$$17) {
-    return L(x$$17, acc$$13);
-  }, ys$$11, reverse(xs$$24));
+export function append(xs$$29, ys$$11) {
+  return fold(function (acc$$10, x$$15) {
+    return L(x$$15, acc$$10);
+  }, ys$$11, reverse(xs$$29));
 }
-export function collect(f$$14, xs$$25) {
-  return fold(function (acc$$14, x$$18) {
-    return append(f$$14(x$$18), acc$$14);
-  }, L(), reverse(xs$$25));
+export function collect(f$$15, xs$$30) {
+  return ofSeq(collect$$1(f$$15, xs$$30));
 }
-export function map(f$$15, xs$$26) {
-  return reverse(fold(function (acc$$15, x$$19) {
-    return L(f$$15(x$$19), acc$$15);
-  }, L(), xs$$26));
+export function map(f$$16, xs$$32) {
+  return reverse(fold(function (acc$$11, x$$16) {
+    return L(f$$16(x$$16), acc$$11);
+  }, L(), xs$$32));
 }
-export function mapIndexed(f$$16, xs$$28) {
-  return reverse(foldIndexed(function (i$$3, acc$$16, x$$20) {
-    return L(f$$16(i$$3, x$$20), acc$$16);
-  }, L(), xs$$28));
+export function mapIndexed(f$$17, xs$$34) {
+  return reverse(foldIndexed(function (i$$3, acc$$12, x$$17) {
+    return L(f$$17(i$$3, x$$17), acc$$12);
+  }, L(), xs$$34));
 }
-export function indexed(xs$$30) {
-  return mapIndexed(function (i$$4, x$$21) {
-    return [i$$4, x$$21];
-  }, xs$$30);
+export function indexed(xs$$36) {
+  return mapIndexed(function (i$$4, x$$18) {
+    return [i$$4, x$$18];
+  }, xs$$36);
 }
-export function map2(f$$17, xs$$31, ys$$12) {
-  return reverse(fold2(function (acc$$17, x$$22, y$$7) {
-    return L(f$$17(x$$22, y$$7), acc$$17);
-  }, L(), xs$$31, ys$$12));
+export function map2(f$$18, xs$$37, ys$$12) {
+  return reverse(fold2(function (acc$$13, x$$19, y$$4) {
+    return L(f$$18(x$$19, y$$4), acc$$13);
+  }, L(), xs$$37, ys$$12));
 }
-export function mapIndexed2(f$$18, xs$$33, ys$$13) {
-  return reverse(foldIndexed2(function (i$$5, acc$$18, x$$23, y$$8) {
-    return L(f$$18(i$$5, x$$23, y$$8), acc$$18);
-  }, L(), xs$$33, ys$$13));
+export function mapIndexed2(f$$19, xs$$39, ys$$13) {
+  return reverse(foldIndexed2(function (i$$5, acc$$14, x$$20, y$$5) {
+    return L(f$$19(i$$5, x$$20, y$$5), acc$$14);
+  }, L(), xs$$39, ys$$13));
 }
-export function map3(f$$19, xs$$35, ys$$14, zs$$3) {
-  return reverse(fold3(function (acc$$19, x$$24, y$$9, z$$2) {
-    return L(f$$19(x$$24, y$$9, z$$2), acc$$19);
-  }, L(), xs$$35, ys$$14, zs$$3));
+export function map3(f$$20, xs$$41, ys$$14, zs$$3) {
+  return reverse(fold3(function (acc$$15, x$$21, y$$6, z$$2) {
+    return L(f$$20(x$$21, y$$6, z$$2), acc$$15);
+  }, L(), xs$$41, ys$$14, zs$$3));
 }
-export function mapIndexed3(f$$20, xs$$37, ys$$15, zs$$4) {
-  return reverse(foldIndexed3(function (i$$6, acc$$20, x$$25, y$$10, z$$3) {
-    return L(f$$20(i$$6, x$$25, y$$10, z$$3), acc$$20);
-  }, L(), xs$$37, ys$$15, zs$$4));
+export function mapIndexed3(f$$21, xs$$43, ys$$15, zs$$4) {
+  return reverse(foldIndexed3(function (i$$6, acc$$16, x$$22, y$$7, z$$3) {
+    return L(f$$21(i$$6, x$$22, y$$7, z$$3), acc$$16);
+  }, L(), xs$$43, ys$$15, zs$$4));
 }
-export function mapFold(f$$21, s, xs$$39) {
-  const foldFn = function foldFn(tupledArg, x$$26) {
-    const patternInput = f$$21(tupledArg[1], x$$26);
+export function mapFold(f$$22, s, xs$$45) {
+  const foldFn = function foldFn(tupledArg, x$$23) {
+    const patternInput = f$$22(tupledArg[1], x$$23);
     return [L(patternInput[0], tupledArg[0]), patternInput[1]];
   };
 
-  const patternInput$$1 = fold(foldFn, [L(), s], xs$$39);
+  const patternInput$$1 = fold(foldFn, [L(), s], xs$$45);
   return [reverse(patternInput$$1[0]), patternInput$$1[1]];
 }
-export function mapFoldBack(f$$22, xs$$40, s$$2) {
+export function mapFoldBack(f$$23, xs$$46, s$$2) {
   return mapFold(function (s$$3, v) {
-    return f$$22(v, s$$3);
-  }, s$$2, reverse(xs$$40));
+    return f$$23(v, s$$3);
+  }, s$$2, reverse(xs$$46));
 }
-export function iterate(f$$23, xs$$41) {
-  fold(function (unitVar0, x$$27) {
-    f$$23(x$$27);
-  }, null, xs$$41);
+export function iterate(f$$24, xs$$47) {
+  fold(function (unitVar0, x$$24) {
+    f$$24(x$$24);
+  }, null, xs$$47);
 }
-export function iterate2(f$$24, xs$$42, ys$$16) {
-  fold2(function (unitVar0$$1, x$$28, y$$11) {
-    f$$24(x$$28, y$$11);
-  }, null, xs$$42, ys$$16);
+export function iterate2(f$$25, xs$$48, ys$$16) {
+  fold2(function (unitVar0$$1, x$$25, y$$8) {
+    f$$25(x$$25, y$$8);
+  }, null, xs$$48, ys$$16);
 }
-export function iterateIndexed(f$$25, xs$$43) {
-  foldIndexed(function (i$$7, unitVar1, x$$29) {
-    f$$25(i$$7, x$$29);
-  }, null, xs$$43);
+export function iterateIndexed(f$$26, xs$$49) {
+  foldIndexed(function (i$$7, unitVar1, x$$26) {
+    f$$26(i$$7, x$$26);
+  }, null, xs$$49);
 }
-export function iterateIndexed2(f$$26, xs$$44, ys$$17) {
-  foldIndexed2(function (i$$8, unitVar1$$1, x$$30, y$$12) {
-    f$$26(i$$8, x$$30, y$$12);
-  }, null, xs$$44, ys$$17);
+export function iterateIndexed2(f$$27, xs$$50, ys$$17) {
+  foldIndexed2(function (i$$8, unitVar1$$1, x$$27, y$$9) {
+    f$$27(i$$8, x$$27, y$$9);
+  }, null, xs$$50, ys$$17);
 }
-export function ofArray(xs$$45) {
-  return foldBack$$1(function (x$$31, acc$$21) {
-    return L(x$$31, acc$$21);
-  }, xs$$45, L());
+export function ofArray(xs$$51) {
+  return foldBack$$1(function (x$$28, acc$$17) {
+    return L(x$$28, acc$$17);
+  }, xs$$51, L());
 }
 export function empty() {
   return L();
 }
-export function isEmpty(_arg1$$10) {
-  if (_arg1$$10.tail == null) {
+export function isEmpty(_arg1$$8) {
+  if (_arg1$$8.tail == null) {
     return true;
   } else {
     return false;
@@ -406,19 +415,19 @@ export function isEmpty(_arg1$$10) {
 }
 export function tryPickIndexedAux($arg$$100, $arg$$101, $arg$$102) {
   tryPickIndexedAux: while (true) {
-    const f$$27 = $arg$$100,
+    const f$$28 = $arg$$100,
           i$$9 = $arg$$101,
-          _arg1$$11 = $arg$$102;
+          _arg1$$9 = $arg$$102;
 
-    if (_arg1$$11.tail != null) {
-      const xs$$46 = _arg1$$11.tail;
-      const x$$32 = _arg1$$11.head;
-      const result = f$$27(i$$9, x$$32);
+    if (_arg1$$9.tail != null) {
+      const xs$$52 = _arg1$$9.tail;
+      const x$$29 = _arg1$$9.head;
+      const result = f$$28(i$$9, x$$29);
 
       if (result == null) {
-        $arg$$100 = f$$27;
+        $arg$$100 = f$$28;
         $arg$$101 = i$$9 + 1;
-        $arg$$102 = xs$$46;
+        $arg$$102 = xs$$52;
         continue tryPickIndexedAux;
       } else {
         return result;
@@ -428,119 +437,119 @@ export function tryPickIndexedAux($arg$$100, $arg$$101, $arg$$102) {
     }
   }
 }
-export function tryPickIndexed(f$$28, xs$$47) {
-  return tryPickIndexedAux(f$$28, 0, xs$$47);
+export function tryPickIndexed(f$$29, xs$$53) {
+  return tryPickIndexedAux(f$$29, 0, xs$$53);
 }
-export function tryPick(f$$29, xs$$48) {
-  return tryPickIndexed(function (_arg1$$12, x$$33) {
-    return f$$29(x$$33);
-  }, xs$$48);
+export function tryPick(f$$30, xs$$54) {
+  return tryPickIndexed(function (_arg1$$10, x$$30) {
+    return f$$30(x$$30);
+  }, xs$$54);
 }
-export function pick(f$$30, xs$$49) {
-  const matchValue$$5 = tryPick(f$$30, xs$$49);
+export function pick(f$$31, xs$$55) {
+  const matchValue$$5 = tryPick(f$$31, xs$$55);
 
   if (matchValue$$5 != null) {
-    const x$$34 = value$$1(matchValue$$5);
+    const x$$31 = value$$1(matchValue$$5);
+    return x$$31;
+  } else {
+    throw new Error("List did not contain any matching elements");
+  }
+}
+export function tryFindIndexed(f$$32, xs$$56) {
+  return tryPickIndexed(function (i$$10, x$$32) {
+    return f$$32(i$$10, x$$32) ? some(x$$32) : null;
+  }, xs$$56);
+}
+export function tryFind(f$$33, xs$$57) {
+  return tryPickIndexed(function (_arg1$$11, x$$33) {
+    return f$$33(x$$33) ? some(x$$33) : null;
+  }, xs$$57);
+}
+export function findIndexed(f$$34, xs$$58) {
+  const matchValue$$6 = tryFindIndexed(f$$34, xs$$58);
+
+  if (matchValue$$6 != null) {
+    const x$$34 = value$$1(matchValue$$6);
     return x$$34;
   } else {
     throw new Error("List did not contain any matching elements");
   }
 }
-export function tryFindIndexed(f$$31, xs$$50) {
-  return tryPickIndexed(function (i$$10, x$$35) {
-    return f$$31(i$$10, x$$35) ? some(x$$35) : null;
-  }, xs$$50);
+export function find(f$$35, xs$$59) {
+  return findIndexed(function (_arg1$$12, x$$35) {
+    return f$$35(x$$35);
+  }, xs$$59);
 }
-export function tryFind(f$$32, xs$$51) {
-  return tryPickIndexed(function (_arg1$$13, x$$36) {
-    return f$$32(x$$36) ? some(x$$36) : null;
-  }, xs$$51);
+export function findBack(f$$36, xs$$60) {
+  return find(f$$36, reverse(xs$$60));
 }
-export function findIndexed(f$$33, xs$$52) {
-  const matchValue$$6 = tryFindIndexed(f$$33, xs$$52);
-
-  if (matchValue$$6 != null) {
-    const x$$37 = value$$1(matchValue$$6);
-    return x$$37;
-  } else {
-    throw new Error("List did not contain any matching elements");
-  }
+export function tryFindBack(f$$37, xs$$63) {
+  return tryFind(f$$37, reverse(xs$$63));
 }
-export function find(f$$34, xs$$53) {
-  return findIndexed(function (_arg1$$14, x$$38) {
-    return f$$34(x$$38);
-  }, xs$$53);
+export function tryFindIndex(f$$38, xs$$66) {
+  return tryPickIndexed(function (i$$11, x$$36) {
+    return f$$38(x$$36) ? i$$11 : null;
+  }, xs$$66);
 }
-export function findBack(f$$35, xs$$54) {
-  return find(f$$35, reverse(xs$$54));
+export function tryFindIndexBack(f$$39, xs$$67) {
+  return tryFindIndexBack$$1(f$$39, ofList(xs$$67, Array));
 }
-export function tryFindBack(f$$36, xs$$57) {
-  return tryFind(f$$36, reverse(xs$$57));
-}
-export function tryFindIndex(f$$37, xs$$60) {
-  return tryPickIndexed(function (i$$11, x$$39) {
-    return f$$37(x$$39) ? i$$11 : null;
-  }, xs$$60);
-}
-export function tryFindIndexBack(f$$38, xs$$61) {
-  return tryFindIndexBack$$1(f$$38, ofList(xs$$61, Array));
-}
-export function findIndex(f$$39, xs$$62) {
-  const matchValue$$7 = tryFindIndex(f$$39, xs$$62);
+export function findIndex(f$$40, xs$$68) {
+  const matchValue$$7 = tryFindIndex(f$$40, xs$$68);
 
   if (matchValue$$7 != null) {
-    const x$$40 = matchValue$$7 | 0;
-    return x$$40 | 0;
+    const x$$37 = matchValue$$7 | 0;
+    return x$$37 | 0;
   } else {
     throw new Error("List did not contain any matching elements");
   }
 }
-export function findIndexBack(f$$40, xs$$63) {
-  return findIndexBack$$1(f$$40, ofList(xs$$63, Array));
+export function findIndexBack(f$$41, xs$$69) {
+  return findIndexBack$$1(f$$41, ofList(xs$$69, Array));
 }
-export function item(n, xs$$64) {
-  return findIndexed(function (i$$12, _arg1$$15) {
+export function item(n, xs$$70) {
+  return findIndexed(function (i$$12, _arg1$$13) {
     return n === i$$12;
-  }, xs$$64);
+  }, xs$$70);
 }
-export function tryItem(n$$1, xs$$65) {
-  return tryFindIndexed(function (i$$13, _arg1$$16) {
+export function tryItem(n$$1, xs$$71) {
+  return tryFindIndexed(function (i$$13, _arg1$$14) {
     return n$$1 === i$$13;
-  }, xs$$65);
+  }, xs$$71);
 }
-export function filter(f$$41, xs$$66) {
-  return foldBack(function (x$$41, acc$$22) {
-    return f$$41(x$$41) ? L(x$$41, acc$$22) : acc$$22;
-  }, xs$$66, L());
+export function filter(f$$42, xs$$72) {
+  return foldBack(function (x$$38, acc$$18) {
+    return f$$42(x$$38) ? L(x$$38, acc$$18) : acc$$18;
+  }, xs$$72, L());
 }
-export function partition(f$$42, xs$$67) {
-  return fold(function (tupledArg$$1, x$$42) {
-    return f$$42(x$$42) ? [L(x$$42, tupledArg$$1[0]), tupledArg$$1[1]] : [tupledArg$$1[0], L(x$$42, tupledArg$$1[1])];
-  }, [L(), L()], reverse(xs$$67));
+export function partition(f$$43, xs$$73) {
+  return fold(function (tupledArg$$1, x$$39) {
+    return f$$43(x$$39) ? [L(x$$39, tupledArg$$1[0]), tupledArg$$1[1]] : [tupledArg$$1[0], L(x$$39, tupledArg$$1[1])];
+  }, [L(), L()], reverse(xs$$73));
 }
-export function choose(f$$43, xs$$68) {
-  return reverse(fold(function (acc$$23, x$$43) {
-    const matchValue$$8 = f$$43(x$$43);
+export function choose(f$$44, xs$$74) {
+  return reverse(fold(function (acc$$19, x$$40) {
+    const matchValue$$8 = f$$44(x$$40);
 
     if (matchValue$$8 == null) {
-      return acc$$23;
+      return acc$$19;
     } else {
-      const y$$13 = value$$1(matchValue$$8);
-      return L(y$$13, acc$$23);
+      const y$$10 = value$$1(matchValue$$8);
+      return L(y$$10, acc$$19);
     }
-  }, L(), xs$$68));
+  }, L(), xs$$74));
 }
 export function contains(value, list, eq) {
-  const loop$$1 = function loop$$1(xs$$70) {
+  const loop$$1 = function loop$$1(xs$$76) {
     loop$$1: while (true) {
-      if (xs$$70.tail != null) {
-        const v$$1 = xs$$70.head;
-        const rest = xs$$70.tail;
+      if (xs$$76.tail != null) {
+        const v$$1 = xs$$76.head;
+        const rest = xs$$76.tail;
 
         if (eq.Equals(value, v$$1)) {
           return true;
         } else {
-          xs$$70 = rest;
+          xs$$76 = rest;
           continue loop$$1;
         }
       } else {
@@ -556,67 +565,67 @@ export function except(itemsToExclude, array$$2, eq$$1) {
     return array$$2;
   } else {
     const cached = createMutable(itemsToExclude, comparerFromEqualityComparer(eq$$1));
-    return filter(function f$$44(arg00) {
+    return filter(function f$$45(arg00) {
       return addToSet(arg00, cached);
     }, array$$2);
   }
 }
-export function initialize(n$$2, f$$45) {
-  let xs$$72 = L();
+export function initialize(n$$2, f$$46) {
+  let xs$$78 = L();
 
   for (let i$$14 = 1; i$$14 <= n$$2; i$$14++) {
-    xs$$72 = L(f$$45(n$$2 - i$$14), xs$$72);
+    xs$$78 = L(f$$46(n$$2 - i$$14), xs$$78);
   }
 
-  return xs$$72;
+  return xs$$78;
 }
-export function replicate(n$$3, x$$44) {
-  return initialize(n$$3, function (_arg1$$17) {
-    return x$$44;
+export function replicate(n$$3, x$$41) {
+  return initialize(n$$3, function (_arg1$$15) {
+    return x$$41;
   });
 }
-export function reduce(f$$46, _arg1$$18) {
-  if (_arg1$$18.tail != null) {
-    const t = _arg1$$18.tail;
-    const h = _arg1$$18.head;
-    return fold(f$$46, h, t);
+export function reduce(f$$47, _arg1$$16) {
+  if (_arg1$$16.tail != null) {
+    const t$$1 = _arg1$$16.tail;
+    const h$$1 = _arg1$$16.head;
+    return fold(f$$47, h$$1, t$$1);
   } else {
     throw new Error("List was empty");
   }
 }
-export function reduceBack(f$$47, _arg1$$19) {
-  if (_arg1$$19.tail != null) {
-    const t$$1 = _arg1$$19.tail;
-    const h$$1 = _arg1$$19.head;
-    return foldBack(f$$47, t$$1, h$$1);
+export function reduceBack(f$$48, _arg1$$17) {
+  if (_arg1$$17.tail != null) {
+    const t$$2 = _arg1$$17.tail;
+    const h$$2 = _arg1$$17.head;
+    return foldBack(f$$48, t$$2, h$$2);
   } else {
     throw new Error("List was empty");
   }
 }
-export function forAll(f$$48, xs$$73) {
-  return fold(function (acc$$24, x$$45) {
-    return acc$$24 ? f$$48(x$$45) : false;
-  }, true, xs$$73);
+export function forAll(f$$49, xs$$79) {
+  return fold(function (acc$$20, x$$42) {
+    return acc$$20 ? f$$49(x$$42) : false;
+  }, true, xs$$79);
 }
-export function forAll2(f$$49, xs$$74, ys$$18) {
-  return fold2(function (acc$$25, x$$46, y$$14) {
-    return acc$$25 ? f$$49(x$$46, y$$14) : false;
-  }, true, xs$$74, ys$$18);
+export function forAll2(f$$50, xs$$80, ys$$18) {
+  return fold2(function (acc$$21, x$$43, y$$11) {
+    return acc$$21 ? f$$50(x$$43, y$$11) : false;
+  }, true, xs$$80, ys$$18);
 }
 export function exists($arg$$146, $arg$$147) {
   exists: while (true) {
-    const f$$50 = $arg$$146,
-          _arg1$$20 = $arg$$147;
+    const f$$51 = $arg$$146,
+          _arg1$$18 = $arg$$147;
 
-    if (_arg1$$20.tail != null) {
-      const xs$$75 = _arg1$$20.tail;
-      const x$$47 = _arg1$$20.head;
+    if (_arg1$$18.tail != null) {
+      const xs$$81 = _arg1$$18.tail;
+      const x$$44 = _arg1$$18.head;
 
-      if (f$$50(x$$47)) {
+      if (f$$51(x$$44)) {
         return true;
       } else {
-        $arg$$146 = f$$50;
-        $arg$$147 = xs$$75;
+        $arg$$146 = f$$51;
+        $arg$$147 = xs$$81;
         continue exists;
       }
     } else {
@@ -626,18 +635,18 @@ export function exists($arg$$146, $arg$$147) {
 }
 export function exists2($arg$$148, $arg$$149, $arg$$150) {
   exists2: while (true) {
-    const f$$51 = $arg$$148,
+    const f$$52 = $arg$$148,
           bs$$2 = $arg$$149,
           cs$$2 = $arg$$150;
     const matchValue$$9 = [bs$$2, cs$$2];
-    var $target$$151, x$$48, xs$$76, y$$15, ys$$19;
+    var $target$$151, x$$45, xs$$82, y$$12, ys$$19;
 
     if (matchValue$$9[0].tail != null) {
       if (matchValue$$9[1].tail != null) {
         $target$$151 = 1;
-        x$$48 = matchValue$$9[0].head;
-        xs$$76 = matchValue$$9[0].tail;
-        y$$15 = matchValue$$9[1].head;
+        x$$45 = matchValue$$9[0].head;
+        xs$$82 = matchValue$$9[0].tail;
+        y$$12 = matchValue$$9[1].head;
         ys$$19 = matchValue$$9[1].tail;
       } else {
         $target$$151 = 2;
@@ -652,108 +661,104 @@ export function exists2($arg$$148, $arg$$149, $arg$$150) {
       case 0:
         {
           return false;
-          break;
         }
 
       case 1:
         {
-          if (f$$51(x$$48, y$$15)) {
+          if (f$$52(x$$45, y$$12)) {
             return true;
           } else {
-            $arg$$148 = f$$51;
-            $arg$$149 = xs$$76;
+            $arg$$148 = f$$52;
+            $arg$$149 = xs$$82;
             $arg$$150 = ys$$19;
             continue exists2;
           }
-
-          break;
         }
 
       case 2:
         {
           throw new Error("Lists had different lengths");
-          break;
         }
     }
   }
 }
-export function unzip(xs$$77) {
+export function unzip(xs$$83) {
   return foldBack(function (tupledArg$$2, tupledArg$$3) {
     return [L(tupledArg$$2[0], tupledArg$$3[0]), L(tupledArg$$2[1], tupledArg$$3[1])];
-  }, xs$$77, [L(), L()]);
+  }, xs$$83, [L(), L()]);
 }
-export function unzip3(xs$$78) {
+export function unzip3(xs$$84) {
   return foldBack(function (tupledArg$$4, tupledArg$$5) {
     return [L(tupledArg$$4[0], tupledArg$$5[0]), L(tupledArg$$4[1], tupledArg$$5[1]), L(tupledArg$$4[2], tupledArg$$5[2])];
-  }, xs$$78, [L(), L(), L()]);
+  }, xs$$84, [L(), L(), L()]);
 }
-export function zip(xs$$79, ys$$20) {
-  return map2(function (x$$51, y$$18) {
-    return [x$$51, y$$18];
-  }, xs$$79, ys$$20);
+export function zip(xs$$85, ys$$20) {
+  return map2(function (x$$48, y$$15) {
+    return [x$$48, y$$15];
+  }, xs$$85, ys$$20);
 }
-export function zip3(xs$$80, ys$$21, zs$$5) {
-  return map3(function (x$$52, y$$19, z$$5) {
-    return [x$$52, y$$19, z$$5];
-  }, xs$$80, ys$$21, zs$$5);
+export function zip3(xs$$86, ys$$21, zs$$5) {
+  return map3(function (x$$49, y$$16, z$$5) {
+    return [x$$49, y$$16, z$$5];
+  }, xs$$86, ys$$21, zs$$5);
 }
-export function sort(xs$$81, comparer$$2) {
-  var xs$$82;
-  return ofArray((xs$$82 = ofList$$1(xs$$81, Array), (xs$$82.sort(function comparer$$3(x$$53, y$$20) {
-    return comparer$$2.Compare(x$$53, y$$20);
-  }), xs$$82)));
-}
-export function sortBy(projection, xs$$84, comparer$$4) {
-  var xs$$85;
-  return ofArray((xs$$85 = ofList$$1(xs$$84, Array), (xs$$85.sort(function comparer$$5(x$$54, y$$21) {
-    return comparer$$4.Compare(projection(x$$54), projection(y$$21));
-  }), xs$$85)));
-}
-export function sortDescending(xs$$87, comparer$$6) {
+export function sort(xs$$87, comparer$$2) {
   var xs$$88;
-  return ofArray((xs$$88 = ofList$$1(xs$$87, Array), (xs$$88.sort(function comparer$$7(x$$55, y$$22) {
-    return comparer$$6.Compare(x$$55, y$$22) * -1;
+  return ofArray((xs$$88 = ofList$$1(xs$$87, Array), (xs$$88.sort(function comparer$$3(x$$50, y$$17) {
+    return comparer$$2.Compare(x$$50, y$$17);
   }), xs$$88)));
 }
-export function sortByDescending(projection$$1, xs$$90, comparer$$8) {
+export function sortBy(projection, xs$$90, comparer$$4) {
   var xs$$91;
-  return ofArray((xs$$91 = ofList$$1(xs$$90, Array), (xs$$91.sort(function comparer$$9(x$$56, y$$23) {
-    return comparer$$8.Compare(projection$$1(x$$56), projection$$1(y$$23)) * -1;
+  return ofArray((xs$$91 = ofList$$1(xs$$90, Array), (xs$$91.sort(function comparer$$5(x$$51, y$$18) {
+    return comparer$$4.Compare(projection(x$$51), projection(y$$18));
   }), xs$$91)));
 }
-export function sortWith(comparer$$10, xs$$93) {
+export function sortDescending(xs$$93, comparer$$6) {
   var xs$$94;
-  return ofArray((xs$$94 = ofList$$1(xs$$93, Array), (xs$$94.sort(comparer$$10), xs$$94)));
+  return ofArray((xs$$94 = ofList$$1(xs$$93, Array), (xs$$94.sort(function comparer$$7(x$$52, y$$19) {
+    return comparer$$6.Compare(x$$52, y$$19) * -1;
+  }), xs$$94)));
 }
-export function sum(xs$$96) {
-  return fold(function (x$$57, y$$24) {
-    return x$$57 + y$$24;
-  }, 0, xs$$96);
+export function sortByDescending(projection$$1, xs$$96, comparer$$8) {
+  var xs$$97;
+  return ofArray((xs$$97 = ofList$$1(xs$$96, Array), (xs$$97.sort(function comparer$$9(x$$53, y$$20) {
+    return comparer$$8.Compare(projection$$1(x$$53), projection$$1(y$$20)) * -1;
+  }), xs$$97)));
 }
-export function sumBy(f$$52, xs$$97) {
-  return fold(function (acc$$26, x$$58) {
-    return acc$$26 + f$$52(x$$58);
-  }, 0, xs$$97);
+export function sortWith(comparer$$10, xs$$99) {
+  var xs$$100;
+  return ofArray((xs$$100 = ofList$$1(xs$$99, Array), (xs$$100.sort(comparer$$10), xs$$100)));
 }
-export function maxBy(projection$$2, xs$$98, comparer$$12) {
-  return reduce(function (x$$59, y$$25) {
-    return comparer$$12.Compare(projection$$2(y$$25), projection$$2(x$$59)) > 0 ? y$$25 : x$$59;
-  }, xs$$98);
+export function sum(xs$$102) {
+  return fold(function (x$$54, y$$21) {
+    return x$$54 + y$$21;
+  }, 0, xs$$102);
+}
+export function sumBy(f$$53, xs$$103) {
+  return fold(function (acc$$22, x$$55) {
+    return acc$$22 + f$$53(x$$55);
+  }, 0, xs$$103);
+}
+export function maxBy(projection$$2, xs$$104, comparer$$12) {
+  return reduce(function (x$$56, y$$22) {
+    return comparer$$12.Compare(projection$$2(y$$22), projection$$2(x$$56)) > 0 ? y$$22 : x$$56;
+  }, xs$$104);
 }
 export function max(li, comparer$$13) {
-  return reduce(function (x$$60, y$$26) {
-    return comparer$$13.Compare(y$$26, x$$60) > 0 ? y$$26 : x$$60;
+  return reduce(function (x$$57, y$$23) {
+    return comparer$$13.Compare(y$$23, x$$57) > 0 ? y$$23 : x$$57;
   }, li);
 }
-export function minBy(projection$$3, xs$$99, comparer$$14) {
-  return reduce(function (x$$61, y$$27) {
-    return comparer$$14.Compare(projection$$3(y$$27), projection$$3(x$$61)) > 0 ? x$$61 : y$$27;
-  }, xs$$99);
+export function minBy(projection$$3, xs$$105, comparer$$14) {
+  return reduce(function (x$$58, y$$24) {
+    return comparer$$14.Compare(projection$$3(y$$24), projection$$3(x$$58)) > 0 ? x$$58 : y$$24;
+  }, xs$$105);
 }
-export function min(xs$$100, comparer$$15) {
-  return reduce(function (x$$62, y$$28) {
-    return comparer$$15.Compare(y$$28, x$$62) > 0 ? x$$62 : y$$28;
-  }, xs$$100);
+export function min(xs$$106, comparer$$15) {
+  return reduce(function (x$$59, y$$25) {
+    return comparer$$15.Compare(y$$25, x$$59) > 0 ? x$$59 : y$$25;
+  }, xs$$106);
 }
 export function average(zs$$6) {
   const total = sum(zs$$6);
@@ -763,20 +768,20 @@ export function averageBy(g, zs$$7) {
   const total$$1 = sumBy(g, zs$$7);
   return total$$1 / length$$1(zs$$7);
 }
-export function permute(f$$53, xs$$101) {
-  return ofArray(permute$$1(f$$53, ofList(xs$$101, Array)));
+export function permute(f$$54, xs$$107) {
+  return ofArray(permute$$1(f$$54, ofList(xs$$107, Array)));
 }
-export function skip(i$$15, xs$$103) {
-  const skipInner = function skipInner(i$$16, xs$$104) {
+export function skip(i$$15, xs$$109) {
+  const skipInner = function skipInner(i$$16, xs$$110) {
     skipInner: while (true) {
-      const matchValue$$10 = [i$$16, xs$$104];
+      const matchValue$$10 = [i$$16, xs$$110];
 
       if (matchValue$$10[0] === 0) {
-        return xs$$104;
+        return xs$$110;
       } else if (matchValue$$10[1].tail != null) {
-        const xs$$105 = matchValue$$10[1].tail;
+        const xs$$111 = matchValue$$10[1].tail;
         i$$16 = i$$16 - 1;
-        xs$$104 = xs$$105;
+        xs$$110 = xs$$111;
         continue skipInner;
       } else {
         throw new Error("The input sequence has an insufficient number of elements.");
@@ -784,12 +789,12 @@ export function skip(i$$15, xs$$103) {
     }
   };
 
-  const matchValue$$11 = [i$$15, xs$$103];
+  const matchValue$$11 = [i$$15, xs$$109];
 
   if (matchValue$$11[0] < 0) {
     throw new Error("The input must be non-negative.");
   } else {
-    var $target$$172, i$$19, xs$$107;
+    var $target$$172, i$$19, xs$$113;
 
     if (matchValue$$11[0] === 0) {
       $target$$172 = 0;
@@ -799,49 +804,46 @@ export function skip(i$$15, xs$$103) {
       } else {
         $target$$172 = 2;
         i$$19 = matchValue$$11[0];
-        xs$$107 = matchValue$$11[1];
+        xs$$113 = matchValue$$11[1];
       }
     } else {
       $target$$172 = 2;
       i$$19 = matchValue$$11[0];
-      xs$$107 = matchValue$$11[1];
+      xs$$113 = matchValue$$11[1];
     }
 
     switch ($target$$172) {
       case 0:
         {
-          return xs$$103;
-          break;
+          return xs$$109;
         }
 
       case 1:
         {
-          const xs$$106 = matchValue$$11[1].tail;
-          return xs$$106;
-          break;
+          const xs$$112 = matchValue$$11[1].tail;
+          return xs$$112;
         }
 
       case 2:
         {
-          return skipInner(i$$19, xs$$107);
-          break;
+          return skipInner(i$$19, xs$$113);
         }
     }
   }
 }
 export function skipWhile($arg$$173, $arg$$174) {
-  var t$$2, h$$2;
+  var t$$3, h$$3;
 
   skipWhile: while (true) {
     const predicate = $arg$$173,
-          xs$$108 = $arg$$174;
-    var $target$$175, h$$3, t$$3;
+          xs$$114 = $arg$$174;
+    var $target$$175, h$$4, t$$4;
 
-    if (xs$$108.tail != null) {
-      if (t$$2 = xs$$108.tail, (h$$2 = xs$$108.head, predicate(h$$2))) {
+    if (xs$$114.tail != null) {
+      if (t$$3 = xs$$114.tail, (h$$3 = xs$$114.head, predicate(h$$3))) {
         $target$$175 = 0;
-        h$$3 = xs$$108.head;
-        t$$3 = xs$$108.tail;
+        h$$4 = xs$$114.head;
+        t$$4 = xs$$114.tail;
       } else {
         $target$$175 = 1;
       }
@@ -853,49 +855,47 @@ export function skipWhile($arg$$173, $arg$$174) {
       case 0:
         {
           $arg$$173 = predicate;
-          $arg$$174 = t$$3;
+          $arg$$174 = t$$4;
           continue skipWhile;
-          break;
         }
 
       case 1:
         {
-          return xs$$108;
-          break;
+          return xs$$114;
         }
     }
   }
 }
-export function takeSplitAux(error, i$$20, acc$$27, xs$$109) {
+export function takeSplitAux(error, i$$20, acc$$23, xs$$115) {
   takeSplitAux: while (true) {
-    const matchValue$$12 = [i$$20, xs$$109];
+    const matchValue$$12 = [i$$20, xs$$115];
 
     if (matchValue$$12[0] === 0) {
-      return [reverse(acc$$27), xs$$109];
+      return [reverse(acc$$23), xs$$115];
     } else if (matchValue$$12[1].tail != null) {
-      const xs$$110 = matchValue$$12[1].tail;
-      const x$$63 = matchValue$$12[1].head;
+      const xs$$116 = matchValue$$12[1].tail;
+      const x$$60 = matchValue$$12[1].head;
       error = error;
       i$$20 = i$$20 - 1;
-      acc$$27 = L(x$$63, acc$$27);
-      xs$$109 = xs$$110;
+      acc$$23 = L(x$$60, acc$$23);
+      xs$$115 = xs$$116;
       continue takeSplitAux;
     } else {
       if (error) {
         throw new Error("The input sequence has an insufficient number of elements.");
       } else {
-        return [reverse(acc$$27), xs$$109];
+        return [reverse(acc$$23), xs$$115];
       }
     }
   }
 }
-export function take(i$$21, xs$$111) {
-  const matchValue$$13 = [i$$21, xs$$111];
+export function take(i$$21, xs$$117) {
+  const matchValue$$13 = [i$$21, xs$$117];
 
   if (matchValue$$13[0] < 0) {
     throw new Error("The input must be non-negative.");
   } else {
-    var $target$$176, i$$24, xs$$112;
+    var $target$$176, i$$24, xs$$118;
 
     if (matchValue$$13[0] === 0) {
       $target$$176 = 0;
@@ -905,62 +905,59 @@ export function take(i$$21, xs$$111) {
       } else {
         $target$$176 = 2;
         i$$24 = matchValue$$13[0];
-        xs$$112 = matchValue$$13[1];
+        xs$$118 = matchValue$$13[1];
       }
     } else {
       $target$$176 = 2;
       i$$24 = matchValue$$13[0];
-      xs$$112 = matchValue$$13[1];
+      xs$$118 = matchValue$$13[1];
     }
 
     switch ($target$$176) {
       case 0:
         {
           return L();
-          break;
         }
 
       case 1:
         {
-          const x$$64 = matchValue$$13[1].head;
-          return L(x$$64, L());
-          break;
+          const x$$61 = matchValue$$13[1].head;
+          return L(x$$61, L());
         }
 
       case 2:
         {
-          return takeSplitAux(true, i$$24, L(), xs$$112)[0];
-          break;
+          return takeSplitAux(true, i$$24, L(), xs$$118)[0];
         }
     }
   }
 }
-export function takeWhile(predicate$$1, xs$$113) {
-  if (xs$$113.tail != null) {
-    if (xs$$113.tail.tail == null) {
-      if (predicate$$1(xs$$113.head)) {
-        return xs$$113;
+export function takeWhile(predicate$$1, xs$$119) {
+  if (xs$$119.tail != null) {
+    if (xs$$119.tail.tail == null) {
+      if (predicate$$1(xs$$119.head)) {
+        return xs$$119;
       } else {
-        return xs$$113.tail;
+        return xs$$119.tail;
       }
     } else {
-      if (!predicate$$1(xs$$113.head)) {
+      if (!predicate$$1(xs$$119.head)) {
         return L();
       } else {
-        return L(xs$$113.head, takeWhile(predicate$$1, xs$$113.tail));
+        return L(xs$$119.head, takeWhile(predicate$$1, xs$$119.tail));
       }
     }
   } else {
-    return xs$$113;
+    return xs$$119;
   }
 }
-export function truncate(i$$25, xs$$115) {
-  const matchValue$$14 = [i$$25, xs$$115];
+export function truncate(i$$25, xs$$121) {
+  const matchValue$$14 = [i$$25, xs$$121];
 
   if (matchValue$$14[0] < 0) {
     throw new Error("The input must be non-negative.");
   } else {
-    var $target$$179, i$$28, xs$$116;
+    var $target$$179, i$$28, xs$$122;
 
     if (matchValue$$14[0] === 0) {
       $target$$179 = 0;
@@ -970,43 +967,40 @@ export function truncate(i$$25, xs$$115) {
       } else {
         $target$$179 = 2;
         i$$28 = matchValue$$14[0];
-        xs$$116 = matchValue$$14[1];
+        xs$$122 = matchValue$$14[1];
       }
     } else {
       $target$$179 = 2;
       i$$28 = matchValue$$14[0];
-      xs$$116 = matchValue$$14[1];
+      xs$$122 = matchValue$$14[1];
     }
 
     switch ($target$$179) {
       case 0:
         {
           return L();
-          break;
         }
 
       case 1:
         {
-          const x$$67 = matchValue$$14[1].head;
-          return L(x$$67, L());
-          break;
+          const x$$64 = matchValue$$14[1].head;
+          return L(x$$64, L());
         }
 
       case 2:
         {
-          return takeSplitAux(false, i$$28, L(), xs$$116)[0];
-          break;
+          return takeSplitAux(false, i$$28, L(), xs$$122)[0];
         }
     }
   }
 }
-export function splitAt(i$$29, xs$$117) {
-  const matchValue$$15 = [i$$29, xs$$117];
+export function splitAt(i$$29, xs$$123) {
+  const matchValue$$15 = [i$$29, xs$$123];
 
   if (matchValue$$15[0] < 0) {
     throw new Error("The input must be non-negative.");
   } else {
-    var $target$$180, i$$32, xs$$119;
+    var $target$$180, i$$32, xs$$125;
 
     if (matchValue$$15[0] === 0) {
       $target$$180 = 0;
@@ -1016,83 +1010,57 @@ export function splitAt(i$$29, xs$$117) {
       } else {
         $target$$180 = 2;
         i$$32 = matchValue$$15[0];
-        xs$$119 = matchValue$$15[1];
+        xs$$125 = matchValue$$15[1];
       }
     } else {
       $target$$180 = 2;
       i$$32 = matchValue$$15[0];
-      xs$$119 = matchValue$$15[1];
+      xs$$125 = matchValue$$15[1];
     }
 
     switch ($target$$180) {
       case 0:
         {
-          return [L(), xs$$117];
-          break;
+          return [L(), xs$$123];
         }
 
       case 1:
         {
-          const xs$$118 = matchValue$$15[1].tail;
-          const x$$68 = matchValue$$15[1].head;
-          return [L(x$$68, L()), xs$$118];
-          break;
+          const xs$$124 = matchValue$$15[1].tail;
+          const x$$65 = matchValue$$15[1].head;
+          return [L(x$$65, L()), xs$$124];
         }
 
       case 2:
         {
-          return takeSplitAux(true, i$$32, L(), xs$$119);
-          break;
+          return takeSplitAux(true, i$$32, L(), xs$$125);
         }
     }
   }
 }
-export function toSeq(xs$$120) {
-  return unfold$$1(function (_arg1$$21) {
-    if (_arg1$$21.tail != null) {
-      const xs$$121 = _arg1$$21.tail;
-      const x$$69 = _arg1$$21.head;
-      return [x$$69, xs$$121];
-    } else {
-      return null;
-    }
-  }, xs$$120);
-}
-export function ofSeq(xs$$122) {
-  return foldBack$$2(function (x$$70, acc$$28) {
-    return L(x$$70, acc$$28);
-  }, xs$$122, L());
-}
-export function concat(lists) {
-  return foldBack$$2(function (list$$2, state$$3) {
-    return foldBack$$3(function folder(x$$71, acc$$29) {
-      return L(x$$71, acc$$29);
-    }, list$$2, state$$3);
-  }, lists, L());
-}
-export function slice(lower, upper, xs$$123) {
+export function slice(lower, upper, xs$$126) {
   const lower$$1 = defaultArg(lower, -1) | 0;
   const upper$$1 = defaultArg(upper, -1) | 0;
-  return reverse(foldIndexed(function f$$54(i$$33, acc$$30, x$$72) {
+  return reverse(foldIndexed(function f$$55(i$$33, acc$$24, x$$66) {
     if ((lower$$1 === -1 ? true : lower$$1 <= i$$33) ? upper$$1 === -1 ? true : i$$33 <= upper$$1 : false) {
-      return L(x$$72, acc$$30);
+      return L(x$$66, acc$$24);
     } else {
-      return acc$$30;
+      return acc$$24;
     }
-  }, L(), xs$$123));
+  }, L(), xs$$126));
 }
-export function distinctBy(projection$$4, xs$$126, eq$$2) {
+export function distinctBy(projection$$4, xs$$129, eq$$2) {
   const hashSet = createMutable([], comparerFromEqualityComparer(eq$$2));
-  return filter(function f$$55($arg$$1) {
+  return filter(function f$$56($arg$$1) {
     return addToSet(projection$$4($arg$$1), hashSet);
-  }, xs$$126);
+  }, xs$$129);
 }
-export function distinct(xs$$128, eq$$3) {
-  return distinctBy(function (x$$73) {
-    return x$$73;
-  }, xs$$128, eq$$3);
+export function distinct(xs$$131, eq$$3) {
+  return distinctBy(function (x$$67) {
+    return x$$67;
+  }, xs$$131, eq$$3);
 }
-export function groupBy(projection$$5, xs$$129, eq$$4) {
+export function groupBy(projection$$5, xs$$132, eq$$4) {
   const dict = createMutable$$1([], comparerFromEqualityComparer(eq$$4));
   iterate$$1(function (v$$2) {
     const key = projection$$5(v$$2);
@@ -1102,12 +1070,12 @@ export function groupBy(projection$$5, xs$$129, eq$$4) {
     } else {
       dict.set(key, L(v$$2, L()));
     }
-  }, xs$$129);
+  }, xs$$132);
   return ofSeq$$1(map$$1(function mapping(kv) {
     return [kv[0], reverse(kv[1])];
   }, dict));
 }
-export function countBy(projection$$6, xs$$130, eq$$5) {
+export function countBy(projection$$6, xs$$133, eq$$5) {
   const dict$$1 = createMutable$$1([], comparerFromEqualityComparer(eq$$5));
   iterate(function (v$$3) {
     const key$$1 = projection$$6(v$$3);
@@ -1118,13 +1086,13 @@ export function countBy(projection$$6, xs$$130, eq$$5) {
     } else {
       dict$$1.set(key$$1, new FSharpRef(1));
     }
-  }, xs$$130);
+  }, xs$$133);
   let result$$1 = L();
   iterate$$1(function (group) {
     result$$1 = L([group[0], group[1].contents], result$$1);
   }, dict$$1);
   return result$$1;
 }
-export function where(predicate$$2, xs$$131) {
-  return filter(predicate$$2, xs$$131);
+export function where(predicate$$2, xs$$134) {
+  return filter(predicate$$2, xs$$134);
 }

@@ -1,8 +1,0 @@
-/Users/alfonsogarciacaronunez/dev/repl2/public/samples/obj/Debug/netstandard2.0/Samples.fsprojAssemblyReference.cache
-/Users/alfonsogarciacaronunez/dev/repl2/public/samples/obj/Debug/netstandard2.0/Samples.AssemblyInfoInputs.cache
-/Users/alfonsogarciacaronunez/dev/repl2/public/samples/obj/Debug/netstandard2.0/Samples.AssemblyInfo.fs
-/Users/alfonsogarciacaronunez/dev/repl2/public/samples/bin/Debug/netstandard2.0/Samples.deps.json
-/Users/alfonsogarciacaronunez/dev/repl2/public/samples/bin/Debug/netstandard2.0/Samples.dll
-/Users/alfonsogarciacaronunez/dev/repl2/public/samples/bin/Debug/netstandard2.0/Samples.pdb
-/Users/alfonsogarciacaronunez/dev/repl2/public/samples/obj/Debug/netstandard2.0/Samples.dll
-/Users/alfonsogarciacaronunez/dev/repl2/public/samples/obj/Debug/netstandard2.0/Samples.pdb
