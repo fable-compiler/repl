@@ -16,7 +16,7 @@
     "bulma-pageloader": "^2.1.0",
     "font-awesome": "^4.7.0",
     "lz-string": "^1.4.4",
-    "monaco-editor": "^0.14.3",
+    "monaco-editor": "0.14.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-monaco-editor": "^0.18.0",

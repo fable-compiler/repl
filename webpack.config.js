@@ -48,7 +48,9 @@ var commonPlugins = [
             "fsharp",
             "html",
             "css",
-            "typescript" // Using "javascript" triggers an error with latest Monaco
+            "javascript",
+            // We need typescript too, see https://github.com/Microsoft/monaco-editor-webpack-plugin/issues/27
+            "typescript"
         ],
         features: [
             'accessibilityHelp',
