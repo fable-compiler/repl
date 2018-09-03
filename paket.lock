@@ -327,13 +327,13 @@ NUGET
       Fable.PowerPack (>= 1.5.1) - restriction: >= netstandard2.0
       Fable.React (>= 3.1.3) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.5) - restriction: >= netstandard2.0
-    Thoth.Json (2.0.0-beta-004)
-      Fable.Core (>= 2.0.0-alpha-011) - restriction: >= netstandard2.0
-      FSharp.Core (>= 4.5) - restriction: >= netstandard2.0
+    Thoth.Json (2.0.0-beta-005)
+      Fable.Core (>= 2.0.0-beta-001) - restriction: >= netstandard2.0
+      FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
 GITHUB
   remote: fable-compiler/Fable
-    src/dotnet/Fable.JS/Interfaces.fs (325c94de038a0bdd22220e416c809db7a3237ba2)
-    src/dotnet/Fable.JS/Metadata.fs (325c94de038a0bdd22220e416c809db7a3237ba2)
+    src/dotnet/Fable.Repl/Interfaces.fs (6b4638763e9709ca6cb5d11046961163bbfe1733)
+    src/dotnet/Fable.Repl/Metadata.fs (6b4638763e9709ca6cb5d11046961163bbfe1733)
 GROUP Build
 RESTRICTION: == net46
 NUGET

@@ -1,7 +1,7 @@
 let fableBranch = "master"
 let AppveyorReplArtifactURLParams = "?branch=" + fableBranch + "&pr=false"
 let AppveyorReplArtifactURL =
-    "https://ci.appveyor.com/api/projects/fable-compiler/Fable/artifacts/src/dotnet/Fable.JS/repl-bundle.zip"
+    "https://ci.appveyor.com/api/projects/fable-compiler/Fable/artifacts/src/dotnet/Fable.Repl/repl-bundle.zip"
     + AppveyorReplArtifactURLParams
 
 let FCSExportFolderName = "FSharp.Compiler.Service_export"
@@ -181,7 +181,7 @@ Target "GetBundleFromAppveyor" (fun _ ->
 
 // Assume the bundle has been built in a sibling Fable repo
 Target "GetBundleLocally" (fun _ ->
-    FileUtils.cp_r (currentDir </> "../fable/src/dotnet/Fable.JS/bundle") (currentDir </> "public/js/repl")
+    FileUtils.cp_r (currentDir </> "../fable/src/dotnet/Fable.Repl/bundle") (currentDir </> "public/js/repl")
 )
 
 Target "BuildLib" (fun _ ->

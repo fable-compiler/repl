@@ -65,7 +65,7 @@ type Msg =
     | LoadSuccess
     | LoadFail
     | UrlHashChange
-    | MarkEditorErrors of Fable.JS.Error[]
+    | MarkEditorErrors of Fable.Repl.Error[]
     | StartCompile of string option
     | EndCompile of Result<string, string>
     | ShareCode

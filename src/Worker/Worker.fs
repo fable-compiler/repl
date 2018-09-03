@@ -3,7 +3,7 @@ module Fable.Repl.Worker
 open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Import
-open Fable.JS
+open Fable.Repl
 open Shared
 
 let [<Global>] self: Browser.Worker = jsNative
