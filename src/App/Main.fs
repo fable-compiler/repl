@@ -64,6 +64,7 @@ type Msg =
     | SetFSharpEditor of IEditor
     | LoadSuccess
     | LoadFail
+    | Reset
     | UrlHashChange
     | MarkEditorErrors of Fable.Repl.Error[]
     | StartCompile of string option
@@ -109,6 +110,15 @@ let showErrorToast msg =
     |> Toast.withCloseButton
     |> Toast.error
 
+let resetState model = 
+    Browser.window.localStorage.removeItem(Literals.STORAGE_KEY)
+    Browser.window.location.hash <- ""
+    let saved = loadState(Literals.STORAGE_KEY)
+    { model with FSharpCode = saved.code
+                 HtmlCode = saved.html
+                 CodeES2015 = ""
+                 IFrameUrl = "" }, Cmd.none
+
 let update msg model =
     match msg with
     | LoadSuccess ->
@@ -127,6 +137,8 @@ let update msg model =
         { model with State = Idle }, showErrorToast msg
 
     | SetFSharpEditor ed -> { model with FSharpEditor = ed }, Cmd.none
+
+    | Reset -> resetState model
 
     | UrlHashChange ->
         let parsed = loadState(Literals.STORAGE_KEY)
@@ -248,13 +260,7 @@ let update msg model =
             | Sidebar.Share ->
                 model, Cmd.ofMsg ShareCode
             | Sidebar.Reset ->
-                Browser.window.localStorage.removeItem(Literals.STORAGE_KEY)
-                Browser.window.location.hash <- ""
-                let saved = loadState(Literals.STORAGE_KEY)
-                { model with FSharpCode = saved.code
-                             HtmlCode = saved.html
-                             CodeES2015 = ""
-                             IFrameUrl = "" }, Cmd.none
+                resetState model
 
         { newModel with Sidebar = subModel }, Cmd.batch [ Cmd.map SidebarMsg cmd
                                                           extraCmd ]
@@ -267,6 +273,11 @@ let update msg model =
 
 let init () =
     let worker = Worker()
+
+    if (Browser.window.location.hash = "#reset") then
+        Browser.window.localStorage.removeItem(Literals.STORAGE_KEY)
+        Browser.window.location.hash <- ""
+
     let saved = loadState(Literals.STORAGE_KEY)
     let sidebarModel, sidebarCmd = Sidebar.init saved.sample
     let cmd = Cmd.batch [
@@ -522,7 +533,11 @@ let private subscriptions (model: Model) =
 
         // Subscribe to URL hash change events
         Browser.window.addEventListener_hashchange(fun _ ->
-            dispatch UrlHashChange)
+            let message = 
+                match Browser.window.location.hash with
+                | "#reset" -> Reset
+                | _ -> UrlHashChange
+            dispatch message)
 
     Cmd.ofSub sub
 
