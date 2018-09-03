@@ -40,11 +40,11 @@ type WorkerRequest =
 type WorkerAnswer =
     | Loaded
     | LoadFailed
-    | ParsedCode of errors: Fable.JS.Error[]
-    | CompiledCode of jsCode: string * errors: Fable.JS.Error[]
+    | ParsedCode of errors: Fable.Repl.Error[]
+    | CompiledCode of jsCode: string * errors: Fable.Repl.Error[]
     | CompilationFailed of message: string
     | FoundTooltip of lines: string[]
-    | FoundCompletions of Fable.JS.Completion[]
+    | FoundCompletions of Fable.Repl.Completion[]
     static member Decoder =
         Decode.Auto.generateDecoder<WorkerAnswer>()
 

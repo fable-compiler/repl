@@ -6,7 +6,7 @@ open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Import
 open Fable.PowerPack
-open Fable.JS
+open Fable.Repl
 
 let getEditorContent (ed: Monaco.Editor.IStandaloneCodeEditor) =
     ed.getModel().getValue(Monaco.Editor.EndOfLinePreference.TextDefined, true)
@@ -16,7 +16,7 @@ let getEditorContent (ed: Monaco.Editor.IStandaloneCodeEditor) =
 //---------------------------------------------------
 
 /// **Description**
-/// Convert `Fable.JS.Glyph` type into the `Monaco.Languages.CompletionItemKind`
+/// Convert `Fable.Repl.Glyph` type into the `Monaco.Languages.CompletionItemKind`
 /// **Parameters**
 ///   * `glyph` - parameter of type `Glyph`
 ///
@@ -48,7 +48,7 @@ let createCompletionProvider getCompletions =
                 let! completions = getCompletions position.lineNumber position.column lineText
                 return
                     completions
-                    |> Array.map (fun (c: Fable.JS.Completion) ->
+                    |> Array.map (fun (c: Fable.Repl.Completion) ->
                         jsOptions<Monaco.Languages.CompletionItem>(fun ci ->
                             ci.label <- c.Name
                             ci.kind <- convertGlyph c.Glyph

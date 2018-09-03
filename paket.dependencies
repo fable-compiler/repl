@@ -14,8 +14,8 @@ nuget Thoth.Json prerelease
 nuget Thoth.Elmish.Toast
 nuget Fable.PowerPack prerelease
 
-github fable-compiler/Fable:master src/dotnet/Fable.JS/Interfaces.fs
-github fable-compiler/Fable:master src/dotnet/Fable.JS/Metadata.fs
+github fable-compiler/Fable:master src/dotnet/Fable.Repl/Interfaces.fs
+github fable-compiler/Fable:master src/dotnet/Fable.Repl/Metadata.fs
 
 group Build
 framework: net46
