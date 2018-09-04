@@ -1,7 +1,7 @@
 STORAGE: NONE
 NUGET
   remote: https://www.nuget.org/api/v2
-    dotnet-fable (2.0.0-beta-002) - clitool: true
+    dotnet-fable (2.0.0-beta-003) - clitool: true
       Dotnet.ProjInfo (>= 0.9) - restriction: >= netcoreapp2.0
       FSharp.Compiler.Service (>= 23.0.3) - restriction: >= netcoreapp2.0
       FSharp.Core (>= 4.3.4) - restriction: >= netcoreapp2.0
@@ -332,8 +332,8 @@ NUGET
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
 GITHUB
   remote: fable-compiler/Fable
-    src/dotnet/Fable.Repl/Interfaces.fs (6b4638763e9709ca6cb5d11046961163bbfe1733)
-    src/dotnet/Fable.Repl/Metadata.fs (6b4638763e9709ca6cb5d11046961163bbfe1733)
+    src/dotnet/Fable.Repl/Interfaces.fs (052aeb0c37028de1ba563310b9dbb93ff0cac4bc)
+    src/dotnet/Fable.Repl/Metadata.fs (052aeb0c37028de1ba563310b9dbb93ff0cac4bc)
 GROUP Build
 RESTRICTION: == net46
 NUGET
