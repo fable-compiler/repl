@@ -1,8 +1,7 @@
 import { L, Record, declare, Union } from "./Types.js";
 import { value as value$$2, some, Choice } from "./Option.js";
 import { downcast, structuralHash, toString, extend, THIS_REF } from "./Util.js";
-import { iterate as iterate$$1, empty as empty$$1, fold as fold$$2, toIterator, map as map$$1, reduce, getEnumerator, unfold } from "./Seq.js";
-import { fold as fold$$1 } from "./Array.js";
+import { iterate as iterate$$1, empty as empty$$1, fold as fold$$1, toIterator, map as map$$1, reduce, getEnumerator, unfold } from "./Seq.js";
 import { join } from "./String.js";
 export const SetTree$00601 = declare(function SetTree$00601(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
@@ -315,7 +314,7 @@ export function SetTreeModule$$$spliceOutSuccessor(t$$3) {
 
     default:
       {
-        throw new Error("internal error: Map.spliceOutSuccessor");
+        throw new Error("internal error: Set.spliceOutSuccessor");
       }
   }
 }
@@ -1365,10 +1364,14 @@ export function SetTreeModule$$$ofSeq(comparer$$20, c$$11) {
     ie.Dispose();
   }
 }
-export function SetTreeModule$$$ofArray(comparer$$21, l$$21) {
-  return fold$$1(function (acc$$12, k$$33) {
-    return SetTreeModule$$$add(comparer$$21, k$$33, acc$$12);
-  }, new SetTree$00601(0, "SetEmpty"), l$$21);
+export function SetTreeModule$$$ofArray(comparer$$21, arr$$1) {
+  let acc$$12 = new SetTree$00601(0, "SetEmpty");
+
+  for (let i$$3 = 0; i$$3 <= arr$$1.length - 1; i$$3++) {
+    acc$$12 = SetTreeModule$$$add(comparer$$21, arr$$1[i$$3], acc$$12);
+  }
+
+  return acc$$12;
 }
 export const FSharpSet = declare(function FSharpSet(comparer$$22, tree) {
   const $this$$2 = this;
@@ -1427,9 +1430,9 @@ export function FSharpSet$$Filter$$Z1D55A0D7(s$$28, f$$12) {
     return FSharpSet$$$$002Ector$$2528C5CB(FSharpSet$$get_Comparer(s$$28), SetTreeModule$$$filter(FSharpSet$$get_Comparer(s$$28), f$$12, FSharpSet$$get_Tree(s$$28)));
   }
 }
-export function FSharpSet$$Map$$596F5D77(s$$29, f$$13, comparer$$23) {
-  return FSharpSet$$$$002Ector$$2528C5CB(comparer$$23, SetTreeModule$$$fold(function (acc$$13, k$$34) {
-    return SetTreeModule$$$add(comparer$$23, f$$13(k$$34), acc$$13);
+export function FSharpSet$$Map$$38806891(s$$29, f$$13, comparer$$23) {
+  return FSharpSet$$$$002Ector$$2528C5CB(comparer$$23, SetTreeModule$$$fold(function (acc$$13, k$$33) {
+    return SetTreeModule$$$add(comparer$$23, f$$13(k$$33), acc$$13);
   }, new SetTree$00601(0, "SetEmpty"), FSharpSet$$get_Tree(s$$29)));
 }
 export function FSharpSet$$Exists$$Z1D55A0D7(s$$30, f$$14) {
@@ -1552,7 +1555,7 @@ export function union(s1$$2, s2$$2) {
   return FSharpSet$$$op_Addition(s1$$2, s2$$2);
 }
 export function unionMany(sets$$1, comparer$$25) {
-  return fold$$2(FSharpSet$$$op_Addition, FSharpSet$$$$002Ector$$2528C5CB(comparer$$25, new SetTree$00601(0, "SetEmpty")), sets$$1);
+  return fold$$1(FSharpSet$$$op_Addition, FSharpSet$$$$002Ector$$2528C5CB(comparer$$25, new SetTree$00601(0, "SetEmpty")), sets$$1);
 }
 export function intersect(s1$$3, s2$$3) {
   return FSharpSet$$$Intersection$$Z3BE9BFE0(s1$$3, s2$$3);
@@ -1585,9 +1588,7 @@ export function foldBack(f$$22, s$$43, z$$3) {
   return SetTreeModule$$$foldBack(f$$22, FSharpSet$$get_Tree(s$$43), z$$3);
 }
 export function map(f$$23, s$$44, comparer$$27) {
-  return FSharpSet$$$$002Ector$$2528C5CB(comparer$$27, SetTreeModule$$$fold(function (acc$$14, k$$35) {
-    return SetTreeModule$$$add(comparer$$27, f$$23(k$$35), acc$$14);
-  }, new SetTree$00601(0, "SetEmpty"), FSharpSet$$get_Tree(s$$44)));
+  return FSharpSet$$Map$$38806891(s$$44, f$$23, comparer$$27);
 }
 export function count(s$$45) {
   return FSharpSet$$get_Count(s$$45);
@@ -1601,8 +1602,8 @@ export function maximumElement(s$$47) {
 export function ofList(li, comparer$$28) {
   return FSharpSet$$$$002Ector$$2528C5CB(comparer$$28, SetTreeModule$$$ofSeq(comparer$$28, li));
 }
-export function ofArray(arr$$1, comparer$$29) {
-  return FSharpSet$$$$002Ector$$2528C5CB(comparer$$29, SetTreeModule$$$ofArray(comparer$$29, arr$$1));
+export function ofArray(arr$$2, comparer$$29) {
+  return FSharpSet$$$$002Ector$$2528C5CB(comparer$$29, SetTreeModule$$$ofArray(comparer$$29, arr$$2));
 }
 export function toList(s$$48) {
   return SetTreeModule$$$toList(FSharpSet$$get_Tree(s$$48));
@@ -1712,8 +1713,8 @@ export function distinctBy(projection, xs$$1, comparer$$34) {
   return li$$1;
 }
 export function unionWith(s1$$4, s2$$4) {
-  return fold$$2(function folder(acc$$15, x$$38) {
-    return acc$$15.add(x$$38);
+  return fold$$1(function folder(acc$$14, x$$38) {
+    return acc$$14.add(x$$38);
   }, s1$$4, s2$$4);
 }
 export function intersectWith(s1$$5, s2$$5, comparer$$35) {

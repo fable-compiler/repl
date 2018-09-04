@@ -1,11 +1,10 @@
 import { defaultArg, value as value$$1, some } from "./Option.js";
 import { FSharpRef, L } from "./Types.js";
 import { iterate as iterate$$1, collect as collect$$1, scanBack as scanBack$$1, scan as scan$$1, foldBack2 as foldBack2$$1, fold2 as fold2$$1, fold as fold$$1, map as map$$1 } from "./Seq.js";
-import { permute as permute$$1, ofList as ofList$$1, findIndexBack as findIndexBack$$1, tryFindIndexBack as tryFindIndexBack$$1, foldBack as foldBack$$1 } from "./Array.js";
+import { permute as permute$$1, findIndexBack as findIndexBack$$1, tryFindIndexBack as tryFindIndexBack$$1, foldBack as foldBack$$1 } from "./Array.js";
 import { ofList } from "./Array.js";
 import { tryGetValue, addToSet, comparerFromEqualityComparer } from "./Util.js";
 import { createMutable } from "./Set.js";
-import { ofSeq as ofSeq$$1, length as length$$1 } from "./List.js";
 import { createMutable as createMutable$$1 } from "./Map.js";
 export function head(_arg1) {
   if (_arg1.tail != null) {
@@ -704,31 +703,31 @@ export function zip3(xs$$86, ys$$21, zs$$5) {
 }
 export function sort(xs$$87, comparer$$2) {
   var xs$$88;
-  return ofArray((xs$$88 = ofList$$1(xs$$87, Array), (xs$$88.sort(function comparer$$3(x$$50, y$$17) {
+  return ofArray((xs$$88 = ofList(xs$$87, Array), (xs$$88.sort(function comparer$$3(x$$50, y$$17) {
     return comparer$$2.Compare(x$$50, y$$17);
   }), xs$$88)));
 }
 export function sortBy(projection, xs$$90, comparer$$4) {
   var xs$$91;
-  return ofArray((xs$$91 = ofList$$1(xs$$90, Array), (xs$$91.sort(function comparer$$5(x$$51, y$$18) {
+  return ofArray((xs$$91 = ofList(xs$$90, Array), (xs$$91.sort(function comparer$$5(x$$51, y$$18) {
     return comparer$$4.Compare(projection(x$$51), projection(y$$18));
   }), xs$$91)));
 }
 export function sortDescending(xs$$93, comparer$$6) {
   var xs$$94;
-  return ofArray((xs$$94 = ofList$$1(xs$$93, Array), (xs$$94.sort(function comparer$$7(x$$52, y$$19) {
+  return ofArray((xs$$94 = ofList(xs$$93, Array), (xs$$94.sort(function comparer$$7(x$$52, y$$19) {
     return comparer$$6.Compare(x$$52, y$$19) * -1;
   }), xs$$94)));
 }
 export function sortByDescending(projection$$1, xs$$96, comparer$$8) {
   var xs$$97;
-  return ofArray((xs$$97 = ofList$$1(xs$$96, Array), (xs$$97.sort(function comparer$$9(x$$53, y$$20) {
+  return ofArray((xs$$97 = ofList(xs$$96, Array), (xs$$97.sort(function comparer$$9(x$$53, y$$20) {
     return comparer$$8.Compare(projection$$1(x$$53), projection$$1(y$$20)) * -1;
   }), xs$$97)));
 }
 export function sortWith(comparer$$10, xs$$99) {
   var xs$$100;
-  return ofArray((xs$$100 = ofList$$1(xs$$99, Array), (xs$$100.sort(comparer$$10), xs$$100)));
+  return ofArray((xs$$100 = ofList(xs$$99, Array), (xs$$100.sort(comparer$$10), xs$$100)));
 }
 export function sum(xs$$102) {
   return fold(function (x$$54, y$$21) {
@@ -762,11 +761,11 @@ export function min(xs$$106, comparer$$15) {
 }
 export function average(zs$$6) {
   const total = sum(zs$$6);
-  return total / length$$1(zs$$6);
+  return total / length(zs$$6);
 }
 export function averageBy(g, zs$$7) {
   const total$$1 = sumBy(g, zs$$7);
-  return total$$1 / length$$1(zs$$7);
+  return total$$1 / length(zs$$7);
 }
 export function permute(f$$54, xs$$107) {
   return ofArray(permute$$1(f$$54, ofList(xs$$107, Array)));
@@ -1071,11 +1070,11 @@ export function groupBy(projection$$5, xs$$132, eq$$4) {
       dict.set(key, L(v$$2, L()));
     }
   }, xs$$132);
-  return ofSeq$$1(map$$1(function mapping(kv) {
+  return ofSeq(map$$1(function mapping(kv) {
     return [kv[0], reverse(kv[1])];
   }, dict));
 }
-export function countBy(projection$$6, xs$$133, eq$$5) {
+export function countBy(projection$$6, xs$$134, eq$$5) {
   const dict$$1 = createMutable$$1([], comparerFromEqualityComparer(eq$$5));
   iterate(function (v$$3) {
     const key$$1 = projection$$6(v$$3);
@@ -1086,13 +1085,13 @@ export function countBy(projection$$6, xs$$133, eq$$5) {
     } else {
       dict$$1.set(key$$1, new FSharpRef(1));
     }
-  }, xs$$133);
+  }, xs$$134);
   let result$$1 = L();
   iterate$$1(function (group) {
     result$$1 = L([group[0], group[1].contents], result$$1);
   }, dict$$1);
   return result$$1;
 }
-export function where(predicate$$2, xs$$134) {
-  return filter(predicate$$2, xs$$134);
+export function where(predicate$$2, xs$$135) {
+  return filter(predicate$$2, xs$$135);
 }

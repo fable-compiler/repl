@@ -1030,7 +1030,7 @@ export function FSharpMap$$TryGetValue$$5BDDA1(__$$10, k$$30, defValue) {
     return [true, v$$25];
   }
 }
-export function FSharpMap$$TryPick$$Z52B03DBD(__$$11, f$$17) {
+export function FSharpMap$$TryPick$$72321DD7(__$$11, f$$17) {
   return MapTreeModule$$$tryPick(f$$17, __$$11.tree);
 }
 export function FSharpMap$$Exists$$Z395DDC35(__$$12, f$$18) {
@@ -1051,10 +1051,10 @@ export function FSharpMap$$FoldSection(__$$16, lo$$2, hi$$2, f$$22, acc$$12) {
 export function FSharpMap$$Iterate$$1DCFB91D(__$$17, f$$23) {
   MapTreeModule$$$iter(f$$23, __$$17.tree);
 }
-export function FSharpMap$$MapRange$$Z1D9544EB(__$$18, f$$24) {
+export function FSharpMap$$MapRange$$6DC7247(__$$18, f$$24) {
   return FSharpMap$$$$002Ector$$58ADD115(__$$18.comparer, MapTreeModule$$$map(f$$24, __$$18.tree));
 }
-export function FSharpMap$$Map$$Z5CD84AAA(__$$19, f$$25) {
+export function FSharpMap$$Map$$Z6F6B671C(__$$19, f$$25) {
   return FSharpMap$$$$002Ector$$58ADD115(__$$19.comparer, MapTreeModule$$$mapi(f$$25, __$$19.tree));
 }
 export function FSharpMap$$Partition$$Z395DDC35(__$$20, f$$26) {
@@ -1095,9 +1095,9 @@ FSharpMap.prototype.GetHashCode = function () {
   const e$$1 = MapTreeModule$$$mkIEnumerator(FSharpMap$$get_Tree(this$$$1));
 
   while (e$$1.MoveNext()) {
-    const activePatternResult2372 = e$$1.Current;
-    res$$3 = combineHash(res$$3, structuralHash(activePatternResult2372[0]));
-    res$$3 = combineHash(res$$3, structuralHash(activePatternResult2372[1]));
+    const activePatternResult2414 = e$$1.Current;
+    res$$3 = combineHash(res$$3, structuralHash(activePatternResult2414[0]));
+    res$$3 = combineHash(res$$3, structuralHash(activePatternResult2414[1]));
   }
 
   return Math.abs(res$$3) | 0;
@@ -1174,7 +1174,7 @@ export function iterate(f$$27, m$$29) {
   FSharpMap$$Iterate$$1DCFB91D(m$$29, f$$27);
 }
 export function tryPick(f$$28, m$$30) {
-  return FSharpMap$$TryPick$$Z52B03DBD(m$$30, f$$28);
+  return FSharpMap$$TryPick$$72321DD7(m$$30, f$$28);
 }
 export function pick(f$$29, m$$31) {
   const matchValue$$8 = tryPick(f$$29, m$$31);
@@ -1199,10 +1199,10 @@ export function forAll(f$$33, m$$35) {
   return FSharpMap$$ForAll$$Z395DDC35(m$$35, f$$33);
 }
 export function mapRange(f$$34, m$$36) {
-  return FSharpMap$$MapRange$$Z1D9544EB(m$$36, f$$34);
+  return FSharpMap$$MapRange$$6DC7247(m$$36, f$$34);
 }
 export function map(f$$35, m$$37) {
-  return FSharpMap$$Map$$Z5CD84AAA(m$$37, f$$35);
+  return FSharpMap$$Map$$Z6F6B671C(m$$37, f$$35);
 }
 export function fold(f$$36, z, m$$38) {
   return MapTreeModule$$$fold(f$$36, z, FSharpMap$$get_Tree(m$$38));

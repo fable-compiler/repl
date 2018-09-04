@@ -5,104 +5,69 @@ import { fold } from "../fable-core/List.js";
 export const Props$002EFragmentProp = declare(function Props$002EFragmentProp(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Props$002EFragmentProp$$$System$002EIEquatable$00601($this$$1) {
+export function Props$002EFragmentProp$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIFragmentProp($this$$1) {
   return {
     [THIS_REF]: $this$$1
   };
 }
-export function Props$002EFragmentProp$$$System$002EIComparable$00601($this$$2) {
+export function Props$002EFragmentProp$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIProp($this$$2) {
   return {
     [THIS_REF]: $this$$2
-  };
-}
-export function Props$002EFragmentProp$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIFragmentProp($this$$3) {
-  return {
-    [THIS_REF]: $this$$3
-  };
-}
-export function Props$002EFragmentProp$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIProp($this$$4) {
-  return {
-    [THIS_REF]: $this$$4
   };
 }
 export const Props$002EProp = declare(function Props$002EProp(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Props$002EProp$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIHTMLProp($this$$5) {
+export function Props$002EProp$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIHTMLProp($this$$3) {
   return {
-    [THIS_REF]: $this$$5
+    [THIS_REF]: $this$$3
   };
 }
-export function Props$002EProp$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIProp($this$$6) {
+export function Props$002EProp$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIProp($this$$4) {
   return {
-    [THIS_REF]: $this$$6
+    [THIS_REF]: $this$$4
   };
 }
 export const Props$002EDangerousHtml = declare(function Props$002EDangerousHtml(arg1) {
   this.__html = arg1;
 }, Record);
-export function Props$002EDangerousHtml$$$System$002EIEquatable$00601($this$$7) {
-  return {
-    [THIS_REF]: $this$$7
-  };
-}
-export function Props$002EDangerousHtml$$$System$002EIComparable$00601($this$$8) {
-  return {
-    [THIS_REF]: $this$$8
-  };
-}
 export const Props$002EDOMAttr = declare(function Props$002EDOMAttr(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Props$002EDOMAttr$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIHTMLProp($this$$9) {
+export function Props$002EDOMAttr$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIHTMLProp($this$$5) {
   return {
-    [THIS_REF]: $this$$9
+    [THIS_REF]: $this$$5
   };
 }
-export function Props$002EDOMAttr$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIProp($this$$10) {
+export function Props$002EDOMAttr$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIProp($this$$6) {
   return {
-    [THIS_REF]: $this$$10
+    [THIS_REF]: $this$$6
   };
 }
 export const Props$002ESVGAttr = declare(function Props$002ESVGAttr(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Props$002ESVGAttr$$$System$002EIEquatable$00601($this$$11) {
+export function Props$002ESVGAttr$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIProp($this$$7) {
   return {
-    [THIS_REF]: $this$$11
-  };
-}
-export function Props$002ESVGAttr$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIProp($this$$12) {
-  return {
-    [THIS_REF]: $this$$12
+    [THIS_REF]: $this$$7
   };
 }
 export const Props$002EHTMLAttr = declare(function Props$002EHTMLAttr(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Props$002EHTMLAttr$$$System$002EIEquatable$00601($this$$13) {
+export function Props$002EHTMLAttr$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIHTMLProp($this$$8) {
   return {
-    [THIS_REF]: $this$$13
+    [THIS_REF]: $this$$8
   };
 }
-export function Props$002EHTMLAttr$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIHTMLProp($this$$14) {
+export function Props$002EHTMLAttr$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIProp($this$$9) {
   return {
-    [THIS_REF]: $this$$14
-  };
-}
-export function Props$002EHTMLAttr$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIProp($this$$15) {
-  return {
-    [THIS_REF]: $this$$15
+    [THIS_REF]: $this$$9
   };
 }
 export const Props$002ECSSProp = declare(function Props$002ECSSProp(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Props$002ECSSProp$$$System$002EIEquatable$00601($this$$16) {
-  return {
-    [THIS_REF]: $this$$16
-  };
-}
 export function Props$$$Style(css) {
   return ["style", createObj(css, 1)];
 }

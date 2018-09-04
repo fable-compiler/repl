@@ -136,13 +136,16 @@ export function isWhiteSpace(s, index) {
     return (0x09 <= cp && cp <= 0x0D) || cp === 0x85 || cp === 0xA0;
 }
 export function isHighSurrogate(s, index) {
-    return /[\uD800-\uDBFF]/.test(s.charAt(index || 0));
+    const cp = s.charCodeAt(index || 0);
+    return (0xD800 <= cp && cp <= 0xDBFF);
 }
 export function isLowSurrogate(s, index) {
-    return /[\uDC00-\uDFFF]/.test(s.charAt(index || 0));
+    const cp = s.charCodeAt(index || 0);
+    return (0xDC00 <= cp && cp <= 0xDFFF);
 }
 export function isSurrogate(s, index) {
-    return /[\uD800-\uDFFF]/.test(s.charAt(index || 0));
+    const cp = s.charCodeAt(index || 0);
+    return (0xD800 <= cp && cp <= 0xDFFF);
 }
 export function isSurrogatePair(s, index) {
     return typeof index === "number"

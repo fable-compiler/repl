@@ -165,6 +165,39 @@ export function fromNumber(value, unsigned) {
     return fromBits((value % TWO_PWR_32_DBL) | 0, (value / TWO_PWR_32_DBL) | 0, unsigned);
 }
 /**
+ * @param {number} value
+ * @param {boolean} unsigned
+ * @param {number} kind
+ * @returns {!Long}
+ * @inner
+ */
+export function fromInteger(value, unsigned, kind) {
+    var x;
+    var xh = 0;
+    switch (kind) {
+        case 0:
+            x = value << 24 >> 24;
+            xh = x;
+            break;
+        case 4:
+            x = value << 24 >>> 24;
+            break;
+        case 1:
+            x = value << 16 >> 16;
+            xh = x;
+            break;
+        case 5:
+            x = value << 16 >>> 16;
+            break;
+        case 2:
+            x = value >> 0;
+            xh = x;
+            break;
+        case 6: x = value >>> 0;
+    }
+    return fromBits(x, xh >> 31, unsigned);
+}
+/**
  * @param {number} lowBits
  * @param {number} highBits
  * @param {boolean=} unsigned
@@ -353,6 +386,14 @@ export function toNumber($this) {
     if ($this.unsigned)
         return (($this.high >>> 0) * TWO_PWR_32_DBL) + ($this.low >>> 0);
     return $this.high * TWO_PWR_32_DBL + ($this.low >>> 0);
+}
+;
+/**
+ * Converts the Long to a 32 bit integer.
+ * @returns {number}
+ */
+export function toIntNumber($this) {
+    return $this.low >>> 0;
 }
 ;
 /**
@@ -1019,4 +1060,10 @@ export function unixEpochMillisecondsToTicks(ms, offset) {
 }
 export function ticksToUnixEpochMilliseconds(ticks) {
     return toNumber(op_Subtraction(op_Division(ticks, 10000), 62135596800000));
+}
+export function makeRangeStepFunction(step, last, unsigned) {
+    const zero = unsigned ? UZERO : ZERO;
+    return (x) => greaterThan(step, zero) && lessThanOrEqual(x, last)
+        || lessThan(step, zero) && greaterThanOrEqual(x, last)
+        ? [x, op_Addition(x, step)] : null;
 }
