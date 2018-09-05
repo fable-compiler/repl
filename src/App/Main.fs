@@ -21,6 +21,9 @@ let private loadState(_key: string): ISavedState = importMember "./js/util.js"
 let private saveState(_key: string, _code: string, _html: string): unit = importMember "./js/util.js"
 let private updateQuery(_fsharpCode : string, _htmlCode : string): unit = importMember "./js/util.js"
 
+[<Literal>]
+let resetHash = "#reset"
+
 type IEditor = Monaco.Editor.IStandaloneCodeEditor
 
 type State =
@@ -274,7 +277,7 @@ let update msg model =
 let init () =
     let worker = Worker()
 
-    if (Browser.window.location.hash = "#reset") then
+    if (Browser.window.location.hash = resetHash) then
         Browser.window.localStorage.removeItem(Literals.STORAGE_KEY)
         Browser.window.location.hash <- ""
 
@@ -503,7 +506,11 @@ let private view (model: Model) dispatch =
         [ PageLoader.pageLoader [ PageLoader.Color IsWhite
                                   PageLoader.IsActive (model.State = Loading) ]
                                 [ span [ Class "title" ]
-                                    [ str "We are getting everything ready for you" ] ]
+                                    [ str "We are getting everything ready for you" 
+                                      p [] 
+                                        [ str "Trouble loading the repl? " 
+                                          a [ Href resetHash ] [ str "Click here"]
+                                          str " to reset." ] ] ]
           menubar model dispatch
           div [ Class "page-content" ]
             [ Sidebar.view model.Sidebar (SidebarMsg >> dispatch)
@@ -534,9 +541,10 @@ let private subscriptions (model: Model) =
         // Subscribe to URL hash change events
         Browser.window.addEventListener_hashchange(fun _ ->
             let message = 
-                match Browser.window.location.hash with
-                | "#reset" -> Reset
-                | _ -> UrlHashChange
+                if (Browser.window.location.hash = resetHash) then
+                    Reset
+                else
+                    UrlHashChange
             dispatch message)
 
     Cmd.ofSub sub
