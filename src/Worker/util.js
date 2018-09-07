@@ -1,7 +1,7 @@
 /// @ts-check
 
-import * as Babel from "babel-standalone";
-import BabelTemplate from "babel-template";
+import * as Babel from "@babel/standalone";
+import BabelTemplate from "@babel/template";
 import * as BabelPlugins from "fable-utils/babel-plugins";
 
 function getBlobUrl(name) {
