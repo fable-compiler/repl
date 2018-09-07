@@ -15,6 +15,11 @@ NUGET
       Fable.Core (>= 2.0.0-beta-001) - restriction: >= netstandard2.0
       Fable.PowerPack (>= 2.0.0-beta-004) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
+    Fable.Elmish.Browser (2.0.0-beta-5)
+      Fable.Core (>= 2.0.0-beta-001) - restriction: >= netstandard2.0
+      Fable.Elmish (>= 2.0.0-beta-4) - restriction: >= netstandard2.0
+      Fable.Import.Browser (>= 1.3) - restriction: >= netstandard2.0
+      FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
     Fable.Elmish.HMR (2.0.0-beta-4)
       Fable.Core (>= 2.0.0-beta-001) - restriction: >= netstandard2.0
       Fable.Elmish (>= 2.0.0-beta-4) - restriction: >= netstandard2.0
@@ -38,13 +43,13 @@ NUGET
       Fable.Core (>= 2.0.0-alpha-006) - restriction: >= netstandard2.0
       Fable.Import.Browser (>= 1.1.1) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.3.4) - restriction: >= netstandard2.0
-    FSharp.Compiler.Service (23.0.3) - restriction: >= netcoreapp2.0
+    FSharp.Compiler.Service (25.0.1) - restriction: >= netcoreapp2.0
       FSharp.Core (>= 4.1.18) - restriction: || (>= net45) (>= netstandard2.0)
-      System.Collections.Immutable (>= 1.3.1) - restriction: || (>= net45) (>= netstandard2.0)
+      System.Collections.Immutable (>= 1.5) - restriction: || (>= net45) (>= netstandard2.0)
       System.Diagnostics.Process (>= 4.1) - restriction: && (< net45) (>= netstandard2.0)
       System.Diagnostics.TraceSource (>= 4.0) - restriction: && (< net45) (>= netstandard2.0)
       System.Reflection.Emit (>= 4.3) - restriction: && (< net45) (>= netstandard2.0)
-      System.Reflection.Metadata (>= 1.4.2) - restriction: || (>= net45) (>= netstandard2.0)
+      System.Reflection.Metadata (>= 1.6) - restriction: || (>= net45) (>= netstandard2.0)
       System.Reflection.TypeExtensions (>= 4.3) - restriction: && (< net45) (>= netstandard2.0)
       System.Runtime.Loader (>= 4.0) - restriction: && (< net45) (>= netstandard2.0)
       System.Security.Cryptography.Algorithms (>= 4.3) - restriction: && (< net45) (>= netstandard2.0)
@@ -332,8 +337,8 @@ NUGET
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
 GITHUB
   remote: fable-compiler/Fable
-    src/dotnet/Fable.Repl/Interfaces.fs (052aeb0c37028de1ba563310b9dbb93ff0cac4bc)
-    src/dotnet/Fable.Repl/Metadata.fs (052aeb0c37028de1ba563310b9dbb93ff0cac4bc)
+    src/dotnet/Fable.Repl/Interfaces.fs (44aca9fe64a2280bb4d56ac1aa8a4f6b8ec2739f)
+    src/dotnet/Fable.Repl/Metadata.fs (44aca9fe64a2280bb4d56ac1aa8a4f6b8ec2739f)
 GROUP Build
 RESTRICTION: == net46
 NUGET

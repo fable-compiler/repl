@@ -3,6 +3,7 @@ storage:none
 
 clitool dotnet-fable prerelease
 nuget Fable.Core prerelease
+nuget Fable.Elmish.Browser prerelease
 nuget Fable.Import.Browser
 nuget Fable.React prerelease
 nuget Fulma prerelease

@@ -14,6 +14,7 @@
     <Compile Include="Editor.fs" />
     <Compile Include="Generator.fs" />
     <Compile Include="Mouse.fs" />
+    <Compile Include="Router.fs" />
     <Compile Include="Widgets/Samples.fs" />
     <Compile Include="Widgets/Other.fs" />
     <Compile Include="Sidebar.fs" />

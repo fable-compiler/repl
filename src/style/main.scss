@@ -1,8 +1,7 @@
-@import '~bulma/sass/utilities/_all';
 @import './_variables';
 @import '~bulma/bulma';
 @import './monaco-editor-hover-content.sass';
-@import '~bulma-pageloader';
+@import '../../node_modules/bulma-pageloader/dist/css/bulma-pageloader.sass';
 @import './menu-group';
 
 $fa-font-path: "~font-awesome/fonts/";
@@ -76,22 +75,11 @@ html {
 
         .editor-container {
             height: 100%;
-            // background-color: #363636;
 
             .card {
-                // background-color: #1e1e1e;
 
                 .card-header {
-                    // background-color: white;
                     cursor: pointer;
-
-                    .icon {
-                        // color: $dark;
-
-                        &:hover {
-                            // color: grey;
-                        }
-                    }
                 }
 
                 .card-content {

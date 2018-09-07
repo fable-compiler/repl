@@ -50,8 +50,7 @@ module General =
                 div [ ]
                     [ Field.div [ Field.HasAddons ]
                         [ Control.div [ ]
-                            [ Button.button [ Button.Color IsDark
-                                              Button.OnClick (fun _ -> dispatch AskReset) ]
+                            [ Button.button [ Button.OnClick (fun _ -> dispatch AskReset) ]
                                 [ Icon.faIcon [ ]
                                     [ Fa.icon Fa.I.Refresh ] ] ]
                           Control.div [ Control.IsExpanded ]
@@ -62,8 +61,7 @@ module General =
                                     [ str "Click here to reset" ] ] ] ]
                       Field.div [ Field.HasAddons ]
                         [ Control.div [ ]
-                            [ Button.button [ Button.Color IsDark
-                                              Button.OnClick (fun _ -> dispatch  Msg.Share) ]
+                            [ Button.button [ Button.OnClick (fun _ -> dispatch  Msg.Share) ]
                                 [ Icon.faIcon [ ]
                                     [ Fa.icon Fa.I.Share ] ] ]
                           Control.div [ Control.IsExpanded ]

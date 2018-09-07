@@ -4,12 +4,15 @@ $success: #73c991;
 $danger: #c74e39;
 $dark: #252526;
 $gray-darker: rgba(128, 128, 128, 0.2);
+$text-color: #d4d4d4;
+
+@import '~bulma/sass/utilities/_all.sass';
 
 $body-size: 14px;
-$body-background-color: $primary;
-$text: #d4d4d4;
+$body-background-color: $dark;
+$text: $text-color;
 $text-strong: $text;
-$navbar-background-color: $dark;
+// $navbar-background-color: $dark;
 
 $code: $grey-lighter;
 $code-background: $dark;
@@ -33,6 +36,7 @@ $card-header-background-color: $gray-darker;
 $input-hover-color: $link-hover;
 
 $button-background-color: $gray-darker;
+$button-text-hover-background-color: $gray-darker;
 $button-color: $text;
 
 $tabs-toggle-link-border-style: none;
@@ -40,6 +44,9 @@ $tabs-toggle-link-active-background-color: $gray-darker;
 $tabs-toggle-link-hover-background-color: $text;
 
 $label-color: $text;
+
+$menu-item-hover-color: $text-color;
+$menu-item-hover-background-color: $gray-darker;
 
 // custom
 $resize-background: #414141;

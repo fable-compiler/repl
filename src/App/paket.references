@@ -7,6 +7,7 @@ Fulma.Extensions
 Fable.Elmish
 Fable.Elmish.React
 Fable.Elmish.HMR
+Fable.Elmish.Browser
 Thoth.Json
 Thoth.Elmish.Toast
 Fable.PowerPack
