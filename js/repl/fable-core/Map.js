@@ -2,8 +2,8 @@ import { Record, L, declare, Union } from "./Types.js";
 import { value as value$$3, some } from "./Option.js";
 import { fold as fold$$1 } from "./List.js";
 import { iterate as iterate$$1, empty as empty$$1, toIterator, map as map$$1, unfold, getEnumerator } from "./Seq.js";
-import { compare, downcast, structuralHash, extend, THIS_REF } from "./Util.js";
 import { join, toText, printf } from "./String.js";
+import { compare, structuralHash } from "./Util.js";
 export const MapTree$00602 = declare(function MapTree$00602(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
@@ -943,44 +943,27 @@ export const MapTreeModule$002EmkIEnumerator$0027$00602 = declare(function MapTr
 export function MapTreeModule$002EmkIEnumerator$0027$00602$$$$002Ector$$Z26BC498C(s$$6) {
   return this != null ? MapTreeModule$002EmkIEnumerator$0027$00602.call(this, s$$6) : new MapTreeModule$002EmkIEnumerator$0027$00602(s$$6);
 }
-export function MapTreeModule$002EmkIEnumerator$0027$00602$$$System$002ECollections$002EGeneric$002EIEnumerator$00601($this$$61) {
-  return extend(MapTreeModule$002EmkIEnumerator$0027$00602$$$System$002ECollections$002EIEnumerator($this$$61), MapTreeModule$002EmkIEnumerator$0027$00602$$$System$002EIDisposable($this$$61), {
-    [THIS_REF]: $this$$61,
+Object.defineProperty(MapTreeModule$002EmkIEnumerator$0027$00602.prototype, "Current", {
+  "get": function () {
+    const __ = this;
+    return MapTreeModule$$$current(__.i);
+  }
+});
 
-    get Current() {
-      return MapTreeModule$$$current($this$$61.i);
-    }
+MapTreeModule$002EmkIEnumerator$0027$00602.prototype.MoveNext = function () {
+  const __$$1 = this;
+  return MapTreeModule$$$moveNext(__$$1.i);
+};
 
-  });
-}
-export function MapTreeModule$002EmkIEnumerator$0027$00602$$$System$002ECollections$002EIEnumerator($this$$62) {
-  return {
-    [THIS_REF]: $this$$62,
+MapTreeModule$002EmkIEnumerator$0027$00602.prototype.Reset = function () {
+  const __$$2 = this;
+  __$$2.i = MapTreeModule$$$mkIterator(__$$2.s);
+};
 
-    get Current() {
-      return MapTreeModule$$$current($this$$62.i);
-    },
+MapTreeModule$002EmkIEnumerator$0027$00602.prototype.Dispose = function () {};
 
-    MoveNext() {
-      return MapTreeModule$$$moveNext($this$$62.i);
-    },
-
-    Reset() {
-      $this$$62.i = MapTreeModule$$$mkIterator($this$$62.s);
-    }
-
-  };
-}
-export function MapTreeModule$002EmkIEnumerator$0027$00602$$$System$002EIDisposable($this$$63) {
-  return {
-    [THIS_REF]: $this$$63,
-
-    Dispose() {}
-
-  };
-}
 export function MapTreeModule$$$mkIEnumerator(s$$7) {
-  return MapTreeModule$002EmkIEnumerator$0027$00602$$$System$002ECollections$002EGeneric$002EIEnumerator$00601(MapTreeModule$002EmkIEnumerator$0027$00602$$$$002Ector$$Z26BC498C(s$$7));
+  return MapTreeModule$002EmkIEnumerator$0027$00602$$$$002Ector$$Z26BC498C(s$$7);
 }
 export function MapTreeModule$$$toSeq(s$$8) {
   const en = MapTreeModule$$$mkIEnumerator(s$$8);
@@ -1000,28 +983,23 @@ export const FSharpMap = declare(function FSharpMap(comparer$$17, tree) {
 export function FSharpMap$$$$002Ector$$58ADD115(comparer$$17, tree) {
   return this != null ? FSharpMap.call(this, comparer$$17, tree) : new FSharpMap(comparer$$17, tree);
 }
-export function FSharpMap$$$System$002ECollections$002EGeneric$002EIEnumerable$00601($this$$64) {
-  return {
-    [THIS_REF]: $this$$64
-  };
+export function FSharpMap$$get_Comparer(__$$4) {
+  return __$$4.comparer;
 }
-export function FSharpMap$$get_Comparer(__$$5) {
-  return __$$5.comparer;
+export function FSharpMap$$get_Tree(__$$5) {
+  return __$$5.tree;
 }
-export function FSharpMap$$get_Tree(__$$6) {
-  return __$$6.tree;
+export function FSharpMap$$Add$$5BDDA1(__$$6, k$$28, v$$24) {
+  return FSharpMap$$$$002Ector$$58ADD115(__$$6.comparer, MapTreeModule$$$add(__$$6.comparer, k$$28, v$$24, __$$6.tree));
 }
-export function FSharpMap$$Add$$5BDDA1(__$$7, k$$28, v$$24) {
-  return FSharpMap$$$$002Ector$$58ADD115(__$$7.comparer, MapTreeModule$$$add(__$$7.comparer, k$$28, v$$24, __$$7.tree));
+export function FSharpMap$$get_IsEmpty(__$$7) {
+  return MapTreeModule$$$isEmpty(__$$7.tree);
 }
-export function FSharpMap$$get_IsEmpty(__$$8) {
-  return MapTreeModule$$$isEmpty(__$$8.tree);
+export function FSharpMap$$get_Item$$2B595(__$$8, k$$29) {
+  return MapTreeModule$$$find(__$$8.comparer, k$$29, __$$8.tree);
 }
-export function FSharpMap$$get_Item$$2B595(__$$9, k$$29) {
-  return MapTreeModule$$$find(__$$9.comparer, k$$29, __$$9.tree);
-}
-export function FSharpMap$$TryGetValue$$5BDDA1(__$$10, k$$30, defValue) {
-  const matchValue$$6 = MapTreeModule$$$tryFind(__$$10.comparer, k$$30, __$$10.tree);
+export function FSharpMap$$TryGetValue$$5BDDA1(__$$9, k$$30, defValue) {
+  const matchValue$$6 = MapTreeModule$$$tryFind(__$$9.comparer, k$$30, __$$9.tree);
 
   if (matchValue$$6 == null) {
     return [false, defValue];
@@ -1030,51 +1008,51 @@ export function FSharpMap$$TryGetValue$$5BDDA1(__$$10, k$$30, defValue) {
     return [true, v$$25];
   }
 }
-export function FSharpMap$$TryPick$$72321DD7(__$$11, f$$17) {
-  return MapTreeModule$$$tryPick(f$$17, __$$11.tree);
+export function FSharpMap$$TryPick$$72321DD7(__$$10, f$$17) {
+  return MapTreeModule$$$tryPick(f$$17, __$$10.tree);
 }
-export function FSharpMap$$Exists$$Z395DDC35(__$$12, f$$18) {
-  return MapTreeModule$$$exists(f$$18, __$$12.tree);
+export function FSharpMap$$Exists$$Z395DDC35(__$$11, f$$18) {
+  return MapTreeModule$$$exists(f$$18, __$$11.tree);
 }
-export function FSharpMap$$Filter$$Z395DDC35(__$$13, f$$19) {
-  return FSharpMap$$$$002Ector$$58ADD115(__$$13.comparer, MapTreeModule$$$filter(__$$13.comparer, f$$19, __$$13.tree));
+export function FSharpMap$$Filter$$Z395DDC35(__$$12, f$$19) {
+  return FSharpMap$$$$002Ector$$58ADD115(__$$12.comparer, MapTreeModule$$$filter(__$$12.comparer, f$$19, __$$12.tree));
 }
-export function FSharpMap$$ForAll$$Z395DDC35(__$$14, f$$20) {
-  return MapTreeModule$$$forall(f$$20, __$$14.tree);
+export function FSharpMap$$ForAll$$Z395DDC35(__$$13, f$$20) {
+  return MapTreeModule$$$forall(f$$20, __$$13.tree);
 }
-export function FSharpMap$$Fold(__$$15, f$$21, acc$$11) {
-  return MapTreeModule$$$foldBack(f$$21, __$$15.tree, acc$$11);
+export function FSharpMap$$Fold(__$$14, f$$21, acc$$11) {
+  return MapTreeModule$$$foldBack(f$$21, __$$14.tree, acc$$11);
 }
-export function FSharpMap$$FoldSection(__$$16, lo$$2, hi$$2, f$$22, acc$$12) {
-  return MapTreeModule$$$foldSection(__$$16.comparer, lo$$2, hi$$2, f$$22, __$$16.tree, acc$$12);
+export function FSharpMap$$FoldSection(__$$15, lo$$2, hi$$2, f$$22, acc$$12) {
+  return MapTreeModule$$$foldSection(__$$15.comparer, lo$$2, hi$$2, f$$22, __$$15.tree, acc$$12);
 }
-export function FSharpMap$$Iterate$$1DCFB91D(__$$17, f$$23) {
-  MapTreeModule$$$iter(f$$23, __$$17.tree);
+export function FSharpMap$$Iterate$$1DCFB91D(__$$16, f$$23) {
+  MapTreeModule$$$iter(f$$23, __$$16.tree);
 }
-export function FSharpMap$$MapRange$$6DC7247(__$$18, f$$24) {
-  return FSharpMap$$$$002Ector$$58ADD115(__$$18.comparer, MapTreeModule$$$map(f$$24, __$$18.tree));
+export function FSharpMap$$MapRange$$6DC7247(__$$17, f$$24) {
+  return FSharpMap$$$$002Ector$$58ADD115(__$$17.comparer, MapTreeModule$$$map(f$$24, __$$17.tree));
 }
-export function FSharpMap$$Map$$Z6F6B671C(__$$19, f$$25) {
-  return FSharpMap$$$$002Ector$$58ADD115(__$$19.comparer, MapTreeModule$$$mapi(f$$25, __$$19.tree));
+export function FSharpMap$$Map$$Z6F6B671C(__$$18, f$$25) {
+  return FSharpMap$$$$002Ector$$58ADD115(__$$18.comparer, MapTreeModule$$$mapi(f$$25, __$$18.tree));
 }
-export function FSharpMap$$Partition$$Z395DDC35(__$$20, f$$26) {
-  const patternInput$$4 = MapTreeModule$$$partition(__$$20.comparer, f$$26, __$$20.tree);
-  return [FSharpMap$$$$002Ector$$58ADD115(__$$20.comparer, patternInput$$4[0]), FSharpMap$$$$002Ector$$58ADD115(__$$20.comparer, patternInput$$4[1])];
+export function FSharpMap$$Partition$$Z395DDC35(__$$19, f$$26) {
+  const patternInput$$4 = MapTreeModule$$$partition(__$$19.comparer, f$$26, __$$19.tree);
+  return [FSharpMap$$$$002Ector$$58ADD115(__$$19.comparer, patternInput$$4[0]), FSharpMap$$$$002Ector$$58ADD115(__$$19.comparer, patternInput$$4[1])];
 }
-export function FSharpMap$$get_Count(__$$21) {
-  return MapTreeModule$$$size(__$$21.tree);
+export function FSharpMap$$get_Count(__$$20) {
+  return MapTreeModule$$$size(__$$20.tree);
 }
-export function FSharpMap$$ContainsKey$$2B595(__$$22, k$$31) {
-  return MapTreeModule$$$mem(__$$22.comparer, k$$31, __$$22.tree);
+export function FSharpMap$$ContainsKey$$2B595(__$$21, k$$31) {
+  return MapTreeModule$$$mem(__$$21.comparer, k$$31, __$$21.tree);
 }
-export function FSharpMap$$Remove$$2B595(__$$23, k$$32) {
-  return FSharpMap$$$$002Ector$$58ADD115(__$$23.comparer, MapTreeModule$$$remove(__$$23.comparer, k$$32, __$$23.tree));
+export function FSharpMap$$Remove$$2B595(__$$22, k$$32) {
+  return FSharpMap$$$$002Ector$$58ADD115(__$$22.comparer, MapTreeModule$$$remove(__$$22.comparer, k$$32, __$$22.tree));
 }
-export function FSharpMap$$TryFind$$2B595(__$$24, k$$33) {
-  return MapTreeModule$$$tryFind(__$$24.comparer, k$$33, __$$24.tree);
+export function FSharpMap$$TryFind$$2B595(__$$23, k$$33) {
+  return MapTreeModule$$$tryFind(__$$23.comparer, k$$33, __$$23.tree);
 }
-export function FSharpMap$$ToList(__$$25) {
-  return MapTreeModule$$$toList(__$$25.tree);
+export function FSharpMap$$ToList(__$$24) {
+  return MapTreeModule$$$toList(__$$24.tree);
 }
 
 FSharpMap.prototype.toString = function () {
@@ -1109,13 +1087,13 @@ FSharpMap.prototype.Equals = function (that) {
 };
 
 FSharpMap.prototype[Symbol.iterator] = function () {
-  const __$$26 = this;
-  return toIterator(MapTreeModule$$$mkIEnumerator(__$$26.tree));
+  const __$$25 = this;
+  return toIterator(MapTreeModule$$$mkIEnumerator(__$$25.tree));
 };
 
 FSharpMap.prototype.CompareTo = function (obj) {
   const m$$22 = this;
-  const m2 = downcast(obj);
+  const m2 = obj;
   let res$$4 = 0;
   let finished = false;
   const e1 = MapTreeModule$$$mkIEnumerator(FSharpMap$$get_Tree(m$$22));

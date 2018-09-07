@@ -1,7 +1,7 @@
 import { L, Record, declare, Union } from "./Types.js";
 import { value as value$$2, some, Choice } from "./Option.js";
-import { downcast, structuralHash, toString, extend, THIS_REF } from "./Util.js";
 import { iterate as iterate$$1, empty as empty$$1, fold as fold$$1, toIterator, map as map$$1, reduce, getEnumerator, unfold } from "./Seq.js";
+import { structuralHash, toString } from "./Util.js";
 import { join } from "./String.js";
 export const SetTree$00601 = declare(function SetTree$00601(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
@@ -1017,44 +1017,27 @@ export const SetTreeModule$002EmkIEnumerator$00601 = declare(function SetTreeMod
 export function SetTreeModule$002EmkIEnumerator$00601$$$$002Ector$$Z5B395D56(s$$14) {
   return this != null ? SetTreeModule$002EmkIEnumerator$00601.call(this, s$$14) : new SetTreeModule$002EmkIEnumerator$00601(s$$14);
 }
-export function SetTreeModule$002EmkIEnumerator$00601$$$System$002ECollections$002EGeneric$002EIEnumerator$00601($this$$39) {
-  return extend(SetTreeModule$002EmkIEnumerator$00601$$$System$002ECollections$002EIEnumerator($this$$39), SetTreeModule$002EmkIEnumerator$00601$$$System$002EIDisposable($this$$39), {
-    [THIS_REF]: $this$$39,
+Object.defineProperty(SetTreeModule$002EmkIEnumerator$00601.prototype, "Current", {
+  "get": function () {
+    const __ = this;
+    return SetTreeModule$$$current(__.i);
+  }
+});
 
-    get Current() {
-      return SetTreeModule$$$current($this$$39.i);
-    }
+SetTreeModule$002EmkIEnumerator$00601.prototype.MoveNext = function () {
+  const __$$1 = this;
+  return SetTreeModule$$$moveNext(__$$1.i);
+};
 
-  });
-}
-export function SetTreeModule$002EmkIEnumerator$00601$$$System$002ECollections$002EIEnumerator($this$$40) {
-  return {
-    [THIS_REF]: $this$$40,
+SetTreeModule$002EmkIEnumerator$00601.prototype.Reset = function () {
+  const __$$2 = this;
+  __$$2.i = SetTreeModule$$$mkIterator(__$$2.s);
+};
 
-    get Current() {
-      return SetTreeModule$$$current($this$$40.i);
-    },
+SetTreeModule$002EmkIEnumerator$00601.prototype.Dispose = function () {};
 
-    MoveNext() {
-      return SetTreeModule$$$moveNext($this$$40.i);
-    },
-
-    Reset() {
-      $this$$40.i = SetTreeModule$$$mkIterator($this$$40.s);
-    }
-
-  };
-}
-export function SetTreeModule$002EmkIEnumerator$00601$$$System$002EIDisposable($this$$41) {
-  return {
-    [THIS_REF]: $this$$41,
-
-    Dispose() {}
-
-  };
-}
 export function SetTreeModule$$$mkIEnumerator(s$$15) {
-  return SetTreeModule$002EmkIEnumerator$00601$$$System$002ECollections$002EGeneric$002EIEnumerator$00601(SetTreeModule$002EmkIEnumerator$00601$$$$002Ector$$Z5B395D56(s$$15));
+  return SetTreeModule$002EmkIEnumerator$00601$$$$002Ector$$Z5B395D56(s$$15);
 }
 export function SetTreeModule$$$toSeq(s$$16) {
   const en = SetTreeModule$$$mkIEnumerator(s$$16);
@@ -1069,20 +1052,20 @@ export function SetTreeModule$$$toSeq(s$$16) {
 export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
   SetTreeModule$$$compareStacks: while (true) {
     const matchValue$$8 = [l1, l2];
-    var $target$$42, t1$$6, t2$$6, n1k, n2k, t1$$7, t2$$7, n1k$$1, n2k$$1, n2r, t1$$8, t2$$8, emp, n1k$$2, n1r, n2k$$2, t1$$9, t2$$9, n1k$$3, n1r$$1, n2k$$3, n2r$$1, t1$$10, t2$$10, n1k$$4, t1$$11, n1k$$5, n1l, n1r$$2, t1$$12, n2k$$4, t2$$11, n2k$$5, n2l, n2r$$2, t2$$12;
+    var $target$$39, t1$$6, t2$$6, n1k, n2k, t1$$7, t2$$7, n1k$$1, n2k$$1, n2r, t1$$8, t2$$8, emp, n1k$$2, n1r, n2k$$2, t1$$9, t2$$9, n1k$$3, n1r$$1, n2k$$3, n2r$$1, t1$$10, t2$$10, n1k$$4, t1$$11, n1k$$5, n1l, n1r$$2, t1$$12, n2k$$4, t2$$11, n2k$$5, n2l, n2r$$2, t2$$12;
 
     if (matchValue$$8[0].tail != null) {
       if (matchValue$$8[1].tail != null) {
         if (matchValue$$8[1].head.tag === 2) {
           if (matchValue$$8[0].head.tag === 2) {
-            $target$$42 = 4;
+            $target$$39 = 4;
             n1k = matchValue$$8[0].head.fields[0];
             n2k = matchValue$$8[1].head.fields[0];
             t1$$7 = matchValue$$8[0].tail;
             t2$$7 = matchValue$$8[1].tail;
           } else if (matchValue$$8[0].head.tag === 1) {
             if (matchValue$$8[0].head.fields[1].tag === 0) {
-              $target$$42 = 6;
+              $target$$39 = 6;
               emp = matchValue$$8[0].head.fields[1];
               n1k$$2 = matchValue$$8[0].head.fields[0];
               n1r = matchValue$$8[0].head.fields[2];
@@ -1090,21 +1073,21 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
               t1$$9 = matchValue$$8[0].tail;
               t2$$9 = matchValue$$8[1].tail;
             } else {
-              $target$$42 = 9;
+              $target$$39 = 9;
               n1k$$5 = matchValue$$8[0].head.fields[0];
               n1l = matchValue$$8[0].head.fields[1];
               n1r$$2 = matchValue$$8[0].head.fields[2];
               t1$$12 = matchValue$$8[0].tail;
             }
           } else {
-            $target$$42 = 10;
+            $target$$39 = 10;
             n2k$$4 = matchValue$$8[1].head.fields[0];
             t2$$11 = matchValue$$8[1].tail;
           }
         } else if (matchValue$$8[1].head.tag === 1) {
           if (matchValue$$8[1].head.fields[1].tag === 0) {
             if (matchValue$$8[0].head.tag === 2) {
-              $target$$42 = 5;
+              $target$$39 = 5;
               n1k$$1 = matchValue$$8[0].head.fields[0];
               n2k$$1 = matchValue$$8[1].head.fields[0];
               n2r = matchValue$$8[1].head.fields[2];
@@ -1112,7 +1095,7 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
               t2$$8 = matchValue$$8[1].tail;
             } else if (matchValue$$8[0].head.tag === 1) {
               if (matchValue$$8[0].head.fields[1].tag === 0) {
-                $target$$42 = 7;
+                $target$$39 = 7;
                 n1k$$3 = matchValue$$8[0].head.fields[0];
                 n1r$$1 = matchValue$$8[0].head.fields[2];
                 n2k$$3 = matchValue$$8[1].head.fields[0];
@@ -1120,61 +1103,61 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
                 t1$$10 = matchValue$$8[0].tail;
                 t2$$10 = matchValue$$8[1].tail;
               } else {
-                $target$$42 = 9;
+                $target$$39 = 9;
                 n1k$$5 = matchValue$$8[0].head.fields[0];
                 n1l = matchValue$$8[0].head.fields[1];
                 n1r$$2 = matchValue$$8[0].head.fields[2];
                 t1$$12 = matchValue$$8[0].tail;
               }
             } else {
-              $target$$42 = 11;
+              $target$$39 = 11;
               n2k$$5 = matchValue$$8[1].head.fields[0];
               n2l = matchValue$$8[1].head.fields[1];
               n2r$$2 = matchValue$$8[1].head.fields[2];
               t2$$12 = matchValue$$8[1].tail;
             }
           } else if (matchValue$$8[0].head.tag === 2) {
-            $target$$42 = 8;
+            $target$$39 = 8;
             n1k$$4 = matchValue$$8[0].head.fields[0];
             t1$$11 = matchValue$$8[0].tail;
           } else if (matchValue$$8[0].head.tag === 1) {
-            $target$$42 = 9;
+            $target$$39 = 9;
             n1k$$5 = matchValue$$8[0].head.fields[0];
             n1l = matchValue$$8[0].head.fields[1];
             n1r$$2 = matchValue$$8[0].head.fields[2];
             t1$$12 = matchValue$$8[0].tail;
           } else {
-            $target$$42 = 11;
+            $target$$39 = 11;
             n2k$$5 = matchValue$$8[1].head.fields[0];
             n2l = matchValue$$8[1].head.fields[1];
             n2r$$2 = matchValue$$8[1].head.fields[2];
             t2$$12 = matchValue$$8[1].tail;
           }
         } else if (matchValue$$8[0].head.tag === 2) {
-          $target$$42 = 8;
+          $target$$39 = 8;
           n1k$$4 = matchValue$$8[0].head.fields[0];
           t1$$11 = matchValue$$8[0].tail;
         } else if (matchValue$$8[0].head.tag === 1) {
-          $target$$42 = 9;
+          $target$$39 = 9;
           n1k$$5 = matchValue$$8[0].head.fields[0];
           n1l = matchValue$$8[0].head.fields[1];
           n1r$$2 = matchValue$$8[0].head.fields[2];
           t1$$12 = matchValue$$8[0].tail;
         } else {
-          $target$$42 = 3;
+          $target$$39 = 3;
           t1$$6 = matchValue$$8[0].tail;
           t2$$6 = matchValue$$8[1].tail;
         }
       } else {
-        $target$$42 = 2;
+        $target$$39 = 2;
       }
     } else if (matchValue$$8[1].tail != null) {
-      $target$$42 = 1;
+      $target$$39 = 1;
     } else {
-      $target$$42 = 0;
+      $target$$39 = 0;
     }
 
-    switch ($target$$42) {
+    switch ($target$$39) {
       case 0:
         {
           return 0;
@@ -1345,10 +1328,10 @@ export function SetTreeModule$$$copyToArray(s$$19, arr, i$$2) {
 export function SetTreeModule$$$mkFromEnumerator(comparer$$19, acc$$11, e) {
   SetTreeModule$$$mkFromEnumerator: while (true) {
     if (e.MoveNext()) {
-      const $var$$43 = comparer$$19;
+      const $var$$40 = comparer$$19;
       acc$$11 = SetTreeModule$$$add(comparer$$19, e.Current, acc$$11);
       e = e;
-      comparer$$19 = $var$$43;
+      comparer$$19 = $var$$40;
       continue SetTreeModule$$$mkFromEnumerator;
     } else {
       return acc$$11;
@@ -1381,16 +1364,11 @@ export const FSharpSet = declare(function FSharpSet(comparer$$22, tree) {
 export function FSharpSet$$$$002Ector$$2528C5CB(comparer$$22, tree) {
   return this != null ? FSharpSet.call(this, comparer$$22, tree) : new FSharpSet(comparer$$22, tree);
 }
-export function FSharpSet$$$System$002ECollections$002EGeneric$002EIEnumerable$00601($this$$44) {
-  return {
-    [THIS_REF]: $this$$44
-  };
+export function FSharpSet$$get_Comparer(__$$4) {
+  return __$$4.comparer;
 }
-export function FSharpSet$$get_Comparer(__$$5) {
-  return __$$5.comparer;
-}
-export function FSharpSet$$get_Tree(__$$6) {
-  return __$$6.tree;
+export function FSharpSet$$get_Tree(__$$5) {
+  return __$$5.tree;
 }
 export function FSharpSet$$Add$$2B595(s$$20, x$$9) {
   return FSharpSet$$$$002Ector$$2528C5CB(FSharpSet$$get_Comparer(s$$20), SetTreeModule$$$add(FSharpSet$$get_Comparer(s$$20), x$$9, FSharpSet$$get_Tree(s$$20)));
@@ -1523,12 +1501,12 @@ FSharpSet.prototype.GetHashCode = function () {
 
 FSharpSet.prototype.Equals = function (that) {
   const this$$$2 = this;
-  return SetTreeModule$$$compare(FSharpSet$$get_Comparer(this$$$2), FSharpSet$$get_Tree(this$$$2), FSharpSet$$get_Tree(downcast(that))) === 0;
+  return SetTreeModule$$$compare(FSharpSet$$get_Comparer(this$$$2), FSharpSet$$get_Tree(this$$$2), FSharpSet$$get_Tree(that)) === 0;
 };
 
 FSharpSet.prototype.CompareTo = function (that$$1) {
   const this$$$3 = this;
-  return SetTreeModule$$$compare(FSharpSet$$get_Comparer(this$$$3), FSharpSet$$get_Tree(this$$$3), FSharpSet$$get_Tree(downcast(that$$1))) | 0;
+  return SetTreeModule$$$compare(FSharpSet$$get_Comparer(this$$$3), FSharpSet$$get_Tree(this$$$3), FSharpSet$$get_Tree(that$$1)) | 0;
 };
 
 FSharpSet.prototype[Symbol.iterator] = function () {
