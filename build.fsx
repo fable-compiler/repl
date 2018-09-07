@@ -7,6 +7,8 @@ let AppveyorReplArtifactURL =
 let FCSExportFolderName = "FSharp.Compiler.Service_export"
 let FableFolderName = "Fable"
 
+let libsOutput = "public/libs"
+
 // include Fake libs
 #r "./packages/build/FAKE/tools/FakeLib.dll"
 #r "System.IO.Compression.FileSystem"
@@ -108,6 +110,14 @@ let ensureRepoSetup (info : RepoSetupInfo) =
     else
         printfn "Directory %s found" info.FolderName
 
+let updateVersion () =
+    let version = File.ReadAllText(currentDir </> "public/js/repl/version.txt")
+    let reg = Regex(@"\bVERSION\s*=\s*""(.*?)""")
+    let mainFile = currentDir </> "src/App/Shared.fs"
+    (reg, mainFile) ||> replaceLines (fun line m ->
+        let replacement = sprintf "VERSION = \"%s\"" version
+        reg.Replace(line, replacement) |> Some)
+
 Target "BuildFcsExport" (fun _ ->
     ensureRepoSetup
         { FolderPath = FCSExportFolderPath
@@ -135,16 +145,12 @@ Target "InstallDotNetCore" (fun _ ->
     dotnetExePath <- DotNetCli.InstallDotNetSDK dotnetcliVersion
 )
 
-let libsOutput = "public" </> "libs"
-
 Target "Clean" (fun _ ->
     !! "public/js"
     ++ libsOutput
     ++ "deploy"
   |> CleanDirs
 )
-
-// Dependencies
 
 Target "Restore" (fun _ ->
     runDotnet currentDir "restore Fable.REPL.sln"
@@ -177,11 +183,13 @@ Target "PublishGithubPages" (fun _->
 
 Target "GetBundleFromAppveyor" (fun _ ->
     downloadArtifact (currentDir </> "public/js/repl") AppveyorReplArtifactURL
+    updateVersion ()
 )
 
 // Assume the bundle has been built in a sibling Fable repo
 Target "GetBundleLocally" (fun _ ->
     FileUtils.cp_r (currentDir </> "../fable/src/dotnet/Fable.Repl/bundle") (currentDir </> "public/js/repl")
+    updateVersion ()
 )
 
 Target "BuildLib" (fun _ ->
@@ -215,15 +223,6 @@ Target "BuildSamples" (fun _ ->
         (sprintf "run -c Release -p ../fable/src/dotnet/Fable.Compiler fable-splitter --fable-core %s --args \"%s\"" fableCoreDir splitterArgs)
 )
 
-Target "UpdateVersion" (fun _ ->
-    let version = File.ReadAllText(currentDir </> "public/js/repl/version.txt")
-    let reg = Regex(@"\bVERSION\s*=\s*""(.*?)""")
-    let mainFile = currentDir </> "src/App/Shared.fs"
-    (reg, mainFile) ||> replaceLines (fun line m ->
-        let replacement = sprintf "VERSION = \"%s\"" version
-        reg.Replace(line, replacement) |> Some)
-)
-
 Target "All" DoNothing
 
 // Build order
@@ -241,7 +240,6 @@ Target "All" DoNothing
     ==> "GenerateMetadata"
 
 "BuildApp"
-    ==> "UpdateVersion"
     ==> "PublishGithubPages"
 
 "BuildLib"

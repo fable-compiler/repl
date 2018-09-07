@@ -1,7 +1,7 @@
 STORAGE: NONE
 NUGET
   remote: https://www.nuget.org/api/v2
-    dotnet-fable (2.0.0-beta-003) - clitool: true
+    dotnet-fable (2.0.0-beta-004) - clitool: true
       Dotnet.ProjInfo (>= 0.9) - restriction: >= netcoreapp2.0
       FSharp.Compiler.Service (>= 23.0.3) - restriction: >= netcoreapp2.0
       FSharp.Core (>= 4.3.4) - restriction: >= netcoreapp2.0
