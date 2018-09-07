@@ -1,70 +1,25 @@
 import { Record, declare, Union } from "../fable-core/Types.js";
-import { createObj, THIS_REF } from "../fable-core/Util.js";
+import { createObj } from "../fable-core/Util.js";
 import { ofList as ofList$$1 } from "../fable-core/Array.js";
 import { fold } from "../fable-core/List.js";
 export const Props$002EFragmentProp = declare(function Props$002EFragmentProp(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Props$002EFragmentProp$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIFragmentProp($this$$1) {
-  return {
-    [THIS_REF]: $this$$1
-  };
-}
-export function Props$002EFragmentProp$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIProp($this$$2) {
-  return {
-    [THIS_REF]: $this$$2
-  };
-}
 export const Props$002EProp = declare(function Props$002EProp(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Props$002EProp$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIHTMLProp($this$$3) {
-  return {
-    [THIS_REF]: $this$$3
-  };
-}
-export function Props$002EProp$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIProp($this$$4) {
-  return {
-    [THIS_REF]: $this$$4
-  };
-}
 export const Props$002EDangerousHtml = declare(function Props$002EDangerousHtml(arg1) {
   this.__html = arg1;
 }, Record);
 export const Props$002EDOMAttr = declare(function Props$002EDOMAttr(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Props$002EDOMAttr$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIHTMLProp($this$$5) {
-  return {
-    [THIS_REF]: $this$$5
-  };
-}
-export function Props$002EDOMAttr$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIProp($this$$6) {
-  return {
-    [THIS_REF]: $this$$6
-  };
-}
 export const Props$002ESVGAttr = declare(function Props$002ESVGAttr(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Props$002ESVGAttr$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIProp($this$$7) {
-  return {
-    [THIS_REF]: $this$$7
-  };
-}
 export const Props$002EHTMLAttr = declare(function Props$002EHTMLAttr(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Props$002EHTMLAttr$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIHTMLProp($this$$8) {
-  return {
-    [THIS_REF]: $this$$8
-  };
-}
-export function Props$002EHTMLAttr$$$Fable$002ERepl$002ELib$002EReact$002EProps$002EIProp($this$$9) {
-  return {
-    [THIS_REF]: $this$$9
-  };
-}
 export const Props$002ECSSProp = declare(function Props$002ECSSProp(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
