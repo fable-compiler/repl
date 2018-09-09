@@ -17,7 +17,7 @@ let private toHash page =
         | Reset -> "reset"
         | Home -> ""
 
-    "#" </> segmentsPart
+    "#" + segmentsPart
 
 let pageParser: Parser<Page->Page,Page> =
     oneOf [

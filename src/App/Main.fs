@@ -21,9 +21,6 @@ let private loadState(_key: string): ISavedState = importMember "./js/util.js"
 let private saveState(_key: string, _code: string, _html: string): unit = importMember "./js/util.js"
 let private updateQuery(_fsharpCode : string, _htmlCode : string): unit = importMember "./js/util.js"
 
-[<Literal>]
-let resetHash = "#reset"
-
 type IEditor = Monaco.Editor.IStandaloneCodeEditor
 
 type State =
@@ -268,7 +265,7 @@ let update msg (model : Model) =
                 | Sidebar.Share ->
                     model, Cmd.ofMsg ShareCode
                 | Sidebar.Reset ->
-                    model, Router.modifyUrl Router.Reset
+                    model, Router.newUrl Router.Reset
 
             { newModel with Sidebar = subModel }, Cmd.batch [ Cmd.map SidebarMsg cmd
                                                               extraCmd ]
@@ -564,7 +561,7 @@ let private view (model: Model) dispatch =
                                         [ str "We are getting everything ready for you"
                                           p []
                                             [ str "Trouble loading the repl? "
-                                              a [ Href resetHash ] [ str "Click here"]
+                                              a [ Router.href Router.Reset ] [ str "Click here"]
                                               str " to reset." ] ] ]
               menubar model dispatch
               div [ Class "page-content" ]
