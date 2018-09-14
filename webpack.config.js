@@ -11,13 +11,13 @@ var CONFIG = {
     devServerPort: 8080,
     babel: {
         presets: [
+            "@babel/preset-react",
             ["@babel/preset-env", {
                 "targets": {
                     "browsers": ["last 2 versions"]
                 },
                 "modules": false
-            }],
-            "@babel/preset-react"
+            }]
         ],
         plugins: [
             "@babel/plugin-proposal-class-properties"

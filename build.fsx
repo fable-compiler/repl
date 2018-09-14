@@ -4,7 +4,7 @@ let AppveyorReplArtifactURL =
     "https://ci.appveyor.com/api/projects/fable-compiler/Fable/artifacts/src/dotnet/Fable.Repl/repl-bundle.zip"
     + AppveyorReplArtifactURLParams
 
-let FCSExportFolderName = "FSharp.Compiler.Service_export"
+let FCSExportFolderName = "FSharp.Compiler.Service_fable"
 let FableFolderName = "Fable"
 
 let libsOutput = "public/libs"

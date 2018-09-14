@@ -6,6 +6,7 @@
   <ItemGroup>
     <Compile Include="React.fs" />
     <Compile Include="Elmish.fs" />
+    <Compile Include="Canvas.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

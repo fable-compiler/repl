@@ -81,9 +81,9 @@ module rec Props =
         | OnTimeUpdate of (Browser.Event -> unit)
         | OnVolumeChange of (Browser.Event -> unit)
         | OnWaiting of (Browser.Event -> unit)
-        | OnClick of (Browser.Event -> unit)
+        | OnClick of (Browser.MouseEvent -> unit)
         | OnContextMenu of (Browser.Event -> unit)
-        | OnDoubleClick of (Browser.Event -> unit)
+        | OnDoubleClick of (Browser.MouseEvent -> unit)
         | OnDrag of (Browser.Event -> unit)
         | OnDragEnd of (Browser.Event -> unit)
         | OnDragEnter of (Browser.Event -> unit)
@@ -92,13 +92,13 @@ module rec Props =
         | OnDragOver of (Browser.Event -> unit)
         | OnDragStart of (Browser.Event -> unit)
         | OnDrop of (Browser.Event -> unit)
-        | OnMouseDown of (Browser.Event -> unit)
-        | OnMouseEnter of (Browser.Event -> unit)
-        | OnMouseLeave of (Browser.Event -> unit)
-        | OnMouseMove of (Browser.Event -> unit)
-        | OnMouseOut of (Browser.Event -> unit)
-        | OnMouseOver of (Browser.Event -> unit)
-        | OnMouseUp of (Browser.Event -> unit)
+        | OnMouseDown of (Browser.MouseEvent -> unit)
+        | OnMouseEnter of (Browser.MouseEvent -> unit)
+        | OnMouseLeave of (Browser.MouseEvent -> unit)
+        | OnMouseMove of (Browser.MouseEvent -> unit)
+        | OnMouseOut of (Browser.MouseEvent -> unit)
+        | OnMouseOver of (Browser.MouseEvent -> unit)
+        | OnMouseUp of (Browser.MouseEvent -> unit)
         | OnSelect of (Browser.Event -> unit)
         | OnTouchCancel of (Browser.Event -> unit)
         | OnTouchEnd of (Browser.Event -> unit)
@@ -753,10 +753,10 @@ open Props
 let ofFunction<'P> (f: 'P -> ReactElement) (props: 'P) (children: ReactElement seq): ReactElement =
     React.createElement(f, props, children)
 
-// /// Instantiate an imported React component. The first two arguments must be string literals, "default" can be used for the first one.
-// /// Example: `ofImport "Map" "leaflet" { x = 10; y = 50 } []`
-// let ofImport<'P> (importMember: string) (importPath: string) (props: 'P) (children: ReactElement seq): ReactElement =
-//     React.createElement(import importMember importPath, props, children)
+/// Instantiate an imported React component. The first two arguments must be string literals, "default" can be used for the first one.
+/// Example: `ofImport "Map" "leaflet" { x = 10; y = 50 } []`
+let inline internal ofImport<'P> (importMember: string) (importPath: string) (props: 'P) (children: ReactElement seq): ReactElement =
+    React.createElement(import importMember importPath, props, children)
 
 /// Alias of `ofString`
 let str (s: string): ReactElement = unbox s
