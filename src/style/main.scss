@@ -4,6 +4,7 @@
 @import '../../node_modules/bulma-pageloader/dist/css/bulma-pageloader.sass';
 @import './menu-group';
 @import './toast.scss';
+@import './problems.scss';
 
 $fa-font-path: "~font-awesome/fonts/";
 @import '~font-awesome/scss/font-awesome';
@@ -58,6 +59,11 @@ html {
         display: flex;
         width: 100%;
 
+        .tabs {
+            margin-bottom: 0;
+            height: $tabs-header-height;
+        }
+
         .horizontal-resize {
             width: 4px;
             margin-left: -2px;
@@ -104,11 +110,6 @@ html {
 
         .output-container {
             height: 100%;
-
-            .tabs {
-                margin-bottom: 0;
-                height: $tabs-header-height;
-            }
 
             .editor-output {
                 height: calc(100% - #{$tabs-header-height});

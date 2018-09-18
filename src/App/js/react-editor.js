@@ -30,19 +30,20 @@ class Editor extends React.Component {
     componentDidUpdate(prevProps) {
         if (prevProps.errors !== this.props.errors) {
             this.monaco.editor.setModelMarkers(this.editor.getModel(), "FSharpErrors", this.props.errors);
+            this.onResize();
         }
     }
 
     render() {
         return (
-            <div style={{height: '100%', overflow: 'hidden'}}>
+            <div style={this.props.style}>
                 <ReactResizeDetector handleWidth handleHeight onResize={this.onResize} />
                 <MonacoEditor
                     value={this.props.value}
                     options={this.props.options}
                     onChange={this.onChange}
                     editorDidMount={this.editorDidMount}
-                    // requireConfig={requireConfig}
+                // requireConfig={requireConfig}
                 />
             </div>
         );
@@ -56,7 +57,8 @@ Editor.propTypes = {
     value: PropTypes.string,
     editorDidMount: PropTypes.func,
     options: PropTypes.object,
-    errors : PropTypes.array
+    errors: PropTypes.array,
+    style: PropTypes.object
 };
 
 Editor.defaultProps = {
@@ -64,7 +66,8 @@ Editor.defaultProps = {
     value: "",
     editorDidMount: noop,
     options: null,
-    errors : []
+    errors: [],
+    style: { height: '100%', overflow: 'hidden' }
 };
 
 export default Editor;

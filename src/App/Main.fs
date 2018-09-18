@@ -422,6 +422,21 @@ let fsharpEditorOptions =
         o.minimap <- Some minimapOptions
     )
 
+let private editorTabs =
+    Tabs.tabs [ Tabs.IsCentered
+                Tabs.Size Size.IsMedium
+                Tabs.IsToggle ]
+        [ Tabs.tab [ //Tabs.Tab.IsActive (activeTab = LiveTab)
+                     Tabs.Tab.Props [
+                         // OnClick (fun _ -> SetActiveTab LiveTab |> dispatch)
+                     ] ]
+            [ a [ ] [ str "Live sample" ] ]
+          Tabs.tab [ //Tabs.Tab.IsActive (activeTab = CodeTab)
+                     Tabs.Tab.Props [
+                         // OnClick (fun _ -> SetActiveTab CodeTab |> dispatch)
+                     ] ]
+            [ a [ ] [ str "Code" ] ] ]
+
 let private editorArea model dispatch =
     let fsharpAngle, htmlAngle =
         match model.EditorCollapse with
@@ -431,8 +446,8 @@ let private editorArea model dispatch =
 
     let fsharpDisplay, htmlDisplay =
         match model.EditorCollapse with
-        | BothExtended -> "block", "block"
-        | FSharpOnly -> "block", "none"
+        | BothExtended -> "flex", "block"
+        | FSharpOnly -> "flex", "none"
         | HtmlOnly -> "none", "block"
 
     let fsharpHeight, htmlHeight =
@@ -444,70 +459,86 @@ let private editorArea model dispatch =
         | HtmlOnly ->
             Literals.EDITOR_COLLAPSED_HEIGHT, Literals.EDITOR_UNCOLLAPSED_HEIGHT
 
+    let problems =
+        div [ Class "problems-container" ]
+            [ for error in model.FSharpErrors do
+                match error.severity with
+                | Monaco.MarkerSeverity.Error
+                | Monaco.MarkerSeverity.Warning ->
+                    let icon =
+                        match error.severity with
+                        | Monaco.MarkerSeverity.Error -> Fa.I.TimesCircle
+                        | Monaco.MarkerSeverity.Warning -> Fa.I.ExclamationCircle
+                        | _ -> failwith "Should not happen"
+
+                    yield div [ Class "problems-row" ]
+                            [ Icon.faIcon [ Icon.Size IsSmall ]
+                                [ Fa.icon icon ]
+                              span [ Class "problems-description" ]
+                                [ str error.message ]
+                              span [ Class "problems-row-position" ]
+                                [ str "("
+                                  str (string error.startLineNumber)
+                                  str ","
+                                  str (string error.startColumn)
+                                  str ")" ] ]
+                | _ -> ()
+            ]
+
     div [ Class "editor-container"
-          Style [ Width (numberToPercent model.PanelSplitRatio) ] ]
-        [ Card.card [ Common.Props [ Style [ Height ("calc("+ fsharpHeight + " - 4px)") ] ] ] // We remove 4px to compensate the vertical-resize height
-            [ Card.header [ Common.Props [ OnClick (fun _ -> dispatch ToggleFsharpCollapse )] ]
-                [ Card.Header.title [ ]
-                    [ str "F#" ]
-                  Card.Header.icon [ ]
-                    [ Icon.faIcon [ ]
-                        [ Fa.icon fsharpAngle
-                          Fa.faLg ] ] ]
-              Card.content [ Common.Props [ Style [ Display fsharpDisplay ] ] ]
-                [ ReactEditor.editor [ ReactEditor.Options fsharpEditorOptions
-                                       ReactEditor.Value model.FSharpCode
-                                       ReactEditor.OnChange (ChangeFsharpCode >> dispatch)
-                                       ReactEditor.Errors model.FSharpErrors
-                                       ReactEditor.EditorDidMount (fun editor monacoModule ->
-                                        if not (isNull editor) then
-                                            dispatch (SetFSharpEditor editor)
+          Style [ Width (numberToPercent model.PanelSplitRatio)
+                  Position "relative" ] ]
+        [ editorTabs
+          ReactEditor.editor [ ReactEditor.Options fsharpEditorOptions
+                               ReactEditor.Value model.FSharpCode
+                               ReactEditor.OnChange (ChangeFsharpCode >> dispatch)
+                               ReactEditor.Errors model.FSharpErrors
+                               ReactEditor.EditorDidMount (fun editor monacoModule ->
+                                if not (isNull editor) then
+                                    dispatch (SetFSharpEditor editor)
 
-                                            // Because we have access to the monacoModule here,
-                                            // register the different provider needed for F# editor
-                                            let getTooltip line column lineText =
-                                                async {
-                                                    let! res = model.Worker.PostAndAwaitResponse(GetTooltip(line, column, lineText))
-                                                    match res with
-                                                    | FoundTooltip lines -> return lines
-                                                    | _ -> return [||]
-                                                }
+                                    // Because we have access to the monacoModule here,
+                                    // register the different provider needed for F# editor
+                                    let getTooltip line column lineText =
+                                        async {
+                                            let! res = model.Worker.PostAndAwaitResponse(GetTooltip(line, column, lineText))
+                                            match res with
+                                            | FoundTooltip lines -> return lines
+                                            | _ -> return [||]
+                                        }
 
-                                            let tooltipProvider = Editor.createTooltipProvider getTooltip
-                                            monacoModule.languages.registerHoverProvider("fsharp", tooltipProvider) |> ignore
+                                    let tooltipProvider = Editor.createTooltipProvider getTooltip
+                                    monacoModule.languages.registerHoverProvider("fsharp", tooltipProvider) |> ignore
 
-                                            let getCompletion line column lineText =
-                                                async {
-                                                    let! res = model.Worker.PostAndAwaitResponse(GetCompletions(line, column, lineText))
-                                                    match res with
-                                                    | FoundCompletions lines -> return lines
-                                                    | _ -> return [||]
-                                                }
+                                    let getCompletion line column lineText =
+                                        async {
+                                            let! res = model.Worker.PostAndAwaitResponse(GetCompletions(line, column, lineText))
+                                            match res with
+                                            | FoundCompletions lines -> return lines
+                                            | _ -> return [||]
+                                        }
 
-                                            let completionProvider = Editor.createCompletionProvider getCompletion
-                                            monacoModule.languages.registerCompletionItemProvider("fsharp", completionProvider) |> ignore
+                                    let completionProvider = Editor.createCompletionProvider getCompletion
+                                    monacoModule.languages.registerCompletionItemProvider("fsharp", completionProvider) |> ignore
 
-                                            editor.addCommand(monacoModule.KeyMod.Alt ||| int Monaco.KeyCode.Enter,
-                                                (fun () -> StartCompile None |> dispatch), "") |> ignore
-                                       ) ]
+                                    editor.addCommand(monacoModule.KeyMod.Alt ||| int Monaco.KeyCode.Enter,
+                                        (fun () -> StartCompile None |> dispatch), "") |> ignore
+                               ) ]
+          problems ]
+        //   Card.card [ Common.Props [ Style [ Height htmlHeight ] ] ]
+        //     [ Card.header [ Common.Props [ OnClick (fun _ -> dispatch ToggleHtmlCollapse )] ]
+        //         [ Card.Header.title [ ]
+        //             [ str "Html" ]
+        //           Card.Header.icon [ ]
+        //             [ Icon.faIcon [ ]
+        //                 [ Fa.icon htmlAngle
+        //                   Fa.faLg ] ] ]
+        //       Card.content [ Common.Props [ Style [ Display htmlDisplay ] ] ]
+        //         [ ReactEditor.editor [ ReactEditor.Options htmlEditorOptions
+        //                                ReactEditor.Value model.HtmlCode
+        //                                ReactEditor.OnChange (ChangeHtmlCode >> dispatch) ]
+                         //] ]
 
-                           ] ]
-          div [ Class "vertical-resize"
-                OnMouseDown (fun _ -> dispatch EditorDragStarted) ]
-              [ ]
-          Card.card [ Common.Props [ Style [ Height htmlHeight ] ] ]
-            [ Card.header [ Common.Props [ OnClick (fun _ -> dispatch ToggleHtmlCollapse )] ]
-                [ Card.Header.title [ ]
-                    [ str "Html" ]
-                  Card.Header.icon [ ]
-                    [ Icon.faIcon [ ]
-                        [ Fa.icon htmlAngle
-                          Fa.faLg ] ] ]
-              Card.content [ Common.Props [ Style [ Display htmlDisplay ] ] ]
-                [ ReactEditor.editor [ ReactEditor.Options htmlEditorOptions
-                                       ReactEditor.Value model.HtmlCode
-                                       ReactEditor.OnChange (ChangeHtmlCode >> dispatch) ]
-                         ] ] ]
 
 let private outputTabs (activeTab : ActiveTab) dispatch =
     Tabs.tabs [ Tabs.IsCentered
