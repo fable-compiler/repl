@@ -64,6 +64,11 @@ type Model =
     | Initializing
     | Running of ModelInfo
 
+type EndCompileStatus =
+    | Ok of string
+    | Errors of Fable.Repl.Error[]
+    | Error of string
+
 type Msg =
     | SetFSharpEditor of IEditor
     | LoadSuccess
@@ -72,7 +77,7 @@ type Msg =
     | UrlHashChange
     | MarkEditorErrors of Fable.Repl.Error[]
     | StartCompile of string option
-    | EndCompile of Result<string, string>
+    | EndCompile of EndCompileStatus
     | ShareCode
     | SetActiveTab of ActiveTab
     | SetIFrameUrl of string
@@ -105,11 +110,11 @@ let parseEditorCode (worker: ObservableWorker<_>) (model: Monaco.Editor.IModel) 
     let content = model.getValue (Monaco.Editor.EndOfLinePreference.TextDefined, true)
     ParseCode content |> worker.Post
 
-let showErrorToast msg =
+let showGlobalErrorToast msg =
     Toast.message msg
-    |> Toast.title "Error"
-    |> Toast.position Toast.TopRight
-    |> Toast.icon "fa fa-exclamation"
+    |> Toast.title "Failed to compiled"
+    |> Toast.position Toast.BottomRight
+    |> Toast.icon Fa.I.Exclamation
     |> Toast.noTimeout
     |> Toast.withCloseButton
     |> Toast.error
@@ -133,7 +138,7 @@ let update msg (model : Model) =
 
         | LoadFail ->
             let msg = "Assemblies couldn't be loaded. Some firewalls prevent download of binary files, please check."
-            { model with State = Idle }, showErrorToast msg
+            { model with State = Idle }, showGlobalErrorToast msg
 
         | SetFSharpEditor ed -> { model with FSharpEditor = ed }, Cmd.none
 
@@ -166,11 +171,27 @@ let update msg (model : Model) =
         | EndCompile result ->
             match result with
             | Ok codeES2015 ->
-                let model = { model with State = Compiled; CodeES2015 = codeES2015 }
-                let cmd = Cmd.performFunc (generateHtmlUrl model) codeES2015 SetIFrameUrl
-                model, cmd
+                { model with CodeES2015 = codeES2015
+                             State = Compiled
+                             FSharpErrors = ResizeArray [||] }, Cmd.batch [ Cmd.performFunc (generateHtmlUrl model) codeES2015 SetIFrameUrl
+                                                                            Toast.message "Compiled successfuly"
+                                                                            |> Toast.position Toast.BottomRight
+                                                                            |> Toast.icon Fa.I.Check
+                                                                            |> Toast.timeout (System.TimeSpan.FromSeconds 4.)
+                                                                            |> Toast.dismissOnClick
+                                                                            |> Toast.success ]
+
+            | Errors errors ->
+                { model with State = Compiled
+                             FSharpErrors = mapErrorToMarker errors }, Toast.message "Failed to compiled"
+                                                                        |> Toast.position Toast.BottomRight
+                                                                        |> Toast.icon Fa.I.Exclamation
+                                                                        |> Toast.timeout (System.TimeSpan.FromSeconds 4.)
+                                                                        |> Toast.dismissOnClick
+                                                                        |> Toast.error
+
             | Error msg ->
-                { model with State = Compiled }, showErrorToast msg
+                { model with State = Compiled }, showGlobalErrorToast msg
 
         | ShareCode ->
             (getEditorContent model.FSharpEditor, model.HtmlCode )
@@ -288,10 +309,9 @@ let workerCmd (worker : ObservableWorker<_>)=
                 LoadSuccess |> dispatch
             | LoadFailed -> LoadFail |> dispatch
             | ParsedCode errors -> MarkEditorErrors errors |> dispatch
-            | CompiledCode(jsCode, errors) ->
-                MarkEditorErrors errors |> dispatch
-                Ok jsCode |> EndCompile |> dispatch
-            | CompilationFailed msg -> Error msg |> EndCompile |> dispatch
+            | CompilationFailed errors -> Errors errors |> EndCompile |> dispatch
+            | CompilationSucceed jsCode -> Ok jsCode |> EndCompile |> dispatch
+            | CompilerCrashed msg -> Error msg |> EndCompile |> dispatch
             // Do nothing, these will be handled by .PostAndAwaitResponse
             | FoundTooltip _ -> ()
             | FoundCompletions _ -> ()
@@ -583,7 +603,7 @@ open Elmish.Browser.UrlParser
 
 Program.mkProgram init update view
 |> Program.toNavigable (parseHash Router.pageParser) urlUpdate
-|> Toast.Program.withToast Toast.render
+|> Toast.Program.withToast Toast.renderToastWithFulma
 #if DEBUG
 |> Program.withHMR
 #endif

@@ -41,8 +41,9 @@ type WorkerAnswer =
     | Loaded
     | LoadFailed
     | ParsedCode of errors: Fable.Repl.Error[]
-    | CompiledCode of jsCode: string * errors: Fable.Repl.Error[]
-    | CompilationFailed of message: string
+    | CompilationSucceed of jsCode: string
+    | CompilationFailed of errors: Fable.Repl.Error[]
+    | CompilerCrashed of message: string
     | FoundTooltip of lines: string[]
     | FoundCompletions of Fable.Repl.Completion[]
     static member Decoder =
@@ -117,4 +118,3 @@ let debounce (ms: int) (obs: IObservable<'T>): IObservable<'T> =
                     debouncedObs.Trigger(snapshot)
                     timeoutActive <- false), ms)) |> Some
     upcast debouncedObs
-

@@ -43,9 +43,15 @@ let init() = async {
                     let parseResults = measureTime "FCS parsing" Fable.ParseFSharpProject (checker, Literals.FILE_NAME, fsharpCode)
                     let babelAst, errors = measureTime "Fable transform" Fable.CompileToBabelAst ("fable-core", parseResults, Literals.FILE_NAME, optimize)
                     let jsCode = measureTime "Babel generation" compileBabelAst babelAst
-                    CompiledCode(jsCode, errors) |> worker.Post
+                    // It seems that Fable.CompileToBabelAst do not keep the parse errors
+                    // For now, we add them manually
+                    let errors = Array.concat [parseResults.Errors; errors]
+                    if Array.isEmpty errors then
+                        CompilationSucceed jsCode |> worker.Post
+                    else
+                        CompilationFailed errors |> worker.Post
                 with er ->
-                    CompilationFailed er.Message |> worker.Post
+                    CompilerCrashed er.Message |> worker.Post
             | GetTooltip(line, col, lineText) ->
                 async {
                     let! tooltipLines =
