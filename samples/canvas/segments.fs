@@ -19,7 +19,7 @@ type Settings =
           FollowSpeed = 0.1
           NumOfSegments = 16
           CanvasWidth = 600.
-          CanvasHeight = 800. }
+          CanvasHeight = 600. }
 
 type Position =
     { X : float
