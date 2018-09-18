@@ -1,4 +1,4 @@
-import { drawOps } from "../Canvas.js";
+import { drawOps } from "../Canvas.fs";
 
 function onAnimationFrame(tick) {
   var last = -1;
