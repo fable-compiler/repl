@@ -444,6 +444,45 @@ let private editorArea model dispatch =
         | HtmlOnly ->
             Literals.EDITOR_COLLAPSED_HEIGHT, Literals.EDITOR_UNCOLLAPSED_HEIGHT
 
+    let problems =
+        div [ Style [ BackgroundColor "#fff0f0"
+                      BorderTop "1px solid #ffd6d6"
+                      Color "#ff0000"
+                      Flex "0 0 auto"
+                      MaxHeight "33%"
+                      Overflow "auto"
+                      Margin "0"
+                      Padding "0.5rem 0.75rem"
+                      WhiteSpace "pre-wrap" ] ]
+            [ for error in model.FSharpErrors do
+                match error.severity with
+                | Monaco.MarkerSeverity.Error
+                | Monaco.MarkerSeverity.Warning ->
+                    let icon =
+                        match error.severity with
+                        | Monaco.MarkerSeverity.Error -> Fa.I.TimesCircle
+                        | Monaco.MarkerSeverity.Warning -> Fa.I.ExclamationCircle
+                        | _ -> failwith "Should not happen"
+
+                    let message =
+                        if error.message.Contains("\n") then
+                            error.message.Split('\n').[0]
+                        else
+                            error.message
+
+                    yield span [ ]
+                            [ Icon.faIcon [ Icon.Size IsSmall ]
+                                [ Fa.icon icon ]
+                              str message
+                              span [ Style [ BackgroundColor "grey"] ]
+                                [ str "("
+                                  str (string error.startLineNumber)
+                                  str ","
+                                  str (string error.startColumn)
+                                  str ")" ] ]
+                | _ -> ()
+            ]
+
     div [ Class "editor-container"
           Style [ Width (numberToPercent model.PanelSplitRatio) ] ]
         [ Card.card [ Common.Props [ Style [ Height ("calc("+ fsharpHeight + " - 4px)") ] ] ] // We remove 4px to compensate the vertical-resize height
@@ -495,19 +534,21 @@ let private editorArea model dispatch =
           div [ Class "vertical-resize"
                 OnMouseDown (fun _ -> dispatch EditorDragStarted) ]
               [ ]
-          Card.card [ Common.Props [ Style [ Height htmlHeight ] ] ]
-            [ Card.header [ Common.Props [ OnClick (fun _ -> dispatch ToggleHtmlCollapse )] ]
-                [ Card.Header.title [ ]
-                    [ str "Html" ]
-                  Card.Header.icon [ ]
-                    [ Icon.faIcon [ ]
-                        [ Fa.icon htmlAngle
-                          Fa.faLg ] ] ]
-              Card.content [ Common.Props [ Style [ Display htmlDisplay ] ] ]
-                [ ReactEditor.editor [ ReactEditor.Options htmlEditorOptions
-                                       ReactEditor.Value model.HtmlCode
-                                       ReactEditor.OnChange (ChangeHtmlCode >> dispatch) ]
-                         ] ] ]
+          problems
+        //   Card.card [ Common.Props [ Style [ Height htmlHeight ] ] ]
+        //     [ Card.header [ Common.Props [ OnClick (fun _ -> dispatch ToggleHtmlCollapse )] ]
+        //         [ Card.Header.title [ ]
+        //             [ str "Html" ]
+        //           Card.Header.icon [ ]
+        //             [ Icon.faIcon [ ]
+        //                 [ Fa.icon htmlAngle
+        //                   Fa.faLg ] ] ]
+        //       Card.content [ Common.Props [ Style [ Display htmlDisplay ] ] ]
+        //         [ ReactEditor.editor [ ReactEditor.Options htmlEditorOptions
+        //                                ReactEditor.Value model.HtmlCode
+        //                                ReactEditor.OnChange (ChangeHtmlCode >> dispatch) ]
+                         //] ]
+                          ]
 
 let private outputTabs (activeTab : ActiveTab) dispatch =
     Tabs.tabs [ Tabs.IsCentered
