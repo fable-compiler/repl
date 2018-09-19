@@ -3,6 +3,7 @@ module ReactEditor
 open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Helpers.React
+open Fable.Helpers.React.Props
 open Fable.Import
 
 type Props =
@@ -17,6 +18,10 @@ type Props =
     /// Errors to set into the editor
     /// Currently only used for the F# editor
     | Errors of ResizeArray<Monaco.Editor.IMarkerData>
+
+/// Override style of the div container
+let inline Style (css: CSSProp seq): Props =
+    !!("style", keyValueList CaseRules.LowerFirst css)
 
 let inline editor (props: Props list) : React.ReactElement =
     ofImport "default" "./js/react-editor.js" (keyValueList CaseRules.LowerFirst props) []

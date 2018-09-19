@@ -1,0 +1,46 @@
+.problems-container {
+    background-color: #fff0f0;
+    border-top: 1px solid #ffd6d6;
+    color: #ff0000;
+    max-height: 20%;
+    margin: 0;
+    padding: 0.5rem 0.75rem;
+    position: absolute;
+    overflow: auto;
+    bottom: 0;
+    width: 100%;
+
+    &:empty {
+        display: none;
+    }
+
+    .problems-row {
+
+        &:hover {
+            cursor: pointer;
+            background-color: #fcdddd;
+        }
+
+        display: flex;
+
+        .icon {
+            display: inline-block;
+            margin-right: 0.25rem;
+        }
+
+        .problems-description {
+            margin-right: 0.25rem;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .problems-row-position {
+            color: #6d6d6d;
+        }
+
+        &:not(:last-child) {
+            margin-bottom: 0.25rem;
+        }
+    }
+}
