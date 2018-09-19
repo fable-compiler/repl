@@ -1,46 +1,89 @@
-.problems-container {
-    background-color: #fff0f0;
-    border-top: 1px solid #ffd6d6;
-    color: #ff0000;
-    max-height: 20%;
+.problems-panel {
     margin: 0;
-    padding: 0.5rem 0.75rem;
     position: absolute;
-    overflow: auto;
+    overflow: visible;
     bottom: 0;
     width: 100%;
 
-    &:empty {
-        display: none;
+    .problems-container {
+        background-color: #fff0f0;
+        border-top: 1px solid #ffd6d6;
+        padding: 0.5rem 0.75rem;
+        color: #ff0000;
+        overflow: auto;
+        max-height: 200px;
+
+        &:empty {
+            display: none;
+        }
+
+        .problems-row {
+
+            &:after {
+                content: attr(data-tooltip-content);
+                position: absolute;
+                visibility: hidden;
+                color: #d4d4d4;
+                background-color: #2d2d30;
+                max-width: 70%;
+                // Force to display correctly the newline
+                white-space: pre-wrap;
+                // 68px is the size of the Editor gutter
+                margin: 0 auto 0 68px;
+                left: 0;
+                right: 0;
+                padding: .5rem;
+                border: 1px solid #454545;
+                // This settings are to mimic the tooltip design used by Monaco
+                font-family: Menlo, Monaco, "Courier New", monospace;
+                font-weight: normal;
+                font-size: 14px;
+                line-height: 21px;
+                letter-spacing: 0px;
+                opacity: 0;
+                transition: opacity 0s linear 1.5s;
+                pointer-events: none;
+                // We always position the tooltip content on top of the `problems-container`.
+                // This is need in order to support both scroll and tooltip.
+                // The problem being we are already in an absolute div so we can't outpass everything.
+                // Also, we need both
+                //  - `overflow: visible` => Used to allow the children div to display something wider than the parent frame
+                //  - `overflow: auto` => Used to force a scroll when the child is being to high
+                bottom: 100%;
+            }
+
+            &:hover:after {
+                visibility: visible;
+                opacity: 1;
+            }
+
+            &:hover {
+                cursor: pointer;
+                background-color: #fcdddd;
+            }
+
+            display: flex;
+
+            .icon {
+                display: inline-block;
+                margin-right: 0.25rem;
+            }
+
+            .problems-description {
+                margin-right: 0.25rem;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+
+            .problems-row-position {
+                color: #6d6d6d;
+            }
+
+            &:not(:last-child) {
+                margin-bottom: 0.25rem;
+            }
+        }
     }
 
-    .problems-row {
-
-        &:hover {
-            cursor: pointer;
-            background-color: #fcdddd;
-        }
-
-        display: flex;
-
-        .icon {
-            display: inline-block;
-            margin-right: 0.25rem;
-        }
-
-        .problems-description {
-            margin-right: 0.25rem;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-
-        .problems-row-position {
-            color: #6d6d6d;
-        }
-
-        &:not(:last-child) {
-            margin-bottom: 0.25rem;
-        }
-    }
 }

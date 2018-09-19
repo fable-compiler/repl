@@ -9,7 +9,7 @@ open System.Diagnostics
 
 [<RequireQualifiedAccess>]
 module Literals =
-    let [<Literal>] VERSION = "2.0.0-beta-004"
+    let [<Literal>] VERSION = "2.0.0-beta-005"
     let [<Literal>] STORAGE_KEY = "fable-repl"
     let [<Literal>] REPL_BUNDLE_URL = "./js/repl/bundle.min.js"
     let [<Literal>] SAMPLES_JSON_URL = "./samples/samples.json"
@@ -23,9 +23,6 @@ module Literals =
     let [<Literal>] FABLE_REPL_LIB_DIR = HOST + "/js/repl/lib"
     /// This is the name of the source code file passed to FCS
     let [<Literal>] FILE_NAME = "test.fs"
-    /// 46px = 42px + 4px (card-header height + vertical-resize height)
-    let [<Literal>] EDITOR_UNCOLLAPSED_HEIGHT = "calc(100% - 42px)"
-    let [<Literal>] EDITOR_COLLAPSED_HEIGHT = "38px"
 
 let [<Global>] private setTimeout(f: unit->unit, ms: int): unit = jsNative
 

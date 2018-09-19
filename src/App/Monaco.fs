@@ -109,7 +109,7 @@ module Monaco =
     /// This class is a simple parser which creates the basic component paths
     /// (http://tools.ietf.org/html/rfc3986#section-3) with minimal validation
     /// and encoding.
-    /// 
+    ///
     ///        foo://example.com:8042/over/there?name=ferret#nose
     ///        \_/   \______________/\_________/ \_________/ \__/
     ///         |           |            |            |        |
@@ -152,7 +152,7 @@ module Monaco =
     /// This class is a simple parser which creates the basic component paths
     /// (http://tools.ietf.org/html/rfc3986#section-3) with minimal validation
     /// and encoding.
-    /// 
+    ///
     ///        foo://example.com:8042/over/there?name=ferret#nose
     ///        \_/   \______________/\_________/ \_________/ \__/
     ///         |           |            |            |        |
@@ -705,7 +705,7 @@ module Monaco =
             abstract theme: string option with get, set
             /// An URL to open when Ctrl+H (Windows and Linux) or Cmd+H (OSX) is pressed in
             /// the accessibility help dialog in the editor.
-            /// 
+            ///
             /// Defaults to "https://go.microsoft.com/fwlink/?linkid=852450"
             abstract accessibilityHelpUrl: string option with get, set
 
@@ -1005,17 +1005,17 @@ module Monaco =
             abstract validatePosition: position: IPosition -> Position
             /// Advances the given position by the given offest (negative offsets are also accepted)
             /// and returns it as a new valid position.
-            /// 
+            ///
             /// If the offset and position are such that their combination goes beyond the beginning or
             /// end of the model, throws an exception.
-            /// 
+            ///
             /// If the ofsset is such that the new position would be in the middle of a multi-byte
             /// line terminator, throws an exception.
             abstract modifyPosition: position: IPosition * offset: float -> Position
             /// Create a valid range.
             abstract validateRange: range: IRange -> Range
             /// <summary>Converts the position to a zero-based offset.
-            /// 
+            ///
             /// The position will be [adjusted](#TextDocument.validatePosition).</summary>
             /// <param name="position">A position.</param>
             abstract getOffsetAt: position: IPosition -> float
@@ -1257,9 +1257,9 @@ module Monaco =
 
         /// A (serializable) state of the view.
         type [<AllowNullLiteral>] IViewState =
-            /// written by previous versions 
+            /// written by previous versions
             abstract scrollTop: float option with get, set
-            /// written by previous versions 
+            /// written by previous versions
             abstract scrollTopWithoutViewZones: float option with get, set
             abstract scrollLeft: float with get, set
             abstract firstPosition: IPosition with get, set
@@ -2588,7 +2588,7 @@ module Monaco =
 
         /// A snippet string is a template which allows to insert text
         /// and to control the editor cursor when insertion happens.
-        /// 
+        ///
         /// A snippet can define tab stops and placeholders with `$1`, `$2`
         /// and `${3:foo}`. `$0` defines the final tab stop, it defaults to
         /// the end of the snippet. Variables are defined with `$name` and
@@ -2628,10 +2628,10 @@ module Monaco =
             /// is used.
             abstract insertText: U2<string, SnippetString> option with get, set
             /// A range of text that should be replaced by this completion item.
-            /// 
+            ///
             /// Defaults to a range from the start of the [current word](#TextDocument.getWordRangeAtPosition) to the
             /// current position.
-            /// 
+            ///
             /// *Note:* The range must be a [single line](#Range.isSingleLine) and it must
             /// [contain](#Range.contains) the position at which completion has been [requested](#CompletionItemProvider.provideCompletionItems).
             abstract range: Range option with get, set
@@ -2660,13 +2660,13 @@ module Monaco =
             /// How the completion was triggered.
             abstract triggerKind: SuggestTriggerKind with get, set
             /// Character that triggered the completion item provider.
-            /// 
+            ///
             /// `undefined` if provider was not triggered by a character.
             abstract triggerCharacter: string option with get, set
 
         /// The completion item provider interface defines the contract between extensions and
         /// the [IntelliSense](https://code.visualstudio.com/docs/editor/intellisense).
-        /// 
+        ///
         /// When computing *complete* completion items is expensive, providers can optionally implement
         /// the `resolveCompletionItem`-function. In that case it is enough to return completion
         /// items with a [label](#CompletionItem.label) from the
@@ -2679,7 +2679,7 @@ module Monaco =
             abstract provideCompletionItems: document: Editor.ITextModel * position: Position * token: CancellationToken * context: CompletionContext -> U4<ResizeArray<CompletionItem>, Thenable<ResizeArray<CompletionItem>>, CompletionList, Thenable<CompletionList>>
             /// Given a completion item fill in more data, like [doc-comment](#CompletionItem.documentation)
             /// or [details](#CompletionItem.detail).
-            /// 
+            ///
             /// The editor will only resolve a completion item once.
             abstract resolveCompletionItem: item: CompletionItem * token: CancellationToken -> U2<CompletionItem, Thenable<CompletionItem>>
 
@@ -3018,7 +3018,7 @@ module Monaco =
         /// the formatting-feature.
         type [<AllowNullLiteral>] DocumentRangeFormattingEditProvider =
             /// Provide formatting edits for a range in a document.
-            /// 
+            ///
             /// The given range is a hint and providers can decide to format a smaller
             /// or larger range. Often this is done by adjusting the start and end
             /// of the range to full syntax nodes.
@@ -3029,7 +3029,7 @@ module Monaco =
         type [<AllowNullLiteral>] OnTypeFormattingEditProvider =
             abstract autoFormatTriggerCharacters: ResizeArray<string> with get, set
             /// Provide formatting edits after a character has been typed.
-            /// 
+            ///
             /// The given position and character should hint to the provider
             /// what range the position to expand to, like find the matching `{`
             /// when `}` has been entered.
@@ -3187,8 +3187,8 @@ module Monaco =
             RegExp * U2<string, IMonarchLanguageAction> * string
 
         /// A rule is either a regular expression and an action
-        ///  		shorthands: [reg,act] == { regex: reg, action: act}
-        /// 		and       : [reg,act,nxt] == { regex: reg, action: act{ next: nxt }}
+        ///         shorthands: [reg,act] == { regex: reg, action: act}
+        ///         and       : [reg,act,nxt] == { regex: reg, action: act{ next: nxt }}
         type [<AllowNullLiteral>] IExpandedMonarchLanguageRule =
             /// match tokens
             abstract regex: U2<string, RegExp> option with get, set
@@ -3394,7 +3394,7 @@ module Monaco =
                 abstract traceResolution: bool option with get, set
                 abstract resolveJsonModule: bool option with get, set
                 abstract types: ResizeArray<string> option with get, set
-                /// Paths used to compute primary types search locations 
+                /// Paths used to compute primary types search locations
                 abstract typeRoots: ResizeArray<string> option with get, set
                 abstract esModuleInterop: bool option with get, set
                 [<Emit "$0[$1]{{=$2}}">] abstract Item: option: string -> CompilerOptionsValue option with get, set

@@ -16,10 +16,10 @@
     <Compile Include="Mouse.fs" />
     <Compile Include="Router.fs" />
     <Compile Include="Toast.fs" />
+    <Compile Include="ReactEditor.fs" />
     <Compile Include="Widgets/Samples.fs" />
     <Compile Include="Widgets/Other.fs" />
     <Compile Include="Sidebar.fs" />
-    <Compile Include="ReactEditor.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />

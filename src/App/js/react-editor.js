@@ -16,6 +16,19 @@ class Editor extends React.Component {
         this.props.editorDidMount(editor, monaco);
         this.editor = editor;
         this.monaco = monaco;
+
+        if (this.props.eventId !== null)
+            window.addEventListener(this.props.eventId, ev => {
+                switch (ev.detail.eventType) {
+                    case "cursorMove":
+                        this.editor.setSelection(ev.detail.range);
+                        this.editor.focus();
+                        this.editor.revealRangeInCenter(ev.detail.range);
+                        break;
+                    default:
+                        break;
+                }
+            });
     }
 
     onChange = (newValue, e) => {
@@ -35,8 +48,9 @@ class Editor extends React.Component {
     }
 
     render() {
+        let display = this.props.isHidden ? "none" : "block";
         return (
-            <div style={this.props.style}>
+            <div style={{ height: '100%', overflow: 'hidden', display: display }}>
                 <ReactResizeDetector handleWidth handleHeight onResize={this.onResize} />
                 <MonacoEditor
                     value={this.props.value}
@@ -58,7 +72,8 @@ Editor.propTypes = {
     editorDidMount: PropTypes.func,
     options: PropTypes.object,
     errors: PropTypes.array,
-    style: PropTypes.object
+    eventId: PropTypes.string,
+    isHidden: PropTypes.bool
 };
 
 Editor.defaultProps = {
@@ -67,7 +82,8 @@ Editor.defaultProps = {
     editorDidMount: noop,
     options: null,
     errors: [],
-    style: { height: '100%', overflow: 'hidden' }
+    eventId: null,
+    isHidden: false
 };
 
 export default Editor;

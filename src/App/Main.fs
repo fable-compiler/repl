@@ -29,9 +29,15 @@ type State =
     | Compiling
     | Compiled
 
-type ActiveTab =
-    | CodeTab
-    | LiveTab
+[<RequireQualifiedAccess>]
+type OutputTab =
+    | Code
+    | Live
+
+[<RequireQualifiedAccess>]
+type CodeTab =
+    | FSharp
+    | Html
 
 type DragTarget =
     | NoTarget
@@ -49,7 +55,8 @@ type ModelInfo =
       State: State
       InfoMessage: string
       IFrameUrl : string
-      ActiveTab : ActiveTab
+      OutputTab : OutputTab
+      CodeTab : CodeTab
       CodeES2015: string
       FSharpCode : string
       FSharpErrors : ResizeArray<Monaco.Editor.IMarkerData>
@@ -79,7 +86,8 @@ type Msg =
     | StartCompile of string option
     | EndCompile of EndCompileStatus
     | ShareCode
-    | SetActiveTab of ActiveTab
+    | SetOutputTab of OutputTab
+    | SetCodeTab of CodeTab
     | SetIFrameUrl of string
     | EditorDragStarted
     | EditorDrag of Position
@@ -201,8 +209,11 @@ let update msg (model : Model) =
         | SetIFrameUrl newUrl ->
             { model with IFrameUrl = newUrl }, Cmd.none
 
-        | SetActiveTab newTab ->
-            { model with ActiveTab = newTab }, Cmd.none
+        | SetOutputTab newTab ->
+            { model with OutputTab = newTab }, Cmd.none
+
+        | SetCodeTab newTab ->
+            { model with CodeTab = newTab }, Cmd.none
 
         | EditorDragStarted ->
             { model with DragTarget = EditorSplitter }, Cmd.none
@@ -339,7 +350,8 @@ let urlUpdate (result: Option<Router.Page>) model =
                   Worker = worker
                   InfoMessage = "Fable REPL fully works on the browser, no code is sent to any server (compile shortcut: Alt+Enter)"
                   IFrameUrl = ""
-                  ActiveTab = LiveTab
+                  OutputTab = OutputTab.Live
+                  CodeTab = CodeTab.FSharp
                   CodeES2015 = ""
                   FSharpCode = saved.code
                   FSharpErrors = ResizeArray [||]
@@ -422,77 +434,68 @@ let fsharpEditorOptions =
         o.minimap <- Some minimapOptions
     )
 
-let private editorTabs =
+let private editorTabs (activeTab : CodeTab) dispatch =
     Tabs.tabs [ Tabs.IsCentered
                 Tabs.Size Size.IsMedium
                 Tabs.IsToggle ]
-        [ Tabs.tab [ //Tabs.Tab.IsActive (activeTab = LiveTab)
+        [ Tabs.tab [ Tabs.Tab.IsActive (activeTab = CodeTab.FSharp)
                      Tabs.Tab.Props [
-                         // OnClick (fun _ -> SetActiveTab LiveTab |> dispatch)
+                        OnClick (fun _ -> SetCodeTab CodeTab.FSharp |> dispatch)
                      ] ]
-            [ a [ ] [ str "Live sample" ] ]
-          Tabs.tab [ //Tabs.Tab.IsActive (activeTab = CodeTab)
+            [ a [ ] [ str "F#" ] ]
+          Tabs.tab [ Tabs.Tab.IsActive (activeTab = CodeTab.Html)
                      Tabs.Tab.Props [
-                         // OnClick (fun _ -> SetActiveTab CodeTab |> dispatch)
+                         OnClick (fun _ -> SetCodeTab CodeTab.Html |> dispatch)
                      ] ]
-            [ a [ ] [ str "Code" ] ] ]
+            [ a [ ] [ str "Html" ] ] ]
+
+let private problemsPanel (errors : ResizeArray<Monaco.Editor.IMarkerData>) =
+        div [ Class "problems-panel" ]
+            [ div [ Class "problems-container" ]
+                [ for error in errors do
+                    match error.severity with
+                    | Monaco.MarkerSeverity.Error
+                    | Monaco.MarkerSeverity.Warning ->
+                        let icon =
+                            match error.severity with
+                            | Monaco.MarkerSeverity.Error -> Fa.I.TimesCircle
+                            | Monaco.MarkerSeverity.Warning -> Fa.I.ExclamationCircle
+                            | _ -> failwith "Should not happen"
+
+                        yield div [ Class "problems-row"
+                                    Data("tooltip-content",  error.message)
+                                    OnClick (fun _ ->
+                                        ReactEditor.Dispatch.cursorMove "fsharp_cursor_jump" error
+                                    ) ]
+                                [ Icon.faIcon [ Icon.Size IsSmall ]
+                                    [ Fa.icon icon ]
+                                  span [ Class "problems-description" ]
+                                    [ str error.message ]
+                                  span [ Class "problems-row-position" ]
+                                    [ str "("
+                                      str (string error.startLineNumber)
+                                      str ","
+                                      str (string error.startColumn)
+                                      str ")" ] ]
+                    | _ -> () ] ]
 
 let private editorArea model dispatch =
-    let fsharpAngle, htmlAngle =
-        match model.EditorCollapse with
-        | BothExtended -> Fa.I.Compress, Fa.I.Compress
-        | FSharpOnly -> Fa.I.Compress, Fa.I.Expand
-        | HtmlOnly -> Fa.I.Expand, Fa.I.Compress
-
-    let fsharpDisplay, htmlDisplay =
-        match model.EditorCollapse with
-        | BothExtended -> "flex", "block"
-        | FSharpOnly -> "flex", "none"
-        | HtmlOnly -> "none", "block"
-
-    let fsharpHeight, htmlHeight =
-        match model.EditorCollapse with
-        | BothExtended ->
-            numberToPercent model.EditorSplitRatio, numberToPercent (1. - model.EditorSplitRatio)
-        | FSharpOnly ->
-            Literals.EDITOR_UNCOLLAPSED_HEIGHT, Literals.EDITOR_COLLAPSED_HEIGHT
-        | HtmlOnly ->
-            Literals.EDITOR_COLLAPSED_HEIGHT, Literals.EDITOR_UNCOLLAPSED_HEIGHT
-
-    let problems =
-        div [ Class "problems-container" ]
-            [ for error in model.FSharpErrors do
-                match error.severity with
-                | Monaco.MarkerSeverity.Error
-                | Monaco.MarkerSeverity.Warning ->
-                    let icon =
-                        match error.severity with
-                        | Monaco.MarkerSeverity.Error -> Fa.I.TimesCircle
-                        | Monaco.MarkerSeverity.Warning -> Fa.I.ExclamationCircle
-                        | _ -> failwith "Should not happen"
-
-                    yield div [ Class "problems-row" ]
-                            [ Icon.faIcon [ Icon.Size IsSmall ]
-                                [ Fa.icon icon ]
-                              span [ Class "problems-description" ]
-                                [ str error.message ]
-                              span [ Class "problems-row-position" ]
-                                [ str "("
-                                  str (string error.startLineNumber)
-                                  str ","
-                                  str (string error.startColumn)
-                                  str ")" ] ]
-                | _ -> ()
-            ]
-
     div [ Class "editor-container"
           Style [ Width (numberToPercent model.PanelSplitRatio)
                   Position "relative" ] ]
-        [ editorTabs
+        [ editorTabs model.CodeTab dispatch
+          // Html editor
+          ReactEditor.editor [ ReactEditor.Options htmlEditorOptions
+                               ReactEditor.Value model.HtmlCode
+                               ReactEditor.IsHidden (model.CodeTab = CodeTab.FSharp)
+                               ReactEditor.OnChange (ChangeHtmlCode >> dispatch) ]
+          // F# editor
           ReactEditor.editor [ ReactEditor.Options fsharpEditorOptions
                                ReactEditor.Value model.FSharpCode
+                               ReactEditor.IsHidden (model.CodeTab = CodeTab.Html)
                                ReactEditor.OnChange (ChangeFsharpCode >> dispatch)
                                ReactEditor.Errors model.FSharpErrors
+                               ReactEditor.EventId "fsharp_cursor_jump"
                                ReactEditor.EditorDidMount (fun editor monacoModule ->
                                 if not (isNull editor) then
                                     dispatch (SetFSharpEditor editor)
@@ -524,34 +527,21 @@ let private editorArea model dispatch =
                                     editor.addCommand(monacoModule.KeyMod.Alt ||| int Monaco.KeyCode.Enter,
                                         (fun () -> StartCompile None |> dispatch), "") |> ignore
                                ) ]
-          problems ]
-        //   Card.card [ Common.Props [ Style [ Height htmlHeight ] ] ]
-        //     [ Card.header [ Common.Props [ OnClick (fun _ -> dispatch ToggleHtmlCollapse )] ]
-        //         [ Card.Header.title [ ]
-        //             [ str "Html" ]
-        //           Card.Header.icon [ ]
-        //             [ Icon.faIcon [ ]
-        //                 [ Fa.icon htmlAngle
-        //                   Fa.faLg ] ] ]
-        //       Card.content [ Common.Props [ Style [ Display htmlDisplay ] ] ]
-        //         [ ReactEditor.editor [ ReactEditor.Options htmlEditorOptions
-        //                                ReactEditor.Value model.HtmlCode
-        //                                ReactEditor.OnChange (ChangeHtmlCode >> dispatch) ]
-                         //] ]
+          problemsPanel model.FSharpErrors ]
 
 
-let private outputTabs (activeTab : ActiveTab) dispatch =
+let private outputTabs (activeTab : OutputTab) dispatch =
     Tabs.tabs [ Tabs.IsCentered
                 Tabs.Size Size.IsMedium
                 Tabs.IsToggle ]
-        [ Tabs.tab [ Tabs.Tab.IsActive (activeTab = LiveTab)
+        [ Tabs.tab [ Tabs.Tab.IsActive (activeTab = OutputTab.Live)
                      Tabs.Tab.Props [
-                         OnClick (fun _ -> SetActiveTab LiveTab |> dispatch)
+                         OnClick (fun _ -> SetOutputTab OutputTab.Live |> dispatch)
                      ] ]
             [ a [ ] [ str "Live sample" ] ]
-          Tabs.tab [ Tabs.Tab.IsActive (activeTab = CodeTab)
+          Tabs.tab [ Tabs.Tab.IsActive (activeTab = OutputTab.Code)
                      Tabs.Tab.Props [
-                         OnClick (fun _ -> SetActiveTab CodeTab |> dispatch)
+                         OnClick (fun _ -> SetOutputTab OutputTab.Code |> dispatch)
                      ] ]
             [ a [ ] [ str "Code" ] ] ]
 
@@ -581,8 +571,8 @@ let private outputArea model dispatch =
     let content =
         match model.State with
         | Compiling | Compiled ->
-            [ outputTabs model.ActiveTab dispatch
-              viewIframe (model.ActiveTab = LiveTab) model.IFrameUrl
+            [ outputTabs model.OutputTab dispatch
+              viewIframe (model.OutputTab = OutputTab.Live) model.IFrameUrl
               viewCodeEditor model ]
         | _ ->
             [ br [ ]
