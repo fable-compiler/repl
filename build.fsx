@@ -1,13 +1,25 @@
-let fableBranch = "master"
-let AppveyorReplArtifactURLParams = "?branch=" + fableBranch + "&pr=false"
-let AppveyorReplArtifactURL =
+open System
+open System.IO
+open System.Net
+open System.Text.RegularExpressions
+
+let FABLE_BRANCH = "master"
+let APPVEYOR_REPL_ARTIFACT_URL_PARAMS = "?branch=" + FABLE_BRANCH + "&pr=false"
+let APPVEYOR_REPL_ARTIFACT_URL =
     "https://ci.appveyor.com/api/projects/fable-compiler/Fable/artifacts/src/dotnet/Fable.Repl/repl-bundle.zip"
-    + AppveyorReplArtifactURLParams
+    + APPVEYOR_REPL_ARTIFACT_URL_PARAMS
 
-let FCSExportFolderName = "FSharp.Compiler.Service_fable"
-let FableFolderName = "Fable"
+let CWD = __SOURCE_DIRECTORY__
+let NCAVE_FCS_REPO = Path.Combine(CWD, "../FSharp.Compiler.Service_fable")
+let FABLE_REPO = Path.Combine(CWD, "../Fable")
 
-let libsOutput = "public/libs"
+let LIBS_OUTPUT = Path.Combine(CWD, "public/libs")
+let REPL_OUTPUT = Path.Combine(CWD, "public/js/repl")
+let METADATA_OUTPUT = Path.Combine(CWD, "public/metadata2")
+let METADATA_SOURCE = Path.Combine(NCAVE_FCS_REPO, "temp/metadata2")
+
+let METADATA_EXPORT_DIR = Path.Combine(CWD, "src/Export")
+let APP_DIR = Path.Combine(CWD, "src/App")
 
 // include Fake libs
 #r "./packages/build/FAKE/tools/FakeLib.dll"
@@ -15,10 +27,6 @@ let libsOutput = "public/libs"
 #load "paket-files/build/fsharp/FAKE/modules/Octokit/Octokit.fsx"
 #load "paket-files/build/fable-compiler/fake-helpers/Fable.FakeHelpers.fs"
 
-open System
-open System.IO
-open System.Net
-open System.Text.RegularExpressions
 open Fake
 open Fake.Git
 open Fake.YarnHelper
@@ -65,12 +73,6 @@ let downloadArtifact path (url: string) =
     File.Delete tempFile
     printfn "Artifact unzipped at %s" path
 
-let currentDir = __SOURCE_DIRECTORY__
-let rootDir = currentDir </> ".."
-let FCSExportFolderPath = rootDir </> FCSExportFolderName
-let FableFolderPath = rootDir </> FableFolderName
-let appDir = currentDir </> "src" </> "App"
-
 let rec waitUserResponse _ =
     let userInput = Console.ReadLine()
     match userInput.ToUpper() with
@@ -82,57 +84,59 @@ let rec waitUserResponse _ =
 
 type RepoSetupInfo =
     { FolderPath : string
-      FolderName : string
       GithubLink : string
       GithubBranch : string }
 
 let ensureRepoSetup (info : RepoSetupInfo) =
+    let folderName = Path.GetFileName(info.FolderPath)
     // Use getBuildParamOrDefault to force Y on CI server
     // See: http://fake.build/apidocs/fake-environmenthelper.html
     // and: https://stackoverflow.com/questions/26267601/can-i-pass-a-parameter-to-a-f-fake-build-script
     if not (Directory.Exists(info.FolderPath)) then
-        printfn "Can't find %s at: %s" info.FolderName rootDir
+        let rootDir = Path.GetDirectoryName(info.FolderPath)
+        printfn "Can't find %s at: %s" folderName rootDir
         let setupMode = getBuildParamOrDefault "setup" "ask"
 
         if setupMode = "ask" then
             printfn "Do you want me to setup it for you ? (Y/N)"
             let autoSetup = waitUserResponse ()
             if autoSetup then
-                printfn "Installing %s for you" info.FolderName
-                Repository.clone rootDir info.GithubLink info.FolderName
+                printfn "Installing %s for you" folderName
+                Repository.clone rootDir info.GithubLink folderName
                 runSimpleGitCommand info.FolderPath ("checkout " + info.GithubBranch) |> ignore
             else
-                failwithf "You need to setup the %s project at %s yourself." info.FolderName rootDir
+                failwithf "You need to setup the %s project at %s yourself." folderName rootDir
         else
-            printfn "You started with auto setup mode. Installing %s for you..." info.FolderName
-            Repository.clone rootDir info.GithubLink info.FolderName
+            printfn "You started with auto setup mode. Installing %s for you..." folderName
+            Repository.clone rootDir info.GithubLink folderName
             runSimpleGitCommand info.FolderPath ("checkout " + info.GithubBranch) |> ignore
     else
-        printfn "Directory %s found" info.FolderName
+        printfn "Directory %s found" folderName
+        // Ensure this is the correct branch
+        runSimpleGitCommand info.FolderPath ("checkout " + info.GithubBranch) |> ignore
 
 let updateVersion () =
-    let version = File.ReadAllText(currentDir </> "public/js/repl/version.txt")
+    let version = File.ReadAllText(REPL_OUTPUT </> "version.txt")
     let reg = Regex(@"\bVERSION\s*=\s*""(.*?)""")
-    let mainFile = currentDir </> "src/App/Shared.fs"
+    let mainFile = CWD </> "src/App/Shared.fs"
     (reg, mainFile) ||> replaceLines (fun line m ->
         let replacement = sprintf "VERSION = \"%s\"" version
         reg.Replace(line, replacement) |> Some)
 
 Target "BuildFcsExport" (fun _ ->
     ensureRepoSetup
-        { FolderPath = FCSExportFolderPath
-          FolderName = FCSExportFolderName
+        { FolderPath = NCAVE_FCS_REPO
           GithubLink = "git@github.com:ncave/FSharp.Compiler.Service.git"
           GithubBranch = "export" }
 
-    runScript FCSExportFolderPath "fcs\\build" "Export.Metadata"
+    sprintf "Export.Metadata --envvar FCS_EXPORT_PROJECT \"%s\"" METADATA_EXPORT_DIR
+    |> runScript NCAVE_FCS_REPO "fcs\\build"
 )
 
 Target "GenerateMetadata" (fun _ ->
-    let destination = currentDir </> "public" </> "metadata2"
-    CleanDir destination
-    CopyDir destination (FCSExportFolderPath </> "temp" </> "metadata2") (fun _ -> true)
-    !! (destination </> "*.dll")
+    CleanDir METADATA_OUTPUT
+    CopyDir METADATA_OUTPUT METADATA_SOURCE (fun _ -> true)
+    !! (METADATA_OUTPUT </> "*.dll")
     |> Seq.iter(fun filename ->
         Rename (filename + ".txt") filename
     )
@@ -147,13 +151,13 @@ Target "InstallDotNetCore" (fun _ ->
 
 Target "Clean" (fun _ ->
     !! "public/js"
-    ++ libsOutput
+    ++ LIBS_OUTPUT
     ++ "deploy"
   |> CleanDirs
 )
 
 Target "Restore" (fun _ ->
-    runDotnet currentDir "restore Fable.REPL.sln"
+    runDotnet CWD "restore Fable.REPL.sln"
 )
 
 Target "YarnInstall" (fun _ ->
@@ -164,31 +168,31 @@ Target "YarnInstall" (fun _ ->
 )
 
 Target "CopyModules" (fun _ ->
-    let vsOutput = libsOutput </> "vs"
+    let vsOutput = LIBS_OUTPUT </> "vs"
     CreateDir vsOutput
     CopyDir vsOutput ("node_modules" </> "monaco-editor" </> "min" </> "vs") (fun _ -> true)
 )
 
 Target "WatchApp" (fun _ ->
-    runDotnet appDir "fable webpack-dev-server"
+    runDotnet APP_DIR "fable webpack-dev-server"
 )
 
 Target "BuildApp" (fun _ ->
-    runDotnet appDir "fable webpack-cli"
+    runDotnet APP_DIR "fable webpack-cli"
 )
 
 Target "PublishGithubPages" (fun _->
-    runYarn currentDir "gh-pages -d deploy"
+    runYarn CWD "gh-pages -d deploy"
 )
 
 Target "GetBundleFromAppveyor" (fun _ ->
-    downloadArtifact (currentDir </> "public/js/repl") AppveyorReplArtifactURL
+    downloadArtifact REPL_OUTPUT APPVEYOR_REPL_ARTIFACT_URL
     updateVersion ()
 )
 
 // Assume the bundle has been built in a sibling Fable repo
 Target "GetBundleLocally" (fun _ ->
-    FileUtils.cp_r (currentDir </> "../fable/src/dotnet/Fable.Repl/bundle") (currentDir </> "public/js/repl")
+    FileUtils.cp_r (FABLE_REPO </> "src/dotnet/Fable.Repl/bundle") REPL_OUTPUT
     updateVersion ()
 )
 
@@ -196,14 +200,14 @@ Target "BuildLib" (fun _ ->
     // fable-splitter will adjust the fable-core path
     let fableCoreDir = "force:${outDir}../fable-core"
     let libProj = "src/Lib/Fable.Repl.Lib.fsproj"
-    let outDir = "public/js/repl/lib"
+    let outDir = REPL_OUTPUT </> "lib"
     let splitterArgs = sprintf "%s -o %s --allFiles" libProj outDir
-    runDotnet (currentDir </> "src/App")
-        (sprintf "fable fable-splitter --fable-core %s -- %s" fableCoreDir splitterArgs)
+    sprintf "fable fable-splitter --fable-core %s -- %s" fableCoreDir splitterArgs
+    |> runDotnet APP_DIR
 
     // Ensure that all imports end with .js
     let reg = Regex(@"^import.+?""[^""]+")
-    for file in Directory.EnumerateFiles(currentDir </> outDir, "*.js", SearchOption.AllDirectories) do
+    for file in Directory.EnumerateFiles(CWD </> outDir, "*.js", SearchOption.AllDirectories) do
         let newLines =
             File.ReadLines file
             |> Seq.map (fun line -> reg.Replace(line, fun m ->
@@ -219,7 +223,7 @@ Target "BuildSamples" (fun _ ->
     let libProj = "public/samples/Samples.fsproj"
     let outDir = "temp"
     let splitterArgs = sprintf "%s -o %s --allFiles" libProj outDir
-    runDotnet currentDir
+    runDotnet CWD
         (sprintf "run -c Release -p ../fable/src/dotnet/Fable.Compiler fable-splitter --fable-core %s --args \"%s\"" fableCoreDir splitterArgs)
 )
 

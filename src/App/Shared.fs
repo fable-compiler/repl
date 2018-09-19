@@ -5,11 +5,10 @@ open System.Collections.Generic
 open Fable.Core
 open Fable.Import
 open Thoth.Json
-open System.Diagnostics
 
 [<RequireQualifiedAccess>]
 module Literals =
-    let [<Literal>] VERSION = "2.0.0-beta-004"
+    let [<Literal>] VERSION = "2.0.0-beta-005"
     let [<Literal>] STORAGE_KEY = "fable-repl"
     let [<Literal>] REPL_BUNDLE_URL = "./js/repl/bundle.min.js"
     let [<Literal>] SAMPLES_JSON_URL = "./samples/samples.json"
@@ -97,7 +96,7 @@ type GenericObservable<'T>(?disp: unit->unit) =
                     | None -> ()
                     listeners.Remove(g) |> ignore }
 
-let createObservable(subscribe: ('T->unit)->unit): GenericObservable<'T> =
+let createObservable(subscribe: ('T->unit)->unit) : GenericObservable<'T> =
     let obs = GenericObservable()
     subscribe obs.Trigger
     obs
