@@ -1,5 +1,6 @@
 namespace Widgets
 
+
 module General =
 
     open Fable.Helpers.React
@@ -61,11 +62,11 @@ module General =
                                     [ str "Click here to reset" ] ] ] ]
                       Field.div [ Field.HasAddons ]
                         [ Control.div [ ]
-                            [ Button.button [ Button.OnClick (fun _ -> dispatch  Msg.Share) ]
+                            [ Button.button [ Button.OnClick (fun _ -> dispatch Msg.Share) ]
                                 [ Icon.faIcon [ ]
                                     [ Fa.icon Fa.I.Share ] ] ]
                           Control.div [ Control.IsExpanded ]
-                            [ Button.button [ Button.OnClick (fun _ -> dispatch  Msg.Share)
+                            [ Button.button [ Button.OnClick (fun _ -> dispatch Msg.Share)
                                               Button.IsText
                                               Button.IsFullWidth ]
                                 [ Text.span [ ]

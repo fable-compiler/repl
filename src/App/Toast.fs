@@ -17,12 +17,12 @@ let renderToastWithFulma =
         member __.InputArea children =
             Columns.columns [ Columns.IsGapless
                               Columns.Modifiers [ Modifier.TextAlignment (Screen.All, TextAlignment.Centered) ]
-                              Columns.CustomClass "notify-inputs-area" ]
+                              Columns.CustomClass "toast-inputs-area" ]
                 children
         member __.Input (txt : string) (callback : (unit -> unit)) =
             Column.column [ ]
                 [ Button.button [ Button.OnClick (fun _ -> callback ())
-                                  Button.Color IsWhite ]
+                                  Button.Color (IColor.IsCustomColor "text") ]
                     [ str txt ] ]
         member __.Title txt =
             Heading.h5 []

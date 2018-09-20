@@ -53,7 +53,6 @@ type ModelInfo =
     { FSharpEditor: IEditor
       Worker: ObservableWorker<WorkerAnswer>
       State: State
-      InfoMessage: string
       IFrameUrl : string
       OutputTab : OutputTab
       CodeTab : CodeTab
@@ -85,7 +84,7 @@ type Msg =
     | MarkEditorErrors of Fable.Repl.Error[]
     | StartCompile of string option
     | EndCompile of EndCompileStatus
-    | ShareCode
+    | ShareableUrlReady of unit
     | SetOutputTab of OutputTab
     | SetCodeTab of CodeTab
     | SetIFrameUrl of string
@@ -102,6 +101,7 @@ type Msg =
     | SidebarMsg of Sidebar.Msg
     | ChangeFsharpCode of string
     | ChangeHtmlCode of string
+    | UpdateQueryFailed of exn
 
 let generateHtmlUrl (model: ModelInfo) jsCode =
     saveState(Literals.STORAGE_KEY, model.FSharpCode, model.HtmlCode)
@@ -170,7 +170,7 @@ let update msg (model : Model) =
                 let code =
                     match code with
                     | Some code -> code
-                    | None -> getEditorContent model.FSharpEditor
+                    | None -> model.FSharpCode
                 CompileCode(code, model.Sidebar.Options.Optimize) |> model.Worker.Post
                 { model with State = Compiling }, Cmd.none
             else
@@ -200,11 +200,6 @@ let update msg (model : Model) =
 
             | Error msg ->
                 { model with State = Compiled }, showGlobalErrorToast msg
-
-        | ShareCode ->
-            (getEditorContent model.FSharpEditor, model.HtmlCode )
-            |> updateQuery
-            { model with InfoMessage = "Shareable link now in address bar" }, Cmd.none
 
         | SetIFrameUrl newUrl ->
             { model with IFrameUrl = newUrl }, Cmd.none
@@ -295,7 +290,7 @@ let update msg (model : Model) =
                     { model with FSharpCode = fsharpCode
                                  HtmlCode = htmlCode }, cmd
                 | Sidebar.Share ->
-                    model, Cmd.ofMsg ShareCode
+                    model, Cmd.ofFunc updateQuery (model.FSharpCode, model.HtmlCode) ShareableUrlReady UpdateQueryFailed
                 | Sidebar.Reset ->
                     model, Router.newUrl Router.Reset
 
@@ -307,10 +302,27 @@ let update msg (model : Model) =
 
         | ChangeHtmlCode newCode ->
             { model with HtmlCode = newCode }, Cmd.none
+
+        | ShareableUrlReady () ->
+            model, Toast.message "Copy it from the address bar"
+                    |> Toast.title "Shareable link is ready"
+                    |> Toast.position Toast.BottomRight
+                    |> Toast.icon Fa.I.InfoCircle
+                    |> Toast.timeout (System.TimeSpan.FromSeconds 5.)
+                    |> Toast.info
+
+        | UpdateQueryFailed exn ->
+            Browser.console.error exn
+            model, Toast.message "An error occured when updating the URL"
+                    |> Toast.icon Fa.I.Warning
+                    |> Toast.position Toast.BottomRight
+                    |> Toast.warning
+
         // Map into model type
         |> (fun (model,cmd) ->
             Running model, cmd
         )
+
 
 let workerCmd (worker : ObservableWorker<_>)=
     let handler dispatch =
@@ -348,7 +360,6 @@ let urlUpdate (result: Option<Router.Page>) model =
                 { State = Loading
                   FSharpEditor = Unchecked.defaultof<IEditor>
                   Worker = worker
-                  InfoMessage = "Fable REPL fully works on the browser, no code is sent to any server (compile shortcut: Alt+Enter)"
                   IFrameUrl = ""
                   OutputTab = OutputTab.Live
                   CodeTab = CodeTab.FSharp
@@ -410,7 +421,7 @@ let private menubar (model: ModelInfo) dispatch =
           Navbar.Start.div [ ]
             [ Navbar.menu [ ]
                 [ Navbar.Item.div [ ]
-                    [ str model.InfoMessage ] ] ] ]
+                    [ str "Fable REPL fully works on the browser, no code is sent to any server (compile shortcut: Alt+Enter)" ] ] ] ]
 
 let htmlEditorOptions =
     jsOptions<Monaco.Editor.IEditorConstructionOptions>(fun o ->
