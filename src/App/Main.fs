@@ -84,6 +84,7 @@ type Msg =
     | MarkEditorErrors of Fable.Repl.Error[]
     | StartCompile of string option
     | EndCompile of EndCompileStatus
+    | UpdateStats of CompileStats
     | ShareableUrlReady of unit
     | SetOutputTab of OutputTab
     | SetCodeTab of CodeTab
@@ -318,6 +319,9 @@ let update msg (model : Model) =
                     |> Toast.position Toast.BottomRight
                     |> Toast.warning
 
+        | UpdateStats stats ->
+            model, Cmd.ofMsg (SidebarMsg (Sidebar.UpdateStats stats))
+
         // Map into model type
         |> (fun (model,cmd) ->
             Running model, cmd
@@ -332,8 +336,12 @@ let workerCmd (worker : ObservableWorker<_>)=
                 LoadSuccess |> dispatch
             | LoadFailed -> LoadFail |> dispatch
             | ParsedCode errors -> MarkEditorErrors errors |> dispatch
-            | CompilationFailed errors -> Errors errors |> EndCompile |> dispatch
-            | CompilationSucceed jsCode -> Ok jsCode |> EndCompile |> dispatch
+            | CompilationFailed (errors, stats) ->
+                Errors errors |> EndCompile |> dispatch
+                UpdateStats stats |> dispatch
+            | CompilationSucceed (jsCode, stats) ->
+                Ok jsCode |> EndCompile |> dispatch
+                UpdateStats stats |> dispatch
             | CompilerCrashed msg -> Error msg |> EndCompile |> dispatch
             // Do nothing, these will be handled by .PostAndAwaitResponse
             | FoundTooltip _ -> ()
@@ -613,7 +621,8 @@ let private view (model: Model) dispatch =
                                         [ str "We are getting everything ready for you"
                                           p []
                                             [ str "Trouble loading the repl? "
-                                              a [ Router.href Router.Reset ] [ str "Click here"]
+                                              a [ Router.href Router.Reset
+                                                  Style [ TextDecoration "underline" ] ] [ str "Click here"]
                                               str " to reset." ] ] ]
               menubar model dispatch
               div [ Class "page-content" ]

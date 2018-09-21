@@ -7,7 +7,8 @@ type Model =
       WidgetsState : Set<string>
       Samples : Widgets.Samples.Model
       Options : Widgets.Options.Model
-      General : Widgets.General.Model }
+      General : Widgets.General.Model
+      Statistics : Widgets.Stats.Model }
 
 type Msg =
     | SamplesMsg of Widgets.Samples.Msg
@@ -15,6 +16,7 @@ type Msg =
     | GeneralMsg of Widgets.General.Msg
     | ToggleWidget of string
     | ToggleState
+    | UpdateStats of Widgets.Stats.Model
 
 type ExternalMsg =
     | LoadSample of string * string
@@ -28,7 +30,12 @@ let init sampleUrl =
       WidgetsState = Set.empty
       General = Widgets.General.init()
       Samples = samplesModel
-      Options = Widgets.Options.init () }, Cmd.map SamplesMsg samplesCmd
+      Options = Widgets.Options.init ()
+      Statistics =
+        { FCS_checker = 0.
+          FCS_parsing = 0.
+          Fable_transform = 0.
+          Babel_generation = 0. } }, Cmd.map SamplesMsg samplesCmd
 
 let update msg model =
     match msg with
@@ -67,8 +74,10 @@ let update msg model =
         { model with WidgetsState = newWidgetsState }, Cmd.none, NoOp
 
     | ToggleState ->
-        printfn "togle state triggerd"
         { model with IsExpanded = not model.IsExpanded }, Cmd.none, NoOp
+
+    | UpdateStats stats ->
+        { model with Statistics = stats }, Cmd.none, NoOp
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
@@ -128,9 +137,9 @@ let private collapseButton dispatch =
 
 let private sidebarContainer dispatch sections =
     div [ Class "sidebar is-expanded" ]
-        [ yield! sections
-          yield div [ Style [ Flex "1" ] ] [ ]
-          yield collapseButton dispatch ]
+        [ div [ Class "widgets-list" ]
+            sections
+          collapseButton dispatch ]
 
 let private expandButton dispatch =
     Card.card [ Props [ OnClick (fun _ -> dispatch ToggleState ) ] ]
@@ -145,6 +154,7 @@ let view (model: Model) dispatch =
         [ "General", Fa.I.Th, Widgets.General.view model.General (GeneralMsg >> dispatch), None
           "Samples", Fa.I.Book, Widgets.Samples.view model.Samples (SamplesMsg >> dispatch), Some "500px"
           "Options", Fa.I.Cog, Widgets.Options.view model.Options (OptionsMsg >> dispatch), None
+          "Statistics", Fa.I.ClockO, Widgets.Stats.view model.Statistics, None
           "About", Fa.I.Info, Widgets.About.view, None ]
         |> List.map (renderWidgets model dispatch)
 
@@ -152,6 +162,6 @@ let view (model: Model) dispatch =
         sidebarContainer dispatch widgets
     else
         div [ Class "sidebar is-collapse" ]
-            [ yield! widgets
-              yield div [ Style [ Flex "1" ] ] [ ]
-              yield expandButton dispatch ]
+            [ div [ Class "widgets-list" ]
+                widgets
+              expandButton dispatch ]

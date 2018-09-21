@@ -135,5 +135,39 @@ module About =
             [ str ("Version: " + Literals.VERSION)
               br [ ]
               a [ Href "https://github.com/fable-compiler/repl2/issues/new" ]
-                [ Text.span [ Modifiers [ Modifier.TextTransform TextTransform.Italic ] ]
+                [ Text.span [ Modifiers [ Modifier.TextTransform TextTransform.Italic ]
+                              Props [ Style [ TextDecoration "underline" ] ] ]
                     [ str "Found a bug ?" ] ] ]
+
+module Stats =
+
+    open Fable.Helpers.React
+    open Fable.Helpers.React.Props
+    open Fable.Core.JsInterop
+    open Fulma
+    open Fable.Repl.Shared
+
+    type Model = CompileStats
+
+    let private row (label : string) (value : float)=
+        tr [ ]
+            [ td [ ]
+                [ str label ]
+              td [ ]
+                [ Text.span [ Modifiers [ Modifier.TextColor IsSuccess
+                                          Modifier.TextAlignment (Screen.All, TextAlignment.Right) ]
+                              Props [ Style [ Display "block" ] ] ]
+                    [ str value?toLocaleString$() ] ] ]
+
+    let view (model : Model) =
+        Content.content [ ]
+            [ Table.table [ ]
+                [ thead [ ]
+                    [ tr [ ]
+                        [ th [ ] [ str "Steps" ]
+                          th [ Class "has-text-right" ] [ str "ms" ] ] ]
+                  tbody [ ]
+                    [ row "FCS checker" model.FCS_checker
+                      row "FCS parsing" model.FCS_parsing
+                      row "Fable transform" model.Fable_transform
+                      row "Babel generation" model.Babel_generation ] ] ]

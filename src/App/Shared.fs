@@ -34,12 +34,18 @@ type WorkerRequest =
     static member Decoder =
         Decode.Auto.generateDecoder<WorkerRequest>()
 
+type CompileStats =
+    { FCS_checker : float
+      FCS_parsing : float
+      Fable_transform : float
+      Babel_generation : float }
+
 type WorkerAnswer =
     | Loaded
     | LoadFailed
     | ParsedCode of errors: Fable.Repl.Error[]
-    | CompilationSucceed of jsCode: string
-    | CompilationFailed of errors: Fable.Repl.Error[]
+    | CompilationSucceed of jsCode: string * stats: CompileStats
+    | CompilationFailed of errors: Fable.Repl.Error[] * stats: CompileStats
     | CompilerCrashed of message: string
     | FoundTooltip of lines: string[]
     | FoundCompletions of Fable.Repl.Completion[]

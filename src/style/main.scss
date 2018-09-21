@@ -30,6 +30,12 @@ html {
             width: 250px;
         }
 
+        .widgets-list {
+            overflow-y: auto;
+            flex: 1 1 0%;
+            max-height: calc(100vh - #{$navbar-height} - 42px);
+        }
+
         .item {
             &:hover {
                 background-color: $info;
