@@ -62,6 +62,16 @@ let init() = async {
                         | Some res -> Fable.GetCompletionsAtLocation(res, int line, int col, lineText)
                     FoundCompletions completions |> worker.Post
                 } |> Async.StartImmediate
+            | GetDeclarationLocation(line, col, lineText) ->
+                async {
+                    let! result =
+                        match currentResults with
+                        | None -> async.Return None
+                        | Some res -> Fable.GetDeclarationLocation(res, int line, int col, lineText)
+                    result |> Option.map (fun x ->
+                        x.StartLine, x.StartColumn, x.EndLine, x.EndColumn)
+                    |> FoundDeclarationLocation |> worker.Post
+                } |> Async.StartImmediate
         )
     with _ ->
         worker.Post LoadFailed
