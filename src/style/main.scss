@@ -2,17 +2,28 @@
 @import '~bulma/bulma';
 @import './monaco-editor-hover-content.sass';
 @import '../../node_modules/bulma-pageloader/dist/css/bulma-pageloader.sass';
+@import '../../node_modules/bulma-switch/dist/css/bulma-switch.sass';
 @import './menu-group';
 @import './toast.scss';
 @import './problems.scss';
 
 $fa-font-path: "~font-awesome/fonts/";
 @import '~font-awesome/scss/font-awesome';
+@import './fira_code.scss';
 
 $tabs-header-height: 42px;
 
 html {
     overflow-y: hidden;
+
+    &.has-navbar-fixed-top {
+        padding-top: 0;
+
+        body {
+            padding-top: 0;
+            margin-top: 3.25rem;
+        }
+    }
 }
 
 .page-content {
