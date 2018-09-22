@@ -24,6 +24,8 @@ type Props =
     | EventId of string
     /// If `true`, the editor is hidden
     | IsHidden of bool
+    /// Custom class to add to the `react-editor` container
+    | CustomClass of string
 
 /// Override style of the div container
 let inline Style (css: CSSProp seq): Props =

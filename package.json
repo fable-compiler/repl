@@ -18,6 +18,7 @@
     "babel-loader": "^8.0.2",
     "bulma": "^0.7.1",
     "bulma-pageloader": "^2.1.0",
+    "bulma-switch": "^2.0.0",
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^1.0.0",
     "fable-loader": "^2.0.0-beta-001",

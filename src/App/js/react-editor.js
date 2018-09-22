@@ -5,8 +5,8 @@ import ReactResizeDetector from 'react-resize-detector';
 
 
 class Editor extends React.Component {
-    editor = null;
-    monaco = null
+    // editor = null;
+    // monaco = null
 
     constructor(props) {
         super(props);
@@ -45,12 +45,17 @@ class Editor extends React.Component {
             this.monaco.editor.setModelMarkers(this.editor.getModel(), "FSharpErrors", this.props.errors);
             this.onResize();
         }
+
+        if (prevProps.options !== this.props.options) {
+            this.editor.updateOptions(this.props.options);
+        }
     }
 
     render() {
         let display = this.props.isHidden ? "none" : "block";
+        let className = "react-editor " + this.props.customClass;
         return (
-            <div style={{ height: '100%', overflow: 'hidden', display: display }}>
+            <div class={className} style={{ height: '100%', overflow: 'hidden', display: display }}>
                 <ReactResizeDetector handleWidth handleHeight onResize={this.onResize} />
                 <MonacoEditor
                     value={this.props.value}
@@ -73,7 +78,8 @@ Editor.propTypes = {
     options: PropTypes.object,
     errors: PropTypes.array,
     eventId: PropTypes.string,
-    isHidden: PropTypes.bool
+    isHidden: PropTypes.bool,
+    customClass: PropTypes.string
 };
 
 Editor.defaultProps = {
@@ -83,7 +89,8 @@ Editor.defaultProps = {
     options: null,
     errors: [],
     eventId: null,
-    isHidden: false
+    isHidden: false,
+    customClass: ""
 };
 
 export default Editor;

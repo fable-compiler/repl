@@ -431,26 +431,37 @@ let private menubar (model: ModelInfo) dispatch =
                 [ Navbar.Item.div [ ]
                     [ str "Fable REPL fully works on the browser, no code is sent to any server (compile shortcut: Alt+Enter)" ] ] ] ]
 
-let htmlEditorOptions =
+let private fontSizeClass =
+        function
+        | 11. -> "is-small"
+        | 14. -> "is-medium"
+        | 17. -> "is-large"
+        | _ -> "is-medium"
+
+let private htmlEditorOptions (fontSize : float) (fontFamily : string) =
     jsOptions<Monaco.Editor.IEditorConstructionOptions>(fun o ->
         let minimapOptions =  jsOptions<Monaco.Editor.IEditorMinimapOptions>(fun oMinimap ->
             oMinimap.enabled <- Some false
         )
         o.language <- Some "html"
-        o.fontSize <- Some 14.
+        o.fontSize <- Some fontSize
         o.theme <- Some "vs-dark"
         o.minimap <- Some minimapOptions
+        o.fontFamily <- Some fontFamily
+        o.fontLigatures <- Some (fontFamily = "Fira Code")
     )
 
-let fsharpEditorOptions =
+let private fsharpEditorOptions (fontSize : float) (fontFamily : string) =
     jsOptions<Monaco.Editor.IEditorConstructionOptions>(fun o ->
         let minimapOptions = jsOptions<Monaco.Editor.IEditorMinimapOptions>(fun oMinimap ->
             oMinimap.enabled <- Some false
         )
         o.language <- Some "fsharp"
-        o.fontSize <- Some 14.
+        o.fontSize <- Some fontSize
         o.theme <- Some "vs-dark"
         o.minimap <- Some minimapOptions
+        o.fontFamily <- Some fontFamily
+        o.fontLigatures <- Some (fontFamily = "Fira Code")
     )
 
 let private editorTabs (activeTab : CodeTab) dispatch =
@@ -504,17 +515,23 @@ let private editorArea model dispatch =
                   Position "relative" ] ]
         [ editorTabs model.CodeTab dispatch
           // Html editor
-          ReactEditor.editor [ ReactEditor.Options htmlEditorOptions
+          ReactEditor.editor [ ReactEditor.Options (htmlEditorOptions
+                                                        model.Sidebar.Options.FontSize
+                                                        model.Sidebar.Options.FontFamily)
                                ReactEditor.Value model.HtmlCode
                                ReactEditor.IsHidden (model.CodeTab = CodeTab.FSharp)
+                               ReactEditor.CustomClass (fontSizeClass model.Sidebar.Options.FontSize)
                                ReactEditor.OnChange (ChangeHtmlCode >> dispatch) ]
           // F# editor
-          ReactEditor.editor [ ReactEditor.Options fsharpEditorOptions
+          ReactEditor.editor [ ReactEditor.Options (fsharpEditorOptions
+                                                        model.Sidebar.Options.FontSize
+                                                        model.Sidebar.Options.FontFamily)
                                ReactEditor.Value model.FSharpCode
                                ReactEditor.IsHidden (model.CodeTab = CodeTab.Html)
                                ReactEditor.OnChange (ChangeFsharpCode >> dispatch)
                                ReactEditor.Errors model.FSharpErrors
                                ReactEditor.EventId "fsharp_cursor_jump"
+                               ReactEditor.CustomClass (fontSizeClass model.Sidebar.Options.FontSize)
                                ReactEditor.EditorDidMount (fun editor monacoModule ->
                                 if not (isNull editor) then
                                     dispatch (SetFSharpEditor editor)
@@ -573,18 +590,23 @@ let private viewIframe isShown url =
         [ ]
 
 let private viewCodeEditor (model: ModelInfo) =
+    let fontFamily = model.Sidebar.Options.FontFamily
     let options = jsOptions<Monaco.Editor.IEditorConstructionOptions>(fun o ->
                         let minimapOptions = jsOptions<Monaco.Editor.IEditorMinimapOptions>(fun oMinimap ->
                             oMinimap.enabled <- Some false
                         )
                         o.language <- Some "javascript"
-                        o.fontSize <- Some 14.
+                        o.fontSize <- Some model.Sidebar.Options.FontSize
                         o.theme <- Some "vs-dark"
                         o.minimap <- Some minimapOptions
                         o.readOnly <- Some true
+                        o.fontFamily <- Some fontFamily
+                        o.fontLigatures <- Some (fontFamily = "Fira Code")
                     )
+
     ReactEditor.editor [ ReactEditor.Options options
-                         ReactEditor.Value model.CodeES2015 ]
+                         ReactEditor.Value model.CodeES2015
+                         ReactEditor.CustomClass (fontSizeClass model.Sidebar.Options.FontSize) ]
 
 let private outputArea model dispatch =
     let content =

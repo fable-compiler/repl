@@ -100,28 +100,93 @@ module Options =
     open Fable.Helpers.React
     open Fable.Helpers.React.Props
     open Fulma
+    open Fulma.Extensions
 
     type Model =
-        { Optimize: bool }
+        { Optimize : bool
+          FontSize : float
+          FontFamily : string }
 
     type Msg =
         | ToggleOptimize
+        | ChangeFontSize of float
+        | ChangeFontFamily of string
+
+    [<Literal>]
+    let private MONACO_DEFAULT_FONT_FAMILY = "Menlo, Monaco, \"Courier New\", monospace"
 
     let init () =
-        { Optimize = false }
+        { Optimize = false
+          FontSize = 14.
+          FontFamily = MONACO_DEFAULT_FONT_FAMILY }
 
     let update msg model =
         match msg with
         | ToggleOptimize ->
             { model with Optimize = not model.Optimize }
 
+        | ChangeFontSize newSize ->
+            { model with FontSize = newSize }
+
+        | ChangeFontFamily newFont ->
+            { model with FontFamily = newFont }
+
+    let private fontSizeOption (label : string) (fontSize : float) =
+        option [ Value (string fontSize) ]
+            [ str label ]
+
+    let inline private fontSizeSetting (fontSize : float) dispatch =
+        Field.div [ ]
+            [ Label.label [ ]
+                [ str "Editors font size" ]
+              Control.div [ ]
+                [ Select.select [ Select.IsFullWidth ]
+                    [ select [ Value (string fontSize)
+                               OnChange (fun ev ->
+                                ev.Value |> float |> ChangeFontSize |> dispatch
+                               ) ]
+                        [ fontSizeOption "Small" 13.
+                          fontSizeOption "Medium" 14.
+                          fontSizeOption "Large" 16. ] ] ] ]
+
+    let private fontFamilyOption (label : string) (fontFamily : string) =
+        option [ Value fontFamily ]
+            [ str label ]
+
+    let inline private fontFamilySetting (fontFamily : string) dispatch =
+        Field.div [ ]
+            [ Label.label [ ]
+                [ str "Editors font family" ]
+              Control.div [ ]
+                [ Select.select [ Select.IsFullWidth ]
+                    [ select [ Value fontFamily
+                               OnChange (fun ev ->
+                                ev.Value |> ChangeFontFamily |> dispatch
+                               ) ]
+                        [ fontFamilyOption "Fira Code" "Fira Code"
+                          fontFamilyOption "Monaco default" MONACO_DEFAULT_FONT_FAMILY ] ] ] ]
+
+    let inline private optimizeSetting (isActive : bool) dispatch =
+        let label =
+            if isActive then
+                "Active"
+            else
+                "Disabled"
+
+        Field.div [ ]
+            [ Label.label [ ]
+                [ str "Optimize (experimental)" ]
+              Control.div [ ]
+                [ Switch.switch [ Switch.Color IsSuccess
+                                  Switch.Checked isActive
+                                  Switch.OnChange (fun _ -> dispatch ToggleOptimize) ]
+                    [ str label ] ] ]
+
     let view (model: Model) dispatch =
-        Content.content [ ]
-            [ Checkbox.checkbox [ ]
-                [ Checkbox.input
-                    [ Common.Props [ Checked model.Optimize
-                                     OnChange (fun _ -> dispatch ToggleOptimize) ] ]
-                  str " Optimize (experimental)" ] ]
+        div [ ]
+            [ fontFamilySetting model.FontFamily dispatch
+              fontSizeSetting model.FontSize dispatch
+              optimizeSetting model.Optimize dispatch ]
 
 module About =
 

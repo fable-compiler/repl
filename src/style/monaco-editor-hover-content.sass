@@ -1,12 +1,27 @@
 // This files is used to ensure the typography, spacing in `monaco-editor-hover-content`
 // This is adapted from `content` class of Bulma.
 // We reduce a bit the font size because otherwise the tooltip content looks really big
+
+// Begin custom section
+.react-editor
+  &.is-small
+    .monaco-editor-hover-content
+      font-size: 13px !important
+    .code
+        font-size: 13px !important
+  &.is-medium
+    .monaco-editor-hover-content
+      font-size: 14px !important
+    .code
+        font-size: 14px !important
+  &.is-large
+    .monaco-editor-hover-content
+      font-size: 16px !important
+    .code
+        font-size: 16px !important
+// End custom section
+
 .monaco-editor-hover-content
-  // Begin custom section
-  font-size: 13px !important
-  .code
-    font-size: 13px !important
-  // End custom section
   // Inline
   li + li
     margin-top: 0.25em
