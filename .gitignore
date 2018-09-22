@@ -35,3 +35,5 @@ public/*.svg
 public/*.woff2
 public/*.ttf
 public/*.woff
+
+src/fonts/firacode/\.DS_Store

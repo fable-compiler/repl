@@ -41,7 +41,6 @@ type CodeTab =
 
 type DragTarget =
     | NoTarget
-    | EditorSplitter
     | PanelSplitter
 
 type EditorCollapse =
@@ -61,9 +60,7 @@ type ModelInfo =
       FSharpErrors : ResizeArray<Monaco.Editor.IMarkerData>
       HtmlCode: string
       DragTarget : DragTarget
-      EditorSplitRatio : float
       PanelSplitRatio : float
-      EditorCollapse : EditorCollapse
       Sidebar : Sidebar.Model }
 
 type Model =
@@ -89,16 +86,11 @@ type Msg =
     | SetOutputTab of OutputTab
     | SetCodeTab of CodeTab
     | SetIFrameUrl of string
-    | EditorDragStarted
-    | EditorDrag of Position
-    | EditorDragEnded
     | PanelDragStarted
     | PanelDrag of Position
     | PanelDragEnded
     | MouseUp
     | MouseMove of Mouse.Position
-    | ToggleFsharpCollapse
-    | ToggleHtmlCollapse
     | SidebarMsg of Sidebar.Msg
     | ChangeFsharpCode of string
     | ChangeHtmlCode of string
@@ -211,18 +203,10 @@ let update msg (model : Model) =
         | SetCodeTab newTab ->
             { model with CodeTab = newTab }, Cmd.none
 
-        | EditorDragStarted ->
-            { model with DragTarget = EditorSplitter }, Cmd.none
-
-        | EditorDragEnded ->
-            { model with DragTarget = NoTarget }, Cmd.none
-
         | MouseUp ->
             let cmd =
                 match model.DragTarget with
                 | NoTarget -> Cmd.none
-                | EditorSplitter ->
-                    Cmd.ofMsg EditorDragEnded
                 | PanelSplitter ->
                     Cmd.ofMsg PanelDragEnded
             model, cmd
@@ -231,18 +215,9 @@ let update msg (model : Model) =
             let cmd =
                 match model.DragTarget with
                 | NoTarget -> Cmd.none
-                | EditorSplitter ->
-                    Cmd.ofMsg (EditorDrag position)
                 | PanelSplitter ->
                     Cmd.ofMsg (PanelDrag position)
             model, cmd
-
-        | EditorDrag position ->
-            { model with EditorSplitRatio =
-                           position
-                           |> (fun p -> p.Y - 54.)
-                           |> (fun h -> h / (Browser.window.innerHeight - 54.))
-                           |> clamp 0.3 0.7 }, Cmd.none
 
         | PanelDragStarted ->
             { model with DragTarget = PanelSplitter }, Cmd.none
@@ -261,22 +236,6 @@ let update msg (model : Model) =
             // printfn "PANELDRAG: x %f offset %f innerWidth %f splitRatio %f"
             //     position.X offset Browser.window.innerWidth splitRatio
             { model with PanelSplitRatio = splitRatio }, Cmd.none
-
-        | ToggleFsharpCollapse ->
-            let newState =
-                match model.EditorCollapse with
-                | BothExtended -> HtmlOnly
-                | FSharpOnly -> HtmlOnly
-                | HtmlOnly -> BothExtended
-            { model with EditorCollapse = newState }, Cmd.none
-
-        | ToggleHtmlCollapse ->
-            let newState =
-                match model.EditorCollapse with
-                | BothExtended -> FSharpOnly
-                | FSharpOnly -> BothExtended
-                | HtmlOnly -> FSharpOnly
-            { model with EditorCollapse = newState }, Cmd.none
 
         | SidebarMsg msg ->
             let (subModel, cmd, externalMsg) = Sidebar.update msg model.Sidebar
@@ -376,9 +335,7 @@ let urlUpdate (result: Option<Router.Page>) model =
                   FSharpErrors = ResizeArray [||]
                   HtmlCode = saved.html
                   DragTarget = NoTarget
-                  EditorSplitRatio = 0.6
                   PanelSplitRatio = 0.5
-                  EditorCollapse = BothExtended
                   Sidebar = sidebarModel }, cmd
 
         | Running model -> Running model, Cmd.none
@@ -479,7 +436,7 @@ let private editorTabs (activeTab : CodeTab) dispatch =
                      ] ]
             [ a [ ] [ str "Html" ] ] ]
 
-let private problemsPanel (errors : ResizeArray<Monaco.Editor.IMarkerData>) =
+let private problemsPanel (errors : ResizeArray<Monaco.Editor.IMarkerData>) (currentTab : CodeTab) dispatch =
         div [ Class "problems-panel" ]
             [ div [ Class "problems-container" ]
                 [ for error in errors do
@@ -495,6 +452,8 @@ let private problemsPanel (errors : ResizeArray<Monaco.Editor.IMarkerData>) =
                         yield div [ Class "problems-row"
                                     Data("tooltip-content",  error.message)
                                     OnClick (fun _ ->
+                                        if currentTab = CodeTab.Html then
+                                            SetCodeTab CodeTab.FSharp |> dispatch
                                         ReactEditor.Dispatch.cursorMove "fsharp_cursor_jump" error
                                     ) ]
                                 [ Icon.faIcon [ Icon.Size IsSmall ]
@@ -563,7 +522,7 @@ let private editorArea model dispatch =
                                     editor.addCommand(monacoModule.KeyMod.Alt ||| int Monaco.KeyCode.Enter,
                                         (fun () -> StartCompile None |> dispatch), "") |> ignore
                                ) ]
-          problemsPanel model.FSharpErrors ]
+          problemsPanel model.FSharpErrors model.CodeTab dispatch ]
 
 
 let private outputTabs (activeTab : OutputTab) dispatch =
@@ -634,7 +593,7 @@ let private view (model: Model) dispatch =
     | Running model ->
         let isDragging =
             match model.DragTarget with
-            | EditorSplitter | PanelSplitter -> true
+            | PanelSplitter -> true
             | NoTarget -> false
         div [ classList [ "is-unselectable", isDragging ] ]
             [ PageLoader.pageLoader [ PageLoader.Color IsPrimary

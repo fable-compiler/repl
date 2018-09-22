@@ -55,7 +55,7 @@ class Editor extends React.Component {
         let display = this.props.isHidden ? "none" : "block";
         let className = "react-editor " + this.props.customClass;
         return (
-            <div class={className} style={{ height: '100%', overflow: 'hidden', display: display }}>
+            <div className={className} style={{ height: '100%', overflow: 'hidden', display: display }}>
                 <ReactResizeDetector handleWidth handleHeight onResize={this.onResize} />
                 <MonacoEditor
                     value={this.props.value}
