@@ -40,13 +40,14 @@ module Cmd =
                             |> Decode.map moveCtor
                         | Some "mouseup" ->
                             Decode.succeed upCtor
-                        | _ ->
+                        | x ->
                             // Discard messages we don't know how to handle it
-                            Decode.fail "Invalid message from iframe"
+                            sprintf "`%A` is not a known value for an iframe message" x
+                            |> Decode.fail
                     )
-                iframeMessageDecoder "$" ev.data
+                Decode.fromValue "$" iframeMessageDecoder ev.data
                 |> function
                     | Ok msg -> dispatch msg
-                    | Error _error -> () // console.warn error
+                    | Error error -> console.warn error
             )
         [ handler ]
