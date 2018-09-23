@@ -26,6 +26,14 @@ html {
     }
 }
 
+.field.has-addons {
+    .control.is-expanded {
+        .button {
+            border-left-color: #dbdbdb;
+        }
+    }
+}
+
 .page-content {
     height: calc(100vh - #{$navbar-height});
     width: 100%;
