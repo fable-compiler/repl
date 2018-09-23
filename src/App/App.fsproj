@@ -25,6 +25,7 @@
     <Compile Include="Widgets/Stats.fs" />
     <Compile Include="Sidebar.fs" />
     <Compile Include="Main.fs" />
+    <Compile Include="Loader.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

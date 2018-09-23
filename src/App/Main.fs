@@ -48,7 +48,7 @@ type EditorCollapse =
     | HtmlOnly
     | FSharpOnly
 
-type ModelInfo =
+type Model =
     { FSharpEditor: IEditor
       Worker: ObservableWorker<WorkerAnswer>
       State: State
@@ -62,10 +62,6 @@ type ModelInfo =
       DragTarget : DragTarget
       PanelSplitRatio : float
       Sidebar : Sidebar.Model }
-
-type Model =
-    | Initializing
-    | Running of ModelInfo
 
 type EndCompileStatus =
     | Ok of string
@@ -96,7 +92,7 @@ type Msg =
     | ChangeHtmlCode of string
     | UpdateQueryFailed of exn
 
-let generateHtmlUrl (model: ModelInfo) jsCode =
+let generateHtmlUrl (model: Model) jsCode =
     saveState(Literals.STORAGE_KEY, model.FSharpCode, model.HtmlCode)
     Generator.generateHtmlBlobUrl model.HtmlCode jsCode
 
@@ -121,187 +117,177 @@ let showGlobalErrorToast msg =
     |> Toast.error
 
 let update msg (model : Model) =
-    match model with
-    | Initializing -> model, Cmd.none
+    match msg with
+    | LoadSuccess ->
+        // Parse code every X seconds.
+        let md = model.FSharpEditor.getModel()
+        let obs =
+            createObservable(fun trigger ->
+                model.FSharpEditor.getModel().onDidChangeContent(fun _ -> trigger md) |> ignore)
+        debounce 1000 obs
+        |> Observable.add (parseEditorCode model.Worker)
+        obs.Trigger md
 
-    | Running model ->
-        match msg with
-        | LoadSuccess ->
-            // Parse code every X seconds.
-            let md = model.FSharpEditor.getModel()
-            let obs =
-                createObservable(fun trigger ->
-                    model.FSharpEditor.getModel().onDidChangeContent(fun _ -> trigger md) |> ignore)
-            debounce 1000 obs
-            |> Observable.add (parseEditorCode model.Worker)
-            obs.Trigger md
+        let browserAdviceCommand =
+            if not ReactDeviceDetect.exports.isChrome
+                && not ReactDeviceDetect.exports.isSafari then
 
-            let browserAdviceCommand =
-                if not ReactDeviceDetect.exports.isChrome
-                    && not ReactDeviceDetect.exports.isSafari then
+                Toast.message "We recommend using Chrome or Safari, for best performance"
+                |> Toast.icon Fa.I.Info
+                |> Toast.position Toast.BottomRight
+                |> Toast.timeout (System.TimeSpan.FromSeconds 5.)
+                |> Toast.dismissOnClick
+                |> Toast.info
 
-                    Toast.message "We recommend using Chrome or Safari, for best performance"
-                    |> Toast.icon Fa.I.Info
-                    |> Toast.position Toast.BottomRight
-                    |> Toast.timeout (System.TimeSpan.FromSeconds 5.)
-                    |> Toast.dismissOnClick
-                    |> Toast.info
-
-                else
-                    Cmd.none
-
-            { model with State = Idle }, Cmd.batch [ Cmd.ofMsg (StartCompile None)
-                                                     browserAdviceCommand ]
-
-        | LoadFail ->
-            let msg = "Assemblies couldn't be loaded. Some firewalls prevent download of binary files, please check."
-            { model with State = Idle }, showGlobalErrorToast msg
-
-        | SetFSharpEditor ed -> { model with FSharpEditor = ed }, Cmd.none
-
-        | Reset ->
-            Browser.window.localStorage.removeItem(Literals.STORAGE_KEY)
-            let saved = loadState(Literals.STORAGE_KEY)
-            { model with FSharpCode = saved.code
-                         HtmlCode = saved.html
-                         CodeES2015 = ""
-                         IFrameUrl = "" }, Router.modifyUrl Router.Home
-
-        | UrlHashChange ->
-            let parsed = loadState(Literals.STORAGE_KEY)
-            { model with FSharpCode = parsed.code; HtmlCode = parsed.html }, Cmd.ofMsg (StartCompile (Some parsed.code))
-
-        | MarkEditorErrors errors ->
-            { model with FSharpErrors = mapErrorToMarker errors }, Cmd.none
-
-        | StartCompile code ->
-            if model.State <> Compiling then
-                let code =
-                    match code with
-                    | Some code -> code
-                    | None -> model.FSharpCode
-                CompileCode(code, model.Sidebar.Options.Optimize) |> model.Worker.Post
-                { model with State = Compiling }, Cmd.none
             else
-             model, Cmd.none
+                Cmd.none
 
-        | EndCompile result ->
-            match result with
-            | Ok codeES2015 ->
-                { model with CodeES2015 = codeES2015
-                             State = Compiled
-                             FSharpErrors = ResizeArray [||] }, Cmd.batch [ Cmd.performFunc (generateHtmlUrl model) codeES2015 SetIFrameUrl
-                                                                            Toast.message "Compiled successfuly"
-                                                                            |> Toast.position Toast.BottomRight
-                                                                            |> Toast.icon Fa.I.Check
-                                                                            |> Toast.timeout (System.TimeSpan.FromSeconds 4.)
-                                                                            |> Toast.dismissOnClick
-                                                                            |> Toast.success ]
+        { model with State = Idle }, Cmd.batch [ Cmd.ofMsg (StartCompile None)
+                                                 browserAdviceCommand ]
 
-            | Errors errors ->
-                { model with State = Compiled
-                             FSharpErrors = mapErrorToMarker errors }, Toast.message "Failed to compiled"
+    | LoadFail ->
+        let msg = "Assemblies couldn't be loaded. Some firewalls prevent download of binary files, please check."
+        { model with State = Idle }, showGlobalErrorToast msg
+
+    | SetFSharpEditor ed -> { model with FSharpEditor = ed }, Cmd.none
+
+    | Reset ->
+        Browser.window.localStorage.removeItem(Literals.STORAGE_KEY)
+        let saved = loadState(Literals.STORAGE_KEY)
+        { model with FSharpCode = saved.code
+                     HtmlCode = saved.html
+                     CodeES2015 = ""
+                     IFrameUrl = "" }, Router.modifyUrl Router.Home
+
+    | UrlHashChange ->
+        let parsed = loadState(Literals.STORAGE_KEY)
+        { model with FSharpCode = parsed.code; HtmlCode = parsed.html }, Cmd.ofMsg (StartCompile (Some parsed.code))
+
+    | MarkEditorErrors errors ->
+        { model with FSharpErrors = mapErrorToMarker errors }, Cmd.none
+
+    | StartCompile code ->
+        if model.State <> Compiling then
+            let code =
+                match code with
+                | Some code -> code
+                | None -> model.FSharpCode
+            CompileCode(code, model.Sidebar.Options.Optimize) |> model.Worker.Post
+            { model with State = Compiling }, Cmd.none
+        else
+         model, Cmd.none
+
+    | EndCompile result ->
+        match result with
+        | Ok codeES2015 ->
+            { model with CodeES2015 = codeES2015
+                         State = Compiled
+                         FSharpErrors = ResizeArray [||] }, Cmd.batch [ Cmd.performFunc (generateHtmlUrl model) codeES2015 SetIFrameUrl
+                                                                        Toast.message "Compiled successfuly"
                                                                         |> Toast.position Toast.BottomRight
-                                                                        |> Toast.icon Fa.I.Exclamation
+                                                                        |> Toast.icon Fa.I.Check
                                                                         |> Toast.timeout (System.TimeSpan.FromSeconds 4.)
                                                                         |> Toast.dismissOnClick
-                                                                        |> Toast.error
+                                                                        |> Toast.success ]
 
-            | Error msg ->
-                { model with State = Compiled }, showGlobalErrorToast msg
+        | Errors errors ->
+            { model with State = Compiled
+                         FSharpErrors = mapErrorToMarker errors }, Toast.message "Failed to compiled"
+                                                                    |> Toast.position Toast.BottomRight
+                                                                    |> Toast.icon Fa.I.Exclamation
+                                                                    |> Toast.timeout (System.TimeSpan.FromSeconds 4.)
+                                                                    |> Toast.dismissOnClick
+                                                                    |> Toast.error
 
-        | SetIFrameUrl newUrl ->
-            { model with IFrameUrl = newUrl }, Cmd.none
+        | Error msg ->
+            { model with State = Compiled }, showGlobalErrorToast msg
 
-        | SetOutputTab newTab ->
-            { model with OutputTab = newTab }, Cmd.none
+    | SetIFrameUrl newUrl ->
+        { model with IFrameUrl = newUrl }, Cmd.none
 
-        | SetCodeTab newTab ->
-            { model with CodeTab = newTab }, Cmd.none
+    | SetOutputTab newTab ->
+        { model with OutputTab = newTab }, Cmd.none
 
-        | MouseUp ->
-            let cmd =
-                match model.DragTarget with
-                | NoTarget -> Cmd.none
-                | PanelSplitter ->
-                    Cmd.ofMsg PanelDragEnded
-            model, cmd
+    | SetCodeTab newTab ->
+        { model with CodeTab = newTab }, Cmd.none
 
-        | MouseMove position ->
-            let cmd =
-                match model.DragTarget with
-                | NoTarget -> Cmd.none
-                | PanelSplitter ->
-                    Cmd.ofMsg (PanelDrag position)
-            model, cmd
+    | MouseUp ->
+        let cmd =
+            match model.DragTarget with
+            | NoTarget -> Cmd.none
+            | PanelSplitter ->
+                Cmd.ofMsg PanelDragEnded
+        model, cmd
 
-        | PanelDragStarted ->
-            { model with DragTarget = PanelSplitter }, Cmd.none
+    | MouseMove position ->
+        let cmd =
+            match model.DragTarget with
+            | NoTarget -> Cmd.none
+            | PanelSplitter ->
+                Cmd.ofMsg (PanelDrag position)
+        model, cmd
 
-        | PanelDragEnded ->
-            { model with DragTarget = NoTarget }, Cmd.none
+    | PanelDragStarted ->
+        { model with DragTarget = PanelSplitter }, Cmd.none
 
-        | PanelDrag position ->
-            let offset =
-                if model.Sidebar.IsExpanded then 250. else 0.
-            let splitRatio =
-                position
-                |> (fun p -> p.X - offset)
-                |> (fun w -> w / (Browser.window.innerWidth - offset))
-                |> clamp 0.2 0.8
-            // printfn "PANELDRAG: x %f offset %f innerWidth %f splitRatio %f"
-            //     position.X offset Browser.window.innerWidth splitRatio
-            { model with PanelSplitRatio = splitRatio }, Cmd.none
+    | PanelDragEnded ->
+        { model with DragTarget = NoTarget }, Cmd.none
 
-        | SidebarMsg msg ->
-            let (subModel, cmd, externalMsg) = Sidebar.update msg model.Sidebar
-            let newModel, extraCmd =
-                match externalMsg with
-                | Sidebar.NoOp -> model, Cmd.none
-                | Sidebar.LoadSample (fsharpCode, htmlCode) ->
-                    let cmd =
-                        match model.State with
-                        | Loading -> Cmd.none
-                        | _ -> Cmd.ofMsg (StartCompile (Some fsharpCode)) // Trigger a new compilation
-                    { model with FSharpCode = fsharpCode
-                                 HtmlCode = htmlCode }, cmd
-                | Sidebar.Share ->
-                    model, Cmd.ofFunc updateQuery (model.FSharpCode, model.HtmlCode) ShareableUrlReady UpdateQueryFailed
-                | Sidebar.Reset ->
-                    model, Router.newUrl Router.Reset
+    | PanelDrag position ->
+        let offset =
+            if model.Sidebar.IsExpanded then 250. else 0.
+        let splitRatio =
+            position
+            |> (fun p -> p.X - offset)
+            |> (fun w -> w / (Browser.window.innerWidth - offset))
+            |> clamp 0.2 0.8
+        // printfn "PANELDRAG: x %f offset %f innerWidth %f splitRatio %f"
+        //     position.X offset Browser.window.innerWidth splitRatio
+        { model with PanelSplitRatio = splitRatio }, Cmd.none
 
-            { newModel with Sidebar = subModel }, Cmd.batch [ Cmd.map SidebarMsg cmd
-                                                              extraCmd ]
+    | SidebarMsg msg ->
+        let (subModel, cmd, externalMsg) = Sidebar.update msg model.Sidebar
+        let newModel, extraCmd =
+            match externalMsg with
+            | Sidebar.NoOp -> model, Cmd.none
+            | Sidebar.LoadSample (fsharpCode, htmlCode) ->
+                let cmd =
+                    match model.State with
+                    | Loading -> Cmd.none
+                    | _ -> Cmd.ofMsg (StartCompile (Some fsharpCode)) // Trigger a new compilation
+                { model with FSharpCode = fsharpCode
+                             HtmlCode = htmlCode }, cmd
+            | Sidebar.Share ->
+                model, Cmd.ofFunc updateQuery (model.FSharpCode, model.HtmlCode) ShareableUrlReady UpdateQueryFailed
+            | Sidebar.Reset ->
+                model, Router.newUrl Router.Reset
 
-        | ChangeFsharpCode newCode ->
-            { model with FSharpCode = newCode }, Cmd.none
+        { newModel with Sidebar = subModel }, Cmd.batch [ Cmd.map SidebarMsg cmd
+                                                          extraCmd ]
 
-        | ChangeHtmlCode newCode ->
-            { model with HtmlCode = newCode }, Cmd.none
+    | ChangeFsharpCode newCode ->
+        { model with FSharpCode = newCode }, Cmd.none
 
-        | ShareableUrlReady () ->
-            model, Toast.message "Copy it from the address bar"
-                    |> Toast.title "Shareable link is ready"
-                    |> Toast.position Toast.BottomRight
-                    |> Toast.icon Fa.I.InfoCircle
-                    |> Toast.timeout (System.TimeSpan.FromSeconds 5.)
-                    |> Toast.info
+    | ChangeHtmlCode newCode ->
+        { model with HtmlCode = newCode }, Cmd.none
 
-        | UpdateQueryFailed exn ->
-            Browser.console.error exn
-            model, Toast.message "An error occured when updating the URL"
-                    |> Toast.icon Fa.I.Warning
-                    |> Toast.position Toast.BottomRight
-                    |> Toast.warning
+    | ShareableUrlReady () ->
+        model, Toast.message "Copy it from the address bar"
+                |> Toast.title "Shareable link is ready"
+                |> Toast.position Toast.BottomRight
+                |> Toast.icon Fa.I.InfoCircle
+                |> Toast.timeout (System.TimeSpan.FromSeconds 5.)
+                |> Toast.info
 
-        | UpdateStats stats ->
-            model, Cmd.ofMsg (SidebarMsg (Sidebar.UpdateStats stats))
+    | UpdateQueryFailed exn ->
+        Browser.console.error exn
+        model, Toast.message "An error occured when updating the URL"
+                |> Toast.icon Fa.I.Warning
+                |> Toast.position Toast.BottomRight
+                |> Toast.warning
 
-        // Map into model type
-        |> (fun (model,cmd) ->
-            Running model, cmd
-        )
-
+    | UpdateStats stats ->
+        model, Cmd.ofMsg (SidebarMsg (Sidebar.UpdateStats stats))
 
 let workerCmd (worker : ObservableWorker<_>)=
     let handler dispatch =
@@ -324,55 +310,31 @@ let workerCmd (worker : ObservableWorker<_>)=
         )
     [ handler ]
 
-let urlUpdate (result: Option<Router.Page>) model =
-    let (model, cmd) =
-        match model with
-        | Initializing ->
-            let worker = ObservableWorker(Worker(), WorkerAnswer.Decoder)
+let init () =
+    let worker = ObservableWorker(Worker(), WorkerAnswer.Decoder)
 
-            let saved = loadState(Literals.STORAGE_KEY)
-            let sidebarModel, sidebarCmd = Sidebar.init saved.sample
-            let cmd = Cmd.batch [
-                        Cmd.ups MouseUp
-                        Cmd.move MouseMove
-                        Cmd.iframeMessage MouseMove MouseUp
-                        Cmd.map SidebarMsg sidebarCmd
-                        workerCmd worker ]
+    let saved = loadState(Literals.STORAGE_KEY)
+    let sidebarModel, sidebarCmd = Sidebar.init saved.sample
+    let cmd = Cmd.batch [
+                Cmd.ups MouseUp
+                Cmd.move MouseMove
+                Cmd.iframeMessage MouseMove MouseUp
+                Cmd.map SidebarMsg sidebarCmd
+                workerCmd worker ]
 
-            Running
-                { State = Loading
-                  FSharpEditor = Unchecked.defaultof<IEditor>
-                  Worker = worker
-                  IFrameUrl = ""
-                  OutputTab = OutputTab.Live
-                  CodeTab = CodeTab.FSharp
-                  CodeES2015 = ""
-                  FSharpCode = saved.code
-                  FSharpErrors = ResizeArray [||]
-                  HtmlCode = saved.html
-                  DragTarget = NoTarget
-                  PanelSplitRatio = 0.5
-                  Sidebar = sidebarModel }, cmd
-
-        | Running model -> Running model, Cmd.none
-
-    match result with
-    | None ->
-        Browser.console.error("Error parsing url: " + Browser.window.location.href)
-        model, Cmd.batch [ cmd
-                           Router.modifyUrl Router.Home ]
-
-    | Some page ->
-        match page with
-        | Router.Home ->
-            model, cmd
-        // If user ask for reset, send a Reset message
-        | Router.Reset ->
-            model, Cmd.batch [ cmd
-                               Cmd.ofMsg Reset ]
-
-let init (result: Option<Router.Page>) =
-    urlUpdate result Initializing
+    { State = Loading
+      FSharpEditor = Unchecked.defaultof<IEditor>
+      Worker = worker
+      IFrameUrl = ""
+      OutputTab = OutputTab.Live
+      CodeTab = CodeTab.FSharp
+      CodeES2015 = ""
+      FSharpCode = saved.code
+      FSharpErrors = ResizeArray [||]
+      HtmlCode = saved.html
+      DragTarget = NoTarget
+      PanelSplitRatio = 0.5
+      Sidebar = sidebarModel }, cmd
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
@@ -380,7 +342,7 @@ open Fable.Helpers.React.Props
 let private numberToPercent number =
     string (number * 100.) + "%"
 
-let private menubar (model: ModelInfo) dispatch =
+let private menubar (model: Model) dispatch =
     let smallFaIcon icon =
         Icon.faIcon [ Icon.Size Size.IsSmall ] icon
     let compileIcon =
@@ -564,7 +526,7 @@ let private viewIframe isShown url =
              Class (toggleDisplay isShown) ]
         [ ]
 
-let private viewCodeEditor (model: ModelInfo) =
+let private viewCodeEditor (model: Model) =
     let fontFamily = model.Sidebar.Options.FontFamily
     let options = jsOptions<Monaco.Editor.IEditorConstructionOptions>(fun o ->
                         let minimapOptions = jsOptions<Monaco.Editor.IEditorMinimapOptions>(fun oMinimap ->
@@ -601,49 +563,27 @@ let private outputArea model dispatch =
           Style [ Width (numberToPercent (1. - model.PanelSplitRatio)) ] ]
         content
 
-let private view (model: Model) dispatch =
-    match model with
-    | Initializing ->
-        str "Initializing"
-
-    | Running model ->
-        let isDragging =
-            match model.DragTarget with
-            | PanelSplitter -> true
-            | NoTarget -> false
-        div [ classList [ "is-unselectable", isDragging ] ]
-            [ PageLoader.pageLoader [ PageLoader.Color IsPrimary
-                                      PageLoader.IsActive (model.State = Loading) ]
-                                    [ span [ Class "title" ]
-                                        [ str "We are getting everything ready for you"
-                                          p []
-                                            [ str "Trouble loading the repl? "
-                                              a [ Router.href Router.Reset
-                                                  Style [ TextDecoration "underline" ] ] [ str "Click here"]
-                                              str " to reset." ] ] ]
-              menubar model dispatch
-              div [ Class "page-content" ]
-                [ Sidebar.view model.Sidebar (SidebarMsg >> dispatch)
-                  div [ Class "main-content" ]
-                    [ editorArea model dispatch
-                      div [ Class "horizontal-resize"
-                            OnMouseDown (fun _ -> dispatch PanelDragStarted) ]
-                          [ ]
-                      outputArea model dispatch ] ] ]
-
-// TODO: Service worker not working atm because https is not used. Revisit after enabling it.
-// Browser.navigator.serviceWorker.register("/service-worker.js") |> ignore
-
-open Elmish.React
-open Elmish.HMR
-open Elmish.Browser.Navigation
-open Elmish.Browser.UrlParser
-
-Program.mkProgram init update view
-|> Program.toNavigable (parseHash Router.pageParser) urlUpdate
-|> Toast.Program.withToast Toast.renderToastWithFulma
-#if DEBUG
-|> Program.withHMR
-#endif
-|> Program.withReact "app-container"
-|> Program.run
+let view (model: Model) dispatch =
+    let isDragging =
+        match model.DragTarget with
+        | PanelSplitter -> true
+        | NoTarget -> false
+    div [ classList [ "is-unselectable", isDragging ] ]
+        [ PageLoader.pageLoader [ PageLoader.Color IsPrimary
+                                  PageLoader.IsActive (model.State = Loading) ]
+                                [ span [ Class "title" ]
+                                    [ str "We are getting everything ready for you"
+                                      p []
+                                        [ str "Trouble loading the repl? "
+                                          a [ Router.href Router.Reset
+                                              Style [ TextDecoration "underline" ] ] [ str "Click here"]
+                                          str " to reset." ] ] ]
+          menubar model dispatch
+          div [ Class "page-content" ]
+            [ Sidebar.view model.Sidebar (SidebarMsg >> dispatch)
+              div [ Class "main-content" ]
+                [ editorArea model dispatch
+                  div [ Class "horizontal-resize"
+                        OnMouseDown (fun _ -> dispatch PanelDragStarted) ]
+                      [ ]
+                  outputArea model dispatch ] ] ]
