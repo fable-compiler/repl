@@ -190,7 +190,7 @@ module Options =
                                OnChange (fun ev ->
                                 ev.Value |> float |> ChangeFontSize |> dispatch
                                ) ]
-                        [ fontSizeOption "Small" 13.
+                        [ fontSizeOption "Small" 12.
                           fontSizeOption "Medium" 14.
                           fontSizeOption "Large" 16. ] ] ] ]
 
