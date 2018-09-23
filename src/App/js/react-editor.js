@@ -10,6 +10,10 @@ class Editor extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            width: 0,
+            height: 0
+        };
     }
 
     editorDidMount = (editor, monaco) => {
@@ -35,9 +39,16 @@ class Editor extends React.Component {
         this.props.onChange(newValue);
     }
 
-    onResize = () => {
-        if (this.editor !== null)
-            this.editor.layout();
+    onResize = (width, height) => {
+        if (this.editor !== null) {
+            if (width !== undefined && height !== undefined)
+                this.editor.layout({
+                    width: width,
+                    height: height
+                });
+            else
+                this.editor.layout();
+        }
     }
 
     componentDidUpdate(prevProps) {

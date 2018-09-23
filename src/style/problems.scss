@@ -1,9 +1,6 @@
 .problems-panel {
-    margin: 0;
-    position: absolute;
     overflow: visible;
-    bottom: 0;
-    width: 100%;
+    position: relative;
 
     .problems-container {
         background-color: #fff0f0;

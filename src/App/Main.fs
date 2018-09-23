@@ -415,39 +415,39 @@ let private editorTabs (activeTab : CodeTab) dispatch =
             [ a [ ] [ str "Html" ] ] ]
 
 let private problemsPanel (errors : ResizeArray<Monaco.Editor.IMarkerData>) (currentTab : CodeTab) dispatch =
-        div [ Class "problems-panel" ]
-            [ div [ Class "problems-container" ]
-                [ for error in errors do
-                    match error.severity with
-                    | Monaco.MarkerSeverity.Error
-                    | Monaco.MarkerSeverity.Warning ->
-                        let icon =
-                            match error.severity with
-                            | Monaco.MarkerSeverity.Error -> Fa.I.TimesCircle
-                            | Monaco.MarkerSeverity.Warning -> Fa.I.ExclamationCircle
-                            | _ -> failwith "Should not happen"
+    div [ Class "problems-panel" ]
+        [ div [ Class "problems-container" ]
+            [ for error in errors do
+                match error.severity with
+                | Monaco.MarkerSeverity.Error
+                | Monaco.MarkerSeverity.Warning ->
+                    let icon =
+                        match error.severity with
+                        | Monaco.MarkerSeverity.Error -> Fa.I.TimesCircle
+                        | Monaco.MarkerSeverity.Warning -> Fa.I.ExclamationCircle
+                        | _ -> failwith "Should not happen"
 
-                        yield div [ Class "problems-row"
-                                    Data("tooltip-content",  error.message)
-                                    OnClick (fun _ ->
-                                        if currentTab = CodeTab.Html then
-                                            SetCodeTab CodeTab.FSharp |> dispatch
-                                        ReactEditor.Dispatch.cursorMove "fsharp_cursor_jump" error
-                                    ) ]
-                                [ Icon.faIcon [ Icon.Size IsSmall ]
-                                    [ Fa.icon icon ]
-                                  span [ Class "problems-description" ]
-                                    [ str error.message ]
-                                  span [ Class "problems-row-position" ]
-                                    [ str "("
-                                      str (string error.startLineNumber)
-                                      str ","
-                                      str (string error.startColumn)
-                                      str ")" ] ]
-                    | _ -> () ] ]
+                    yield div [ Class "problems-row"
+                                Data("tooltip-content", error.message)
+                                OnClick (fun _ ->
+                                    if currentTab = CodeTab.Html then
+                                        SetCodeTab CodeTab.FSharp |> dispatch
+                                    ReactEditor.Dispatch.cursorMove "fsharp_cursor_jump" error
+                                ) ]
+                            [ Icon.faIcon [ Icon.Size IsSmall ]
+                                [ Fa.icon icon ]
+                              span [ Class "problems-description" ]
+                                [ str error.message ]
+                              span [ Class "problems-row-position" ]
+                                [ str "("
+                                  str (string error.startLineNumber)
+                                  str ","
+                                  str (string error.startColumn)
+                                  str ")" ] ]
+                | _ -> () ] ]
 
 let private editorArea model dispatch =
-    div [ Class "editor-container"
+    div [ Class "vertical-panel"
           Style [ Width (numberToPercent model.PanelSplitRatio)
                   Position "relative" ] ]
         [ editorTabs model.CodeTab dispatch
@@ -543,15 +543,54 @@ let private viewCodeEditor (model: Model) =
 
     ReactEditor.editor [ ReactEditor.Options options
                          ReactEditor.Value model.CodeES2015
+                         ReactEditor.IsHidden (model.OutputTab <> OutputTab.Code)
                          ReactEditor.CustomClass (fontSizeClass model.Sidebar.Options.FontSize) ]
+
+let private consolePanel (logs : string list) =
+        div [ Class "console-panel" ]
+            [ div [ Class "console-container" ]
+                [ for log in logs do
+                    // match error.severity with
+                    // | Monaco.MarkerSeverity.Error
+                    // | Monaco.MarkerSeverity.Warning ->
+                        // let icon =
+                        //     match error.severity with
+                        //     | Monaco.MarkerSeverity.Error -> Fa.I.TimesCircle
+                        //     | Monaco.MarkerSeverity.Warning -> Fa.I.ExclamationCircle
+                        //     | _ -> failwith "Should not happen"
+
+                        yield div [ Class "problems-row" ]
+                                [ Icon.faIcon [ Icon.Size IsSmall ]
+                                    [ Fa.icon Fa.I.TimesCircle ]
+                                  span [ Class "problems-description" ]
+                                    [ str log ]
+                                  span [ Class "problems-row-position" ]
+                                    [ str "("
+                                      str (string 1)
+                                      str ","
+                                      str (string 1)
+                                      str ")" ] ]
+                    // | _ -> () ]
+                     ] ]
+
+let logs =
+    [ "Hello world"
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor."
+      """Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis
+in faucibus orci luctus et ultrices posuere cubilia Curae;
+Aliquam nibh. Mauris ac mauris sed pede pellentesque fermentum.
+Maecenas adipiscing ante non diam sodales hendrerit."""
+    ]
 
 let private outputArea model dispatch =
     let content =
         match model.State with
         | Compiling | Compiled ->
             [ outputTabs model.OutputTab dispatch
-              viewIframe (model.OutputTab = OutputTab.Live) model.IFrameUrl
-              viewCodeEditor model ]
+              div [ Class "output-content" ]
+                [ viewIframe (model.OutputTab = OutputTab.Live) model.IFrameUrl
+                  viewCodeEditor model
+                  consolePanel logs ] ]
         | _ ->
             [ br [ ]
               Text.div [ Modifiers [ Modifier.TextAlignment (Screen.All, TextAlignment.Centered) ]
