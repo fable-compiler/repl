@@ -135,7 +135,23 @@ let update msg (model : Model) =
             debounce 1000 obs
             |> Observable.add (parseEditorCode model.Worker)
             obs.Trigger md
-            { model with State = Idle }, Cmd.ofMsg (StartCompile None)
+
+            let browserAdviceCommand =
+                if not ReactDeviceDetect.exports.isChrome
+                    && not ReactDeviceDetect.exports.isSafari then
+
+                    Toast.message "We recommend using Chrome or Safari, for best performance"
+                    |> Toast.icon Fa.I.Info
+                    |> Toast.position Toast.BottomRight
+                    |> Toast.timeout (System.TimeSpan.FromSeconds 5.)
+                    |> Toast.dismissOnClick
+                    |> Toast.info
+
+                else
+                    Cmd.none
+
+            { model with State = Idle }, Cmd.batch [ Cmd.ofMsg (StartCompile None)
+                                                     browserAdviceCommand ]
 
         | LoadFail ->
             let msg = "Assemblies couldn't be loaded. Some firewalls prevent download of binary files, please check."

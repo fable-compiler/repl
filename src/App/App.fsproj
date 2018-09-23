@@ -8,6 +8,7 @@
       <Paket>True</Paket>
       <Link>paket-files/Interfaces.fs</Link>
     </Compile>
+    <Compile Include="Libs/ReactDeviceDetect.fs" />
     <Compile Include="Monaco.fs" />
     <Compile Include="Shared.fs" />
     <Compile Include="Helpers.fs" />
