@@ -76,10 +76,7 @@ let private view (model: Model) dispatch =
         Main.view model (MainMsg >> dispatch)
 
     | InvalidPlatform ->
-        // Remove the padding due to `has-navbar-fixed-top`
-        // because we are on mobile and we just want
-        // to display a centered message
-        div [ Style [ MarginTop "-3.25rem" ] ]
+        div [ ]
             [ Hero.hero [ Hero.IsFullHeight ]
                 [ Hero.body [ ]
                     [ Container.container [ ]

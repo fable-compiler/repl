@@ -137,7 +137,11 @@ let private collapseButton dispatch =
 
 let private sidebarContainer dispatch sections =
     div [ Class "sidebar is-expanded" ]
-        [ div [ Class "widgets-list" ]
+        [ div [ Class "brand" ]
+            [ img [ Src "img/fable-ionide.png" ]
+              Heading.h4 [ ]
+                [ str "Fable REPL" ] ]
+          div [ Class "widgets-list" ]
             sections
           collapseButton dispatch ]
 
@@ -149,7 +153,7 @@ let private expandButton dispatch =
                     [ Fa.faLg
                       Fa.icon Fa.I.AngleDoubleRight ] ] ] ]
 
-let view (model: Model) dispatch =
+let view (model: Model) (actionAreaExpanded, actionAreaCollapsed) dispatch =
     let widgets =
         [ "General", Fa.I.Th, Widgets.General.view model.General (GeneralMsg >> dispatch), None
           "Samples", Fa.I.Book, Widgets.Samples.view model.Samples (SamplesMsg >> dispatch), Some "500px"
@@ -159,9 +163,11 @@ let view (model: Model) dispatch =
         |> List.map (renderWidgets model dispatch)
 
     if model.IsExpanded then
-        sidebarContainer dispatch widgets
+        sidebarContainer dispatch (actionAreaExpanded::widgets)
     else
-        div [ Class "sidebar is-collapse" ]
-            [ div [ Class "widgets-list" ]
-                widgets
+        div [ Class "sidebar is-collapsed" ]
+            [ div [ Class "brand" ]
+                [ img [ Src "img/fable-ionide.png" ] ]
+              div [ Class "widgets-list" ]
+                (actionAreaCollapsed::widgets)
               expandButton dispatch ]

@@ -91,6 +91,7 @@ type Msg =
     | ChangeFsharpCode of string
     | ChangeHtmlCode of string
     | UpdateQueryFailed of exn
+    | RefreshIframe
 
 let generateHtmlUrl (model: Model) jsCode =
     saveState(Literals.STORAGE_KEY, model.FSharpCode, model.HtmlCode)
@@ -289,6 +290,9 @@ let update msg (model : Model) =
     | UpdateStats stats ->
         model, Cmd.ofMsg (SidebarMsg (Sidebar.UpdateStats stats))
 
+    | RefreshIframe ->
+        model, Cmd.performFunc (Generator.generateHtmlBlobUrl model.HtmlCode) model.CodeES2015 SetIFrameUrl
+
 let workerCmd (worker : ObservableWorker<_>)=
     let handler dispatch =
         worker
@@ -341,30 +345,6 @@ open Fable.Helpers.React.Props
 
 let private numberToPercent number =
     string (number * 100.) + "%"
-
-let private menubar (model: Model) dispatch =
-    let smallFaIcon icon =
-        Icon.faIcon [ Icon.Size Size.IsSmall ] icon
-    let compileIcon =
-        if model.State = Compiling
-        then smallFaIcon [ Fa.icon Fa.I.Spinner; Fa.spin ]
-        else smallFaIcon [ Fa.icon Fa.I.Play ]
-    Navbar.navbar
-        [ Navbar.IsFixedTop
-          Navbar.Color IsPrimary ]
-        [ Navbar.Brand.div [ ]
-            [ Navbar.Item.div [ ]
-                [ img [ Src "img/fable-ionide.png" ] ]
-              Navbar.Item.div [ ]
-                [ Button.button
-                    [ Button.OnClick (fun _ -> dispatch (StartCompile None)) ]
-                      [ compileIcon
-                        Text.span []
-                           [ str "Compile" ] ] ] ]
-          Navbar.Start.div [ ]
-            [ Navbar.menu [ ]
-                [ Navbar.Item.div [ ]
-                    [ str "Fable REPL fully works on the browser, no code is sent to any server (compile shortcut: Alt+Enter)" ] ] ] ]
 
 let private fontSizeClass =
         function
@@ -602,6 +582,46 @@ let private outputArea model dispatch =
           Style [ Width (numberToPercent (1. - model.PanelSplitRatio)) ] ]
         content
 
+let private actionArea (state : State) dispatch =
+    let compileIcon =
+        if state = State.Compiling then
+            [ Fa.icon Fa.I.Spinner
+              Fa.spin ]
+        else
+            [ Fa.icon Fa.I.Play ]
+
+    let collapsed =
+        div [ Class "actions-area" ]
+            [ div [ Class "action-button" ]
+                [ Button.button [ Button.IsOutlined
+                                  Button.OnClick (fun _ -> dispatch (StartCompile None)) ]
+                    [ Icon.faIcon [ Icon.Size IsSmall ]
+                        compileIcon
+                      span [ ]
+                        [ str "Compile" ] ] ]
+              div [ Class "action-button" ]
+                [ Button.button [ Button.IsOutlined
+                                  Button.OnClick (fun _ -> dispatch RefreshIframe) ]
+                    [ Icon.faIcon [ Icon.Size IsSmall ]
+                        [ Fa.icon Fa.I.Refresh ]
+                      span [ ]
+                        [ str "Refresh" ] ] ] ]
+
+    let expanded =
+        div [ Class "actions-area" ]
+            [ div [ Class "action-button" ]
+                [ Button.button [ Button.IsOutlined
+                                  Button.OnClick (fun _ -> dispatch (StartCompile None)) ]
+                    [ Icon.faIcon [ Icon.Size IsLarge ]
+                        compileIcon ] ]
+              div [ Class "action-button" ]
+                [ Button.button [ Button.IsOutlined
+                                  Button.OnClick (fun _ -> dispatch RefreshIframe) ]
+                    [ Icon.faIcon [ Icon.Size IsLarge ]
+                        [ Fa.icon Fa.I.Refresh ] ] ] ]
+
+    (collapsed, expanded)
+
 let view (model: Model) dispatch =
     let isDragging =
         match model.DragTarget with
@@ -617,9 +637,9 @@ let view (model: Model) dispatch =
                                           a [ Router.href Router.Reset
                                               Style [ TextDecoration "underline" ] ] [ str "Click here"]
                                           str " to reset." ] ] ]
-          menubar model dispatch
+
           div [ Class "page-content" ]
-            [ Sidebar.view model.Sidebar (SidebarMsg >> dispatch)
+            [ Sidebar.view model.Sidebar (actionArea model.State dispatch) (SidebarMsg >> dispatch)
               div [ Class "main-content" ]
                 [ editorArea model dispatch
                   div [ Class "horizontal-resize"
