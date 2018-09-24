@@ -68,7 +68,7 @@ html {
             align-items: center;
             padding-top: .5rem;
             padding-bottom: .5rem;
-            box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+            box-shadow: -1px 0px 1px 0px #f2f2f2;
 
             img {
                 width: 32px;
@@ -78,10 +78,6 @@ html {
                 text-align: center;
                 width: 50%;
             }
-        }
-
-        .actions-area {
-            box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
         }
 
         &.is-collapsed {
