@@ -373,7 +373,7 @@ let init () =
       DragTarget = NoTarget
       PanelSplitRatio = 0.5
       Sidebar = sidebarModel
-      IsProblemsPanelExpanded = false
+      IsProblemsPanelExpanded = true
       Logs = [] }, cmd
 
 open Fable.Helpers.React
