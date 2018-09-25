@@ -90,7 +90,7 @@ let private view (model: Model) dispatch =
                           Heading.p [ Heading.IsSubtitle
                                       Heading.Is5
                                       Heading.Modifiers [ Modifier.TextAlignment (Screen.All, TextAlignment.Centered) ] ]
-                            [ str "is only available on desktop" ] ] ] ] ]
+                            [ str "is only available on desktop. You can activate the desktop mode on your mobile device, but some functionality may not work properly." ] ] ] ] ]
 
 // TODO: Service worker not working atm because https is not used. Revisit after enabling it.
 // Browser.navigator.serviceWorker.register("/service-worker.js") |> ignore
