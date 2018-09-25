@@ -50,54 +50,77 @@
                 margin-right: 0.25rem;
                 text-overflow: ellipsis;
                 overflow: hidden;
+                flex-grow: 1;
             }
         }
+    }
+
+    .scrollable-panel-body-row {
+        border-color: #d6d6d6;
+        background-color: #f5f5f5;
+        color: $grey-darker;
+
+        @each $name, $pair in $colors {
+            $color: nth($pair, 1);
+            $color-invert: nth($pair, 2);
+            $color-lightning: max((100% - lightness($color)) - 10%, 0%);
+            $color-lightning-hover: max((100% - lightness($color)) - 5%, 0%);
+            $color-luminance: colorLuminance($color);
+            $darken-percentage: $color-luminance * 60%;
+            $desaturate-percentage: $color-luminance * 20%;
+
+            &.is-#{$name} {
+                background-color: lighten($color, $color-lightning);
+                border-color: $color;
+                color: desaturate(darken($color, $darken-percentage), $desaturate-percentage);
+            }
+
+            .icon.is-#{$name} {
+                color: saturate($color, 15%);
+            }
+        }
+
+        .scrollable-panel-body-row-description {
+            white-space: pre-wrap;
+        }
+
     }
 
     &.is-console {
         .scrollable-panel-body:empty:after {
             content: "No logs received";
         }
-
-        .scrollable-panel-body-row {
-            border-color: #d6d6d6;
-            background-color: #f5f5f5;
-            color: $grey-darker;
-
-            @each $name, $pair in $colors {
-                $color: nth($pair, 1);
-                $color-invert: nth($pair, 2);
-                $color-lightning: max((100% - lightness($color)) - 10%, 0%);
-                $color-luminance: colorLuminance($color);
-                $darken-percentage: $color-luminance * 60%;
-                $desaturate-percentage: $color-luminance * 20%;
-
-                &.is-#{$name} {
-                    background-color: lighten($color, $color-lightning);
-                    border-color: $color;
-                    color: desaturate(darken($color, $darken-percentage), $desaturate-percentage);
-                }
-
-                .icon.is-#{$name} {
-                    color: saturate($color, 15%);
-                }
-            }
-
-            .problems-description {
-                white-space: pre-wrap;
-            }
-
-        }
     }
 
     &.is-problem {
+
         .scrollable-panel-body:empty:after {
-            content: "No problems detected in the project";
+            content: "No problems detected in your project";
         }
 
-        .scrollable-panel-body-row {
-            background-color: #FCF0F0;
-            color: #ff0000;
+        .scrollable-panel-body-row  {
+
+            &.is-danger {
+                .scrollable-panel-body-row-description {
+                    white-space: nowrap;
+                }
+            }
+
+            @each $name, $pair in $colors {
+                $color: nth($pair, 1);
+                $color-lightning: max((100% - lightness($color)) - 15%, 0%);
+
+                &.is-#{$name} {
+                    &:hover {
+                        background-color: lighten($color, $color-lightning);;
+                    }
+                }
+
+            }
+
+            .scrollable-panel-body-row-description {
+                white-space: pre-wrap;
+            }
 
             &:after {
                 content: attr(data-tooltip-content);
@@ -139,11 +162,6 @@
 
             &:hover {
                 cursor: pointer;
-                background-color: #fcdddd;
-            }
-
-            .scrollable-panel-body-row-description {
-                white-space: nowrap;
             }
 
             .scrollable-panel-body-row-position {

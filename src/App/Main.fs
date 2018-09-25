@@ -466,25 +466,27 @@ let private problemsPanel (isExpanded : bool) (errors : ResizeArray<Monaco.Edito
                 [ Icon.faIcon [ ]
                     [ Fa.faLg
                       Fa.icon headerIcon ] ] ]
+
           div [ Class ("scrollable-panel-body " + bodyDisplay) ]
             [ for error in errors do
                 match error.severity with
                 | Monaco.MarkerSeverity.Error
                 | Monaco.MarkerSeverity.Warning ->
-                    let icon =
+                    let (icon, colorClass) =
                         match error.severity with
-                        | Monaco.MarkerSeverity.Error -> Fa.I.TimesCircle
-                        | Monaco.MarkerSeverity.Warning -> Fa.I.ExclamationCircle
-                        | _ -> failwith "Should not happen"
+                        | Monaco.MarkerSeverity.Error -> Fa.I.TimesCircle, ofColor IsDanger
+                        | Monaco.MarkerSeverity.Warning -> Fa.I.ExclamationTriangle, ofColor IsWarning
+                        | _ -> failwith "Should not happen", ofColor NoColor
 
-                    yield div [ Class "scrollable-panel-body-row"
+                    yield div [ Class ("scrollable-panel-body-row " + colorClass)
                                 Data("tooltip-content", error.message)
                                 OnClick (fun _ ->
                                     if currentTab = CodeTab.Html then
                                         SetCodeTab CodeTab.FSharp |> dispatch
                                     ReactEditor.Dispatch.cursorMove "fsharp_cursor_jump" error
                                 ) ]
-                            [ Icon.faIcon [ Icon.Size IsSmall ]
+                            [ Icon.faIcon [ Icon.Size IsSmall
+                                            Icon.CustomClass colorClass ]
                                 [ Fa.icon icon ]
                               span [ Class "scrollable-panel-body-row-description" ]
                                 [ str error.message ]

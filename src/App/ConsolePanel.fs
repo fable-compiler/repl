@@ -43,24 +43,20 @@ type ConsolePanel(props) =
         this.scroolToBottom()
 
     member __.ShowLog (icon : Fa.I.FontAwesomeIcons option) color content =
-        let cls =
-            match color with
-            | IColor.IsWarning -> "is-warning"
-            | IColor.IsDanger -> "is-danger"
-            | _ -> ""
+        let colorClass = ofColor color
 
-        div [ Class ("scrollable-panel-body-row " + cls) ]
+        div [ Class ("scrollable-panel-body-row " + colorClass) ]
             [ Icon.faIcon [ Icon.Size IsSmall
-                            Icon.CustomClass cls ]
+                            Icon.CustomClass colorClass ]
                 [ if icon.IsSome then
                     yield Fa.icon icon.Value ]
-              span [ Class "problems-description" ]
+              span [ Class "scrollable-panel-body-row-description" ]
                 [ str content ] ]
 
     member __.ShowSeparator =
         div [ Class "scrollable-panel-body-row is-info"
               Style [ JustifyContent "center" ] ]
-            [ str "IFrame loaded" ]
+            [ str "Iframe loaded" ]
 
     member __.OnContainerScroll( ev : React.WheelEvent) =
         let elt = ev.currentTarget :?> Browser.HTMLDivElement
