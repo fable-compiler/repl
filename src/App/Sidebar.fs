@@ -110,6 +110,13 @@ let private renderExpandedWidgets (states : Set<string>) dispatch (title, icon, 
 
 
 let renderCollapsedWidgets dispatch (title, icon, widget, maxHeight) =
+    let props =
+        match maxHeight with
+        | Some maxHeight ->
+            [ Props [ Style [ MaxHeight maxHeight
+                              OverflowY "auto" ] ] ]
+        | None -> [ ]
+
     div [ Class "item" ]
         [ Icon.faIcon [ Icon.Size IsLarge ]
             [ Fa.faLg
@@ -118,7 +125,7 @@ let renderCollapsedWidgets dispatch (title, icon, widget, maxHeight) =
             [ Card.header [ Common.Props [ OnClick (fun _ -> ToggleWidget title |> dispatch ) ] ]
                 [ Card.Header.title [ ]
                     [ str title ] ]
-              Card.content [ ]
+              Card.content props
                 [ widget ] ] ]
 
 let private renderWidgets model dispatch (title, icon, widget, maxHeight) =
