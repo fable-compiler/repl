@@ -25,7 +25,14 @@ module Cmd =
                 |> dispatch)
         [ handler ]
 
-    let iframeMessage moveCtor upCtor =
+    type IframeMessageArgs<'Msg> =
+        { MoveCtor : Position -> 'Msg
+          UpCtor : 'Msg
+          ConsoleLogCor : string -> 'Msg
+          ConsoleWarnCor : string -> 'Msg
+          ConsoleErrorCor : string -> 'Msg }
+
+    let iframeMessage (args : IframeMessageArgs<'Msg>) =
         let handler dispatch =
             window.addEventListener_message(fun ev ->
                 let iframeMessageDecoder =
@@ -37,9 +44,18 @@ module Cmd =
                             Decode.object (fun get ->
                                 { X = get.Required.Field "x" Decode.float
                                   Y = get.Required.Field "y" Decode.float })
-                            |> Decode.map moveCtor
+                            |> Decode.map args.MoveCtor
                         | Some "mouseup" ->
-                            Decode.succeed upCtor
+                            Decode.succeed args.UpCtor
+                        | Some "console_log" ->
+                            Decode.field "content" Decode.string
+                            |> Decode.map args.ConsoleLogCor
+                        | Some "console_warn" ->
+                            Decode.field "content" Decode.string
+                            |> Decode.map args.ConsoleWarnCor
+                        | Some "console_error" ->
+                            Decode.field "content" Decode.string
+                            |> Decode.map args.ConsoleErrorCor
                         | x ->
                             // Discard messages we don't know how to handle it
                             sprintf "`%A` is not a known value for an iframe message" x

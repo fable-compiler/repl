@@ -36,4 +36,4 @@ public/*.woff2
 public/*.ttf
 public/*.woff
 
-*\.DS_Store
+*.DS_Store

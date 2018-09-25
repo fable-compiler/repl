@@ -61,7 +61,9 @@ type Model =
       HtmlCode: string
       DragTarget : DragTarget
       PanelSplitRatio : float
-      Sidebar : Sidebar.Model }
+      Sidebar : Sidebar.Model
+      IsProblemsPanelExpanded : bool
+      Logs : ConsolePanel.Log list }
 
 type EndCompileStatus =
     | Ok of string
@@ -81,34 +83,45 @@ type Msg =
     | ShareableUrlReady of unit
     | SetOutputTab of OutputTab
     | SetCodeTab of CodeTab
+    | ToggleProblemsPanel
     | SetIFrameUrl of string
     | PanelDragStarted
     | PanelDrag of Position
     | PanelDragEnded
     | MouseUp
     | MouseMove of Mouse.Position
+    | AddConsoleLog of string
+    | AddConsoleError of string
+    | AddConsoleWarn of string
     | SidebarMsg of Sidebar.Msg
     | ChangeFsharpCode of string
     | ChangeHtmlCode of string
     | UpdateQueryFailed of exn
     | RefreshIframe
 
-let generateHtmlUrl (model: Model) jsCode =
+let private addLog log (model : Model) =
+    { model with Logs =
+                    if model.Logs.Length >= Literals.MAX_LOGS_LENGTH then
+                        model.Logs.Tail @ [log]
+                    else
+                        model.Logs @ [log] }
+
+let private generateHtmlUrl (model: Model) jsCode =
     saveState(Literals.STORAGE_KEY, model.FSharpCode, model.HtmlCode)
     Generator.generateHtmlBlobUrl model.HtmlCode jsCode
 
-let clamp min max value =
+let private clamp min max value =
     if value >= max
     then max
     elif value <= min
     then min
     else value
 
-let parseEditorCode (worker: ObservableWorker<_>) (model: Monaco.Editor.IModel) =
+let private parseEditorCode (worker: ObservableWorker<_>) (model: Monaco.Editor.IModel) =
     let content = model.getValue (Monaco.Editor.EndOfLinePreference.TextDefined, true)
     ParseCode content |> worker.Post
 
-let showGlobalErrorToast msg =
+let private showGlobalErrorToast msg =
     Toast.message msg
     |> Toast.title "Failed to compiled"
     |> Toast.position Toast.BottomRight
@@ -152,6 +165,9 @@ let update msg (model : Model) =
 
     | SetFSharpEditor ed -> { model with FSharpEditor = ed }, Cmd.none
 
+    | ToggleProblemsPanel ->
+        { model with IsProblemsPanelExpanded = not model.IsProblemsPanelExpanded }, Cmd.none
+
     | Reset ->
         Browser.window.localStorage.removeItem(Literals.STORAGE_KEY)
         let saved = loadState(Literals.STORAGE_KEY)
@@ -183,20 +199,19 @@ let update msg (model : Model) =
         | Ok codeES2015 ->
             { model with CodeES2015 = codeES2015
                          State = Compiled
-                         FSharpErrors = ResizeArray [||] }, Cmd.batch [ Cmd.performFunc (generateHtmlUrl model) codeES2015 SetIFrameUrl
-                                                                        Toast.message "Compiled successfuly"
-                                                                        |> Toast.position Toast.BottomRight
-                                                                        |> Toast.icon Fa.I.Check
-                                                                        |> Toast.timeout (System.TimeSpan.FromSeconds 4.)
-                                                                        |> Toast.dismissOnClick
-                                                                        |> Toast.success ]
+                         FSharpErrors = ResizeArray [||] }
+            |> addLog ConsolePanel.Log.Separator, Cmd.batch [ Cmd.performFunc (generateHtmlUrl model) codeES2015 SetIFrameUrl
+                                                              Toast.message "Compiled successfuly"
+                                                              |> Toast.position Toast.BottomRight
+                                                              |> Toast.icon Fa.I.Check
+                                                              |> Toast.dismissOnClick
+                                                              |> Toast.success ]
 
         | Errors errors ->
             { model with State = Compiled
                          FSharpErrors = mapErrorToMarker errors }, Toast.message "Failed to compiled"
                                                                     |> Toast.position Toast.BottomRight
                                                                     |> Toast.icon Fa.I.Exclamation
-                                                                    |> Toast.timeout (System.TimeSpan.FromSeconds 4.)
                                                                     |> Toast.dismissOnClick
                                                                     |> Toast.error
 
@@ -291,7 +306,20 @@ let update msg (model : Model) =
         model, Cmd.ofMsg (SidebarMsg (Sidebar.UpdateStats stats))
 
     | RefreshIframe ->
-        model, Cmd.performFunc (Generator.generateHtmlBlobUrl model.HtmlCode) model.CodeES2015 SetIFrameUrl
+        model
+        |> addLog ConsolePanel.Log.Separator, Cmd.performFunc (Generator.generateHtmlBlobUrl model.HtmlCode) model.CodeES2015 SetIFrameUrl
+
+    | AddConsoleLog content ->
+        model
+        |> addLog (ConsolePanel.Log.Info content), Cmd.none
+
+    | AddConsoleError content ->
+        model
+        |> addLog (ConsolePanel.Log.Error content), Cmd.none
+
+    | AddConsoleWarn content ->
+        model
+        |> addLog (ConsolePanel.Log.Warn content), Cmd.none
 
 let workerCmd (worker : ObservableWorker<_>)=
     let handler dispatch =
@@ -322,7 +350,12 @@ let init () =
     let cmd = Cmd.batch [
                 Cmd.ups MouseUp
                 Cmd.move MouseMove
-                Cmd.iframeMessage MouseMove MouseUp
+                Cmd.iframeMessage
+                    { MoveCtor = MouseMove
+                      UpCtor = MouseUp
+                      ConsoleLogCor = AddConsoleLog
+                      ConsoleWarnCor = AddConsoleWarn
+                      ConsoleErrorCor = AddConsoleError }
                 Cmd.map SidebarMsg sidebarCmd
                 workerCmd worker ]
 
@@ -338,7 +371,9 @@ let init () =
       HtmlCode = saved.html
       DragTarget = NoTarget
       PanelSplitRatio = 0.5
-      Sidebar = sidebarModel }, cmd
+      Sidebar = sidebarModel
+      IsProblemsPanelExpanded = false
+      Logs = [] }, cmd
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
@@ -394,9 +429,43 @@ let private editorTabs (activeTab : CodeTab) dispatch =
                      ] ]
             [ a [ ] [ str "Html" ] ] ]
 
-let private problemsPanel (errors : ResizeArray<Monaco.Editor.IMarkerData>) (currentTab : CodeTab) dispatch =
-    div [ Class "problems-panel" ]
-        [ div [ Class "problems-container" ]
+let private problemsPanel (isExpanded : bool) (errors : ResizeArray<Monaco.Editor.IMarkerData>) (currentTab : CodeTab) dispatch =
+    let bodyDisplay =
+        if isExpanded then
+            ""
+        else
+            "is-hidden"
+
+    let headerIcon =
+        if isExpanded then
+            Fa.I.AngleDown
+        else
+            Fa.I.AngleUp
+
+    let title =
+        if errors.Count = 0 then
+            span [ ]
+                [ str "Problems" ]
+        else
+            span [ ]
+                [ str "Problems: "
+                  Text.span [ Props [ Style [ MarginLeft ".5rem" ] ] ]
+                    [ str (string errors.Count ) ] ]
+
+    div [ Class "scrollable-panel is-problem" ]
+        [ div [ Class "scrollable-panel-header"
+                OnClick (fun _ -> dispatch ToggleProblemsPanel) ]
+            [ div [ Class "scrollable-panel-header-icon" ]
+                [ Icon.faIcon [ ]
+                    [ Fa.faLg
+                      Fa.icon headerIcon ] ]
+              div [ Class "scrollable-panel-header-title" ]
+                [ title ]
+              div [ Class "scrollable-panel-header-icon" ]
+                [ Icon.faIcon [ ]
+                    [ Fa.faLg
+                      Fa.icon headerIcon ] ] ]
+          div [ Class ("scrollable-panel-body " + bodyDisplay) ]
             [ for error in errors do
                 match error.severity with
                 | Monaco.MarkerSeverity.Error
@@ -407,7 +476,7 @@ let private problemsPanel (errors : ResizeArray<Monaco.Editor.IMarkerData>) (cur
                         | Monaco.MarkerSeverity.Warning -> Fa.I.ExclamationCircle
                         | _ -> failwith "Should not happen"
 
-                    yield div [ Class "problems-row"
+                    yield div [ Class "scrollable-panel-body-row"
                                 Data("tooltip-content", error.message)
                                 OnClick (fun _ ->
                                     if currentTab = CodeTab.Html then
@@ -416,9 +485,9 @@ let private problemsPanel (errors : ResizeArray<Monaco.Editor.IMarkerData>) (cur
                                 ) ]
                             [ Icon.faIcon [ Icon.Size IsSmall ]
                                 [ Fa.icon icon ]
-                              span [ Class "problems-description" ]
+                              span [ Class "scrollable-panel-body-row-description" ]
                                 [ str error.message ]
-                              span [ Class "problems-row-position" ]
+                              span [ Class "scrollable-panel-body-row-position" ]
                                 [ str "("
                                   str (string error.startLineNumber)
                                   str ","
@@ -480,7 +549,7 @@ let private editorArea model dispatch =
                                     editor.addCommand(monacoModule.KeyMod.Alt ||| int Monaco.KeyCode.Enter,
                                         (fun () -> StartCompile None |> dispatch), "") |> ignore
                                ) ]
-          problemsPanel model.FSharpErrors model.CodeTab dispatch ]
+          problemsPanel model.IsProblemsPanelExpanded model.FSharpErrors model.CodeTab dispatch ]
 
 
 let private outputTabs (activeTab : OutputTab) dispatch =
@@ -526,42 +595,6 @@ let private viewCodeEditor (model: Model) =
                          ReactEditor.IsHidden (model.OutputTab <> OutputTab.Code)
                          ReactEditor.CustomClass (fontSizeClass model.Sidebar.Options.FontSize) ]
 
-let private consolePanel (logs : string list) =
-        div [ Class "console-panel" ]
-            [ div [ Class "console-container" ]
-                [ for log in logs do
-                    // match error.severity with
-                    // | Monaco.MarkerSeverity.Error
-                    // | Monaco.MarkerSeverity.Warning ->
-                        // let icon =
-                        //     match error.severity with
-                        //     | Monaco.MarkerSeverity.Error -> Fa.I.TimesCircle
-                        //     | Monaco.MarkerSeverity.Warning -> Fa.I.ExclamationCircle
-                        //     | _ -> failwith "Should not happen"
-
-                        yield div [ Class "problems-row" ]
-                                [ Icon.faIcon [ Icon.Size IsSmall ]
-                                    [ Fa.icon Fa.I.TimesCircle ]
-                                  span [ Class "problems-description" ]
-                                    [ str log ]
-                                  span [ Class "problems-row-position" ]
-                                    [ str "("
-                                      str (string 1)
-                                      str ","
-                                      str (string 1)
-                                      str ")" ] ]
-                    // | _ -> () ]
-                     ] ]
-
-let logs =
-    [ "Hello world"
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor."
-      """Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis
-in faucibus orci luctus et ultrices posuere cubilia Curae;
-Aliquam nibh. Mauris ac mauris sed pede pellentesque fermentum.
-Maecenas adipiscing ante non diam sodales hendrerit."""
-    ]
-
 let private outputArea model dispatch =
     let content =
         match model.State with
@@ -570,7 +603,7 @@ let private outputArea model dispatch =
               div [ Class "output-content" ]
                 [ viewIframe (model.OutputTab = OutputTab.Live) model.IFrameUrl
                   viewCodeEditor model
-                  consolePanel logs ] ]
+                  ConsolePanel.view model.Logs ] ]
         | _ ->
             [ br [ ]
               Text.div [ Modifiers [ Modifier.TextAlignment (Screen.All, TextAlignment.Centered) ]
@@ -623,26 +656,32 @@ let private actionArea (state : State) dispatch =
     (collapsed, expanded)
 
 let view (model: Model) dispatch =
-    let isDragging =
-        match model.DragTarget with
-        | PanelSplitter -> true
-        | NoTarget -> false
-    div [ classList [ "is-unselectable", isDragging ] ]
-        [ PageLoader.pageLoader [ PageLoader.Color IsPrimary
-                                  PageLoader.IsActive (model.State = Loading) ]
-                                [ span [ Class "title" ]
-                                    [ str "We are getting everything ready for you"
-                                      p []
-                                        [ str "Trouble loading the repl? "
-                                          a [ Router.href Router.Reset
-                                              Style [ TextDecoration "underline" ] ] [ str "Click here"]
-                                          str " to reset." ] ] ]
+    Elmish.React.Common.lazyView2
+        (fun model dispatch ->
+            let isDragging =
+                match model.DragTarget with
+                | PanelSplitter -> true
+                | NoTarget -> false
+            div [ classList [ "is-unselectable", isDragging ] ]
+                [ PageLoader.pageLoader [ PageLoader.Color IsPrimary
+                                          PageLoader.IsActive (model.State = Loading) ]
+                                        [ span [ Class "title" ]
+                                            [ str "We are getting everything ready for you"
+                                              p []
+                                                [ str "Trouble loading the repl? "
+                                                  a [ Router.href Router.Reset
+                                                      Style [ TextDecoration "underline" ] ] [ str "Click here"]
+                                                  str " to reset." ] ] ]
 
-          div [ Class "page-content" ]
-            [ Sidebar.view model.Sidebar (actionArea model.State dispatch) (SidebarMsg >> dispatch)
-              div [ Class "main-content" ]
-                [ editorArea model dispatch
-                  div [ Class "horizontal-resize"
-                        OnMouseDown (fun _ -> dispatch PanelDragStarted) ]
-                      [ ]
-                  outputArea model dispatch ] ] ]
+                  div [ Class "page-content" ]
+                    [ Sidebar.view model.Sidebar (actionArea model.State dispatch) (SidebarMsg >> dispatch)
+                      div [ Class "main-content" ]
+                        [ editorArea model dispatch
+                          div [ Class "horizontal-resize"
+                                OnMouseDown (fun _ -> dispatch PanelDragStarted) ]
+                              [ ]
+                          outputArea model dispatch ] ] ]
+
+        )
+        model
+        dispatch
