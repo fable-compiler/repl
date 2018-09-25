@@ -3184,8 +3184,8 @@ module Monaco =
             RegExp * U2<string, IMonarchLanguageAction> * string
 
         /// A rule is either a regular expression and an action
-        ///  		shorthands: [reg,act] == { regex: reg, action: act}
-        /// 		and       : [reg,act,nxt] == { regex: reg, action: act{ next: nxt }}
+        ///         shorthands: [reg,act] == { regex: reg, action: act}
+        ///         and       : [reg,act,nxt] == { regex: reg, action: act{ next: nxt }}
         type [<AllowNullLiteral>] IExpandedMonarchLanguageRule =
             /// match tokens
             abstract regex: U2<string, RegExp> option with get, set

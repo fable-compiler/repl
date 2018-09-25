@@ -8,9 +8,6 @@ open Fable.Import
 open Fable.PowerPack
 open Fable.Repl
 
-let getEditorContent (ed: Monaco.Editor.IStandaloneCodeEditor) =
-    ed.getModel().getValue(Monaco.Editor.EndOfLinePreference.TextDefined, true)
-
 //---------------------------------------------------
 // Features providers
 //---------------------------------------------------

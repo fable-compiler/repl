@@ -8,6 +8,7 @@
       <Paket>True</Paket>
       <Link>paket-files/Interfaces.fs</Link>
     </Compile>
+    <Compile Include="Libs/ReactDeviceDetect.fs" />
     <Compile Include="Monaco.fs" />
     <Compile Include="Shared.fs" />
     <Compile Include="Helpers.fs" />
@@ -15,11 +16,17 @@
     <Compile Include="Generator.fs" />
     <Compile Include="Mouse.fs" />
     <Compile Include="Router.fs" />
-    <Compile Include="Widgets/Samples.fs" />
-    <Compile Include="Widgets/Other.fs" />
-    <Compile Include="Sidebar.fs" />
+    <Compile Include="Toast.fs" />
     <Compile Include="ReactEditor.fs" />
+    <Compile Include="Widgets/About.fs" />
+    <Compile Include="Widgets/General.fs" />
+    <Compile Include="Widgets/Options.fs" />
+    <Compile Include="Widgets/Samples.fs" />
+    <Compile Include="Widgets/Stats.fs" />
+    <Compile Include="Sidebar.fs" />
+    <Compile Include="ConsolePanel.fs" />
     <Compile Include="Main.fs" />
+    <Compile Include="Loader.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

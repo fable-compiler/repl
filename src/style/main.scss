@@ -2,19 +2,40 @@
 @import '~bulma/bulma';
 @import './monaco-editor-hover-content.sass';
 @import '../../node_modules/bulma-pageloader/dist/css/bulma-pageloader.sass';
+@import '../../node_modules/bulma-switch/dist/css/bulma-switch.sass';
 @import './menu-group';
+@import './toast.scss';
+@import './scrollable-panel.scss';
 
 $fa-font-path: "~font-awesome/fonts/";
 @import '~font-awesome/scss/font-awesome';
+@import './fira_code.scss';
 
 $tabs-header-height: 42px;
 
 html {
     overflow-y: hidden;
+
+    &.has-navbar-fixed-top {
+        padding-top: 0;
+
+        body {
+            padding-top: 0;
+            margin-top: 3.25rem;
+        }
+    }
+}
+
+.field.has-addons {
+    .control.is-expanded {
+        .button {
+            border-left-color: #dbdbdb;
+        }
+    }
 }
 
 .page-content {
-    height: calc(100vh - #{$navbar-height});
+    height: 100vh;
     width: 100%;
     display: flex;
 
@@ -26,6 +47,53 @@ html {
 
         &.is-expanded {
             width: 250px;
+
+            .actions-area {
+                display: flex;
+                justify-content: space-evenly;
+            }
+
+            .widgets-list .action-button {
+                height: $icon-dimensions-large;
+                justify-content: center;
+                align-items: center;
+                display: flex;
+            }
+        }
+
+        .brand {
+            height: $icon-dimensions-large;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: .5rem;
+            padding-bottom: .5rem;
+            box-shadow: -1px 0px 1px 0px #f2f2f2;
+
+            img {
+                width: 32px;
+            }
+
+            h4 {
+                text-align: center;
+                width: 50%;
+            }
+        }
+
+        &.is-collapsed {
+            .widgets-list .action-button {
+                height: $icon-dimensions-large;
+                width: $icon-dimensions-large;
+                justify-content: center;
+                align-items: center;
+                display: flex;
+            }
+        }
+
+        .widgets-list {
+            overflow-y: auto;
+            flex: 1 1 0%;
+            max-height: calc(100vh - #{$navbar-height} - $icon-dimensions-large);
         }
 
         .item {
@@ -35,7 +103,7 @@ html {
 
                 .item-content {
                     display: block;
-                    transform: translate3d(42px, -42px, 0);
+                    transform: translate3d($icon-dimensions-large, -$icon-dimensions-large, 0);
                     position: fixed;
                     z-index: 2;
                 }
@@ -44,7 +112,8 @@ html {
             .item-content {
                 display: none;
                 width: 250px;
-                border: 1px solid rgba(0, 0, 0, 0.1);
+                border-right: 1px solid rgba(0, 0, 0, 0.1);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             }
         }
 
@@ -56,6 +125,11 @@ html {
     .main-content {
         display: flex;
         width: 100%;
+
+        .tabs {
+            margin-bottom: 0;
+            height: $tabs-header-height;
+        }
 
         .horizontal-resize {
             width: 4px;
@@ -73,27 +147,18 @@ html {
             z-index: 1000;
         }
 
-        .editor-container {
-            height: 100%;
+        .vertical-panel {
+            display: flex;
+            flex-grow: 1;
+            flex-direction: column;
 
-            .card {
-
-                .card-header {
-                    cursor: pointer;
-                }
-
-                .card-content {
-                    padding: 0;
-                    height: calc(100% - 3em); // Compensate the line-height: 1.5; of the header
-
-                    .editor-fsharp,
-                    .editor-html {
-                        height: 100%;
-                    }
-
-                }
+            .tabs {
+                min-height: 42px;
             }
 
+            .react-editor {
+                flex-grow: 1;
+            }
         }
 
         .collapse-control {
@@ -102,22 +167,36 @@ html {
         }
 
         .output-container {
-            height: 100%;
+            display: flex;
+            flex-direction: column;
 
-            .tabs {
-                margin-bottom: 0;
-                height: $tabs-header-height;
+            .output-content {
+
+                .tabs {
+                    min-height: 42px;
+                }
+
+                display: flex;
+                flex-grow: 1;
+                flex-direction: column;
+
+                .editor-output {
+                    // min-height: calc(100% - #{$tabs-header-height});
+
+                }
+
+                .react-editor {
+                    flex-grow: 1;
+                }
+
+                iframe {
+                    width: 100%;
+                    // height: calc(100% - #{$tabs-header-height});
+                    flex: 1 1 0%;
+                    background-color: white;
+                }
             }
 
-            .editor-output {
-                height: calc(100% - #{$tabs-header-height});
-            }
-
-            iframe {
-                width: 100%;
-                height: calc(100% - #{$tabs-header-height});
-                background-color: white;
-            }
         }
     }
 }

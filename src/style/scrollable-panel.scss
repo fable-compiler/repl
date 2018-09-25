@@ -1,0 +1,172 @@
+.scrollable-panel {
+    overflow: visible;
+    position: relative;
+
+    .scrollable-panel-header {
+        background-color: $card-header-background-color;
+        display: flex;
+        justify-content: space-between;
+        line-height: 1.5rem;
+        font-weight: $weight-bold;
+        align-items: stretch;
+        cursor: pointer;
+
+        .scrollable-panel-header-icon {
+            padding: .25rem .75rem;
+            justify-content: center;
+        }
+
+        .scrollable-panel-header-title {
+            padding: .25rem .75rem;
+            flex-grow: 1;
+            display: flex;
+            align-content: center;
+            justify-content: center;
+        }
+    }
+
+    .scrollable-panel-body {
+        overflow: auto;
+        height: 200px;
+
+        &:empty:after {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            justify-content: center;
+        }
+
+        .scrollable-panel-body-row {
+            display: flex;
+            padding: .15rem .75rem;
+            border: 1px solid transparent;
+
+            .icon {
+                display: inline-block;
+                margin-right: 0.25rem;
+            }
+
+            .scrollable-panel-body-row-description {
+                margin-right: 0.25rem;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                flex-grow: 1;
+            }
+        }
+    }
+
+    .scrollable-panel-body-row {
+        border-color: #d6d6d6;
+        background-color: #f5f5f5;
+        color: $grey-darker;
+
+        @each $name, $pair in $colors {
+            $color: nth($pair, 1);
+            $color-invert: nth($pair, 2);
+            $color-lightning: max((100% - lightness($color)) - 10%, 0%);
+            $color-lightning-hover: max((100% - lightness($color)) - 5%, 0%);
+            $color-luminance: colorLuminance($color);
+            $darken-percentage: $color-luminance * 60%;
+            $desaturate-percentage: $color-luminance * 20%;
+
+            &.is-#{$name} {
+                background-color: lighten($color, $color-lightning);
+                border-color: $color;
+                color: desaturate(darken($color, $darken-percentage), $desaturate-percentage);
+            }
+
+            .icon.is-#{$name} {
+                color: saturate($color, 15%);
+            }
+        }
+
+        .scrollable-panel-body-row-description {
+            white-space: pre-wrap;
+        }
+
+    }
+
+    &.is-console {
+        .scrollable-panel-body:empty:after {
+            content: "No logs received";
+        }
+    }
+
+    &.is-problem {
+
+        .scrollable-panel-body:empty:after {
+            content: "No problems detected in your project";
+        }
+
+        .scrollable-panel-body-row  {
+
+            &.is-danger {
+                .scrollable-panel-body-row-description {
+                    white-space: nowrap;
+                }
+            }
+
+            @each $name, $pair in $colors {
+                $color: nth($pair, 1);
+                $color-lightning: max((100% - lightness($color)) - 15%, 0%);
+
+                &.is-#{$name} {
+                    &:hover {
+                        background-color: lighten($color, $color-lightning);;
+                    }
+                }
+
+            }
+
+            .scrollable-panel-body-row-description {
+                white-space: pre-wrap;
+            }
+
+            &:after {
+                content: attr(data-tooltip-content);
+                position: absolute;
+                visibility: hidden;
+                color: #d4d4d4;
+                background-color: #2d2d30;
+                max-width: 70%;
+                // Force to display correctly the newline
+                white-space: pre-wrap;
+                // 68px is the size of the Editor gutter
+                margin: 0 auto 0 68px;
+                left: 0;
+                right: 0;
+                padding: .5rem;
+                border: 1px solid #454545;
+                // This settings are to mimic the tooltip design used by Monaco
+                font-family: Menlo, Monaco, "Courier New", monospace;
+                font-weight: normal;
+                font-size: 14px;
+                line-height: 21px;
+                letter-spacing: 0px;
+                opacity: 0;
+                transition: opacity 0s linear 1.5s;
+                pointer-events: none;
+                // We always position the tooltip content on top of the `problems-container`.
+                // This is need in order to support both scroll and tooltip.
+                // The problem being we are already in an absolute div so we can't outpass everything.
+                // Also, we need both
+                //  - `overflow: visible` => Used to allow the children div to display something wider than the parent frame
+                //  - `overflow: auto` => Used to force a scroll when the child is being to high
+                bottom: 100%;
+            }
+
+            &:hover:after {
+                visibility: visible;
+                opacity: 1;
+            }
+
+            &:hover {
+                cursor: pointer;
+            }
+
+            .scrollable-panel-body-row-position {
+                color: #6d6d6d;
+            }
+        }
+    }
+}

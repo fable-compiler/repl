@@ -20,11 +20,9 @@ module Literals =
 #endif
     let [<Literal>] FABLE_CORE_DIR = HOST + "/js/repl/fable-core"
     let [<Literal>] FABLE_REPL_LIB_DIR = HOST + "/js/repl/lib"
+    let [<Literal>] MAX_LOGS_LENGTH = 200
     /// This is the name of the source code file passed to FCS
     let [<Literal>] FILE_NAME = "test.fs"
-    /// 46px = 42px + 4px (card-header height + vertical-resize height)
-    let [<Literal>] EDITOR_UNCOLLAPSED_HEIGHT = "calc(100% - 42px)"
-    let [<Literal>] EDITOR_COLLAPSED_HEIGHT = "38px"
 
 let [<Global>] private setTimeout(f: unit->unit, ms: int): unit = jsNative
 
@@ -37,12 +35,19 @@ type WorkerRequest =
     static member Decoder =
         Decode.Auto.generateDecoder<WorkerRequest>()
 
+type CompileStats =
+    { FCS_checker : float
+      FCS_parsing : float
+      Fable_transform : float
+      Babel_generation : float }
+
 type WorkerAnswer =
     | Loaded
     | LoadFailed
     | ParsedCode of errors: Fable.Repl.Error[]
-    | CompiledCode of jsCode: string * errors: Fable.Repl.Error[]
-    | CompilationFailed of message: string
+    | CompilationSucceed of jsCode: string * stats: CompileStats
+    | CompilationFailed of errors: Fable.Repl.Error[] * stats: CompileStats
+    | CompilerCrashed of message: string
     | FoundTooltip of lines: string[]
     | FoundCompletions of Fable.Repl.Completion[]
     | FoundDeclarationLocation of (* line1, col1, line2, col2 *) (int * int * int * int) option
@@ -118,4 +123,3 @@ let debounce (ms: int) (obs: IObservable<'T>): IObservable<'T> =
                     debouncedObs.Trigger(snapshot)
                     timeoutActive <- false), ms)) |> Some
     upcast debouncedObs
-

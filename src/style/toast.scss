@@ -1,0 +1,71 @@
+.toast-wrapper {
+    z-index: 99999;
+    position: fixed;
+    width: 350px;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+
+    .toast-container {
+
+        &.with-inputs {
+            .notification {
+                margin-bottom: 0;
+            }
+        }
+
+        @each $name, $pair in $colors {
+            $color: nth($pair, 1);
+            $color-lightning: max((100% - lightness($color)) - 40%, 0%);
+            $color-luminance: colorLuminance($color);
+            $darken-percentage: $color-luminance * 70%;
+            $desaturate-percentage: $color-luminance * 30%;
+
+            &.is-#{$name} {
+                background-color: lighten($color, $color-lightning)
+                // .message-header
+                //     background-color: $color
+                //     color: $color-invert
+                // .message-body
+                //     border-color: $color
+                //     color: desaturate(darken($color, $darken-percentage), $desaturate-percentage)
+            }
+        }
+
+        .toast-inputs-area {
+            margin: 0.5em 0;
+
+            .button.is-text {
+                color: #fff;
+            }
+
+            .column:not(:last-child) {
+                border-right: $white-bis solid 1px;
+            }
+        }
+    }
+}
+
+.toast-container.dismiss-on-click {
+    .notification {
+        &:hover {
+            cursor: pointer;
+
+            &.is-success {
+                background-color: darken($success, 2.5%);
+            }
+
+            &.is-info {
+                background-color: darken($info, 2.5%);
+            }
+
+            &.is-warning {
+                background-color: darken($warning, 2.5%);
+            }
+
+            &.is-danger {
+                background-color: darken($danger, 2.5%);
+            }
+        }
+    }
+}

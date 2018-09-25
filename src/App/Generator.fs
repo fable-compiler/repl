@@ -22,7 +22,44 @@ let private bubbleMouseEvents =
 <body>
     <script>
     (function () {
+        var nativeConsoleLog = console.log;
+        var nativeConsoleWarn = console.warn;
+        var nativeConsoleError = console.error;
         var origin = window.location.origin;
+
+        console.log = function() {
+            var firstArg = arguments[0];
+            if (arguments.length === 1 && typeof firstArg === 'string') {
+                parent.postMessage({
+                    type: 'console_log',
+                    content: firstArg
+                }, origin);
+            }
+            nativeConsoleLog.apply(this, arguments);
+        };
+
+        console.warn = function() {
+            var firstArg = arguments[0];
+            if (arguments.length === 1 && typeof firstArg === 'string') {
+                parent.postMessage({
+                    type: 'console_warn',
+                    content: firstArg
+                }, origin);
+            }
+            nativeConsoleWarn.apply(this, arguments);
+        };
+
+        console.error = function() {
+            var firstArg = arguments[0];
+            if (arguments.length === 1 && typeof firstArg === 'string') {
+                parent.postMessage({
+                    type: 'console_error',
+                    content: firstArg
+                }, origin);
+            }
+            nativeConsoleError.apply(this, arguments);
+        };
+
         document.addEventListener("mousemove", function (ev) {
             window.parent.postMessage({
                 type: "mousemove",
