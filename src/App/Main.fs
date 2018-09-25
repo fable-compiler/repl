@@ -535,6 +535,9 @@ let private editorArea model dispatch =
                                             | _ -> return [||]
                                         }
 
+                                    let tooltipProvider = Editor.createTooltipProvider getTooltip
+                                    monacoModule.languages.registerHoverProvider("fsharp", tooltipProvider) |> ignore
+
                                     let getDeclarationLocation uri line column lineText =
                                         async {
                                             let! res = model.Worker.PostAndAwaitResponse(GetDeclarationLocation(line, column, lineText))
