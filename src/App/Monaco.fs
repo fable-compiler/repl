@@ -17,7 +17,7 @@ module Monaco =
         abstract Emitter: EmitterStatic
         abstract Promise: Promise
         abstract CancellationTokenSource: CancellationTokenSource
-        abstract Uri: Uri
+        abstract Uri: UriStatic
         abstract KeyMod: KeyMod
         abstract Position: Position
         abstract Range: Range
@@ -360,10 +360,7 @@ module Monaco =
 
     /// A position in the editor.
     type [<AllowNullLiteral>] Position =
-        /// line number (starts at 1)
-        abstract lineNumber: int
-        /// column (the first character in a line is between column 1 and column 2)
-        abstract column: int
+        inherit IPosition
         /// Test if this position equals other position
         abstract equals: other: IPosition -> bool
         /// Test if this position is before other position.

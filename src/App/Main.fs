@@ -339,6 +339,7 @@ let workerCmd (worker : ObservableWorker<_>)=
             // Do nothing, these will be handled by .PostAndAwaitResponse
             | FoundTooltip _ -> ()
             | FoundCompletions _ -> ()
+            | FoundDeclarationLocation _ -> ()
         )
     [ handler ]
 
@@ -532,8 +533,20 @@ let private editorArea model dispatch =
                                             | _ -> return [||]
                                         }
 
-                                    let tooltipProvider = Editor.createTooltipProvider getTooltip
-                                    monacoModule.languages.registerHoverProvider("fsharp", tooltipProvider) |> ignore
+                                    let getDeclarationLocation uri line column lineText =
+                                        async {
+                                            let! res = model.Worker.PostAndAwaitResponse(GetDeclarationLocation(line, column, lineText))
+                                            match res with
+                                            | FoundDeclarationLocation res ->
+                                                // printfn "FoundDeclarationLocation %A" res
+                                                return res |> Option.map (fun (line1, col1, line2, col2) ->
+                                                    uri, line1, col1, line2, col2)
+                                            | _ -> return None
+                                        }
+
+                                    let editorUri = editor.getModel().uri
+                                    let definitionProvider = Editor.createDefinitionProvider (getDeclarationLocation editorUri)
+                                    monacoModule.languages.registerDefinitionProvider("fsharp", definitionProvider) |> ignore
 
                                     let getCompletion line column lineText =
                                         async {

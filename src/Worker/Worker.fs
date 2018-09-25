@@ -42,9 +42,7 @@ let init() = async {
                     let (parseResults, parsingTime) = measureTime "FCS parsing" Fable.ParseFSharpProject (checker, Literals.FILE_NAME, fsharpCode)
                     let ((babelAst, errors), fableTransformTime) = measureTime "Fable transform" Fable.CompileToBabelAst ("fable-core", parseResults, Literals.FILE_NAME, optimize)
                     let (jsCode, babelTime) = measureTime "Babel generation" compileBabelAst babelAst
-                    // It seems that Fable.CompileToBabelAst do not keep the parse errors
-                    // For now, we add them manually
-                    let errors = Array.concat [parseResults.Errors; errors]
+
                     let stats : CompileStats =
                         { FCS_checker = checkerTime
                           FCS_parsing = parsingTime
@@ -72,6 +70,16 @@ let init() = async {
                         | None -> async.Return [||]
                         | Some res -> Fable.GetCompletionsAtLocation(res, int line, int col, lineText)
                     FoundCompletions completions |> worker.Post
+                } |> Async.StartImmediate
+            | GetDeclarationLocation(line, col, lineText) ->
+                async {
+                    let! result =
+                        match currentResults with
+                        | None -> async.Return None
+                        | Some res -> Fable.GetDeclarationLocation(res, int line, int col, lineText)
+                    result |> Option.map (fun x ->
+                        x.StartLine, x.StartColumn, x.EndLine, x.EndColumn)
+                    |> FoundDeclarationLocation |> worker.Post
                 } |> Async.StartImmediate
         )
     with _ ->

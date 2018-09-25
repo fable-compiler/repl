@@ -64,11 +64,35 @@ let createCompletionProvider getCompletions =
             and set _ = ()
     }
 
+let createDefinitionProvider getDeclarationLocation =
+    { new Monaco.Languages.DefinitionProvider with
+        member __.provideDefinition(doc, pos, _) =
+            async {
+                let lineText = doc.getLineContent(pos.lineNumber)
+                let! loc = getDeclarationLocation pos.lineNumber pos.column lineText
+                match loc with
+                | Some(uri, startLine, startColumn, endLine, endColumn) ->
+                    let loc = jsOptions(fun (loc2: Monaco.Languages.Location) ->
+                        loc2.uri <- uri
+                        loc2.range <- jsOptions(fun r ->
+                            r.startLineNumber <- startLine
+                            r.startColumn <- startColumn + 1
+                            r.endLineNumber <- endLine
+                            r.endColumn <- endColumn + 1
+                    ))
+                    return U2.Case1 loc |> U2.Case1
+                | None -> return createEmpty
+            }
+            |> Async.StartAsPromise
+            |> Promise.toThenable
+            |> U3.Case3
+    }
+
 let createTooltipProvider getTooltip =
     { new Monaco.Languages.HoverProvider with
         member __.provideHover(doc, pos, _ ) =
             async {
-                match doc.getWordAtPosition !!pos |> Option.ofObj with
+                match doc.getWordAtPosition pos |> Option.ofObj with
                 | Some w ->
                     let lineText = doc.getLineContent(pos.lineNumber)
                     let! lines = getTooltip pos.lineNumber pos.column lineText

@@ -5,7 +5,6 @@ open System.Collections.Generic
 open Fable.Core
 open Fable.Import
 open Thoth.Json
-open System.Diagnostics
 
 [<RequireQualifiedAccess>]
 module Literals =
@@ -32,6 +31,7 @@ type WorkerRequest =
     | CompileCode of fsharpCode: string * optimize: bool
     | GetTooltip of line: int * column: int * lineText: string
     | GetCompletions of line: int * column: int * lineText: string
+    | GetDeclarationLocation of line: int * column: int * lineText: string
     static member Decoder =
         Decode.Auto.generateDecoder<WorkerRequest>()
 
@@ -50,6 +50,7 @@ type WorkerAnswer =
     | CompilerCrashed of message: string
     | FoundTooltip of lines: string[]
     | FoundCompletions of Fable.Repl.Completion[]
+    | FoundDeclarationLocation of (* line1, col1, line2, col2 *) (int * int * int * int) option
     static member Decoder =
         Decode.Auto.generateDecoder<WorkerAnswer>()
 
@@ -102,7 +103,7 @@ type GenericObservable<'T>(?disp: unit->unit) =
                     | None -> ()
                     listeners.Remove(g) |> ignore }
 
-let createObservable(subscribe: ('T->unit)->unit): GenericObservable<'T> =
+let createObservable(subscribe: ('T->unit)->unit) : GenericObservable<'T> =
     let obs = GenericObservable()
     subscribe obs.Trigger
     obs
