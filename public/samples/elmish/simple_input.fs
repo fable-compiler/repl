@@ -7,9 +7,6 @@ NOTE: The API in Fable's REPL may differ from Fable.Elmish & Fable.React nuget l
 
 open Fable.Repl.Lib
 open Elmish
-open React
-open React.Props
-open Fable.Core.JsInterop
 
 // MODEL
 
@@ -19,16 +16,20 @@ type Model =
 type Msg =
     | ChangeValue of string
 
-let init () = { Value = "" }, Cmd.none
+let init () = { Value = "" }
 
 // UPDATE
 
 let update (msg:Msg) (model:Model) =
     match msg with
     | ChangeValue newValue ->
-        { Value = newValue }, Cmd.none
+        { Value = newValue }
 
 // VIEW (rendered with React)
+
+open React
+open React.Props
+open Fable.Core.JsInterop
 
 let view model dispatch =
     div [ Class "main-container" ]
@@ -41,6 +42,6 @@ let view model dispatch =
               str "!" ] ]
 
 // App
-Program.mkProgram init update view
+Program.mkSimple init update view
 |> Program.withReact "elmish-app"
 |> Program.run
