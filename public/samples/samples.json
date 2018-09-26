@@ -10,8 +10,7 @@
                     {
                         "type": "menu-item",
                         "label": "Hello World (console)",
-                        "fsharpCode": "basic/hello-world-console.fs",
-                        "htmlCode": "default"
+                        "fsharpCode": "basic/hello-world-console.fs"
                     },
                     {
                         "type": "menu-item",
@@ -25,6 +24,13 @@
                 "type": "sub-category",
                 "label": "Elmish",
                 "children": [
+                    {
+                        "type": "menu-item",
+                        "label": "Simple input",
+                        "fsharpCode": "elmish/simple_input.fs",
+                        "htmlCode": "elmish/simple_input.html",
+                        "cssCode": "elmish/simple_input.css"
+                    },
                     {
                         "type": "menu-item",
                         "label": "Counter",
@@ -143,14 +149,12 @@
                     {
                         "type": "menu-item",
                         "label": "Sudoku",
-                        "fsharpCode": "other/sudoku.fs",
-                        "htmlCode": "default"
+                        "fsharpCode": "other/sudoku.fs"
                     },
                     {
                         "type": "menu-item",
                         "label": "Parser Libray",
-                        "fsharpCode": "other/parser.fs",
-                        "htmlCode": "default"
+                        "fsharpCode": "other/parser.fs"
                     }
                 ]
             }
