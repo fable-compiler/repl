@@ -1,0 +1,43 @@
+.digit {
+    height: 20px;
+    padding: 15px;
+    text-align: center;
+    margin: 5px;
+    vertical-align: middle;
+    background-color: lightgreen;
+    width: 25px;
+    font-size: 24px;
+    line-height: 20px;
+    box-shadow: 0 0 3px black;
+}
+
+.digit:empty {
+    background-color: lightgray;
+}
+
+.calc {
+    width: 630px;
+    border: 2px solid black;
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.op-button {
+    height: 40px;
+    padding: 15;
+    text-align: center;
+    margin: 5;
+    vertical-align: middle;
+    background-color: lightblue;
+    width: 55px;
+    font-size: 24px;
+    line-height: 40px;
+    cursor: pointer;
+    box-shadow: 0 0 3px black;
+}
+
+.controls {
+    display: flex;
+    width: 630px;
+    justify-content: center;
+}
