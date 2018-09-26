@@ -177,7 +177,8 @@ let update msg (model : Model) =
         { model with FSharpCode = saved.code
                      HtmlCode = saved.html
                      CodeES2015 = ""
-                     IFrameUrl = "" }, Router.modifyUrl Router.Home
+                     IFrameUrl = ""
+                     Logs = [] }, Router.modifyUrl Router.Home
 
     | UrlHashChange ->
         let parsed = loadState(Literals.STORAGE_KEY)
