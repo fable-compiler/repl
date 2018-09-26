@@ -1,12 +1,8 @@
 module Sudoku
 
 open System.Collections.Generic
-
-let measure f x =
-  let dtStart = Fable.Import.Browser.window.performance.now()
-  let res = f x
-  let elapsed = Fable.Import.Browser.window.performance.now() - dtStart
-  res, elapsed
+open Fable.Repl.Lib
+open Elmish
 
 type Box = int
 type Sudoku = Box array array
@@ -67,7 +63,7 @@ let rec substitute row col (x:Sudoku) =
 
 let getFirstSolution = substitute 0 0 >> Seq.head
 
-let test () =
+let puzzle =
     [[0; 0; 8;  3; 0; 0;  6; 0; 0]
      [0; 0; 4;  0; 0; 0;  0; 1; 0]
      [6; 7; 0;  0; 8; 0;  0; 0; 0]
@@ -80,10 +76,91 @@ let test () =
      [0; 0; 3;  0; 5; 0;  0; 0; 2]
      [0; 5; 0;  0; 0; 0;  0; 7; 4]]
     |> toSudoku
-    |> getFirstSolution
 
-let run () =
-    let res, elapsed = measure test ()
-    printfn "Found solution in %f ms: %A" elapsed res
+let init() = puzzle
 
-run ()
+type Model = Sudoku
+
+type Msg = 
+| Reset
+| Solve
+
+let update (msg:Msg) (model:Model) = 
+    match msg with 
+    | Reset -> puzzle
+    | Solve -> getFirstSolution model
+
+open React
+open React.Props
+
+let digitStyle correct =
+    let color = if correct then "lightgreen" else "lightgray"
+    Style [
+        Height 20
+        Padding 15
+        TextAlign "center"
+        Margin 5
+        VerticalAlign "middle"
+        BackgroundColor color
+        Width 25
+        FontSize 24.0
+        LineHeight 20.0
+        FontSize "24px"
+        LineHeight "20px"
+        BoxShadow "0 0 3px black"
+    ]
+
+let calcStyle =
+    Style [
+      Width "630px"
+      Border "2px black solid"
+      BorderRadius "15px"
+      Padding "10px"
+    ]
+
+let opButtonStyle =
+    Style [
+        Height 40
+        Padding 15
+        TextAlign "center"
+        Margin 5
+        VerticalAlign "middle"
+        BackgroundColor "lightblue"
+        Width "55px"
+        FontSize "24px"
+        LineHeight "40px"
+        Cursor "pointer"
+        BoxShadow "0 0 3px black"
+    ]    
+
+let tableRow xs = tr [] [ for x in xs -> td [] [x] ]
+
+
+let view (model:Model) dispatch =
+    div 
+      []
+      [ div
+          [ calcStyle ]
+          [ table []
+                [ for row in model ->
+                    tableRow [ 
+                        for n in row ->
+                            div [ digitStyle (n <> 0) ] [
+                                str (if n = 0 then "" else string n) ] ] ]
+          ]
+        br []
+        div
+          [ Style [ Display "flex"
+                    Width "630px"
+                    JustifyContent "center" ]]
+          [ div
+              [ opButtonStyle; OnClick (fun _ -> dispatch Reset) ]
+              [ str "Reset" ]
+            div
+              [ opButtonStyle; OnClick (fun _ -> dispatch Solve) ]
+              [ str "Solve" ]]]
+
+// App
+Program.mkSimple init update view
+|> Program.withReact "elmish-app"
+|> Program.run
