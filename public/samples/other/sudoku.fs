@@ -150,7 +150,9 @@ let view (model:Model) dispatch =
           ]
         br []
         div
-          [ ]
+          [ Style [ Display "flex"
+                    Width "630px"
+                    JustifyContent "center" ]]
           [ div
               [ opButtonStyle; OnClick (fun _ -> dispatch Reset) ]
               [ str "Reset" ]
