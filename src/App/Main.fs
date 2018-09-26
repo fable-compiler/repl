@@ -14,12 +14,12 @@ open Mouse
 type ISavedState =
     abstract code: string
     abstract html: string
-    abstract sample: string option
+    abstract css: string
 
 let private Worker(): Browser.Worker = importDefault "worker-loader!../Worker/Worker.fsproj"
 let private loadState(_key: string): ISavedState = importMember "./js/util.js"
-let private saveState(_key: string, _code: string, _html: string): unit = importMember "./js/util.js"
-let private updateQuery(_fsharpCode : string, _htmlCode : string): unit = importMember "./js/util.js"
+let private saveState(_key: string, _code: string, _html: string, _cssCode : string): unit = importMember "./js/util.js"
+let private updateQuery(_fsharpCode : string, _htmlCode : string, _cssCode : string): unit = importMember "./js/util.js"
 
 type IEditor = Monaco.Editor.IStandaloneCodeEditor
 
@@ -38,6 +38,7 @@ type OutputTab =
 type CodeTab =
     | FSharp
     | Html
+    | Css
 
 type DragTarget =
     | NoTarget
@@ -59,6 +60,7 @@ type Model =
       FSharpCode : string
       FSharpErrors : ResizeArray<Monaco.Editor.IMarkerData>
       HtmlCode: string
+      CssCode: string
       DragTarget : DragTarget
       PanelSplitRatio : float
       Sidebar : Sidebar.Model
@@ -96,6 +98,7 @@ type Msg =
     | SidebarMsg of Sidebar.Msg
     | ChangeFsharpCode of string
     | ChangeHtmlCode of string
+    | ChangeCssCode of string
     | UpdateQueryFailed of exn
     | RefreshIframe
 
@@ -107,8 +110,8 @@ let private addLog log (model : Model) =
                         model.Logs @ [log] }
 
 let private generateHtmlUrl (model: Model) jsCode =
-    saveState(Literals.STORAGE_KEY, model.FSharpCode, model.HtmlCode)
-    Generator.generateHtmlBlobUrl model.HtmlCode jsCode
+    saveState(Literals.STORAGE_KEY, model.FSharpCode, model.HtmlCode, model.CssCode)
+    Generator.generateHtmlBlobUrl model.HtmlCode model.CssCode jsCode
 
 let private clamp min max value =
     if value >= max
@@ -266,15 +269,16 @@ let update msg (model : Model) =
         let newModel, extraCmd =
             match externalMsg with
             | Sidebar.NoOp -> model, Cmd.none
-            | Sidebar.LoadSample (fsharpCode, htmlCode) ->
+            | Sidebar.LoadSample (fsharpCode, htmlCode, cssCode) ->
                 let cmd =
                     match model.State with
                     | Loading -> Cmd.none
                     | _ -> Cmd.ofMsg (StartCompile (Some fsharpCode)) // Trigger a new compilation
                 { model with FSharpCode = fsharpCode
-                             HtmlCode = htmlCode }, cmd
+                             HtmlCode = htmlCode
+                             CssCode = cssCode }, cmd
             | Sidebar.Share ->
-                model, Cmd.ofFunc updateQuery (model.FSharpCode, model.HtmlCode) ShareableUrlReady UpdateQueryFailed
+                model, Cmd.ofFunc updateQuery (model.FSharpCode, model.HtmlCode, model.CssCode) ShareableUrlReady UpdateQueryFailed
             | Sidebar.Reset ->
                 model, Router.newUrl Router.Reset
 
@@ -286,6 +290,9 @@ let update msg (model : Model) =
 
     | ChangeHtmlCode newCode ->
         { model with HtmlCode = newCode }, Cmd.none
+
+    | ChangeCssCode newCode ->
+        { model with CssCode = newCode }, Cmd.none
 
     | ShareableUrlReady () ->
         model, Toast.message "Copy it from the address bar"
@@ -307,7 +314,7 @@ let update msg (model : Model) =
 
     | RefreshIframe ->
         model
-        |> addLog ConsolePanel.Log.Separator, Cmd.performFunc (Generator.generateHtmlBlobUrl model.HtmlCode) model.CodeES2015 SetIFrameUrl
+        |> addLog ConsolePanel.Log.Separator, Cmd.performFunc (Generator.generateHtmlBlobUrl model.HtmlCode model.CssCode) model.CodeES2015 SetIFrameUrl
 
     | AddConsoleLog content ->
         model
@@ -347,7 +354,7 @@ let init () =
     let worker = ObservableWorker(Worker(), WorkerAnswer.Decoder)
 
     let saved = loadState(Literals.STORAGE_KEY)
-    let sidebarModel, sidebarCmd = Sidebar.init saved.sample
+    let sidebarModel, sidebarCmd = Sidebar.init ()
     let cmd = Cmd.batch [
                 Cmd.ups MouseUp
                 Cmd.move MouseMove
@@ -370,6 +377,7 @@ let init () =
       FSharpCode = saved.code
       FSharpErrors = ResizeArray [||]
       HtmlCode = saved.html
+      CssCode = saved.css
       DragTarget = NoTarget
       PanelSplitRatio = 0.5
       Sidebar = sidebarModel
@@ -395,6 +403,19 @@ let private htmlEditorOptions (fontSize : float) (fontFamily : string) =
             oMinimap.enabled <- Some false
         )
         o.language <- Some "html"
+        o.fontSize <- Some fontSize
+        o.theme <- Some "vs-dark"
+        o.minimap <- Some minimapOptions
+        o.fontFamily <- Some fontFamily
+        o.fontLigatures <- Some (fontFamily = "Fira Code")
+    )
+
+let private cssEditorOptions (fontSize : float) (fontFamily : string) =
+    jsOptions<Monaco.Editor.IEditorConstructionOptions>(fun o ->
+        let minimapOptions =  jsOptions<Monaco.Editor.IEditorMinimapOptions>(fun oMinimap ->
+            oMinimap.enabled <- Some false
+        )
+        o.language <- Some "css"
         o.fontSize <- Some fontSize
         o.theme <- Some "vs-dark"
         o.minimap <- Some minimapOptions
@@ -428,7 +449,12 @@ let private editorTabs (activeTab : CodeTab) dispatch =
                      Tabs.Tab.Props [
                          OnClick (fun _ -> SetCodeTab CodeTab.Html |> dispatch)
                      ] ]
-            [ a [ ] [ str "Html" ] ] ]
+            [ a [ ] [ str "Html" ] ]
+          Tabs.tab [ Tabs.Tab.IsActive (activeTab = CodeTab.Css)
+                     Tabs.Tab.Props [
+                         OnClick (fun _ -> SetCodeTab CodeTab.Css |> dispatch)
+                     ] ]
+            [ a [ ] [ str "Css" ] ] ]
 
 let private problemsPanel (isExpanded : bool) (errors : ResizeArray<Monaco.Editor.IMarkerData>) (currentTab : CodeTab) dispatch =
     let bodyDisplay =
@@ -481,7 +507,7 @@ let private problemsPanel (isExpanded : bool) (errors : ResizeArray<Monaco.Edito
                     yield div [ Class ("scrollable-panel-body-row " + colorClass)
                                 Data("tooltip-content", error.message)
                                 OnClick (fun _ ->
-                                    if currentTab = CodeTab.Html then
+                                    if currentTab <> CodeTab.FSharp then
                                         SetCodeTab CodeTab.FSharp |> dispatch
                                     ReactEditor.Dispatch.cursorMove "fsharp_cursor_jump" error
                                 ) ]
@@ -508,15 +534,23 @@ let private editorArea model dispatch =
                                                         model.Sidebar.Options.FontSize
                                                         model.Sidebar.Options.FontFamily)
                                ReactEditor.Value model.HtmlCode
-                               ReactEditor.IsHidden (model.CodeTab = CodeTab.FSharp)
+                               ReactEditor.IsHidden (model.CodeTab <> CodeTab.Html)
                                ReactEditor.CustomClass (fontSizeClass model.Sidebar.Options.FontSize)
                                ReactEditor.OnChange (ChangeHtmlCode >> dispatch) ]
+          // Css editor
+          ReactEditor.editor [ ReactEditor.Options (cssEditorOptions
+                                                        model.Sidebar.Options.FontSize
+                                                        model.Sidebar.Options.FontFamily)
+                               ReactEditor.Value model.CssCode
+                               ReactEditor.IsHidden (model.CodeTab <> CodeTab.Css)
+                               ReactEditor.CustomClass (fontSizeClass model.Sidebar.Options.FontSize)
+                               ReactEditor.OnChange (ChangeCssCode >> dispatch) ]
           // F# editor
           ReactEditor.editor [ ReactEditor.Options (fsharpEditorOptions
                                                         model.Sidebar.Options.FontSize
                                                         model.Sidebar.Options.FontFamily)
                                ReactEditor.Value model.FSharpCode
-                               ReactEditor.IsHidden (model.CodeTab = CodeTab.Html)
+                               ReactEditor.IsHidden (model.CodeTab <> CodeTab.FSharp)
                                ReactEditor.OnChange (ChangeFsharpCode >> dispatch)
                                ReactEditor.Errors model.FSharpErrors
                                ReactEditor.EventId "fsharp_cursor_jump"

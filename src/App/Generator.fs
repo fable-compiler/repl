@@ -84,21 +84,32 @@ let private bubbleMouseEvents =
 
 let private bundleScriptTag code = sprintf "<script type=\"module\">\n%s\n</script>\n</body>" code
 
+let private bundleLinkTag style =  sprintf """<link rel="stylesheet" type="text/css" href="%s">""" style
+
 type MimeType =
     | Html
     | JavaScript
+    | Css
 
-let generateBlobURL content mimeType =
+let generateBlobURL content mimeType : string =
     let parts = [ content ] |> unbox<ResizeArray<obj>>
     let options =
         jsOptions<BlobPropertyBag>(fun o ->
             o.``type`` <-
                 match mimeType with
                 | Html -> Some "text/html"
-                | JavaScript -> Some "text/javascript")
+                | JavaScript -> Some "text/javascript"
+                | Css -> Some "text/css")
     URL?createObjectURL(Blob.Create(parts, options))
 
-let generateHtmlBlobUrl (htmlCode : string) (jsCode: string) =
+let private addLinkTag (cssCode : string) =
+    if cssCode <> "" then
+        generateBlobURL cssCode Css
+        |> bundleLinkTag
+    else
+        ""
+
+let generateHtmlBlobUrl (htmlCode : string) (cssCode : string) (jsCode : string) =
     // We need to convert import paths to absolute urls and add .js at the end
     let reg = Regex(@"^import (.*)""(fable-core|fable-repl-lib)(.*)""(.*)$", RegexOptions.Multiline)
     let jsCode = reg.Replace(jsCode, fun m ->
@@ -113,5 +124,6 @@ let generateHtmlBlobUrl (htmlCode : string) (jsCode: string) =
         htmlCode.[..i-1]
         + bubbleMouseEvents
         + "<script type=\"module\">\n" + jsCode + "\n</script>\n"
+        + addLinkTag cssCode
         + htmlCode.[i..]
     generateBlobURL code Html

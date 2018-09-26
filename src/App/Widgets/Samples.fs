@@ -13,11 +13,11 @@ open Fable.Repl.Shared
  // Sample def DSL  //
 /////////////////////
 
-type HtmlCodeInfo =
+type CodeInfo =
     | Default
     | Url of string
 
-let decodeHtmlCode =
+let decodeCodeInfo =
     Decode.string
     |> Decode.andThen (fun code ->
         match code with
@@ -37,7 +37,8 @@ and SubCategory =
 and MenuItemInfo =
     { Label : string
       FSharpCode : string
-      HtmlCode : HtmlCodeInfo }
+      HtmlCode : CodeInfo
+      CssCode : CodeInfo }
 
 and MenuType =
     | Category of CategoryInfo
@@ -49,7 +50,10 @@ and MenuType =
             MenuItem
                 { Label = get.Required.Field "label" Decode.string
                   FSharpCode = get.Required.Field "fsharpCode" Decode.string
-                  HtmlCode = get.Required.Field "htmlCode" decodeHtmlCode } )
+                  HtmlCode = get.Optional.Field "htmlCode" decodeCodeInfo
+                                |> Option.defaultValue Default
+                  CssCode = get.Optional.Field "cssCode" decodeCodeInfo
+                                |> Option.defaultValue Default  } )
 
     static member DecodeCategory =
         Decode.object (fun get ->
@@ -100,13 +104,13 @@ type Msg =
     | FetchSamplesSuccess of obj
     | FetchSamplesError of exn
     | ToggleMenuState of int list
-    | FetchSample of string * HtmlCodeInfo
-    | FetchCodeSuccess of string * string
+    | FetchSample of fsharp : string * html : CodeInfo * css : CodeInfo
+    | FetchCodeSuccess of fsharp : string * html : string * css : string
     | FetchCodeError of exn
 
 type ExternalMsg =
     | NoOp
-    | LoadSample of FSharpCode : string * HtmlCode : string
+    | LoadSample of FSharpCode : string * HtmlCode : string * CssCode : string
 
 let rec updateSubCategoryState (path : int list) (menus : MenuType list) =
     menus
@@ -129,20 +133,36 @@ let rec updateSubCategoryState (path : int list) (menus : MenuType list) =
             menu
     )
 
-let getCodeFromUrl (fsharpUrl, htmlInfo) =
+let getCodeFromUrl (fsharpUrl, htmlInfo, cssInfo) =
     promise {
         let url = "samples/" + fsharpUrl
         let! fsharpRes = Fetch.fetch url []
         let! fsharpCode = fsharpRes.text()
 
-        match htmlInfo with
-        | Default ->
-            return fsharpCode, Fable.Repl.Generator.defaultHtmlCode
-        | Url url ->
-            let! htmlRes = Fetch.fetch ("samples/" + url) []
-            let! htmlCode = htmlRes.text()
-            return fsharpCode, htmlCode
+        let! htmlCode =
+            promise {
+                match htmlInfo with
+                | Default ->
+                    return Fable.Repl.Generator.defaultHtmlCode
+                | Url url ->
+                    let! htmlRes = Fetch.fetch ("samples/" + url) []
+                    return! htmlRes.text()
+            }
+
+        let! cssCode =
+            promise {
+                match cssInfo with
+                | Default ->
+                    return ""
+                | Url url ->
+                    let! cssRes = Fetch.fetch ("samples/" + url) []
+                    return! cssRes.text()
+            }
+
+        return fsharpCode, htmlCode, cssCode
+
     }
+
 
 let fetchSamples () =
     Fetch.fetch Literals.SAMPLES_JSON_URL []
@@ -151,21 +171,11 @@ let fetchSamples () =
 let fetchSamplesCmd () =
     Cmd.ofPromise fetchSamples () FetchSamplesSuccess FetchSamplesError
 
-let fetchCodeCmd (fsharpUrl, htmlInfo) =
-    Cmd.ofPromise getCodeFromUrl (fsharpUrl, htmlInfo) FetchCodeSuccess FetchCodeError
+let fetchCodeCmd (fsharpUrl, htmlInfo, cssInfo) =
+    Cmd.ofPromise getCodeFromUrl (fsharpUrl, htmlInfo, cssInfo) FetchCodeSuccess FetchCodeError
 
-let init (sampleUrl: string option) =
-    let model = { MenuInfos = [] }
-    let cmd = fetchSamplesCmd()
-    match sampleUrl with
-    | None -> model, cmd
-    | Some url ->
-        let urls = url.Split('+')
-        let fsharpUrl, htmlInfo =
-            if urls.Length > 1
-            then urls.[0], HtmlCodeInfo.Url urls.[1]
-            else urls.[0], HtmlCodeInfo.Default
-        model, Cmd.batch [cmd; fetchCodeCmd (fsharpUrl, htmlInfo)]
+let init () =
+    { MenuInfos = [] }, fetchSamplesCmd()
 
 let update msg model =
     match msg with
@@ -178,11 +188,11 @@ let update msg model =
         let newMenuInfos = updateSubCategoryState path model.MenuInfos
         { model with MenuInfos = newMenuInfos }, Cmd.none, NoOp
 
-    | FetchSample (fsharpUrl, htmlInfo) ->
-        model, fetchCodeCmd (fsharpUrl, htmlInfo), NoOp
+    | FetchSample (fsharpUrl, htmlInfo, cssInfo) ->
+        model, fetchCodeCmd (fsharpUrl, htmlInfo, cssInfo), NoOp
 
-    | FetchCodeSuccess (fsharpCode, htmlCode) ->
-        model, Cmd.none, LoadSample (fsharpCode, htmlCode)
+    | FetchCodeSuccess (fsharpCode, htmlCode, cssCode) ->
+        model, Cmd.none, LoadSample (fsharpCode, htmlCode, cssCode)
 
     | FetchSamplesError error
     | FetchCodeError error ->
@@ -193,7 +203,7 @@ let inline genKey key = Props [ Key key ]
 
 let private menuItem info dispatch =
     li [ ]
-       [ a [ OnClick (fun _ -> FetchSample (info.FSharpCode, info.HtmlCode) |> dispatch ) ]
+       [ a [ OnClick (fun _ -> FetchSample (info.FSharpCode, info.HtmlCode, info.CssCode) |> dispatch ) ]
            [ span [ ]
                 [ str info.Label ] ] ]
 

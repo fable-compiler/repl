@@ -1,6 +1,6 @@
 // @ts-check
 
-import * as lzString from "lz-string";
+import lzString from "lz-string";
 
 function parseQuery() {
     var query = window.location.hash.replace(/^\#\?/, '');
@@ -19,7 +19,7 @@ function parseQuery() {
     }).reduce(function(params, param){
       if (param.key && param.value) {
         params[param.key] =
-          param.key === "code" || param.key === "html"
+          param.key === "code" || param.key === "html" || param.key === "css"
             ? lzString.decompressFromEncodedURIComponent(param.value)
             : decodeURIComponent(param.value);
       }
@@ -27,10 +27,11 @@ function parseQuery() {
     }, {});
 }
 
-export function updateQuery(code, html) {
+export function updateQuery(code, html, css) {
     var object =
         { code : lzString.compressToEncodedURIComponent(code),
-          html : lzString.compressToEncodedURIComponent(html) };
+          html : lzString.compressToEncodedURIComponent(html),
+          css : lzString.compressToEncodedURIComponent(css) };
     var query = Object.keys(object).map(function(key) {
       return key + '=' + object[key];
     }).join('&');
@@ -41,13 +42,14 @@ export function updateQuery(code, html) {
 export function loadState(key) {
     return Object.assign({
         code: 'printfn "Hello World" // writes to the dev tools console',
-        html: '<html><body></body></html>'
+        html: '<html><body></body></html>',
+        css: ''
       },
       JSON.parse(window.localStorage.getItem(key)) || {},
       parseQuery()
     );
 }
 
-export function saveState(key, code, html) {
-    window.localStorage.setItem(key, JSON.stringify({ code, html }));
+export function saveState(key, code, html, css) {
+    window.localStorage.setItem(key, JSON.stringify({ code, html, css }));
 }

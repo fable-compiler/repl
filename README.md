@@ -57,6 +57,7 @@ You can add three types of entries:
 
 - label: Name to display in the menu item
 - fsharpCode: Relative url of the F# code
-- htmlCode: If it's `default`, then we will add a minimal html code. Otherwise, you need to set the relative url of the html code to load.
+- htmlCode (*optional field*): Relative url of the html code
+- cssCode (*optional field*): Relative url of the css code
 
 All the urls for `fsharpCode`, `htmlCode` are relative to the `public/samples` folder.
