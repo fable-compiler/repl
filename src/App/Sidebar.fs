@@ -24,8 +24,8 @@ type ExternalMsg =
     | Reset
     | Share
 
-let init sampleUrl =
-    let samplesModel, samplesCmd = Widgets.Samples.init sampleUrl
+let init () =
+    let samplesModel, samplesCmd = Widgets.Samples.init ()
     { IsExpanded = false
       WidgetsState = Set.empty
       General = Widgets.General.init()
