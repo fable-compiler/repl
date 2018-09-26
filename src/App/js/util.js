@@ -41,9 +41,12 @@ export function updateQuery(code, html, css) {
 
 export function loadState(key) {
     return Object.assign({
-        code: 'printfn "Hello World" // writes to the dev tools console',
-        html: '<html><body></body></html>',
-        css: ''
+        // @ts-ignore
+        code: require("!raw-loader!./../../../public/samples/elmish/simple_input.fs"),
+        // @ts-ignore
+        html: require("!raw-loader!./../../../public/samples/elmish/simple_input.html"),
+        // @ts-ignore
+        css: require("!raw-loader!./../../../public/samples/elmish/simple_input.css")
       },
       JSON.parse(window.localStorage.getItem(key)) || {},
       parseQuery()

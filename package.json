@@ -33,6 +33,7 @@
     "monaco-editor": "0.14.3",
     "monaco-editor-webpack-plugin": "^1.5.3",
     "node-sass": "^4.9.3",
+    "raw-loader": "^0.5.1",
     "react": "^16.5.1",
     "react-device-detect": "^1.6.1",
     "react-dom": "^16.5.1",
