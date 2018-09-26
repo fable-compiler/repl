@@ -81,83 +81,43 @@ let init() = puzzle
 
 type Model = Sudoku
 
-type Msg = 
+type Msg =
 | Reset
 | Solve
 
-let update (msg:Msg) (model:Model) = 
-    match msg with 
+let update (msg:Msg) (model:Model) =
+    match msg with
     | Reset -> puzzle
     | Solve -> getFirstSolution model
 
 open React
 open React.Props
 
-let digitStyle correct =
-    let color = if correct then "lightgreen" else "lightgray"
-    Style [
-        Height 20
-        Padding 15
-        TextAlign "center"
-        Margin 5
-        VerticalAlign "middle"
-        BackgroundColor color
-        Width 25
-        FontSize 24.0
-        LineHeight 20.0
-        FontSize "24px"
-        LineHeight "20px"
-        BoxShadow "0 0 3px black"
-    ]
-
-let calcStyle =
-    Style [
-      Width "630px"
-      Border "2px black solid"
-      BorderRadius "15px"
-      Padding "10px"
-    ]
-
-let opButtonStyle =
-    Style [
-        Height 40
-        Padding 15
-        TextAlign "center"
-        Margin 5
-        VerticalAlign "middle"
-        BackgroundColor "lightblue"
-        Width "55px"
-        FontSize "24px"
-        LineHeight "40px"
-        Cursor "pointer"
-        BoxShadow "0 0 3px black"
-    ]    
-
 let tableRow xs = tr [] [ for x in xs -> td [] [x] ]
 
 
 let view (model:Model) dispatch =
-    div 
+    div
       []
       [ div
-          [ calcStyle ]
+          [ Class "calc" ]
           [ table []
                 [ for row in model ->
-                    tableRow [ 
+                    tableRow [
                         for n in row ->
-                            div [ digitStyle (n <> 0) ] [
+                            div [ Class "digit" ] [
                                 str (if n = 0 then "" else string n) ] ] ]
           ]
         br []
         div
-          [ Style [ Display "flex"
-                    Width "630px"
-                    JustifyContent "center" ]]
+          [ Class "controls" ]
           [ div
-              [ opButtonStyle; OnClick (fun _ -> dispatch Reset) ]
+              [ Class "op-button"
+                OnClick (fun _ -> dispatch Reset) ]
               [ str "Reset" ]
             div
-              [ opButtonStyle; OnClick (fun _ -> dispatch Solve) ]
+              [ Class "op-button"
+                OnClick (fun _ -> dispatch Solve) ]
               [ str "Solve" ]]]
 
 // App

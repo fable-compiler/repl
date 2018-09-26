@@ -59,7 +59,8 @@
                         "type": "menu-item",
                         "label": "Sudoku",
                         "fsharpCode": "elmish/sudoku.fs",
-                        "htmlCode": "elmish/sudoku.html"
+                        "htmlCode": "elmish/sudoku.html",
+                        "cssCode": "elmish/sudoku.css"
                     },
                     {
                         "type": "menu-item",
