@@ -450,12 +450,12 @@ let private editorTabs (activeTab : CodeTab) dispatch =
                      Tabs.Tab.Props [
                          OnClick (fun _ -> SetCodeTab CodeTab.Html |> dispatch)
                      ] ]
-            [ a [ ] [ str "Html" ] ]
+            [ a [ ] [ str "HTML" ] ]
           Tabs.tab [ Tabs.Tab.IsActive (activeTab = CodeTab.Css)
                      Tabs.Tab.Props [
                          OnClick (fun _ -> SetCodeTab CodeTab.Css |> dispatch)
                      ] ]
-            [ a [ ] [ str "Css" ] ] ]
+            [ a [ ] [ str "CSS" ] ] ]
 
 let private problemsPanel (isExpanded : bool) (errors : ResizeArray<Monaco.Editor.IMarkerData>) (currentTab : CodeTab) dispatch =
     let bodyDisplay =
