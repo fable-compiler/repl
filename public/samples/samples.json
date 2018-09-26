@@ -51,6 +51,12 @@
                     },
                     {
                         "type": "menu-item",
+                        "label": "Sudoku",
+                        "fsharpCode": "elmish/sudoku.fs",
+                        "htmlCode": "elmish/sudoku.html"
+                    },
+                    {
+                        "type": "menu-item",
                         "label": "TodoMVC",
                         "fsharpCode": "elmish/todomvc.fs",
                         "htmlCode": "elmish/todomvc.html"
@@ -140,12 +146,6 @@
                 "type": "sub-category",
                 "label": "Other",
                 "children": [
-                    {
-                        "type": "menu-item",
-                        "label": "Sudoku",
-                        "fsharpCode": "other/sudoku.fs",
-                        "htmlCode": "default"
-                    },
                     {
                         "type": "menu-item",
                         "label": "Parser Libray",

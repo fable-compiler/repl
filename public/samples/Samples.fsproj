@@ -11,6 +11,7 @@
     <Compile Include="elmish/clock.fs" />
     <Compile Include="elmish/calculator.fs" />
     <Compile Include="elmish/todomvc.fs" />
+    <Compile Include="elmish/sudoku.fs" />
     <Compile Include="elmish/memory.fs" />
     <Compile Include="elmish/spreadsheet.fs" />
     <Compile Include="canvas/segments.fs" />
@@ -25,7 +26,6 @@
     <Compile Include="interop/interop-samples.fs" />
     <Compile Include="interop/jquery.fs" />
     <Compile Include="other/parser.fs" />
-    <Compile Include="other/sudoku.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
