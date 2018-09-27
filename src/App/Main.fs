@@ -526,6 +526,11 @@ let private problemsPanel (isExpanded : bool) (errors : ResizeArray<Monaco.Edito
                                   str ")" ] ]
                 | _ -> () ] ]
 
+let private registerCompileCommand dispatch (editor : Monaco.Editor.IStandaloneCodeEditor) (monacoModule : Monaco.IExports) =
+    let triggerCompile () = StartCompile None |> dispatch
+    editor.addCommand(monacoModule.KeyMod.Alt ||| int Monaco.KeyCode.Enter, triggerCompile, "") |> ignore
+    editor.addCommand(monacoModule.KeyMod.CtrlCmd ||| int Monaco.KeyCode.KEY_S, triggerCompile, "") |> ignore
+
 let private editorArea model dispatch =
     div [ Class "vertical-panel"
           Style [ Width (numberToPercent model.PanelSplitRatio)
@@ -538,7 +543,8 @@ let private editorArea model dispatch =
                                ReactEditor.Value model.HtmlCode
                                ReactEditor.IsHidden (model.CodeTab <> CodeTab.Html)
                                ReactEditor.CustomClass (fontSizeClass model.Sidebar.Options.FontSize)
-                               ReactEditor.OnChange (ChangeHtmlCode >> dispatch) ]
+                               ReactEditor.OnChange (ChangeHtmlCode >> dispatch)
+                               ReactEditor.EditorDidMount (registerCompileCommand dispatch) ]
           // Css editor
           ReactEditor.editor [ ReactEditor.Options (cssEditorOptions
                                                         model.Sidebar.Options.FontSize
@@ -546,7 +552,8 @@ let private editorArea model dispatch =
                                ReactEditor.Value model.CssCode
                                ReactEditor.IsHidden (model.CodeTab <> CodeTab.Css)
                                ReactEditor.CustomClass (fontSizeClass model.Sidebar.Options.FontSize)
-                               ReactEditor.OnChange (ChangeCssCode >> dispatch) ]
+                               ReactEditor.OnChange (ChangeCssCode >> dispatch)
+                               ReactEditor.EditorDidMount (registerCompileCommand dispatch) ]
           // F# editor
           ReactEditor.editor [ ReactEditor.Options (fsharpEditorOptions
                                                         model.Sidebar.Options.FontSize
@@ -600,8 +607,7 @@ let private editorArea model dispatch =
                                     let completionProvider = Editor.createCompletionProvider getCompletion
                                     monacoModule.languages.registerCompletionItemProvider("fsharp", completionProvider) |> ignore
 
-                                    editor.addCommand(monacoModule.KeyMod.Alt ||| int Monaco.KeyCode.Enter,
-                                        (fun () -> StartCompile None |> dispatch), "") |> ignore
+                                    registerCompileCommand dispatch editor monacoModule
                                ) ]
           problemsPanel model.IsProblemsPanelExpanded model.FSharpErrors model.CodeTab dispatch ]
 
