@@ -315,8 +315,7 @@ let update msg (model : Model) =
         model, Cmd.ofMsg (SidebarMsg (Sidebar.UpdateStats stats))
 
     | RefreshIframe ->
-        model
-        |> addLog ConsolePanel.Log.Separator, Cmd.performFunc (Generator.generateHtmlBlobUrl model.HtmlCode model.CssCode) model.CodeES2015 SetIFrameUrl
+        { model with Logs = [ ConsolePanel.Log.Separator ] }, Cmd.performFunc (Generator.generateHtmlBlobUrl model.HtmlCode model.CssCode) model.CodeES2015 SetIFrameUrl
 
     | AddConsoleLog content ->
         model
