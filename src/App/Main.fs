@@ -204,13 +204,13 @@ let update msg (model : Model) =
         | Ok codeES2015 ->
             { model with CodeES2015 = codeES2015
                          State = Compiled
-                         FSharpErrors = ResizeArray [||] }
-            |> addLog ConsolePanel.Log.Separator, Cmd.batch [ Cmd.performFunc (generateHtmlUrl model) codeES2015 SetIFrameUrl
-                                                              Toast.message "Compiled successfuly"
-                                                              |> Toast.position Toast.BottomRight
-                                                              |> Toast.icon Fa.I.Check
-                                                              |> Toast.dismissOnClick
-                                                              |> Toast.success ]
+                         FSharpErrors = ResizeArray [||]
+                         Logs = [ ConsolePanel.Log.Separator ] }, Cmd.batch [ Cmd.performFunc (generateHtmlUrl model) codeES2015 SetIFrameUrl
+                                                                              Toast.message "Compiled successfuly"
+                                                                              |> Toast.position Toast.BottomRight
+                                                                              |> Toast.icon Fa.I.Check
+                                                                              |> Toast.dismissOnClick
+                                                                              |> Toast.success ]
 
         | Errors errors ->
             { model with State = Compiled
