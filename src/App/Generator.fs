@@ -92,7 +92,7 @@ type MimeType =
     | Css
 
 let generateBlobURL content mimeType : string =
-    let parts = [ content ] |> unbox<ResizeArray<obj>>
+    let parts = new ResizeArray<obj>([| content |])
     let options =
         jsOptions<BlobPropertyBag>(fun o ->
             o.``type`` <-
