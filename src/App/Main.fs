@@ -724,8 +724,10 @@ let view (model: Model) dispatch =
             div [ classList [ "is-unselectable", isDragging ] ]
                 [ PageLoader.pageLoader [ PageLoader.Color IsPrimary
                                           PageLoader.IsActive (model.State = Loading) ]
-                                        [ span [ Class "title" ]
-                                            [ str "We are getting everything ready for you"
+                                        [ div [ Class "title has-text-centered"; Style [FontSize "1.2em"] ]
+                                            [ p [] [str "We are getting everything ready for you"]
+                                              p [] [str "While you wait, check out "; a [Href "http://fable.io/fableconf/#planning"; Target "_blank"] [str "the agenda for FableConf"]; str "!" ]
+                                              br []
                                               p []
                                                 [ str "Trouble loading the repl? "
                                                   a [ Router.href Router.Reset
