@@ -1,6 +1,5 @@
 import { defaultArg, value as value$$10, some } from "./Option.js";
 import { compare, addToSet, tryGetValue, comparerFromEqualityComparer, max as max$$1, comparePrimitives } from "./Util.js";
-import { ofSeq as ofSeq$$1 } from "./Array.js";
 import { createMutable } from "./Map.js";
 import { iterate as iterate$$1 } from "./Seq.js";
 import { createMutable as createMutable$$1 } from "./Set.js";
@@ -190,7 +189,7 @@ export function truncate(count$$4, array$$11) {
   return array$$11.slice(0, 0 + count$$5);
 }
 export function concat(arrays, cons$$9) {
-  const arrays$$1 = ofSeq$$1(arrays, Array);
+  const arrays$$1 = Array.from(arrays);
   const matchValue$$2 = arrays$$1.length | 0;
 
   switch (matchValue$$2) {

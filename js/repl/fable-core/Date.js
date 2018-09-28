@@ -8,133 +8,9 @@
  * Basically; invariant: date.getTime() always return UTC time.
  */
 import { fromValue, ticksToUnixEpochMilliseconds, unixEpochMillisecondsToTicks } from "./Long.js";
+import { compareDates, dateOffset, dateToString } from "./Util.js";
 export const offsetRegex = /(?:Z|[+-](\d+):?([0-5]?\d)?)\s*$/;
-export function padWithZeros(i, length) {
-    let str = i.toString(10);
-    while (str.length < length) {
-        str = "0" + str;
-    }
-    return str;
-}
-export function offsetToString(offset) {
-    const isMinus = offset < 0;
-    offset = Math.abs(offset);
-    const hours = ~~(offset / 3600000);
-    const minutes = (offset % 3600000) / 60000;
-    return (isMinus ? "-" : "+") +
-        padWithZeros(hours, 2) + ":" +
-        padWithZeros(minutes, 2);
-}
-export function toHalfUTCString(date, half) {
-    const str = date.toISOString();
-    return half === "first"
-        ? str.substring(0, str.indexOf("T"))
-        : str.substring(str.indexOf("T") + 1, str.length - 1);
-}
-function toISOString(d, utc) {
-    if (utc) {
-        return d.toISOString();
-    }
-    else {
-        // JS Date is always local
-        const printOffset = d.kind == null ? true : d.kind === 2 /* Local */;
-        return padWithZeros(d.getFullYear(), 4) + "-" +
-            padWithZeros(d.getMonth() + 1, 2) + "-" +
-            padWithZeros(d.getDate(), 2) + "T" +
-            padWithZeros(d.getHours(), 2) + ":" +
-            padWithZeros(d.getMinutes(), 2) + ":" +
-            padWithZeros(d.getSeconds(), 2) + "." +
-            padWithZeros(d.getMilliseconds(), 3) +
-            (printOffset ? offsetToString(d.getTimezoneOffset() * -60000) : "");
-    }
-}
-function toISOStringWithOffset(dateWithOffset, offset) {
-    const str = dateWithOffset.toISOString();
-    return str.substring(0, str.length - 1) + offsetToString(offset);
-}
-function toStringWithCustomFormat(date, format, utc) {
-    return format.replace(/(\w)\1*/g, (match) => {
-        let rep = match;
-        switch (match.substring(0, 1)) {
-            case "y":
-                const y = utc ? date.getUTCFullYear() : date.getFullYear();
-                rep = match.length < 4 ? y % 100 : y;
-                break;
-            case "M":
-                rep = (utc ? date.getUTCMonth() : date.getMonth()) + 1;
-                break;
-            case "d":
-                rep = utc ? date.getUTCDate() : date.getDate();
-                break;
-            case "H":
-                rep = utc ? date.getUTCHours() : date.getHours();
-                break;
-            case "h":
-                const h = utc ? date.getUTCHours() : date.getHours();
-                rep = h > 12 ? h % 12 : h;
-                break;
-            case "m":
-                rep = utc ? date.getUTCMinutes() : date.getMinutes();
-                break;
-            case "s":
-                rep = utc ? date.getUTCSeconds() : date.getSeconds();
-                break;
-        }
-        if (rep !== match && rep < 10 && match.length > 1) {
-            rep = "0" + rep;
-        }
-        return rep;
-    });
-}
-export function toStringWithOffset(date, format) {
-    const d = new Date(date.getTime() + date.offset);
-    if (typeof format !== "string") {
-        return d.toISOString().replace(/\.\d+/, "").replace(/[A-Z]|\.\d+/g, " ") + offsetToString(date.offset);
-    }
-    else if (format.length === 1) {
-        switch (format) {
-            case "D":
-            case "d": return toHalfUTCString(d, "first");
-            case "T":
-            case "t": return toHalfUTCString(d, "second");
-            case "O":
-            case "o": return toISOStringWithOffset(d, date.offset);
-            default: throw new Error("Unrecognized Date print format");
-        }
-    }
-    else {
-        return toStringWithCustomFormat(d, format, true);
-    }
-}
-export function toStringWithKind(date, format) {
-    const utc = date.kind === 1 /* UTC */;
-    if (typeof format !== "string") {
-        return utc ? date.toUTCString() : date.toLocaleString();
-    }
-    else if (format.length === 1) {
-        switch (format) {
-            case "D":
-            case "d":
-                return utc ? toHalfUTCString(date, "first") : date.toLocaleDateString();
-            case "T":
-            case "t":
-                return utc ? toHalfUTCString(date, "second") : date.toLocaleTimeString();
-            case "O":
-            case "o":
-                return toISOString(date, utc);
-            default:
-                throw new Error("Unrecognized Date print format");
-        }
-    }
-    else {
-        return toStringWithCustomFormat(date, format, utc);
-    }
-}
-export function toString(date, format) {
-    return date.offset != null
-        ? toStringWithOffset(date, format)
-        : toStringWithKind(date, format);
-}
+export const toString = dateToString;
 export default function DateTime(value, kind) {
     const d = new Date(value);
     d.kind = (kind == null ? 0 /* Unspecified */ : kind) | 0;
@@ -148,7 +24,7 @@ export function fromTicks(ticks, kind) {
     // If kind is anything but UTC, that means that the tick number was not
     // in utc, thus getTime() cannot return UTC, and needs to be shifted.
     if (kind !== 1 /* UTC */) {
-        date = DateTime(date.getTime() - offset(date), kind);
+        date = DateTime(date.getTime() - dateOffset(date), kind);
     }
     return date;
 }
@@ -158,11 +34,11 @@ export function fromDateTimeOffset(date, kind) {
         case 2 /* Local */: return DateTime(date.getTime(), 2 /* Local */);
         default:
             const d = DateTime(date.getTime() + date.offset, kind);
-            return DateTime(d.getTime() - offset(d), kind);
+            return DateTime(d.getTime() - dateOffset(d), kind);
     }
 }
 export function getTicks(date) {
-    return unixEpochMillisecondsToTicks(date.getTime(), offset(date));
+    return unixEpochMillisecondsToTicks(date.getTime(), dateOffset(date));
 }
 export function minValue() {
     // This is "0001-01-01T00:00:00.000Z", actual JS min value is -8640000000000000
@@ -239,13 +115,6 @@ export function tryParse(v) {
     catch (_err) {
         return [false, minValue()];
     }
-}
-export function offset(date) {
-    const date1 = date;
-    return typeof date1.offset === "number"
-        ? date1.offset
-        : (date.kind === 1 /* UTC */
-            ? 0 : date.getTimezoneOffset() * -60000);
 }
 export function create(year, month, day, h = 0, m = 0, s = 0, ms = 0, kind) {
     const dateValue = kind === 1 /* UTC */
@@ -389,21 +258,8 @@ export function toShortTimeString(d) {
 export function equals(d1, d2) {
     return d1.getTime() === d2.getTime();
 }
-export function compare(x, y) {
-    let xtime;
-    let ytime;
-    // DateTimeOffset and DateTime deals with equality differently.
-    if ("offset" in x && "offset" in y) {
-        xtime = x.getTime();
-        ytime = y.getTime();
-    }
-    else {
-        xtime = x.getTime() + offset(x);
-        ytime = y.getTime() + offset(y);
-    }
-    return xtime === ytime ? 0 : (xtime < ytime ? -1 : 1);
-}
-export const compareTo = compare;
+export const compare = compareDates;
+export const compareTo = compareDates;
 export function op_Addition(x, y) {
     return add(x, y);
 }

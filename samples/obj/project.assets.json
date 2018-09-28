@@ -175,8 +175,7 @@
         "lib/netstandard1.6/ru/FSharp.Core.resources.dll",
         "lib/netstandard1.6/tr/FSharp.Core.resources.dll",
         "lib/netstandard1.6/zh-Hans/FSharp.Core.resources.dll",
-        "lib/netstandard1.6/zh-Hant/FSharp.Core.resources.dll",
-        "paket-installmodel.cache"
+        "lib/netstandard1.6/zh-Hant/FSharp.Core.resources.dll"
       ]
     },
     "Microsoft.NETCore.Platforms/1.1.0": {
@@ -193,7 +192,7 @@
       ]
     },
     "NETStandard.Library/2.0.3": {
-      "sha512": "eqyffClOhb/FP/HBqHnH4yJfmebKUoLlOPJsTL5z27q7kZlssjLAd8hOew242YPEuRmZmta1tigi4b0/Z2ISuQ==",
+      "sha512": "st47PosZSHrjECdjeIzZQbzivYBJFv6P2nv4cj2ypdI204DO+vZ7l5raGMiX4eXMJ53RfOIg+/s4DHVZ54Nu2A==",
       "type": "package",
       "path": "netstandard.library/2.0.3",
       "files": [
@@ -330,24 +329,24 @@
     ]
   },
   "packageFolders": {
-    "/Users/maximemangel/.nuget/packages/": {},
+    "/Users/alfonsogarciacaronunez/.nuget/packages/": {},
     "/usr/local/share/dotnet/sdk/NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/maximemangel/Workspaces/Github/fable-compiler/repl2/public/samples/Samples.fsproj",
+      "projectUniqueName": "/Users/alfonsogarciacaronunez/dev/repl2/public/samples/Samples.fsproj",
       "projectName": "Samples",
-      "projectPath": "/Users/maximemangel/Workspaces/Github/fable-compiler/repl2/public/samples/Samples.fsproj",
-      "packagesPath": "/Users/maximemangel/.nuget/packages/",
-      "outputPath": "/Users/maximemangel/Workspaces/Github/fable-compiler/repl2/public/samples/obj/",
+      "projectPath": "/Users/alfonsogarciacaronunez/dev/repl2/public/samples/Samples.fsproj",
+      "packagesPath": "/Users/alfonsogarciacaronunez/.nuget/packages/",
+      "outputPath": "/Users/alfonsogarciacaronunez/dev/repl2/public/samples/obj/",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "/Users/maximemangel/Workspaces/Github/fable-compiler/repl2/NuGet.Config",
-        "/Users/maximemangel/.nuget/NuGet/NuGet.Config"
+        "/Users/alfonsogarciacaronunez/dev/repl2/NuGet.Config",
+        "/Users/alfonsogarciacaronunez/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netstandard2.0"

@@ -1,7 +1,6 @@
 import { Record, L, declare, Union } from "./Types.js";
 import { value as value$$3, some } from "./Option.js";
-import { fold as fold$$1 } from "./List.js";
-import { iterate as iterate$$1, empty as empty$$1, toIterator, map as map$$1, unfold, getEnumerator } from "./Seq.js";
+import { iterate as iterate$$1, empty as empty$$1, toIterator, map as map$$1, unfold, getEnumerator, fold as fold$$1 } from "./Seq.js";
 import { join, toText, printf } from "./String.js";
 import { compare, structuralHash } from "./Util.js";
 export const MapTree$00602 = declare(function MapTree$00602(tag, name, ...fields) {
