@@ -123,6 +123,10 @@ let updateVersion () =
         let replacement = sprintf "VERSION = \"%s\"" version
         reg.Replace(line, replacement) |> Some)
 
+Target "BuildLibBinary" (fun _ ->
+    runDotnet (CWD </> "src/Lib") "build"
+)
+
 Target "BuildFcsExport" (fun _ ->
     ensureRepoSetup
         { FolderPath = NCAVE_FCS_REPO
@@ -240,7 +244,8 @@ Target "All" DoNothing
     ==> "BuildApp"
     ==> "All"
 
-"BuildFcsExport"
+"BuildLibBinary"
+    ==> "BuildFcsExport"
     ==> "GenerateMetadata"
 
 "BuildApp"

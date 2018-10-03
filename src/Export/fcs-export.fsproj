@@ -14,7 +14,7 @@
     <ProjectReference Include="../../../FSharp.Compiler.Service_fable/fcs/FSharp.Compiler.Service/FSharp.Compiler.Service.fsproj" />
     <PackageReference Include="FSharp.Core" Version="4.*" PrivateAssets="All" />
     <PackageReference Include="Dotnet.ProjInfo.Matthid" Version="*" />
-    <PackageReference Include="Fable.Core" Version="2.0.0-beta-001" />
+    <PackageReference Include="Fable.Core" Version="2.0.0" />
     <PackageReference Include="Fable.Import.Browser" Version="1.3.0" />
   </ItemGroup>
 </Project>
