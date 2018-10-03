@@ -104,6 +104,7 @@ type Msg =
     | UpdateQueryFailed of exn
     | RefreshIframe
     | FetchCode of fsharp : string * html : CodeInfo * css : CodeInfo
+    | FetchGist of id: string
     | FetchCodeSuccess of fsharp : string * html : string * css : string
     | FetchCodeError of exn
 
@@ -148,11 +149,11 @@ let getCodeFromUrl (fsharpUrl, htmlInfo, cssInfo) =
             promise {
                 match htmlInfo with
                 | Default ->
-                    return Fable.Repl.Generator.defaultHtmlCode
+                    return Generator.defaultHtmlCode
                 | Url url ->
                     match! Fetch.tryFetch ("samples/" + url) [] with
                     | Ok htmlRes -> return! htmlRes.text()
-                    | Error _ -> return Fable.Repl.Generator.defaultHtmlCode
+                    | Error _ -> return Generator.defaultHtmlCode
             }
 
         let! cssCode =
@@ -169,11 +170,31 @@ let getCodeFromUrl (fsharpUrl, htmlInfo, cssInfo) =
         return fsharpCode, htmlCode, cssCode
     }
 
+let getGist id =
+    let tryFileWithExtension ext (keys: string seq) (filesObj: obj): string option =
+        keys |> Seq.tryFind (fun k -> k.EndsWith(ext))
+        |> Option.map (fun key -> filesObj?(key)?content)
+
+    promise {
+        let url = "https://api.github.com/gists/" + id
+        let! res = Fetch.fetch url []
+        let! json = res.json()
+        let files: obj[] = json?files
+        let fileKeys = JS.Object.keys(files)
+        let fsharp = tryFileWithExtension ".fs" fileKeys files |> Option.get
+        let html = tryFileWithExtension ".html" fileKeys files
+        let css = tryFileWithExtension ".css" fileKeys files
+        return fsharp, defaultArg html Generator.defaultHtmlCode, defaultArg css ""
+    }
+
 let fetchCodeCmd state (fsharpUrl, htmlInfo, cssInfo) =
     match state with
     // Do nothing if we're compiling to prevent getting a different result
     | Compiling -> Cmd.none
     | _ -> Cmd.ofPromise getCodeFromUrl (fsharpUrl, htmlInfo, cssInfo) FetchCodeSuccess FetchCodeError
+
+let fetchGistCmd id =
+    Cmd.ofPromise getGist id FetchCodeSuccess FetchCodeError
 
 let update msg (model : Model) =
     match msg with
@@ -367,6 +388,9 @@ let update msg (model : Model) =
 
     | FetchCode (fsharpCode, htmlCode, cssCode) ->
         model, fetchCodeCmd model.State (fsharpCode, htmlCode, cssCode)
+
+    | FetchGist id ->
+        model, fetchGistCmd id
 
     | FetchCodeSuccess (fsharpCode, htmlCode, cssCode) ->
         let cmd =

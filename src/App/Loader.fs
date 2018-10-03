@@ -56,6 +56,9 @@ let urlUpdate (result: Option<Router.Page>) model =
         | Router.Sample url ->
             let cmd2 = Main.FetchCode(url + ".fs", Url(url + ".html"), Url(url + ".css")) |> MainMsg |> Cmd.ofMsg
             model, Cmd.batch [ cmd; cmd2 ]
+        | Router.Gist id ->
+            let cmd2 = Main.FetchGist id |> MainMsg |> Cmd.ofMsg
+            model, Cmd.batch [ cmd; cmd2 ]
         // If user ask for reset, send a Reset message
         | Router.Reset ->
             model, Cmd.batch [ cmd

@@ -9,6 +9,7 @@ type Page =
     | Reset
     | Home
     | Sample of string
+    | Gist of id: string
 
 let private toHash page =
     let segmentsPart =
@@ -16,6 +17,7 @@ let private toHash page =
         | Reset -> "reset"
         | Home -> ""
         | Sample s -> "sample/" + s
+        | Gist s -> "gist/" + s
 
     "#" + segmentsPart
 
@@ -24,6 +26,7 @@ let pageParser: Parser<Page->Page,Page> =
         map Reset (s "reset")
         map Home top
         map Sample (s "sample" </> str)
+        map Gist (s "gist" </> str)
     ]
 
 let href route =
