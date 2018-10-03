@@ -79,18 +79,6 @@
             },
             {
                 "type": "sub-category",
-                "label": "Canvas",
-                "children": [
-                    {
-                        "type": "menu-item",
-                        "label": "Segments follow mouse",
-                        "fsharpCode": "canvas/segments.fs",
-                        "htmlCode": "canvas/segments.html"
-                    }
-                ]
-            },
-            {
-                "type": "sub-category",
                 "label": "Fun and Games",
                 "children": [
                     {
@@ -146,6 +134,12 @@
                         "label": "Color Fountain",
                         "fsharpCode": "visual/color-fountain.fs",
                         "htmlCode": "visual/color-fountain.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Segments follow mouse",
+                        "fsharpCode": "visual/segments.fs",
+                        "htmlCode": "visual/segments.html"
                     }
                 ]
             },

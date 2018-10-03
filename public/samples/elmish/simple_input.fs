@@ -1,3 +1,5 @@
+module Elmish.SimpleInput
+
 (**
 Minimal application showing how to use Elmish
 You can find more info about Emish architecture and samples at https://elmish.github.io/

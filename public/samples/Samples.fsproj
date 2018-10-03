@@ -15,7 +15,6 @@
     <Compile Include="elmish/sudoku.fs" />
     <Compile Include="elmish/memory.fs" />
     <Compile Include="elmish/spreadsheet.fs" />
-    <Compile Include="canvas/segments.fs" />
     <Compile Include="games/mario.fs" />
     <Compile Include="games/ozmo.fs" />
     <Compile Include="games/pacman.fs" />
@@ -24,6 +23,7 @@
     <Compile Include="visual/raytracer.fs" />
     <Compile Include="visual/hokusai.fs" />
     <Compile Include="visual/color-fountain.fs" />
+    <Compile Include="visual/segments.fs" />
     <Compile Include="interop/interop-samples.fs" />
     <Compile Include="interop/jquery.fs" />
     <Compile Include="other/parser.fs" />
