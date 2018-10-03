@@ -2,6 +2,7 @@ module Fable.Repl.Main
 
 open Fable.Core.JsInterop
 open Fable.Import
+open Fable.PowerPack
 open Fulma
 open Fulma.FontAwesome
 open Fulma.Extensions
@@ -67,7 +68,8 @@ type Model =
       IsProblemsPanelExpanded : bool
       Logs : ConsolePanel.Log list }
 
-type EndCompileStatus =
+[<RequireQualifiedAccess>]
+type CompileResult =
     | Ok of string
     | Errors of Fable.Repl.Error[]
     | Error of string
@@ -80,7 +82,7 @@ type Msg =
     | UrlHashChange
     | MarkEditorErrors of Fable.Repl.Error[]
     | StartCompile of string option
-    | EndCompile of EndCompileStatus
+    | EndCompile of CompileResult
     | UpdateStats of CompileStats
     | ShareableUrlReady of unit
     | SetOutputTab of OutputTab
@@ -101,6 +103,9 @@ type Msg =
     | ChangeCssCode of string
     | UpdateQueryFailed of exn
     | RefreshIframe
+    | FetchCode of fsharp : string * html : CodeInfo * css : CodeInfo
+    | FetchCodeSuccess of fsharp : string * html : string * css : string
+    | FetchCodeError of exn
 
 let private addLog log (model : Model) =
     { model with Logs =
@@ -132,6 +137,43 @@ let private showGlobalErrorToast msg =
     |> Toast.noTimeout
     |> Toast.withCloseButton
     |> Toast.error
+
+let getCodeFromUrl (fsharpUrl, htmlInfo, cssInfo) =
+    promise {
+        let url = "samples/" + fsharpUrl
+        let! fsharpRes = Fetch.fetch url []
+        let! fsharpCode = fsharpRes.text()
+
+        let! htmlCode =
+            promise {
+                match htmlInfo with
+                | Default ->
+                    return Fable.Repl.Generator.defaultHtmlCode
+                | Url url ->
+                    match! Fetch.tryFetch ("samples/" + url) [] with
+                    | Ok htmlRes -> return! htmlRes.text()
+                    | Error _ -> return Fable.Repl.Generator.defaultHtmlCode
+            }
+
+        let! cssCode =
+            promise {
+                match cssInfo with
+                | Default ->
+                    return ""
+                | Url url ->
+                    match! Fetch.tryFetch ("samples/" + url) [] with
+                    | Ok cssRes -> return! cssRes.text()
+                    | Error _ -> return ""
+            }
+
+        return fsharpCode, htmlCode, cssCode
+    }
+
+let fetchCodeCmd state (fsharpUrl, htmlInfo, cssInfo) =
+    match state with
+    // Do nothing if we're compiling to prevent getting a different result
+    | Compiling -> Cmd.none
+    | _ -> Cmd.ofPromise getCodeFromUrl (fsharpUrl, htmlInfo, cssInfo) FetchCodeSuccess FetchCodeError
 
 let update msg (model : Model) =
     match msg with
@@ -201,7 +243,7 @@ let update msg (model : Model) =
 
     | EndCompile result ->
         match result with
-        | Ok codeES2015 ->
+        | CompileResult.Ok codeES2015 ->
             { model with CodeES2015 = codeES2015
                          State = Compiled
                          FSharpErrors = ResizeArray [||]
@@ -212,7 +254,7 @@ let update msg (model : Model) =
                                                                               |> Toast.dismissOnClick
                                                                               |> Toast.success ]
 
-        | Errors errors ->
+        | CompileResult.Errors errors ->
             { model with State = Compiled
                          FSharpErrors = mapErrorToMarker errors }, Toast.message "Failed to compiled"
                                                                     |> Toast.position Toast.BottomRight
@@ -220,7 +262,7 @@ let update msg (model : Model) =
                                                                     |> Toast.dismissOnClick
                                                                     |> Toast.error
 
-        | Error msg ->
+        | CompileResult.Error msg ->
             { model with State = Compiled }, showGlobalErrorToast msg
 
     | SetIFrameUrl newUrl ->
@@ -271,14 +313,8 @@ let update msg (model : Model) =
         let newModel, extraCmd =
             match externalMsg with
             | Sidebar.NoOp -> model, Cmd.none
-            | Sidebar.LoadSample (fsharpCode, htmlCode, cssCode) ->
-                let cmd =
-                    match model.State with
-                    | Loading -> Cmd.none
-                    | _ -> Cmd.ofMsg (StartCompile (Some fsharpCode)) // Trigger a new compilation
-                { model with FSharpCode = fsharpCode
-                             HtmlCode = htmlCode
-                             CssCode = cssCode }, cmd
+            | Sidebar.FetchCode (fsharpCode, htmlCode, cssCode) ->
+                model, fetchCodeCmd model.State (fsharpCode, htmlCode, cssCode)
             | Sidebar.Share ->
                 model, Cmd.ofFunc updateQuery (model.FSharpCode, model.HtmlCode, model.CssCode) ShareableUrlReady UpdateQueryFailed
             | Sidebar.Reset ->
@@ -329,6 +365,23 @@ let update msg (model : Model) =
         model
         |> addLog (ConsolePanel.Log.Warn content), Cmd.none
 
+    | FetchCode (fsharpCode, htmlCode, cssCode) ->
+        model, fetchCodeCmd model.State (fsharpCode, htmlCode, cssCode)
+
+    | FetchCodeSuccess (fsharpCode, htmlCode, cssCode) ->
+        let cmd =
+            match model.State with
+            | Loading -> Cmd.none
+            // Trigger a new compilation if not loading
+            | _ -> Cmd.ofMsg (StartCompile (Some fsharpCode))
+        { model with FSharpCode = fsharpCode
+                     HtmlCode = htmlCode
+                     CssCode = cssCode }, cmd
+
+    | FetchCodeError error ->
+        Browser.console.error error
+        model, Cmd.none
+
 let workerCmd (worker : ObservableWorker<_>)=
     let handler dispatch =
         worker
@@ -338,12 +391,13 @@ let workerCmd (worker : ObservableWorker<_>)=
             | LoadFailed -> LoadFail |> dispatch
             | ParsedCode errors -> MarkEditorErrors errors |> dispatch
             | CompilationFailed (errors, stats) ->
-                Errors errors |> EndCompile |> dispatch
+                CompileResult.Errors errors |> EndCompile |> dispatch
                 UpdateStats stats |> dispatch
             | CompilationSucceed (jsCode, stats) ->
-                Ok jsCode |> EndCompile |> dispatch
+                CompileResult.Ok jsCode |> EndCompile |> dispatch
                 UpdateStats stats |> dispatch
-            | CompilerCrashed msg -> Error msg |> EndCompile |> dispatch
+            | CompilerCrashed msg ->
+                CompileResult.Error msg |> EndCompile |> dispatch
             // Do nothing, these will be handled by .PostAndAwaitResponse
             | FoundTooltip _ -> ()
             | FoundCompletions _ -> ()
@@ -739,7 +793,10 @@ let view (model: Model) dispatch =
                       div [ Class "main-content" ]
                         [ editorArea model dispatch
                           div [ Class "horizontal-resize"
-                                OnMouseDown (fun _ -> dispatch PanelDragStarted) ]
+                                OnMouseDown (fun ev ->
+                                    // This prevents text selection in Safari
+                                    ev.preventDefault()
+                                    dispatch PanelDragStarted) ]
                               [ ]
                           outputArea model dispatch ] ] ]
 

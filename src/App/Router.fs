@@ -5,24 +5,26 @@ open Fable.Helpers.React.Props
 open Elmish.Browser.Navigation
 open Elmish.Browser.UrlParser
 
-let inline (</>) a b = a + "/" + string b
-
 type Page =
     | Reset
     | Home
+    | Sample of string
 
 let private toHash page =
     let segmentsPart =
         match page with
         | Reset -> "reset"
         | Home -> ""
+        | Sample s -> "sample/" + s
 
     "#" + segmentsPart
 
 let pageParser: Parser<Page->Page,Page> =
     oneOf [
         map Reset (s "reset")
-        map Home top ]
+        map Home top
+        map Sample (s "sample" </> str)
+    ]
 
 let href route =
     Href (toHash route)

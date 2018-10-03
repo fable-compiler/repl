@@ -19,7 +19,7 @@ type Msg =
     | UpdateStats of Widgets.Stats.Model
 
 type ExternalMsg =
-    | LoadSample of fsharp : string * html : string * css : string
+    | FetchCode of fsharp : string * html : CodeInfo * css : CodeInfo
     | NoOp
     | Reset
     | Share
@@ -45,7 +45,7 @@ let update msg model =
         let extraMsg =
             match externalMsg with
             | Widgets.Samples.NoOp -> NoOp
-            | Widgets.Samples.LoadSample (fsharpCode, htmlCode, cssCode) -> LoadSample (fsharpCode, htmlCode, cssCode)
+            | Widgets.Samples.FetchCode (fsharpCode, htmlCode, cssCode) -> FetchCode (fsharpCode, htmlCode, cssCode)
 
         { model with Samples = samplesModel }, Cmd.map SamplesMsg samplesCmd, extraMsg
 

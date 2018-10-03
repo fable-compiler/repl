@@ -53,6 +53,9 @@ let urlUpdate (result: Option<Router.Page>) model =
         match page with
         | Router.Home ->
             model, cmd
+        | Router.Sample url ->
+            let cmd2 = Main.FetchCode(url + ".fs", Url(url + ".html"), Url(url + ".css")) |> MainMsg |> Cmd.ofMsg
+            model, Cmd.batch [ cmd; cmd2 ]
         // If user ask for reset, send a Reset message
         | Router.Reset ->
             model, Cmd.batch [ cmd

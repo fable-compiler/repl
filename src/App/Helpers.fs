@@ -1,6 +1,10 @@
 [<AutoOpen>]
 module Helpers
 
+type CodeInfo =
+    | Default
+    | Url of string
+
 module Promise =
     open Fable.Import
     open Fable.PowerPack

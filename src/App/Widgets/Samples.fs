@@ -8,14 +8,11 @@ open Fulma.FontAwesome
 open Fable.Import
 open Fable.PowerPack
 open Fable.Repl.Shared
+open Helpers
 
   /////////////////////
  // Sample def DSL  //
 /////////////////////
-
-type CodeInfo =
-    | Default
-    | Url of string
 
 let decodeCodeInfo =
     Decode.string
@@ -105,12 +102,10 @@ type Msg =
     | FetchSamplesError of exn
     | ToggleMenuState of int list
     | FetchSample of fsharp : string * html : CodeInfo * css : CodeInfo
-    | FetchCodeSuccess of fsharp : string * html : string * css : string
-    | FetchCodeError of exn
 
 type ExternalMsg =
     | NoOp
-    | LoadSample of FSharpCode : string * HtmlCode : string * CssCode : string
+    | FetchCode of fsharp : string * html : CodeInfo * css : CodeInfo
 
 let rec updateSubCategoryState (path : int list) (menus : MenuType list) =
     menus
@@ -133,46 +128,12 @@ let rec updateSubCategoryState (path : int list) (menus : MenuType list) =
             menu
     )
 
-let getCodeFromUrl (fsharpUrl, htmlInfo, cssInfo) =
-    promise {
-        let url = "samples/" + fsharpUrl
-        let! fsharpRes = Fetch.fetch url []
-        let! fsharpCode = fsharpRes.text()
-
-        let! htmlCode =
-            promise {
-                match htmlInfo with
-                | Default ->
-                    return Fable.Repl.Generator.defaultHtmlCode
-                | Url url ->
-                    let! htmlRes = Fetch.fetch ("samples/" + url) []
-                    return! htmlRes.text()
-            }
-
-        let! cssCode =
-            promise {
-                match cssInfo with
-                | Default ->
-                    return ""
-                | Url url ->
-                    let! cssRes = Fetch.fetch ("samples/" + url) []
-                    return! cssRes.text()
-            }
-
-        return fsharpCode, htmlCode, cssCode
-
-    }
-
-
 let fetchSamples () =
     Fetch.fetch Literals.SAMPLES_JSON_URL []
     |> Promise.bind (fun res -> res.json())
 
 let fetchSamplesCmd () =
     Cmd.ofPromise fetchSamples () FetchSamplesSuccess FetchSamplesError
-
-let fetchCodeCmd (fsharpUrl, htmlInfo, cssInfo) =
-    Cmd.ofPromise getCodeFromUrl (fsharpUrl, htmlInfo, cssInfo) FetchCodeSuccess FetchCodeError
 
 let init () =
     { MenuInfos = [] }, fetchSamplesCmd()
@@ -189,13 +150,9 @@ let update msg model =
         { model with MenuInfos = newMenuInfos }, Cmd.none, NoOp
 
     | FetchSample (fsharpUrl, htmlInfo, cssInfo) ->
-        model, fetchCodeCmd (fsharpUrl, htmlInfo, cssInfo), NoOp
+        model, Cmd.none, FetchCode (fsharpUrl, htmlInfo, cssInfo)
 
-    | FetchCodeSuccess (fsharpCode, htmlCode, cssCode) ->
-        model, Cmd.none, LoadSample (fsharpCode, htmlCode, cssCode)
-
-    | FetchSamplesError error
-    | FetchCodeError error ->
+    | FetchSamplesError error ->
         Browser.console.error error
         model, Cmd.none, NoOp
 
