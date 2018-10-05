@@ -21,6 +21,8 @@ let METADATA_SOURCE = Path.Combine(NCAVE_FCS_REPO, "temp/metadata2")
 let METADATA_EXPORT_DIR = Path.Combine(CWD, "src/Export")
 let APP_DIR = Path.Combine(CWD, "src/App")
 
+let LIBS_FOLDER = Path.Combine(CWD, "src/Lib/")
+
 // include Fake libs
 #r "./packages/build/FAKE/tools/FakeLib.dll"
 #r "System.IO.Compression.FileSystem"
@@ -124,6 +126,9 @@ let updateVersion () =
         reg.Replace(line, replacement) |> Some)
 
 Target "BuildFcsExport" (fun _ ->
+    runDotnet (LIBS_FOLDER </> "Fable.Repl.Bindings") "build -c Release"
+    runDotnet (LIBS_FOLDER </> "Fable.Repl.Lib") "build -c Release"
+
     ensureRepoSetup
         { FolderPath = NCAVE_FCS_REPO
           GithubLink = "git@github.com:ncave/FSharp.Compiler.Service.git"
@@ -135,6 +140,7 @@ Target "BuildFcsExport" (fun _ ->
 
 Target "GenerateMetadata" (fun _ ->
     CleanDir METADATA_OUTPUT
+
     CopyDir METADATA_OUTPUT METADATA_SOURCE (fun _ -> true)
     !! (METADATA_OUTPUT </> "*.dll")
     |> Seq.iter(fun filename ->
@@ -199,8 +205,8 @@ Target "GetBundleLocally" (fun _ ->
 Target "BuildLib" (fun _ ->
     // fable-splitter will adjust the fable-core path
     let fableCoreDir = "force:${outDir}../fable-core"
-    let libProj = "src/Lib/Fable.Repl.Lib.fsproj"
     let outDir = REPL_OUTPUT </> "lib"
+    let libProj = LIBS_FOLDER </> "Fable.Repl.Lib" </> "Fable.Repl.Lib.fsproj"
     let splitterArgs = sprintf "%s -o %s --allFiles" libProj outDir
     sprintf "fable fable-splitter --fable-core %s -- %s" fableCoreDir splitterArgs
     |> runDotnet APP_DIR
