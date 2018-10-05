@@ -25,7 +25,7 @@ let init() = async {
     let worker = ObservableWorker<WorkerRequest>(self, WorkerRequest.Decoder, name="WORKER")
     try
         // Create checker
-        let refs = [| yield! Metadata.references false; yield "Fable.Repl.Lib" |]
+        let refs = [| yield! Metadata.references false; yield "Fable.Repl.Lib"; yield "Types" |]
         let! reader = getAssemblyReader refs |> Async.AwaitPromise
         let (checker, checkerTime) = measureTime "FCS checker" Fable.CreateChecker (refs, reader) // Highly computing-expensive
         let mutable currentResults: IParseResults option = None

@@ -33,9 +33,10 @@
                     },
                     {
                         "type": "menu-item",
-                        "label": "Counter",
-                        "fsharpCode": "elmish/counter.fs",
-                        "htmlCode": "elmish/counter.html"
+                        "label": "Random user (Thoth)",
+                        "fsharpCode": "elmish/thoth_random_user.fs",
+                        "htmlCode": "elmish/thoth_random_user.html",
+                        "cssCode": "elmish/thoth_random_user.css"
                     },
                     {
                         "type": "menu-item",
@@ -74,7 +75,6 @@
                         "fsharpCode": "elmish/spreadsheet.fs",
                         "htmlCode": "elmish/spreadsheet.html"
                     }
-
                 ]
             },
             {

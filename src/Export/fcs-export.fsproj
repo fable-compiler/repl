@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <Reference Include="../Lib/bin/Debug/netstandard2.0/Fable.Repl.Lib.dll" />
+    <Reference Include="../Lib/Types/bin/Debug/netstandard2.0/Types.dll" />
     <ProjectReference Include="../../../FSharp.Compiler.Service_fable/fcs/FSharp.Compiler.Service/FSharp.Compiler.Service.fsproj" />
     <PackageReference Include="FSharp.Core" Version="4.*" PrivateAssets="All" />
     <PackageReference Include="Dotnet.ProjInfo.Matthid" Version="*" />

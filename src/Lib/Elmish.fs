@@ -85,19 +85,19 @@ module Cmd =
         [sub]
 
 // #if FABLE_COMPILER
-//     open Fable.PowerPack
+    open PowerPack
 
-//     /// Command to call `promise` block and map the results
-//     let ofPromise (task: 'a -> Fable.Import.JS.Promise<_>)
-//                   (arg:'a)
-//                   (ofSuccess: _ -> 'msg)
-//                   (ofError: _ -> 'msg) : Cmd<'msg> =
-//         let bind dispatch =
-//             task arg
-//             |> Promise.map (ofSuccess >> dispatch)
-//             |> Promise.catch (ofError >> dispatch)
-//             |> ignore
-//         [bind]
+    /// Command to call `promise` block and map the results
+    let ofPromise (task: 'a -> Fable.Import.JS.Promise<_>)
+                  (arg:'a)
+                  (ofSuccess: _ -> 'msg)
+                  (ofError: _ -> 'msg) : Cmd<'msg> =
+        let bind dispatch =
+            task arg
+            |> PowerPack.Promise.map (ofSuccess >> dispatch)
+            |> PowerPack.Promise.catch (ofError >> dispatch)
+            |> ignore
+        [bind]
 // #endif
 
 /// Program type captures various aspects of program behavior

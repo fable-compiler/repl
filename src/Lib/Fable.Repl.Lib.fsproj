@@ -4,7 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="./Types/bin/Debug/netstandard2.0/Types.dll" />
     <Compile Include="React.fs" />
+    <Compile Include="Thoth.fs" />
+    <Compile Include="PowerPack.fs" />
     <Compile Include="Elmish.fs" />
     <Compile Include="Canvas.fs" />
   </ItemGroup>

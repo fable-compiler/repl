@@ -8,7 +8,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="elmish/simple_input.fs" />
-    <Compile Include="elmish/counter.fs" />
+    <Compile Include="elmish/thoth_random_user.fs" />
     <Compile Include="elmish/clock.fs" />
     <Compile Include="elmish/calculator.fs" />
     <Compile Include="elmish/todomvc.fs" />
