@@ -4,12 +4,12 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="./Types/bin/Debug/netstandard2.0/Types.dll" />
+    <ProjectReference Include="../Fable.Repl.Bindings/Fable.Repl.Bindings.fsproj" />
     <Compile Include="React.fs" />
     <Compile Include="Thoth.fs" />
     <Compile Include="PowerPack.fs" />
     <Compile Include="Elmish.fs" />
     <Compile Include="Canvas.fs" />
   </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
+  <Import Project="..\..\..\.paket\Paket.Restore.targets" />
 </Project>

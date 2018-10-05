@@ -1,3 +1,5 @@
+module Thoth.Json.Tests
+
 // We are running all the tests from Thoth.Json except the one
 // for Encode.nil for now because Fable REPL generate invalid JS for this encoder
 open Fable.Repl.Lib
