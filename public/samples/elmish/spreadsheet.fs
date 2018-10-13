@@ -3,6 +3,8 @@ module SpreadSheet
 // Build your own Excel 365 in an hour with F# by Tomas Petricek!
 // Watch the video of the talk here: https://www.youtube.com/watch?v=Bnm71YEt_lI
 
+open System
+
 module Elmish =
     open Fable.Core
     open Fable.Import.Browser
@@ -234,13 +236,12 @@ module Parsec =
       optional (separated sep p)
       |> map (fun l -> defaultArg l [])
 
-    let number = pred (fun t -> t <= '9' && t >= '0')
+    let number = pred Char.IsNumber
 
     let integer = oneOrMore number |> map (fun nums ->
       nums |> List.fold (fun res n -> res * 10 + (int n - int '0')) 0)
 
-    let letter = pred (fun t ->
-      (t <= 'Z' && t >= 'A') || (t <= 'z' && t >= 'a'))
+    let letter = pred Char.IsLetter
 
     let run (Parser(f)) input =
       match f (0, List.ofSeq input) with
@@ -308,7 +309,9 @@ let rec evaluate refs cells = function
       None
 
   | Reference(pos) ->
-      Map.tryFind pos cells |> Option.bind (fun code ->
+      let (col, row) = pos
+      let normalizedCol = Char.ToUpper col
+      Map.tryFind (normalizedCol, row) cells |> Option.bind (fun code ->
         run equation code |> Option.bind (fun parsed ->
           evaluate (Set.add pos refs) cells parsed))
 
