@@ -6,7 +6,7 @@ module.exports = {
     allFiles: true,
     externals: {
         "react": "React",
-        "react-dom": "ReactDom"
+        "react-dom": "ReactDOM"
     },
     fable: {
         define: ["FABLE_REPL_LIB"]

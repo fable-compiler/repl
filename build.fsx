@@ -123,6 +123,10 @@ let updateVersion () =
         let replacement = sprintf "VERSION = \"%s\"" version
         reg.Replace(line, replacement) |> Some)
 
+Target "BuildLibBinary" (fun _ ->
+    runDotnet (CWD </> "src/Lib") "build"
+)
+
 Target "BuildFcsExport" (fun _ ->
     ensureRepoSetup
         { FolderPath = NCAVE_FCS_REPO
@@ -199,13 +203,14 @@ Target "GetBundleLocally" (fun _ ->
 Target "BuildLib" (fun _ ->
     // fable-splitter will adjust the fable-core path
     let fableCoreDir = "force:${outDir}../fable-core"
-    // TODO: Use local version until a new Fable version is published
-    // dotnet run -c Release -p ../Fable/src/dotnet/Fable.Compiler/ fable-splitter --fable-core force:${outDir}../fable-core --args "-c src/Lib/splitter.config.js"
-    sprintf "fable fable-splitter --fable-core %s -- -c src/Lib/splitter.config.js" fableCoreDir
+    let fableCommand =
+        // "fable"
+        // TODO: Use local version until a new Fable version is published
+        "run -c Release -p ../../../Fable/src/dotnet/Fable.Compiler/"
+    sprintf "%s fable-splitter --fable-core %s --args \"-c src/Lib/splitter.config.js\"" fableCommand fableCoreDir
     |> runDotnet APP_DIR
 
     // Ensure that all imports end with .js
-    // TODO: Is this still necessary?
     let outDir = REPL_OUTPUT </> "lib"
     let reg = Regex(@"^import.+?""[^""]+")
     for file in Directory.EnumerateFiles(CWD </> outDir, "*.js", SearchOption.AllDirectories) do
@@ -241,7 +246,8 @@ Target "All" DoNothing
     ==> "BuildApp"
     ==> "All"
 
-"BuildFcsExport"
+"BuildLibBinary"
+    ==> "BuildFcsExport"
     ==> "GenerateMetadata"
 
 "BuildApp"

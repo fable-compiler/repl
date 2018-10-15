@@ -7,10 +7,10 @@ module Elmish.Counter
        The generated JS code won't be as optimized as when using dotnet-fable.
 *)
 
-open Fable.Repl.Lib
+open Fable.Helpers.React
+open Fable.Helpers.React.Props
 open Elmish
-open React
-open React.Props
+open Elmish.React
 
 // MODEL
 

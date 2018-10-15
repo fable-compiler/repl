@@ -3,14 +3,15 @@
 import * as Babel from "@babel/standalone";
 import BabelTemplate from "@babel/template";
 import * as BabelPlugins from "fable-utils/babel-plugins";
-import FableMap from "../Lib/fablemap.json";
+import ReplLibMap from "../Lib/repl-lib-map.json";
 
 export function resolveLibCall(entityName) {
-    debugger;
-    var k = Object.keys(FableMap).find((k) => entityName.indexOf(k) === 0);
+    var k = Object.keys(ReplLibMap).find((k) => entityName.indexOf(k) === 0);
     if (k != null) {
-        var result = FableMap[k];
-        return [result[0], "fable-repl-lib/" + result[1] + ".js"];
+        var result = ReplLibMap[k];
+        // Remove the root module
+        var entityNameTrimmed = entityName.substr(result[0].length).replace(/^\.+/, "");
+        return [entityNameTrimmed, "fable-repl-lib/" + result[1]];
     }
     return null;
 }

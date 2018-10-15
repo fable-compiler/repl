@@ -41,7 +41,8 @@ let init() = async {
             | CompileCode(fsharpCode, optimize) ->
                 try
                     let (parseResults, parsingTime) = measureTime "FCS parsing" Fable.ParseFSharpProject (checker, Literals.FILE_NAME, fsharpCode)
-                    let ((babelAst, errors), fableTransformTime) = measureTime "Fable transform" (fun () -> Fable.CompileToBabelAst("fable-core", parseResults, Literals.FILE_NAME, optimize, resolveLibCall)) ()
+                    let ((babelAst, errors), fableTransformTime) = measureTime "Fable transform" (fun () ->
+                        Fable.CompileToBabelAst("fable-core", parseResults, Literals.FILE_NAME, optimize, resolveLibCall)) ()
                     let (jsCode, babelTime) = measureTime "Babel generation" compileBabelAst babelAst
 
                     let stats : CompileStats =
