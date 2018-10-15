@@ -13,6 +13,7 @@ importScripts Literals.REPL_BUNDLE_URL
 
 let private getAssemblyReader(_refs: string[]): JS.Promise<string->byte[]> = importMember "./util.js"
 let private compileBabelAst(_ast: obj): string = importMember "./util.js"
+let resolveLibCall(entityName: string): (string*string) option = importMember "./util.js"
 
 let measureTime msg f arg =
     let before: float = self?performance?now()
@@ -27,7 +28,7 @@ let init() = async {
         // Create checker
         let refs = [| yield! Metadata.references false; yield "Fable.Repl.Lib" |]
         let! reader = getAssemblyReader refs |> Async.AwaitPromise
-        let (checker, checkerTime) = measureTime "FCS checker" Fable.CreateChecker (refs, reader) // Highly computing-expensive
+        let (checker, checkerTime) = measureTime "FCS checker" Fable.CreateChecker (refs, reader, None) // Highly computing-expensive
         let mutable currentResults: IParseResults option = None
 
         // Send ready message and start listening
@@ -40,7 +41,7 @@ let init() = async {
             | CompileCode(fsharpCode, optimize) ->
                 try
                     let (parseResults, parsingTime) = measureTime "FCS parsing" Fable.ParseFSharpProject (checker, Literals.FILE_NAME, fsharpCode)
-                    let ((babelAst, errors), fableTransformTime) = measureTime "Fable transform" Fable.CompileToBabelAst ("fable-core", parseResults, Literals.FILE_NAME, optimize)
+                    let ((babelAst, errors), fableTransformTime) = measureTime "Fable transform" (fun () -> Fable.CompileToBabelAst("fable-core", parseResults, Literals.FILE_NAME, optimize, resolveLibCall)) ()
                     let (jsCode, babelTime) = measureTime "Babel generation" compileBabelAst babelAst
 
                     let stats : CompileStats =
