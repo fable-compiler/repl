@@ -23,6 +23,54 @@
     <!-- <Compile Include="../../paket-files/elmish/react/src/common.fs" />
     <Compile Include="../../paket-files/elmish/react/src/react.fs" /> -->
     <Compile Include="Elmish.React.fs" />
+
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Common.fs" />
+    <!-- Components -->
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Components/Breadcrumb.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Components/Card.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Components/Dropdown.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Components/Media.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Components/Menu.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Components/Message.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Components/Modal.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Components/Navbar.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Components/Pagination.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Components/Panel.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Components/Tabs.fs" />
+    <!-- Elements -->
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Elements/Box.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Elements/Button.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Elements/Content.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Elements/Delete.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Elements/Heading.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Elements/Icon.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Elements/Image.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Elements/Notification.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Elements/Progress.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Elements/Table.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Elements/Tag.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Elements/Form/Checkbox.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Elements/Form/Control.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Elements/Form/Field.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Elements/Form/File.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Elements/Form/Help.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Elements/Form/Input.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Elements/Form/Label.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Elements/Form/Radio.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Elements/Form/Select.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Elements/Form/Textarea.fs" />
+    <!-- Layout -->
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Layouts/Column.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Layouts/Columns.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Layouts/Container.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Layouts/Footer.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Layouts/Hero.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Layouts/Level.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Layouts/Section.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Layouts/Tile.fs" />
+    <!-- Extra -->
+    <Compile Include="../../paket-files/MangelMaxime/Fulma/src/Fulma/Extra/FontAwesome.fs" />
+
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
