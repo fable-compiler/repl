@@ -3,6 +3,17 @@
 import * as Babel from "@babel/standalone";
 import BabelTemplate from "@babel/template";
 import * as BabelPlugins from "fable-utils/babel-plugins";
+import FableMap from "../Lib/fablemap.json";
+
+export function resolveLibCall(entityName) {
+    debugger;
+    var k = Object.keys(FableMap).find((k) => entityName.indexOf(k) === 0);
+    if (k != null) {
+        var result = FableMap[k];
+        return [result[0], "fable-repl-lib/" + result[1] + ".js"];
+    }
+    return null;
+}
 
 function getBlobUrl(name) {
     // .txt extension is used to enable gzipping in Github Pages

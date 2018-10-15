@@ -15,8 +15,19 @@ nuget Thoth.Json prerelease
 nuget Thoth.Elmish.Toast
 nuget Fable.PowerPack prerelease
 
-github fable-compiler/Fable:master src/dotnet/Fable.Repl/Interfaces.fs
-github fable-compiler/Fable:master src/dotnet/Fable.Repl/Metadata.fs
+github fable-compiler/Fable:repl-lib src/dotnet/Fable.Repl/Interfaces.fs
+github fable-compiler/Fable:repl-lib src/dotnet/Fable.Repl/Metadata.fs
+
+# REPL Lib
+github alfonsogarciacaro/elmish:master src/prelude.fs
+github alfonsogarciacaro/elmish:master src/cmd.fs
+github alfonsogarciacaro/elmish:master src/program.fs
+
+github fable-compiler/fable-react:repl-lib src/Fable.React/Fable.Import.React.fs
+github fable-compiler/fable-react:repl-lib src/Fable.React/Fable.Helpers.React.fs
+
+github elmish/react:master src/common.fs
+github elmish/react:master src/react.fs
 
 group Build
 framework: net46

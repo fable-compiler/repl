@@ -3,7 +3,7 @@ open System.IO
 open System.Net
 open System.Text.RegularExpressions
 
-let FABLE_BRANCH = "master"
+let FABLE_BRANCH = "repl-lib"
 let APPVEYOR_REPL_ARTIFACT_URL_PARAMS = "?branch=" + FABLE_BRANCH + "&pr=false"
 let APPVEYOR_REPL_ARTIFACT_URL =
     "https://ci.appveyor.com/api/projects/fable-compiler/Fable/artifacts/src/dotnet/Fable.Repl/repl-bundle.zip"
@@ -199,13 +199,14 @@ Target "GetBundleLocally" (fun _ ->
 Target "BuildLib" (fun _ ->
     // fable-splitter will adjust the fable-core path
     let fableCoreDir = "force:${outDir}../fable-core"
-    let libProj = "src/Lib/Fable.Repl.Lib.fsproj"
-    let outDir = REPL_OUTPUT </> "lib"
-    let splitterArgs = sprintf "%s -o %s --allFiles" libProj outDir
-    sprintf "fable fable-splitter --fable-core %s -- %s" fableCoreDir splitterArgs
+    // TODO: Use local version until a new Fable version is published
+    // dotnet run -c Release -p ../Fable/src/dotnet/Fable.Compiler/ fable-splitter --fable-core force:${outDir}../fable-core --args "-c src/Lib/splitter.config.js"
+    sprintf "fable fable-splitter --fable-core %s -- -c src/Lib/splitter.config.js" fableCoreDir
     |> runDotnet APP_DIR
 
     // Ensure that all imports end with .js
+    // TODO: Is this still necessary?
+    let outDir = REPL_OUTPUT </> "lib"
     let reg = Regex(@"^import.+?""[^""]+")
     for file in Directory.EnumerateFiles(CWD </> outDir, "*.js", SearchOption.AllDirectories) do
         let newLines =

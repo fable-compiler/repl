@@ -9,11 +9,11 @@ NUGET
       Newtonsoft.Json (>= 11.0.2) - restriction: >= netcoreapp2.0
     Dotnet.ProjInfo (0.9) - restriction: >= netcoreapp2.0
       FSharp.Core (>= 4.2.3) - restriction: && (< net45) (>= netstandard2.0)
-    Fable.Core (2.0.0-beta-001)
-      FSharp.Core (>= 4.3.4) - restriction: >= netstandard2.0
-    Fable.Elmish (2.0.0-beta-4)
-      Fable.Core (>= 2.0.0-beta-001) - restriction: >= netstandard2.0
-      Fable.PowerPack (>= 2.0.0-beta-004) - restriction: >= netstandard2.0
+    Fable.Core (2.0)
+      FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
+    Fable.Elmish (2.0)
+      Fable.Core (>= 2.0) - restriction: >= netstandard2.0
+      Fable.PowerPack (>= 2.0.1) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
     Fable.Elmish.Browser (2.0.0-beta-5)
       Fable.Core (>= 2.0.0-beta-001) - restriction: >= netstandard2.0
@@ -34,15 +34,15 @@ NUGET
       Fable.Core (>= 1.3.17) - restriction: >= netstandard1.6
     Fable.Import.HMR (0.1) - restriction: >= netstandard2.0
       Fable.Core (>= 1.3.17) - restriction: >= netstandard1.6
-    Fable.PowerPack (2.0.0-beta-004)
-      Fable.Core (>= 2.0.0-beta-001) - restriction: >= netstandard2.0
-      Fable.Import.Browser (>= 1.2.0-beta-001) - restriction: >= netstandard2.0
+    Fable.PowerPack (2.0.1)
+      Fable.Core (>= 2.0) - restriction: >= netstandard2.0
+      Fable.Import.Browser (>= 1.3) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
-      Thoth.Json (>= 2.0.0-beta-004) - restriction: >= netstandard2.0
-    Fable.React (4.0.0-alpha-001)
-      Fable.Core (>= 2.0.0-alpha-006) - restriction: >= netstandard2.0
-      Fable.Import.Browser (>= 1.1.1) - restriction: >= netstandard2.0
-      FSharp.Core (>= 4.3.4) - restriction: >= netstandard2.0
+      Thoth.Json (>= 2.0) - restriction: >= netstandard2.0
+    Fable.React (4.0.1)
+      Fable.Core (>= 2.0) - restriction: >= netstandard2.0
+      Fable.Import.Browser (>= 1.3) - restriction: >= netstandard2.0
+      FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
     FSharp.Compiler.Service (25.0.1) - restriction: >= netcoreapp2.0
       FSharp.Core (>= 4.1.18) - restriction: || (>= net45) (>= netstandard2.0)
       System.Collections.Immutable (>= 1.5) - restriction: || (>= net45) (>= netstandard2.0)
@@ -332,13 +332,23 @@ NUGET
       Fable.PowerPack (>= 1.5.1) - restriction: >= netstandard2.0
       Fable.React (>= 3.1.3) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.5) - restriction: >= netstandard2.0
-    Thoth.Json (2.0.0-beta-005)
-      Fable.Core (>= 2.0.0-beta-001) - restriction: >= netstandard2.0
+    Thoth.Json (2.2)
+      Fable.Core (>= 2.0) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
 GITHUB
   remote: fable-compiler/Fable
-    src/dotnet/Fable.Repl/Interfaces.fs (15feafb5f5670ea5b8c760564a84fb413d127bbc)
-    src/dotnet/Fable.Repl/Metadata.fs (15feafb5f5670ea5b8c760564a84fb413d127bbc)
+    src/dotnet/Fable.Repl/Interfaces.fs (9b8f546a8659139f1c023f9f733496b648a186bd)
+    src/dotnet/Fable.Repl/Metadata.fs (9b8f546a8659139f1c023f9f733496b648a186bd)
+  remote: alfonsogarciacaro/elmish
+    src/cmd.fs (47c77a9e850f3fff9440616fd1ad44e77d15df24)
+    src/prelude.fs (47c77a9e850f3fff9440616fd1ad44e77d15df24)
+    src/program.fs (47c77a9e850f3fff9440616fd1ad44e77d15df24)
+  remote: fable-compiler/fable-react
+    src/Fable.React/Fable.Helpers.React.fs (5d2fbfb237b20b3b547d1cbf83a31e0c52be3730)
+    src/Fable.React/Fable.Import.React.fs (5d2fbfb237b20b3b547d1cbf83a31e0c52be3730)
+  remote: elmish/react
+    src/common.fs (e30e7163d564fb88b2813037bacf178654477982)
+    src/react.fs (e30e7163d564fb88b2813037bacf178654477982)
 GROUP Build
 RESTRICTION: == net46
 NUGET

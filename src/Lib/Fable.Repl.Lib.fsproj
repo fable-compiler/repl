@@ -4,9 +4,11 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="React.fs" />
-    <Compile Include="Elmish.fs" />
-    <Compile Include="Canvas.fs" />
+    <Compile Include="../../paket-files/alfonsogarciacaro/elmish/src/prelude.fs" />
+    <Compile Include="../../paket-files/alfonsogarciacaro/elmish/src/cmd.fs" />
+    <Compile Include="../../paket-files/alfonsogarciacaro/elmish/src/program.fs" />
+    <Compile Include="../../paket-files/fable-compiler/fable-react/src/Fable.React/Fable.Import.React.fs" />
+    <Compile Include="../../paket-files/fable-compiler/fable-react/src/Fable.React/Fable.Helpers.React.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
