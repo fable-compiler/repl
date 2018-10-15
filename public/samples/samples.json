@@ -79,18 +79,6 @@
             },
             {
                 "type": "sub-category",
-                "label": "Canvas",
-                "children": [
-                    {
-                        "type": "menu-item",
-                        "label": "Segments follow mouse",
-                        "fsharpCode": "canvas/segments.fs",
-                        "htmlCode": "canvas/segments.html"
-                    }
-                ]
-            },
-            {
-                "type": "sub-category",
                 "label": "Fun and Games",
                 "children": [
                     {

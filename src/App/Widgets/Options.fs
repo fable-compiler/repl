@@ -25,8 +25,10 @@ type Model =
 
     static member Decoder =
         Decode.object (fun get ->
-            { Optimize = get.Optional.Field "optimize" Decode.bool
-                            |> Option.defaultValue false
+            { Optimize = false
+                        // TODO: Optimize is disable to prevent problems with inline functions in REPL Lib
+                        //  get.Optional.Field "optimize" Decode.bool
+                        //     |> Option.defaultValue false
               FontSize = get.Optional.Field "fontSize" Decode.float
                             |> Option.defaultValue 14.
               FontFamily = get.Optional.Field "fontFamily" Decode.string
@@ -134,4 +136,6 @@ let view (model: Model) dispatch =
     div [ ]
         [ fontFamilySetting model.FontFamily dispatch
           fontSizeSetting model.FontSize dispatch
-          optimizeSetting model.Optimize dispatch ]
+          // TODO: Optimize is disable to prevent problems with inline functions in REPL Lib
+        //   optimizeSetting model.Optimize dispatch
+        ]

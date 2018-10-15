@@ -19,12 +19,20 @@ github fable-compiler/Fable:repl-lib src/dotnet/Fable.Repl/Interfaces.fs
 github fable-compiler/Fable:repl-lib src/dotnet/Fable.Repl/Metadata.fs
 
 # REPL Lib
-github alfonsogarciacaro/elmish:master src/prelude.fs
-github alfonsogarciacaro/elmish:master src/cmd.fs
-github alfonsogarciacaro/elmish:master src/program.fs
+github MangelMaxime/Thoth:master src/Thoth.Json/Decode.fs
+github MangelMaxime/Thoth:master src/Thoth.Json/Encode.fs
+
+github fable-compiler/fable-powerpack:master src/Result.fs
+github fable-compiler/fable-powerpack:master src/Promise.fs
+github fable-compiler/fable-powerpack:master src/Fetch.fs
+
+github elmish/elmish:master src/prelude.fs
+github elmish/elmish:master src/cmd.fs
+github elmish/elmish:master src/program.fs
 
 github fable-compiler/fable-react:repl-lib src/Fable.React/Fable.Import.React.fs
 github fable-compiler/fable-react:repl-lib src/Fable.React/Fable.Helpers.React.fs
+github fable-compiler/fable-react:repl-lib src/Fable.Recharts/Fable.Recharts.fs
 
 github elmish/react:master src/common.fs
 github elmish/react:master src/react.fs

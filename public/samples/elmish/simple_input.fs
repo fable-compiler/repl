@@ -1,3 +1,5 @@
+module Elmish.SimpleInput
+
 (**
 Minimal application showing how to use Elmish
 You can find more info about Emish architecture and samples at https://elmish.github.io/
@@ -5,11 +7,11 @@ NOTE: The API in Fable's REPL may differ from Fable.Elmish & Fable.React nuget l
         The generated JS code won't be as optimized as when using dotnet-fable.
 *)
 
-open Fable.Repl.Lib
-open Elmish
-open React
-open React.Props
 open Fable.Core.JsInterop
+open Fable.Helpers.React
+open Fable.Helpers.React.Props
+open Elmish
+open Elmish.React
 
 // MODEL
 

@@ -2,13 +2,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <DefineConstants>$(DefineConstants);FABLE_COMPILER;FABLE_REPL_LIB</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="../../paket-files/alfonsogarciacaro/elmish/src/prelude.fs" />
-    <Compile Include="../../paket-files/alfonsogarciacaro/elmish/src/cmd.fs" />
-    <Compile Include="../../paket-files/alfonsogarciacaro/elmish/src/program.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Thoth/src/Thoth.Json/Decode.fs" />
+    <Compile Include="../../paket-files/MangelMaxime/Thoth/src/Thoth.Json/Encode.fs" />
+
+    <Compile Include="../../paket-files/fable-compiler/fable-powerpack/src/Result.fs" />
+    <Compile Include="../../paket-files/fable-compiler/fable-powerpack/src/Promise.fs" />
+    <Compile Include="../../paket-files/fable-compiler/fable-powerpack/src/Fetch.fs" />
+
+    <Compile Include="../../paket-files/elmish/elmish/src/prelude.fs" />
+    <Compile Include="../../paket-files/elmish/elmish/src/cmd.fs" />
+    <Compile Include="../../paket-files/elmish/elmish/src/program.fs" />
+
     <Compile Include="../../paket-files/fable-compiler/fable-react/src/Fable.React/Fable.Import.React.fs" />
     <Compile Include="../../paket-files/fable-compiler/fable-react/src/Fable.React/Fable.Helpers.React.fs" />
+    <Compile Include="../../paket-files/fable-compiler/fable-react/src/Fable.Recharts/Fable.Recharts.fs" />
+
+    <!-- <Compile Include="../../paket-files/elmish/react/src/common.fs" />
+    <Compile Include="../../paket-files/elmish/react/src/react.fs" /> -->
+    <Compile Include="Elmish.React.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

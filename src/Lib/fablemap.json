@@ -1,7 +1,0 @@
-{
-    "Elmish.Log": ["Elmish.Log", "src/prelude"],
-    "Elmish.Cmd": ["Elmish", "src/cmd"],
-    "Elmish.Program`4": ["Elmish", "src/program"],
-    "Elmish.ProgramModule": ["Elmish", "src/program"],
-    "Fable.Helpers.React": ["Fable.Helpers.React", "Fable.React/Fable.Helpers.React"]
-}

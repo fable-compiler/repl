@@ -7,11 +7,11 @@ module Elmish.TodoMVC
        The generated JS code won't be as optimized as when using dotnet-fable.
 *)
 
-open Fable.Repl.Lib
 open Fable.Import
+open Fable.Helpers.React
+open Fable.Helpers.React.Props
 open Elmish
-open React
-open React.Props
+open Elmish.React
 
 let [<Literal>] ESC_KEY = 27.
 let [<Literal>] ENTER_KEY = 13.
@@ -117,7 +117,7 @@ let onEnter msg dispatch =
         if ev.keyCode = ENTER_KEY then
             dispatch msg)
 
-let targetValue (ev: Browser.Event) =
+let targetValue (ev: React.SyntheticEvent) =
     (ev.target :?> Browser.HTMLInputElement).value
 
 let viewInput (model:string) dispatch =

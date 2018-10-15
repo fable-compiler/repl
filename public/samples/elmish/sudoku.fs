@@ -1,8 +1,11 @@
 module Sudoku
 
 open System.Collections.Generic
-open Fable.Repl.Lib
+open Fable.Import
+open Fable.Helpers.React
+open Fable.Helpers.React.Props
 open Elmish
+open Elmish.React
 
 type Box = int
 type Sudoku = Box array array
@@ -89,9 +92,6 @@ let update (msg:Msg) (model:Model) =
     match msg with
     | Reset -> puzzle
     | Solve -> getFirstSolution model
-
-open React
-open React.Props
 
 let tableRow xs = tr [] [ for x in xs -> td [] [x] ]
 

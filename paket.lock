@@ -337,15 +337,23 @@ NUGET
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
 GITHUB
   remote: fable-compiler/Fable
-    src/dotnet/Fable.Repl/Interfaces.fs (9b8f546a8659139f1c023f9f733496b648a186bd)
-    src/dotnet/Fable.Repl/Metadata.fs (9b8f546a8659139f1c023f9f733496b648a186bd)
-  remote: alfonsogarciacaro/elmish
-    src/cmd.fs (47c77a9e850f3fff9440616fd1ad44e77d15df24)
-    src/prelude.fs (47c77a9e850f3fff9440616fd1ad44e77d15df24)
-    src/program.fs (47c77a9e850f3fff9440616fd1ad44e77d15df24)
+    src/dotnet/Fable.Repl/Interfaces.fs (0ada47c0dd36abf7b35754fe659a8eed5c0f6fe8)
+    src/dotnet/Fable.Repl/Metadata.fs (0ada47c0dd36abf7b35754fe659a8eed5c0f6fe8)
+  remote: MangelMaxime/Thoth
+    src/Thoth.Json/Decode.fs (fddea3c4f405b38754f5e9e8c3e2c7f47799c03c)
+    src/Thoth.Json/Encode.fs (fddea3c4f405b38754f5e9e8c3e2c7f47799c03c)
+  remote: fable-compiler/fable-powerpack
+    src/Fetch.fs (10fd29475f8c6807fed8b5b8b76ea9a6960469d9)
+    src/Promise.fs (10fd29475f8c6807fed8b5b8b76ea9a6960469d9)
+    src/Result.fs (10fd29475f8c6807fed8b5b8b76ea9a6960469d9)
+  remote: elmish/elmish
+    src/cmd.fs (ae89c526a528c2f135e7eb07e343e3aef972437a)
+    src/prelude.fs (ae89c526a528c2f135e7eb07e343e3aef972437a)
+    src/program.fs (ae89c526a528c2f135e7eb07e343e3aef972437a)
   remote: fable-compiler/fable-react
-    src/Fable.React/Fable.Helpers.React.fs (5d2fbfb237b20b3b547d1cbf83a31e0c52be3730)
-    src/Fable.React/Fable.Import.React.fs (5d2fbfb237b20b3b547d1cbf83a31e0c52be3730)
+    src/Fable.React/Fable.Helpers.React.fs (f6c4db356deb897fe66563ebf7f782381ca5ae76)
+    src/Fable.React/Fable.Import.React.fs (f6c4db356deb897fe66563ebf7f782381ca5ae76)
+    src/Fable.Recharts/Fable.Recharts.fs (f6c4db356deb897fe66563ebf7f782381ca5ae76)
   remote: elmish/react
     src/common.fs (e30e7163d564fb88b2813037bacf178654477982)
     src/react.fs (e30e7163d564fb88b2813037bacf178654477982)
