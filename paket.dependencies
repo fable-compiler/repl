@@ -37,6 +37,8 @@ github fable-compiler/fable-react:repl-lib src/Fable.Recharts/Fable.Recharts.fs
 github elmish/react:master src/common.fs
 github elmish/react:master src/react.fs
 
+github MangelMaxime/Fulma
+
 group Build
 framework: net46
 

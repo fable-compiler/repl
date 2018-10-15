@@ -80,6 +80,18 @@
             },
             {
                 "type": "sub-category",
+                "label": "Fulma",
+                "children": [
+                    {
+                        "type": "menu-item",
+                        "label": "Form",
+                        "fsharpCode": "fulma/form.fs",
+                        "htmlCode": "fulma/form.html"
+                    }
+                ]
+            },
+            {
+                "type": "sub-category",
                 "label": "Fun and Games",
                 "children": [
                     {

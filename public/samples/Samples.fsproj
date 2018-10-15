@@ -15,6 +15,7 @@
     <Compile Include="elmish/sudoku.fs" />
     <Compile Include="elmish/memory.fs" />
     <Compile Include="elmish/spreadsheet.fs" />
+    <Compile Include="fulma/form.fs" />
     <Compile Include="games/mario.fs" />
     <Compile Include="games/ozmo.fs" />
     <Compile Include="games/pacman.fs" />

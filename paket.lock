@@ -20,6 +20,10 @@ NUGET
       Fable.Elmish (>= 2.0.0-beta-4) - restriction: >= netstandard2.0
       Fable.Import.Browser (>= 1.3) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
+    Fable.Elmish.Debugger (2.0)
+      Fable.Core (>= 2.0) - restriction: >= netstandard2.0
+      Fable.Elmish (>= 2.0) - restriction: >= netstandard2.0
+      FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
     Fable.Elmish.HMR (2.0.0-beta-4)
       Fable.Core (>= 2.0.0-beta-001) - restriction: >= netstandard2.0
       Fable.Elmish (>= 2.0.0-beta-4) - restriction: >= netstandard2.0
@@ -337,8 +341,8 @@ NUGET
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
 GITHUB
   remote: fable-compiler/Fable
-    src/dotnet/Fable.Repl/Interfaces.fs (0ada47c0dd36abf7b35754fe659a8eed5c0f6fe8)
-    src/dotnet/Fable.Repl/Metadata.fs (0ada47c0dd36abf7b35754fe659a8eed5c0f6fe8)
+    src/dotnet/Fable.Repl/Interfaces.fs (c3dd57fd2b9ff59085c9042b1d5d08277baea4d0)
+    src/dotnet/Fable.Repl/Metadata.fs (c3dd57fd2b9ff59085c9042b1d5d08277baea4d0)
   remote: MangelMaxime/Thoth
     src/Thoth.Json/Decode.fs (fddea3c4f405b38754f5e9e8c3e2c7f47799c03c)
     src/Thoth.Json/Encode.fs (fddea3c4f405b38754f5e9e8c3e2c7f47799c03c)
@@ -347,9 +351,9 @@ GITHUB
     src/Promise.fs (10fd29475f8c6807fed8b5b8b76ea9a6960469d9)
     src/Result.fs (10fd29475f8c6807fed8b5b8b76ea9a6960469d9)
   remote: elmish/elmish
-    src/cmd.fs (ae89c526a528c2f135e7eb07e343e3aef972437a)
-    src/prelude.fs (ae89c526a528c2f135e7eb07e343e3aef972437a)
-    src/program.fs (ae89c526a528c2f135e7eb07e343e3aef972437a)
+    src/cmd.fs (e7880377a7b2c4e97abf7024744b17de5375c11b)
+    src/prelude.fs (e7880377a7b2c4e97abf7024744b17de5375c11b)
+    src/program.fs (e7880377a7b2c4e97abf7024744b17de5375c11b)
   remote: fable-compiler/fable-react
     src/Fable.React/Fable.Helpers.React.fs (f6c4db356deb897fe66563ebf7f782381ca5ae76)
     src/Fable.React/Fable.Import.React.fs (f6c4db356deb897fe66563ebf7f782381ca5ae76)
@@ -357,6 +361,17 @@ GITHUB
   remote: elmish/react
     src/common.fs (e30e7163d564fb88b2813037bacf178654477982)
     src/react.fs (e30e7163d564fb88b2813037bacf178654477982)
+  remote: MangelMaxime/Fulma
+    FULLPROJECT (52f6c18108f0399c156d756d786cf3205d42c44a)
+      dotnet-fable
+      Fable.Core
+      Fable.Elmish
+      Fable.Elmish.Browser
+      Fable.Elmish.Debugger
+      Fable.Elmish.HMR
+      Fable.Elmish.React
+      Fable.PowerPack
+      Fable.React
 GROUP Build
 RESTRICTION: == net46
 NUGET
