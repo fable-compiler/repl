@@ -3,7 +3,7 @@ open System.IO
 open System.Net
 open System.Text.RegularExpressions
 
-let FABLE_BRANCH = "repl-lib"
+let FABLE_BRANCH = "master"
 let APPVEYOR_REPL_ARTIFACT_URL_PARAMS = "?branch=" + FABLE_BRANCH + "&pr=false"
 let APPVEYOR_REPL_ARTIFACT_URL =
     "https://ci.appveyor.com/api/projects/fable-compiler/Fable/artifacts/src/dotnet/Fable.Repl/repl-bundle.zip"
