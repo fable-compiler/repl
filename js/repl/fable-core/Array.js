@@ -3,6 +3,7 @@ import { compare, addToSet, tryGetValue, comparerFromEqualityComparer, max as ma
 import { createMutable } from "./Map.js";
 import { iterate as iterate$$1 } from "./Seq.js";
 import { createMutable as createMutable$$1 } from "./Set.js";
+import { truncate as truncate$$1 } from "./Array.js";
 import { L } from "./Types.js";
 
 function indexNotFound() {
@@ -261,8 +262,8 @@ export function countBy(projection, array$$15, eq) {
 }
 export function distinctBy(projection$$1, array$$16, eq$$1) {
   const hashSet = createMutable$$1([], comparerFromEqualityComparer(eq$$1));
-  return filter(function predicate$$2($arg$$1) {
-    return addToSet(projection$$1($arg$$1), hashSet);
+  return filter(function predicate$$2($arg$$3) {
+    return addToSet(projection$$1($arg$$3), hashSet);
   }, array$$16);
 }
 export function distinct(array$$18, eq$$2) {
@@ -493,10 +494,10 @@ export function partition(f$$6, source$$4, cons$$29) {
     }
   }
 
-  return [res1, res2];
+  return [truncate$$1(iTrue, res1), truncate$$1(iFalse, res2)];
 }
-export function find(predicate$$9, array$$49) {
-  const matchValue$$5 = array$$49.find(predicate$$9);
+export function find(predicate$$9, array$$51) {
+  const matchValue$$5 = array$$51.find(predicate$$9);
 
   if (matchValue$$5 == null) {
     return indexNotFound();
@@ -505,12 +506,12 @@ export function find(predicate$$9, array$$49) {
     return res$$5;
   }
 }
-export function tryFind(predicate$$11, array$$51) {
-  return array$$51.find(predicate$$11);
+export function tryFind(predicate$$11, array$$53) {
+  return array$$53.find(predicate$$11);
 }
-export function findIndex(predicate$$13, array$$53) {
+export function findIndex(predicate$$13, array$$55) {
   var index;
-  const matchValue$$6 = array$$53.findIndex(predicate$$13);
+  const matchValue$$6 = array$$55.findIndex(predicate$$13);
 
   if (index = matchValue$$6 | 0, index > -1) {
     const index$$1 = matchValue$$6 | 0;
@@ -519,9 +520,9 @@ export function findIndex(predicate$$13, array$$53) {
     return indexNotFound() | 0;
   }
 }
-export function tryFindIndex(predicate$$15, array$$55) {
+export function tryFindIndex(predicate$$15, array$$57) {
   var index$$2;
-  const matchValue$$7 = array$$55.findIndex(predicate$$15);
+  const matchValue$$7 = array$$57.findIndex(predicate$$15);
 
   if (index$$2 = matchValue$$7 | 0, index$$2 > -1) {
     const index$$3 = matchValue$$7 | 0;
@@ -530,13 +531,13 @@ export function tryFindIndex(predicate$$15, array$$55) {
     return null;
   }
 }
-export function pick(chooser, array$$57) {
+export function pick(chooser, array$$59) {
   const loop$$1 = function loop$$1(i$$23) {
     loop$$1: while (true) {
-      if (i$$23 >= array$$57.length) {
+      if (i$$23 >= array$$59.length) {
         return indexNotFound();
       } else {
-        const matchValue$$8 = chooser(array$$57[i$$23]);
+        const matchValue$$8 = chooser(array$$59[i$$23]);
 
         if (matchValue$$8 != null) {
           const res$$6 = value$$10(matchValue$$8);
@@ -551,13 +552,13 @@ export function pick(chooser, array$$57) {
 
   return loop$$1(0);
 }
-export function tryPick(chooser$$1, array$$58) {
+export function tryPick(chooser$$1, array$$60) {
   const loop$$2 = function loop$$2(i$$24) {
     loop$$2: while (true) {
-      if (i$$24 >= array$$58.length) {
+      if (i$$24 >= array$$60.length) {
         return null;
       } else {
-        const matchValue$$9 = chooser$$1(array$$58[i$$24]);
+        const matchValue$$9 = chooser$$1(array$$60[i$$24]);
 
         if (matchValue$$9 == null) {
           i$$24 = i$$24 + 1;
@@ -572,13 +573,13 @@ export function tryPick(chooser$$1, array$$58) {
 
   return loop$$2(0);
 }
-export function findBack(predicate$$17, array$$59) {
+export function findBack(predicate$$17, array$$61) {
   const loop$$3 = function loop$$3(i$$25) {
     loop$$3: while (true) {
       if (i$$25 < 0) {
         return indexNotFound();
-      } else if (predicate$$17(array$$59[i$$25])) {
-        return array$$59[i$$25];
+      } else if (predicate$$17(array$$61[i$$25])) {
+        return array$$61[i$$25];
       } else {
         i$$25 = i$$25 - 1;
         continue loop$$3;
@@ -586,15 +587,15 @@ export function findBack(predicate$$17, array$$59) {
     }
   };
 
-  return loop$$3(array$$59.length - 1);
+  return loop$$3(array$$61.length - 1);
 }
-export function tryFindBack(predicate$$18, array$$60) {
+export function tryFindBack(predicate$$18, array$$62) {
   const loop$$4 = function loop$$4(i$$26) {
     loop$$4: while (true) {
       if (i$$26 < 0) {
         return null;
-      } else if (predicate$$18(array$$60[i$$26])) {
-        return some(array$$60[i$$26]);
+      } else if (predicate$$18(array$$62[i$$26])) {
+        return some(array$$62[i$$26]);
       } else {
         i$$26 = i$$26 - 1;
         continue loop$$4;
@@ -602,14 +603,14 @@ export function tryFindBack(predicate$$18, array$$60) {
     }
   };
 
-  return loop$$4(array$$60.length - 1);
+  return loop$$4(array$$62.length - 1);
 }
-export function findIndexBack(predicate$$19, array$$61) {
+export function findIndexBack(predicate$$19, array$$63) {
   const loop$$5 = function loop$$5(i$$27) {
     loop$$5: while (true) {
       if (i$$27 < 0) {
         return indexNotFound() | 0;
-      } else if (predicate$$19(array$$61[i$$27])) {
+      } else if (predicate$$19(array$$63[i$$27])) {
         return i$$27 | 0;
       } else {
         i$$27 = i$$27 - 1;
@@ -618,14 +619,14 @@ export function findIndexBack(predicate$$19, array$$61) {
     }
   };
 
-  return loop$$5(array$$61.length - 1) | 0;
+  return loop$$5(array$$63.length - 1) | 0;
 }
-export function tryFindIndexBack(predicate$$20, array$$62) {
+export function tryFindIndexBack(predicate$$20, array$$64) {
   const loop$$6 = function loop$$6(i$$28) {
     loop$$6: while (true) {
       if (i$$28 < 0) {
         return null;
-      } else if (predicate$$20(array$$62[i$$28])) {
+      } else if (predicate$$20(array$$64[i$$28])) {
         return i$$28;
       } else {
         i$$28 = i$$28 - 1;
@@ -634,7 +635,7 @@ export function tryFindIndexBack(predicate$$20, array$$62) {
     }
   };
 
-  return loop$$6(array$$62.length - 1);
+  return loop$$6(array$$64.length - 1);
 }
 export function choose(f$$7, source$$5, cons$$30) {
   const res$$8 = new cons$$30(0);
@@ -652,22 +653,22 @@ export function choose(f$$7, source$$5, cons$$30) {
 
   return res$$8;
 }
-export function foldIndexed(folder$$2, state$$4, array$$63) {
-  return array$$63.reduce(function folder$$3(acc$$2, x$$3, i$$30) {
+export function foldIndexed(folder$$2, state$$4, array$$65) {
+  return array$$65.reduce(function folder$$3(acc$$2, x$$3, i$$30) {
     return folder$$2(i$$30, acc$$2, x$$3);
   }, state$$4);
 }
-export function fold(folder$$4, state$$6, array$$65) {
-  return array$$65.reduce(folder$$4, state$$6);
+export function fold(folder$$4, state$$6, array$$67) {
+  return array$$67.reduce(folder$$4, state$$6);
 }
-export function iterate(action, array$$67) {
-  for (let i$$31 = 0; i$$31 <= array$$67.length - 1; i$$31++) {
-    action(array$$67[i$$31]);
+export function iterate(action, array$$69) {
+  for (let i$$31 = 0; i$$31 <= array$$69.length - 1; i$$31++) {
+    action(array$$69[i$$31]);
   }
 }
-export function iterateIndexed(action$$1, array$$68) {
-  for (let i$$32 = 0; i$$32 <= array$$68.length - 1; i$$32++) {
-    action$$1(i$$32, array$$68[i$$32]);
+export function iterateIndexed(action$$1, array$$70) {
+  for (let i$$32 = 0; i$$32 <= array$$70.length - 1; i$$32++) {
+    action$$1(i$$32, array$$70[i$$32]);
   }
 }
 export function iterate2(action$$2, array1$$2, array2$$2) {
@@ -688,15 +689,15 @@ export function iterateIndexed2(action$$3, array1$$3, array2$$3) {
     action$$3(i$$34, array1$$3[i$$34], array2$$3[i$$34]);
   }
 }
-export function isEmpty(array$$69) {
-  return array$$69.length === 0;
+export function isEmpty(array$$71) {
+  return array$$71.length === 0;
 }
-export function forAll(predicate$$21, array$$70) {
-  return array$$70.every(predicate$$21);
+export function forAll(predicate$$21, array$$72) {
+  return array$$72.every(predicate$$21);
 }
-export function permute(f$$8, array$$72) {
-  const size = array$$72.length | 0;
-  const res$$9 = new array$$72.constructor(array$$72.length);
+export function permute(f$$8, array$$74) {
+  const size = array$$74.length | 0;
+  const res$$9 = new array$$74.constructor(array$$74.length);
   const checkFlags = new Array(size);
   iterateIndexed(function (i$$35, x$$5) {
     const j$$2 = f$$8(i$$35) | 0;
@@ -707,7 +708,7 @@ export function permute(f$$8, array$$72) {
 
     res$$9[j$$2] = x$$5;
     checkFlags[j$$2] = 1;
-  }, array$$72);
+  }, array$$74);
   const isValid = forAll(function (y$$1) {
     return 1 === y$$1;
   }, checkFlags);
@@ -742,11 +743,11 @@ export function sortInPlace(xs$$1, comparer$$1) {
   });
 }
 
-function copyArray(array$$73) {
-  const result$$9 = new array$$73.constructor(array$$73.length);
+function copyArray(array$$75) {
+  const result$$9 = new array$$75.constructor(array$$75.length);
 
-  for (let i$$37 = 0; i$$37 <= array$$73.length - 1; i$$37++) {
-    result$$9[i$$37] = array$$73[i$$37];
+  for (let i$$37 = 0; i$$37 <= array$$75.length - 1; i$$37++) {
+    result$$9[i$$37] = array$$75[i$$37];
   }
 
   return result$$9;
@@ -802,18 +803,18 @@ export function unfold(generator, state$$8) {
   loop$$7(state$$8);
   return res$$10;
 }
-export function unzip(array$$75) {
-  const len$$11 = array$$75.length | 0;
+export function unzip(array$$77) {
+  const len$$11 = array$$77.length | 0;
   const res1$$1 = new Array(len$$11);
   const res2$$1 = new Array(len$$11);
   iterateIndexed(function (i$$38, tupledArg) {
     res1$$1[i$$38] = tupledArg[0];
     res2$$1[i$$38] = tupledArg[1];
-  }, array$$75);
+  }, array$$77);
   return [res1$$1, res2$$1];
 }
-export function unzip3(array$$76) {
-  const len$$14 = array$$76.length | 0;
+export function unzip3(array$$78) {
+  const len$$14 = array$$78.length | 0;
   const res1$$2 = new Array(len$$14);
   const res2$$2 = new Array(len$$14);
   const res3 = new Array(len$$14);
@@ -821,7 +822,7 @@ export function unzip3(array$$76) {
     res1$$2[i$$39] = tupledArg$$1[0];
     res2$$2[i$$39] = tupledArg$$1[1];
     res3[i$$39] = tupledArg$$1[2];
-  }, array$$76);
+  }, array$$78);
   return [res1$$2, res2$$2, res3];
 }
 export function zip(array1$$4, array2$$4) {
@@ -850,35 +851,35 @@ export function zip3(array1$$5, array2$$5, array3) {
 
   return result$$11;
 }
-export function chunkBySize(chunkSize, array$$77) {
+export function chunkBySize(chunkSize, array$$79) {
   if (chunkSize < 1) {
     throw new Error("The input must be positive." + "\\nParameter name: " + "size");
   }
 
-  if (array$$77.length === 0) {
+  if (array$$79.length === 0) {
     return [[]];
   } else {
     const result$$12 = [];
 
-    for (let x$$14 = 0; x$$14 <= ~~Math.ceil(array$$77.length / chunkSize) - 1; x$$14++) {
+    for (let x$$14 = 0; x$$14 <= ~~Math.ceil(array$$79.length / chunkSize) - 1; x$$14++) {
       const start$$7 = x$$14 * chunkSize | 0;
-      const slice = array$$77.slice(start$$7, start$$7 + chunkSize);
+      const slice = array$$79.slice(start$$7, start$$7 + chunkSize);
       result$$12.push(slice);
     }
 
     return result$$12;
   }
 }
-export function splitAt(index$$4, array$$80) {
+export function splitAt(index$$4, array$$82) {
   if (index$$4 < 0) {
     throw new Error("The input must be non-negative" + "\\nParameter name: " + "index");
   }
 
-  if (index$$4 > array$$80.length) {
+  if (index$$4 > array$$82.length) {
     throw new Error("The input sequence has an insufficient number of elements." + "\\nParameter name: " + "index");
   }
 
-  return [array$$80.slice(0, 0 + index$$4), array$$80.slice(index$$4)];
+  return [array$$82.slice(0, 0 + index$$4), array$$82.slice(index$$4)];
 }
 export function compareWith(comparer$$12, array1$$6, array2$$6) {
   if (array1$$6 == null) {
@@ -912,53 +913,53 @@ export function compareWith(comparer$$12, array1$$6, array2$$6) {
 export function equalsWith(comparer$$13, array1$$7, array2$$7) {
   return compareWith(compare, array1$$7, array2$$7) === 0;
 }
-export function exactlyOne(array$$83) {
-  if (array$$83.length === 1) {
-    return array$$83[0];
-  } else if (array$$83.length === 0) {
+export function exactlyOne(array$$85) {
+  if (array$$85.length === 1) {
+    return array$$85[0];
+  } else if (array$$85.length === 0) {
     throw new Error("The input sequence was empty" + "\\nParameter name: " + "array");
   } else {
     throw new Error("Input array too long" + "\\nParameter name: " + "array");
   }
 }
-export function head(array$$84) {
-  if (array$$84.length === 0) {
+export function head(array$$86) {
+  if (array$$86.length === 0) {
     throw new Error("The input array was empty" + "\\nParameter name: " + "array");
   } else {
-    return array$$84[0];
+    return array$$86[0];
   }
 }
-export function tryHead(array$$85) {
-  if (array$$85.length === 0) {
+export function tryHead(array$$87) {
+  if (array$$87.length === 0) {
     return null;
   } else {
-    return some(array$$85[0]);
+    return some(array$$87[0]);
   }
 }
-export function tail(array$$86) {
-  if (array$$86.length === 0) {
+export function tail(array$$88) {
+  if (array$$88.length === 0) {
     throw new Error("Not enough elements" + "\\nParameter name: " + "array");
   }
 
-  return array$$86.slice(1);
+  return array$$88.slice(1);
 }
-export function item(index$$5, array$$88) {
-  return array$$88[index$$5];
+export function item(index$$5, array$$90) {
+  return array$$90[index$$5];
 }
-export function tryItem(index$$6, array$$89) {
-  if (index$$6 < 0 ? true : index$$6 >= array$$89.length) {
+export function tryItem(index$$6, array$$91) {
+  if (index$$6 < 0 ? true : index$$6 >= array$$91.length) {
     return null;
   } else {
-    return some(array$$89[index$$6]);
+    return some(array$$91[index$$6]);
   }
 }
-export function foldBackIndexed(folder$$6, array$$90, state$$10) {
-  return array$$90.reduceRight(function folder$$7(acc$$4, x$$15, i$$43) {
+export function foldBackIndexed(folder$$6, array$$92, state$$10) {
+  return array$$92.reduceRight(function folder$$7(acc$$4, x$$15, i$$43) {
     return folder$$6(i$$43, x$$15, acc$$4);
   }, state$$10);
 }
-export function foldBack(folder$$8, array$$92, state$$12) {
-  return array$$92.reduceRight(function folder$$9(acc$$5, x$$16) {
+export function foldBack(folder$$8, array$$94, state$$12) {
+  return array$$94.reduceRight(function folder$$9(acc$$5, x$$16) {
     return folder$$8(x$$16, acc$$5);
   }, state$$12);
 }
@@ -1000,62 +1001,62 @@ export function foldBack2(f$$9, array1$$11, array2$$11, state$$17) {
     return f$$9(x$$18, y$$9, acc$$9);
   }, array1$$11, array2$$11, state$$17);
 }
-export function reduce(reduction, array$$94) {
-  if (array$$94.length === 0) {
-    throw new Error("The input array was empty");
-  }
-
-  return array$$94.reduce(reduction);
-}
-export function reduceBack(reduction$$2, array$$96) {
+export function reduce(reduction, array$$96) {
   if (array$$96.length === 0) {
     throw new Error("The input array was empty");
   }
 
-  return array$$96.reduceRight(reduction$$2);
+  return array$$96.reduce(reduction);
+}
+export function reduceBack(reduction$$2, array$$98) {
+  if (array$$98.length === 0) {
+    throw new Error("The input array was empty");
+  }
+
+  return array$$98.reduceRight(reduction$$2);
 }
 export function forAll2(predicate$$23, array1$$12, array2$$12) {
   return fold2(function (acc$$10, x$$19, y$$10) {
     return acc$$10 ? predicate$$23(x$$19, y$$10) : false;
   }, true, array1$$12, array2$$12);
 }
-export function existsOffset($arg$$162, $arg$$163, $arg$$164) {
+export function existsOffset($arg$$164, $arg$$165, $arg$$166) {
   existsOffset: while (true) {
-    const predicate$$24 = $arg$$162,
-          array$$98 = $arg$$163,
-          index$$7 = $arg$$164;
+    const predicate$$24 = $arg$$164,
+          array$$100 = $arg$$165,
+          index$$7 = $arg$$166;
 
-    if (index$$7 === array$$98.length) {
+    if (index$$7 === array$$100.length) {
       return false;
-    } else if (predicate$$24(array$$98[index$$7])) {
+    } else if (predicate$$24(array$$100[index$$7])) {
       return true;
     } else {
-      $arg$$162 = predicate$$24;
-      $arg$$163 = array$$98;
-      $arg$$164 = index$$7 + 1;
+      $arg$$164 = predicate$$24;
+      $arg$$165 = array$$100;
+      $arg$$166 = index$$7 + 1;
       continue existsOffset;
     }
   }
 }
-export function exists(predicate$$25, array$$99) {
-  return existsOffset(predicate$$25, array$$99, 0);
+export function exists(predicate$$25, array$$101) {
+  return existsOffset(predicate$$25, array$$101, 0);
 }
-export function existsOffset2($arg$$167, $arg$$168, $arg$$169, $arg$$170) {
+export function existsOffset2($arg$$169, $arg$$170, $arg$$171, $arg$$172) {
   existsOffset2: while (true) {
-    const predicate$$26 = $arg$$167,
-          array1$$13 = $arg$$168,
-          array2$$13 = $arg$$169,
-          index$$8 = $arg$$170;
+    const predicate$$26 = $arg$$169,
+          array1$$13 = $arg$$170,
+          array2$$13 = $arg$$171,
+          index$$8 = $arg$$172;
 
     if (index$$8 === array1$$13.length) {
       return false;
     } else if (predicate$$26(array1$$13[index$$8], array2$$13[index$$8])) {
       return true;
     } else {
-      $arg$$167 = predicate$$26;
-      $arg$$168 = array1$$13;
-      $arg$$169 = array2$$13;
-      $arg$$170 = index$$8 + 1;
+      $arg$$169 = predicate$$26;
+      $arg$$170 = array1$$13;
+      $arg$$171 = array2$$13;
+      $arg$$172 = index$$8 + 1;
       continue existsOffset2;
     }
   }
@@ -1067,20 +1068,20 @@ export function exists2(predicate$$27, array1$$14, array2$$14) {
 
   return existsOffset2(predicate$$27, array1$$14, array2$$14, 0);
 }
-export function sum(array$$100) {
-  let acc$$11 = 0;
+export function sum(array$$102, adder) {
+  let acc$$11 = adder.GetZero();
 
-  for (let i$$46 = 0; i$$46 <= array$$100.length - 1; i$$46++) {
-    acc$$11 = acc$$11 + array$$100[i$$46];
+  for (let i$$46 = 0; i$$46 <= array$$102.length - 1; i$$46++) {
+    acc$$11 = adder.Add(acc$$11, array$$102[i$$46]);
   }
 
   return acc$$11;
 }
-export function sumBy(projection$$6, array$$101) {
-  let acc$$12 = 0;
+export function sumBy(projection$$6, array$$103, adder$$1) {
+  let acc$$12 = adder$$1.GetZero();
 
-  for (let i$$47 = 0; i$$47 <= array$$101.length - 1; i$$47++) {
-    acc$$12 = acc$$12 + projection$$6(array$$101[i$$47]);
+  for (let i$$47 = 0; i$$47 <= array$$103.length - 1; i$$47++) {
+    acc$$12 = adder$$1.Add(acc$$12, projection$$6(array$$103[i$$47]));
   }
 
   return acc$$12;
@@ -1105,21 +1106,31 @@ export function min(xs$$15, comparer$$17) {
     return comparer$$17.Compare(y$$14, x$$23) > 0 ? x$$23 : y$$14;
   }, xs$$15);
 }
-export function average(array$$102) {
-  if (array$$102.length === 0) {
+export function average(array$$104, averager) {
+  if (array$$104.length === 0) {
     throw new Error("The input array was empty" + "\\nParameter name: " + "array");
   }
 
-  const total = sum(array$$102);
-  return total / array$$102.length;
+  let total = averager.GetZero();
+
+  for (let i$$48 = 0; i$$48 <= array$$104.length - 1; i$$48++) {
+    total = averager.Add(total, array$$104[i$$48]);
+  }
+
+  return averager.DivideByInt(total, array$$104.length);
 }
-export function averageBy(projection$$9, array$$103) {
-  if (array$$103.length === 0) {
+export function averageBy(projection$$9, array$$105, averager$$1) {
+  if (array$$105.length === 0) {
     throw new Error("The input array was empty" + "\\nParameter name: " + "array");
   }
 
-  const total$$1 = sumBy(projection$$9, array$$103);
-  return total$$1 / array$$103.length;
+  let total$$1 = averager$$1.GetZero();
+
+  for (let i$$49 = 0; i$$49 <= array$$105.length - 1; i$$49++) {
+    total$$1 = averager$$1.Add(total$$1, projection$$9(array$$105[i$$49]));
+  }
+
+  return averager$$1.DivideByInt(total$$1, array$$105.length);
 }
 export function ofSeq(source$$8, cons$$31) {
   return cons$$31.from(source$$8);
@@ -1131,8 +1142,8 @@ export function toList(source$$10) {
   const len$$20 = source$$10.length | 0;
   let target$$7 = L();
 
-  for (let i$$48 = len$$20 - 1; i$$48 >= 0; i$$48--) {
-    target$$7 = L(source$$10[i$$48], target$$7);
+  for (let i$$50 = len$$20 - 1; i$$50 >= 0; i$$50--) {
+    target$$7 = L(source$$10[i$$50], target$$7);
   }
 
   return target$$7;

@@ -8,11 +8,11 @@ module Elmish.Clock
 *)
 
 open System
-open Fable.Repl.Lib
-open Fable.Import.Browser
+open Fable.Import
+open Fable.Helpers.React
+open Fable.Helpers.React.Props
 open Elmish
-open React
-open React.Props
+open Elmish.React
 type SVG = SVGAttr
 
 // Types
@@ -27,7 +27,7 @@ let update (Tick next) (CurrentTime _time) =
     CurrentTime next, Cmd.none
 
 let timerTick dispatch =
-    window.setInterval(fun _ ->
+    Browser.window.setInterval(fun _ ->
         dispatch (Tick DateTime.Now)
     , 1000) |> ignore
 

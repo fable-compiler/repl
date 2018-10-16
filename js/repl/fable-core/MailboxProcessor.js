@@ -68,7 +68,7 @@ export function postAndAsyncReply($this, buildMessage) {
     let result;
     let continuation;
     function checkCompletion() {
-        if (result && continuation) {
+        if (result !== void 0 && continuation !== void 0) {
             continuation(result);
         }
     }

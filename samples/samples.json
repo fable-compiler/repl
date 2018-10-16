@@ -33,9 +33,10 @@
                     },
                     {
                         "type": "menu-item",
-                        "label": "Counter",
-                        "fsharpCode": "elmish/counter.fs",
-                        "htmlCode": "elmish/counter.html"
+                        "label": "Random user (Thoth)",
+                        "fsharpCode": "elmish/thoth_random_user.fs",
+                        "htmlCode": "elmish/thoth_random_user.html",
+                        "cssCode": "elmish/thoth_random_user.css"
                     },
                     {
                         "type": "menu-item",
@@ -79,13 +80,13 @@
             },
             {
                 "type": "sub-category",
-                "label": "Canvas",
+                "label": "Fulma",
                 "children": [
                     {
                         "type": "menu-item",
-                        "label": "Segments follow mouse",
-                        "fsharpCode": "canvas/segments.fs",
-                        "htmlCode": "canvas/segments.html"
+                        "label": "Form",
+                        "fsharpCode": "fulma/form.fs",
+                        "htmlCode": "fulma/form.html"
                     }
                 ]
             },
@@ -146,6 +147,12 @@
                         "label": "Color Fountain",
                         "fsharpCode": "visual/color-fountain.fs",
                         "htmlCode": "visual/color-fountain.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Recharts",
+                        "fsharpCode": "visual/recharts.fs",
+                        "htmlCode": "visual/recharts.html"
                     }
                 ]
             },

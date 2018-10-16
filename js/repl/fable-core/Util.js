@@ -231,23 +231,12 @@ export function int32ToString(i, radix) {
     return i.toString(radix);
 }
 export function toString(obj, quoteStrings = false) {
-    if (obj == null) {
-        return String(obj);
-    }
     switch (typeof obj) {
-        case "number":
-        case "boolean":
-        case "symbol":
-        case "undefined":
-            return String(obj);
         case "string":
             return quoteStrings ? JSON.stringify(obj) : obj;
         case "function":
             return obj.name;
         case "object":
-            // if (typeof obj.ToString === "function") {
-            //   return obj.ToString();
-            // }
             // TODO: Print some elements of iterables?
             if (isPlainObject(obj) || Array.isArray(obj)) {
                 try {
@@ -271,6 +260,9 @@ export function toString(obj, quoteStrings = false) {
             else {
                 return obj instanceof Date ? dateToString(obj) : String(obj);
             }
+        // number|boolean|symbol|null|undefined:
+        default:
+            return String(obj);
     }
 }
 export class ObjectRef {
@@ -353,7 +345,7 @@ export function isArray(x) {
     return Array.isArray(x) || ArrayBuffer.isView(x);
 }
 export function isIterable(x) {
-    return x != null && typeof x[Symbol.iterator] === "function";
+    return x != null && typeof x === "object" && Symbol.iterator in x;
 }
 export function isPlainObject(x) {
     return x != null && Object.getPrototypeOf(x).constructor === Object;
@@ -402,6 +394,9 @@ export function equals(x, y) {
     else if (x == null) {
         return y == null;
     }
+    else if (y == null) {
+        return false;
+    }
     else if (typeof x !== "object") {
         return false;
     }
@@ -412,7 +407,7 @@ export function equals(x, y) {
         return isArray(y) && equalArrays(x, y);
     }
     else if (x instanceof Date) {
-        return y instanceof Date && compareDates(x, y) === 0;
+        return (y instanceof Date) && compareDates(x, y) === 0;
     }
     else {
         return false;
@@ -491,6 +486,9 @@ export function compare(x, y) {
     else if (x == null) {
         return y == null ? 0 : -1;
     }
+    else if (y == null) {
+        return 1;
+    }
     else if (typeof x !== "object") {
         return x < y ? -1 : 1;
     }
@@ -501,7 +499,7 @@ export function compare(x, y) {
         return isArray(y) && compareArrays(x, y);
     }
     else if (x instanceof Date) {
-        return y instanceof Date && compareDates(x, y);
+        return (y instanceof Date) && compareDates(x, y);
     }
     else {
         return 1;

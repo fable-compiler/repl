@@ -70,21 +70,21 @@ export function append(xs, ys) {
         }, iters);
     });
 }
-export function average(xs) {
-    let count = 1;
-    const sum = reduce((acc, x) => {
+export function average(xs, averager) {
+    let count = 0;
+    const total = fold((acc, x) => {
         count++;
-        return acc + x;
-    }, xs);
-    return sum / count;
+        return averager.Add(acc, x);
+    }, averager.GetZero(), xs);
+    return averager.DivideByInt(total, count);
 }
-export function averageBy(f, xs) {
-    let count = 1;
-    const sum = reduce((acc, x) => {
+export function averageBy(f, xs, averager) {
+    let count = 0;
+    const total = fold((acc, x) => {
         count++;
-        return (count === 2 ? f(acc) : acc) + f(x);
-    }, xs);
-    return sum / count;
+        return averager.Add(acc, f(x));
+    }, averager.GetZero(), xs);
+    return averager.DivideByInt(total, count);
 }
 export function concat(xs) {
     return delay(() => {
@@ -564,11 +564,11 @@ export function sortWith(f, xs) {
     const ys = Array.from(xs);
     return ofArray(ys.sort(f));
 }
-export function sum(xs) {
-    return fold((acc, x) => acc + x, 0, xs);
+export function sum(xs, adder) {
+    return fold((acc, x) => adder.Add(acc, x), adder.GetZero(), xs);
 }
-export function sumBy(f, xs) {
-    return fold((acc, x) => acc + f(x), 0, xs);
+export function sumBy(f, xs, adder) {
+    return fold((acc, x) => adder.Add(acc, f(x)), adder.GetZero(), xs);
 }
 export function tail(xs) {
     const iter = xs[Symbol.iterator]();

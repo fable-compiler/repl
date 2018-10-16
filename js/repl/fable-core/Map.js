@@ -1,8 +1,8 @@
 import { Record, L, declare, Union } from "./Types.js";
 import { value as value$$3, some } from "./Option.js";
 import { iterate as iterate$$1, empty as empty$$1, toIterator, map as map$$1, unfold, getEnumerator, fold as fold$$1 } from "./Seq.js";
+import { compare, structuralHash, isDisposable } from "./Util.js";
 import { join, toText, printf } from "./String.js";
-import { compare, structuralHash } from "./Util.js";
 export const MapTree$00602 = declare(function MapTree$00602(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
@@ -862,7 +862,9 @@ export function MapTreeModule$$$ofSeq(comparer$$16, c$$9) {
   try {
     return MapTreeModule$$$mkFromEnumerator(comparer$$16, MapTreeModule$$$empty(), ie);
   } finally {
-    ie.Dispose();
+    if (isDisposable(ie)) {
+      ie.Dispose();
+    }
   }
 }
 export function MapTreeModule$$$copyToArray(s$$4, arr$$1, i$$1) {
@@ -1072,9 +1074,9 @@ FSharpMap.prototype.GetHashCode = function () {
   const e$$1 = MapTreeModule$$$mkIEnumerator(FSharpMap$$get_Tree(this$$$1));
 
   while (e$$1.MoveNext()) {
-    const activePatternResult2445 = e$$1.Current;
-    res$$3 = combineHash(res$$3, structuralHash(activePatternResult2445[0]));
-    res$$3 = combineHash(res$$3, structuralHash(activePatternResult2445[1]));
+    const activePatternResult2465 = e$$1.Current;
+    res$$3 = combineHash(res$$3, structuralHash(activePatternResult2465[0]));
+    res$$3 = combineHash(res$$3, structuralHash(activePatternResult2465[1]));
   }
 
   return Math.abs(res$$3) | 0;
@@ -1122,10 +1124,14 @@ FSharpMap.prototype.CompareTo = function (obj) {
 
       return res$$4 | 0;
     } finally {
-      e2.Dispose();
+      if (isDisposable(e2)) {
+        e2.Dispose();
+      }
     }
   } finally {
-    e1.Dispose();
+    if (isDisposable(e1)) {
+      e1.Dispose();
+    }
   }
 };
 

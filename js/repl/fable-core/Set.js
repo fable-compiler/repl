@@ -1,7 +1,7 @@
 import { L, Record, declare, Union } from "./Types.js";
 import { value as value$$2, some, Choice } from "./Option.js";
 import { iterate as iterate$$1, empty as empty$$1, fold as fold$$1, toIterator, map as map$$1, reduce, getEnumerator, unfold } from "./Seq.js";
-import { structuralHash, toString } from "./Util.js";
+import { structuralHash, toString, isDisposable } from "./Util.js";
 import { join } from "./String.js";
 export const SetTree$00601 = declare(function SetTree$00601(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
@@ -1344,7 +1344,9 @@ export function SetTreeModule$$$ofSeq(comparer$$20, c$$11) {
   try {
     return SetTreeModule$$$mkFromEnumerator(comparer$$20, new SetTree$00601(0, "SetEmpty"), ie);
   } finally {
-    ie.Dispose();
+    if (isDisposable(ie)) {
+      ie.Dispose();
+    }
   }
 }
 export function SetTreeModule$$$ofArray(comparer$$21, arr$$1) {

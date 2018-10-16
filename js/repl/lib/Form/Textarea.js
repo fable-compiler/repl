@@ -1,0 +1,185 @@
+import { L, Record, declare, Union } from "../../fable-core/Types.js";
+import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Size$$$ofSize as Size$0024$0024$0024ofSize, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Color$$$ofColor as Color$0024$0024$0024ofColor } from "../Fulma/Common.js";
+import { ofSeq, fold } from "../../fable-core/List.js";
+import { append, delay, empty, singleton } from "../../fable-core/Seq.js";
+import { Props$002EDOMAttr as Props$0024002EDOMAttr, Props$002EProp as Props$0024002EProp, Props$002EHTMLAttr as Props$0024002EHTMLAttr } from "../Fable.React/Fable.Helpers.React.js";
+import { createObj, equals } from "../../fable-core/Util.js";
+const createElement = React.createElement;
+export const Option = declare(function Option(tag, name, ...fields) {
+  Union.call(this, tag, name, ...fields);
+}, Union);
+export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18) {
+  this.Size = arg1;
+  this.IsLoading = arg2;
+  this.IsFocused = arg3;
+  this.IsActive = arg4;
+  this.Color = arg5;
+  this.Id = arg6;
+  this.Disabled = arg7;
+  this.IsReadOnly = arg8;
+  this.HasFixedSize = arg9;
+  this.Value = arg10;
+  this.DefaultValue = arg11;
+  this.ValueOrDefault = arg12;
+  this.Placeholder = arg13;
+  this.OnChange = arg14;
+  this.Ref = arg15;
+  this.Props = arg16;
+  this.CustomClass = arg17;
+  this.Modifiers = arg18;
+}, Record);
+export function Options$$$get_Empty() {
+  return new Options(null, false, false, false, null, null, false, false, false, null, null, null, null, null, null, L(), null, L());
+}
+export function textarea(options, children) {
+  const parseOptions = function parseOptions(result, option) {
+    switch (option.tag) {
+      case 1:
+        {
+          return new Options("is-fullwidth", result.IsLoading, result.IsFocused, result.IsActive, result.Color, result.Id, result.Disabled, result.IsReadOnly, result.HasFixedSize, result.Value, result.DefaultValue, result.ValueOrDefault, result.Placeholder, result.OnChange, result.Ref, result.Props, result.CustomClass, result.Modifiers);
+        }
+
+      case 2:
+        {
+          return new Options("is-inline", result.IsLoading, result.IsFocused, result.IsActive, result.Color, result.Id, result.Disabled, result.IsReadOnly, result.HasFixedSize, result.Value, result.DefaultValue, result.ValueOrDefault, result.Placeholder, result.OnChange, result.Ref, result.Props, result.CustomClass, result.Modifiers);
+        }
+
+      case 3:
+        {
+          const state = option.fields[0];
+          return new Options(result.Size, state, result.IsFocused, result.IsActive, result.Color, result.Id, result.Disabled, result.IsReadOnly, result.HasFixedSize, result.Value, result.DefaultValue, result.ValueOrDefault, result.Placeholder, result.OnChange, result.Ref, result.Props, result.CustomClass, result.Modifiers);
+        }
+
+      case 4:
+        {
+          const state$$1 = option.fields[0];
+          return new Options(result.Size, result.IsLoading, state$$1, result.IsActive, result.Color, result.Id, result.Disabled, result.IsReadOnly, result.HasFixedSize, result.Value, result.DefaultValue, result.ValueOrDefault, result.Placeholder, result.OnChange, result.Ref, result.Props, result.CustomClass, result.Modifiers);
+        }
+
+      case 5:
+        {
+          const state$$2 = option.fields[0];
+          return new Options(result.Size, result.IsLoading, result.IsFocused, state$$2, result.Color, result.Id, result.Disabled, result.IsReadOnly, result.HasFixedSize, result.Value, result.DefaultValue, result.ValueOrDefault, result.Placeholder, result.OnChange, result.Ref, result.Props, result.CustomClass, result.Modifiers);
+        }
+
+      case 7:
+        {
+          const color = option.fields[0];
+          return new Options(result.Size, result.IsLoading, result.IsFocused, result.IsActive, Color$0024$0024$0024ofColor(color), result.Id, result.Disabled, result.IsReadOnly, result.HasFixedSize, result.Value, result.DefaultValue, result.ValueOrDefault, result.Placeholder, result.OnChange, result.Ref, result.Props, result.CustomClass, result.Modifiers);
+        }
+
+      case 8:
+        {
+          const id = option.fields[0];
+          return new Options(result.Size, result.IsLoading, result.IsFocused, result.IsActive, result.Color, id, result.Disabled, result.IsReadOnly, result.HasFixedSize, result.Value, result.DefaultValue, result.ValueOrDefault, result.Placeholder, result.OnChange, result.Ref, result.Props, result.CustomClass, result.Modifiers);
+        }
+
+      case 9:
+        {
+          const state$$3 = option.fields[0];
+          return new Options(result.Size, result.IsLoading, result.IsFocused, result.IsActive, result.Color, result.Id, state$$3, result.IsReadOnly, result.HasFixedSize, result.Value, result.DefaultValue, result.ValueOrDefault, result.Placeholder, result.OnChange, result.Ref, result.Props, result.CustomClass, result.Modifiers);
+        }
+
+      case 6:
+        {
+          const state$$4 = option.fields[0];
+          return new Options(result.Size, result.IsLoading, result.IsFocused, result.IsActive, result.Color, result.Id, result.Disabled, state$$4, result.HasFixedSize, result.Value, result.DefaultValue, result.ValueOrDefault, result.Placeholder, result.OnChange, result.Ref, result.Props, result.CustomClass, result.Modifiers);
+        }
+
+      case 10:
+        {
+          const value = option.fields[0];
+          return new Options(result.Size, result.IsLoading, result.IsFocused, result.IsActive, result.Color, result.Id, result.Disabled, result.IsReadOnly, result.HasFixedSize, value, result.DefaultValue, result.ValueOrDefault, result.Placeholder, result.OnChange, result.Ref, result.Props, result.CustomClass, result.Modifiers);
+        }
+
+      case 11:
+        {
+          const defaultValue = option.fields[0];
+          return new Options(result.Size, result.IsLoading, result.IsFocused, result.IsActive, result.Color, result.Id, result.Disabled, result.IsReadOnly, result.HasFixedSize, result.Value, defaultValue, result.ValueOrDefault, result.Placeholder, result.OnChange, result.Ref, result.Props, result.CustomClass, result.Modifiers);
+        }
+
+      case 12:
+        {
+          const valueOrDefault = option.fields[0];
+          return new Options(result.Size, result.IsLoading, result.IsFocused, result.IsActive, result.Color, result.Id, result.Disabled, result.IsReadOnly, result.HasFixedSize, result.Value, result.DefaultValue, valueOrDefault, result.Placeholder, result.OnChange, result.Ref, result.Props, result.CustomClass, result.Modifiers);
+        }
+
+      case 13:
+        {
+          const placeholder = option.fields[0];
+          return new Options(result.Size, result.IsLoading, result.IsFocused, result.IsActive, result.Color, result.Id, result.Disabled, result.IsReadOnly, result.HasFixedSize, result.Value, result.DefaultValue, result.ValueOrDefault, placeholder, result.OnChange, result.Ref, result.Props, result.CustomClass, result.Modifiers);
+        }
+
+      case 14:
+        {
+          const props = option.fields[0];
+          return new Options(result.Size, result.IsLoading, result.IsFocused, result.IsActive, result.Color, result.Id, result.Disabled, result.IsReadOnly, result.HasFixedSize, result.Value, result.DefaultValue, result.ValueOrDefault, result.Placeholder, result.OnChange, result.Ref, props, result.CustomClass, result.Modifiers);
+        }
+
+      case 15:
+        {
+          const cb = option.fields[0];
+          return new Options(result.Size, result.IsLoading, result.IsFocused, result.IsActive, result.Color, result.Id, result.Disabled, result.IsReadOnly, result.HasFixedSize, result.Value, result.DefaultValue, result.ValueOrDefault, result.Placeholder, cb, result.Ref, result.Props, result.CustomClass, result.Modifiers);
+        }
+
+      case 16:
+        {
+          const cb$$1 = option.fields[0];
+          return new Options(result.Size, result.IsLoading, result.IsFocused, result.IsActive, result.Color, result.Id, result.Disabled, result.IsReadOnly, result.HasFixedSize, result.Value, result.DefaultValue, result.ValueOrDefault, result.Placeholder, result.OnChange, cb$$1, result.Props, result.CustomClass, result.Modifiers);
+        }
+
+      case 17:
+        {
+          const customClass = option.fields[0];
+          return new Options(result.Size, result.IsLoading, result.IsFocused, result.IsActive, result.Color, result.Id, result.Disabled, result.IsReadOnly, result.HasFixedSize, result.Value, result.DefaultValue, result.ValueOrDefault, result.Placeholder, result.OnChange, result.Ref, result.Props, customClass, result.Modifiers);
+        }
+
+      case 18:
+        {
+          return new Options(result.Size, result.IsLoading, result.IsFocused, result.IsActive, result.Color, result.Id, result.Disabled, result.IsReadOnly, true, result.Value, result.DefaultValue, result.ValueOrDefault, result.Placeholder, result.OnChange, result.Ref, result.Props, result.CustomClass, result.Modifiers);
+        }
+
+      case 19:
+        {
+          const modifiers = option.fields[0];
+          return new Options(result.Size, result.IsLoading, result.IsFocused, result.IsActive, result.Color, result.Id, result.Disabled, result.IsReadOnly, result.HasFixedSize, result.Value, result.DefaultValue, result.ValueOrDefault, result.Placeholder, result.OnChange, result.Ref, result.Props, result.CustomClass, Modifier$0024$0024$0024parseModifiers(modifiers));
+        }
+
+      default:
+        {
+          const size = option.fields[0];
+          return new Options(Size$0024$0024$0024ofSize(size), result.IsLoading, result.IsFocused, result.IsActive, result.Color, result.Id, result.Disabled, result.IsReadOnly, result.HasFixedSize, result.Value, result.DefaultValue, result.ValueOrDefault, result.Placeholder, result.OnChange, result.Ref, result.Props, result.CustomClass, result.Modifiers);
+        }
+    }
+  };
+
+  const opts = fold(parseOptions, Options$$$get_Empty(), options);
+  const classes = Common$0024002EHelpers$0024$0024$0024classes("textarea", L(opts.Color, L(opts.CustomClass, L(opts.Size, opts.Modifiers))), L(["has-fixed-size", opts.HasFixedSize], L(["is-loading", opts.IsLoading], L(["is-focused", opts.IsFocused], L(["is-active", opts.IsActive], L())))));
+  return createElement("textarea", createObj(ofSeq(delay(function () {
+    return append(singleton(classes), delay(function () {
+      return append(singleton(new Props$0024002EHTMLAttr(37, "Disabled", opts.Disabled)), delay(function () {
+        return append(singleton(new Props$0024002EHTMLAttr(90, "ReadOnly", opts.IsReadOnly)), delay(function () {
+          return append(opts.Id != null ? singleton(new Props$0024002EHTMLAttr(57, "Id", opts.Id)) : empty(), delay(function () {
+            return append(opts.Value != null ? singleton(new Props$0024002EHTMLAttr(119, "Value", opts.Value)) : empty(), delay(function () {
+              return append(opts.DefaultValue != null ? singleton(new Props$0024002EHTMLAttr(1, "DefaultValue", opts.DefaultValue)) : empty(), delay(function () {
+                return append(opts.ValueOrDefault != null ? singleton(new Props$0024002EProp(1, "Ref", function (e) {
+                  if (!(e == null) ? !equals(e.value, opts.ValueOrDefault) : false) {
+                    e.value = opts.ValueOrDefault;
+                  }
+                })) : empty(), delay(function () {
+                  return append(opts.Placeholder != null ? singleton(new Props$0024002EHTMLAttr(86, "Placeholder", opts.Placeholder)) : empty(), delay(function () {
+                    return append(opts.OnChange != null ? singleton(new Props$0024002EDOMAttr(9, "OnChange", opts.OnChange)) : empty(), delay(function () {
+                      return append(opts.Ref != null ? singleton(new Props$0024002EProp(1, "Ref", opts.Ref)) : empty(), delay(function () {
+                        return opts.Props;
+                      }));
+                    }));
+                  }));
+                }));
+              }));
+            }));
+          }));
+        }));
+      }));
+    }));
+  })), 1), ...children);
+}

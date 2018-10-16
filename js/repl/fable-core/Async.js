@@ -10,6 +10,22 @@ export default class Async {
 function emptyContinuation(x) {
     // NOP
 }
+// MakeAsync: body:(AsyncActivation<'T> -> AsyncReturn) -> Async<'T>
+export function makeAsync(body) {
+    return body;
+}
+// Invoke: computation: Async<'T> -> ctxt:AsyncActivation<'T> -> AsyncReturn
+export function invoke(computation, ctx) {
+    return computation(ctx);
+}
+// CallThenInvoke: ctxt:AsyncActivation<'T> -> result1:'U -> part2:('U -> Async<'T>) -> AsyncReturn
+export function callThenInvoke(ctx, result1, part2) {
+    return part2(result1)(ctx);
+}
+// Bind: ctxt:AsyncActivation<'T> -> part1:Async<'U> -> part2:('U -> Async<'T>) -> AsyncReturn
+export function bind(ctx, part1, part2) {
+    return protectedBind(part1, part2)(ctx);
+}
 export function createCancellationToken(arg) {
     const token = { isCancelled: false };
     if (typeof arg === "number") {
