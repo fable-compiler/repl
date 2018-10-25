@@ -26,11 +26,18 @@ let run2 folder filename =
     |]
     File.WriteAllLines(Path.Combine(__SOURCE_DIRECTORY__, filename), Array.append lines lines2)
 
-let run folder filename =
+let run3 folder filename =
     printfn """{ "type": "menu-item", "label": "%s", "fsharpCode": "fulma/%s", "htmlCode": "fulma/fulma.html" },"""
         (removeExt filename |> firstToUpper)
         filename
 
+let run folder filename =
+    let path = Path.Combine(__SOURCE_DIRECTORY__, filename)
+    let lines = File.ReadAllLines(path)
+    let lines0 = [|"// More info about Fulma at https://mangelmaxime.github.io/Fulma/"|]
+    File.WriteAllLines(path, Array.append lines0 lines)
+
+run "Elements" "box.fs"
 run "Elements" "button.fs"
 run "Elements" "content.fs"
 run "Elements" "delete.fs"

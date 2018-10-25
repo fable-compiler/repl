@@ -1,3 +1,4 @@
+// More info about Fulma at https://mangelmaxime.github.io/Fulma/
 module Fulma.Section
 
 open Fable.Helpers.React
