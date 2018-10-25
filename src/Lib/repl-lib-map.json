@@ -50,8 +50,8 @@
     "Fulma.Select": ["Fulma.Select", "Form/Select"],
     "Fulma.Textarea": ["Fulma.Textarea", "Form/Textarea"],
 
-    "Fulma.Column": ["Fulma.Column", "Layouts/Column"],
     "Fulma.Columns": ["Fulma.Columns", "Layouts/Columns"],
+    "Fulma.Column": ["Fulma.Column", "Layouts/Column"],
     "Fulma.Container": ["Fulma.Container", "Layouts/Container"],
     "Fulma.Footer": ["Fulma.Footer", "Layouts/Footer"],
     "Fulma.Hero": ["Fulma.Hero", "Layouts/Hero"],

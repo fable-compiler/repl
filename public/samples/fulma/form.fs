@@ -5,7 +5,7 @@ open Fable.Helpers.React.Props
 open Fulma
 open Fulma.FontAwesome
 
-let view() =
+let basic() =
     form [ ]
          [ // Name field
            Field.div [ ]
@@ -98,5 +98,6 @@ let view() =
                     [ Button.button [ Button.IsLink ]
                         [ str "Cancel" ] ] ] ]
 
-Card.card [] [Card.content [] [view()] ]
-|> mountById "elmish-app"
+div [] [
+    Card.card [] [Card.content [] [basic()] ]
+] |> mountById "elmish-app"
