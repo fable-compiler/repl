@@ -173,8 +173,15 @@ Target "YarnInstall" (fun _ ->
 
 Target "CopyModules" (fun _ ->
     let vsOutput = LIBS_OUTPUT </> "vs"
+    let cssOutput = LIBS_OUTPUT </> "css"
     CreateDir vsOutput
+    CreateDir cssOutput
     CopyDir vsOutput ("node_modules" </> "monaco-editor" </> "min" </> "vs") (fun _ -> true)
+    CopyFile LIBS_OUTPUT "node_modules/react/umd/react.production.min.js"
+    CopyFile LIBS_OUTPUT "node_modules/react-dom/umd/react-dom.production.min.js"
+    CopyFile cssOutput "node_modules/bulma/css/bulma.min.css"
+    CopyFile cssOutput "node_modules/font-awesome/css/font-awesome.min.css"
+    CopyDir (LIBS_OUTPUT </> "fonts")  "node_modules/font-awesome/fonts" (fun _ -> true)
 )
 
 Target "WatchApp" (fun _ ->
