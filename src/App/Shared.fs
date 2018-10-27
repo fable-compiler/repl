@@ -8,7 +8,7 @@ open Thoth.Json
 
 [<RequireQualifiedAccess>]
 module Literals =
-    let [<Literal>] VERSION = "2.0.4"
+    let [<Literal>] VERSION = "2.0.6"
     let [<Literal>] STORAGE_KEY = "fable-repl"
     let [<Literal>] REPL_BUNDLE_URL = "./js/repl/bundle.min.js"
     let [<Literal>] SAMPLES_JSON_URL = "./samples/samples.json"

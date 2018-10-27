@@ -211,9 +211,8 @@ Target "BuildLib" (fun _ ->
     // fable-splitter will adjust the fable-core path
     let fableCoreDir = "force:${outDir}../fable-core"
     let fableCommand =
-        // "fable"
-        // TODO: Use local version until a new Fable version is published
-        "run -c Release -p ../../../Fable/src/dotnet/Fable.Compiler/"
+        "fable"
+        // "run -c Release -p ../../../Fable/src/dotnet/Fable.Compiler/" // Local version
     sprintf "%s fable-splitter --fable-core %s --args \"-c src/Lib/splitter.config.js\"" fableCommand fableCoreDir
     |> runDotnet APP_DIR
 
