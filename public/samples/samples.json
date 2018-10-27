@@ -5,23 +5,6 @@
         "children": [
             {
                 "type": "sub-category",
-                "label": "Basic",
-                "children": [
-                    {
-                        "type": "menu-item",
-                        "label": "Hello World (console)",
-                        "fsharpCode": "basic/hello-world-console.fs"
-                    },
-                    {
-                        "type": "menu-item",
-                        "label": "Hello World (HTML)",
-                        "fsharpCode": "basic/hello-world-html.fs",
-                        "htmlCode": "basic/hello-world-html.html"
-                    }
-                ]
-            },
-            {
-                "type": "sub-category",
                 "label": "Elmish",
                 "children": [
                     {
@@ -30,13 +13,6 @@
                         "fsharpCode": "elmish/simple_input.fs",
                         "htmlCode": "elmish/simple_input.html",
                         "cssCode": "elmish/simple_input.css"
-                    },
-                    {
-                        "type": "menu-item",
-                        "label": "Random user (Thoth)",
-                        "fsharpCode": "elmish/thoth_random_user.fs",
-                        "htmlCode": "elmish/thoth_random_user.html",
-                        "cssCode": "elmish/thoth_random_user.css"
                     },
                     {
                         "type": "menu-item",
@@ -68,6 +44,13 @@
                         "label": "TodoMVC",
                         "fsharpCode": "elmish/todomvc.fs",
                         "htmlCode": "elmish/todomvc.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Random user (Thoth)",
+                        "fsharpCode": "elmish/thoth_random_user.fs",
+                        "htmlCode": "elmish/thoth_random_user.html",
+                        "cssCode": "elmish/thoth_random_user.css"
                     },
                     {
                         "type": "menu-item",
