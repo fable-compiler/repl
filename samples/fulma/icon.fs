@@ -1,5 +1,5 @@
 // More info about Fulma at https://mangelmaxime.github.io/Fulma/
-module Fulma.Icon
+module Fulma.IconSample
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props

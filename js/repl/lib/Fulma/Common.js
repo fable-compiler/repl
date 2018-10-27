@@ -152,6 +152,37 @@ export function TextSize$002EOption$$$get_toString() {
     return _arg1$$1.tag === 1 ? "2" : _arg1$$1.tag === 2 ? "3" : _arg1$$1.tag === 3 ? "4" : _arg1$$1.tag === 4 ? "5" : _arg1$$1.tag === 5 ? "6" : _arg1$$1.tag === 6 ? "7" : "1";
   };
 }
+export function TextSize$$$generic(screen, size$$1) {
+  return "is-size-" + TextSize$002EOption$$$get_toString()(size$$1) + Screen$$$get_toString()(screen);
+}
+export function TextSize$$$only(screen$$1, size$$2) {
+  var $target$$1;
+
+  switch (screen$$1.tag) {
+    case 2:
+    case 1:
+    case 4:
+      $target$$1 = 0;
+      break;
+
+    default:
+      $target$$1 = 1;
+  }
+
+  switch ($target$$1) {
+    case 0:
+      {
+        return "is-size-" + TextSize$002EOption$$$get_toString()(size$$2) + Screen$$$get_toString()(screen$$1) + "-only";
+      }
+
+    case 1:
+      {
+        const x = screen$$1;
+        console.warn("Screen `%s` does not support `is-size-xxx-only`." + x.toString());
+        return "";
+      }
+  }
+}
 export const TextAlignment$002EOption = declare(function TextAlignment$002EOption(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
@@ -159,6 +190,37 @@ export function TextAlignment$002EOption$$$get_toString() {
   return function (_arg1$$2) {
     return _arg1$$2.tag === 1 ? "has-text-justified" : _arg1$$2.tag === 2 ? "has-text-left" : _arg1$$2.tag === 3 ? "has-text-right" : "has-text-centered";
   };
+}
+export function TextAlignment$$$generic(screen$$2, alignment) {
+  return TextAlignment$002EOption$$$get_toString()(alignment) + Screen$$$get_toString()(screen$$2);
+}
+export function TextAlignment$$$only(screen$$3, alignment$$1) {
+  var $target$$2;
+
+  switch (screen$$3.tag) {
+    case 2:
+    case 1:
+    case 4:
+      $target$$2 = 0;
+      break;
+
+    default:
+      $target$$2 = 1;
+  }
+
+  switch ($target$$2) {
+    case 0:
+      {
+        return TextAlignment$002EOption$$$get_toString()(alignment$$1) + Screen$$$get_toString()(screen$$3) + "-only";
+      }
+
+    case 1:
+      {
+        const x$$1 = screen$$3;
+        console.warn("Screen `%s` does not support `is-size-xxx-only`." + x$$1.toString());
+        return "";
+      }
+  }
 }
 export const TextWeight$002EOption = declare(function TextWeight$002EOption(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
@@ -189,40 +251,50 @@ export function TextWeight$$$ofOption(_arg1$$3) {
 export const TextTransform$002EOption = declare(function TextTransform$002EOption(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
+export function TextTransform$002EOption$$$get_toClass() {
+  return function (_arg1$$4) {
+    return _arg1$$4.tag === 1 ? "is-lowercase" : _arg1$$4.tag === 2 ? "is-uppercase" : _arg1$$4.tag === 3 ? "is-italic" : "is-capitalized";
+  };
+}
 export const Display$002EOption = declare(function Display$002EOption(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Display$$$toDisplayClass(screen, display) {
-  const display$$1 = display.tag === 1 ? "flex" : display.tag === 2 ? "inline" : display.tag === 3 ? "inline-block" : display.tag === 4 ? "inline-flex" : "block";
-  const screen$$1 = Screen$$$get_toString()(screen);
-  return "is-" + display$$1 + screen$$1;
+export function Display$002EOption$$$get_toClass() {
+  return function (_arg1$$5) {
+    return _arg1$$5.tag === 1 ? "flex" : _arg1$$5.tag === 2 ? "inline" : _arg1$$5.tag === 3 ? "inline-block" : _arg1$$5.tag === 4 ? "inline-flex" : "block";
+  };
 }
-export function Display$$$toDisplayOnlyClass(screen$$2, display$$2) {
-  var $target$$1;
+export function Display$$$toDisplayClass(screen$$4, display) {
+  const display$$1 = display.tag === 1 ? "flex" : display.tag === 2 ? "inline" : display.tag === 3 ? "inline-block" : display.tag === 4 ? "inline-flex" : "block";
+  const screen$$5 = Screen$$$get_toString()(screen$$4);
+  return "is-" + display$$1 + screen$$5;
+}
+export function Display$$$toDisplayOnlyClass(screen$$6, display$$2) {
+  var $target$$3;
 
-  switch (screen$$2.tag) {
+  switch (screen$$6.tag) {
     case 2:
     case 1:
     case 4:
-      $target$$1 = 0;
+      $target$$3 = 0;
       break;
 
     default:
-      $target$$1 = 1;
+      $target$$3 = 1;
   }
 
-  switch ($target$$1) {
+  switch ($target$$3) {
     case 0:
       {
         const display$$3 = display$$2.tag === 1 ? "flex" : display$$2.tag === 2 ? "inline" : display$$2.tag === 3 ? "inline-block" : display$$2.tag === 4 ? "inline-flex" : "block";
-        const screen$$3 = Screen$$$get_toString()(screen$$2);
-        return "is-" + display$$3 + screen$$3 + "-only";
+        const screen$$7 = Screen$$$get_toString()(screen$$6);
+        return "is-" + display$$3 + screen$$7 + "-only";
       }
 
     case 1:
       {
-        const x = screen$$2;
-        console.warn("Screen `%s` does not support display only." + x.toString());
+        const x$$2 = screen$$6;
+        console.warn("Screen `%s` does not support display only." + x$$2.toString());
         return "";
       }
   }
@@ -445,64 +517,64 @@ export function Modifier$$$ofText(level$$2) {
       }
   }
 }
-export function Modifier$$$ofInvisible(screen$$4) {
-  return "is-invisible" + Screen$$$get_toString()(screen$$4);
+export function Modifier$$$ofInvisible(screen$$8) {
+  return "is-invisible" + Screen$$$get_toString()(screen$$8);
 }
-export function Modifier$$$ofHidden(screen$$5) {
-  return "is-hidden" + Screen$$$get_toString()(screen$$5);
+export function Modifier$$$ofHidden(screen$$9) {
+  return "is-hidden" + Screen$$$get_toString()(screen$$9);
 }
-export function Modifier$$$ofInvisibleOnly(screen$$6) {
-  var $target$$2;
+export function Modifier$$$ofInvisibleOnly(screen$$10) {
+  var $target$$4;
 
-  switch (screen$$6.tag) {
+  switch (screen$$10.tag) {
     case 2:
     case 1:
     case 4:
-      $target$$2 = 0;
+      $target$$4 = 0;
       break;
 
     default:
-      $target$$2 = 1;
+      $target$$4 = 1;
   }
 
-  switch ($target$$2) {
+  switch ($target$$4) {
     case 0:
       {
-        return "is-invisible" + Screen$$$get_toString()(screen$$6) + "-only";
+        return "is-invisible" + Screen$$$get_toString()(screen$$10) + "-only";
       }
 
     case 1:
       {
-        const x$$1 = screen$$6;
-        console.warn("Screen `%s` does not support `is-invisible-xxx-only`." + x$$1.toString());
+        const x$$3 = screen$$10;
+        console.warn("Screen `%s` does not support `is-invisible-xxx-only`." + x$$3.toString());
         return "";
       }
   }
 }
-export function Modifier$$$ofHiddenOnly(screen$$7) {
-  var $target$$3;
+export function Modifier$$$ofHiddenOnly(screen$$11) {
+  var $target$$5;
 
-  switch (screen$$7.tag) {
+  switch (screen$$11.tag) {
     case 2:
     case 1:
     case 4:
-      $target$$3 = 0;
+      $target$$5 = 0;
       break;
 
     default:
-      $target$$3 = 1;
+      $target$$5 = 1;
   }
 
-  switch ($target$$3) {
+  switch ($target$$5) {
     case 0:
       {
-        return "is-hidden" + Screen$$$get_toString()(screen$$7) + "-only";
+        return "is-hidden" + Screen$$$get_toString()(screen$$11) + "-only";
       }
 
     case 1:
       {
-        const x$$2 = screen$$7;
-        console.warn("Screen `%s` does not support `is-hidden-xxx-only`." + x$$2.toString());
+        const x$$4 = screen$$11;
+        console.warn("Screen `%s` does not support `is-hidden-xxx-only`." + x$$4.toString());
         return "";
       }
   }
@@ -541,7 +613,7 @@ export function Modifier$002EOptions$$$get_Empty() {
 }
 export function Modifier$$$parseModifiers(options) {
   const parseOption = function parseOption(result, opt) {
-    var x$$3, x$$4;
+    var x$$5, x$$6;
 
     if (opt.tag === 1) {
       return new Modifier$002EOptions(result.BackgroundColor, Modifier$$$ofText(opt.fields[0]), result.TextWeight, result.TextSize, result.TextSizeOnly, result.TextAlignment, result.TextAlignmentOnly, result.TextTransform, result.IsClearfix, result.IsPulledLeft, result.IsPulledRight, result.IsMarginless, result.IsPaddingless, result.IsOverlay, result.IsClipped, result.IsRadiusless, result.IsShadowless, result.IsUnselectable, result.IsInvisible, result.IsHidden, result.IsInvisibleOnly, result.IsHiddenOnly, result.Display, result.DisplayOnly);
@@ -550,11 +622,11 @@ export function Modifier$$$parseModifiers(options) {
     } else if (opt.tag === 3) {
       return new Modifier$002EOptions(result.BackgroundColor, result.TextColor, result.TextWeight, result.TextSize + " " + ("is-size-" + TextSize$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0])), result.TextSizeOnly, result.TextAlignment, result.TextAlignmentOnly, result.TextTransform, result.IsClearfix, result.IsPulledLeft, result.IsPulledRight, result.IsMarginless, result.IsPaddingless, result.IsOverlay, result.IsClipped, result.IsRadiusless, result.IsShadowless, result.IsUnselectable, result.IsInvisible, result.IsHidden, result.IsInvisibleOnly, result.IsHiddenOnly, result.Display, result.DisplayOnly);
     } else if (opt.tag === 4) {
-      return new Modifier$002EOptions(result.BackgroundColor, result.TextColor, result.TextWeight, result.TextSize + " " + (opt.fields[0].tag === 2 ? "is-size-" + TextSize$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : opt.fields[0].tag === 1 ? "is-size-" + TextSize$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : opt.fields[0].tag === 4 ? "is-size-" + TextSize$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : (x$$3 = opt.fields[0], (console.warn("Screen `%s` does not support `is-size-xxx-only`." + x$$3.toString()), ""))), result.TextSizeOnly, result.TextAlignment, result.TextAlignmentOnly, result.TextTransform, result.IsClearfix, result.IsPulledLeft, result.IsPulledRight, result.IsMarginless, result.IsPaddingless, result.IsOverlay, result.IsClipped, result.IsRadiusless, result.IsShadowless, result.IsUnselectable, result.IsInvisible, result.IsHidden, result.IsInvisibleOnly, result.IsHiddenOnly, result.Display, result.DisplayOnly);
+      return new Modifier$002EOptions(result.BackgroundColor, result.TextColor, result.TextWeight, result.TextSize + " " + (opt.fields[0].tag === 2 ? "is-size-" + TextSize$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : opt.fields[0].tag === 1 ? "is-size-" + TextSize$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : opt.fields[0].tag === 4 ? "is-size-" + TextSize$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : (x$$5 = opt.fields[0], (console.warn("Screen `%s` does not support `is-size-xxx-only`." + x$$5.toString()), ""))), result.TextSizeOnly, result.TextAlignment, result.TextAlignmentOnly, result.TextTransform, result.IsClearfix, result.IsPulledLeft, result.IsPulledRight, result.IsMarginless, result.IsPaddingless, result.IsOverlay, result.IsClipped, result.IsRadiusless, result.IsShadowless, result.IsUnselectable, result.IsInvisible, result.IsHidden, result.IsInvisibleOnly, result.IsHiddenOnly, result.Display, result.DisplayOnly);
     } else if (opt.tag === 5) {
       return new Modifier$002EOptions(result.BackgroundColor, result.TextColor, result.TextWeight, result.TextSize, result.TextSizeOnly, result.TextAlignment + " " + (TextAlignment$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0])), result.TextAlignmentOnly, result.TextTransform, result.IsClearfix, result.IsPulledLeft, result.IsPulledRight, result.IsMarginless, result.IsPaddingless, result.IsOverlay, result.IsClipped, result.IsRadiusless, result.IsShadowless, result.IsUnselectable, result.IsInvisible, result.IsHidden, result.IsInvisibleOnly, result.IsHiddenOnly, result.Display, result.DisplayOnly);
     } else if (opt.tag === 6) {
-      return new Modifier$002EOptions(result.BackgroundColor, result.TextColor, result.TextWeight, result.TextSize, result.TextSizeOnly, result.TextAlignment + " " + (opt.fields[0].tag === 2 ? TextAlignment$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : opt.fields[0].tag === 1 ? TextAlignment$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : opt.fields[0].tag === 4 ? TextAlignment$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : (x$$4 = opt.fields[0], (console.warn("Screen `%s` does not support `is-size-xxx-only`." + x$$4.toString()), ""))), result.TextAlignmentOnly, result.TextTransform, result.IsClearfix, result.IsPulledLeft, result.IsPulledRight, result.IsMarginless, result.IsPaddingless, result.IsOverlay, result.IsClipped, result.IsRadiusless, result.IsShadowless, result.IsUnselectable, result.IsInvisible, result.IsHidden, result.IsInvisibleOnly, result.IsHiddenOnly, result.Display, result.DisplayOnly);
+      return new Modifier$002EOptions(result.BackgroundColor, result.TextColor, result.TextWeight, result.TextSize, result.TextSizeOnly, result.TextAlignment + " " + (opt.fields[0].tag === 2 ? TextAlignment$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : opt.fields[0].tag === 1 ? TextAlignment$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : opt.fields[0].tag === 4 ? TextAlignment$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : (x$$6 = opt.fields[0], (console.warn("Screen `%s` does not support `is-size-xxx-only`." + x$$6.toString()), ""))), result.TextAlignmentOnly, result.TextTransform, result.IsClearfix, result.IsPulledLeft, result.IsPulledRight, result.IsMarginless, result.IsPaddingless, result.IsOverlay, result.IsClipped, result.IsRadiusless, result.IsShadowless, result.IsUnselectable, result.IsInvisible, result.IsHidden, result.IsInvisibleOnly, result.IsHiddenOnly, result.Display, result.DisplayOnly);
     } else if (opt.tag === 7) {
       return new Modifier$002EOptions(result.BackgroundColor, result.TextColor, result.TextWeight, result.TextSize, result.TextSizeOnly, result.TextAlignment, result.TextAlignmentOnly, result.TextTransform + " " + (opt.fields[0].tag === 1 ? "is-lowercase" : opt.fields[0].tag === 2 ? "is-uppercase" : opt.fields[0].tag === 3 ? "is-italic" : "is-capitalized"), result.IsClearfix, result.IsPulledLeft, result.IsPulledRight, result.IsMarginless, result.IsPaddingless, result.IsOverlay, result.IsClipped, result.IsRadiusless, result.IsShadowless, result.IsUnselectable, result.IsInvisible, result.IsHidden, result.IsInvisibleOnly, result.IsHiddenOnly, result.Display, result.DisplayOnly);
     } else if (opt.tag === 8) {

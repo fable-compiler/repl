@@ -1,7 +1,7 @@
 import { L, Record, declare, Union } from "../../fable-core/Types.js";
 import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Screen, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers } from "../Fulma/Common.js";
+import { createObj, equals } from "../../fable-core/Util.js";
 import { fold } from "../../fable-core/List.js";
-import { createObj } from "../../fable-core/Util.js";
 const createElement = React.createElement;
 export const ISize = declare(function ISize(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
@@ -691,7 +691,7 @@ export function column(options, children) {
     var $target$$1, screen$$1, width$$1;
 
     if (_arg1$$2.tag === 0) {
-      if (width = _arg1$$2.fields[1], (screen = _arg1$$2.fields[0], screen.Equals(new Screen(0, "All")))) {
+      if (width = _arg1$$2.fields[1], (screen = _arg1$$2.fields[0], equals(screen, new Screen(0, "All")))) {
         $target$$1 = 0;
         screen$$1 = _arg1$$2.fields[0];
         width$$1 = _arg1$$2.fields[1];
@@ -713,7 +713,7 @@ export function column(options, children) {
           var $target$$2, offset$$8, screen$$3;
 
           if (_arg1$$2.tag === 1) {
-            if (screen$$2 = _arg1$$2.fields[0], (offset$$7 = _arg1$$2.fields[1], screen$$2.Equals(new Screen(0, "All")))) {
+            if (screen$$2 = _arg1$$2.fields[0], (offset$$7 = _arg1$$2.fields[1], equals(screen$$2, new Screen(0, "All")))) {
               $target$$2 = 0;
               offset$$8 = _arg1$$2.fields[1];
               screen$$3 = _arg1$$2.fields[0];
@@ -735,7 +735,7 @@ export function column(options, children) {
                 var $target$$3, screen$$5, width$$3;
 
                 if (_arg1$$2.tag === 0) {
-                  if (width$$2 = _arg1$$2.fields[1], (screen$$4 = _arg1$$2.fields[0], screen$$4.Equals(new Screen(1, "Desktop")))) {
+                  if (width$$2 = _arg1$$2.fields[1], (screen$$4 = _arg1$$2.fields[0], equals(screen$$4, new Screen(1, "Desktop")))) {
                     $target$$3 = 0;
                     screen$$5 = _arg1$$2.fields[0];
                     width$$3 = _arg1$$2.fields[1];
@@ -757,7 +757,7 @@ export function column(options, children) {
                       var $target$$4, offset$$10, screen$$7;
 
                       if (_arg1$$2.tag === 1) {
-                        if (screen$$6 = _arg1$$2.fields[0], (offset$$9 = _arg1$$2.fields[1], screen$$6.Equals(new Screen(1, "Desktop")))) {
+                        if (screen$$6 = _arg1$$2.fields[0], (offset$$9 = _arg1$$2.fields[1], equals(screen$$6, new Screen(1, "Desktop")))) {
                           $target$$4 = 0;
                           offset$$10 = _arg1$$2.fields[1];
                           screen$$7 = _arg1$$2.fields[0];
@@ -779,7 +779,7 @@ export function column(options, children) {
                             var $target$$5, screen$$9, width$$5;
 
                             if (_arg1$$2.tag === 0) {
-                              if (width$$4 = _arg1$$2.fields[1], (screen$$8 = _arg1$$2.fields[0], screen$$8.Equals(new Screen(2, "Tablet")))) {
+                              if (width$$4 = _arg1$$2.fields[1], (screen$$8 = _arg1$$2.fields[0], equals(screen$$8, new Screen(2, "Tablet")))) {
                                 $target$$5 = 0;
                                 screen$$9 = _arg1$$2.fields[0];
                                 width$$5 = _arg1$$2.fields[1];
@@ -801,7 +801,7 @@ export function column(options, children) {
                                   var $target$$6, offset$$12, screen$$11;
 
                                   if (_arg1$$2.tag === 1) {
-                                    if (screen$$10 = _arg1$$2.fields[0], (offset$$11 = _arg1$$2.fields[1], screen$$10.Equals(new Screen(2, "Tablet")))) {
+                                    if (screen$$10 = _arg1$$2.fields[0], (offset$$11 = _arg1$$2.fields[1], equals(screen$$10, new Screen(2, "Tablet")))) {
                                       $target$$6 = 0;
                                       offset$$12 = _arg1$$2.fields[1];
                                       screen$$11 = _arg1$$2.fields[0];
@@ -823,7 +823,7 @@ export function column(options, children) {
                                         var $target$$7, screen$$13, width$$7;
 
                                         if (_arg1$$2.tag === 0) {
-                                          if (width$$6 = _arg1$$2.fields[1], (screen$$12 = _arg1$$2.fields[0], screen$$12.Equals(new Screen(3, "Mobile")))) {
+                                          if (width$$6 = _arg1$$2.fields[1], (screen$$12 = _arg1$$2.fields[0], equals(screen$$12, new Screen(3, "Mobile")))) {
                                             $target$$7 = 0;
                                             screen$$13 = _arg1$$2.fields[0];
                                             width$$7 = _arg1$$2.fields[1];
@@ -845,7 +845,7 @@ export function column(options, children) {
                                               var $target$$8, offset$$14, screen$$15;
 
                                               if (_arg1$$2.tag === 1) {
-                                                if (screen$$14 = _arg1$$2.fields[0], (offset$$13 = _arg1$$2.fields[1], screen$$14.Equals(new Screen(3, "Mobile")))) {
+                                                if (screen$$14 = _arg1$$2.fields[0], (offset$$13 = _arg1$$2.fields[1], equals(screen$$14, new Screen(3, "Mobile")))) {
                                                   $target$$8 = 0;
                                                   offset$$14 = _arg1$$2.fields[1];
                                                   screen$$15 = _arg1$$2.fields[0];
@@ -867,7 +867,7 @@ export function column(options, children) {
                                                     var $target$$9, screen$$17, width$$9;
 
                                                     if (_arg1$$2.tag === 0) {
-                                                      if (width$$8 = _arg1$$2.fields[1], (screen$$16 = _arg1$$2.fields[0], screen$$16.Equals(new Screen(4, "WideScreen")))) {
+                                                      if (width$$8 = _arg1$$2.fields[1], (screen$$16 = _arg1$$2.fields[0], equals(screen$$16, new Screen(4, "WideScreen")))) {
                                                         $target$$9 = 0;
                                                         screen$$17 = _arg1$$2.fields[0];
                                                         width$$9 = _arg1$$2.fields[1];
@@ -889,7 +889,7 @@ export function column(options, children) {
                                                           var $target$$10, offset$$16, screen$$19;
 
                                                           if (_arg1$$2.tag === 1) {
-                                                            if (screen$$18 = _arg1$$2.fields[0], (offset$$15 = _arg1$$2.fields[1], screen$$18.Equals(new Screen(4, "WideScreen")))) {
+                                                            if (screen$$18 = _arg1$$2.fields[0], (offset$$15 = _arg1$$2.fields[1], equals(screen$$18, new Screen(4, "WideScreen")))) {
                                                               $target$$10 = 0;
                                                               offset$$16 = _arg1$$2.fields[1];
                                                               screen$$19 = _arg1$$2.fields[0];
@@ -911,7 +911,7 @@ export function column(options, children) {
                                                                 var $target$$11, screen$$21, width$$11;
 
                                                                 if (_arg1$$2.tag === 0) {
-                                                                  if (width$$10 = _arg1$$2.fields[1], (screen$$20 = _arg1$$2.fields[0], screen$$20.Equals(new Screen(6, "FullHD")))) {
+                                                                  if (width$$10 = _arg1$$2.fields[1], (screen$$20 = _arg1$$2.fields[0], equals(screen$$20, new Screen(6, "FullHD")))) {
                                                                     $target$$11 = 0;
                                                                     screen$$21 = _arg1$$2.fields[0];
                                                                     width$$11 = _arg1$$2.fields[1];
@@ -933,7 +933,7 @@ export function column(options, children) {
                                                                       var $target$$12, offset$$18, screen$$23;
 
                                                                       if (_arg1$$2.tag === 1) {
-                                                                        if (screen$$22 = _arg1$$2.fields[0], (offset$$17 = _arg1$$2.fields[1], screen$$22.Equals(new Screen(6, "FullHD")))) {
+                                                                        if (screen$$22 = _arg1$$2.fields[0], (offset$$17 = _arg1$$2.fields[1], equals(screen$$22, new Screen(6, "FullHD")))) {
                                                                           $target$$12 = 0;
                                                                           offset$$18 = _arg1$$2.fields[1];
                                                                           screen$$23 = _arg1$$2.fields[0];
@@ -955,7 +955,7 @@ export function column(options, children) {
                                                                             var $target$$13, screen$$25, width$$13;
 
                                                                             if (_arg1$$2.tag === 0) {
-                                                                              if (width$$12 = _arg1$$2.fields[1], (screen$$24 = _arg1$$2.fields[0], screen$$24.Equals(new Screen(5, "Touch")))) {
+                                                                              if (width$$12 = _arg1$$2.fields[1], (screen$$24 = _arg1$$2.fields[0], equals(screen$$24, new Screen(5, "Touch")))) {
                                                                                 $target$$13 = 0;
                                                                                 screen$$25 = _arg1$$2.fields[0];
                                                                                 width$$13 = _arg1$$2.fields[1];
@@ -977,7 +977,7 @@ export function column(options, children) {
                                                                                   var $target$$14, offset$$20, screen$$27;
 
                                                                                   if (_arg1$$2.tag === 1) {
-                                                                                    if (screen$$26 = _arg1$$2.fields[0], (offset$$19 = _arg1$$2.fields[1], screen$$26.Equals(new Screen(5, "Touch")))) {
+                                                                                    if (screen$$26 = _arg1$$2.fields[0], (offset$$19 = _arg1$$2.fields[1], equals(screen$$26, new Screen(5, "Touch")))) {
                                                                                       $target$$14 = 0;
                                                                                       offset$$20 = _arg1$$2.fields[1];
                                                                                       screen$$27 = _arg1$$2.fields[0];

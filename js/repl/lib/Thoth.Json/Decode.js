@@ -16,6 +16,45 @@ import { makeTuple, getTupleElements, isTuple, getElementType, isArray, isUnion,
 export const ErrorReason = declare(function ErrorReason(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
+export function Helpers$$$isString(o) {
+  return typeof o === "string";
+}
+export function Helpers$$$isBoolean(o$$1) {
+  return typeof o$$1 === "boolean";
+}
+export function Helpers$$$isNumber(o$$2) {
+  return typeof o$$2 === "number";
+}
+export function Helpers$$$isArray(o$$3) {
+  return Array.isArray(o$$3);
+}
+export function Helpers$$$isNaN(o$$4) {
+  return Number.isNaN(o$$4);
+}
+export function Helpers$$$isNull(o$$5) {
+  return o$$5 == null;
+}
+export function Helpers$$$isFunction(o$$6) {
+  return typeof o$$6 === "function";
+}
+export function Helpers$$$objectKeys(o$$7) {
+  return Object.keys(o$$7);
+}
+export function Helpers$$$asBool(o$$8) {
+  return o$$8;
+}
+export function Helpers$$$asInt(o$$9) {
+  return o$$9;
+}
+export function Helpers$$$asFloat(o$$10) {
+  return o$$10;
+}
+export function Helpers$$$asString(o$$11) {
+  return o$$11;
+}
+export function Helpers$$$asArray(o$$12) {
+  return o$$12;
+}
 
 function genericMsg(msg, value$$1, newLine) {
   try {
@@ -408,35 +447,35 @@ export function optional(fieldName$$4, decoder$$11, path$$23, v) {
   const matchValue$$12 = decodeValueError(path$$23, function (path$$24, value$$36) {
     return field(fieldName$$4, decoder$$11, path$$24, value$$36);
   }, v);
-  var $target$$31, v$$1, error$$8;
+  var $target$$38, v$$1, error$$8;
 
   if (matchValue$$12.tag === 1) {
     if (matchValue$$12.fields[0][1].tag === 4) {
-      $target$$31 = 1;
+      $target$$38 = 1;
     } else if (matchValue$$12.fields[0][1].tag === 1) {
       if (equals(matchValue$$12.fields[0][1].fields[1], null)) {
-        $target$$31 = 1;
+        $target$$38 = 1;
       } else {
-        $target$$31 = 2;
+        $target$$38 = 2;
         error$$8 = matchValue$$12.fields[0];
       }
     } else if (matchValue$$12.fields[0][1].tag === 0) {
       if (equals(matchValue$$12.fields[0][1].fields[1], null)) {
-        $target$$31 = 1;
+        $target$$38 = 1;
       } else {
-        $target$$31 = 2;
+        $target$$38 = 2;
         error$$8 = matchValue$$12.fields[0];
       }
     } else {
-      $target$$31 = 2;
+      $target$$38 = 2;
       error$$8 = matchValue$$12.fields[0];
     }
   } else {
-    $target$$31 = 0;
+    $target$$38 = 0;
     v$$1 = matchValue$$12.fields[0];
   }
 
-  switch ($target$$31) {
+  switch ($target$$38) {
     case 0:
       {
         return new Result(0, "Ok", some(v$$1));
@@ -457,37 +496,37 @@ export function optionalAt(fieldNames$$1, decoder$$13, path$$25, v$$2) {
   const matchValue$$13 = decodeValueError(path$$25, function (path$$26, value$$37) {
     return at(fieldNames$$1, decoder$$13, path$$26, value$$37);
   }, v$$2);
-  var $target$$36, v$$3, error$$9;
+  var $target$$43, v$$3, error$$9;
 
   if (matchValue$$13.tag === 1) {
     if (matchValue$$13.fields[0][1].tag === 5) {
-      $target$$36 = 1;
+      $target$$43 = 1;
     } else if (matchValue$$13.fields[0][1].tag === 1) {
       if (equals(matchValue$$13.fields[0][1].fields[1], null)) {
-        $target$$36 = 1;
+        $target$$43 = 1;
       } else {
-        $target$$36 = 2;
+        $target$$43 = 2;
         error$$9 = matchValue$$13.fields[0];
       }
     } else if (matchValue$$13.fields[0][1].tag === 2) {
-      $target$$36 = 1;
+      $target$$43 = 1;
     } else if (matchValue$$13.fields[0][1].tag === 0) {
       if (equals(matchValue$$13.fields[0][1].fields[1], null)) {
-        $target$$36 = 1;
+        $target$$43 = 1;
       } else {
-        $target$$36 = 2;
+        $target$$43 = 2;
         error$$9 = matchValue$$13.fields[0];
       }
     } else {
-      $target$$36 = 2;
+      $target$$43 = 2;
       error$$9 = matchValue$$13.fields[0];
     }
   } else {
-    $target$$36 = 0;
+    $target$$43 = 0;
     v$$3 = matchValue$$13.fields[0];
   }
 
-  switch ($target$$36) {
+  switch ($target$$43) {
     case 0:
       {
         return new Result(0, "Ok", some(v$$3));
@@ -536,35 +575,35 @@ export function option(d1, path$$30, value$$44) {
     return new Result(0, "Ok", null);
   } else {
     const matchValue$$14 = d1(path$$30, value$$44);
-    var $target$$49, v$$4, error$$10;
+    var $target$$56, v$$4, error$$10;
 
     if (matchValue$$14.tag === 1) {
       if (matchValue$$14.fields[0][1].tag === 4) {
-        $target$$49 = 1;
+        $target$$56 = 1;
       } else if (matchValue$$14.fields[0][1].tag === 1) {
         if (equals(matchValue$$14.fields[0][1].fields[1], null)) {
-          $target$$49 = 1;
+          $target$$56 = 1;
         } else {
-          $target$$49 = 2;
+          $target$$56 = 2;
           error$$10 = matchValue$$14.fields[0];
         }
       } else if (matchValue$$14.fields[0][1].tag === 0) {
         if (equals(matchValue$$14.fields[0][1].fields[1], null)) {
-          $target$$49 = 1;
+          $target$$56 = 1;
         } else {
-          $target$$49 = 2;
+          $target$$56 = 2;
           error$$10 = matchValue$$14.fields[0];
         }
       } else {
-        $target$$49 = 2;
+        $target$$56 = 2;
         error$$10 = matchValue$$14.fields[0];
       }
     } else {
-      $target$$49 = 0;
+      $target$$56 = 0;
       v$$4 = matchValue$$14.fields[0];
     }
 
-    switch ($target$$49) {
+    switch ($target$$56) {
       case 0:
         {
           return new Result(0, "Ok", some(v$$4));
@@ -760,35 +799,35 @@ export function object(builder, path$$45, v$$7) {
           const matchValue$$20 = decodeValueError(path$$45, function (path$$48, value$$60) {
             return field(fieldName$$6, decoder$$29, path$$48, value$$60);
           }, v$$7);
-          var $target$$118, v$$11, error$$16;
+          var $target$$125, v$$11, error$$16;
 
           if (matchValue$$20.tag === 1) {
             if (matchValue$$20.fields[0][1].tag === 4) {
-              $target$$118 = 1;
+              $target$$125 = 1;
             } else if (matchValue$$20.fields[0][1].tag === 1) {
               if (equals(matchValue$$20.fields[0][1].fields[1], null)) {
-                $target$$118 = 1;
+                $target$$125 = 1;
               } else {
-                $target$$118 = 2;
+                $target$$125 = 2;
                 error$$16 = matchValue$$20.fields[0];
               }
             } else if (matchValue$$20.fields[0][1].tag === 0) {
               if (equals(matchValue$$20.fields[0][1].fields[1], null)) {
-                $target$$118 = 1;
+                $target$$125 = 1;
               } else {
-                $target$$118 = 2;
+                $target$$125 = 2;
                 error$$16 = matchValue$$20.fields[0];
               }
             } else {
-              $target$$118 = 2;
+              $target$$125 = 2;
               error$$16 = matchValue$$20.fields[0];
             }
           } else {
-            $target$$118 = 0;
+            $target$$125 = 0;
             v$$11 = matchValue$$20.fields[0];
           }
 
-          switch ($target$$118) {
+          switch ($target$$125) {
             case 0:
               {
                 return some(v$$11);
@@ -811,37 +850,37 @@ export function object(builder, path$$45, v$$7) {
             const matchValue$$21 = decodeValueError(path$$45, function (path$$49, value$$61) {
               return at(fieldNames$$3, decoder$$31, path$$49, value$$61);
             }, v$$7);
-            var $target$$119, v$$12, error$$17;
+            var $target$$126, v$$12, error$$17;
 
             if (matchValue$$21.tag === 1) {
               if (matchValue$$21.fields[0][1].tag === 5) {
-                $target$$119 = 1;
+                $target$$126 = 1;
               } else if (matchValue$$21.fields[0][1].tag === 1) {
                 if (equals(matchValue$$21.fields[0][1].fields[1], null)) {
-                  $target$$119 = 1;
+                  $target$$126 = 1;
                 } else {
-                  $target$$119 = 2;
+                  $target$$126 = 2;
                   error$$17 = matchValue$$21.fields[0];
                 }
               } else if (matchValue$$21.fields[0][1].tag === 2) {
-                $target$$119 = 1;
+                $target$$126 = 1;
               } else if (matchValue$$21.fields[0][1].tag === 0) {
                 if (equals(matchValue$$21.fields[0][1].fields[1], null)) {
-                  $target$$119 = 1;
+                  $target$$126 = 1;
                 } else {
-                  $target$$119 = 2;
+                  $target$$126 = 2;
                   error$$17 = matchValue$$21.fields[0];
                 }
               } else {
-                $target$$119 = 2;
+                $target$$126 = 2;
                 error$$17 = matchValue$$21.fields[0];
               }
             } else {
-              $target$$119 = 0;
+              $target$$126 = 0;
               v$$12 = matchValue$$21.fields[0];
             }
 
-            switch ($target$$119) {
+            switch ($target$$126) {
               case 0:
                 {
                   return some(v$$12);
@@ -864,28 +903,28 @@ export function object(builder, path$$45, v$$7) {
 
         Raw(decoder$$33) {
           const matchValue$$22 = decodeValueError(path$$45, decoder$$33, v$$7);
-          var $target$$120, v$$13, error$$18;
+          var $target$$127, v$$13, error$$18;
 
           if (matchValue$$22.tag === 1) {
             if (matchValue$$22.fields[0][1].tag === 4) {
-              $target$$120 = 1;
+              $target$$127 = 1;
             } else if (matchValue$$22.fields[0][1].tag === 0) {
               if (equals(matchValue$$22.fields[0][1].fields[1], null)) {
-                $target$$120 = 1;
+                $target$$127 = 1;
               } else {
-                $target$$120 = 2;
+                $target$$127 = 2;
                 error$$18 = matchValue$$22.fields[0];
               }
             } else {
-              $target$$120 = 2;
+              $target$$127 = 2;
               error$$18 = matchValue$$22.fields[0];
             }
           } else {
-            $target$$120 = 0;
+            $target$$127 = 0;
             v$$13 = matchValue$$22.fields[0];
           }
 
-          switch ($target$$120) {
+          switch ($target$$127) {
             case 0:
               {
                 return some(v$$13);
@@ -1167,7 +1206,7 @@ function mixedArray(msg$$12, decoders$$2, path$$121, values) {
   if (decoders$$2.length !== values.length) {
     return new Result(1, "Error", [path$$121, new ErrorReason(7, "FailMessage", toText(printf("Expected %i %s but got %i"))(decoders$$2.length)(msg$$12)(values.length))]);
   } else {
-    return foldBack2(function (arg1, arg2, arg3) {
+    return foldBack2(function ($arg$$5, $arg$$6, $arg$$7) {
       return function folder$$1(value$$133) {
         return function (decoder$$105) {
           return function (acc$$1) {
@@ -1181,7 +1220,7 @@ function mixedArray(msg$$12, decoders$$2, path$$121, values) {
             }
           };
         };
-      }(arg1)(uncurry(2, arg2))(arg3);
+      }($arg$$5)(uncurry(2, $arg$$6))($arg$$7);
     }, values, decoders$$2, new Result(0, "Ok", L()));
   }
 }
