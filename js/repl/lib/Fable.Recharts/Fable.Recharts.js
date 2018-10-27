@@ -1,6 +1,4 @@
 import { Union, declare, Record } from "../../fable-core/Types.js";
-import { createObj } from "../../fable-core/Util.js";
-const createElement = React.createElement;
 export const Props$002EPoint2 = declare(function Props$002EPoint2(arg1, arg2) {
   this.x = arg1;
   this.y = arg2;
@@ -36,199 +34,34 @@ export const Props$002EViewBox = declare(function Props$002EViewBox(arg1, arg2, 
 export const Props$002EChart = declare(function Props$002EChart(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Props$002EChart$$$Custom$$433E080(key, value) {
-  return [key, value];
-}
 export const Props$002ETreemap = declare(function Props$002ETreemap(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Props$002ETreemap$$$Custom$$433E080(key$$1, value$$1) {
-  return [key$$1, value$$1];
-}
 export const Props$002EResponsive = declare(function Props$002EResponsive(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Props$002EResponsive$$$Custom$$433E080(key$$2, value$$2) {
-  return [key$$2, value$$2];
-}
 export const Props$002ELegend = declare(function Props$002ELegend(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Props$002ELegend$$$Custom$$433E080(key$$3, value$$3) {
-  return [key$$3, value$$3];
-}
 export const Props$002ETooltip = declare(function Props$002ETooltip(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Props$002ETooltip$$$Custom$$433E080(key$$4, value$$4) {
-  return [key$$4, value$$4];
-}
 export const Props$002ECell = declare(function Props$002ECell(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Props$002ECell$$$Custom$$433E080(key$$5, value$$5) {
-  return [key$$5, value$$5];
-}
 export const Props$002EText = declare(function Props$002EText(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Props$002EText$$$Custom$$433E080(key$$6, value$$6) {
-  return [key$$6, value$$6];
-}
 export const Props$002ELabel = declare(function Props$002ELabel(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Props$002ELabel$$$Custom$$433E080(key$$7, value$$7) {
-  return [key$$7, value$$7];
-}
 export const Props$002ELabelList = declare(function Props$002ELabelList(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Props$002ELabelList$$$Custom$$433E080(key$$8, value$$8) {
-  return [key$$8, value$$8];
-}
 export const Props$002ECartesian = declare(function Props$002ECartesian(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Props$002ECartesian$$$Custom$$433E080(key$$9, value$$9) {
-  return [key$$9, value$$9];
-}
 export const Props$002EPolar = declare(function Props$002EPolar(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Props$002EPolar$$$Custom$$433E080(key$$10, value$$10) {
-  return [key$$10, value$$10];
-}
 export const Props$002EShape = declare(function Props$002EShape() {});
-export function Props$002EShape$$$Custom$$433E080(key$$11, value$$11) {
-  return [key$$11, value$$11];
-}
-export function ofImport(importMember, _importPath, props, children) {
-  return createElement(Recharts[importMember], props, ...children);
-}
-export function lineChart(props$$1, children$$1) {
-  return createElement(Recharts.LineChart, createObj(props$$1, 1), ...children$$1);
-}
-export function barChart(props$$3, children$$3) {
-  return createElement(Recharts.BarChart, createObj(props$$3, 1), ...children$$3);
-}
-export function areaChart(props$$5, children$$5) {
-  return createElement(Recharts.AreaChart, createObj(props$$5, 1), ...children$$5);
-}
-export function composedChart(props$$7, children$$7) {
-  return createElement(Recharts.ComposedChart, createObj(props$$7, 1), ...children$$7);
-}
-export function pieChart(props$$9, children$$9) {
-  return createElement(Recharts.PieChart, createObj(props$$9, 1), ...children$$9);
-}
-export function radarChart(props$$11, children$$11) {
-  return createElement(Recharts.RadarChart, createObj(props$$11, 1), ...children$$11);
-}
-export function radialBarChart(props$$13, children$$13) {
-  return createElement(Recharts.RadialBarChart, createObj(props$$13, 1), ...children$$13);
-}
-export function scatterChart(props$$15, children$$15) {
-  return createElement(Recharts.ScatterChart, createObj(props$$15, 1), ...children$$15);
-}
-export function treemap(props$$17, children$$17) {
-  return createElement(Recharts.Treemap, createObj(props$$17, 1), ...children$$17);
-}
-export function responsiveContainer(props$$19, children$$19) {
-  return createElement(Recharts.ResponsiveContainer, createObj(props$$19, 1), ...children$$19);
-}
-export function legend(props$$21, children$$21) {
-  return createElement(Recharts.Legend, createObj(props$$21, 1), ...children$$21);
-}
-export function tooltip(props$$23, children$$23) {
-  return createElement(Recharts.Tooltip, createObj(props$$23, 1), ...children$$23);
-}
-export function cell(props$$25, children$$25) {
-  return createElement(Recharts.Cell, createObj(props$$25, 1), ...children$$25);
-}
-export function text(props$$27, children$$27) {
-  return createElement(Recharts.Text, createObj(props$$27, 1), ...children$$27);
-}
-export function label(props$$29, children$$29) {
-  return createElement(Recharts.Label, createObj(props$$29, 1), ...children$$29);
-}
-export function labelList(props$$31, children$$31) {
-  return createElement(Recharts.LabelList, createObj(props$$31, 1), ...children$$31);
-}
-export function area(props$$33, children$$33) {
-  return createElement(Recharts.Area, createObj(props$$33, 1), ...children$$33);
-}
-export function bar(props$$35, children$$35) {
-  return createElement(Recharts.Bar, createObj(props$$35, 1), ...children$$35);
-}
-export function line(props$$37, children$$37) {
-  return createElement(Recharts.Line, createObj(props$$37, 1), ...children$$37);
-}
-export function scatter(props$$39, children$$39) {
-  return createElement(Recharts.Scatter, createObj(props$$39, 1), ...children$$39);
-}
-export function xaxis(props$$41, children$$41) {
-  return createElement(Recharts.XAxis, createObj(props$$41, 1), ...children$$41);
-}
-export function yaxis(props$$43, children$$43) {
-  return createElement(Recharts.YAxis, createObj(props$$43, 1), ...children$$43);
-}
-export function zaxis(props$$45, children$$45) {
-  return createElement(Recharts.ZAxis, createObj(props$$45, 1), ...children$$45);
-}
-export function brush(props$$47, children$$47) {
-  return createElement(Recharts.Brush, createObj(props$$47, 1), ...children$$47);
-}
-export function cartesianAxis(props$$49, children$$49) {
-  return createElement(Recharts.CartesianAxis, createObj(props$$49, 1), ...children$$49);
-}
-export function cartesianGrid(props$$51, children$$51) {
-  return createElement(Recharts.CartesianGrid, createObj(props$$51, 1), ...children$$51);
-}
-export function referenceLine(props$$53, children$$53) {
-  return createElement(Recharts.ReferenceLine, createObj(props$$53, 1), ...children$$53);
-}
-export function referenceDot(props$$55, children$$55) {
-  return createElement(Recharts.ReferenceDot, createObj(props$$55, 1), ...children$$55);
-}
-export function referenceArea(props$$57, children$$57) {
-  return createElement(Recharts.ReferenceArea, createObj(props$$57, 1), ...children$$57);
-}
-export function errorBar(props$$59, children$$59) {
-  return createElement(Recharts.ErrorBar, createObj(props$$59, 1), ...children$$59);
-}
-export function pie(props$$61, children$$61) {
-  return createElement(Recharts.Pie, createObj(props$$61, 1), ...children$$61);
-}
-export function radar(props$$63, children$$63) {
-  return createElement(Recharts.Radar, createObj(props$$63, 1), ...children$$63);
-}
-export function radialBar(props$$65, children$$65) {
-  return createElement(Recharts.RadialBar, createObj(props$$65, 1), ...children$$65);
-}
-export function polarAngleAxis(props$$67, children$$67) {
-  return createElement(Recharts.PolarAngleAxis, createObj(props$$67, 1), ...children$$67);
-}
-export function polarGrid(props$$69, children$$69) {
-  return createElement(Recharts.PolarGrid, createObj(props$$69, 1), ...children$$69);
-}
-export function polarRadiusAxis(props$$71, children$$71) {
-  return createElement(Recharts.PolarRadiusAxis, createObj(props$$71, 1), ...children$$71);
-}
-export function cross(props$$73) {
-  return createElement(Recharts.Cross, createObj(props$$73, 1), ...[]);
-}
-export function curve(props$$75) {
-  return createElement(Recharts.Curve, createObj(props$$75, 1), ...[]);
-}
-export function dot(props$$77) {
-  return createElement(Recharts.Dot, createObj(props$$77, 1), ...[]);
-}
-export function polygon(props$$79) {
-  return createElement(Recharts.Polygon, createObj(props$$79, 1), ...[]);
-}
-export function rectangle(props$$81) {
-  return createElement(Recharts.Rectangle, createObj(props$$81, 1), ...[]);
-}
-export function sector(props$$83) {
-  return createElement(Recharts.Sector, createObj(props$$83, 1), ...[]);
-}

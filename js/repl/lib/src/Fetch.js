@@ -1,5 +1,5 @@
 import { L, Union, declare } from "../../fable-core/Types.js";
-import { int32ToString, createObj } from "../../fable-core/Util.js";
+import { createObj, int32ToString } from "../../fable-core/Util.js";
 import { Promise$$$result as Promise$0024$0024$0024result } from "./Promise.js";
 import { fromValue, unwrap } from "../Thoth.Json/Decode.js";
 import { Result } from "../../fable-core/Option.js";
@@ -12,12 +12,6 @@ export const Fetch_types$002EHttpRequestHeaders = declare(function Fetch_types$0
 export const Fetch_types$002ERequestProperties = declare(function Fetch_types$002ERequestProperties(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function requestHeaders(headers) {
-  return new Fetch_types$002ERequestProperties(1, "Headers", createObj(headers, 0));
-}
-export function requestProps(props) {
-  return createObj(props, 1);
-}
 
 function errorString(response) {
   return int32ToString(response.status) + " " + response.statusText + " for URL " + response.url;

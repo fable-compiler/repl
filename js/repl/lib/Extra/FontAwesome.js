@@ -4,15 +4,6 @@ import { Common$$$genericParse as Common$0024$0024$0024genericParse, Common$002E
 import { createObj } from "../../fable-core/Util.js";
 import { icon } from "../Elements/Icon.js";
 const createElement = React.createElement;
-export function Fa$002EI$$$Tags() {
-  return "fa-tags";
-}
-export function Fa$002EI$$$$003500px() {
-  return "fa-500px";
-}
-export function Fa$002EI$$$Custom(iconClass) {
-  return iconClass;
-}
 export const Fa$002ETypes$002EIIconSize = declare(function Fa$002ETypes$002EIIconSize(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);

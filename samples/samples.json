@@ -5,23 +5,6 @@
         "children": [
             {
                 "type": "sub-category",
-                "label": "Basic",
-                "children": [
-                    {
-                        "type": "menu-item",
-                        "label": "Hello World (console)",
-                        "fsharpCode": "basic/hello-world-console.fs"
-                    },
-                    {
-                        "type": "menu-item",
-                        "label": "Hello World (HTML)",
-                        "fsharpCode": "basic/hello-world-html.fs",
-                        "htmlCode": "basic/hello-world-html.html"
-                    }
-                ]
-            },
-            {
-                "type": "sub-category",
                 "label": "Elmish",
                 "children": [
                     {
@@ -30,13 +13,6 @@
                         "fsharpCode": "elmish/simple_input.fs",
                         "htmlCode": "elmish/simple_input.html",
                         "cssCode": "elmish/simple_input.css"
-                    },
-                    {
-                        "type": "menu-item",
-                        "label": "Random user (Thoth)",
-                        "fsharpCode": "elmish/thoth_random_user.fs",
-                        "htmlCode": "elmish/thoth_random_user.html",
-                        "cssCode": "elmish/thoth_random_user.css"
                     },
                     {
                         "type": "menu-item",
@@ -71,11 +47,17 @@
                     },
                     {
                         "type": "menu-item",
+                        "label": "Random user (Thoth)",
+                        "fsharpCode": "elmish/thoth_random_user.fs",
+                        "htmlCode": "elmish/thoth_random_user.html",
+                        "cssCode": "elmish/thoth_random_user.css"
+                    },
+                    {
+                        "type": "menu-item",
                         "label": "Spreadsheet",
                         "fsharpCode": "elmish/spreadsheet.fs",
                         "htmlCode": "elmish/spreadsheet.html"
                     }
-
                 ]
             },
             {
@@ -84,9 +66,177 @@
                 "children": [
                     {
                         "type": "menu-item",
+                        "label": "Button",
+                        "fsharpCode": "fulma/button.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Content",
+                        "fsharpCode": "fulma/content.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Delete",
+                        "fsharpCode": "fulma/delete.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Icon",
+                        "fsharpCode": "fulma/icon.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Image",
+                        "fsharpCode": "fulma/image.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Progress",
+                        "fsharpCode": "fulma/progress.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Table",
+                        "fsharpCode": "fulma/table.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Tag",
+                        "fsharpCode": "fulma/tag.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Title",
+                        "fsharpCode": "fulma/title.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Notification",
+                        "fsharpCode": "fulma/notification.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
                         "label": "Form",
                         "fsharpCode": "fulma/form.fs",
-                        "htmlCode": "fulma/form.html"
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Breadcrumb",
+                        "fsharpCode": "fulma/breadcrumb.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Panel",
+                        "fsharpCode": "fulma/panel.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Card",
+                        "fsharpCode": "fulma/card.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Menu",
+                        "fsharpCode": "fulma/menu.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Message",
+                        "fsharpCode": "fulma/message.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Navbar",
+                        "fsharpCode": "fulma/navbar.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Pagination",
+                        "fsharpCode": "fulma/pagination.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Tabs",
+                        "fsharpCode": "fulma/tabs.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Modal",
+                        "fsharpCode": "fulma/modal.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Media",
+                        "fsharpCode": "fulma/media.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Dropdown",
+                        "fsharpCode": "fulma/dropdown.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Container",
+                        "fsharpCode": "fulma/container.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Level",
+                        "fsharpCode": "fulma/level.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Hero",
+                        "fsharpCode": "fulma/hero.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Footer",
+                        "fsharpCode": "fulma/footer.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Section",
+                        "fsharpCode": "fulma/section.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Tile",
+                        "fsharpCode": "fulma/tile.fs",
+                        "htmlCode": "fulma/fulma.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Columns",
+                        "fsharpCode": "fulma/columns.fs",
+                        "htmlCode": "fulma/fulma.html"
                     }
                 ]
             },

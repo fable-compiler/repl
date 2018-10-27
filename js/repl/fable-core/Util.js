@@ -541,12 +541,16 @@ export function createObj(fields, caseRule = CaseRules.None) {
         throw new Error("Cannot infer key and value of " + toString(kvPair));
     }
     const o = {};
+    const definedCaseRule = caseRule;
     for (let kvPair of fields) {
+        let caseRule = CaseRules.None;
         if (kvPair == null) {
             fail(kvPair);
         }
-        if (typeof kvPair.toJSON === "function") { // Deflate unions
+        // Deflate unions and use the defined case rule
+        if (typeof kvPair.toJSON === "function") {
             kvPair = kvPair.toJSON();
+            caseRule = definedCaseRule;
         }
         if (Array.isArray(kvPair)) {
             switch (kvPair.length) {

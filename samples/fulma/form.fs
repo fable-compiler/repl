@@ -1,3 +1,4 @@
+// More info about Fulma at https://mangelmaxime.github.io/Fulma/
 module Fulma.Form
 
 open Fable.Helpers.React
@@ -5,7 +6,7 @@ open Fable.Helpers.React.Props
 open Fulma
 open Fulma.FontAwesome
 
-let view() =
+let basic() =
     form [ ]
          [ // Name field
            Field.div [ ]
@@ -98,5 +99,6 @@ let view() =
                     [ Button.button [ Button.IsLink ]
                         [ str "Cancel" ] ] ] ]
 
-Card.card [] [Card.content [] [view()] ]
-|> mountById "elmish-app"
+div [] [
+    Card.card [] [Card.content [] [basic()] ]
+] |> mountById "elmish-app"

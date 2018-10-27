@@ -12,49 +12,10 @@ import { map as map$$2, iterate } from "../../fable-core/Seq.js";
 import { curry, compare, comparePrimitives, uncurry, equals, int32ToString } from "../../fable-core/Util.js";
 import { ofList as ofList$$1, tryFind, foldBack2, foldBack, toList, map as map$$1 } from "../../fable-core/Array.js";
 import { ofSeq as ofSeq$$1, ofList } from "../../fable-core/Map.js";
-import { getGenerics, getGenericTypeDefinition, makeTuple, getTupleElements, isTuple, isGenericType, getElementType, isArray, isUnion, makeRecord, getRecordElements, isRecord, fullName, getUnionCaseFields, makeUnion as makeUnion$$1, getUnionCases, name as name$$5 } from "../../fable-core/Reflection.js";
+import { makeTuple, getTupleElements, isTuple, getElementType, isArray, isUnion, makeRecord, getRecordElements, getGenerics, getGenericTypeDefinition, isGenericType, isRecord, fullName, getUnionCaseFields, makeUnion as makeUnion$$1, getUnionCases, name as name$$5 } from "../../fable-core/Reflection.js";
 export const ErrorReason = declare(function ErrorReason(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export function Helpers$$$isString(o) {
-  return typeof o === "string";
-}
-export function Helpers$$$isBoolean(o$$1) {
-  return typeof o$$1 === "boolean";
-}
-export function Helpers$$$isNumber(o$$2) {
-  return typeof o$$2 === "number";
-}
-export function Helpers$$$isArray(o$$3) {
-  return Array.isArray(o$$3);
-}
-export function Helpers$$$isNaN(o$$4) {
-  return Number.isNaN(o$$4);
-}
-export function Helpers$$$isNull(o$$5) {
-  return o$$5 == null;
-}
-export function Helpers$$$isFunction(o$$6) {
-  return typeof o$$6 === "function";
-}
-export function Helpers$$$objectKeys(o$$7) {
-  return Object.keys(o$$7);
-}
-export function Helpers$$$asBool(o$$8) {
-  return o$$8;
-}
-export function Helpers$$$asInt(o$$9) {
-  return o$$9;
-}
-export function Helpers$$$asFloat(o$$10) {
-  return o$$10;
-}
-export function Helpers$$$asString(o$$11) {
-  return o$$11;
-}
-export function Helpers$$$asArray(o$$12) {
-  return o$$12;
-}
 
 function genericMsg(msg, value$$1, newLine) {
   try {
@@ -447,35 +408,35 @@ export function optional(fieldName$$4, decoder$$11, path$$23, v) {
   const matchValue$$12 = decodeValueError(path$$23, function (path$$24, value$$36) {
     return field(fieldName$$4, decoder$$11, path$$24, value$$36);
   }, v);
-  var $target$$38, v$$1, error$$8;
+  var $target$$31, v$$1, error$$8;
 
   if (matchValue$$12.tag === 1) {
     if (matchValue$$12.fields[0][1].tag === 4) {
-      $target$$38 = 1;
+      $target$$31 = 1;
     } else if (matchValue$$12.fields[0][1].tag === 1) {
       if (equals(matchValue$$12.fields[0][1].fields[1], null)) {
-        $target$$38 = 1;
+        $target$$31 = 1;
       } else {
-        $target$$38 = 2;
+        $target$$31 = 2;
         error$$8 = matchValue$$12.fields[0];
       }
     } else if (matchValue$$12.fields[0][1].tag === 0) {
       if (equals(matchValue$$12.fields[0][1].fields[1], null)) {
-        $target$$38 = 1;
+        $target$$31 = 1;
       } else {
-        $target$$38 = 2;
+        $target$$31 = 2;
         error$$8 = matchValue$$12.fields[0];
       }
     } else {
-      $target$$38 = 2;
+      $target$$31 = 2;
       error$$8 = matchValue$$12.fields[0];
     }
   } else {
-    $target$$38 = 0;
+    $target$$31 = 0;
     v$$1 = matchValue$$12.fields[0];
   }
 
-  switch ($target$$38) {
+  switch ($target$$31) {
     case 0:
       {
         return new Result(0, "Ok", some(v$$1));
@@ -496,37 +457,37 @@ export function optionalAt(fieldNames$$1, decoder$$13, path$$25, v$$2) {
   const matchValue$$13 = decodeValueError(path$$25, function (path$$26, value$$37) {
     return at(fieldNames$$1, decoder$$13, path$$26, value$$37);
   }, v$$2);
-  var $target$$43, v$$3, error$$9;
+  var $target$$36, v$$3, error$$9;
 
   if (matchValue$$13.tag === 1) {
     if (matchValue$$13.fields[0][1].tag === 5) {
-      $target$$43 = 1;
+      $target$$36 = 1;
     } else if (matchValue$$13.fields[0][1].tag === 1) {
       if (equals(matchValue$$13.fields[0][1].fields[1], null)) {
-        $target$$43 = 1;
+        $target$$36 = 1;
       } else {
-        $target$$43 = 2;
+        $target$$36 = 2;
         error$$9 = matchValue$$13.fields[0];
       }
     } else if (matchValue$$13.fields[0][1].tag === 2) {
-      $target$$43 = 1;
+      $target$$36 = 1;
     } else if (matchValue$$13.fields[0][1].tag === 0) {
       if (equals(matchValue$$13.fields[0][1].fields[1], null)) {
-        $target$$43 = 1;
+        $target$$36 = 1;
       } else {
-        $target$$43 = 2;
+        $target$$36 = 2;
         error$$9 = matchValue$$13.fields[0];
       }
     } else {
-      $target$$43 = 2;
+      $target$$36 = 2;
       error$$9 = matchValue$$13.fields[0];
     }
   } else {
-    $target$$43 = 0;
+    $target$$36 = 0;
     v$$3 = matchValue$$13.fields[0];
   }
 
-  switch ($target$$43) {
+  switch ($target$$36) {
     case 0:
       {
         return new Result(0, "Ok", some(v$$3));
@@ -575,35 +536,35 @@ export function option(d1, path$$30, value$$44) {
     return new Result(0, "Ok", null);
   } else {
     const matchValue$$14 = d1(path$$30, value$$44);
-    var $target$$56, v$$4, error$$10;
+    var $target$$49, v$$4, error$$10;
 
     if (matchValue$$14.tag === 1) {
       if (matchValue$$14.fields[0][1].tag === 4) {
-        $target$$56 = 1;
+        $target$$49 = 1;
       } else if (matchValue$$14.fields[0][1].tag === 1) {
         if (equals(matchValue$$14.fields[0][1].fields[1], null)) {
-          $target$$56 = 1;
+          $target$$49 = 1;
         } else {
-          $target$$56 = 2;
+          $target$$49 = 2;
           error$$10 = matchValue$$14.fields[0];
         }
       } else if (matchValue$$14.fields[0][1].tag === 0) {
         if (equals(matchValue$$14.fields[0][1].fields[1], null)) {
-          $target$$56 = 1;
+          $target$$49 = 1;
         } else {
-          $target$$56 = 2;
+          $target$$49 = 2;
           error$$10 = matchValue$$14.fields[0];
         }
       } else {
-        $target$$56 = 2;
+        $target$$49 = 2;
         error$$10 = matchValue$$14.fields[0];
       }
     } else {
-      $target$$56 = 0;
+      $target$$49 = 0;
       v$$4 = matchValue$$14.fields[0];
     }
 
-    switch ($target$$56) {
+    switch ($target$$49) {
       case 0:
         {
           return new Result(0, "Ok", some(v$$4));
@@ -776,6 +737,18 @@ export function object(builder, path$$45, v$$7) {
             const v$$9 = matchValue$$18.fields[0];
             return v$$9;
           }
+        },
+
+        Raw(decoder$$28) {
+          const matchValue$$19 = decodeValueError(path$$45, decoder$$28, v$$7);
+
+          if (matchValue$$19.tag === 1) {
+            const error$$15 = matchValue$$19.fields[0];
+            throw new DecoderException(error$$15);
+          } else {
+            const v$$10 = matchValue$$19.fields[0];
+            return v$$10;
+          }
         }
 
       };
@@ -783,42 +756,42 @@ export function object(builder, path$$45, v$$7) {
 
     get Optional() {
       return {
-        Field(fieldName$$6, decoder$$28) {
-          const matchValue$$19 = decodeValueError(path$$45, function (path$$48, value$$60) {
-            return field(fieldName$$6, decoder$$28, path$$48, value$$60);
+        Field(fieldName$$6, decoder$$29) {
+          const matchValue$$20 = decodeValueError(path$$45, function (path$$48, value$$60) {
+            return field(fieldName$$6, decoder$$29, path$$48, value$$60);
           }, v$$7);
-          var $target$$125, v$$10, error$$15;
+          var $target$$118, v$$11, error$$16;
 
-          if (matchValue$$19.tag === 1) {
-            if (matchValue$$19.fields[0][1].tag === 4) {
-              $target$$125 = 1;
-            } else if (matchValue$$19.fields[0][1].tag === 1) {
-              if (equals(matchValue$$19.fields[0][1].fields[1], null)) {
-                $target$$125 = 1;
+          if (matchValue$$20.tag === 1) {
+            if (matchValue$$20.fields[0][1].tag === 4) {
+              $target$$118 = 1;
+            } else if (matchValue$$20.fields[0][1].tag === 1) {
+              if (equals(matchValue$$20.fields[0][1].fields[1], null)) {
+                $target$$118 = 1;
               } else {
-                $target$$125 = 2;
-                error$$15 = matchValue$$19.fields[0];
+                $target$$118 = 2;
+                error$$16 = matchValue$$20.fields[0];
               }
-            } else if (matchValue$$19.fields[0][1].tag === 0) {
-              if (equals(matchValue$$19.fields[0][1].fields[1], null)) {
-                $target$$125 = 1;
+            } else if (matchValue$$20.fields[0][1].tag === 0) {
+              if (equals(matchValue$$20.fields[0][1].fields[1], null)) {
+                $target$$118 = 1;
               } else {
-                $target$$125 = 2;
-                error$$15 = matchValue$$19.fields[0];
+                $target$$118 = 2;
+                error$$16 = matchValue$$20.fields[0];
               }
             } else {
-              $target$$125 = 2;
-              error$$15 = matchValue$$19.fields[0];
+              $target$$118 = 2;
+              error$$16 = matchValue$$20.fields[0];
             }
           } else {
-            $target$$125 = 0;
-            v$$10 = matchValue$$19.fields[0];
+            $target$$118 = 0;
+            v$$11 = matchValue$$20.fields[0];
           }
 
-          switch ($target$$125) {
+          switch ($target$$118) {
             case 0:
               {
-                return some(v$$10);
+                return some(v$$11);
               }
 
             case 1:
@@ -828,50 +801,50 @@ export function object(builder, path$$45, v$$7) {
 
             case 2:
               {
-                throw new DecoderException(error$$15);
+                throw new DecoderException(error$$16);
               }
           }
         },
 
-        At(fieldNames$$3, decoder$$30) {
+        At(fieldNames$$3, decoder$$31) {
           if (Object.getPrototypeOf(v$$7 || false) === Object.prototype) {
-            const matchValue$$20 = decodeValueError(path$$45, function (path$$49, value$$61) {
-              return at(fieldNames$$3, decoder$$30, path$$49, value$$61);
+            const matchValue$$21 = decodeValueError(path$$45, function (path$$49, value$$61) {
+              return at(fieldNames$$3, decoder$$31, path$$49, value$$61);
             }, v$$7);
-            var $target$$126, v$$11, error$$16;
+            var $target$$119, v$$12, error$$17;
 
-            if (matchValue$$20.tag === 1) {
-              if (matchValue$$20.fields[0][1].tag === 5) {
-                $target$$126 = 1;
-              } else if (matchValue$$20.fields[0][1].tag === 1) {
-                if (equals(matchValue$$20.fields[0][1].fields[1], null)) {
-                  $target$$126 = 1;
+            if (matchValue$$21.tag === 1) {
+              if (matchValue$$21.fields[0][1].tag === 5) {
+                $target$$119 = 1;
+              } else if (matchValue$$21.fields[0][1].tag === 1) {
+                if (equals(matchValue$$21.fields[0][1].fields[1], null)) {
+                  $target$$119 = 1;
                 } else {
-                  $target$$126 = 2;
-                  error$$16 = matchValue$$20.fields[0];
+                  $target$$119 = 2;
+                  error$$17 = matchValue$$21.fields[0];
                 }
-              } else if (matchValue$$20.fields[0][1].tag === 2) {
-                $target$$126 = 1;
-              } else if (matchValue$$20.fields[0][1].tag === 0) {
-                if (equals(matchValue$$20.fields[0][1].fields[1], null)) {
-                  $target$$126 = 1;
+              } else if (matchValue$$21.fields[0][1].tag === 2) {
+                $target$$119 = 1;
+              } else if (matchValue$$21.fields[0][1].tag === 0) {
+                if (equals(matchValue$$21.fields[0][1].fields[1], null)) {
+                  $target$$119 = 1;
                 } else {
-                  $target$$126 = 2;
-                  error$$16 = matchValue$$20.fields[0];
+                  $target$$119 = 2;
+                  error$$17 = matchValue$$21.fields[0];
                 }
               } else {
-                $target$$126 = 2;
-                error$$16 = matchValue$$20.fields[0];
+                $target$$119 = 2;
+                error$$17 = matchValue$$21.fields[0];
               }
             } else {
-              $target$$126 = 0;
-              v$$11 = matchValue$$20.fields[0];
+              $target$$119 = 0;
+              v$$12 = matchValue$$21.fields[0];
             }
 
-            switch ($target$$126) {
+            switch ($target$$119) {
               case 0:
                 {
-                  return some(v$$11);
+                  return some(v$$12);
                 }
 
               case 1:
@@ -881,11 +854,52 @@ export function object(builder, path$$45, v$$7) {
 
               case 2:
                 {
-                  throw new DecoderException(error$$16);
+                  throw new DecoderException(error$$17);
                 }
             }
           } else {
             throw new DecoderException([path$$45, new ErrorReason(1, "BadType", "an object", v$$7)]);
+          }
+        },
+
+        Raw(decoder$$33) {
+          const matchValue$$22 = decodeValueError(path$$45, decoder$$33, v$$7);
+          var $target$$120, v$$13, error$$18;
+
+          if (matchValue$$22.tag === 1) {
+            if (matchValue$$22.fields[0][1].tag === 4) {
+              $target$$120 = 1;
+            } else if (matchValue$$22.fields[0][1].tag === 0) {
+              if (equals(matchValue$$22.fields[0][1].fields[1], null)) {
+                $target$$120 = 1;
+              } else {
+                $target$$120 = 2;
+                error$$18 = matchValue$$22.fields[0];
+              }
+            } else {
+              $target$$120 = 2;
+              error$$18 = matchValue$$22.fields[0];
+            }
+          } else {
+            $target$$120 = 0;
+            v$$13 = matchValue$$22.fields[0];
+          }
+
+          switch ($target$$120) {
+            case 0:
+              {
+                return some(v$$13);
+              }
+
+            case 1:
+              {
+                return null;
+              }
+
+            case 2:
+              {
+                throw new DecoderException(error$$18);
+              }
           }
         }
 
@@ -1125,63 +1139,70 @@ function toMap(xs) {
   });
 }
 
-function autoObject(decoders$$2, path$$120, value$$132) {
+function autoObject(decoderInfos, path$$120, value$$132) {
   if (!(Object.getPrototypeOf(value$$132 || false) === Object.prototype)) {
     return new Result(1, "Error", [path$$120, new ErrorReason(0, "BadPrimitive", "an object", value$$132)]);
   } else {
     return foldBack(function folder(tupledArg, acc) {
       if (acc.tag === 0) {
         const result$$1 = acc.fields[0];
-        return mapOk(function mapping$$3(v$$12) {
-          return L(v$$12, result$$1);
-        }, field(tupledArg[0], uncurry(2, tupledArg[1]), path$$120, value$$132));
+
+        if (tupledArg[0]) {
+          return mapOk(function mapping$$3(v$$14) {
+            return L(v$$14, result$$1);
+          }, optional(tupledArg[1], uncurry(2, tupledArg[2]), path$$120, value$$132));
+        } else {
+          return mapOk(function mapping$$4(v$$15) {
+            return L(v$$15, result$$1);
+          }, field(tupledArg[1], uncurry(2, tupledArg[2]), path$$120, value$$132));
+        }
       } else {
         return acc;
       }
-    }, decoders$$2, new Result(0, "Ok", L()));
+    }, decoderInfos, new Result(0, "Ok", L()));
   }
 }
 
-function mixedArray(msg$$12, decoders$$3, path$$121, values) {
-  if (decoders$$3.length !== values.length) {
-    return new Result(1, "Error", [path$$121, new ErrorReason(7, "FailMessage", toText(printf("Expected %i %s but got %i"))(decoders$$3.length)(msg$$12)(values.length))]);
+function mixedArray(msg$$12, decoders$$2, path$$121, values) {
+  if (decoders$$2.length !== values.length) {
+    return new Result(1, "Error", [path$$121, new ErrorReason(7, "FailMessage", toText(printf("Expected %i %s but got %i"))(decoders$$2.length)(msg$$12)(values.length))]);
   } else {
-    return foldBack2(function ($arg$$5, $arg$$6, $arg$$7) {
+    return foldBack2(function (arg1, arg2, arg3) {
       return function folder$$1(value$$133) {
-        return function (decoder$$103) {
+        return function (decoder$$105) {
           return function (acc$$1) {
             if (acc$$1.tag === 0) {
-              const result$$3 = acc$$1.fields[0];
-              return mapOk(function mapping$$4(v$$13) {
-                return L(v$$13, result$$3);
-              }, decoder$$103(path$$121, value$$133));
+              const result$$4 = acc$$1.fields[0];
+              return mapOk(function mapping$$5(v$$16) {
+                return L(v$$16, result$$4);
+              }, decoder$$105(path$$121, value$$133));
             } else {
               return acc$$1;
             }
           };
         };
-      }($arg$$5)(uncurry(2, $arg$$6))($arg$$7);
-    }, values, decoders$$3, new Result(0, "Ok", L()));
+      }(arg1)(uncurry(2, arg2))(arg3);
+    }, values, decoders$$2, new Result(0, "Ok", L()));
   }
 }
 
 function makeUnion(t$$2, isCamelCase, name$$1, path$$122, values$$1) {
-  const matchValue$$21 = tryFind(function predicate(x$$6) {
+  const matchValue$$23 = tryFind(function predicate(x$$6) {
     return name$$5(x$$6) === name$$1;
   }, getUnionCases(t$$2));
 
-  if (matchValue$$21 != null) {
-    const uci = matchValue$$21;
+  if (matchValue$$23 != null) {
+    const uci = matchValue$$23;
 
     if (values$$1.length === 0) {
       return new Result(0, "Ok", makeUnion$$1(uci, []));
     } else {
-      const decoders$$4 = map$$1(function mapping$$5(fi) {
+      const decoders$$3 = map$$1(function mapping$$6(fi) {
         return autoDecoder(isCamelCase, fi[1]);
       }, getUnionCaseFields(uci), Array);
-      return mapOk(function mapping$$6(values$$2) {
+      return mapOk(function mapping$$7(values$$2) {
         return makeUnion$$1(uci, ofList$$1(values$$2, Array));
-      }, mixedArray("union fields", decoders$$4, path$$122, values$$1));
+      }, mixedArray("union fields", decoders$$3, path$$122, values$$1));
     }
   } else {
     return new Result(1, "Error", [path$$122, new ErrorReason(7, "FailMessage", "Cannot find case " + name$$1 + " in " + fullName(t$$2))]);
@@ -1192,13 +1213,22 @@ function autoDecodeRecordsAndUnions(t$$3, isCamelCase$$1) {
   if (isRecord(t$$3)) {
     return function (path$$123) {
       return function (value$$134) {
-        const decoders$$5 = map$$1(function mapping$$7(fi$$1) {
+        const decoders$$4 = map$$1(function mapping$$8(fi$$1) {
           const name$$2 = isCamelCase$$1 ? name$$5(fi$$1).slice(null, 0 + 1).toLowerCase() + name$$5(fi$$1).slice(1, name$$5(fi$$1).length) : name$$5(fi$$1);
-          return [name$$2, autoDecoder(isCamelCase$$1, fi$$1[1])];
+          let patternInput;
+
+          if (isGenericType(fi$$1[1])) {
+            const fullname = fullName(getGenericTypeDefinition(fi$$1[1]));
+            patternInput = fullname === "Microsoft.FSharp.Core.FSharpOption`1[System.Object]" ? [true, getGenerics(fi$$1[1])[0]] : [false, fi$$1[1]];
+          } else {
+            patternInput = [false, fi$$1[1]];
+          }
+
+          return [patternInput[0], name$$2, autoDecoder(isCamelCase$$1, patternInput[1])];
         }, getRecordElements(t$$3), Array);
-        return mapOk(function mapping$$8(xs$$1) {
+        return mapOk(function mapping$$9(xs$$1) {
           return makeRecord(t$$3, ofList$$1(xs$$1, Array));
-        }, autoObject(decoders$$5, path$$123, value$$134));
+        }, autoObject(decoders$$4, path$$123, value$$134));
       };
     };
   } else if (isUnion(t$$3)) {
@@ -1227,31 +1257,31 @@ function autoDecodeRecordsAndUnions(t$$3, isCamelCase$$1) {
 
 function autoDecoder(isCamelCase$$2, t$$4) {
   if (isArray(t$$4)) {
-    const decoder$$104 = function (t$$5) {
+    const decoder$$106 = function (t$$5) {
       return autoDecoder(isCamelCase$$2, t$$5);
     }(getElementType(t$$4));
 
     return function (d) {
       return curry(2, d);
     }(function (path$$125, value$$136) {
-      return array(uncurry(2, decoder$$104), path$$125, value$$136);
+      return array(uncurry(2, decoder$$106), path$$125, value$$136);
     });
   } else if (isGenericType(t$$4)) {
     if (isTuple(t$$4)) {
-      const decoders$$6 = map$$1(function mapping$$9(t$$6) {
+      const decoders$$5 = map$$1(function mapping$$10(t$$6) {
         return autoDecoder(isCamelCase$$2, t$$6);
       }, getTupleElements(t$$4), Array);
       return function (path$$126) {
         return function (value$$137) {
-          return Array.isArray(value$$137) ? mapOk(function mapping$$10(xs$$2) {
+          return Array.isArray(value$$137) ? mapOk(function mapping$$11(xs$$2) {
             return makeTuple(ofList$$1(xs$$2, Array), t$$4);
-          }, mixedArray("tuple elements", decoders$$6, path$$126, value$$137)) : new Result(1, "Error", [path$$126, new ErrorReason(0, "BadPrimitive", "an array", value$$137)]);
+          }, mixedArray("tuple elements", decoders$$5, path$$126, value$$137)) : new Result(1, "Error", [path$$126, new ErrorReason(0, "BadPrimitive", "an array", value$$137)]);
         };
       };
     } else {
-      const fullname = fullName(getGenericTypeDefinition(t$$4));
+      const fullname$$1 = fullName(getGenericTypeDefinition(t$$4));
 
-      if (fullname === "Microsoft.FSharp.Core.FSharpOption`1[System.Object]") {
+      if (fullname$$1 === "Microsoft.FSharp.Core.FSharpOption`1[System.Object]") {
         return function (d$$2) {
           return curry(2, d$$2);
         }(function (path$$127, value$$138) {
@@ -1259,7 +1289,7 @@ function autoDecoder(isCamelCase$$2, t$$4) {
             return autoDecoder(isCamelCase$$2, t$$7);
           }(getGenerics(t$$4)[0])), path$$127, value$$138);
         });
-      } else if (fullname === "Microsoft.FSharp.Collections.FSharpList`1[System.Object]") {
+      } else if (fullname$$1 === "Microsoft.FSharp.Collections.FSharpList`1[System.Object]") {
         return function (d$$4) {
           return curry(2, d$$4);
         }(function (path$$128, value$$139) {
@@ -1267,7 +1297,7 @@ function autoDecoder(isCamelCase$$2, t$$4) {
             return autoDecoder(isCamelCase$$2, t$$8);
           }(getGenerics(t$$4)[0])), path$$128, value$$139);
         });
-      } else if (fullname === "Microsoft.FSharp.Collections.FSharpMap`2[System.Object,System.Object]") {
+      } else if (fullname$$1 === "Microsoft.FSharp.Collections.FSharpMap`2[System.Object,System.Object]") {
         const decoder1$$7 = function (t$$9) {
           return autoDecoder(isCamelCase$$2, t$$9);
         }(getGenerics(t$$4)[0]);
@@ -1278,13 +1308,13 @@ function autoDecoder(isCamelCase$$2, t$$4) {
 
         return function (path$$129) {
           return function (value$$140) {
-            const matchValue$$22 = array(uncurry(2, tuple2(uncurry(2, decoder1$$7), uncurry(2, decoder2$$7))), path$$129, value$$140);
+            const matchValue$$24 = array(uncurry(2, tuple2(uncurry(2, decoder1$$7), uncurry(2, decoder2$$7))), path$$129, value$$140);
 
-            if (matchValue$$22.tag === 0) {
-              const ar = matchValue$$22.fields[0];
+            if (matchValue$$24.tag === 0) {
+              const ar = matchValue$$24.fields[0];
               return new Result(0, "Ok", toMap(ar));
             } else {
-              const er = matchValue$$22.fields[0];
+              const er = matchValue$$24.fields[0];
               return new Result(1, "Error", er);
             }
           };
@@ -1294,84 +1324,84 @@ function autoDecoder(isCamelCase$$2, t$$4) {
       }
     }
   } else {
-    const fullname$$1 = fullName(t$$4);
+    const fullname$$2 = fullName(t$$4);
 
-    if (fullname$$1 === "System.Boolean") {
+    if (fullname$$2 === "System.Boolean") {
       return function d$$6(path$$130) {
         return function (value$$142) {
           return bool(path$$130, value$$142);
         };
       };
-    } else if (fullname$$1 === "System.String") {
+    } else if (fullname$$2 === "System.String") {
       return function d$$7(path$$131) {
         return function (value$$143) {
           return string(path$$131, value$$143);
         };
       };
-    } else if (fullname$$1 === "System.Int32") {
+    } else if (fullname$$2 === "System.Int32") {
       return function d$$8(path$$132) {
         return function (value$$144) {
           return int$(path$$132, value$$144);
         };
       };
-    } else if (fullname$$1 === "System.Double") {
+    } else if (fullname$$2 === "System.Double") {
       return function d$$9(path$$133) {
         return function (value$$145) {
           return float$(path$$133, value$$145);
         };
       };
-    } else if (fullname$$1 === "System.Decimal") {
+    } else if (fullname$$2 === "System.Decimal") {
       return function d$$10(path$$134) {
         return function (value$$146) {
           return decimal(path$$134, value$$146);
         };
       };
-    } else if (fullname$$1 === "System.Int64") {
+    } else if (fullname$$2 === "System.Int64") {
       return function d$$11(path$$135) {
         return function (value$$147) {
           return int64(path$$135, value$$147);
         };
       };
-    } else if (fullname$$1 === "System.UInt32") {
+    } else if (fullname$$2 === "System.UInt32") {
       return function d$$12(path$$136) {
         return function (value$$148) {
           return uint32(path$$136, value$$148);
         };
       };
-    } else if (fullname$$1 === "System.UInt64") {
+    } else if (fullname$$2 === "System.UInt64") {
       return function d$$13(path$$137) {
         return function (value$$149) {
           return uint64(path$$137, value$$149);
         };
       };
-    } else if (fullname$$1 === "System.Numerics.BigInteger") {
+    } else if (fullname$$2 === "System.Numerics.BigInteger") {
       return function d$$14(path$$138) {
         return function (value$$150) {
           return bigint(path$$138, value$$150);
         };
       };
-    } else if (fullname$$1 === "System.DateTime") {
+    } else if (fullname$$2 === "System.DateTime") {
       return function d$$15(path$$139) {
         return function (value$$151) {
           return datetime(path$$139, value$$151);
         };
       };
-    } else if (fullname$$1 === "System.DateTimeOffset") {
+    } else if (fullname$$2 === "System.DateTimeOffset") {
       return function d$$16(path$$140) {
         return function (value$$152) {
           return datetimeOffset(path$$140, value$$152);
         };
       };
-    } else if (fullname$$1 === "System.Guid") {
+    } else if (fullname$$2 === "System.Guid") {
       return function d$$17(path$$141) {
         return function (value$$153) {
           return guid(path$$141, value$$153);
         };
       };
-    } else if (fullname$$1 === "System.Object") {
+    } else if (fullname$$2 === "System.Object") {
       return function (arg00$0040) {
-        return function (v$$14) {
-          return value(arg00$0040, v$$14);
+        return function (v$$17) {
+          return value(arg00$0040, v$$17);
         };
       };
     } else {
@@ -1390,18 +1420,18 @@ export function Auto$$$generateDecoder$$38AE3D3E(isCamelCase$$3, resolver) {
   }(resolver.ResolveType())));
 }
 export function Auto$$$fromString$$Z4741753B(json$$1, isCamelCase$$5, resolver$$1) {
-  const decoder$$106 = Auto$$$generateDecoder$$38AE3D3E(isCamelCase$$5, resolver$$1);
-  return fromString(uncurry(2, decoder$$106), json$$1);
+  const decoder$$108 = Auto$$$generateDecoder$$38AE3D3E(isCamelCase$$5, resolver$$1);
+  return fromString(uncurry(2, decoder$$108), json$$1);
 }
 export function Auto$$$unsafeFromString$$Z4741753B(json$$2, isCamelCase$$6, resolver$$2) {
-  const decoder$$107 = Auto$$$generateDecoder$$38AE3D3E(isCamelCase$$6, resolver$$2);
-  const matchValue$$23 = fromString(uncurry(2, decoder$$107), json$$2);
+  const decoder$$109 = Auto$$$generateDecoder$$38AE3D3E(isCamelCase$$6, resolver$$2);
+  const matchValue$$25 = fromString(uncurry(2, decoder$$109), json$$2);
 
-  if (matchValue$$23.tag === 1) {
-    const msg$$13 = matchValue$$23.fields[0];
+  if (matchValue$$25.tag === 1) {
+    const msg$$13 = matchValue$$25.fields[0];
     throw new Error(msg$$13);
   } else {
-    const x$$7 = matchValue$$23.fields[0];
+    const x$$7 = matchValue$$25.fields[0];
     return x$$7;
   }
 }

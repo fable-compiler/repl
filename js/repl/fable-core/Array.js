@@ -3,7 +3,6 @@ import { compare, addToSet, tryGetValue, comparerFromEqualityComparer, max as ma
 import { createMutable } from "./Map.js";
 import { iterate as iterate$$1 } from "./Seq.js";
 import { createMutable as createMutable$$1 } from "./Set.js";
-import { truncate as truncate$$1 } from "./Array.js";
 import { L } from "./Types.js";
 
 function indexNotFound() {
@@ -494,7 +493,7 @@ export function partition(f$$6, source$$4, cons$$29) {
     }
   }
 
-  return [truncate$$1(iTrue, res1), truncate$$1(iFalse, res2)];
+  return [truncate(iTrue, res1), truncate(iFalse, res2)];
 }
 export function find(predicate$$9, array$$51) {
   const matchValue$$5 = array$$51.find(predicate$$9);
