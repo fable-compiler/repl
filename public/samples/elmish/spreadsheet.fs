@@ -3,131 +3,13 @@ module SpreadSheet
 // Build your own Excel 365 in an hour with F# by Tomas Petricek!
 // Watch the video of the talk here: https://www.youtube.com/watch?v=Bnm71YEt_lI
 
-open System
-
-module Elmish =
-    open Fable.Core
-    open Fable.Import.Browser
-
-    // ------------------------------------------------------------------------------------------------
-    // Virtual Dom bindings
-    // ------------------------------------------------------------------------------------------------
-
-    module Virtualdom =
-      type IVirtualDom =
-        abstract h: string * obj * obj[] -> obj
-        abstract diff: obj * obj -> obj
-        abstract patch: obj * obj -> Node
-        abstract createElement: obj -> Node
-
-      let [<Global>] private virtualDom: IVirtualDom = jsNative
-
-      let inline h(arg1, arg2, arg3) = virtualDom.h(arg1, arg2, arg3)
-      let inline diff (tree1) (tree2) = virtualDom.diff(tree1, tree2)
-      let inline patch (node) (patches) = virtualDom.patch(node, patches)
-      let inline createElement (e) = virtualDom.createElement(e)
-
-    // ------------------------------------------------------------------------------------------------
-    // F# representation of DOM and rendering using VirtualDom
-    // ------------------------------------------------------------------------------------------------
-
-    type DomAttribute =
-      | EventHandler of (obj -> unit)
-      | Attribute of string
-      | Property of string
-
-    type DomNode =
-      | Text of string
-      | Element of tag:string * attributes:(string * DomAttribute)[] * children : DomNode[]
-
-    let createTree tag args children =
-        let attrs = ResizeArray<_>()
-        let props = ResizeArray<_>()
-        for k, v in args do
-          match k, v with
-          | "style", Attribute v
-          | "style", Property v ->
-              let args = v.Split(';') |> Array.map (fun a ->
-                let sep = a.IndexOf(':')
-                if sep > 0 then a.Substring(0, sep), box (a.Substring(sep+1))
-                else a, box "" )
-              props.Add ("style", JsInterop.createObj args)
-          | "class", Attribute v
-          | "class", Property v ->
-              attrs.Add (k, box v)
-          | k, Attribute v ->
-              attrs.Add (k, box v)
-          | k, Property v ->
-              props.Add (k, box v)
-          | k, EventHandler f ->
-              props.Add (k, box f)
-        let attrs = JsInterop.createObj attrs
-        let props = JsInterop.createObj (Seq.append ["attributes", attrs] props)
-        let elem = Virtualdom.h(tag, props, children)
-        elem
-
-    let rec render node =
-      match node with
-      | Text(s) ->
-          box s, ignore
-      | Element(tag, attrs, children) ->
-          let children, funcs = Array.map render children |> Array.unzip
-          let func = funcs |> Array.fold (fun f g x -> f (g x)) ignore
-          let focused = attrs |> Array.exists (function "focused", Property "true" -> true | _ -> false)
-          let id = attrs |> Array.tryPick (function "id", Property id -> Some id | _ -> None)
-          let focus = match id with Some id when focused -> (fun () -> document.getElementById(id).focus()) | _ -> ignore
-          createTree tag attrs children, focus >> func
-
-    // ------------------------------------------------------------------------------------------------
-    // Helpers for dynamic property access & for creating HTML elements
-    // ------------------------------------------------------------------------------------------------
-
-    [<Emit("$0[$1]")>]
-    let getProperty (o:obj) (s:string) = failwith "!"
-
-    type Dynamic() =
-      static member (?) (d:Dynamic, s:string) : Dynamic = getProperty d s
-
-    let text s = Text(s)
-    let (=>) k v = k, Property(v)
-    let (=!>) k f = k, EventHandler(fun o -> f (unbox<Dynamic> o))
-
-    type El() =
-      static member (?) (_:El, n:string) = fun a b ->
-        Element(n, Array.ofList a, Array.ofList b)
-
-    let h = El()
-
-    // ------------------------------------------------------------------------------------------------
-    // Entry point - create event and update on trigger
-    // ------------------------------------------------------------------------------------------------
-
-    let app id initial r u =
-      let event = new Event<'T>()
-      let trigger e = event.Trigger(e)
-      let mutable container = document.createElement("div") :> Node
-      document.getElementById(id).appendChild(container) |> ignore
-      let mutable tree = JsInterop.createObj []
-      let mutable state = initial
-
-      let handleEvent evt =
-        state <- match evt with Some e -> u state e | _ -> state
-        let newTree, f = r trigger state |> render
-        let patches = Virtualdom.diff tree newTree
-        container <- Virtualdom.patch container patches
-        f ()
-        tree <- newTree
-
-      handleEvent None
-      event.Publish.Add(Some >> handleEvent)
-
 module Parsec =
     type ParseStream<'T> = int * list<'T>
-    type Parser<'R> = Parser of (ParseStream<char> -> option<ParseStream<char> * 'R>)
+    type Parser<'T, 'R> = Parser of (ParseStream<'T> -> option<ParseStream<'T> * 'R>)
 
     /// Returned by the `slot` function to create a parser slot that is filled later
-    type ParserSetter<'R> =
-      { Set : Parser<'R> -> unit }
+    type ParserSetter<'T, 'R> =
+      { Set : Parser<'T, 'R> -> unit }
 
     /// Ignore the result of the parser
     let ignore (Parser p) = Parser(fun input ->
@@ -140,8 +22,8 @@ module Parsec =
       Parser(fun input -> slot.Value input)
 
     /// If the input matches the specified prefix, produce the specified result
-    let prefix (prefix:list<char>) result = Parser(fun (offset, input) ->
-      let rec loop (word:list<char>) input =
+    let prefix (prefix:list<'C>) result = Parser(fun (offset, input) ->
+      let rec loop (word:list<'C>) input =
         match word, input with
         | c::word, i::input when c = i -> loop word input
         | [], input -> Some(input)
@@ -236,149 +118,177 @@ module Parsec =
       optional (separated sep p)
       |> map (fun l -> defaultArg l [])
 
-    let number = pred Char.IsNumber
+    let number = pred (fun t -> t <= '9' && t >= '0')
 
     let integer = oneOrMore number |> map (fun nums ->
       nums |> List.fold (fun res n -> res * 10 + (int n - int '0')) 0)
 
-    let letter = pred Char.IsLetter
+    let letter = pred (fun t ->
+      (t <= 'Z' && t >= 'A') || (t <= 'z' && t >= 'a'))
 
     let run (Parser(f)) input =
       match f (0, List.ofSeq input) with
       | Some((i, _), res) when i = Seq.length input -> Some res
       | _ -> None
 
-// Main
+module Evaluator =
+    open Parsec
+
+    // ----------------------------------------------------------------------------
+    // DOMAIN MODEL
+    // ----------------------------------------------------------------------------
+
+    type Position = char * int
+
+    type Expr =
+      | Reference of Position
+      | Number of int
+      | Binary of Expr * char * Expr
+
+    // ----------------------------------------------------------------------------
+    // PARSER
+    // ----------------------------------------------------------------------------
+
+    // Basics: operators (+, -, *, /), cell reference (e.g. A10), number (e.g. 123)
+    let operator = char '+' <|> char '-' <|> char '*' <|> char '/'
+    let reference = letter <*> integer |> map Reference
+    let number = integer |> map Number
+
+    // Nested operator uses need to be parethesized, for example (1 + (3 * 4)).
+    // <expr> is a binary operator without parentheses, number, reference or
+    // nested brackets, while <term> is always bracketed or primitive. We need
+    // to use `expr` recursively, which is handled via mutable slots.
+    let exprSetter, expr = slot ()
+    let brack = char '(' <*>> anySpace <*>> expr <<*> anySpace <<*> char ')'
+    let term = number <|> reference <|> brack
+    let binary = term <<*> anySpace <*> operator <<*> anySpace <*> term |> map (fun ((l,op), r) -> Binary(l, op, r))
+    let exprAux = binary <|> term
+    exprSetter.Set exprAux
+
+    // Formula starts with `=` followed by expression
+    // Equation you can write in a cell is either number or a formula
+    let formula = char '=' <*>> anySpace <*>> expr
+    let equation = anySpace <*>> (formula <|> number) <<*> anySpace
+
+    // Run the parser on a given input
+    let parse input = run equation input
+
+    // ----------------------------------------------------------------------------
+    // EVALUATOR
+    // ----------------------------------------------------------------------------
+
+    let rec evaluate visited (cells:Map<Position, string>) expr =
+      match expr with
+      | Number num ->
+          Some num
+
+      | Binary(l, op, r) ->
+          let ops = dict [ '+', (+); '-', (-); '*', (*); '/', (/) ]
+          evaluate visited cells l |> Option.bind (fun l ->
+            evaluate visited cells r |> Option.map (fun r ->
+              ops.[op] l r ))
+
+      | Reference pos when Set.contains pos visited ->
+          None
+
+      | Reference pos ->
+          cells.TryFind pos |> Option.bind (fun value ->
+            parse value |> Option.bind (fun parsed ->
+              evaluate (Set.add pos visited) cells parsed))
+
 open Elmish
-open Parsec
+open Elmish.React
+open Fable.Helpers.React
+open Fable.Helpers.React.Props
+open Fable.Core.JsInterop
+
+open Evaluator
 
 // ----------------------------------------------------------------------------
-
-type Position = char * int
-
-type Expr =
-  | Number of int
-  | Binary of Expr * char * Expr
-  | Reference of Position
-
-type State =
-  { Cols : char list
-    Rows : int list
-    Active : Position option
-    Cells : Map<Position, string> }
+// DOMAIN MODEL
+// ----------------------------------------------------------------------------
 
 type Event =
-  | StartEdit of Position
   | UpdateValue of Position * string
+  | StartEdit of Position
+
+type State =
+  { Rows : int list
+    Active : Position option
+    Cols : char list
+    Cells : Map<Position, string> }
 
 // ----------------------------------------------------------------------------
-
-let number = integer |> map Number
-let operator =
-  char '*' <|> char '+' <|>
-  char '-' <|> char '/'
-let reference =
-  letter <*> integer |> map Reference
-
-let exprSetter, expr = slot ()
-let brack =
-  char '(' <*>> anySpace <*>> expr <<*>
-    anySpace <<*> char ')'
-
-let term = number <|> brack <|> reference
-
-let binary =
-  term <<*> anySpace <*> operator <<*>
-    anySpace <*> term
-  |> map (fun ((l,op), r) -> Binary(l, op, r))
-
-let exprAux = binary <|> term
-exprSetter.Set exprAux
-
-let formula = char '=' <*>> anySpace <*>> expr
-let equation =
-  anySpace <*>> (formula <|> number) <<*> anySpace
-
+// EVENT HANDLING
 // ----------------------------------------------------------------------------
 
-let rec evaluate refs cells = function
-  | Number(n) ->
-      Some n
+let update msg state =
+  match msg with
+  | StartEdit(pos) ->
+      { state with Active = Some pos }, Cmd.none
 
-  | Reference(pos) when Set.contains pos refs ->
-      None
-
-  | Reference(pos) ->
-      let (col, row) = pos
-      let normalizedCol = Char.ToUpper col
-      Map.tryFind (normalizedCol, row) cells |> Option.bind (fun code ->
-        run equation code |> Option.bind (fun parsed ->
-          evaluate (Set.add pos refs) cells parsed))
-
-  | Binary(l, op, r) ->
-      let ops = dict ['+', (+); '-', (-); '*', (*); '/', (/)]
-      evaluate refs cells l |> Option.bind (fun le ->
-        evaluate refs cells r |> Option.map (fun re ->
-          ops.[op] le re))
+  | UpdateValue(pos, value) ->
+      let newCells = Map.add pos value state.Cells
+      { state with Cells = newCells }, Cmd.none
 
 // ----------------------------------------------------------------------------
+// RENDERING
+// ----------------------------------------------------------------------------
 
-let renderEditor trigger pos value =
-  h?td ["class" => "selected"] [
-    h?input [
-      "oninput" =!> fun d -> trigger (UpdateValue(pos, unbox d?target?value))
-      "id" => "celled"; "focused" => "true"
-      "value" => value ] []
+let renderEditor (trigger:Event -> unit) pos value =
+  td [ Class "selected"] [
+    input [
+      AutoFocus true
+      OnInput (fun e -> trigger(UpdateValue(pos, e.target?value)))
+      Value value ]
   ]
 
-let renderView trigger pos value =
-  h?td [
-    "onclick" =!> fun _ -> trigger(StartEdit pos)
-    "style" => if Option.isNone value then "background:#ffe0e0" else ""
-  ] [ text (defaultArg value "#ERR") ]
+let renderView trigger pos (value:option<_>) =
+  td
+    [ Style (if value.IsNone then [Background "#ffb0b0"] else [Background "white"])
+      OnClick (fun _ -> trigger(StartEdit(pos)) ) ]
+    [ str (Option.defaultValue "#ERR" value) ]
 
 let renderCell trigger pos state =
   let value = Map.tryFind pos state.Cells
   if state.Active = Some pos then
-    renderEditor trigger pos (defaultArg value "")
+    renderEditor trigger pos (Option.defaultValue "" value)
   else
-    match value with
-    | None -> renderView trigger pos (Some "")
-    | Some value ->
-        let res =
-          run equation value |> Option.bind (fun parsed ->
-            evaluate Set.empty state.Cells parsed
-            |> Option.map string)
-        renderView trigger pos res
+    let value =
+      match value with
+      | Some value ->
+          parse value |> Option.bind (evaluate Set.empty state.Cells) |> Option.map string
+      | _ -> Some ""
+    renderView trigger pos value
 
-let render trigger state =
-  h?table [] [
-    yield h?tr [] [
-      yield h?th [] []
-      for col in state.Cols -> h?th [] [ text (string col) ]
-    ]
-    for row in state.Rows -> h?tr [] [
-      yield h?th [] [ text (string row) ]
-      for col in state.Cols -> renderCell trigger (col, row) state
-    ]
+let view state trigger =
+  let empty = td [] []
+  let header h = th [] [str h]
+  let headers = state.Cols |> List.map (fun h -> header (string h))
+  let headers = empty::headers
+
+  let row cells = tr [] cells
+  let cells n =
+    let cells = state.Cols |> List.map (fun h -> renderCell trigger (h, n) state)
+    header (string n) :: cells
+  let rows = state.Rows |> List.map (fun r -> tr [] (cells r))
+
+  table [] [
+    tr [] headers
+    tbody [] rows
   ]
 
 // ----------------------------------------------------------------------------
-
-let update state = function
-  | UpdateValue(pos, value) ->
-      let newCells = Map.add pos value state.Cells
-      { state with Cells = newCells }
-  | StartEdit(pos) ->
-      { state with Active = Some pos }
-
+// ENTRY POINT
 // ----------------------------------------------------------------------------
 
-let initial =
-  { Rows = [ 1 .. 15 ]
-    Cols = [ 'A' .. 'K' ]
+let initial () =
+  { Cols = ['A' .. 'K']
+    Rows = [1 .. 15]
     Active = None
-    Cells = Map.empty }
+    Cells = Map.empty },
+  Cmd.none
 
-
-app "main" initial render update
+Program.mkProgram initial update view
+|> Program.withReact "main"
+|> Program.run

@@ -1,38 +1,39 @@
 STORAGE: NONE
 NUGET
   remote: https://www.nuget.org/api/v2
-    dotnet-fable (2.0.0-beta-004) - clitool: true
+    dotnet-fable (2.0.8) - clitool: true
       Dotnet.ProjInfo (>= 0.9) - restriction: >= netcoreapp2.0
-      FSharp.Compiler.Service (>= 23.0.3) - restriction: >= netcoreapp2.0
-      FSharp.Core (>= 4.3.4) - restriction: >= netcoreapp2.0
+      FSharp.Compiler.Service (>= 25.0.1) - restriction: >= netcoreapp2.0
+      FSharp.Core (>= 4.5.2) - restriction: >= netcoreapp2.0
       Microsoft.NETCore.App (>= 2.0) - restriction: >= netcoreapp2.0
       Newtonsoft.Json (>= 11.0.2) - restriction: >= netcoreapp2.0
-    Dotnet.ProjInfo (0.9) - restriction: >= netcoreapp2.0
-      FSharp.Core (>= 4.2.3) - restriction: && (< net45) (>= netstandard2.0)
-    Fable.Core (2.0)
+    Dotnet.ProjInfo (0.12.2) - restriction: >= netcoreapp2.0
+      FSharp.Core (>= 4.1.18) - restriction: && (< net45) (>= netstandard2.0)
+    Fable.Core (2.0.1)
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
     Fable.Elmish (2.0)
       Fable.Core (>= 2.0) - restriction: >= netstandard2.0
       Fable.PowerPack (>= 2.0.1) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
-    Fable.Elmish.Browser (2.0.0-beta-5)
-      Fable.Core (>= 2.0.0-beta-001) - restriction: >= netstandard2.0
-      Fable.Elmish (>= 2.0.0-beta-4) - restriction: >= netstandard2.0
+    Fable.Elmish.Browser (2.0)
+      Fable.Core (>= 2.0) - restriction: >= netstandard2.0
+      Fable.Elmish (>= 2.0) - restriction: >= netstandard2.0
       Fable.Import.Browser (>= 1.3) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
-    Fable.Elmish.Debugger (2.0)
+    Fable.Elmish.Debugger (2.0.2)
       Fable.Core (>= 2.0) - restriction: >= netstandard2.0
       Fable.Elmish (>= 2.0) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
-    Fable.Elmish.HMR (2.0.0-beta-4)
-      Fable.Core (>= 2.0.0-beta-001) - restriction: >= netstandard2.0
-      Fable.Elmish (>= 2.0.0-beta-4) - restriction: >= netstandard2.0
+    Fable.Elmish.HMR (2.0)
+      Fable.Core (>= 2.0) - restriction: >= netstandard2.0
+      Fable.Elmish (>= 2.0) - restriction: >= netstandard2.0
+      Fable.Import.HMR (>= 0.1) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
-    Fable.Elmish.React (2.0.0-beta-4)
-      Fable.Core (>= 2.0.0-beta-001) - restriction: >= netstandard2.0
-      Fable.Elmish (>= 2.0.0-beta-4) - restriction: >= netstandard2.0
-      Fable.PowerPack (>= 2.0.0-beta-004) - restriction: >= netstandard2.0
-      Fable.React (>= 4.0.0-alpha-001) - restriction: >= netstandard2.0
+    Fable.Elmish.React (2.0)
+      Fable.Core (>= 2.0) - restriction: >= netstandard2.0
+      Fable.Elmish (>= 2.0) - restriction: >= netstandard2.0
+      Fable.PowerPack (>= 2.0.1) - restriction: >= netstandard2.0
+      Fable.React (>= 4.0.1) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
     Fable.Import.Browser (1.3)
       Fable.Core (>= 1.3.17) - restriction: >= netstandard1.6
@@ -43,7 +44,7 @@ NUGET
       Fable.Import.Browser (>= 1.3) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
       Thoth.Json (>= 2.0) - restriction: >= netstandard2.0
-    Fable.React (4.0.1)
+    Fable.React (4.1.1)
       Fable.Core (>= 2.0) - restriction: >= netstandard2.0
       Fable.Import.Browser (>= 1.3) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
@@ -58,23 +59,23 @@ NUGET
       System.Runtime.Loader (>= 4.0) - restriction: && (< net45) (>= netstandard2.0)
       System.Security.Cryptography.Algorithms (>= 4.3) - restriction: && (< net45) (>= netstandard2.0)
     FSharp.Core (4.5.2) - restriction: >= netstandard2.0
-    Fulma (1.0.0-beta-026)
-      Fable.Core (>= 1.3.12) - restriction: >= netstandard1.6
-      Fable.React (>= 3.1) - restriction: >= netstandard1.6
-    Fulma.Extensions (1.0.0-beta-016)
-      Fable.Core (>= 1.3.12) - restriction: >= netstandard1.6
-      Fable.React (>= 3.1) - restriction: >= netstandard1.6
-      Fulma (>= 1.0.0-beta-019) - restriction: >= netstandard1.6
-    Microsoft.NETCore.App (2.1.3) - restriction: >= netcoreapp2.0
-      Microsoft.NETCore.DotNetHostPolicy (>= 2.1.3) - restriction: >= netcoreapp2.1
+    Fulma (1.0)
+      Fable.Core (>= 2.0) - restriction: >= netstandard2.0
+      Fable.React (>= 4.0.1) - restriction: >= netstandard2.0
+    Fulma.Extensions (1.0)
+      Fable.Core (>= 2.0) - restriction: >= netstandard2.0
+      Fable.React (>= 4.0.1) - restriction: >= netstandard2.0
+      Fulma (>= 1.0) - restriction: >= netstandard2.0
+    Microsoft.NETCore.App (2.1.5) - restriction: >= netcoreapp2.0
+      Microsoft.NETCore.DotNetHostPolicy (>= 2.1.5) - restriction: >= netcoreapp2.1
       Microsoft.NETCore.Platforms (>= 2.1.1) - restriction: >= netcoreapp2.1
       Microsoft.NETCore.Targets (>= 2.0) - restriction: >= netcoreapp2.1
       NETStandard.Library (>= 2.0.3) - restriction: >= netcoreapp2.1
-    Microsoft.NETCore.DotNetAppHost (2.1.3) - restriction: >= netcoreapp2.1
-    Microsoft.NETCore.DotNetHostPolicy (2.1.3) - restriction: >= netcoreapp2.1
-      Microsoft.NETCore.DotNetHostResolver (>= 2.1.3)
-    Microsoft.NETCore.DotNetHostResolver (2.1.3) - restriction: >= netcoreapp2.1
-      Microsoft.NETCore.DotNetAppHost (>= 2.1.3)
+    Microsoft.NETCore.DotNetAppHost (2.1.5) - restriction: >= netcoreapp2.1
+    Microsoft.NETCore.DotNetHostPolicy (2.1.5) - restriction: >= netcoreapp2.1
+      Microsoft.NETCore.DotNetHostResolver (>= 2.1.5)
+    Microsoft.NETCore.DotNetHostResolver (2.1.5) - restriction: >= netcoreapp2.1
+      Microsoft.NETCore.DotNetAppHost (>= 2.1.5)
     Microsoft.NETCore.Platforms (2.1.1) - restriction: >= netcoreapp2.0
     Microsoft.NETCore.Targets (2.1) - restriction: >= netcoreapp2.0
     Microsoft.Win32.Primitives (4.3) - restriction: >= netcoreapp2.0
@@ -242,7 +243,7 @@ NUGET
     System.Runtime (4.3) - restriction: >= netcoreapp2.0
       Microsoft.NETCore.Platforms (>= 1.1) - restriction: || (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.5) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.2) (< win8) (< wp8)) (&& (< monoandroid) (< net45) (>= netstandard1.2) (< netstandard1.3) (< win8) (< wpa81)) (&& (< monoandroid) (< net45) (>= netstandard1.3) (< netstandard1.5) (< win8) (< wpa81)) (< portable-net45+win8+wp8+wpa81)
       Microsoft.NETCore.Targets (>= 1.1) - restriction: || (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.5) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.2) (< win8) (< wp8)) (&& (< monoandroid) (< net45) (>= netstandard1.2) (< netstandard1.3) (< win8) (< wpa81)) (&& (< monoandroid) (< net45) (>= netstandard1.3) (< netstandard1.5) (< win8) (< wpa81)) (< portable-net45+win8+wp8+wpa81)
-    System.Runtime.CompilerServices.Unsafe (4.5.1) - restriction: || (&& (>= monotouch) (>= netcoreapp2.0)) (&& (>= net461) (>= netcoreapp2.0)) (&& (>= netcoreapp2.0) (< netcoreapp2.1)) (&& (>= netcoreapp2.0) (< netstandard1.1)) (&& (>= netcoreapp2.0) (< netstandard2.0)) (&& (>= netcoreapp2.0) (>= uap10.1)) (&& (>= netcoreapp2.0) (>= xamarinios)) (&& (>= netcoreapp2.0) (>= xamarinmac)) (&& (>= netcoreapp2.0) (>= xamarintvos)) (&& (>= netcoreapp2.0) (>= xamarinwatchos))
+    System.Runtime.CompilerServices.Unsafe (4.5.2) - restriction: || (&& (>= monotouch) (>= netcoreapp2.0)) (&& (>= net461) (>= netcoreapp2.0)) (&& (>= netcoreapp2.0) (< netcoreapp2.1)) (&& (>= netcoreapp2.0) (< netstandard1.1)) (&& (>= netcoreapp2.0) (< netstandard2.0)) (&& (>= netcoreapp2.0) (>= uap10.1)) (&& (>= netcoreapp2.0) (>= xamarinios)) (&& (>= netcoreapp2.0) (>= xamarinmac)) (&& (>= netcoreapp2.0) (>= xamarintvos)) (&& (>= netcoreapp2.0) (>= xamarinwatchos))
     System.Runtime.Extensions (4.3) - restriction: >= netcoreapp2.0
       Microsoft.NETCore.Platforms (>= 1.1) - restriction: || (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.5) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81)) (&& (< monoandroid) (< net45) (>= netstandard1.3) (< netstandard1.5) (< win8) (< wpa81)) (< portable-net45+win8+wp8+wpa81)
       Microsoft.NETCore.Targets (>= 1.1) - restriction: || (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.5) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81)) (&& (< monoandroid) (< net45) (>= netstandard1.3) (< netstandard1.5) (< win8) (< wpa81)) (< portable-net45+win8+wp8+wpa81)
@@ -306,7 +307,7 @@ NUGET
       System.Runtime (>= 4.3) - restriction: && (< monoandroid) (< monotouch) (< net46) (>= netstandard1.3) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)
       System.Threading (>= 4.3) - restriction: && (< monoandroid) (< monotouch) (< net46) (>= netstandard1.3) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)
       System.Threading.Tasks (>= 4.3) - restriction: && (< monoandroid) (< monotouch) (< net46) (>= netstandard1.3) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)
-    System.Security.Principal.Windows (4.5) - restriction: >= netcoreapp2.0
+    System.Security.Principal.Windows (4.5.1) - restriction: >= netcoreapp2.0
       Microsoft.NETCore.Platforms (>= 2.0) - restriction: >= netcoreapp2.0
     System.Text.Encoding (4.3) - restriction: >= netcoreapp2.0
       Microsoft.NETCore.Platforms (>= 1.1) - restriction: || (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.3) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81)) (< portable-net45+win8+wp8+wpa81)
@@ -336,24 +337,24 @@ NUGET
       Fable.PowerPack (>= 1.5.1) - restriction: >= netstandard2.0
       Fable.React (>= 3.1.3) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.5) - restriction: >= netstandard2.0
-    Thoth.Json (2.2)
+    Thoth.Json (2.3)
       Fable.Core (>= 2.0) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
 GITHUB
   remote: fable-compiler/Fable
-    src/dotnet/Fable.Repl/Interfaces.fs (c3dd57fd2b9ff59085c9042b1d5d08277baea4d0)
-    src/dotnet/Fable.Repl/Metadata.fs (c3dd57fd2b9ff59085c9042b1d5d08277baea4d0)
+    src/dotnet/Fable.Repl/Interfaces.fs (cfeec4821a221d949cd0191958102a87821b7862)
+    src/dotnet/Fable.Repl/Metadata.fs (cfeec4821a221d949cd0191958102a87821b7862)
   remote: MangelMaxime/Thoth
-    src/Thoth.Json/Decode.fs (fddea3c4f405b38754f5e9e8c3e2c7f47799c03c)
-    src/Thoth.Json/Encode.fs (fddea3c4f405b38754f5e9e8c3e2c7f47799c03c)
+    src/Thoth.Json/Decode.fs (ff6c611f8dd4cdc06846ea10f30b1ced7c7f0a0f)
+    src/Thoth.Json/Encode.fs (ff6c611f8dd4cdc06846ea10f30b1ced7c7f0a0f)
   remote: fable-compiler/fable-powerpack
-    src/Fetch.fs (10fd29475f8c6807fed8b5b8b76ea9a6960469d9)
-    src/Promise.fs (10fd29475f8c6807fed8b5b8b76ea9a6960469d9)
-    src/Result.fs (10fd29475f8c6807fed8b5b8b76ea9a6960469d9)
+    src/Fetch.fs (ec9f55ab057f6c9b862ad1da95eb567f6e4a9827)
+    src/Promise.fs (ec9f55ab057f6c9b862ad1da95eb567f6e4a9827)
+    src/Result.fs (ec9f55ab057f6c9b862ad1da95eb567f6e4a9827)
   remote: elmish/elmish
-    src/cmd.fs (e7880377a7b2c4e97abf7024744b17de5375c11b)
-    src/prelude.fs (e7880377a7b2c4e97abf7024744b17de5375c11b)
-    src/program.fs (e7880377a7b2c4e97abf7024744b17de5375c11b)
+    src/cmd.fs (51199581afbaf7bfad138ea85ccc32c668f68854)
+    src/prelude.fs (51199581afbaf7bfad138ea85ccc32c668f68854)
+    src/program.fs (51199581afbaf7bfad138ea85ccc32c668f68854)
   remote: fable-compiler/fable-react
     src/Fable.React/Fable.Helpers.React.fs (f6c4db356deb897fe66563ebf7f782381ca5ae76)
     src/Fable.React/Fable.Import.React.fs (f6c4db356deb897fe66563ebf7f782381ca5ae76)
@@ -362,7 +363,7 @@ GITHUB
     src/common.fs (e30e7163d564fb88b2813037bacf178654477982)
     src/react.fs (e30e7163d564fb88b2813037bacf178654477982)
   remote: MangelMaxime/Fulma
-    FULLPROJECT (52f6c18108f0399c156d756d786cf3205d42c44a)
+    FULLPROJECT (8761007ab4def19934ddcf1eca613a33b4ac1302)
       dotnet-fable
       Fable.Core
       Fable.Elmish
