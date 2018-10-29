@@ -126,7 +126,7 @@ let private parseEditorCode (worker: ObservableWorker<_>) (model: Monaco.Editor.
 
 let private showGlobalErrorToast msg =
     Toast.message msg
-    |> Toast.title "Failed to compiled"
+    |> Toast.title "Failed to compile"
     |> Toast.position Toast.BottomRight
     |> Toast.icon Fa.I.Exclamation
     |> Toast.noTimeout
@@ -214,7 +214,7 @@ let update msg (model : Model) =
 
         | Errors errors ->
             { model with State = Compiled
-                         FSharpErrors = mapErrorToMarker errors }, Toast.message "Failed to compiled"
+                         FSharpErrors = mapErrorToMarker errors }, Toast.message "Failed to compile"
                                                                     |> Toast.position Toast.BottomRight
                                                                     |> Toast.icon Fa.I.Exclamation
                                                                     |> Toast.dismissOnClick
