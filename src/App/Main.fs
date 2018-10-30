@@ -504,7 +504,7 @@ let private problemsPanel (isExpanded : bool) (errors : ResizeArray<Monaco.Edito
                         | _ -> failwith "Should not happen", ofColor NoColor
 
                     yield div [ Class ("scrollable-panel-body-row " + colorClass)
-                                Data("tooltip-content", error.message)
+                                // Data("tooltip-content", error.message)
                                 OnClick (fun _ ->
                                     if currentTab <> CodeTab.FSharp then
                                         SetCodeTab CodeTab.FSharp |> dispatch

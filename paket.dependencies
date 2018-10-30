@@ -1,22 +1,22 @@
 source https://nuget.org/api/v2
 storage:none
 
-clitool dotnet-fable prerelease
-nuget Fable.Core prerelease
-nuget Fable.Elmish.Browser prerelease
+clitool dotnet-fable
+nuget Fable.Core
+nuget Fable.Elmish.Browser
 nuget Fable.Import.Browser
-nuget Fable.React prerelease
-nuget Fulma prerelease
-nuget Fulma.Extensions prerelease
-nuget Fable.Elmish prerelease
-nuget Fable.Elmish.React prerelease
-nuget Fable.Elmish.HMR prerelease
-nuget Thoth.Json prerelease
+nuget Fable.React
+nuget Fulma
+nuget Fulma.Extensions
+nuget Fable.Elmish
+nuget Fable.Elmish.React
+nuget Fable.Elmish.HMR
+nuget Thoth.Json
 nuget Thoth.Elmish.Toast
-nuget Fable.PowerPack prerelease
+nuget Fable.PowerPack
 
-github fable-compiler/Fable:repl-lib src/dotnet/Fable.Repl/Interfaces.fs
-github fable-compiler/Fable:repl-lib src/dotnet/Fable.Repl/Metadata.fs
+github fable-compiler/Fable:master src/dotnet/Fable.Repl/Interfaces.fs
+github fable-compiler/Fable:master src/dotnet/Fable.Repl/Metadata.fs
 
 # REPL Lib
 github MangelMaxime/Thoth:master src/Thoth.Json/Decode.fs

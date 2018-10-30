@@ -35,12 +35,12 @@ let init() = async {
         worker.Post Loaded
         worker |> Observable.add (function
             | ParseCode fsharpCode ->
-                let res = Fable.ParseFSharpProject(checker, Literals.FILE_NAME, fsharpCode)
+                let res = Fable.ParseFSharpScript(checker, Literals.FILE_NAME, fsharpCode)
                 currentResults <- Some res
                 ParsedCode res.Errors |> worker.Post
             | CompileCode(fsharpCode, optimize) ->
                 try
-                    let (parseResults, parsingTime) = measureTime "FCS parsing" Fable.ParseFSharpProject (checker, Literals.FILE_NAME, fsharpCode)
+                    let (parseResults, parsingTime) = measureTime "FCS parsing" Fable.ParseFSharpScript (checker, Literals.FILE_NAME, fsharpCode)
                     let ((babelAst, errors), fableTransformTime) = measureTime "Fable transform" (fun () ->
                         Fable.CompileToBabelAst("fable-core", parseResults, Literals.FILE_NAME, optimize, resolveLibCall)) ()
                     let (jsCode, babelTime) = measureTime "Babel generation" compileBabelAst babelAst
