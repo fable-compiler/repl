@@ -11965,8 +11965,6 @@ label.panel-block {
     content: "No logs received"; }
   .scrollable-panel.is-problem .scrollable-panel-body:empty:after {
     content: "No problems detected in your project"; }
-  .scrollable-panel.is-problem .scrollable-panel-body-row.is-danger .scrollable-panel-body-row-description {
-    white-space: nowrap; }
   .scrollable-panel.is-problem .scrollable-panel-body-row.is-white:hover {
     background-color: white; }
   .scrollable-panel.is-problem .scrollable-panel-body-row.is-black:hover {
