@@ -100,11 +100,12 @@
 
         .scrollable-panel-body-row  {
 
-            &.is-danger {
-                .scrollable-panel-body-row-description {
-                    white-space: nowrap;
-                }
-            }
+            // white-space: nowrap is hiding the sidebar in Chrome
+            // &.is-danger {
+            //     .scrollable-panel-body-row-description {
+            //         white-space: nowrap;
+            //     }
+            // }
 
             @each $name, $pair in $colors {
                 $color: nth($pair, 1);

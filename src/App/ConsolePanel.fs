@@ -92,7 +92,7 @@ type ConsolePanel(props) =
                 [ ] ]
 
     member this.ToggleDisplay _ev =
-        this.setState({ this.state with IsExpanded = not this.state.IsExpanded })
+        this.setState(fun s _ -> { s with IsExpanded = not s.IsExpanded })
 
     override this.render() =
         let headerIcon =

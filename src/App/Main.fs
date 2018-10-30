@@ -398,15 +398,13 @@ let private fontSizeClass =
         | 17. -> "is-large"
         | _ -> "is-medium"
 
-let private htmlEditorOptions (fontSize : float) (fontFamily : string) =
-    jsOptions<Monaco.Editor.IEditorConstructionOptions>(fun o ->
-        let minimapOptions =  jsOptions<Monaco.Editor.IEditorMinimapOptions>(fun oMinimap ->
-            oMinimap.enabled <- Some false
-        )
+let private htmlEditorOptions (fontSize : float) (fontFamily : string): Monaco.Editor.IEditorConstructionOptions =
+    jsOptions(fun o ->
         o.language <- Some "html"
         o.fontSize <- Some fontSize
         o.theme <- Some "vs-dark"
-        o.minimap <- Some minimapOptions
+        o.minimap <- Some (jsOptions(fun oMinimap ->
+            oMinimap.enabled <- Some false))
         o.fontFamily <- Some fontFamily
         o.fontLigatures <- Some (fontFamily = "Fira Code")
     )
@@ -726,7 +724,6 @@ let view (model: Model) dispatch =
                                           PageLoader.IsActive (model.State = Loading) ]
                                         [ div [ Class "title has-text-centered"; Style [FontSize "1.2em"] ]
                                             [ p [] [str "We are getting everything ready for you"]
-                                              p [] [str "While you wait, check out "; a [Href "http://fable.io/fableconf/#planning"; Target "_blank"] [str "the agenda for FableConf"]; str "!" ]
                                               br []
                                               p []
                                                 [ str "Trouble loading the repl? "
@@ -739,7 +736,10 @@ let view (model: Model) dispatch =
                       div [ Class "main-content" ]
                         [ editorArea model dispatch
                           div [ Class "horizontal-resize"
-                                OnMouseDown (fun _ -> dispatch PanelDragStarted) ]
+                                OnMouseDown (fun ev ->
+                                    // This prevents text selection in Safari
+                                    ev.preventDefault()
+                                    dispatch PanelDragStarted) ]
                               [ ]
                           outputArea model dispatch ] ] ]
 
