@@ -23,8 +23,9 @@ export function SetTreeModule$$$countAux(s, acc) {
         {
           const r = s.fields[2];
           const l = s.fields[1];
+          const $acc$$3 = acc;
           s = l;
-          acc = SetTreeModule$$$countAux(r, acc + 1);
+          acc = SetTreeModule$$$countAux(r, $acc$$3 + 1);
           continue SetTreeModule$$$countAux;
         }
     }
@@ -61,19 +62,19 @@ export function SetTreeModule$$$height(t) {
 export const SetTreeModule$$$tolerance = 2;
 export function SetTreeModule$$$mk(l$$2, k, r$$2) {
   const matchValue = [l$$2, r$$2];
-  var $target$$3;
+  var $target$$4;
 
   if (matchValue[0].tag === 0) {
     if (matchValue[1].tag === 0) {
-      $target$$3 = 0;
+      $target$$4 = 0;
     } else {
-      $target$$3 = 1;
+      $target$$4 = 1;
     }
   } else {
-    $target$$3 = 1;
+    $target$$4 = 1;
   }
 
-  switch ($target$$3) {
+  switch ($target$$4) {
     case 0:
       {
         return SetTreeModule$$$SetOne(k);
@@ -178,28 +179,28 @@ export function SetTreeModule$$$add(comparer, k$$2, t$$1) {
 }
 export function SetTreeModule$$$balance(comparer$$1, t1$$1, k$$3, t2$$1) {
   const matchValue$$1 = [t1$$1, t2$$1];
-  var $target$$4, t2$$2, t1$$2, k1, t2$$3, k2$$2, t1$$3, h1, h2, k1$$1, k2$$3, t11, t12, t21, t22;
+  var $target$$5, t2$$2, t1$$2, k1, t2$$3, k2$$2, t1$$3, h1, h2, k1$$1, k2$$3, t11, t12, t21, t22;
 
   if (matchValue$$1[0].tag === 2) {
     if (matchValue$$1[1].tag === 0) {
-      $target$$4 = 1;
+      $target$$5 = 1;
       t1$$2 = matchValue$$1[0];
     } else if (matchValue$$1[1].tag === 2) {
-      $target$$4 = 2;
+      $target$$5 = 2;
       k1 = matchValue$$1[0].fields[0];
       t2$$3 = matchValue$$1[1];
     } else {
-      $target$$4 = 2;
+      $target$$5 = 2;
       k1 = matchValue$$1[0].fields[0];
       t2$$3 = matchValue$$1[1];
     }
   } else if (matchValue$$1[0].tag === 1) {
     if (matchValue$$1[1].tag === 2) {
-      $target$$4 = 3;
+      $target$$5 = 3;
       k2$$2 = matchValue$$1[1].fields[0];
       t1$$3 = matchValue$$1[0];
     } else if (matchValue$$1[1].tag === 1) {
-      $target$$4 = 4;
+      $target$$5 = 4;
       h1 = matchValue$$1[0].fields[3];
       h2 = matchValue$$1[1].fields[3];
       k1$$1 = matchValue$$1[0].fields[0];
@@ -209,15 +210,15 @@ export function SetTreeModule$$$balance(comparer$$1, t1$$1, k$$3, t2$$1) {
       t21 = matchValue$$1[1].fields[1];
       t22 = matchValue$$1[1].fields[2];
     } else {
-      $target$$4 = 1;
+      $target$$5 = 1;
       t1$$2 = matchValue$$1[0];
     }
   } else {
-    $target$$4 = 0;
+    $target$$5 = 0;
     t2$$2 = matchValue$$1[1];
   }
 
-  switch ($target$$4) {
+  switch ($target$$5) {
     case 0:
       {
         return SetTreeModule$$$add(comparer$$1, k$$3, t2$$2);
@@ -385,15 +386,19 @@ export function SetTreeModule$$$mem(comparer$$4, k$$5, t$$5) {
           const c$$6 = comparer$$4.Compare(k$$5, k2$$8) | 0;
 
           if (c$$6 < 0) {
-            comparer$$4 = comparer$$4;
-            k$$5 = k$$5;
+            const $comparer$$4$$6 = comparer$$4;
+            const $k$$5$$7 = k$$5;
+            comparer$$4 = $comparer$$4$$6;
+            k$$5 = $k$$5$$7;
             t$$5 = l$$6;
             continue SetTreeModule$$$mem;
           } else if (c$$6 === 0) {
             return true;
           } else {
-            comparer$$4 = comparer$$4;
-            k$$5 = k$$5;
+            const $comparer$$4$$8 = comparer$$4;
+            const $k$$5$$9 = k$$5;
+            comparer$$4 = $comparer$$4$$8;
+            k$$5 = $k$$5$$9;
             t$$5 = r$$6;
             continue SetTreeModule$$$mem;
           }
@@ -426,11 +431,11 @@ export function SetTreeModule$$$iter(f, t$$6) {
       }
   }
 }
-export function SetTreeModule$$$foldBack($arg$$7, $arg$$8, $arg$$9) {
+export function SetTreeModule$$$foldBack($arg$$12, $arg$$13, $arg$$14) {
   SetTreeModule$$$foldBack: while (true) {
-    const f$$1 = $arg$$7,
-          m$$1 = $arg$$8,
-          x$$1 = $arg$$9;
+    const f$$1 = $arg$$12,
+          m$$1 = $arg$$13,
+          x$$1 = $arg$$14;
 
     switch (m$$1.tag) {
       case 2:
@@ -449,19 +454,19 @@ export function SetTreeModule$$$foldBack($arg$$7, $arg$$8, $arg$$9) {
           const r$$8 = m$$1.fields[2];
           const l$$8 = m$$1.fields[1];
           const k$$6 = m$$1.fields[0];
-          $arg$$7 = f$$1;
-          $arg$$8 = l$$8;
-          $arg$$9 = f$$1(k$$6, SetTreeModule$$$foldBack(f$$1, r$$8, x$$1));
+          $arg$$12 = f$$1;
+          $arg$$13 = l$$8;
+          $arg$$14 = f$$1(k$$6, SetTreeModule$$$foldBack(f$$1, r$$8, x$$1));
           continue SetTreeModule$$$foldBack;
         }
     }
   }
 }
-export function SetTreeModule$$$fold($arg$$10, $arg$$11, $arg$$12) {
+export function SetTreeModule$$$fold($arg$$15, $arg$$16, $arg$$17) {
   SetTreeModule$$$fold: while (true) {
-    const f$$2 = $arg$$10,
-          x$$2 = $arg$$11,
-          m$$2 = $arg$$12;
+    const f$$2 = $arg$$15,
+          x$$2 = $arg$$16,
+          m$$2 = $arg$$17;
 
     switch (m$$2.tag) {
       case 2:
@@ -482,18 +487,18 @@ export function SetTreeModule$$$fold($arg$$10, $arg$$11, $arg$$12) {
           const k$$8 = m$$2.fields[0];
           const x$$3 = SetTreeModule$$$fold(f$$2, x$$2, l$$9);
           const x$$4 = f$$2(x$$3, k$$8);
-          $arg$$10 = f$$2;
-          $arg$$11 = x$$4;
-          $arg$$12 = r$$9;
+          $arg$$15 = f$$2;
+          $arg$$16 = x$$4;
+          $arg$$17 = r$$9;
           continue SetTreeModule$$$fold;
         }
     }
   }
 }
-export function SetTreeModule$$$forall($arg$$13, $arg$$14) {
+export function SetTreeModule$$$forall($arg$$18, $arg$$19) {
   SetTreeModule$$$forall: while (true) {
-    const f$$3 = $arg$$13,
-          m$$3 = $arg$$14;
+    const f$$3 = $arg$$18,
+          m$$3 = $arg$$19;
 
     switch (m$$3.tag) {
       case 2:
@@ -514,8 +519,8 @@ export function SetTreeModule$$$forall($arg$$13, $arg$$14) {
           const k2$$12 = m$$3.fields[0];
 
           if (f$$3(k2$$12) ? SetTreeModule$$$forall(f$$3, l$$10) : false) {
-            $arg$$13 = f$$3;
-            $arg$$14 = r$$10;
+            $arg$$18 = f$$3;
+            $arg$$19 = r$$10;
             continue SetTreeModule$$$forall;
           } else {
             return false;
@@ -524,10 +529,10 @@ export function SetTreeModule$$$forall($arg$$13, $arg$$14) {
     }
   }
 }
-export function SetTreeModule$$$exists($arg$$15, $arg$$16) {
+export function SetTreeModule$$$exists($arg$$20, $arg$$21) {
   SetTreeModule$$$exists: while (true) {
-    const f$$4 = $arg$$15,
-          m$$4 = $arg$$16;
+    const f$$4 = $arg$$20,
+          m$$4 = $arg$$21;
 
     switch (m$$4.tag) {
       case 2:
@@ -550,8 +555,8 @@ export function SetTreeModule$$$exists($arg$$15, $arg$$16) {
           if (f$$4(k2$$14) ? true : SetTreeModule$$$exists(f$$4, l$$11)) {
             return true;
           } else {
-            $arg$$15 = f$$4;
-            $arg$$16 = r$$11;
+            $arg$$20 = f$$4;
+            $arg$$21 = r$$11;
             continue SetTreeModule$$$exists;
           }
         }
@@ -581,12 +586,12 @@ export function SetTreeModule$$$psubset(comparer$$6, a$$1, b$$1) {
     return false;
   }
 }
-export function SetTreeModule$$$filterAux($arg$$17, $arg$$18, $arg$$19, $arg$$20) {
+export function SetTreeModule$$$filterAux($arg$$22, $arg$$23, $arg$$24, $arg$$25) {
   SetTreeModule$$$filterAux: while (true) {
-    const comparer$$7 = $arg$$17,
-          f$$5 = $arg$$18,
-          s$$2 = $arg$$19,
-          acc$$1 = $arg$$20;
+    const comparer$$7 = $arg$$22,
+          f$$5 = $arg$$23,
+          s$$2 = $arg$$24,
+          acc$$1 = $arg$$25;
 
     switch (s$$2.tag) {
       case 2:
@@ -611,10 +616,10 @@ export function SetTreeModule$$$filterAux($arg$$17, $arg$$18, $arg$$19, $arg$$20
           const l$$12 = s$$2.fields[1];
           const k$$10 = s$$2.fields[0];
           const acc$$2 = f$$5(k$$10) ? SetTreeModule$$$add(comparer$$7, k$$10, acc$$1) : acc$$1;
-          $arg$$17 = comparer$$7;
-          $arg$$18 = f$$5;
-          $arg$$19 = l$$12;
-          $arg$$20 = SetTreeModule$$$filterAux(comparer$$7, f$$5, r$$12, acc$$2);
+          $arg$$22 = comparer$$7;
+          $arg$$23 = f$$5;
+          $arg$$24 = l$$12;
+          $arg$$25 = SetTreeModule$$$filterAux(comparer$$7, f$$5, r$$12, acc$$2);
           continue SetTreeModule$$$filterAux;
         }
     }
@@ -642,10 +647,11 @@ export function SetTreeModule$$$diffAux(comparer$$9, m$$6, acc$$3) {
           const r$$13 = m$$6.fields[2];
           const l$$13 = m$$6.fields[1];
           const k$$12 = m$$6.fields[0];
-          const $var$$24 = comparer$$9;
+          const $acc$$3$$30 = acc$$3;
+          const $comparer$$9$$29 = comparer$$9;
+          comparer$$9 = $comparer$$9$$29;
           m$$6 = l$$13;
-          acc$$3 = SetTreeModule$$$diffAux(comparer$$9, r$$13, SetTreeModule$$$remove(comparer$$9, k$$12, acc$$3));
-          comparer$$9 = $var$$24;
+          acc$$3 = SetTreeModule$$$diffAux($comparer$$9$$29, r$$13, SetTreeModule$$$remove($comparer$$9$$29, k$$12, $acc$$3$$30));
           continue SetTreeModule$$$diffAux;
         }
     }
@@ -656,33 +662,33 @@ export function SetTreeModule$$$diff(comparer$$10, a$$2, b$$2) {
 }
 export function SetTreeModule$$$union(comparer$$11, t1$$4, t2$$4) {
   const matchValue$$3 = [t1$$4, t2$$4];
-  var $target$$25, h1$$1, h2$$1, k1$$4, k2$$16, t11$$2, t12$$2, t21$$1, t22$$1, t$$7, t$$8, k1$$5, t2$$5, k2$$17, t1$$5;
+  var $target$$31, h1$$1, h2$$1, k1$$4, k2$$16, t11$$2, t12$$2, t21$$1, t22$$1, t$$7, t$$8, k1$$5, t2$$5, k2$$17, t1$$5;
 
   if (matchValue$$3[0].tag === 0) {
-    $target$$25 = 1;
+    $target$$31 = 1;
     t$$7 = matchValue$$3[1];
   } else if (matchValue$$3[0].tag === 2) {
     if (matchValue$$3[1].tag === 0) {
-      $target$$25 = 2;
+      $target$$31 = 2;
       t$$8 = matchValue$$3[0];
     } else if (matchValue$$3[1].tag === 2) {
-      $target$$25 = 3;
+      $target$$31 = 3;
       k1$$5 = matchValue$$3[0].fields[0];
       t2$$5 = matchValue$$3[1];
     } else {
-      $target$$25 = 3;
+      $target$$31 = 3;
       k1$$5 = matchValue$$3[0].fields[0];
       t2$$5 = matchValue$$3[1];
     }
   } else if (matchValue$$3[1].tag === 0) {
-    $target$$25 = 2;
+    $target$$31 = 2;
     t$$8 = matchValue$$3[0];
   } else if (matchValue$$3[1].tag === 2) {
-    $target$$25 = 4;
+    $target$$31 = 4;
     k2$$17 = matchValue$$3[1].fields[0];
     t1$$5 = matchValue$$3[0];
   } else {
-    $target$$25 = 0;
+    $target$$31 = 0;
     h1$$1 = matchValue$$3[0].fields[3];
     h2$$1 = matchValue$$3[1].fields[3];
     k1$$4 = matchValue$$3[0].fields[0];
@@ -693,7 +699,7 @@ export function SetTreeModule$$$union(comparer$$11, t1$$4, t2$$4) {
     t22$$1 = matchValue$$3[1].fields[2];
   }
 
-  switch ($target$$25) {
+  switch ($target$$31) {
     case 0:
       {
         if (h1$$1 > h2$$1) {
@@ -752,8 +758,10 @@ export function SetTreeModule$$$intersectionAux(comparer$$12, b$$3, m$$7, acc$$4
           const k$$14 = m$$7.fields[0];
           const acc$$5 = SetTreeModule$$$intersectionAux(comparer$$12, b$$3, r$$14, acc$$4);
           const acc$$6 = SetTreeModule$$$mem(comparer$$12, k$$14, b$$3) ? SetTreeModule$$$add(comparer$$12, k$$14, acc$$5) : acc$$5;
-          comparer$$12 = comparer$$12;
-          b$$3 = b$$3;
+          const $b$$3$$33 = b$$3;
+          const $comparer$$12$$32 = comparer$$12;
+          comparer$$12 = $comparer$$12$$32;
+          b$$3 = $b$$3$$33;
           m$$7 = l$$14;
           acc$$4 = acc$$6;
           continue SetTreeModule$$$intersectionAux;
@@ -771,13 +779,13 @@ export function SetTreeModule$$$partition1(comparer$$14, f$$7, k$$16, acc1, acc2
     return [acc1, SetTreeModule$$$add(comparer$$14, k$$16, acc2)];
   }
 }
-export function SetTreeModule$$$partitionAux($arg$$31, $arg$$32, $arg$$33, $arg$$34, $arg$$35) {
+export function SetTreeModule$$$partitionAux($arg$$39, $arg$$40, $arg$$41, $arg$$42, $arg$$43) {
   SetTreeModule$$$partitionAux: while (true) {
-    const comparer$$15 = $arg$$31,
-          f$$8 = $arg$$32,
-          s$$4 = $arg$$33,
-          acc_0 = $arg$$34,
-          acc_1 = $arg$$35;
+    const comparer$$15 = $arg$$39,
+          f$$8 = $arg$$40,
+          s$$4 = $arg$$41,
+          acc_0 = $arg$$42,
+          acc_1 = $arg$$43;
     const acc$$7 = [acc_0, acc_1];
 
     switch (s$$4.tag) {
@@ -799,11 +807,11 @@ export function SetTreeModule$$$partitionAux($arg$$31, $arg$$32, $arg$$33, $arg$
           const k$$17 = s$$4.fields[0];
           const acc$$8 = SetTreeModule$$$partitionAux(comparer$$15, f$$8, r$$15, acc$$7[0], acc$$7[1]);
           const acc$$9 = SetTreeModule$$$partition1(comparer$$15, f$$8, k$$17, acc$$8[0], acc$$8[1]);
-          $arg$$31 = comparer$$15;
-          $arg$$32 = f$$8;
-          $arg$$33 = l$$15;
-          $arg$$34 = acc$$9[0];
-          $arg$$35 = acc$$9[1];
+          $arg$$39 = comparer$$15;
+          $arg$$40 = f$$8;
+          $arg$$41 = l$$15;
+          $arg$$42 = acc$$9[0];
+          $arg$$43 = acc$$9[1];
           continue SetTreeModule$$$partitionAux;
         }
     }
@@ -957,10 +965,12 @@ export function SetTreeModule$$$collapseLHS(stack) {
       if (stack.head.tag === 2) {
         return stack;
       } else if (stack.head.tag === 1) {
-        stack = L(stack.head.fields[1], L(SetTreeModule$$$SetOne(stack.head.fields[0]), L(stack.head.fields[2], stack.tail)));
+        const $stack$$47 = stack;
+        stack = L($stack$$47.head.fields[1], L(SetTreeModule$$$SetOne($stack$$47.head.fields[0]), L($stack$$47.head.fields[2], $stack$$47.tail)));
         continue SetTreeModule$$$collapseLHS;
       } else {
-        stack = stack.tail;
+        const $stack$$48 = stack;
+        stack = $stack$$48.tail;
         continue SetTreeModule$$$collapseLHS;
       }
     } else {
@@ -1052,20 +1062,20 @@ export function SetTreeModule$$$toSeq(s$$16) {
 export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
   SetTreeModule$$$compareStacks: while (true) {
     const matchValue$$8 = [l1, l2];
-    var $target$$39, t1$$6, t2$$6, n1k, n2k, t1$$7, t2$$7, n1k$$1, n2k$$1, n2r, t1$$8, t2$$8, emp, n1k$$2, n1r, n2k$$2, t1$$9, t2$$9, n1k$$3, n1r$$1, n2k$$3, n2r$$1, t1$$10, t2$$10, n1k$$4, t1$$11, n1k$$5, n1l, n1r$$2, t1$$12, n2k$$4, t2$$11, n2k$$5, n2l, n2r$$2, t2$$12;
+    var $target$$49, t1$$6, t2$$6, n1k, n2k, t1$$7, t2$$7, n1k$$1, n2k$$1, n2r, t1$$8, t2$$8, emp, n1k$$2, n1r, n2k$$2, t1$$9, t2$$9, n1k$$3, n1r$$1, n2k$$3, n2r$$1, t1$$10, t2$$10, n1k$$4, t1$$11, n1k$$5, n1l, n1r$$2, t1$$12, n2k$$4, t2$$11, n2k$$5, n2l, n2r$$2, t2$$12;
 
     if (matchValue$$8[0].tail != null) {
       if (matchValue$$8[1].tail != null) {
         if (matchValue$$8[1].head.tag === 2) {
           if (matchValue$$8[0].head.tag === 2) {
-            $target$$39 = 4;
+            $target$$49 = 4;
             n1k = matchValue$$8[0].head.fields[0];
             n2k = matchValue$$8[1].head.fields[0];
             t1$$7 = matchValue$$8[0].tail;
             t2$$7 = matchValue$$8[1].tail;
           } else if (matchValue$$8[0].head.tag === 1) {
             if (matchValue$$8[0].head.fields[1].tag === 0) {
-              $target$$39 = 6;
+              $target$$49 = 6;
               emp = matchValue$$8[0].head.fields[1];
               n1k$$2 = matchValue$$8[0].head.fields[0];
               n1r = matchValue$$8[0].head.fields[2];
@@ -1073,21 +1083,21 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
               t1$$9 = matchValue$$8[0].tail;
               t2$$9 = matchValue$$8[1].tail;
             } else {
-              $target$$39 = 9;
+              $target$$49 = 9;
               n1k$$5 = matchValue$$8[0].head.fields[0];
               n1l = matchValue$$8[0].head.fields[1];
               n1r$$2 = matchValue$$8[0].head.fields[2];
               t1$$12 = matchValue$$8[0].tail;
             }
           } else {
-            $target$$39 = 10;
+            $target$$49 = 10;
             n2k$$4 = matchValue$$8[1].head.fields[0];
             t2$$11 = matchValue$$8[1].tail;
           }
         } else if (matchValue$$8[1].head.tag === 1) {
           if (matchValue$$8[1].head.fields[1].tag === 0) {
             if (matchValue$$8[0].head.tag === 2) {
-              $target$$39 = 5;
+              $target$$49 = 5;
               n1k$$1 = matchValue$$8[0].head.fields[0];
               n2k$$1 = matchValue$$8[1].head.fields[0];
               n2r = matchValue$$8[1].head.fields[2];
@@ -1095,7 +1105,7 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
               t2$$8 = matchValue$$8[1].tail;
             } else if (matchValue$$8[0].head.tag === 1) {
               if (matchValue$$8[0].head.fields[1].tag === 0) {
-                $target$$39 = 7;
+                $target$$49 = 7;
                 n1k$$3 = matchValue$$8[0].head.fields[0];
                 n1r$$1 = matchValue$$8[0].head.fields[2];
                 n2k$$3 = matchValue$$8[1].head.fields[0];
@@ -1103,61 +1113,61 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
                 t1$$10 = matchValue$$8[0].tail;
                 t2$$10 = matchValue$$8[1].tail;
               } else {
-                $target$$39 = 9;
+                $target$$49 = 9;
                 n1k$$5 = matchValue$$8[0].head.fields[0];
                 n1l = matchValue$$8[0].head.fields[1];
                 n1r$$2 = matchValue$$8[0].head.fields[2];
                 t1$$12 = matchValue$$8[0].tail;
               }
             } else {
-              $target$$39 = 11;
+              $target$$49 = 11;
               n2k$$5 = matchValue$$8[1].head.fields[0];
               n2l = matchValue$$8[1].head.fields[1];
               n2r$$2 = matchValue$$8[1].head.fields[2];
               t2$$12 = matchValue$$8[1].tail;
             }
           } else if (matchValue$$8[0].head.tag === 2) {
-            $target$$39 = 8;
+            $target$$49 = 8;
             n1k$$4 = matchValue$$8[0].head.fields[0];
             t1$$11 = matchValue$$8[0].tail;
           } else if (matchValue$$8[0].head.tag === 1) {
-            $target$$39 = 9;
+            $target$$49 = 9;
             n1k$$5 = matchValue$$8[0].head.fields[0];
             n1l = matchValue$$8[0].head.fields[1];
             n1r$$2 = matchValue$$8[0].head.fields[2];
             t1$$12 = matchValue$$8[0].tail;
           } else {
-            $target$$39 = 11;
+            $target$$49 = 11;
             n2k$$5 = matchValue$$8[1].head.fields[0];
             n2l = matchValue$$8[1].head.fields[1];
             n2r$$2 = matchValue$$8[1].head.fields[2];
             t2$$12 = matchValue$$8[1].tail;
           }
         } else if (matchValue$$8[0].head.tag === 2) {
-          $target$$39 = 8;
+          $target$$49 = 8;
           n1k$$4 = matchValue$$8[0].head.fields[0];
           t1$$11 = matchValue$$8[0].tail;
         } else if (matchValue$$8[0].head.tag === 1) {
-          $target$$39 = 9;
+          $target$$49 = 9;
           n1k$$5 = matchValue$$8[0].head.fields[0];
           n1l = matchValue$$8[0].head.fields[1];
           n1r$$2 = matchValue$$8[0].head.fields[2];
           t1$$12 = matchValue$$8[0].tail;
         } else {
-          $target$$39 = 3;
+          $target$$49 = 3;
           t1$$6 = matchValue$$8[0].tail;
           t2$$6 = matchValue$$8[1].tail;
         }
       } else {
-        $target$$39 = 2;
+        $target$$49 = 2;
       }
     } else if (matchValue$$8[1].tail != null) {
-      $target$$39 = 1;
+      $target$$49 = 1;
     } else {
-      $target$$39 = 0;
+      $target$$49 = 0;
     }
 
-    switch ($target$$39) {
+    switch ($target$$49) {
       case 0:
         {
           return 0;
@@ -1175,7 +1185,8 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
 
       case 3:
         {
-          comparer$$17 = comparer$$17;
+          const $comparer$$17$$50 = comparer$$17;
+          comparer$$17 = $comparer$$17$$50;
           l1 = t1$$6;
           l2 = t2$$6;
           continue SetTreeModule$$$compareStacks;
@@ -1188,7 +1199,8 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
           if (c$$7 !== 0) {
             return c$$7 | 0;
           } else {
-            comparer$$17 = comparer$$17;
+            const $comparer$$17$$51 = comparer$$17;
+            comparer$$17 = $comparer$$17$$51;
             l1 = t1$$7;
             l2 = t2$$7;
             continue SetTreeModule$$$compareStacks;
@@ -1202,7 +1214,8 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
           if (c$$8 !== 0) {
             return c$$8 | 0;
           } else {
-            comparer$$17 = comparer$$17;
+            const $comparer$$17$$52 = comparer$$17;
+            comparer$$17 = $comparer$$17$$52;
             l1 = L(new SetTree$00601(0, "SetEmpty"), t1$$8);
             l2 = L(n2r, t2$$8);
             continue SetTreeModule$$$compareStacks;
@@ -1216,7 +1229,8 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
           if (c$$9 !== 0) {
             return c$$9 | 0;
           } else {
-            comparer$$17 = comparer$$17;
+            const $comparer$$17$$53 = comparer$$17;
+            comparer$$17 = $comparer$$17$$53;
             l1 = L(n1r, t1$$9);
             l2 = L(emp, t2$$9);
             continue SetTreeModule$$$compareStacks;
@@ -1230,7 +1244,8 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
           if (c$$10 !== 0) {
             return c$$10 | 0;
           } else {
-            comparer$$17 = comparer$$17;
+            const $comparer$$17$$54 = comparer$$17;
+            comparer$$17 = $comparer$$17$$54;
             l1 = L(n1r$$1, t1$$10);
             l2 = L(n2r$$1, t2$$10);
             continue SetTreeModule$$$compareStacks;
@@ -1239,32 +1254,40 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
 
       case 8:
         {
-          comparer$$17 = comparer$$17;
+          const $comparer$$17$$55 = comparer$$17;
+          const $l2$$56 = l2;
+          comparer$$17 = $comparer$$17$$55;
           l1 = L(new SetTree$00601(0, "SetEmpty"), L(SetTreeModule$$$SetOne(n1k$$4), t1$$11));
-          l2 = l2;
+          l2 = $l2$$56;
           continue SetTreeModule$$$compareStacks;
         }
 
       case 9:
         {
-          comparer$$17 = comparer$$17;
+          const $comparer$$17$$57 = comparer$$17;
+          const $l2$$58 = l2;
+          comparer$$17 = $comparer$$17$$57;
           l1 = L(n1l, L(SetTreeModule$$$SetNode(n1k$$5, new SetTree$00601(0, "SetEmpty"), n1r$$2, 0), t1$$12));
-          l2 = l2;
+          l2 = $l2$$58;
           continue SetTreeModule$$$compareStacks;
         }
 
       case 10:
         {
-          comparer$$17 = comparer$$17;
-          l1 = l1;
+          const $comparer$$17$$59 = comparer$$17;
+          const $l1$$60 = l1;
+          comparer$$17 = $comparer$$17$$59;
+          l1 = $l1$$60;
           l2 = L(new SetTree$00601(0, "SetEmpty"), L(SetTreeModule$$$SetOne(n2k$$4), t2$$11));
           continue SetTreeModule$$$compareStacks;
         }
 
       case 11:
         {
-          comparer$$17 = comparer$$17;
-          l1 = l1;
+          const $comparer$$17$$61 = comparer$$17;
+          const $l1$$62 = l1;
+          comparer$$17 = $comparer$$17$$61;
+          l1 = $l1$$62;
           l2 = L(n2l, L(SetTreeModule$$$SetNode(n2k$$5, new SetTree$00601(0, "SetEmpty"), n2r$$2, 0), t2$$12));
           continue SetTreeModule$$$compareStacks;
         }
@@ -1308,8 +1331,9 @@ export function SetTreeModule$$$loop(m$$8, acc$$10) {
           const r$$20 = m$$8.fields[2];
           const l$$20 = m$$8.fields[1];
           const k$$31 = m$$8.fields[0];
+          const $acc$$10$$63 = acc$$10;
           m$$8 = l$$20;
-          acc$$10 = L(k$$31, SetTreeModule$$$loop(r$$20, acc$$10));
+          acc$$10 = L(k$$31, SetTreeModule$$$loop(r$$20, $acc$$10$$63));
           continue SetTreeModule$$$loop;
         }
     }
@@ -1328,10 +1352,12 @@ export function SetTreeModule$$$copyToArray(s$$19, arr, i$$2) {
 export function SetTreeModule$$$mkFromEnumerator(comparer$$19, acc$$11, e) {
   SetTreeModule$$$mkFromEnumerator: while (true) {
     if (e.MoveNext()) {
-      const $var$$40 = comparer$$19;
-      acc$$11 = SetTreeModule$$$add(comparer$$19, e.Current, acc$$11);
-      e = e;
-      comparer$$19 = $var$$40;
+      const $acc$$11$$65 = acc$$11;
+      const $comparer$$19$$64 = comparer$$19;
+      const $e$$66 = e;
+      comparer$$19 = $comparer$$19$$64;
+      acc$$11 = SetTreeModule$$$add($comparer$$19$$64, $e$$66.Current, $acc$$11$$65);
+      e = $e$$66;
       continue SetTreeModule$$$mkFromEnumerator;
     } else {
       return acc$$11;

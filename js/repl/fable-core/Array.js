@@ -281,7 +281,8 @@ export function contains(value$$3, array$$21, eq$$3) {
       } else if (eq$$3.Equals(value$$3, array$$21[i$$13])) {
         return true;
       } else {
-        i$$13 = i$$13 + 1;
+        const $i$$13$$49 = i$$13;
+        i$$13 = $i$$13$$49 + 1;
         continue loop;
       }
     }
@@ -542,7 +543,8 @@ export function pick(chooser, array$$59) {
           const res$$6 = value$$10(matchValue$$8);
           return res$$6;
         } else {
-          i$$23 = i$$23 + 1;
+          const $i$$23$$84 = i$$23;
+          i$$23 = $i$$23$$84 + 1;
           continue loop$$1;
         }
       }
@@ -560,7 +562,8 @@ export function tryPick(chooser$$1, array$$60) {
         const matchValue$$9 = chooser$$1(array$$60[i$$24]);
 
         if (matchValue$$9 == null) {
-          i$$24 = i$$24 + 1;
+          const $i$$24$$87 = i$$24;
+          i$$24 = $i$$24$$87 + 1;
           continue loop$$2;
         } else {
           const res$$7 = matchValue$$9;
@@ -580,7 +583,8 @@ export function findBack(predicate$$17, array$$61) {
       } else if (predicate$$17(array$$61[i$$25])) {
         return array$$61[i$$25];
       } else {
-        i$$25 = i$$25 - 1;
+        const $i$$25$$90 = i$$25;
+        i$$25 = $i$$25$$90 - 1;
         continue loop$$3;
       }
     }
@@ -596,7 +600,8 @@ export function tryFindBack(predicate$$18, array$$62) {
       } else if (predicate$$18(array$$62[i$$26])) {
         return some(array$$62[i$$26]);
       } else {
-        i$$26 = i$$26 - 1;
+        const $i$$26$$93 = i$$26;
+        i$$26 = $i$$26$$93 - 1;
         continue loop$$4;
       }
     }
@@ -612,7 +617,8 @@ export function findIndexBack(predicate$$19, array$$63) {
       } else if (predicate$$19(array$$63[i$$27])) {
         return i$$27 | 0;
       } else {
-        i$$27 = i$$27 - 1;
+        const $i$$27$$96 = i$$27;
+        i$$27 = $i$$27$$96 - 1;
         continue loop$$5;
       }
     }
@@ -628,7 +634,8 @@ export function tryFindIndexBack(predicate$$20, array$$64) {
       } else if (predicate$$20(array$$64[i$$28])) {
         return i$$28;
       } else {
-        i$$28 = i$$28 - 1;
+        const $i$$28$$99 = i$$28;
+        i$$28 = $i$$28$$99 - 1;
         continue loop$$6;
       }
     }
@@ -1019,20 +1026,20 @@ export function forAll2(predicate$$23, array1$$12, array2$$12) {
     return acc$$10 ? predicate$$23(x$$19, y$$10) : false;
   }, true, array1$$12, array2$$12);
 }
-export function existsOffset($arg$$164, $arg$$165, $arg$$166) {
+export function existsOffset($arg$$171, $arg$$172, $arg$$173) {
   existsOffset: while (true) {
-    const predicate$$24 = $arg$$164,
-          array$$100 = $arg$$165,
-          index$$7 = $arg$$166;
+    const predicate$$24 = $arg$$171,
+          array$$100 = $arg$$172,
+          index$$7 = $arg$$173;
 
     if (index$$7 === array$$100.length) {
       return false;
     } else if (predicate$$24(array$$100[index$$7])) {
       return true;
     } else {
-      $arg$$164 = predicate$$24;
-      $arg$$165 = array$$100;
-      $arg$$166 = index$$7 + 1;
+      $arg$$171 = predicate$$24;
+      $arg$$172 = array$$100;
+      $arg$$173 = index$$7 + 1;
       continue existsOffset;
     }
   }
@@ -1040,22 +1047,22 @@ export function existsOffset($arg$$164, $arg$$165, $arg$$166) {
 export function exists(predicate$$25, array$$101) {
   return existsOffset(predicate$$25, array$$101, 0);
 }
-export function existsOffset2($arg$$169, $arg$$170, $arg$$171, $arg$$172) {
+export function existsOffset2($arg$$176, $arg$$177, $arg$$178, $arg$$179) {
   existsOffset2: while (true) {
-    const predicate$$26 = $arg$$169,
-          array1$$13 = $arg$$170,
-          array2$$13 = $arg$$171,
-          index$$8 = $arg$$172;
+    const predicate$$26 = $arg$$176,
+          array1$$13 = $arg$$177,
+          array2$$13 = $arg$$178,
+          index$$8 = $arg$$179;
 
     if (index$$8 === array1$$13.length) {
       return false;
     } else if (predicate$$26(array1$$13[index$$8], array2$$13[index$$8])) {
       return true;
     } else {
-      $arg$$169 = predicate$$26;
-      $arg$$170 = array1$$13;
-      $arg$$171 = array2$$13;
-      $arg$$172 = index$$8 + 1;
+      $arg$$176 = predicate$$26;
+      $arg$$177 = array1$$13;
+      $arg$$178 = array2$$13;
+      $arg$$179 = index$$8 + 1;
       continue existsOffset2;
     }
   }
