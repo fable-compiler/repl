@@ -11960,7 +11960,8 @@ label.panel-block {
     .scrollable-panel .scrollable-panel-body-row .icon.is-danger {
       color: #da4126; }
     .scrollable-panel .scrollable-panel-body-row .scrollable-panel-body-row-description {
-      white-space: pre-wrap; }
+      white-space: pre-wrap;
+      word-break: break-all; }
   .scrollable-panel.is-console .scrollable-panel-body:empty:after {
     content: "No logs received"; }
   .scrollable-panel.is-problem .scrollable-panel-body:empty:after {
