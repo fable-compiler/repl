@@ -678,7 +678,7 @@ let rec game () =
     context.font <- "bold 8px";
     drawText("CLICK TO START", 88., 96.)
     let mutable playing = false
-    canvas.addEventListener_pointerdown(fun _ ->
+    canvas.addEventListener_click(fun _ ->
         if not playing then
             playing <- true
             playLevel (levelCompleted, gameOver))
