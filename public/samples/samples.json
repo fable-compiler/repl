@@ -40,6 +40,13 @@
                         "cssCode": "elmish/sudoku.css"
                     },
                     {
+                        "type": "menu-item", 
+                        "label": "Input Validation",
+                        "fsharpCode": "elmish/validation.fs",
+                        "htmlCode": "elmish/validation.html",
+                        "cssCode": "elmish/validation.css"
+                    },
+                    {
                         "type": "menu-item",
                         "label": "TodoMVC",
                         "fsharpCode": "elmish/todomvc.fs",
