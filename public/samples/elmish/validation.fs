@@ -175,7 +175,7 @@ let errorMessagesIfAny triedLogin = function
           li [ errorStyle ] [ str error ] ]
 
 let appIcon = 
-  img [ Src "/img/fable_logo.png"
+  img [ Src "https://zaid-ajaj.github.io/elmish-login-flow-validation/img/fable_logo.png"
         Style [ Height 80; Width 100 ] ]
 
 let render (state: State) dispatch = 
