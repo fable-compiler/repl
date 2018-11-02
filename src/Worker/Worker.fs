@@ -52,10 +52,7 @@ let init() = async {
                           Babel_generation = babelTime }
 
                     let errors = Array.append (parseResults.Errors) res.FableErrors
-                    if Array.isEmpty errors then
-                        CompilationSucceed (jsCode, stats) |> worker.Post
-                    else
-                        CompilationFailed (errors, stats) |> worker.Post
+                    CompilationFinished (jsCode, errors, stats) |> worker.Post
                 with er ->
                     CompilerCrashed er.Message |> worker.Post
             | GetTooltip(line, col, lineText) ->

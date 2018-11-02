@@ -67,10 +67,7 @@ type Model =
       IsProblemsPanelExpanded : bool
       Logs : ConsolePanel.Log list }
 
-type EndCompileStatus =
-    | Ok of string
-    | Errors of Fable.Repl.Error[]
-    | Error of string
+type EndCompileStatus = Result<string * Fable.Repl.Error[], string>
 
 type Msg =
     | SetFSharpEditor of IEditor
@@ -201,24 +198,30 @@ let update msg (model : Model) =
 
     | EndCompile result ->
         match result with
-        | Ok codeES2015 ->
-            { model with CodeES2015 = codeES2015
-                         State = Compiled
-                         FSharpErrors = ResizeArray [||]
-                         Logs = [ ConsolePanel.Log.Separator ] }, Cmd.batch [ Cmd.performFunc (generateHtmlUrl model) codeES2015 SetIFrameUrl
-                                                                              Toast.message "Compiled successfuly"
-                                                                              |> Toast.position Toast.BottomRight
-                                                                              |> Toast.icon Fa.I.Check
-                                                                              |> Toast.dismissOnClick
-                                                                              |> Toast.success ]
-
-        | Errors errors ->
-            { model with State = Compiled
-                         FSharpErrors = mapErrorToMarker errors }, Toast.message "Failed to compile"
-                                                                    |> Toast.position Toast.BottomRight
-                                                                    |> Toast.icon Fa.I.Exclamation
-                                                                    |> Toast.dismissOnClick
-                                                                    |> Toast.error
+        | Ok(codeES2015, errors) ->
+            let hasCriticalErrors = errors |> Array.exists (fun e -> not e.IsWarning)
+            if hasCriticalErrors then
+                let toastCmd =
+                    Toast.message "Failed to compile"
+                    |> Toast.position Toast.BottomRight
+                    |> Toast.icon Fa.I.Exclamation
+                    |> Toast.dismissOnClick
+                    |> Toast.error
+                { model with State = Compiled
+                             FSharpErrors = mapErrorToMarker errors
+                             Logs = [ ConsolePanel.Log.Separator ] }, toastCmd
+            else
+                let toastCmd =
+                    Toast.message "Compiled successfuly"
+                    |> Toast.position Toast.BottomRight
+                    |> Toast.icon Fa.I.Check
+                    |> Toast.dismissOnClick
+                    |> Toast.success
+                { model with CodeES2015 = codeES2015
+                             State = Compiled
+                             FSharpErrors = mapErrorToMarker errors
+                             Logs = [ ConsolePanel.Log.Separator ] },
+                Cmd.batch [ Cmd.performFunc (generateHtmlUrl model) codeES2015 SetIFrameUrl; toastCmd ]
 
         | Error msg ->
             { model with State = Compiled }, showGlobalErrorToast msg
@@ -337,11 +340,8 @@ let workerCmd (worker : ObservableWorker<_>)=
                 LoadSuccess |> dispatch
             | LoadFailed -> LoadFail |> dispatch
             | ParsedCode errors -> MarkEditorErrors errors |> dispatch
-            | CompilationFailed (errors, stats) ->
-                Errors errors |> EndCompile |> dispatch
-                UpdateStats stats |> dispatch
-            | CompilationSucceed (jsCode, stats) ->
-                Ok jsCode |> EndCompile |> dispatch
+            | CompilationFinished (jsCode, errors, stats) ->
+                Ok(jsCode, errors) |> EndCompile |> dispatch
                 UpdateStats stats |> dispatch
             | CompilerCrashed msg -> Error msg |> EndCompile |> dispatch
             // Do nothing, these will be handled by .PostAndAwaitResponse

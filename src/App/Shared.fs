@@ -22,9 +22,7 @@ module Literals =
     let [<Literal>] FABLE_REPL_LIB_DIR = HOST + "/js/repl/lib"
     let [<Literal>] MAX_LOGS_LENGTH = 200
     /// This is the name of the source code file passed to FCS
-    /// Use .fsx extension to prevent unexpected problems
-    /// see https://github.com/fable-compiler/repl2/issues/64#issuecomment-434864132
-    let [<Literal>] FILE_NAME = "test.fsx"
+    let [<Literal>] FILE_NAME = "test.fs"
 
 let [<Global>] private setTimeout(f: unit->unit, ms: int): unit = jsNative
 
@@ -47,8 +45,7 @@ type WorkerAnswer =
     | Loaded
     | LoadFailed
     | ParsedCode of errors: Fable.Repl.Error[]
-    | CompilationSucceed of jsCode: string * stats: CompileStats
-    | CompilationFailed of errors: Fable.Repl.Error[] * stats: CompileStats
+    | CompilationFinished of jsCode: string * errors: Fable.Repl.Error[] * stats: CompileStats
     | CompilerCrashed of message: string
     | FoundTooltip of lines: string[]
     | FoundCompletions of Fable.Repl.Completion[]
