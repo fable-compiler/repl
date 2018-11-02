@@ -41,9 +41,9 @@ let init() = async {
             | CompileCode(fsharpCode, optimize) ->
                 try
                     let (parseResults, parsingTime) = measureTime "FCS parsing" Fable.ParseFSharpScript (checker, Literals.FILE_NAME, fsharpCode)
-                    let ((babelAst, errors), fableTransformTime) = measureTime "Fable transform" (fun () ->
+                    let (res, fableTransformTime) = measureTime "Fable transform" (fun () ->
                         Fable.CompileToBabelAst("fable-core", parseResults, Literals.FILE_NAME, optimize, resolveLibCall)) ()
-                    let (jsCode, babelTime) = measureTime "Babel generation" compileBabelAst babelAst
+                    let (jsCode, babelTime) = measureTime "Babel generation" compileBabelAst res.BabelAst
 
                     let stats : CompileStats =
                         { FCS_checker = checkerTime
@@ -51,6 +51,7 @@ let init() = async {
                           Fable_transform = fableTransformTime
                           Babel_generation = babelTime }
 
+                    let errors = Array.append (parseResults.Errors) res.FableErrors
                     if Array.isEmpty errors then
                         CompilationSucceed (jsCode, stats) |> worker.Post
                     else

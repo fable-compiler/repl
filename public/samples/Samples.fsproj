@@ -15,6 +15,7 @@
     <Compile Include="elmish/sudoku.fs" />
     <Compile Include="elmish/memory.fs" />
     <Compile Include="elmish/spreadsheet.fs" />
+    <Compile Include="elmish/validation.fs" />
     <Compile Include="fulma/box.fs" />
     <Compile Include="fulma/button.fs" />
     <Compile Include="fulma/content.fs" />

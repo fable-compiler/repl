@@ -40,11 +40,10 @@
                         "cssCode": "elmish/sudoku.css"
                     },
                     {
-                        "type": "menu-item", 
+                        "type": "menu-item",
                         "label": "Input Validation",
                         "fsharpCode": "elmish/validation.fs",
-                        "htmlCode": "elmish/validation.html",
-                        "cssCode": "elmish/validation.css"
+                        "htmlCode": "elmish/validation.html"
                     },
                     {
                         "type": "menu-item",

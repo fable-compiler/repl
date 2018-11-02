@@ -342,8 +342,8 @@ NUGET
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
 GITHUB
   remote: fable-compiler/Fable
-    src/dotnet/Fable.Repl/Interfaces.fs (37cc9106e436e9e1014ade433cf162ef7194a8f4)
-    src/dotnet/Fable.Repl/Metadata.fs (37cc9106e436e9e1014ade433cf162ef7194a8f4)
+    src/dotnet/Fable.Repl/Interfaces.fs (615bf003f4e599068f11e50f8411ef5402fc55f9)
+    src/dotnet/Fable.Repl/Metadata.fs (615bf003f4e599068f11e50f8411ef5402fc55f9)
   remote: MangelMaxime/Thoth
     src/Thoth.Json/Decode.fs (ff6c611f8dd4cdc06846ea10f30b1ced7c7f0a0f)
     src/Thoth.Json/Encode.fs (ff6c611f8dd4cdc06846ea10f30b1ced7c7f0a0f)

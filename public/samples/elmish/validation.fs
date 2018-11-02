@@ -1,6 +1,7 @@
+module Elmish.Validation
+
 open System
 open Fable.Core
-open Fable.Core.JsInterop
 open Elmish
 open Elmish.React
 open Fable.PowerPack
@@ -8,23 +9,23 @@ open Fable.Import.React
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
 
-type LoginResult = 
+type LoginResult =
     | Success of token:string
     | UsernameDoesNotExist
     | PasswordIncorrect
     | LoginError of errorMsg:string
 
-type LoginInfo = 
-    { Username : string 
+type LoginInfo =
+    { Username : string
       Password : string }
 
-type Msg = 
+type Msg =
     | Login
     | ChangeUsername of string
     | ChangePassword of string
     | LoginSuccess of adminSecureToken: string
     | LoginFailed of error:string
-    | UpdateValidationErrors 
+    | UpdateValidationErrors
 
 type State = {
     LoggingIn: bool
@@ -37,8 +38,8 @@ type State = {
 }
 
 
-module Http = 
-    let private loginPromise (info: LoginInfo) = 
+module Http =
+    let private loginPromise (info: LoginInfo) =
         promise {
             // simulate server word
             do! Promise.sleep 1500
@@ -46,19 +47,19 @@ module Http =
         }
 
     let login (info: LoginInfo) =
-        
+
         let successHandler = function
             | Success token -> LoginSuccess token
             | UsernameDoesNotExist -> LoginFailed "Username does not exist"
             | PasswordIncorrect -> LoginFailed "The password you entered is incorrect"
             | LoginError error -> LoginFailed error
-        
+
         Cmd.ofPromise loginPromise info
                       successHandler
                       (fun ex -> LoginFailed "Unknown error occured while logging you in")
 
 
-let init() = 
+let init() =
     { InputUsername = ""
       InputPassword = ""
       UsernameValidationErrors =  [ ]
@@ -68,18 +69,18 @@ let init() =
       LoggingIn = false }, Cmd.none
 
 
-let validateInput (state: State) =  
-  let usernameRules = 
+let validateInput (state: State) =
+  let usernameRules =
     [ String.IsNullOrWhiteSpace(state.InputUsername), "Field 'Username' cannot be empty"
       state.InputUsername.Trim().Length < 5, "Field 'Username' must at least have 5 characters" ]
-  let passwordRules = 
+  let passwordRules =
     [ String.IsNullOrWhiteSpace(state.InputPassword), "Field 'Password' cannot be empty"
       state.InputPassword.Trim().Length < 5, "Field 'Password' must at least have 5 characters" ]
-  let usernameValidationErrors = 
+  let usernameValidationErrors =
       usernameRules
       |> List.filter fst
       |> List.map snd
-  let passwordValidationErrors = 
+  let passwordValidationErrors =
       passwordRules
       |> List.filter fst
       |> List.map snd
@@ -87,135 +88,128 @@ let validateInput (state: State) =
   usernameValidationErrors, passwordValidationErrors
 
 
-let update msg (state: State) = 
-    match msg with 
+let update msg (state: State) =
+    match msg with
     | ChangeUsername name ->
-        let nextState = { state with InputUsername = name }          
+        let nextState = { state with InputUsername = name }
         nextState, Cmd.ofMsg UpdateValidationErrors
-    
+
     | ChangePassword pass ->
-        let nextState = { state with InputPassword = pass }        
+        let nextState = { state with InputPassword = pass }
         nextState, Cmd.ofMsg UpdateValidationErrors
-    
+
     | UpdateValidationErrors ->
         let usernameErrors, passwordErrors = validateInput state
         let nextState =
             { state with UsernameValidationErrors = usernameErrors
                          PasswordValidationErrors = passwordErrors }
         nextState, Cmd.none
-    
+
     | Login ->
         let state = { state with HasTriedToLogin = true }
         let usernameErrors, passwordErrors =
            validateInput state
-        let startLogin = 
+        let startLogin =
             List.isEmpty usernameErrors
          && List.isEmpty passwordErrors
 
-        if not startLogin then state, Cmd.none 
-        else 
-          let nextState = { state with LoggingIn = true } 
-          let credentials = { 
+        if not startLogin then state, Cmd.none
+        else
+          let nextState = { state with LoggingIn = true }
+          let credentials = {
               Username = state.InputUsername
-              Password = state.InputPassword  
+              Password = state.InputPassword
           }
 
           nextState, Http.login credentials
-    
-    | LoginSuccess token -> 
+
+    | LoginSuccess token ->
         let nextState = { state with LoggingIn = false }
         nextState, Cmd.none
-    
+
     | LoginFailed error ->
-        let nextState = 
-            { state with 
-                LoginError = Some error 
+        let nextState =
+            { state with
+                LoginError = Some error
                 LoggingIn = false }
 
         nextState, Cmd.none
 
+type InputType = Text | Password
 
-module Option =
-  let ofElement (elem : ReactElement option) =
-    unbox<ReactElement> elem
-    
-
-type InputType = Text | Password 
-let textInput inputLabel initial inputType (onChange: string -> unit) = 
-  let inputType = match inputType with 
+let textInput inputLabel initial inputType (onChange: string -> unit) =
+  let inputType = match inputType with
                   | Text -> "input"
                   | Password -> "password"
-  div 
+  div
     [ ClassName "form-group" ]
     [ input [ ClassName "form-control form-control-lg"
               Type inputType
               DefaultValue initial
               Placeholder inputLabel
-              OnChange (fun e -> onChange !!e.target?value) ] ]
+              OnChange (fun e -> onChange e.Value) ] ]
 
-let loginFormStyle = 
+let loginFormStyle =
   Style [ Width "400px"
           MarginTop "70px"
           TextAlign "center" ]
 
-let cardBlockStyle = 
+let cardBlockStyle =
   Style [ Padding "30px"
           TextAlign "left"
           BorderRadius 10 ]
 
-[<Emit("null")>]
-let emptyElement : ReactElement = jsNative
 let errorMessagesIfAny triedLogin = function
-  | [ ] -> emptyElement
-  | x when triedLogin = false -> emptyElement
+  | [ ] -> None
+  | _ when triedLogin = false -> None
   | errors ->
     let errorStyle = Style [ Color "crimson"; FontSize 12 ]
-    ul [ ] 
-       [ for error in errors -> 
-          li [ errorStyle ] [ str error ] ]
+    ul [ ]
+       [ for error in errors ->
+          li [ errorStyle ] [ str error ] ] |> Some
 
-let appIcon = 
+let appIcon =
   img [ Src "https://zaid-ajaj.github.io/elmish-login-flow-validation/img/fable_logo.png"
         Style [ Height 80; Width 100 ] ]
 
-let render (state: State) dispatch = 
+let render (state: State) dispatch =
 
-    let loginBtnContent = 
+    let loginBtnContent =
       if state.LoggingIn then i [ ClassName "fa fa-circle-o-notch fa-spin" ] []
       else str "Login"
 
-    let validationRules = 
+    let validationRules =
       [ state.InputUsername.Trim().Length >= 5
         state.InputPassword.Trim().Length >= 5 ]
-    
+
     let canLogin = Seq.forall id validationRules
 
-    let btnClass = 
-      if canLogin 
+    let btnClass =
+      if canLogin
       then "btn btn-success btn-lg"
       else "btn btn-info btn-lg"
-    div 
+    div
       [ ClassName "container" ; loginFormStyle ]
-      [ div 
+      [ div
          [ ClassName "card" ]
          [ div
              [ ClassName "card-block"; cardBlockStyle ]
-             [ div 
-                [ Style [ TextAlign "center" ] ] 
+             [ div
+                [ Style [ TextAlign "center" ] ]
                 [ appIcon ]
                br []
                textInput "Username" state.InputUsername Text (ChangeUsername >> dispatch)
-               errorMessagesIfAny state.HasTriedToLogin state.UsernameValidationErrors
+               ofOption (errorMessagesIfAny state.HasTriedToLogin state.UsernameValidationErrors)
                textInput "Password" state.InputPassword Password (ChangePassword >> dispatch)
-               errorMessagesIfAny state.HasTriedToLogin state.PasswordValidationErrors
+               ofOption (errorMessagesIfAny state.HasTriedToLogin state.PasswordValidationErrors)
                div
                 [ Style [ TextAlign "center" ] ]
-                [ button 
+                [ button
                     [ ClassName btnClass
-                      OnClick (fun e -> dispatch Login) ] 
+                      OnClick (fun e -> dispatch Login) ]
                     [ loginBtnContent ] ] ] ] ]
 
 
-Program.mkProgram init update render 
+Program.mkProgram init update render
 |> Program.withReact "elmish-app"
 |> Program.run
