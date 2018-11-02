@@ -232,7 +232,7 @@ module Scenes =
         { Things = [ SceneObjects.Plane ({ X = 0.0; Y = 1.0; Z = 0.0 }, 0.0, Surfaces.Checkerboard);
                      SceneObjects.Sphere ({ X = 0.0; Y = 1.0; Z = -0.25 }, 1.0, Surfaces.Shiny)
                      SceneObjects.Sphere ({ X = -1.0; Y = 0.5; Z = 1.5 }, 0.5, Surfaces.Shiny) ];
-          Lights = [ { Pos = { X = -2.0; Y = 2.0; Z = 0.0 }; Color = { R = 0.49; G = 0.07; B = 0.07 } };
+          Lights = [ { Pos = { X = -2.0; Y = 2.5; Z = 0.0 }; Color = { R = 0.49; G = 0.07; B = 0.07 } };
                      { Pos = { X = 1.5; Y = 2.5; Z = 1.5 }; Color = { R = 0.07; G = 0.07; B = 0.49 } };
                      { Pos = { X = 1.5; Y = 2.5; Z = -1.5 }; Color = { R = 0.07; G = 0.49; B = 0.071 } };
                      { Pos = { X = 0.0; Y = 3.5; Z = 0.0 }; Color = { R = 0.21; G = 0.21; B = 0.35 } } ];
@@ -253,6 +253,6 @@ let measure f x y =
     let elapsed = window.performance.now() - dtStart
     res, elapsed
 
-let x, y, w, h = (0, 0, 500, 500)
+let x, y, w, h = (0, 0, 512, 512)
 let _, elapsed = measure renderScene Scenes.TwoSpheresOnACheckerboard (x, y, w, h)
 printfn "Ray tracing:\n - rendered image size: (%dx%d)\n - elapsed: %f ms" w h elapsed

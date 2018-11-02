@@ -41,6 +41,12 @@
                     },
                     {
                         "type": "menu-item",
+                        "label": "Input Validation",
+                        "fsharpCode": "elmish/validation.fs",
+                        "htmlCode": "elmish/validation.html"
+                    },
+                    {
+                        "type": "menu-item",
                         "label": "TodoMVC",
                         "fsharpCode": "elmish/todomvc.fs",
                         "htmlCode": "elmish/todomvc.html"
