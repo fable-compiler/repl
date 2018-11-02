@@ -43,6 +43,8 @@ export function last(_arg1$$3) {
     } else {
       throw new Error("List was empty");
     }
+
+    break;
   }
 }
 export function tryLast(_arg1$$4) {
@@ -58,6 +60,8 @@ export function tryLast(_arg1$$4) {
     } else {
       return null;
     }
+
+    break;
   }
 }
 export function compareWith(comparer, xs$$3, ys) {
@@ -88,6 +92,8 @@ export function compareWith(comparer, xs$$3, ys) {
         } else {
           return -1 | 0;
         }
+
+        break;
       }
     };
 
@@ -112,6 +118,8 @@ export function foldIndexedAux($arg$$7, $arg$$8, $arg$$9, $arg$$10) {
     } else {
       return acc;
     }
+
+    break;
   }
 }
 export function foldIndexed(f$$1, state, xs$$7) {
@@ -133,6 +141,8 @@ export function fold($arg$$14, $arg$$15, $arg$$16) {
     } else {
       return state$$1;
     }
+
+    break;
   }
 }
 export function reverse(xs$$9) {
@@ -209,6 +219,8 @@ export function foldIndexed2Aux($arg$$20, $arg$$21, $arg$$22, $arg$$23, $arg$$24
           throw new Error("Lists had different lengths");
         }
     }
+
+    break;
   }
 }
 export function foldIndexed2(f$$6, state$$4, xs$$17, ys$$4) {
@@ -235,6 +247,8 @@ export function unfold(f$$9, state$$7) {
       } else {
         return reverse(acc$$6);
       }
+
+      break;
     }
   };
 
@@ -299,6 +313,8 @@ export function foldIndexed3Aux($arg$$41, $arg$$42, $arg$$43, $arg$$44, $arg$$45
           throw new Error("Lists had different lengths");
         }
     }
+
+    break;
   }
 }
 export function foldIndexed3(f$$11, seed, xs$$21, ys$$8, zs$$1) {
@@ -434,6 +450,8 @@ export function tryPickIndexedAux($arg$$100, $arg$$101, $arg$$102) {
     } else {
       return null;
     }
+
+    break;
   }
 }
 export function tryPickIndexed(f$$29, xs$$52) {
@@ -554,6 +572,8 @@ export function contains(value, list, eq) {
       } else {
         return false;
       }
+
+      break;
     }
   };
 
@@ -630,6 +650,8 @@ export function exists($arg$$146, $arg$$147) {
     } else {
       return false;
     }
+
+    break;
   }
 }
 export function exists2($arg$$148, $arg$$149, $arg$$150) {
@@ -679,6 +701,8 @@ export function exists2($arg$$148, $arg$$149, $arg$$150) {
           throw new Error("Lists had different lengths");
         }
     }
+
+    break;
   }
 }
 export function unzip(xs$$82) {
@@ -790,6 +814,8 @@ export function skip(i$$15, xs$$110) {
       } else {
         throw new Error("The input sequence has an insufficient number of elements.");
       }
+
+      break;
     }
   };
 
@@ -868,6 +894,8 @@ export function skipWhile($arg$$176, $arg$$177) {
           return xs$$115;
         }
     }
+
+    break;
   }
 }
 export function takeSplitAux(error, i$$20, acc$$26, xs$$116) {
@@ -894,6 +922,8 @@ export function takeSplitAux(error, i$$20, acc$$26, xs$$116) {
         return [reverse(acc$$26), xs$$116];
       }
     }
+
+    break;
   }
 }
 export function take(i$$21, xs$$118) {

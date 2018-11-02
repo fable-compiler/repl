@@ -1,6 +1,5 @@
 // Source: http://www.tryfsharp.org/create/cpoulain/shared/raytracer.fsx
 // slightly modified to avoid some allocations
-// NOTE: Takes several seconds to compile and run
 
 module RayTracer
 

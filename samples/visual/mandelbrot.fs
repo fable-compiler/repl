@@ -1,7 +1,6 @@
 module Mandelbrot
 
-// You can draw a rectangle to zoom in an area
-// (feature added by Avi Avni)
+// You can draw a rectangle to zoom in an area (feature added by Avi Avni)
 
 open Fable.Core
 open Fable.Core.JsInterop

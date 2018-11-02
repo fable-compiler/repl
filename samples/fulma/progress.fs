@@ -6,7 +6,7 @@ open Fable.Helpers.React.Props
 open Fulma
 
 let colorInteractive () =
-    div [ ClassName "block" ]
+    div [ Class "block" ]
         [ Progress.progress
             [ Progress.Value 15
               Progress.Max 100 ] [ str "15%" ]
@@ -32,7 +32,7 @@ let colorInteractive () =
               Progress.Max 100 ] [ str "90%" ] ]
 
 let sizeInteractive () =
-    div [ ClassName "block" ]
+    div [ Class "block" ]
         [ Progress.progress
             [ Progress.Size IsSmall
               Progress.Value 15

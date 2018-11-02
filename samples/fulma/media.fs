@@ -13,7 +13,7 @@ let basic () =
           Media.content [ ]
             [ Field.div [ ]
                 [ Control.div [ ]
-                    [ textarea [ ClassName "textarea"
+                    [ textarea [ Class "textarea"
                                  Placeholder "Add a message ..." ]
                                [ ] ] ]
               Level.level [ ]

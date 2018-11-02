@@ -285,6 +285,8 @@ export function contains(value$$3, array$$21, eq$$3) {
         i$$13 = $i$$13$$49 + 1;
         continue loop;
       }
+
+      break;
     }
   };
 
@@ -548,6 +550,8 @@ export function pick(chooser, array$$59) {
           continue loop$$1;
         }
       }
+
+      break;
     }
   };
 
@@ -570,6 +574,8 @@ export function tryPick(chooser$$1, array$$60) {
           return res$$7;
         }
       }
+
+      break;
     }
   };
 
@@ -587,6 +593,8 @@ export function findBack(predicate$$17, array$$61) {
         i$$25 = $i$$25$$90 - 1;
         continue loop$$3;
       }
+
+      break;
     }
   };
 
@@ -604,6 +612,8 @@ export function tryFindBack(predicate$$18, array$$62) {
         i$$26 = $i$$26$$93 - 1;
         continue loop$$4;
       }
+
+      break;
     }
   };
 
@@ -621,6 +631,8 @@ export function findIndexBack(predicate$$19, array$$63) {
         i$$27 = $i$$27$$96 - 1;
         continue loop$$5;
       }
+
+      break;
     }
   };
 
@@ -638,6 +650,8 @@ export function tryFindIndexBack(predicate$$20, array$$64) {
         i$$28 = $i$$28$$99 - 1;
         continue loop$$6;
       }
+
+      break;
     }
   };
 
@@ -796,13 +810,18 @@ export function unfold(generator, state$$8) {
   const res$$10 = [];
 
   const loop$$7 = function loop$$7(state$$9) {
-    const matchValue$$11 = generator(state$$9);
+    loop$$7: while (true) {
+      const matchValue$$11 = generator(state$$9);
 
-    if (matchValue$$11 != null) {
-      const x$$13 = matchValue$$11[0];
-      const s$0027$$2 = matchValue$$11[1];
-      res$$10.push(x$$13);
-      loop$$7(s$0027$$2);
+      if (matchValue$$11 != null) {
+        const x$$13 = matchValue$$11[0];
+        const s$0027$$2 = matchValue$$11[1];
+        res$$10.push(x$$13);
+        state$$9 = s$0027$$2;
+        continue loop$$7;
+      }
+
+      break;
     }
   };
 
@@ -1042,6 +1061,8 @@ export function existsOffset($arg$$171, $arg$$172, $arg$$173) {
       $arg$$173 = index$$7 + 1;
       continue existsOffset;
     }
+
+    break;
   }
 }
 export function exists(predicate$$25, array$$101) {
@@ -1065,6 +1086,8 @@ export function existsOffset2($arg$$176, $arg$$177, $arg$$178, $arg$$179) {
       $arg$$179 = index$$8 + 1;
       continue existsOffset2;
     }
+
+    break;
   }
 }
 export function exists2(predicate$$27, array1$$14, array2$$14) {

@@ -1,6 +1,5 @@
 module Pacman
 
-// NOTE: Takes several seconds to compile
 // Another great F# game by Phil Trelford! The code involves rendering the maze,
 // AI for the ghosts, user interaction and even playing sound effects. There is
 // some brief commentary, but if you're a beginner look at the other examples first.

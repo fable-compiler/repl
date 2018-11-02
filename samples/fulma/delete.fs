@@ -6,7 +6,7 @@ open Fable.Helpers.React.Props
 open Fulma
 
 let demoInteractive () =
-    div [ ClassName "block" ]
+    div [ Class "block" ]
         [ Delete.delete
             [ Delete.Size IsSmall ] [ ]
           Delete.delete

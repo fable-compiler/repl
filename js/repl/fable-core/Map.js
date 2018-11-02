@@ -29,6 +29,8 @@ export function MapTreeModule$$$sizeAux(acc, m) {
           return acc | 0;
         }
     }
+
+    break;
   }
 }
 export function MapTreeModule$$$size(x) {
@@ -234,6 +236,8 @@ export function MapTreeModule$$$find(comparer$$1, k$$3, m$$4) {
           throw new Error("key not found");
         }
     }
+
+    break;
   }
 }
 export function MapTreeModule$$$tryFind(comparer$$2, k$$4, m$$5) {
@@ -284,6 +288,8 @@ export function MapTreeModule$$$tryFind(comparer$$2, k$$4, m$$5) {
           return null;
         }
     }
+
+    break;
   }
 }
 export function MapTreeModule$$$partition1(comparer$$3, f, k$$5, v$$3, acc1, acc2) {
@@ -331,6 +337,8 @@ export function MapTreeModule$$$partitionAux($arg$$19, $arg$$20, $arg$$21, $arg$
           return acc$$1;
         }
     }
+
+    break;
   }
 }
 export function MapTreeModule$$$partition(comparer$$5, f$$2, s$$1) {
@@ -378,6 +386,8 @@ export function MapTreeModule$$$filterAux($arg$$32, $arg$$33, $arg$$34, $arg$$35
           return acc$$5;
         }
     }
+
+    break;
   }
 }
 export function MapTreeModule$$$filter(comparer$$8, f$$5, s$$3) {
@@ -499,32 +509,43 @@ export function MapTreeModule$$$mem(comparer$$10, k$$12, m$$8) {
           return false;
         }
     }
+
+    break;
   }
 }
-export function MapTreeModule$$$iter(f$$6, m$$9) {
-  switch (m$$9.tag) {
-    case 1:
-      {
-        const v2$$8 = m$$9.fields[1];
-        const k2$$12 = m$$9.fields[0];
-        f$$6(k2$$12, v2$$8);
-        break;
-      }
+export function MapTreeModule$$$iter($arg$$43, $arg$$44) {
+  MapTreeModule$$$iter: while (true) {
+    const f$$6 = $arg$$43,
+          m$$9 = $arg$$44;
 
-    case 2:
-      {
-        const v2$$9 = m$$9.fields[1];
-        const r$$10 = m$$9.fields[3];
-        const l$$10 = m$$9.fields[2];
-        const k2$$13 = m$$9.fields[0];
-        MapTreeModule$$$iter(f$$6, l$$10);
-        f$$6(k2$$13, v2$$9);
-        MapTreeModule$$$iter(f$$6, r$$10);
-        break;
-      }
+    switch (m$$9.tag) {
+      case 1:
+        {
+          const v2$$8 = m$$9.fields[1];
+          const k2$$12 = m$$9.fields[0];
+          f$$6(k2$$12, v2$$8);
+          break;
+        }
 
-    default:
-      {}
+      case 2:
+        {
+          const v2$$9 = m$$9.fields[1];
+          const r$$10 = m$$9.fields[3];
+          const l$$10 = m$$9.fields[2];
+          const k2$$13 = m$$9.fields[0];
+          MapTreeModule$$$iter(f$$6, l$$10);
+          f$$6(k2$$13, v2$$9);
+          $arg$$43 = f$$6;
+          $arg$$44 = r$$10;
+          continue MapTreeModule$$$iter;
+          break;
+        }
+
+      default:
+        {}
+    }
+
+    break;
   }
 }
 export function MapTreeModule$$$tryPick($arg$$45, $arg$$46) {
@@ -570,6 +591,8 @@ export function MapTreeModule$$$tryPick($arg$$45, $arg$$46) {
           return null;
         }
     }
+
+    break;
   }
 }
 export function MapTreeModule$$$exists($arg$$47, $arg$$48) {
@@ -606,6 +629,8 @@ export function MapTreeModule$$$exists($arg$$47, $arg$$48) {
           return false;
         }
     }
+
+    break;
   }
 }
 export function MapTreeModule$$$forall($arg$$49, $arg$$50) {
@@ -642,6 +667,8 @@ export function MapTreeModule$$$forall($arg$$49, $arg$$50) {
           return true;
         }
     }
+
+    break;
   }
 }
 export function MapTreeModule$$$map(f$$10, m$$13) {
@@ -733,6 +760,8 @@ export function MapTreeModule$$$foldBack($arg$$55, $arg$$56, $arg$$57) {
           return x$$1;
         }
     }
+
+    break;
   }
 }
 export function MapTreeModule$$$fold($arg$$58, $arg$$59, $arg$$60) {
@@ -768,6 +797,8 @@ export function MapTreeModule$$$fold($arg$$58, $arg$$59, $arg$$60) {
           return x$$4;
         }
     }
+
+    break;
   }
 }
 export function MapTreeModule$$$foldFromTo(comparer$$11, lo, hi, f$$14, m$$17, x$$7) {
@@ -836,6 +867,8 @@ export function MapTreeModule$$$loop(m$$19, acc$$8) {
           return acc$$8;
         }
     }
+
+    break;
   }
 }
 export function MapTreeModule$$$toList(m$$20) {
@@ -860,6 +893,8 @@ export function MapTreeModule$$$mkFromEnumerator(comparer$$14, acc$$10, e) {
     } else {
       return acc$$10;
     }
+
+    break;
   }
 }
 export function MapTreeModule$$$ofArray(comparer$$15, arr) {
@@ -911,6 +946,8 @@ export function MapTreeModule$$$collapseLHS(stack) {
     } else {
       return L();
     }
+
+    break;
   }
 }
 export function MapTreeModule$$$mkIterator(s$$5) {

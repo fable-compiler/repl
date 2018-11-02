@@ -29,6 +29,8 @@ export function SetTreeModule$$$countAux(s, acc) {
           continue SetTreeModule$$$countAux;
         }
     }
+
+    break;
   }
 }
 export function SetTreeModule$$$count(s$$1) {
@@ -404,31 +406,42 @@ export function SetTreeModule$$$mem(comparer$$4, k$$5, t$$5) {
           }
         }
     }
+
+    break;
   }
 }
-export function SetTreeModule$$$iter(f, t$$6) {
-  switch (t$$6.tag) {
-    case 2:
-      {
-        const k2$$11 = t$$6.fields[0];
-        f(k2$$11);
-        break;
-      }
+export function SetTreeModule$$$iter($arg$$10, $arg$$11) {
+  SetTreeModule$$$iter: while (true) {
+    const f = $arg$$10,
+          t$$6 = $arg$$11;
 
-    case 0:
-      {
-        break;
-      }
+    switch (t$$6.tag) {
+      case 2:
+        {
+          const k2$$11 = t$$6.fields[0];
+          f(k2$$11);
+          break;
+        }
 
-    default:
-      {
-        const r$$7 = t$$6.fields[2];
-        const l$$7 = t$$6.fields[1];
-        const k2$$10 = t$$6.fields[0];
-        SetTreeModule$$$iter(f, l$$7);
-        f(k2$$10);
-        SetTreeModule$$$iter(f, r$$7);
-      }
+      case 0:
+        {
+          break;
+        }
+
+      default:
+        {
+          const r$$7 = t$$6.fields[2];
+          const l$$7 = t$$6.fields[1];
+          const k2$$10 = t$$6.fields[0];
+          SetTreeModule$$$iter(f, l$$7);
+          f(k2$$10);
+          $arg$$10 = f;
+          $arg$$11 = r$$7;
+          continue SetTreeModule$$$iter;
+        }
+    }
+
+    break;
   }
 }
 export function SetTreeModule$$$foldBack($arg$$12, $arg$$13, $arg$$14) {
@@ -460,6 +473,8 @@ export function SetTreeModule$$$foldBack($arg$$12, $arg$$13, $arg$$14) {
           continue SetTreeModule$$$foldBack;
         }
     }
+
+    break;
   }
 }
 export function SetTreeModule$$$fold($arg$$15, $arg$$16, $arg$$17) {
@@ -493,6 +508,8 @@ export function SetTreeModule$$$fold($arg$$15, $arg$$16, $arg$$17) {
           continue SetTreeModule$$$fold;
         }
     }
+
+    break;
   }
 }
 export function SetTreeModule$$$forall($arg$$18, $arg$$19) {
@@ -527,6 +544,8 @@ export function SetTreeModule$$$forall($arg$$18, $arg$$19) {
           }
         }
     }
+
+    break;
   }
 }
 export function SetTreeModule$$$exists($arg$$20, $arg$$21) {
@@ -561,6 +580,8 @@ export function SetTreeModule$$$exists($arg$$20, $arg$$21) {
           }
         }
     }
+
+    break;
   }
 }
 export function SetTreeModule$$$isEmpty(m$$5) {
@@ -623,6 +644,8 @@ export function SetTreeModule$$$filterAux($arg$$22, $arg$$23, $arg$$24, $arg$$25
           continue SetTreeModule$$$filterAux;
         }
     }
+
+    break;
   }
 }
 export function SetTreeModule$$$filter(comparer$$8, f$$6, s$$3) {
@@ -655,6 +678,8 @@ export function SetTreeModule$$$diffAux(comparer$$9, m$$6, acc$$3) {
           continue SetTreeModule$$$diffAux;
         }
     }
+
+    break;
   }
 }
 export function SetTreeModule$$$diff(comparer$$10, a$$2, b$$2) {
@@ -767,6 +792,8 @@ export function SetTreeModule$$$intersectionAux(comparer$$12, b$$3, m$$7, acc$$4
           continue SetTreeModule$$$intersectionAux;
         }
     }
+
+    break;
   }
 }
 export function SetTreeModule$$$intersection(comparer$$13, a$$3, b$$4) {
@@ -815,6 +842,8 @@ export function SetTreeModule$$$partitionAux($arg$$39, $arg$$40, $arg$$41, $arg$
           continue SetTreeModule$$$partitionAux;
         }
     }
+
+    break;
   }
 }
 export function SetTreeModule$$$partition(comparer$$16, f$$9, s$$5) {
@@ -866,6 +895,8 @@ export function SetTreeModule$$$minimumElementAux(s$$7, n$$1) {
           continue SetTreeModule$$$minimumElementAux;
         }
     }
+
+    break;
   }
 }
 export function SetTreeModule$$$minimumElementOpt(s$$8) {
@@ -912,6 +943,8 @@ export function SetTreeModule$$$maximumElementAux(s$$9, n$$2) {
           continue SetTreeModule$$$maximumElementAux;
         }
     }
+
+    break;
   }
 }
 export function SetTreeModule$$$maximumElementOpt(s$$10) {
@@ -976,6 +1009,8 @@ export function SetTreeModule$$$collapseLHS(stack) {
     } else {
       return L();
     }
+
+    break;
   }
 }
 export function SetTreeModule$$$mkIterator(s$$13) {
@@ -1292,6 +1327,8 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
           continue SetTreeModule$$$compareStacks;
         }
     }
+
+    break;
   }
 }
 export function SetTreeModule$$$compare(comparer$$18, s1, s2) {
@@ -1337,6 +1374,8 @@ export function SetTreeModule$$$loop(m$$8, acc$$10) {
           continue SetTreeModule$$$loop;
         }
     }
+
+    break;
   }
 }
 export function SetTreeModule$$$toList(s$$18) {
@@ -1362,6 +1401,8 @@ export function SetTreeModule$$$mkFromEnumerator(comparer$$19, acc$$11, e) {
     } else {
       return acc$$11;
     }
+
+    break;
   }
 }
 export function SetTreeModule$$$ofSeq(comparer$$20, c$$11) {

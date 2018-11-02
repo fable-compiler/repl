@@ -3,11 +3,7 @@ module Thoth.RandomUser
 (**
 Small application showing how to use:
 - Thoth.Json
-- Fable.PowerPack
-    - Promise
-    - Fetch API
-NOTE: The API in Fable's REPL may differ from nuget libraries.
-        The generated JS code won't be as optimized as when using dotnet-fable.
+- Fable.PowerPack (Promise, Fetch API)
 *)
 
 open System

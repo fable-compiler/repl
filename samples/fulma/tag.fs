@@ -6,7 +6,7 @@ open Fable.Helpers.React.Props
 open Fulma
 
 let colorInteractive () =
-    div [ ClassName "block" ]
+    div [ Class "block" ]
         [ Tag.tag [ ] [ str "Default" ]
           Tag.tag [ Tag.Color IsWhite ] [ str "White" ]
           Tag.tag [ Tag.Color IsLight ] [ str "Light" ]
@@ -19,13 +19,13 @@ let colorInteractive () =
           Tag.tag [ Tag.Color IsDanger ] [ str "Danger" ] ]
 
 let sizeInteractive () =
-    div [ ClassName "block" ]
+    div [ Class "block" ]
         [ Tag.tag [ ] [ str "Normal" ]
           Tag.tag [ Tag.Color IsPrimary; Tag.Size IsMedium ] [ str "Medium" ]
           Tag.tag [ Tag.Color IsInfo; Tag.Size IsLarge ] [ str "Large" ] ]
 
 let nestedDeleteStyleInteractive () =
-    div [ ClassName "block" ]
+    div [ Class "block" ]
         [ Tag.tag [ Tag.Color IsDark ]
             [ str "With delete"
               Delete.delete [ Delete.Size IsSmall ] [ ] ]
