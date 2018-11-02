@@ -2,9 +2,8 @@ module Hokusai
 
 (*
 Hokusai and Julia: rendering fractals using HTML5 canvas
-This demo is based on Tomas Petricek's F# Advent Calendar post
-that explores Japanese art using the (now defunct) Freebase type provider
-and renders The Great Wave by Hokusai using the Julia fractal.
+This demo is based on Tomas Petricek's F# Advent Calendar post that explores
+Japanese art and renders The Great Wave by Hokusai using the Julia fractal.
 *)
 
 open Fable.Core

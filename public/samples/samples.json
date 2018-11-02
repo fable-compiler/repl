@@ -311,41 +311,6 @@
                         "htmlCode": "visual/recharts.html"
                     }
                 ]
-            },
-            {
-                "type": "sub-category",
-                "label": "Other",
-                "children": [
-                    {
-                        "type": "menu-item",
-                        "label": "Parser Libray",
-                        "fsharpCode": "other/parser.fs"
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "type": "category",
-        "label": "Learn",
-        "children": [
-            {
-                "type": "sub-category",
-                "label": "Interop with JS",
-                "children": [
-                    {
-                        "type": "menu-item",
-                        "label": "Mini JQuery bindings",
-                        "fsharpCode": "interop/jquery.fs",
-                        "htmlCode": "interop/jquery.html"
-                    },
-                    {
-                        "type": "menu-item",
-                        "label": "Commented Interop examples",
-                        "fsharpCode": "interop/interop-samples.fs",
-                        "htmlCode": "interop/interop-samples.html"
-                    }
-                ]
             }
         ]
     }
