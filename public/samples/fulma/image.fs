@@ -8,7 +8,7 @@ open Fable.Helpers.React.Props
 open Fulma
 
 let fixedInteractive () =
-    div [ ClassName "block" ]
+    div [ Class "block" ]
         [ Image.image [ Image.Is64x64 ]
             [ img [ Src "https://dummyimage.com/64x64/7a7a7a/fff" ] ]
           br [ ]
@@ -16,7 +16,7 @@ let fixedInteractive () =
             [ img [ Src "https://dummyimage.com/128x128/7a7a7a/fff" ] ] ]
 
 let responsiveInteractive () =
-    div [ ClassName "block" ]
+    div [ Class "block" ]
         [ Image.image [ Image.Is2by1 ]
             [ img [ Src "https://dummyimage.com/640x320/7a7a7a/fff" ] ] ]
 

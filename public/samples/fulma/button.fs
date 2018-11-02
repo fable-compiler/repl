@@ -9,14 +9,14 @@ open Fulma.FontAwesome
 let colorInteractive () =
     Columns.columns [ ]
         [ Column.column [ ]
-            [ div [ ClassName "block" ]
+            [ div [ Class "block" ]
                   [ Button.button [ ] [ str "Button" ]
                     Button.button [ Button.Color IsWhite ] [ str "White" ]
                     Button.button [ Button.Color IsLight ] [ str "Light" ]
                     Button.button [ Button.Color IsDark ] [ str "Dark" ]
                     Button.button [ Button.Color IsBlack ] [ str "Black" ] ] ]
           Column.column [ ]
-            [ div [ ClassName "block" ]
+            [ div [ Class "block" ]
                   [ Button.button [ Button.IsLink ] [ str "Link" ]
                     Button.button [ Button.Color IsPrimary ] [ str "Primary" ]
                     Button.button [ Button.Color IsInfo ] [ str "Info" ]
@@ -25,14 +25,14 @@ let colorInteractive () =
                     Button.button [ Button.Color IsDanger ] [ str "Danger" ] ] ] ]
 
 let sizeInteractive () =
-    div [ ClassName "block" ]
+    div [ Class "block" ]
         [ Button.button [ Button.Size IsSmall ] [ str "Small" ]
           Button.button [ ] [ str "Normal" ]
           Button.button [ Button.Size IsMedium ] [ str "Medium" ]
           Button.button [ Button.Size IsLarge ] [ str "Large" ] ]
 
 let outlinedInteractive () =
-    div [ ClassName "block" ]
+    div [ Class "block" ]
         [ Button.button [ Button.IsOutlined ] [ str "Outlined" ]
           Button.button [ Button.Color IsSuccess; Button.IsOutlined ] [ str "Outlined" ]
           Button.button [ Button.Color IsPrimary; Button.IsOutlined ] [ str "Outlined" ]
@@ -40,14 +40,14 @@ let outlinedInteractive () =
           Button.button [ Button.Color IsDanger; Button.IsOutlined ] [ str "Outlined" ] ]
 
 let mixedStyleInteractive () =
-    div [ ClassName "callout is-primary block" ]
+    div [ Class "callout is-primary block" ]
         [ Button.button [ Button.IsInverted ] [ str "Inverted" ]
           Button.button [ Button.Color IsSuccess; Button.IsInverted ] [ str "Inverted" ]
           Button.button [ Button.Color IsDanger; Button.IsInverted; Button.IsOutlined ] [ str "Invert Outlined" ]
           Button.button [ Button.Color IsInfo; Button.IsInverted; Button.IsOutlined ] [ str "Invert Outlined" ] ]
 
 let stateInteractive () =
-    div [ ClassName "block" ]
+    div [ Class "block" ]
         [ Button.button [ ] [ str "Normal" ]
           Button.button [ Button.Color IsSuccess; Button.IsHovered true ] [ str "Hover" ]
           Button.button [ Button.Color IsWarning; Button.IsFocused true ] [ str "Focus" ]
@@ -59,7 +59,7 @@ let staticView () =
         [ str "Static" ]
 
 let disabled () =
-    div [ ClassName "block" ]
+    div [ Class "block" ]
         [ Button.button [ Button.Disabled true
                           Button.IsLink ] [ str "Link" ]
           Button.button [ Button.Disabled true
@@ -74,7 +74,7 @@ let disabled () =
                           Button.Color IsDanger ] [ str "Danger" ] ]
 
 let icons () =
-    div [ ClassName "block" ]
+    div [ Class "block" ]
         [ Button.button [ ] [ Icon.faIcon [ ] [ Fa.icon Fa.I.Bold ] ]
           Button.button [ ] [ Icon.faIcon [ ] [ Fa.icon Fa.I.Italic ] ]
           Button.button [ ] [ Icon.faIcon [ ] [ Fa.icon Fa.I.Underline ] ]
@@ -82,7 +82,7 @@ let icons () =
                           Button.IsOutlined ] [ str "Danger" ] ]
 
 let demoHelpers () =
-    div [ ClassName "block" ]
+    div [ Class "block" ]
         [ Button.a [ ] [ str "Anchor" ]
           Button.span [ ] [ str "Span" ]
           Button.button [ ] [ str "Button" ]

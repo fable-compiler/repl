@@ -142,8 +142,8 @@ let textInput inputLabel initial inputType (onChange: string -> unit) =
                   | Text -> "input"
                   | Password -> "password"
   div
-    [ ClassName "form-group" ]
-    [ input [ ClassName "form-control form-control-lg"
+    [ Class "form-group" ]
+    [ input [ Class "form-control form-control-lg"
               Type inputType
               DefaultValue initial
               Placeholder inputLabel
@@ -175,7 +175,7 @@ let appIcon =
 let render (state: State) dispatch =
 
     let loginBtnContent =
-      if state.LoggingIn then i [ ClassName "fa fa-circle-o-notch fa-spin" ] []
+      if state.LoggingIn then i [ Class "fa fa-circle-o-notch fa-spin" ] []
       else str "Login"
 
     let validationRules =
@@ -189,11 +189,11 @@ let render (state: State) dispatch =
       then "btn btn-success btn-lg"
       else "btn btn-info btn-lg"
     div
-      [ ClassName "container" ; loginFormStyle ]
+      [ Class "container" ; loginFormStyle ]
       [ div
-         [ ClassName "card" ]
+         [ Class "card" ]
          [ div
-             [ ClassName "card-block"; cardBlockStyle ]
+             [ Class "card-block"; cardBlockStyle ]
              [ div
                 [ Style [ TextAlign "center" ] ]
                 [ appIcon ]
@@ -205,7 +205,7 @@ let render (state: State) dispatch =
                div
                 [ Style [ TextAlign "center" ] ]
                 [ button
-                    [ ClassName btnClass
+                    [ Class btnClass
                       OnClick (fun e -> dispatch Login) ]
                     [ loginBtnContent ] ] ] ] ]
 

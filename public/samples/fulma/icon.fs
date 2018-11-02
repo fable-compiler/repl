@@ -7,19 +7,19 @@ open Fulma
 open Fulma.FontAwesome
 
 let icon () =
-    div [ ClassName "block" ]
+    div [ Class "block" ]
         [ Icon.icon [ Icon.Size IsSmall ]
-            [ i [ ClassName "fa fa-home" ] [ ] ]
+            [ i [ Class "fa fa-home" ] [ ] ]
           Icon.icon [ ]
-            [ i [ ClassName "fa fa-lg fa-home" ] [ ] ]
+            [ i [ Class "fa fa-lg fa-home" ] [ ] ]
           Icon.icon [ Icon.Size IsMedium ]
-            [ i [ ClassName "fa fa-2x fa-home" ] [ ] ]
+            [ i [ Class "fa fa-2x fa-home" ] [ ] ]
           Icon.icon [ Icon.Size IsLarge ]
-            [ i [ ClassName "fa fa-3x fa-home" ] [ ] ] ]
+            [ i [ Class "fa fa-3x fa-home" ] [ ] ] ]
 
 //Display modification of container size with Bulma options
 let containerSizes () =
-    div [ ClassName "block" ]
+    div [ Class "block" ]
         [ //faIcon creates one Fulma icon element containing one Font Awesome icon
           Icon.faIcon [ // First group of Options: Usual fulma properties available: size, class
                         // Icon container size set to small in Fulma
@@ -46,7 +46,7 @@ let containerSizes () =
 
 //Diplay Font Awesome Rotation & Flip
 let iconRotationFlip () =
-    div [ ClassName "block" ]
+    div [ Class "block" ]
         [ ul [ ]
              [ li [ ]
                   [ Icon.faIcon [ Icon.Size IsMedium ]
@@ -85,7 +85,7 @@ let iconRotationFlip () =
 
 //Display Font Awesome Animations
 let iconAnimations () =
-    div [ ClassName "block" ]
+    div [ Class "block" ]
         [ ul [ ]
              [ li [ ]
                   [ Icon.faIcon [ Icon.Size IsLarge ]
@@ -108,7 +108,7 @@ let iconAnimations () =
 
 //Stacked Icons
 let stackedIcons () =
-    div [ ClassName "block" ]
+    div [ Class "block" ]
         [ ul [ ]
              [ li [ ]
                   [ Icon.stackParent [ Fa.Parent.faLg ]
@@ -123,7 +123,7 @@ let stackedIcons () =
 
 //Display Font Awesome Icon List
 let iconList () =
-    div [ ClassName "block" ]
+    div [ Class "block" ]
         [ // fa_ul creates an unordered list with icons instead of the classic bullet points
           Icon.fa_ul [ ]
             [ li [ ]
@@ -139,7 +139,7 @@ let iconList () =
                   str "Item processing" ] ] ]
 
 let borderPulledIcons () =
-    div [ ClassName "block" ]
+    div [ Class "block" ]
         [ span [ ]
                [ Icon.faIcon [ ]
                              [ Fa.icon Fa.I.QuoteLeft
@@ -151,14 +151,14 @@ let borderPulledIcons () =
                      Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat.." ] ]
 
 let fontAwesomeIcons () =
-    div [ ClassName "block" ]
+    div [ Class "block" ]
         [ Icon.faIcon [ Icon.Size IsSmall ] [ Fa.icon Fa.I.Home ]
           Icon.faIcon [ ] [ Fa.icon Fa.I.Tags; Fa.faLg ]
           Icon.faIcon [ Icon.Size IsMedium ] [ Fa.icon Fa.I.``500px``; Fa.fa2x ]
           Icon.faIcon [ Icon.Size IsLarge ] [ Fa.icon Fa.I.Android; Fa.fa3x ] ]
 
 let composeButtons () =
-    div [ ClassName "block" ]
+    div [ Class "block" ]
         [ Button.button [ Button.Color IsDanger ]
                         [ Icon.faIcon [ ]
                                       [ Fa.icon Fa.I.Trash; Fa.faLg ]

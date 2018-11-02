@@ -215,7 +215,7 @@ let private subMenu label currentPath isActive children dispatch =
             None
 
     li [ ]
-       [ a [ ClassName "menu-group"
+       [ a [ Class "menu-group"
              OnClick (fun _ -> ToggleMenuState currentPath |> dispatch ) ]
            [ span [ ] [ str label ]
              Icon.faIcon [ ]
