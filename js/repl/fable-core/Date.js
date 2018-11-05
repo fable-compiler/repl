@@ -91,6 +91,8 @@ export function parseRaw(str) {
                 }
             }
             date = new Date(baseDate.getTime() + timeInSeconds * 1000);
+            // correct for daylight savings time
+            date = new Date(date.getTime() + (date.getTimezoneOffset() - baseDate.getTimezoneOffset()) * 60000);
         }
         else {
             throw new Error("The string is not a valid Date.");

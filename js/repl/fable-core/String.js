@@ -466,5 +466,5 @@ export function trimEnd(str, ...chars) {
         : str.replace(new RegExp("[" + escape(chars.join("")) + "]+$"), "");
 }
 export function filter(pred, x) {
-    return x.split("").filter(pred).join("");
+    return x.split("").filter((c) => pred(c)).join("");
 }
