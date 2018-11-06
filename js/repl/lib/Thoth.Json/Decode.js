@@ -633,14 +633,17 @@ export function oneOf(decoders, path$$31, value$$45) {
 
         if (matchValue$$15.tag === 1) {
           const error$$11 = matchValue$$15.fields[0];
+          const $errors$$57 = errors;
           decoders$$1 = tail;
-          errors = append(errors, L(error$$11, L()));
+          errors = append($errors$$57, L(error$$11, L()));
           continue runner;
         } else {
           const v$$5 = matchValue$$15.fields[0];
           return new Result(0, "Ok", v$$5);
         }
       }
+
+      break;
     }
   };
 
@@ -799,35 +802,35 @@ export function object(builder, path$$45, v$$7) {
           const matchValue$$20 = decodeValueError(path$$45, function (path$$48, value$$60) {
             return field(fieldName$$6, decoder$$29, path$$48, value$$60);
           }, v$$7);
-          var $target$$125, v$$11, error$$16;
+          var $target$$126, v$$11, error$$16;
 
           if (matchValue$$20.tag === 1) {
             if (matchValue$$20.fields[0][1].tag === 4) {
-              $target$$125 = 1;
+              $target$$126 = 1;
             } else if (matchValue$$20.fields[0][1].tag === 1) {
               if (equals(matchValue$$20.fields[0][1].fields[1], null)) {
-                $target$$125 = 1;
+                $target$$126 = 1;
               } else {
-                $target$$125 = 2;
+                $target$$126 = 2;
                 error$$16 = matchValue$$20.fields[0];
               }
             } else if (matchValue$$20.fields[0][1].tag === 0) {
               if (equals(matchValue$$20.fields[0][1].fields[1], null)) {
-                $target$$125 = 1;
+                $target$$126 = 1;
               } else {
-                $target$$125 = 2;
+                $target$$126 = 2;
                 error$$16 = matchValue$$20.fields[0];
               }
             } else {
-              $target$$125 = 2;
+              $target$$126 = 2;
               error$$16 = matchValue$$20.fields[0];
             }
           } else {
-            $target$$125 = 0;
+            $target$$126 = 0;
             v$$11 = matchValue$$20.fields[0];
           }
 
-          switch ($target$$125) {
+          switch ($target$$126) {
             case 0:
               {
                 return some(v$$11);
@@ -850,37 +853,37 @@ export function object(builder, path$$45, v$$7) {
             const matchValue$$21 = decodeValueError(path$$45, function (path$$49, value$$61) {
               return at(fieldNames$$3, decoder$$31, path$$49, value$$61);
             }, v$$7);
-            var $target$$126, v$$12, error$$17;
+            var $target$$127, v$$12, error$$17;
 
             if (matchValue$$21.tag === 1) {
               if (matchValue$$21.fields[0][1].tag === 5) {
-                $target$$126 = 1;
+                $target$$127 = 1;
               } else if (matchValue$$21.fields[0][1].tag === 1) {
                 if (equals(matchValue$$21.fields[0][1].fields[1], null)) {
-                  $target$$126 = 1;
+                  $target$$127 = 1;
                 } else {
-                  $target$$126 = 2;
+                  $target$$127 = 2;
                   error$$17 = matchValue$$21.fields[0];
                 }
               } else if (matchValue$$21.fields[0][1].tag === 2) {
-                $target$$126 = 1;
+                $target$$127 = 1;
               } else if (matchValue$$21.fields[0][1].tag === 0) {
                 if (equals(matchValue$$21.fields[0][1].fields[1], null)) {
-                  $target$$126 = 1;
+                  $target$$127 = 1;
                 } else {
-                  $target$$126 = 2;
+                  $target$$127 = 2;
                   error$$17 = matchValue$$21.fields[0];
                 }
               } else {
-                $target$$126 = 2;
+                $target$$127 = 2;
                 error$$17 = matchValue$$21.fields[0];
               }
             } else {
-              $target$$126 = 0;
+              $target$$127 = 0;
               v$$12 = matchValue$$21.fields[0];
             }
 
-            switch ($target$$126) {
+            switch ($target$$127) {
               case 0:
                 {
                   return some(v$$12);
@@ -903,28 +906,28 @@ export function object(builder, path$$45, v$$7) {
 
         Raw(decoder$$33) {
           const matchValue$$22 = decodeValueError(path$$45, decoder$$33, v$$7);
-          var $target$$127, v$$13, error$$18;
+          var $target$$128, v$$13, error$$18;
 
           if (matchValue$$22.tag === 1) {
             if (matchValue$$22.fields[0][1].tag === 4) {
-              $target$$127 = 1;
+              $target$$128 = 1;
             } else if (matchValue$$22.fields[0][1].tag === 0) {
               if (equals(matchValue$$22.fields[0][1].fields[1], null)) {
-                $target$$127 = 1;
+                $target$$128 = 1;
               } else {
-                $target$$127 = 2;
+                $target$$128 = 2;
                 error$$18 = matchValue$$22.fields[0];
               }
             } else {
-              $target$$127 = 2;
+              $target$$128 = 2;
               error$$18 = matchValue$$22.fields[0];
             }
           } else {
-            $target$$127 = 0;
+            $target$$128 = 0;
             v$$13 = matchValue$$22.fields[0];
           }
 
-          switch ($target$$127) {
+          switch ($target$$128) {
             case 0:
               {
                 return some(v$$13);
