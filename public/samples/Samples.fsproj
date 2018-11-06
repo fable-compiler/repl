@@ -55,6 +55,13 @@
     <Compile Include="visual/hokusai.fs" />
     <Compile Include="visual/color-fountain.fs" />
     <Compile Include="visual/recharts.fs" />
+    <Compile Include="tour/functions.fs" />
+    <Compile Include="tour/primitives.fs" />
+    <Compile Include="tour/collections.fs" />
+    <Compile Include="tour/records.fs" />
+    <Compile Include="tour/unions.fs" />
+    <Compile Include="tour/units.fs" />
+    <Compile Include="tour/classes.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

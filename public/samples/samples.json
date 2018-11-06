@@ -313,5 +313,52 @@
                 ]
             }
         ]
+    },
+    {
+        "type": "category",
+        "label": "Learn",
+        "children": [
+            {
+                "type": "sub-category",
+                "label": "Tour of F#",
+                "children": [
+                    {
+                        "type": "menu-item",
+                        "label": "Functions",
+                        "fsharpCode": "tour/functions.fs"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Primitive Types",
+                        "fsharpCode": "tour/primitives.fs"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Collections",
+                        "fsharpCode": "tour/collections.fs"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Tuples and Records",
+                        "fsharpCode": "tour/records.fs"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Union Types",
+                        "fsharpCode": "tour/unions.fs"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Units of Measure",
+                        "fsharpCode": "tour/units.fs"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Defining Classes",
+                        "fsharpCode": "tour/classes.fs"
+                    }
+                ]
+            }
+        ]
     }
 ]
