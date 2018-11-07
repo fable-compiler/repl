@@ -1,36 +1,30 @@
-var fableCache = 'fable-repl2-v1';
+/**
+ * Welcome to your Workbox-powered service worker!
+ *
+ * You'll need to register this file in your web app and you should
+ * disable HTTP caching for this file too.
+ * See https://goo.gl/nhQhGp
+ *
+ * The rest of the code is auto-generated. Please don't update this file
+ * directly; instead, make changes to your Workbox build configuration
+ * and re-run your build process.
+ * See https://goo.gl/2aRDsh
+ */
 
-self.addEventListener('activate', function (event) {
-    event.waitUntil(
-        caches.keys().then(function (cacheNames) {
-            return Promise.all(
-                cacheNames.filter(function (cacheName) {
-                    return cacheName !== fableCache;
-                }).map(function (cacheName) {
-                    return caches.delete(cacheName);
-                })
-            );
-        })
-    );
-});
+importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
-self.addEventListener('fetch', function (event) {
-    event.respondWith(
-        caches.open(fableCache).then(function (cache) {
-            return cache.match(event.request).then(function (response) {
-                var url = new URL(event.request.url);
-                if (url.pathname.startsWith('/samples'))
-                    return fetch(event.request).then(function (response) {
-                        cache.put(event.request, response.clone());
-                        return response;
-                    }, function () {
-                        return response;
-                    });
-                return response || fetch(event.request).then(function (response) {
-                    cache.put(event.request, response.clone());
-                    return response;
-                });
-            });
-        })
-    );
-});
+importScripts(
+  "precache-manifest.2becd78dfca21903419f48e7275dcf88.js"
+);
+
+workbox.skipWaiting();
+workbox.clientsClaim();
+
+/**
+ * The workboxSW.precacheAndRoute() method efficiently caches and responds to
+ * requests for URLs in the manifest.
+ * See https://goo.gl/S9QRab
+ */
+self.__precacheManifest = [].concat(self.__precacheManifest || []);
+workbox.precaching.suppressWarnings();
+workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
