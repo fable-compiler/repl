@@ -35,6 +35,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+const WorkboxPlugin = require('workbox-webpack-plugin');
 
 // The HtmlWebpackPlugin allows us to use a template for the index.html page
 // and automatically injects <script> or <link> tags for generated bundles.
@@ -115,6 +116,16 @@ module.exports = {
         commonPlugins.concat([
             new MiniCssExtractPlugin({ filename: 'style.css' }),
             new CopyWebpackPlugin([{ from: CONFIG.assetsDir }]),
+            new WorkboxPlugin.GenerateSW({
+                // these options encourage the ServiceWorkers to get in there fast
+                // and not allow any straggling "old" SWs to hang around
+                clientsClaim: true,
+                skipWaiting: true,
+                // runtimeCaching: [{
+                //     urlPattern: new RegExp('/api/.*'),
+                //     handler: 'staleWhileRevalidate'
+                //   }]
+            }),
         ])
         : commonPlugins.concat([
             new webpack.HotModuleReplacementPlugin(),

@@ -1,14 +1,9 @@
 module Fable.Repl.Loader
 
-open Fable.Core.JsInterop
 open Fable.Import
 open Fulma
-open Fulma.FontAwesome
-open Fulma.Extensions
 open Elmish
 open Thoth.Elmish
-open Shared
-open Editor
 open Mouse
 
 type Model =
@@ -92,8 +87,9 @@ let private view (model: Model) dispatch =
                                       Heading.Modifiers [ Modifier.TextAlignment (Screen.All, TextAlignment.Centered) ] ]
                             [ str "is only available on desktop" ] ] ] ] ]
 
-// TODO: Service worker not working atm because https is not used. Revisit after enabling it.
-// Browser.navigator.serviceWorker.register("/service-worker.js") |> ignore
+#if !DEBUG
+Browser.navigator.serviceWorker.register("./service-worker.js") |> ignore
+#endif
 
 open Elmish.React
 open Elmish.HMR
