@@ -16,7 +16,7 @@ module Literals =
 #if DEBUG
         "http://localhost:8080"
 #else
-        "http://fable.io/repl"
+        "https://fable.io/repl"
 #endif
     let [<Literal>] FABLE_CORE_DIR = HOST + "/js/repl/fable-core"
     let [<Literal>] FABLE_REPL_LIB_DIR = HOST + "/js/repl/lib"
