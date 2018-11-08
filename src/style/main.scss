@@ -200,3 +200,10 @@ html {
         }
     }
 }
+
+.monaco-editor {
+    .context-view {
+        position: fixed;
+        z-index: 12000;
+    }
+}
