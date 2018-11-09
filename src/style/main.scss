@@ -203,7 +203,13 @@ html {
 
 .monaco-editor {
     .context-view {
+        z-index: 12000;
         position: fixed;
+    }
+    .monaco-editor-hover {
+        z-index: 12000;
+    }
+    .suggest-widget {
         z-index: 12000;
     }
 }

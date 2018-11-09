@@ -433,6 +433,7 @@ let private fsharpEditorOptions (fontSize : float) (fontFamily : string) =
         o.minimap <- Some minimapOptions
         o.fontFamily <- Some fontFamily
         o.fontLigatures <- Some (fontFamily = "Fira Code")
+        o.fixedOverflowWidgets <- Some true
     )
 
 let private editorTabs (activeTab : CodeTab) dispatch =
