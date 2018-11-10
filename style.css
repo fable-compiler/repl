@@ -14488,3 +14488,13 @@ html {
           flex: 1 1 0%;
           background-color: white; }
 
+.monaco-editor .context-view {
+  z-index: 12000;
+  position: fixed; }
+
+.monaco-editor .monaco-editor-hover {
+  z-index: 12000; }
+
+.monaco-editor .suggest-widget {
+  z-index: 12000; }
+
