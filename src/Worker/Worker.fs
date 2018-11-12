@@ -54,6 +54,7 @@ let init() = async {
                     let errors = Array.append (parseResults.Errors) res.FableErrors
                     CompilationFinished (jsCode, errors, stats) |> worker.Post
                 with er ->
+                    Browser.console.error er
                     CompilerCrashed er.Message |> worker.Post
             | GetTooltip(line, col, lineText) ->
                 async {
