@@ -4,7 +4,7 @@ self.__precacheManifest = [
     "url": "metadata2/System.ComponentModel.dll.txt"
   },
   {
-    "revision": "e75e4bbd12be82f8eada2822bc32ea96",
+    "revision": "9591f6ad1ef509aef918840572522391",
     "url": "js/repl/bundle.min.js"
   },
   {
@@ -20,12 +20,12 @@ self.__precacheManifest = [
     "url": "metadata2/Fable.Repl.Lib.dll.txt"
   },
   {
-    "revision": "5b9549ffffdd8b79c31dcecd3ea9aac1",
-    "url": "libs/vs/editor/editor.main.js"
-  },
-  {
     "revision": "5637a34c3027f711380975103a988948",
     "url": "metadata2/FSharp.Core.dll.txt"
+  },
+  {
+    "revision": "5b9549ffffdd8b79c31dcecd3ea9aac1",
+    "url": "libs/vs/editor/editor.main.js"
   },
   {
     "revision": "e554104e0fc182e7b50a9dcca6792a80",
@@ -80,12 +80,12 @@ self.__precacheManifest = [
     "url": "samples/visual/recharts.html"
   },
   {
-    "revision": "bf82edf1e23b548b950c5dd2541ab864",
-    "url": "samples/visual/raytracer.html"
-  },
-  {
     "revision": "761391b3cdedb414531e5b59e37dddc5",
     "url": "samples/visual/recharts.fs"
+  },
+  {
+    "revision": "bf82edf1e23b548b950c5dd2541ab864",
+    "url": "samples/visual/raytracer.html"
   },
   {
     "revision": "5b4708ef5aeb22597de84029788b78ae",
@@ -124,24 +124,16 @@ self.__precacheManifest = [
     "url": "samples/tour/units.fs"
   },
   {
-    "revision": "2b848ea467cfe646b409f117ad79f4ce",
-    "url": "samples/tour/primitives.fs"
-  },
-  {
     "revision": "589c0d0a891b1a21d640089b2a76b7df",
     "url": "samples/tour/records.fs"
   },
   {
+    "revision": "2b848ea467cfe646b409f117ad79f4ce",
+    "url": "samples/tour/primitives.fs"
+  },
+  {
     "revision": "05be95306cefc45a9eaae8d29cb31f54",
     "url": "samples/tour/functions.fs"
-  },
-  {
-    "revision": "b06871f281fee6b241d60582ae9369b9",
-    "url": "libs/fonts/fontawesome-webfont.ttf"
-  },
-  {
-    "revision": "674f50d287a8c48dc19ba404d20fe713",
-    "url": "libs/fonts/fontawesome-webfont.eot"
   },
   {
     "revision": "fba54ff6375de7d32d599a205d37348b",
@@ -152,12 +144,16 @@ self.__precacheManifest = [
     "url": "samples/tour/classes.fs"
   },
   {
+    "revision": "b06871f281fee6b241d60582ae9369b9",
+    "url": "libs/fonts/fontawesome-webfont.ttf"
+  },
+  {
     "revision": "e26efb566f4d51df03a6f1daf2d21a98",
     "url": "samples/Samples.fsproj"
   },
   {
-    "revision": "7ec5025761f33cecc8887958d3a8a1b7",
-    "url": "metadata2/System.Xml.XmlSerializer.dll.txt"
+    "revision": "674f50d287a8c48dc19ba404d20fe713",
+    "url": "libs/fonts/fontawesome-webfont.eot"
   },
   {
     "revision": "f5a03fb2bcfce3969bcebcdfb4678e44",
@@ -170,10 +166,6 @@ self.__precacheManifest = [
   {
     "revision": "f5a03fb2bcfce3969bcebcdfb4678e44",
     "url": "samples/obj/Samples.fsproj.paket.references.cached"
-  },
-  {
-    "revision": "ce8fb1487ab716e800695ee092508a15",
-    "url": "libs/css/bulma.min.css"
   },
   {
     "revision": "03353909b68ffcd9a83cd8590552ceed",
@@ -192,6 +184,14 @@ self.__precacheManifest = [
     "url": "samples/games/pacman.html"
   },
   {
+    "revision": "7ec5025761f33cecc8887958d3a8a1b7",
+    "url": "metadata2/System.Xml.XmlSerializer.dll.txt"
+  },
+  {
+    "revision": "ce8fb1487ab716e800695ee092508a15",
+    "url": "libs/css/bulma.min.css"
+  },
+  {
     "revision": "c49515c6b3be5387b861e8cf2f582c2a",
     "url": "samples/games/ozmo.html"
   },
@@ -200,28 +200,24 @@ self.__precacheManifest = [
     "url": "samples/games/ozmo.fs"
   },
   {
-    "revision": "1e214235b23bd1c34c03a888db497361",
-    "url": "metadata2/System.Data.Common.dll.txt"
+    "revision": "331e15b4fedd53e090619968e1c39820",
+    "url": "samples/games/mario.html"
   },
   {
     "revision": "005a044254cd175da101476c64c79062",
     "url": "samples/games/mario.fs"
   },
   {
-    "revision": "331e15b4fedd53e090619968e1c39820",
-    "url": "samples/games/mario.html"
-  },
-  {
     "revision": "16f278fb1d929719af6a5dae161b58f6",
     "url": "samples/fulma/title.fs"
   },
   {
-    "revision": "3ba8e4a0771f3bf62c6a3b72042ff5fd",
-    "url": "libs/vs/language/json/jsonWorker.js"
-  },
-  {
     "revision": "48dc8d0e2b6245fbd25ad46ff3e4ec60",
     "url": "samples/fulma/tile.fs"
+  },
+  {
+    "revision": "1e214235b23bd1c34c03a888db497361",
+    "url": "metadata2/System.Data.Common.dll.txt"
   },
   {
     "revision": "3748fe57432ec1fd32ade7af8d07e2fe",
@@ -240,28 +236,28 @@ self.__precacheManifest = [
     "url": "samples/fulma/section.fs"
   },
   {
-    "revision": "e6675aee4674e263131eaa3abdb262c8",
-    "url": "samples/fulma/panel.fs"
-  },
-  {
     "revision": "f73cfbe573105ae0c419c63f46f3b8b1",
     "url": "samples/fulma/script.fsx"
-  },
-  {
-    "revision": "415072c060e20e615cfe0d75cdb3cbd1",
-    "url": "typescript.worker.js"
   },
   {
     "revision": "d4f09f2c7b988ba0beb73cb3184f2afd",
     "url": "samples/fulma/progress.fs"
   },
   {
-    "revision": "2130114a9971a46385ac35070f3663b3",
-    "url": "samples/fulma/pagination.fs"
+    "revision": "e6675aee4674e263131eaa3abdb262c8",
+    "url": "samples/fulma/panel.fs"
   },
   {
-    "revision": "07ad0044b4670e815756ed5ebcc08db9",
-    "url": "samples/fulma/message.fs"
+    "revision": "415072c060e20e615cfe0d75cdb3cbd1",
+    "url": "typescript.worker.js"
+  },
+  {
+    "revision": "3ba8e4a0771f3bf62c6a3b72042ff5fd",
+    "url": "libs/vs/language/json/jsonWorker.js"
+  },
+  {
+    "revision": "2130114a9971a46385ac35070f3663b3",
+    "url": "samples/fulma/pagination.fs"
   },
   {
     "revision": "b098491e073f07ff84d4a7dd1c87dbb1",
@@ -276,8 +272,16 @@ self.__precacheManifest = [
     "url": "samples/fulma/modal.fs"
   },
   {
-    "revision": "c30b049c5fd35c8f05433ca510d19455",
-    "url": "metadata2/System.Xml.XDocument.dll.txt"
+    "revision": "07ad0044b4670e815756ed5ebcc08db9",
+    "url": "samples/fulma/message.fs"
+  },
+  {
+    "revision": "11e69c6a70f09d95434e5df316cbec53",
+    "url": "samples/fulma/menu.fs"
+  },
+  {
+    "revision": "29168b7c2d5f87ae06eac042fcc16e1b",
+    "url": "samples/fulma/media.fs"
   },
   {
     "revision": "736d0f34e70969acbbee1499bdd8a4ea",
@@ -288,24 +292,12 @@ self.__precacheManifest = [
     "url": "metadata2/System.Runtime.InteropServices.dll.txt"
   },
   {
-    "revision": "2f763a9b2abd29f900606852c2509d69",
-    "url": "samples/fulma/image.fs"
-  },
-  {
-    "revision": "1551b0f92ee37d3ec4f3621e153898cd",
-    "url": "samples/elmish/spreadsheet.fs"
-  },
-  {
-    "revision": "29168b7c2d5f87ae06eac042fcc16e1b",
-    "url": "samples/fulma/media.fs"
-  },
-  {
-    "revision": "11e69c6a70f09d95434e5df316cbec53",
-    "url": "samples/fulma/menu.fs"
-  },
-  {
     "revision": "d4b08570576597c9bcb087d221bdae97",
     "url": "samples/fulma/level.fs"
+  },
+  {
+    "revision": "2f763a9b2abd29f900606852c2509d69",
+    "url": "samples/fulma/image.fs"
   },
   {
     "revision": "84e8408d75f029864ff8fc9af89b828f",
@@ -318,6 +310,14 @@ self.__precacheManifest = [
   {
     "revision": "d1bf00cede7c402c3f9c6f20480dfc8a",
     "url": "samples/fulma/fulma.html"
+  },
+  {
+    "revision": "1551b0f92ee37d3ec4f3621e153898cd",
+    "url": "samples/elmish/spreadsheet.fs"
+  },
+  {
+    "revision": "c30b049c5fd35c8f05433ca510d19455",
+    "url": "metadata2/System.Xml.XDocument.dll.txt"
   },
   {
     "revision": "e1959d618f8c88bfacdd0dace23e16f8",
@@ -344,20 +344,16 @@ self.__precacheManifest = [
     "url": "samples/fulma/container.fs"
   },
   {
-    "revision": "cce3c2af8e247000e75f3a17d6a240b1",
-    "url": "libs/vs/base/worker/workerMain.js"
-  },
-  {
-    "revision": "baf9b6076cd87b4a4e4f66f9fadd4a70",
-    "url": "samples/fulma/button.fs"
+    "revision": "1f602ed1b62568003b6395d201e1c9a0",
+    "url": "samples/fulma/columns.fs"
   },
   {
     "revision": "5fae504dfedc7b6794cc83926ba63a4c",
     "url": "samples/fulma/card.fs"
   },
   {
-    "revision": "1f602ed1b62568003b6395d201e1c9a0",
-    "url": "samples/fulma/columns.fs"
+    "revision": "baf9b6076cd87b4a4e4f66f9fadd4a70",
+    "url": "samples/fulma/button.fs"
   },
   {
     "revision": "45621126a6663fc65eb952b7f065f945",
@@ -392,10 +388,6 @@ self.__precacheManifest = [
     "url": "samples/elmish/thoth_random_user.fs"
   },
   {
-    "revision": "0d2717cd5d853e5c765ca032dfd41a4d",
-    "url": "libs/fonts/FontAwesome.otf"
-  },
-  {
     "revision": "6e8249813b671ab032db5425ae89e63f",
     "url": "samples/elmish/thoth_random_user.css"
   },
@@ -406,6 +398,14 @@ self.__precacheManifest = [
   {
     "revision": "ca573fce656daa121f6563b73520039a",
     "url": "samples/elmish/sudoku.fs"
+  },
+  {
+    "revision": "2ca8415e2d70d675600825fc3c8ddb84",
+    "url": "samples/elmish/sudoku.css"
+  },
+  {
+    "revision": "5025df355f56edc0ae05c178254cfd9d",
+    "url": "samples/elmish/spreadsheet.html"
   },
   {
     "revision": "fd9341675d6a2fc790540f1cc29791a0",
@@ -420,20 +420,16 @@ self.__precacheManifest = [
     "url": "js/repl/fable-core/BitConverter.js"
   },
   {
-    "revision": "3e75530e7ebecdd2aa38966ac0ead129",
-    "url": "js/repl/fable-core/BigInt/FFT.js"
-  },
-  {
     "revision": "8e8a31e3ee8bd268a7acaa478df20c25",
     "url": "js/repl/fable-core/Char.js"
   },
   {
-    "revision": "17d2a286b087aa6e55ec87bc779d049e",
+    "revision": "a674460ee1bca936adbc2ea984a962cf",
     "url": "js/repl/fable-core/DateOffset.js"
   },
   {
-    "revision": "1dbad696d171aa373387aac1d4a795a2",
-    "url": "js/repl/fable-core/DictTypes.js"
+    "revision": "f51bb39a5cd9bb5dcf12fd6e06358f1a",
+    "url": "js/repl/fable-core/Decimal.js"
   },
   {
     "revision": "b3ead21407f38c3a4ad55d51e54b5003",
@@ -444,24 +440,28 @@ self.__precacheManifest = [
     "url": "js/repl/fable-core/Event.js"
   },
   {
-    "revision": "083c79d7d881bfdc830573f888161772",
-    "url": "js/repl/fable-core/Encoding.js"
-  },
-  {
-    "revision": "d0a0a4a6df15c9aed1c768be6430098c",
-    "url": "js/repl/fable-core/FSharp.Collections.js"
-  },
-  {
-    "revision": "8097b9e4e15e44be4a3838792952035c",
-    "url": "js/repl/fable-core/FSharp.Core.js"
+    "revision": "1dbad696d171aa373387aac1d4a795a2",
+    "url": "js/repl/fable-core/DictTypes.js"
   },
   {
     "revision": "d41d8cd98f00b204e9800998ecf8427e",
     "url": "js/repl/fable-core/Global.js"
   },
   {
+    "revision": "8097b9e4e15e44be4a3838792952035c",
+    "url": "js/repl/fable-core/FSharp.Core.js"
+  },
+  {
     "revision": "a0d6a2a420537f3094f44ad94a2ae0d9",
     "url": "js/repl/fable-core/Int32.js"
+  },
+  {
+    "revision": "d0a0a4a6df15c9aed1c768be6430098c",
+    "url": "js/repl/fable-core/FSharp.Collections.js"
+  },
+  {
+    "revision": "083c79d7d881bfdc830573f888161772",
+    "url": "js/repl/fable-core/Encoding.js"
   },
   {
     "revision": "17c2da07cca47707f1719102489e6d97",
@@ -472,7 +472,7 @@ self.__precacheManifest = [
     "url": "js/repl/fable-core/Observable.js"
   },
   {
-    "revision": "75f14a9f5fddf00ed156086f26338814",
+    "revision": "2cf3da528bbe2b6c93749a99d3bb1f98",
     "url": "js/repl/fable-core/Option.js"
   },
   {
@@ -480,32 +480,36 @@ self.__precacheManifest = [
     "url": "js/repl/fable-core/Reflection.js"
   },
   {
-    "revision": "0bd9669ac6af6b5c8b036fd5a2c72832",
-    "url": "js/repl/fable-core/System.Text.js"
-  },
-  {
     "revision": "a2d132fd9e8afd4a8538d051d6384db3",
     "url": "js/repl/fable-core/RegExp.js"
-  },
-  {
-    "revision": "b54885b56c6f2e0d7c13d6f19a4bb29a",
-    "url": "js/repl/fable-core/TimeSpan.js"
   },
   {
     "revision": "ef1ca401de807ee2c42b5cc3d97234c5",
     "url": "js/repl/fable-core/Timer.js"
   },
   {
-    "revision": "4209452ecd21aabbcf928132949d3f0f",
-    "url": "js/repl/fable-core/Uri.js"
+    "revision": "b54885b56c6f2e0d7c13d6f19a4bb29a",
+    "url": "js/repl/fable-core/TimeSpan.js"
   },
   {
-    "revision": "27ae1d1be797c1bce32028f9b1986eea",
+    "revision": "58b626c1df271743c3e6f4d5ddb3412c",
     "url": "js/repl/fable-core/Types.js"
   },
   {
     "revision": "aaca1230e6e85e4177eeb8bc53a83021",
     "url": "js/repl/fable-core/Unicode.9.0.0.js"
+  },
+  {
+    "revision": "0bd9669ac6af6b5c8b036fd5a2c72832",
+    "url": "js/repl/fable-core/System.Text.js"
+  },
+  {
+    "revision": "4209452ecd21aabbcf928132949d3f0f",
+    "url": "js/repl/fable-core/Uri.js"
+  },
+  {
+    "revision": "701dc0bffd2c4087b94259064c92e4ce",
+    "url": "js/repl/lib/Components/Dropdown.js"
   },
   {
     "revision": "d851ab5afe32cbda054fb81644cbe342",
@@ -518,10 +522,6 @@ self.__precacheManifest = [
   {
     "revision": "e2ce743844266bde5d6f3df86bfa5c7d",
     "url": "js/repl/lib/Components/Media.js"
-  },
-  {
-    "revision": "701dc0bffd2c4087b94259064c92e4ce",
-    "url": "js/repl/lib/Components/Dropdown.js"
   },
   {
     "revision": "5ea5bf3bbc74898a48d5c58f4f440550",
@@ -540,52 +540,52 @@ self.__precacheManifest = [
     "url": "js/repl/lib/Components/Pagination.js"
   },
   {
-    "revision": "4a10d9fd7ccc3c6b34579df7ec7686b9",
-    "url": "js/repl/lib/Components/Panel.js"
-  },
-  {
     "revision": "36b3c16f0435d6fa55bac8d577834ff7",
     "url": "js/repl/lib/Components/Tabs.js"
   },
   {
-    "revision": "3982b35b9912e27502a9b22c961cc5a3",
-    "url": "js/repl/lib/Elements/Box.js"
+    "revision": "4a10d9fd7ccc3c6b34579df7ec7686b9",
+    "url": "js/repl/lib/Components/Panel.js"
   },
   {
     "revision": "28cd2f361dfc1fd481105adc2c48d682",
     "url": "js/repl/lib/Elements/Content.js"
   },
   {
+    "revision": "3982b35b9912e27502a9b22c961cc5a3",
+    "url": "js/repl/lib/Elements/Box.js"
+  },
+  {
     "revision": "07597e64228d4dc6e594ed11215f77f1",
     "url": "js/repl/lib/Elements/Delete.js"
-  },
-  {
-    "revision": "d3b5c8a3534ca0aa5b33e355594b2f42",
-    "url": "js/repl/lib/Elements/Heading.js"
-  },
-  {
-    "revision": "967dc9307611bb9004938b4b63de49a0",
-    "url": "js/repl/lib/Elements/Icon.js"
   },
   {
     "revision": "17bd8ffd20803a7edd1f99e22f9e3f36",
     "url": "js/repl/lib/Elements/Image.js"
   },
   {
-    "revision": "95a8504521ae3c69b6ca1260a4142f11",
-    "url": "js/repl/lib/Elements/Notification.js"
+    "revision": "967dc9307611bb9004938b4b63de49a0",
+    "url": "js/repl/lib/Elements/Icon.js"
+  },
+  {
+    "revision": "d3b5c8a3534ca0aa5b33e355594b2f42",
+    "url": "js/repl/lib/Elements/Heading.js"
   },
   {
     "revision": "b06d62effe266bec29661415413137fb",
     "url": "js/repl/lib/Elements/Progress.js"
   },
   {
-    "revision": "78e9fc9feec8c213966c64793e9d18fb",
-    "url": "js/repl/lib/Elements/Table.js"
-  },
-  {
     "revision": "798f92a003fa035b4a9eb9f0042e6969",
     "url": "js/repl/lib/Elmish.React.js"
+  },
+  {
+    "revision": "95a8504521ae3c69b6ca1260a4142f11",
+    "url": "js/repl/lib/Elements/Notification.js"
+  },
+  {
+    "revision": "78e9fc9feec8c213966c64793e9d18fb",
+    "url": "js/repl/lib/Elements/Table.js"
   },
   {
     "revision": "53050f4257b3308692a990151107dd88",
@@ -596,6 +596,18 @@ self.__precacheManifest = [
     "url": "js/repl/lib/Fable.React/Fable.Import.React.js"
   },
   {
+    "revision": "d7ad171abaa5ac2605dea6559ff42577",
+    "url": "js/repl/lib/Form/Control.js"
+  },
+  {
+    "revision": "0fcf4f5dbd71762fd192d037e15d91d2",
+    "url": "js/repl/lib/Form/Field.js"
+  },
+  {
+    "revision": "6a9c1a8f95e5a86319a276dffab7de7e",
+    "url": "js/repl/lib/Form/File.js"
+  },
+  {
     "revision": "3e0e980042c87da00ae940d6de71b025",
     "url": "js/repl/lib/Form/Checkbox.js"
   },
@@ -604,32 +616,24 @@ self.__precacheManifest = [
     "url": "js/repl/lib/Form/Help.js"
   },
   {
-    "revision": "d7ad171abaa5ac2605dea6559ff42577",
-    "url": "js/repl/lib/Form/Control.js"
+    "revision": "c049769b98d5b48989ec2b0efbb504ab",
+    "url": "samples/elmish/simple_input.html"
   },
   {
-    "revision": "6a9c1a8f95e5a86319a276dffab7de7e",
-    "url": "js/repl/lib/Form/File.js"
+    "revision": "65acf77a8cc16eed68d5a438a4d87d51",
+    "url": "samples/elmish/simple_input.fs"
   },
   {
-    "revision": "26866f20249a886aa9d74148e211a397",
-    "url": "js/repl/lib/Form/Label.js"
+    "revision": "0d2717cd5d853e5c765ca032dfd41a4d",
+    "url": "libs/fonts/FontAwesome.otf"
   },
   {
-    "revision": "0fcf4f5dbd71762fd192d037e15d91d2",
-    "url": "js/repl/lib/Form/Field.js"
+    "revision": "2a0e7e50d7967ea99a9b09ce21ddefa7",
+    "url": "samples/elmish/simple_input.css"
   },
   {
-    "revision": "c15f30726c3d989a31e3d31933b950eb",
-    "url": "js/repl/lib/Form/Radio.js"
-  },
-  {
-    "revision": "5025df355f56edc0ae05c178254cfd9d",
-    "url": "samples/elmish/spreadsheet.html"
-  },
-  {
-    "revision": "2ca8415e2d70d675600825fc3c8ddb84",
-    "url": "samples/elmish/sudoku.css"
+    "revision": "cce3c2af8e247000e75f3a17d6a240b1",
+    "url": "libs/vs/base/worker/workerMain.js"
   },
   {
     "revision": "dcc326cde731b1dc97f2f6c8df096c67",
@@ -640,23 +644,19 @@ self.__precacheManifest = [
     "url": "samples/elmish/memory.fs"
   },
   {
-    "revision": "b0113142490cb493620db6a631338e47",
-    "url": "samples/elmish/clock.html"
+    "revision": "b0158e1e03962967327286719b261690",
+    "url": "js/repl/fable-core/BigInt.js"
   },
   {
-    "revision": "345b4eeb693fef7cf393cdc349db7e28",
-    "url": "metadata2/System.Xml.dll.txt"
-  },
-  {
-    "revision": "399c445c57e554f4e64f058a3cac3fcf",
-    "url": "samples/elmish/clock.fs"
-  },
-  {
-    "revision": "186876dbbb8949e2c6993767bcb552df",
+    "revision": "3ae9c1f1c6faef9cd897648deb4e938b",
     "url": "js/repl/fable-core/Date.js"
   },
   {
-    "revision": "2fe31654d32431f005dd9b59d74aef4a",
+    "revision": "0226e530641acda9c1f662996ce0452e",
+    "url": "js/repl/fable-core/Util.js"
+  },
+  {
+    "revision": "d5e73c201409ff62b7568ca5b231c21a",
     "url": "js/repl/fable-core/String.js"
   },
   {
@@ -664,32 +664,28 @@ self.__precacheManifest = [
     "url": "js/repl/lib/Elements/Button.js"
   },
   {
+    "revision": "dbef5e4f6ccda2ea778f104115e5fad0",
+    "url": "js/repl/lib/Fable.Recharts/Fable.Recharts.js"
+  },
+  {
     "revision": "87e5a72739d8c2e65587fd99afe22f36",
     "url": "js/repl/lib/Extra/FontAwesome.js"
   },
   {
-    "revision": "dbef5e4f6ccda2ea778f104115e5fad0",
-    "url": "js/repl/lib/Fable.Recharts/Fable.Recharts.js"
+    "revision": "b0113142490cb493620db6a631338e47",
+    "url": "samples/elmish/clock.html"
   },
   {
     "revision": "bf56aec1979b7b357dc82e75e7f7b30f",
     "url": "js/repl/lib/Form/Input.js"
   },
   {
-    "revision": "b0113142490cb493620db6a631338e47",
-    "url": "samples/elmish/calculator.html"
-  },
-  {
-    "revision": "914d71dfa359678f4d472742e4c0af83",
-    "url": "js/repl/fable-core/BigInt.js"
-  },
-  {
     "revision": "3c3903c5626bb0bc5e2102e032c44c1b",
     "url": "js/repl/fable-core/Seq.js"
   },
   {
-    "revision": "8cd6f69c7c7a67cd2bd1db956ffb8a22",
-    "url": "js/repl/fable-core/Util.js"
+    "revision": "a6bbe1781d506441dc8a474242c64fa6",
+    "url": "js/repl/fable-core/lib/big.js"
   },
   {
     "revision": "e892b9b8410fd40b7e0505d8dd4f2ad3",
@@ -700,32 +696,40 @@ self.__precacheManifest = [
     "url": "js/repl/lib/Fable.React/Fable.Helpers.React.js"
   },
   {
-    "revision": "fd0baadbbabae739fc8ece57194f544b",
-    "url": "samples/elmish/calculator.fs"
+    "revision": "345b4eeb693fef7cf393cdc349db7e28",
+    "url": "metadata2/System.Xml.dll.txt"
   },
   {
-    "revision": "89cd5dee6336bf836065f534d7704b3a",
-    "url": "js/repl/fable-core/BigInt/BigNat.js"
+    "revision": "a453a7dcfc6ce02ff8d4b9105cebd8d1",
+    "url": "js/repl/fable-core/BigInt/z.js"
   },
   {
     "revision": "f001a0c4d6ec3631f089f468804cc398",
     "url": "js/repl/fable-core/List.js"
   },
   {
-    "revision": "b4f74ae3d31dfc8c36d7ad71f0eb6bda",
-    "url": "metadata2/WindowsBase.dll.txt"
+    "revision": "399c445c57e554f4e64f058a3cac3fcf",
+    "url": "samples/elmish/clock.fs"
   },
   {
     "revision": "a252f6a6e23472dfc0f1545cc693a896",
     "url": "js/repl/fable-core/Array.js"
   },
   {
-    "revision": "11d7020403faff7019d154ea6033e243",
+    "revision": "a9ea9242634fbd473e6ab2afddd00072",
     "url": "js/repl/fable-core/Map.js"
   },
   {
-    "revision": "83f655a60411d02ec82a8a4b408d5ae1",
+    "revision": "fb9d777ab954bc2fcf5bc34298fdb3ad",
     "url": "js/repl/fable-core/Long.js"
+  },
+  {
+    "revision": "c15f30726c3d989a31e3d31933b950eb",
+    "url": "js/repl/lib/Form/Radio.js"
+  },
+  {
+    "revision": "26866f20249a886aa9d74148e211a397",
+    "url": "js/repl/lib/Form/Label.js"
   },
   {
     "revision": "571d8e8b9e8cfa92d44fc88bf662aaf6",
@@ -736,20 +740,24 @@ self.__precacheManifest = [
     "url": "js/repl/lib/Layouts/Columns.js"
   },
   {
-    "revision": "aaa805f5a88682ebf4db359ced80292f",
-    "url": "js/repl/lib/Layouts/Footer.js"
+    "revision": "e5c920bedf6388064404f7f56835c599",
+    "url": "js/repl/lib/Layouts/Hero.js"
   },
   {
     "revision": "f01068c538006e12e5b5f11edb02ab3d",
     "url": "js/repl/lib/Layouts/Container.js"
   },
   {
-    "revision": "edf680fd201cf420290b20816c98ced6",
-    "url": "js/repl/lib/Layouts/Section.js"
+    "revision": "aaa805f5a88682ebf4db359ced80292f",
+    "url": "js/repl/lib/Layouts/Footer.js"
   },
   {
-    "revision": "e5c920bedf6388064404f7f56835c599",
-    "url": "js/repl/lib/Layouts/Hero.js"
+    "revision": "d985ce27c2ab5e921ad47cef47b3f66f",
+    "url": "js/repl/lib/Layouts/Level.js"
+  },
+  {
+    "revision": "edf680fd201cf420290b20816c98ced6",
+    "url": "js/repl/lib/Layouts/Section.js"
   },
   {
     "revision": "602239cdb8eba2b3a255c8c868610c30",
@@ -760,20 +768,20 @@ self.__precacheManifest = [
     "url": "js/repl/lib/Layouts/Tile.js"
   },
   {
-    "revision": "d985ce27c2ab5e921ad47cef47b3f66f",
-    "url": "js/repl/lib/Layouts/Level.js"
+    "revision": "b0113142490cb493620db6a631338e47",
+    "url": "samples/elmish/calculator.html"
   },
   {
     "revision": "5d36dc454241cfd7165c56504987ac0a",
     "url": "js/repl/lib/src/Fetch.js"
   },
   {
-    "revision": "92ad2701bd49496e59cbd0f8c35f5de1",
-    "url": "metadata2/System.Xml.XPath.XDocument.dll.txt"
-  },
-  {
     "revision": "b6a366be910784a8d1fcd54f0d08fe83",
     "url": "js/repl/lib/src/prelude.js"
+  },
+  {
+    "revision": "b592b8a9f2b791f708d9028224707ae2",
+    "url": "js/repl/lib/src/program.js"
   },
   {
     "revision": "ba14880c58830a78df0ea451c2132025",
@@ -784,20 +792,20 @@ self.__precacheManifest = [
     "url": "js/repl/lib/src/Result.js"
   },
   {
-    "revision": "b592b8a9f2b791f708d9028224707ae2",
-    "url": "js/repl/lib/src/program.js"
-  },
-  {
     "revision": "9da602ae8d8d6c50b22a947fe78678af",
     "url": "js/repl/lib/Thoth.Json/Encode.js"
   },
   {
-    "revision": "2d3122b037d996d22c41158f40c7f2d3",
+    "revision": "d7ab4e5218e7a8aa3bb580ba83b0cd6e",
     "url": "js/repl/version.txt"
   },
   {
     "revision": "7fefa79f0389b06cb8da9e1869cdea30",
     "url": "libs/vs/basic-languages/apex/apex.js"
+  },
+  {
+    "revision": "db854cf970cbf6f72330f51a581517a3",
+    "url": "libs/vs/basic-languages/azcli/azcli.js"
   },
   {
     "revision": "dca3c6551bbb081b845f42c727a9e94a",
@@ -812,60 +820,52 @@ self.__precacheManifest = [
     "url": "libs/vs/basic-languages/coffee/coffee.js"
   },
   {
-    "revision": "b8009174713bfd11f842e6a2444bc0bb",
-    "url": "libs/vs/basic-languages/csharp/csharp.js"
-  },
-  {
-    "revision": "db854cf970cbf6f72330f51a581517a3",
-    "url": "libs/vs/basic-languages/azcli/azcli.js"
+    "revision": "87ed670c753336e995644fefec9620c5",
+    "url": "libs/vs/basic-languages/cpp/cpp.js"
   },
   {
     "revision": "d272df6a03e9da8420590932cba95ecf",
     "url": "libs/vs/basic-languages/csp/csp.js"
   },
   {
-    "revision": "87ed670c753336e995644fefec9620c5",
-    "url": "libs/vs/basic-languages/cpp/cpp.js"
-  },
-  {
-    "revision": "94e2bc9c19748e126f37c82f51281680",
-    "url": "libs/vs/basic-languages/fsharp/fsharp.js"
-  },
-  {
-    "revision": "6413aca4b7f7d4db17eadd3f444334d6",
-    "url": "libs/vs/basic-languages/dockerfile/dockerfile.js"
+    "revision": "b8009174713bfd11f842e6a2444bc0bb",
+    "url": "libs/vs/basic-languages/csharp/csharp.js"
   },
   {
     "revision": "5cdd6d11da9895890a5144840a6b8787",
     "url": "libs/vs/basic-languages/css/css.js"
   },
   {
+    "revision": "6413aca4b7f7d4db17eadd3f444334d6",
+    "url": "libs/vs/basic-languages/dockerfile/dockerfile.js"
+  },
+  {
+    "revision": "94e2bc9c19748e126f37c82f51281680",
+    "url": "libs/vs/basic-languages/fsharp/fsharp.js"
+  },
+  {
     "revision": "1630ea0695eaedf3f67e4e932c692fc1",
     "url": "libs/vs/basic-languages/go/go.js"
-  },
-  {
-    "revision": "9b5a5342e0dba94d85eaf539ee25b9ba",
-    "url": "libs/vs/basic-languages/handlebars/handlebars.js"
-  },
-  {
-    "revision": "02b26507fe43dc4d2c17cc9b409e2000",
-    "url": "libs/vs/basic-languages/java/java.js"
   },
   {
     "revision": "864755a7315041494dd16ee3083f4e09",
     "url": "libs/vs/basic-languages/html/html.js"
   },
   {
+    "revision": "9b5a5342e0dba94d85eaf539ee25b9ba",
+    "url": "libs/vs/basic-languages/handlebars/handlebars.js"
+  },
+  {
     "revision": "59b3088bcd4867f83925fce1729d0fab",
     "url": "libs/vs/basic-languages/ini/ini.js"
   },
   {
-    "revision": "5f3e88f9f7d2a62238b87dec7c91ef24",
-    "url": "libs/vs/basic-languages/lua/lua.js"
+    "revision": "02b26507fe43dc4d2c17cc9b409e2000",
+    "url": "libs/vs/basic-languages/java/java.js"
   },
   {
-    "revision": "0eb80c3a6c08c2d115c99ecb8cb7fa6a",
-    "url": "libs/vs/basic-languages/less/less.js"
+    "revision": "59de70a1e3360b84513a353b8205f6fa",
+    "url": "libs/vs/basic-languages/javascript/javascript.js"
   },
   {
     "revision": "ca1b98d8ea5c6eabe6119d9533a2b6e6",
@@ -876,8 +876,12 @@ self.__precacheManifest = [
     "url": "libs/vs/basic-languages/markdown/markdown.js"
   },
   {
-    "revision": "59de70a1e3360b84513a353b8205f6fa",
-    "url": "libs/vs/basic-languages/javascript/javascript.js"
+    "revision": "5f3e88f9f7d2a62238b87dec7c91ef24",
+    "url": "libs/vs/basic-languages/lua/lua.js"
+  },
+  {
+    "revision": "0eb80c3a6c08c2d115c99ecb8cb7fa6a",
+    "url": "libs/vs/basic-languages/less/less.js"
   },
   {
     "revision": "2712fccb43bac86314fa0598c09e54e6",
@@ -908,8 +912,8 @@ self.__precacheManifest = [
     "url": "libs/vs/basic-languages/redis/redis.js"
   },
   {
-    "revision": "ab64bf47e9073b28a4d20618b1a31f30",
-    "url": "libs/vs/basic-languages/sb/sb.js"
+    "revision": "1e1deecb870fb696ed7e7ddd822f0839",
+    "url": "js/repl/lib/Form/Textarea.js"
   },
   {
     "revision": "93489e1be2e32046e3670b5bdab3455b",
@@ -920,8 +924,8 @@ self.__precacheManifest = [
     "url": "libs/vs/basic-languages/scheme/scheme.js"
   },
   {
-    "revision": "1e1deecb870fb696ed7e7ddd822f0839",
-    "url": "js/repl/lib/Form/Textarea.js"
+    "revision": "ab64bf47e9073b28a4d20618b1a31f30",
+    "url": "libs/vs/basic-languages/sb/sb.js"
   },
   {
     "revision": "c7ccff9cdba32eafe825a4f0437f0804",
@@ -932,8 +936,20 @@ self.__precacheManifest = [
     "url": "libs/vs/basic-languages/scss/scss.js"
   },
   {
+    "revision": "a83b216271cbc449a37182e1228b8f74",
+    "url": "js/repl/fable-core/BigInt/n.js"
+  },
+  {
+    "revision": "811529b009007135c0389cafe622e136",
+    "url": "libs/react.production.min.js"
+  },
+  {
     "revision": "49637613a58c52edb1dd0c15332df6f7",
     "url": "libs/vs/basic-languages/st/st.js"
+  },
+  {
+    "revision": "f5afee83bf59c60a34da79bfabef4c8d",
+    "url": "js/repl/fable-core/Set.js"
   },
   {
     "revision": "f20f0fd2268e0211e8eebc1e3290e3f9",
@@ -944,48 +960,40 @@ self.__precacheManifest = [
     "url": "libs/vs/basic-languages/typescript/typescript.js"
   },
   {
-    "revision": "cc01456677e419ecdd056caa89a19444",
-    "url": "libs/vs/basic-languages/vb/vb.js"
-  },
-  {
-    "revision": "64c652b37bf8268e029e8089d1251955",
-    "url": "js/repl/fable-core/Set.js"
-  },
-  {
-    "revision": "811529b009007135c0389cafe622e136",
-    "url": "libs/react.production.min.js"
-  },
-  {
-    "revision": "a47a66570137dc46935c8b5bc2d1e714",
-    "url": "libs/vs/basic-languages/xml/xml.js"
+    "revision": "efd2370849aa50ea6ef4bbdb715ccdf0",
+    "url": "libs/vs/basic-languages/mysql/mysql.js"
   },
   {
     "revision": "0466c832dae5012ca41e98d8eb6db1c8",
     "url": "libs/vs/basic-languages/php/php.js"
   },
   {
-    "revision": "9980ee64f55d15919fc49c20c0d3b498",
-    "url": "libs/vs/basic-languages/yaml/yaml.js"
-  },
-  {
-    "revision": "efd2370849aa50ea6ef4bbdb715ccdf0",
-    "url": "libs/vs/basic-languages/mysql/mysql.js"
-  },
-  {
     "revision": "7be0563f36493cb077250e5e8c9f17a0",
     "url": "libs/vs/basic-languages/postiats/postiats.js"
   },
   {
-    "revision": "c161e76ef2de1625e2bbfafe2594970d",
-    "url": "libs/vs/basic-languages/ruby/ruby.js"
+    "revision": "cc01456677e419ecdd056caa89a19444",
+    "url": "libs/vs/basic-languages/vb/vb.js"
+  },
+  {
+    "revision": "a47a66570137dc46935c8b5bc2d1e714",
+    "url": "libs/vs/basic-languages/xml/xml.js"
+  },
+  {
+    "revision": "9980ee64f55d15919fc49c20c0d3b498",
+    "url": "libs/vs/basic-languages/yaml/yaml.js"
+  },
+  {
+    "revision": "7776b63296b300a9a1dd702074ec66df",
+    "url": "libs/vs/basic-languages/razor/razor.js"
   },
   {
     "revision": "7a6c72e5517ac70cf6bfc6082aa58056",
     "url": "libs/vs/basic-languages/redshift/redshift.js"
   },
   {
-    "revision": "7776b63296b300a9a1dd702074ec66df",
-    "url": "libs/vs/basic-languages/razor/razor.js"
+    "revision": "c161e76ef2de1625e2bbfafe2594970d",
+    "url": "libs/vs/basic-languages/ruby/ruby.js"
   },
   {
     "revision": "209fe7cdd2a50c7e99674039e9cc9fed",
@@ -1000,16 +1008,16 @@ self.__precacheManifest = [
     "url": "js/repl/lib/Fulma/Common.js"
   },
   {
-    "revision": "bf63d04d041b14ca7a8c30de83313740",
-    "url": "libs/vs/basic-languages/solidity/solidity.js"
-  },
-  {
     "revision": "cb695b854c313a16a595527a501b1f1c",
     "url": "libs/vs/basic-languages/sql/sql.js"
   },
   {
     "revision": "269550530cc127b6aa5a35925a7de6ce",
     "url": "libs/css/font-awesome.min.css"
+  },
+  {
+    "revision": "bf63d04d041b14ca7a8c30de83313740",
+    "url": "libs/vs/basic-languages/solidity/solidity.js"
   },
   {
     "revision": "04d7441f52a8bd0143f033abc8329768",
@@ -1036,24 +1044,16 @@ self.__precacheManifest = [
     "url": "metadata2/System.ComponentModel.DataAnnotations.dll.txt"
   },
   {
+    "revision": "13923dd31cc45e6f26fc",
+    "url": "style.css"
+  },
+  {
     "revision": "5a6d2564a27d3042e2f433b6d4f04d46",
     "url": "metadata2/System.ComponentModel.EventBasedAsync.dll.txt"
   },
   {
-    "revision": "287bcbb94de84f0110e3",
-    "url": "style.css"
-  },
-  {
     "revision": "9c60fc4bcbeef1fb52a4cfb481229308",
     "url": "metadata2/System.Configuration.dll.txt"
-  },
-  {
-    "revision": "8340765d91d7ca60351fb92699d31545",
-    "url": "libs/vs/editor/editor.main.nls.js"
-  },
-  {
-    "revision": "0f050d9565d8618f5da8f91c21079185",
-    "url": "metadata2/System.Diagnostics.Contracts.dll.txt"
   },
   {
     "revision": "904af0d56524611e7a7c26857362d2f8",
@@ -1064,24 +1064,28 @@ self.__precacheManifest = [
     "url": "metadata2/System.Diagnostics.DiagnosticSource.dll.txt"
   },
   {
-    "revision": "5dea230337b1212e663f41ecba4e9316",
-    "url": "metadata2/System.Diagnostics.FileVersionInfo.dll.txt"
+    "revision": "0f050d9565d8618f5da8f91c21079185",
+    "url": "metadata2/System.Diagnostics.Contracts.dll.txt"
   },
   {
-    "revision": "792d3df709956b27c2e6ac5d5dfd1106",
-    "url": "metadata2/System.Diagnostics.TextWriterTraceListener.dll.txt"
+    "revision": "5dea230337b1212e663f41ecba4e9316",
+    "url": "metadata2/System.Diagnostics.FileVersionInfo.dll.txt"
   },
   {
     "revision": "022e887ca36a57e5c35d471d66bc786d",
     "url": "metadata2/System.Diagnostics.Tools.dll.txt"
   },
   {
-    "revision": "11691f905ddf0fbf7f3ecf794d72b650",
-    "url": "libs/vs/editor/editor.main.nls.de.js"
+    "revision": "792d3df709956b27c2e6ac5d5dfd1106",
+    "url": "metadata2/System.Diagnostics.TextWriterTraceListener.dll.txt"
   },
   {
-    "revision": "1a3f7fb415c208671935e73d22586383",
-    "url": "metadata2/System.Globalization.Calendars.dll.txt"
+    "revision": "950253a9d478d0c90913da47dc230690",
+    "url": "js/repl/lib/Layouts/Column.js"
+  },
+  {
+    "revision": "ac747f476ed487343529cd94843a210d",
+    "url": "libs/vs/language/typescript/tsMode.js"
   },
   {
     "revision": "03b726413b0386c1a790ff4f59842161",
@@ -1092,72 +1096,56 @@ self.__precacheManifest = [
     "url": "metadata2/System.Drawing.dll.txt"
   },
   {
-    "revision": "ac747f476ed487343529cd94843a210d",
-    "url": "libs/vs/language/typescript/tsMode.js"
-  },
-  {
     "revision": "a65db82e105c6a7098669697580ff442",
     "url": "metadata2/System.Globalization.dll.txt"
-  },
-  {
-    "revision": "950253a9d478d0c90913da47dc230690",
-    "url": "js/repl/lib/Layouts/Column.js"
-  },
-  {
-    "revision": "1862b825d64ed4a2e47f184d533921c2",
-    "url": "metadata2/System.Globalization.Extensions.dll.txt"
-  },
-  {
-    "revision": "8df5e3221d095cf915775d5141b05e72",
-    "url": "metadata2/System.IO.Compression.dll.txt"
   },
   {
     "revision": "6d618e32c8694677b41db9d48cfa91dc",
     "url": "metadata2/Microsoft.VisualBasic.dll.txt"
   },
   {
+    "revision": "1a3f7fb415c208671935e73d22586383",
+    "url": "metadata2/System.Globalization.Calendars.dll.txt"
+  },
+  {
+    "revision": "1862b825d64ed4a2e47f184d533921c2",
+    "url": "metadata2/System.Globalization.Extensions.dll.txt"
+  },
+  {
     "revision": "86e4721e5e102f4abcd87a02031a5b11",
     "url": "js/repl/lib/Thoth.Json/Decode.js"
   },
   {
-    "revision": "23ae09c58cd372eb306ce4eac8d6c999",
-    "url": "metadata2/System.IO.Compression.FileSystem.dll.txt"
+    "revision": "8340765d91d7ca60351fb92699d31545",
+    "url": "libs/vs/editor/editor.main.nls.js"
   },
   {
-    "revision": "f47cae2c20f9e2d876cf9be5350411d8",
-    "url": "libs/vs/editor/editor.main.nls.fr.js"
-  },
-  {
-    "revision": "79783b6ee655b9c7bf9fc0ea90820585",
-    "url": "metadata2/System.IO.Compression.ZipFile.dll.txt"
+    "revision": "11691f905ddf0fbf7f3ecf794d72b650",
+    "url": "libs/vs/editor/editor.main.nls.de.js"
   },
   {
     "revision": "4125f85dfefd4b2132c118c431d3fffd",
     "url": "libs/vs/editor/editor.main.nls.es.js"
   },
   {
-    "revision": "38f976233b13311a5760ca4f6fe99cd7",
-    "url": "metadata2/System.IO.dll.txt"
+    "revision": "23ae09c58cd372eb306ce4eac8d6c999",
+    "url": "metadata2/System.IO.Compression.FileSystem.dll.txt"
   },
   {
-    "revision": "9995b8e014789acadc4a68986871422e",
-    "url": "libs/vs/editor/editor.main.nls.zh-cn.js"
+    "revision": "8df5e3221d095cf915775d5141b05e72",
+    "url": "metadata2/System.IO.Compression.dll.txt"
   },
   {
-    "revision": "559353ac64954d0d76b87e0b8a3e806b",
-    "url": "libs/vs/editor/editor.main.nls.it.js"
-  },
-  {
-    "revision": "550b505e48ca6d67761dfa33e9f1dfa7",
-    "url": "metadata2/System.Collections.NonGeneric.dll.txt"
-  },
-  {
-    "revision": "77e0deb2cec56edf39eea15ad7c70a70",
-    "url": "metadata2/System.IO.FileSystem.DriveInfo.dll.txt"
+    "revision": "79783b6ee655b9c7bf9fc0ea90820585",
+    "url": "metadata2/System.IO.Compression.ZipFile.dll.txt"
   },
   {
     "revision": "f1afa78baf85a57655a75d97a0f7cfe1",
     "url": "metadata2/System.Collections.Concurrent.dll.txt"
+  },
+  {
+    "revision": "550b505e48ca6d67761dfa33e9f1dfa7",
+    "url": "metadata2/System.Collections.NonGeneric.dll.txt"
   },
   {
     "revision": "8fcd0812321519bb61cff1b35b769998",
@@ -1184,36 +1172,40 @@ self.__precacheManifest = [
     "url": "metadata2/System.Data.dll.txt"
   },
   {
-    "revision": "b291ae3297b970f1bbd5d7ffe120a0f7",
-    "url": "metadata2/System.IO.FileSystem.Primitives.dll.txt"
+    "revision": "38f976233b13311a5760ca4f6fe99cd7",
+    "url": "metadata2/System.IO.dll.txt"
   },
   {
-    "revision": "960c0518d0a2040f921abe4f144dd746",
-    "url": "metadata2/System.IO.FileSystem.Watcher.dll.txt"
+    "revision": "77e0deb2cec56edf39eea15ad7c70a70",
+    "url": "metadata2/System.IO.FileSystem.DriveInfo.dll.txt"
+  },
+  {
+    "revision": "b291ae3297b970f1bbd5d7ffe120a0f7",
+    "url": "metadata2/System.IO.FileSystem.Primitives.dll.txt"
   },
   {
     "revision": "9382b2c3efaae798d7cef43dcbea9857",
     "url": "metadata2/System.Diagnostics.StackTrace.dll.txt"
   },
   {
-    "revision": "ecee433dc3a7f8ff1305dae173a8c0e7",
-    "url": "metadata2/System.Diagnostics.TraceSource.dll.txt"
+    "revision": "f47cae2c20f9e2d876cf9be5350411d8",
+    "url": "libs/vs/editor/editor.main.nls.fr.js"
+  },
+  {
+    "revision": "559353ac64954d0d76b87e0b8a3e806b",
+    "url": "libs/vs/editor/editor.main.nls.it.js"
+  },
+  {
+    "revision": "960c0518d0a2040f921abe4f144dd746",
+    "url": "metadata2/System.IO.FileSystem.Watcher.dll.txt"
   },
   {
     "revision": "15fdccca2b44309b78feed6662470a63",
     "url": "metadata2/System.IO.MemoryMappedFiles.dll.txt"
   },
   {
-    "revision": "cb736e09a122b1f2498d2035628afec6",
-    "url": "libs/vs/editor/editor.main.nls.zh-tw.js"
-  },
-  {
-    "revision": "22a9bdb1ba73ec476ed133dbc9ce0b41",
-    "url": "libs/vs/editor/editor.main.nls.ko.js"
-  },
-  {
-    "revision": "a9c81caa6ec09083ae176ec554bcf443",
-    "url": "metadata2/System.IO.UnmanagedMemoryStream.dll.txt"
+    "revision": "ecee433dc3a7f8ff1305dae173a8c0e7",
+    "url": "metadata2/System.Diagnostics.TraceSource.dll.txt"
   },
   {
     "revision": "c19305ef3bef6ee87b8f37dea3849856",
@@ -1224,16 +1216,28 @@ self.__precacheManifest = [
     "url": "libs/vs/language/html/htmlMode.js"
   },
   {
+    "revision": "a9c81caa6ec09083ae176ec554bcf443",
+    "url": "metadata2/System.IO.UnmanagedMemoryStream.dll.txt"
+  },
+  {
+    "revision": "9995b8e014789acadc4a68986871422e",
+    "url": "libs/vs/editor/editor.main.nls.zh-cn.js"
+  },
+  {
+    "revision": "22a9bdb1ba73ec476ed133dbc9ce0b41",
+    "url": "libs/vs/editor/editor.main.nls.ko.js"
+  },
+  {
+    "revision": "cb736e09a122b1f2498d2035628afec6",
+    "url": "libs/vs/editor/editor.main.nls.zh-tw.js"
+  },
+  {
     "revision": "9e65e1814509688a76d833810069e57d",
     "url": "libs/vs/language/css/cssMode.js"
   },
   {
     "revision": "a57e3167d172e11e1dc71cf48fea1758",
     "url": "metadata2/System.IO.FileSystem.dll.txt"
-  },
-  {
-    "revision": "068bd25307974030d54a2e2ce53e3d3f",
-    "url": "libs/vs/editor/editor.main.nls.ja.js"
   },
   {
     "revision": "28ab5438f2b8d3b755eae20052dfebed",
@@ -1248,24 +1252,28 @@ self.__precacheManifest = [
     "url": "metadata2/System.IO.Pipes.dll.txt"
   },
   {
-    "revision": "ac61b23d23375cd76f78bd62d4f88f45",
-    "url": "metadata2/System.Linq.dll.txt"
-  },
-  {
-    "revision": "da599f4e1d88b82e71fd18bdb3fafeaf",
-    "url": "metadata2/System.Drawing.Primitives.dll.txt"
+    "revision": "068bd25307974030d54a2e2ce53e3d3f",
+    "url": "libs/vs/editor/editor.main.nls.ja.js"
   },
   {
     "revision": "03d8cf05ea1aa550106c496c9d3ffc2d",
     "url": "libs/vs/loader.js"
   },
   {
-    "revision": "858e42778b6663c1c01e0c011893a7b5",
-    "url": "metadata2/Dotnet.ProjInfo.Matthid.dll.txt"
+    "revision": "ac61b23d23375cd76f78bd62d4f88f45",
+    "url": "metadata2/System.Linq.dll.txt"
   },
   {
     "revision": "bff540fe89c03f33cf913cb90b44bb7d",
     "url": "metadata2/System.Net.dll.txt"
+  },
+  {
+    "revision": "858e42778b6663c1c01e0c011893a7b5",
+    "url": "metadata2/Dotnet.ProjInfo.Matthid.dll.txt"
+  },
+  {
+    "revision": "da599f4e1d88b82e71fd18bdb3fafeaf",
+    "url": "metadata2/System.Drawing.Primitives.dll.txt"
   },
   {
     "revision": "d7b6803898e300f4ed8811db904a8a0b",
@@ -1276,48 +1284,48 @@ self.__precacheManifest = [
     "url": "metadata2/System.Linq.Queryable.dll.txt"
   },
   {
-    "revision": "0c7af3ff15ee6bea6e4734a479ac9a2b",
-    "url": "libs/vs/editor/editor.main.nls.ru.js"
+    "revision": "af7ae505a9eed503f8b8e6982036873e",
+    "url": "libs/fonts/fontawesome-webfont.woff2"
   },
   {
     "revision": "9074539846b5b61c7a6e8c5df14c6458",
     "url": "metadata2/System.Net.HttpListener.dll.txt"
   },
   {
-    "revision": "af7ae505a9eed503f8b8e6982036873e",
-    "url": "libs/fonts/fontawesome-webfont.woff2"
-  },
-  {
     "revision": "9ad9fd2d233774b424d70e0da5b44894",
     "url": "metadata2/System.Linq.Parallel.dll.txt"
-  },
-  {
-    "revision": "b0ed0352b505a9987988f67756058f7a",
-    "url": "metadata2/System.dll.txt"
   },
   {
     "revision": "528a3b966441b523098c4e538eb26307",
     "url": "libs/vs/language/json/jsonMode.js"
   },
   {
-    "revision": "d544a835aecf127db83534d748a8fdc6",
-    "url": "metadata2/System.Net.NameResolution.dll.txt"
+    "revision": "b0ed0352b505a9987988f67756058f7a",
+    "url": "metadata2/System.dll.txt"
   },
   {
-    "revision": "9b3b5ab9c9d5425ee927272e59cb0a3f",
-    "url": "metadata2/System.Net.Ping.dll.txt"
+    "revision": "0c7af3ff15ee6bea6e4734a479ac9a2b",
+    "url": "libs/vs/editor/editor.main.nls.ru.js"
+  },
+  {
+    "revision": "d544a835aecf127db83534d748a8fdc6",
+    "url": "metadata2/System.Net.NameResolution.dll.txt"
   },
   {
     "revision": "7dac28c67d0fb1c5934acb379f00b3c2",
     "url": "metadata2/mscorlib.dll.txt"
   },
   {
-    "revision": "6be3b3c841d5218f51656a25e72b2135",
-    "url": "metadata2/System.Collections.Immutable.dll.txt"
+    "revision": "9b3b5ab9c9d5425ee927272e59cb0a3f",
+    "url": "metadata2/System.Net.Ping.dll.txt"
   },
   {
     "revision": "20bc216186b984f457a92f5729cdfc9a",
     "url": "metadata2/System.Net.Mail.dll.txt"
+  },
+  {
+    "revision": "6be3b3c841d5218f51656a25e72b2135",
+    "url": "metadata2/System.Collections.Immutable.dll.txt"
   },
   {
     "revision": "47e65560a294eb3553762efcad0f69a8",
@@ -1340,44 +1348,40 @@ self.__precacheManifest = [
     "url": "metadata2/System.Numerics.dll.txt"
   },
   {
-    "revision": "b47f10a16defebad4f7b130bfb3f17a1",
-    "url": "metadata2/System.Reflection.dll.txt"
-  },
-  {
     "revision": "175e0e7d6d00ffd5c61278677e7c83f8",
     "url": "metadata2/System.Reflection.DispatchProxy.dll.txt"
+  },
+  {
+    "revision": "b47f10a16defebad4f7b130bfb3f17a1",
+    "url": "metadata2/System.Reflection.dll.txt"
   },
   {
     "revision": "c682917a3110911d8fe2cd422adc5c80",
     "url": "metadata2/System.Reflection.Emit.ILGeneration.dll.txt"
   },
   {
+    "revision": "df3fbf413ea0ee9418728908a8043653",
+    "url": "metadata2/System.Reflection.Emit.Lightweight.dll.txt"
+  },
+  {
     "revision": "b560d61f9792621e4a95a25720920743",
     "url": "metadata2/System.Reflection.Extensions.dll.txt"
   },
   {
-    "revision": "df3fbf413ea0ee9418728908a8043653",
-    "url": "metadata2/System.Reflection.Emit.Lightweight.dll.txt"
+    "revision": "99b2f3c163aee47b3964b1032013d8f5",
+    "url": "libs/react-dom.production.min.js"
   },
   {
     "revision": "3252a1dc668cb30c72b9348caffb95ac",
     "url": "metadata2/System.Reflection.TypeExtensions.dll.txt"
   },
   {
-    "revision": "2a0e7e50d7967ea99a9b09ce21ddefa7",
-    "url": "samples/elmish/simple_input.css"
-  },
-  {
-    "revision": "65acf77a8cc16eed68d5a438a4d87d51",
-    "url": "samples/elmish/simple_input.fs"
-  },
-  {
-    "revision": "c049769b98d5b48989ec2b0efbb504ab",
-    "url": "samples/elmish/simple_input.html"
-  },
-  {
     "revision": "16615148f500271efa57295da308fcf2",
     "url": "metadata2/System.Resources.Reader.dll.txt"
+  },
+  {
+    "revision": "fee66e712a8a08eef5805a46892932ad",
+    "url": "libs/fonts/fontawesome-webfont.woff"
   },
   {
     "revision": "762caa9cce5d09b127d77f5f44fb736b",
@@ -1388,68 +1392,68 @@ self.__precacheManifest = [
     "url": "metadata2/System.Net.Http.dll.txt"
   },
   {
-    "revision": "c2cc8d02be9bfbe9d255930d4034b7b2",
-    "url": "metadata2/System.Resources.Writer.dll.txt"
-  },
-  {
     "revision": "bf418a6f4d09cdb9b68aeed3821c104b",
     "url": "metadata2/System.Runtime.CompilerServices.VisualC.dll.txt"
+  },
+  {
+    "revision": "c2cc8d02be9bfbe9d255930d4034b7b2",
+    "url": "metadata2/System.Resources.Writer.dll.txt"
   },
   {
     "revision": "20f785ae9529b83bdcf24474eb90de01",
     "url": "metadata2/System.Runtime.Handles.dll.txt"
   },
   {
-    "revision": "fee66e712a8a08eef5805a46892932ad",
-    "url": "libs/fonts/fontawesome-webfont.woff"
-  },
-  {
-    "revision": "99b2f3c163aee47b3964b1032013d8f5",
-    "url": "libs/react-dom.production.min.js"
+    "revision": "87ce327166cbf606e38a4dc07558e7df",
+    "url": "metadata2/System.Net.Security.dll.txt"
   },
   {
     "revision": "38f921df7b61a90ec58525484d62e2a6",
     "url": "metadata2/System.Runtime.InteropServices.WindowsRuntime.dll.txt"
   },
   {
-    "revision": "ea830c82411e3955b79b6489e6b040a3",
-    "url": "metadata2/System.Runtime.InteropServices.RuntimeInformation.dll.txt"
-  },
-  {
     "revision": "82432c88458d15140155e98d463cf230",
     "url": "metadata2/System.Runtime.Loader.dll.txt"
   },
   {
-    "revision": "af2bee20e4770d391598a5f1af4e0e9b",
-    "url": "metadata2/System.Runtime.Serialization.dll.txt"
-  },
-  {
-    "revision": "87ce327166cbf606e38a4dc07558e7df",
-    "url": "metadata2/System.Net.Security.dll.txt"
-  },
-  {
-    "revision": "3cf22041ab447fd0f7df0c7be16224d2",
-    "url": "metadata2/System.Runtime.Serialization.Json.dll.txt"
-  },
-  {
-    "revision": "7177418487ec18c45a72ddf46cca1a2a",
-    "url": "metadata2/System.Runtime.Serialization.Primitives.dll.txt"
+    "revision": "ea830c82411e3955b79b6489e6b040a3",
+    "url": "metadata2/System.Runtime.InteropServices.RuntimeInformation.dll.txt"
   },
   {
     "revision": "e3bf4c9df5cf7cf8e3dc45ce5d9a5357",
     "url": "metadata2/System.Net.WebClient.dll.txt"
   },
   {
+    "revision": "af2bee20e4770d391598a5f1af4e0e9b",
+    "url": "metadata2/System.Runtime.Serialization.dll.txt"
+  },
+  {
+    "revision": "3cf22041ab447fd0f7df0c7be16224d2",
+    "url": "metadata2/System.Runtime.Serialization.Json.dll.txt"
+  },
+  {
     "revision": "8a6a7b186b9efc86cdffab5a94b44534",
     "url": "metadata2/System.Net.WebSockets.dll.txt"
+  },
+  {
+    "revision": "7177418487ec18c45a72ddf46cca1a2a",
+    "url": "metadata2/System.Runtime.Serialization.Primitives.dll.txt"
   },
   {
     "revision": "0926da7ddd4ad92fb74e62d8a51f7b9e",
     "url": "metadata2/System.Security.Cryptography.Encoding.dll.txt"
   },
   {
+    "revision": "6b340d2481742836dbbe177c704e8bc1",
+    "url": "metadata2/System.Security.dll.txt"
+  },
+  {
     "revision": "1cddbf98b817a244d4910e24948a6287",
     "url": "metadata2/System.ObjectModel.dll.txt"
+  },
+  {
+    "revision": "9b5774c717b08d8148203724bafe2cfb",
+    "url": "metadata2/System.Linq.Expressions.dll.txt"
   },
   {
     "revision": "6873d96c894074b2cc9615ecb0364873",
@@ -1460,44 +1464,36 @@ self.__precacheManifest = [
     "url": "metadata2/System.Security.SecureString.dll.txt"
   },
   {
-    "revision": "acb155aa17ce4673556f46163a5589be",
-    "url": "metadata2/System.ServiceModel.Web.dll.txt"
-  },
-  {
-    "revision": "6b340d2481742836dbbe177c704e8bc1",
-    "url": "metadata2/System.Security.dll.txt"
-  },
-  {
-    "revision": "a2cac730377600e5d4e3aaca0b3c81d9",
-    "url": "metadata2/System.ServiceProcess.dll.txt"
-  },
-  {
-    "revision": "9b5774c717b08d8148203724bafe2cfb",
-    "url": "metadata2/System.Linq.Expressions.dll.txt"
+    "revision": "24bc8b214614871aec747256190ad631",
+    "url": "metadata2/System.Net.NetworkInformation.dll.txt"
   },
   {
     "revision": "d6b727f42653d2d49003fd2de2e4631c",
     "url": "metadata2/System.Reflection.Primitives.dll.txt"
   },
   {
-    "revision": "c7b48c6ee0c7f7ade917e452bb7f4cc1",
-    "url": "metadata2/System.Text.Encoding.dll.txt"
-  },
-  {
-    "revision": "24bc8b214614871aec747256190ad631",
-    "url": "metadata2/System.Net.NetworkInformation.dll.txt"
-  },
-  {
     "revision": "945d5c47baa8204807064702307a6a9f",
     "url": "metadata2/System.Net.Primitives.dll.txt"
   },
   {
-    "revision": "4a6b813b6fd81977bc887a4b6f6c93ef",
-    "url": "metadata2/System.Runtime.Numerics.dll.txt"
+    "revision": "acb155aa17ce4673556f46163a5589be",
+    "url": "metadata2/System.ServiceModel.Web.dll.txt"
+  },
+  {
+    "revision": "a2cac730377600e5d4e3aaca0b3c81d9",
+    "url": "metadata2/System.ServiceProcess.dll.txt"
+  },
+  {
+    "revision": "c7b48c6ee0c7f7ade917e452bb7f4cc1",
+    "url": "metadata2/System.Text.Encoding.dll.txt"
   },
   {
     "revision": "257f7d8aa0265833c1a967e257f1f8d3",
     "url": "metadata2/System.Net.Requests.dll.txt"
+  },
+  {
+    "revision": "4a6b813b6fd81977bc887a4b6f6c93ef",
+    "url": "metadata2/System.Runtime.Numerics.dll.txt"
   },
   {
     "revision": "033d41156c0dda68c99fc0c7c0fdb490",
@@ -1512,16 +1508,16 @@ self.__precacheManifest = [
     "url": "metadata2/System.Numerics.Vectors.dll.txt"
   },
   {
-    "revision": "04b339950069cf41462b2a75e2091abe",
-    "url": "metadata2/System.Security.Cryptography.Primitives.dll.txt"
+    "revision": "8e036e867bffad3c044648f038c853b7",
+    "url": "metadata2/System.Security.Cryptography.Csp.dll.txt"
   },
   {
     "revision": "263ab3457651d68656209ac60bf6c261",
     "url": "metadata2/System.Threading.Overlapped.dll.txt"
   },
   {
-    "revision": "8e036e867bffad3c044648f038c853b7",
-    "url": "metadata2/System.Security.Cryptography.Csp.dll.txt"
+    "revision": "04b339950069cf41462b2a75e2091abe",
+    "url": "metadata2/System.Security.Cryptography.Primitives.dll.txt"
   },
   {
     "revision": "da4d2af479a1a17729018a324b6be148",
@@ -1532,10 +1528,6 @@ self.__precacheManifest = [
     "url": "metadata2/System.Threading.Tasks.Extensions.dll.txt"
   },
   {
-    "revision": "b1e4eb3c7e395f4c5260a93f7f1d441b",
-    "url": "metadata2/System.Threading.Tasks.Parallel.dll.txt"
-  },
-  {
     "revision": "729f5c800460519f66851f44669a77e4",
     "url": "metadata2/System.Reflection.Emit.dll.txt"
   },
@@ -1544,32 +1536,36 @@ self.__precacheManifest = [
     "url": "metadata2/System.Threading.ThreadPool.dll.txt"
   },
   {
+    "revision": "b1e4eb3c7e395f4c5260a93f7f1d441b",
+    "url": "metadata2/System.Threading.Tasks.Parallel.dll.txt"
+  },
+  {
     "revision": "5ab2baeef1a75c3162f6cb1217bf6128",
     "url": "metadata2/System.Threading.Timer.dll.txt"
-  },
-  {
-    "revision": "1d392ccdf843b0d3991494b08bc6fc16",
-    "url": "metadata2/System.Runtime.Serialization.Xml.dll.txt"
-  },
-  {
-    "revision": "8f362a19484fd1c39eed5cb478138cc3",
-    "url": "metadata2/System.Text.RegularExpressions.dll.txt"
   },
   {
     "revision": "799479f178f5aa7d2ee8ba908ee6f381",
     "url": "metadata2/System.Net.Sockets.dll.txt"
   },
   {
+    "revision": "b49bf24e6e539d90bee4396b37603565",
+    "url": "metadata2/System.Transactions.dll.txt"
+  },
+  {
+    "revision": "8f362a19484fd1c39eed5cb478138cc3",
+    "url": "metadata2/System.Text.RegularExpressions.dll.txt"
+  },
+  {
     "revision": "01cbd748ae2d82a19cb114d9791f74a5",
     "url": "metadata2/System.Security.Claims.dll.txt"
   },
   {
-    "revision": "d8939206990dfd58262bd354d0e3714b",
-    "url": "metadata2/System.Security.Cryptography.Algorithms.dll.txt"
+    "revision": "1d392ccdf843b0d3991494b08bc6fc16",
+    "url": "metadata2/System.Runtime.Serialization.Xml.dll.txt"
   },
   {
-    "revision": "b49bf24e6e539d90bee4396b37603565",
-    "url": "metadata2/System.Transactions.dll.txt"
+    "revision": "d8939206990dfd58262bd354d0e3714b",
+    "url": "metadata2/System.Security.Cryptography.Algorithms.dll.txt"
   },
   {
     "revision": "7d5108a2347f6be015d03b557a2f5551",
@@ -1580,6 +1576,10 @@ self.__precacheManifest = [
     "url": "metadata2/System.Threading.Thread.dll.txt"
   },
   {
+    "revision": "a6102ef490f7388ff56a43915044d6a1",
+    "url": "metadata2/System.ComponentModel.TypeConverter.dll.txt"
+  },
+  {
     "revision": "1575e957645fd10aab75af065877d2e3",
     "url": "metadata2/System.ValueTuple.dll.txt"
   },
@@ -1588,8 +1588,8 @@ self.__precacheManifest = [
     "url": "metadata2/System.Web.dll.txt"
   },
   {
-    "revision": "a6102ef490f7388ff56a43915044d6a1",
-    "url": "metadata2/System.ComponentModel.TypeConverter.dll.txt"
+    "revision": "4bb5619392849e454215a6dc61c5cc84",
+    "url": "metadata2/System.Threading.dll.txt"
   },
   {
     "revision": "7866d0e22d0e161250e03996c5399149",
@@ -1600,16 +1600,8 @@ self.__precacheManifest = [
     "url": "metadata2/System.Threading.Tasks.Dataflow.dll.txt"
   },
   {
-    "revision": "4bb5619392849e454215a6dc61c5cc84",
-    "url": "metadata2/System.Threading.dll.txt"
-  },
-  {
     "revision": "52e96d2dc434c073648ec781932ea92d",
     "url": "metadata2/System.Windows.dll.txt"
-  },
-  {
-    "revision": "22e3012cd914f2ef9238ba362ceadeba",
-    "url": "metadata2/System.Transactions.Local.dll.txt"
   },
   {
     "revision": "3f0836e21f0807eda348e11bc013b40d",
@@ -1618,6 +1610,10 @@ self.__precacheManifest = [
   {
     "revision": "d4ddcf14cd21a96d549f26306efa8db9",
     "url": "metadata2/netstandard.dll.txt"
+  },
+  {
+    "revision": "22e3012cd914f2ef9238ba362ceadeba",
+    "url": "metadata2/System.Transactions.Local.dll.txt"
   },
   {
     "revision": "4ea516b2245c9a93eda50bf593d05d09",
@@ -1632,6 +1628,18 @@ self.__precacheManifest = [
     "url": "metadata2/System.Xml.XPath.dll.txt"
   },
   {
+    "revision": "b4f74ae3d31dfc8c36d7ad71f0eb6bda",
+    "url": "metadata2/WindowsBase.dll.txt"
+  },
+  {
+    "revision": "92ad2701bd49496e59cbd0f8c35f5de1",
+    "url": "metadata2/System.Xml.XPath.XDocument.dll.txt"
+  },
+  {
+    "revision": "fd0baadbbabae739fc8ece57194f544b",
+    "url": "samples/elmish/calculator.fs"
+  },
+  {
     "revision": "c28214861c2726a244d18b81c3a50bca",
     "url": "f9577813ed2c35c6946b.worker.js"
   },
@@ -1640,7 +1648,7 @@ self.__precacheManifest = [
     "url": "img/pacman/Powerup.wav"
   },
   {
-    "revision": "0f84df2051f21bdc0c081925d59a8f19",
+    "revision": "9238ec46d6ed0872f794125ff121b143",
     "url": "index.html"
   },
   {
@@ -1648,7 +1656,7 @@ self.__precacheManifest = [
     "url": "img/pacman/Powerup31.wav"
   },
   {
-    "url": "52.83f8a71aab9d535c512b.js"
+    "url": "52.8410a36ff99006e2e3f8.js"
   },
   {
     "revision": "9d3b39510816c69cb6fbdd2bc3939997",
@@ -1663,12 +1671,12 @@ self.__precacheManifest = [
     "url": "img/pacman/Dot2.wav"
   },
   {
-    "revision": "6eca66eb8db6733347b37ba223c0a6fb",
-    "url": "img/memory/violin.png"
-  },
-  {
     "revision": "85c8346e9481f3e2c8c54588de18035a",
     "url": "img/memory/turntable.png"
+  },
+  {
+    "revision": "6eca66eb8db6733347b37ba223c0a6fb",
+    "url": "img/memory/violin.png"
   },
   {
     "revision": "ce63ede29c360ffe598051c994234532",
@@ -1679,48 +1687,44 @@ self.__precacheManifest = [
     "url": "img/pacman/Hurt.wav"
   },
   {
-    "revision": "8ca252a0779e5a3c043166fe744b97eb",
-    "url": "img/pacman/Dot4.wav"
-  },
-  {
     "revision": "f09a5af0eeba48592de7c3dfcd03d791",
     "url": "img/pacman/Dot3.wav"
   },
   {
-    "revision": "b760f5db957fd44ce46758e8c92cbac3",
-    "url": "img/pacman/Dot.wav"
-  },
-  {
-    "revision": "c7b90256a217ecc32ae784c9583ecb82",
-    "url": "img/memory/saxophone.png"
-  },
-  {
-    "revision": "05558fcf3163e589444ee79b6d639c93",
-    "url": "img/memory/trumpet.png"
+    "revision": "8ca252a0779e5a3c043166fe744b97eb",
+    "url": "img/pacman/Dot4.wav"
   },
   {
     "revision": "808667dc8bb2e4c7da1694d6d0f12c27",
     "url": "img/memory/piano.png"
   },
   {
-    "revision": "39541ebfac86ca99c0be659af79f7c9b",
-    "url": "img/memory/bass-guitar.png"
+    "revision": "b760f5db957fd44ce46758e8c92cbac3",
+    "url": "img/pacman/Dot.wav"
   },
   {
-    "revision": "7d3ddce705334335a1d27938abe70c75",
-    "url": "img/memory/electric-guitar.png"
+    "revision": "05558fcf3163e589444ee79b6d639c93",
+    "url": "img/memory/trumpet.png"
+  },
+  {
+    "revision": "c7b90256a217ecc32ae784c9583ecb82",
+    "url": "img/memory/saxophone.png"
   },
   {
     "revision": "dd1b3644fb182c3ff86172d3e0d32521",
     "url": "img/memory/headphones.png"
   },
   {
-    "revision": "fc3e671eec7c5a0454c2420696d555fb",
-    "url": "img/mario/mariowalkright.gif"
+    "revision": "7d3ddce705334335a1d27938abe70c75",
+    "url": "img/memory/electric-guitar.png"
   },
   {
-    "revision": "11deae6ea36c0146fcb58427f19a2c15",
-    "url": "img/mario/mariostandright.gif"
+    "revision": "39541ebfac86ca99c0be659af79f7c9b",
+    "url": "img/memory/bass-guitar.png"
+  },
+  {
+    "revision": "fc3e671eec7c5a0454c2420696d555fb",
+    "url": "img/mario/mariowalkright.gif"
   },
   {
     "revision": "9c706cb487b5c5e79ecd85bd51d6cbef",
@@ -1729,6 +1733,10 @@ self.__precacheManifest = [
   {
     "revision": "8e84fe11ad728cc393a05393d4dd279c",
     "url": "img/mario/mariostandleft.gif"
+  },
+  {
+    "revision": "11deae6ea36c0146fcb58427f19a2c15",
+    "url": "img/mario/mariostandright.gif"
   },
   {
     "revision": "cf6fd2c1111181de94f846b39b4b9344",
@@ -1751,7 +1759,7 @@ self.__precacheManifest = [
     "url": "img/pacman/EatGhost.wav"
   },
   {
-    "url": "39.83f8a71aab9d535c512b.js"
+    "url": "39.8410a36ff99006e2e3f8.js"
   },
   {
     "url": "8027cf95961ca238debdd2352284e532.woff"
@@ -1766,7 +1774,7 @@ self.__precacheManifest = [
     "url": "e0fea666fb73e683da8982050f509f81.woff2"
   },
   {
-    "url": "app.83f8a71aab9d535c512b.js"
+    "url": "app.8410a36ff99006e2e3f8.js"
   },
   {
     "url": "af2692f72b79d5935fe511236e05dbc8.woff"
@@ -1797,11 +1805,11 @@ self.__precacheManifest = [
     "url": "af7ae505a9eed503f8b8e6982036873e.woff2"
   },
   {
-    "url": "9.83f8a71aab9d535c512b.js"
+    "url": "9.8410a36ff99006e2e3f8.js"
   },
   {
-    "revision": "9e7bc7cc3bc0bc9b4f5b62fe3784f666",
-    "url": "b9a092b5e6155d63f1aa.worker.js"
+    "revision": "f9d2aea3c7c09e37a5f667eef4078c64",
+    "url": "ecdcced760e60d931359.worker.js"
   },
   {
     "url": "ea734aec73e961c5814b1b403c9b90c6.ttf"
@@ -1819,20 +1827,20 @@ self.__precacheManifest = [
     "url": "css.worker.js"
   },
   {
-    "url": "29.83f8a71aab9d535c512b.js"
+    "url": "29.8410a36ff99006e2e3f8.js"
   },
   {
     "revision": "8ae5575b87f70400e220eae97ba8a0e6",
     "url": "5d8175d5f09fe66e4f44.worker.js"
   },
   {
-    "url": "6.83f8a71aab9d535c512b.js"
+    "url": "6.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "7.83f8a71aab9d535c512b.js"
+    "url": "7.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "8.83f8a71aab9d535c512b.js"
+    "url": "8.8410a36ff99006e2e3f8.js"
   },
   {
     "url": "7c8fa37007189c6e9a50125e5ca64cff.eot"
@@ -1841,136 +1849,136 @@ self.__precacheManifest = [
     "url": "674f50d287a8c48dc19ba404d20fe713.eot"
   },
   {
-    "url": "25.83f8a71aab9d535c512b.js"
+    "url": "25.8410a36ff99006e2e3f8.js"
   },
   {
     "url": "06b79b8f8677e6333512a61ec7caa63f.eot"
   },
   {
-    "url": "50.83f8a71aab9d535c512b.js"
+    "url": "50.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "49.83f8a71aab9d535c512b.js"
+    "url": "49.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "48.83f8a71aab9d535c512b.js"
+    "url": "48.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "47.83f8a71aab9d535c512b.js"
+    "url": "47.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "46.83f8a71aab9d535c512b.js"
+    "url": "46.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "45.83f8a71aab9d535c512b.js"
+    "url": "45.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "44.83f8a71aab9d535c512b.js"
+    "url": "44.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "43.83f8a71aab9d535c512b.js"
+    "url": "43.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "42.83f8a71aab9d535c512b.js"
+    "url": "42.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "41.83f8a71aab9d535c512b.js"
+    "url": "41.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "40.83f8a71aab9d535c512b.js"
+    "url": "40.8410a36ff99006e2e3f8.js"
   },
   {
     "url": "5c4876bef50a7df9d8ac48af75ecf11c.woff2"
   },
   {
-    "url": "38.83f8a71aab9d535c512b.js"
+    "url": "38.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "37.83f8a71aab9d535c512b.js"
+    "url": "37.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "36.83f8a71aab9d535c512b.js"
+    "url": "36.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "35.83f8a71aab9d535c512b.js"
+    "url": "35.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "34.83f8a71aab9d535c512b.js"
+    "url": "34.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "33.83f8a71aab9d535c512b.js"
+    "url": "33.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "32.83f8a71aab9d535c512b.js"
+    "url": "32.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "31.83f8a71aab9d535c512b.js"
+    "url": "31.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "30.83f8a71aab9d535c512b.js"
+    "url": "30.8410a36ff99006e2e3f8.js"
   },
   {
     "url": "1a77fe6d9f399212fcfcfde790ce66b2.ttf"
   },
   {
-    "url": "28.83f8a71aab9d535c512b.js"
+    "url": "28.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "27.83f8a71aab9d535c512b.js"
+    "url": "27.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "26.83f8a71aab9d535c512b.js"
+    "url": "26.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "51.83f8a71aab9d535c512b.js"
+    "url": "51.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "24.83f8a71aab9d535c512b.js"
+    "url": "24.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "23.83f8a71aab9d535c512b.js"
+    "url": "23.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "22.83f8a71aab9d535c512b.js"
+    "url": "22.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "21.83f8a71aab9d535c512b.js"
+    "url": "21.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "20.83f8a71aab9d535c512b.js"
+    "url": "20.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "19.83f8a71aab9d535c512b.js"
+    "url": "19.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "18.83f8a71aab9d535c512b.js"
+    "url": "18.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "17.83f8a71aab9d535c512b.js"
+    "url": "17.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "16.83f8a71aab9d535c512b.js"
+    "url": "16.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "15.83f8a71aab9d535c512b.js"
+    "url": "15.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "14.83f8a71aab9d535c512b.js"
+    "url": "14.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "13.83f8a71aab9d535c512b.js"
+    "url": "13.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "12.83f8a71aab9d535c512b.js"
+    "url": "12.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "11.83f8a71aab9d535c512b.js"
+    "url": "11.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "10.83f8a71aab9d535c512b.js"
+    "url": "10.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "53.83f8a71aab9d535c512b.js"
+    "url": "53.8410a36ff99006e2e3f8.js"
   },
   {
     "url": "4cfc570109e603356ee7586978c46852.eot"
@@ -1983,25 +1991,25 @@ self.__precacheManifest = [
     "url": "5c6aa3e267f5554fd7cf15557b7e44aa.eot"
   },
   {
-    "url": "5.83f8a71aab9d535c512b.js"
+    "url": "5.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "4.83f8a71aab9d535c512b.js"
+    "url": "4.8410a36ff99006e2e3f8.js"
   },
   {
     "url": "137778879005023b427be30df1f57d83.ttf"
   },
   {
-    "url": "3.83f8a71aab9d535c512b.js"
+    "url": "3.8410a36ff99006e2e3f8.js"
   },
   {
-    "url": "2.83f8a71aab9d535c512b.js"
+    "url": "2.8410a36ff99006e2e3f8.js"
   },
   {
     "revision": "fa5eb8ac91c0dd64b5e435a81d69ca1c",
     "url": "051515d4f52f73873424.worker.js"
   },
   {
-    "url": "0.83f8a71aab9d535c512b.js"
+    "url": "0.8410a36ff99006e2e3f8.js"
   }
 ];

@@ -1,4 +1,4 @@
-import { combineHashCodes, compare, compareArrays, equals, equalArrays, identityHash, structuralHash, numberHash, toString } from "./Util.js";
+import { combineHashCodes, compare, compareArrays, equals, equalArrays, identityHash, structuralHash, numberHash } from "./Util.js";
 function sameType(x, y) {
     return y != null && Object.getPrototypeOf(x).constructor === Object.getPrototypeOf(y).constructor;
 }
@@ -30,7 +30,7 @@ export function declare(cons, superClass) {
 export function SystemObject() {
 }
 SystemObject.prototype.toString = function () {
-    return "{" + Object.keys(this).map(k => k + " = " + toString(this[k])).join(";\n ") + "}";
+    return "{" + Object.keys(this).map(k => k + " = " + String(this[k])).join(";\n ") + "}";
 };
 SystemObject.prototype.GetHashCode = function () {
     return identityHash(this);
@@ -65,7 +65,7 @@ export function List(head, tail) {
     this.tail = tail;
 }
 List.prototype.toString = function () {
-    return "[" + Array.from(this).map(x => toString(x)).join("; ") + "]";
+    return "[" + Array.from(this).map(x => String(x)).join("; ") + "]";
 };
 List.prototype.toJSON = function () {
     return Array.from(this);
@@ -104,10 +104,10 @@ Union.prototype.toString = function () {
         return this.name;
     }
     else if (len === 1) {
-        return this.name + " " + toString(this.fields[0]);
+        return this.name + " " + String(this.fields[0]);
     }
     else {
-        return this.name + " (" + this.fields.map(x => toString(x)).join(",") + ")";
+        return this.name + " (" + this.fields.map(x => String(x)).join(",") + ")";
     }
 };
 Union.prototype.toJSON = function () {
@@ -186,7 +186,7 @@ function recordCompare(self, other, getFieldNames) {
 export function Record() {
 }
 Record.prototype.toString = function () {
-    return "{" + Object.keys(this).map(k => k + " = " + toString(this[k])).join(";\n ") + "}";
+    return "{" + Object.keys(this).map(k => k + " = " + String(this[k])).join(";\n ") + "}";
 };
 Record.prototype.toJSON = function () {
     return recordToJson(this);

@@ -1,5 +1,5 @@
 import { declare, Union } from "./Types.js";
-import { compare, equals, structuralHash, toString } from "./Util.js";
+import { compare, equals, structuralHash } from "./Util.js";
 // Options are erased in runtime by Fable, but we have
 // the `Some` type below to wrap values that would evaluate
 // to null in runtime. These two rules must be followed:
@@ -15,7 +15,7 @@ export class Some {
     }
     // Don't add "Some" for consistency with erased options
     toString() {
-        return toString(this.value);
+        return String(this.value);
     }
     toJSON() {
         return this.value;

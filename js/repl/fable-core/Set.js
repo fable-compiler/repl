@@ -1,7 +1,7 @@
 import { L, Record, declare, Union } from "./Types.js";
 import { value as value$$2, some, Choice } from "./Option.js";
 import { iterate as iterate$$1, empty as empty$$1, fold as fold$$1, toIterator, map as map$$1, reduce, getEnumerator, unfold } from "./Seq.js";
-import { structuralHash, toString, isDisposable } from "./Util.js";
+import { structuralHash, isDisposable } from "./Util.js";
 import { join } from "./String.js";
 export const SetTree$00601 = declare(function SetTree$00601(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
@@ -1548,7 +1548,7 @@ export function FSharpSet$$IsProperSupersetOf$$6A20B1FF(x$$20, y$$3) {
 
 FSharpSet.prototype.toString = function () {
   const this$ = this;
-  return "set [" + join("; ", ...map$$1(toString, this$)) + "]";
+  return "set [" + join("; ", ...map$$1(String, this$)) + "]";
 };
 
 FSharpSet.prototype.GetHashCode = function () {

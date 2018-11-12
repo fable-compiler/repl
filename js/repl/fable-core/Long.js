@@ -392,14 +392,6 @@ export function toNumber($this) {
 }
 ;
 /**
- * Converts the Long to a 32 bit integer.
- * @returns {number}
- */
-export function toIntNumber($this) {
-    return $this.low >>> 0;
-}
-;
-/**
  * Converts the Long to a string written in the specified radix.
  * @param {number=} radix Radix (2-36), defaults to 10
  * @returns {string}

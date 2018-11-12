@@ -1129,9 +1129,9 @@ FSharpMap.prototype.GetHashCode = function () {
   const e$$1 = MapTreeModule$$$mkIEnumerator(FSharpMap$$get_Tree(this$$$1));
 
   while (e$$1.MoveNext()) {
-    const activePatternResult2465 = e$$1.Current;
-    res$$3 = combineHash(res$$3, structuralHash(activePatternResult2465[0]));
-    res$$3 = combineHash(res$$3, structuralHash(activePatternResult2465[1]));
+    const activePatternResult3017 = e$$1.Current;
+    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3017[0]));
+    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3017[1]));
   }
 
   return Math.abs(res$$3) | 0;

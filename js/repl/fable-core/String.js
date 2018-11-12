@@ -1,7 +1,7 @@
 import { toString as dateToString } from "./Date.js";
+import Decimal from "./Decimal.js";
 import Long, { fromBytes as longFromBytes, toBytes as longToBytes, toString as longToString } from "./Long.js";
 import { escape } from "./RegExp.js";
-import { toString } from "./Util.js";
 const fsFormatRegExp = /(^|[^%])%([0+ ]*)(-?\d+)?(?:\.(\d+))?(\w)/;
 const formatRegExp = /\{(\d+)(,-?\d+)?(?:\:(.+?))?\}/g;
 // From https://stackoverflow.com/a/13653180/3922220
@@ -128,10 +128,8 @@ function formatOnce(str2, rep) {
                 rep = Number(rep).toExponential(precision);
                 break;
             case "O":
-                rep = toString(rep);
-                break;
             case "A":
-                rep = toString(rep, true);
+                rep = String(rep);
                 break;
             case "x":
                 rep = toHex(rep);
@@ -178,7 +176,7 @@ export function format(str, ...args) {
     return str.replace(formatRegExp, (match, idx, pad, pattern) => {
         let rep = args[idx];
         let padSymbol = " ";
-        if (typeof rep === "number" || rep instanceof Long) {
+        if (typeof rep === "number" || rep instanceof Long || rep instanceof Decimal) {
             switch ((pattern || "").substring(0, 1)) {
                 case "f":
                 case "F":

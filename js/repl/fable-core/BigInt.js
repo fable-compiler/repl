@@ -1,807 +1,145 @@
-// tslint:disable
-import { toString as toString_1 } from "./Util.js";
-import { factorial as bigNatFactorial, ofString, toFloat, toUInt64 as bigNattoUInt64, toUInt32 as bigNattoUInt32, pow as bigNatPow, two as bigNatTwo, rem, lte, hcf, bitOr, bitAnd, divmod, mul, isOne, sub, gte, scale as bigNatScale, one as bigNatOne, add, ofInt64, toString, hash as bigNatHash, gt, lt, isZero, equal, getSmall, isSmall, ofInt32 } from "./BigInt/BigNat.js";
-import { initialize } from "./Seq.js";
-import { fromBits, fromNumber, neg as neg_1, add as add_1, mul as mul_1 } from "./Long.js";
-import { trim } from "./String.js";
-export default class BigInteger {
-    constructor(signInt, v) {
-        this.signInt = signInt;
-        this.v = v;
-    }
-    get Sign() {
-        if (this.IsZero) {
-            return 0;
-        }
-        else {
-            return this.signInt;
-        }
-    }
-    get SignInt() {
-        return this.signInt;
-    }
-    get V() {
-        return this.v;
-    }
-    get IsZero() {
-        if (this.SignInt === 0) {
-            return true;
-        }
-        else {
-            return isZero(this.V);
-        }
-    }
-    get IsOne() {
-        if (this.SignInt === 1) {
-            return isOne(this.V);
-        }
-        else {
-            return false;
-        }
-    }
-    get StructuredDisplayString() {
-        return toString_1(this);
-    }
-    get IsSmall() {
-        if (this.IsZero) {
-            return true;
-        }
-        else {
-            return isSmall(this.V);
-        }
-    }
-    get IsNegative() {
-        if (this.SignInt === -1) {
-            return !this.IsZero;
-        }
-        else {
-            return false;
-        }
-    }
-    get IsPositive() {
-        if (this.SignInt === 1) {
-            return !this.IsZero;
-        }
-        else {
-            return false;
-        }
-    }
-    CompareTo(obj) {
-        if (obj instanceof BigInteger) {
-            const that = obj;
-            return compare(this, that);
-        }
-        else {
-            throw new Error("the objects are not comparable" + "\nParameter name: " + "obj");
-        }
-    }
-    toString() {
-        const matchValue = this.SignInt;
-        let $var19 = null;
-        switch (matchValue) {
-            case 1:
-                $var19 = toString(this.V);
-                break;
-            case -1:
-                if (isZero(this.V)) {
-                    $var19 = "0";
-                }
-                else {
-                    $var19 = "-" + toString(this.V);
-                }
-                break;
-            case 0:
-                $var19 = "0";
-                break;
-            default:
-                throw new Error("signs should be +/- 1 or 0");
-        }
-        return $var19;
-    }
-    Equals(obj) {
-        if (obj instanceof BigInteger) {
-            const that = obj;
-            return op_Equality(this, that);
-        }
-        else {
-            return false;
-        }
-    }
-    GetHashCode() {
-        return hash(this);
-    }
-    toJSON() {
-        return this.toString();
-    }
+import { BigInteger$$get_IsOne as BigInteger$0024$0024get_IsOne, BigInteger$$get_IsZero as BigInteger$0024$0024get_IsZero, BigInteger$$get_Sign as BigInteger$0024$0024get_Sign, BigInteger$$get_ToDecimal as BigInteger$0024$0024get_ToDecimal, BigInteger$$get_ToDouble as BigInteger$0024$0024get_ToDouble, BigInteger$$get_ToSingle as BigInteger$0024$0024get_ToSingle, BigInteger$$get_ToUInt64 as BigInteger$0024$0024get_ToUInt64, BigInteger$$get_ToInt64 as BigInteger$0024$0024get_ToInt64, BigInteger$$get_ToUInt32 as BigInteger$0024$0024get_ToUInt32, BigInteger$$get_ToInt32 as BigInteger$0024$0024get_ToInt32, BigInteger$$get_ToUInt16 as BigInteger$0024$0024get_ToUInt16, BigInteger$$get_ToInt16 as BigInteger$0024$0024get_ToInt16, BigInteger$$get_ToByte as BigInteger$0024$0024get_ToByte, BigInteger$$get_ToSByte as BigInteger$0024$0024get_ToSByte, BigInteger$$$$002Ector$$Z524259C1 as BigInteger$0024$0024$0024$0024002Ector$0024$0024Z524259C1, BigInteger$$$$002Ector$$Z524259A4 as BigInteger$0024$0024$0024$0024002Ector$0024$0024Z524259A4, BigInteger$$$get_Two as BigInteger$0024$0024$0024get_Two, BigInteger$$$Abs$$Z665282C2 as BigInteger$0024$0024$0024Abs$0024$0024Z665282C2, BigInteger$$$Pow$$62E082A2 as BigInteger$0024$0024$0024Pow$0024$002462E082A2, BigInteger$$$GreatestCommonDivisor$$56F059C0 as BigInteger$0024$0024$0024GreatestCommonDivisor$0024$002456F059C0, BigInteger$$$DivRem$$56F059C0 as BigInteger$0024$0024$0024DivRem$0024$002456F059C0, BigInteger$$$Parse$$Z721C83C5 as BigInteger$0024$0024$0024Parse$0024$0024Z721C83C5, BigInteger$$$op_Inequality$$56F059C0 as BigInteger$0024$0024$0024op_Inequality$0024$002456F059C0, BigInteger$$$op_Equality$$56F059C0 as BigInteger$0024$0024$0024op_Equality$0024$002456F059C0, BigInteger$$$op_GreaterThanOrEqual$$56F059C0 as BigInteger$0024$0024$0024op_GreaterThanOrEqual$0024$002456F059C0, BigInteger$$$op_GreaterThan$$56F059C0 as BigInteger$0024$0024$0024op_GreaterThan$0024$002456F059C0, BigInteger$$$op_LessThanOrEqual$$56F059C0 as BigInteger$0024$0024$0024op_LessThanOrEqual$0024$002456F059C0, BigInteger$$$op_LessThan$$56F059C0 as BigInteger$0024$0024$0024op_LessThan$0024$002456F059C0, BigInteger$$$op_BitwiseOr$$56F059C0 as BigInteger$0024$0024$0024op_BitwiseOr$0024$002456F059C0, BigInteger$$$op_BitwiseAnd$$56F059C0 as BigInteger$0024$0024$0024op_BitwiseAnd$0024$002456F059C0, BigInteger$$$op_LeftShift$$62E082A2 as BigInteger$0024$0024$0024op_LeftShift$0024$002462E082A2, BigInteger$$$op_RightShift$$62E082A2 as BigInteger$0024$0024$0024op_RightShift$0024$002462E082A2, BigInteger$$$op_UnaryPlus$$Z665282C2 as BigInteger$0024$0024$0024op_UnaryPlus$0024$0024Z665282C2, BigInteger$$$op_UnaryNegation$$Z665282C2 as BigInteger$0024$0024$0024op_UnaryNegation$0024$0024Z665282C2, BigInteger$$$op_Modulus$$56F059C0 as BigInteger$0024$0024$0024op_Modulus$0024$002456F059C0, BigInteger$$$op_Division$$56F059C0 as BigInteger$0024$0024$0024op_Division$0024$002456F059C0, BigInteger$$$op_Multiply$$56F059C0 as BigInteger$0024$0024$0024op_Multiply$0024$002456F059C0, BigInteger$$$op_Subtraction$$56F059C0 as BigInteger$0024$0024$0024op_Subtraction$0024$002456F059C0, BigInteger$$$op_Addition$$56F059C0 as BigInteger$0024$0024$0024op_Addition$0024$002456F059C0, BigInteger$$$get_One as BigInteger$0024$0024$0024get_One, BigInteger$$$get_Zero as BigInteger$0024$0024$0024get_Zero, BigInteger } from "./BigInt/z.js";
+import { equals as equals$$1, structuralHash } from "./Util.js";
+export function isBigInt(x) {
+  return x instanceof BigInteger;
 }
-const smallLim = 4096;
-const smallPosTab = Array.from(initialize(smallLim, n => ofInt32(n)));
-export const one = fromInt32(1);
-export const two = fromInt32(2);
-export const zero = fromInt32(0);
-export const equals = op_Equality;
-export const fromString = parse;
-export const get_Zero = fromZero;
-export const get_One = fromOne;
-export function fromZero() { return zero; }
-export function fromOne() { return one; }
-export function fromInt32(n) {
-    if (n >= 0) {
-        return new BigInteger(1, nat(ofInt32(n)));
-    }
-    else if (n === -2147483648) {
-        return new BigInteger(-1, nat(ofInt64(neg_1(fromNumber(n, false)))));
-    }
-    else {
-        return new BigInteger(-1, nat(ofInt32(-n)));
-    }
+export const get_Zero = BigInteger$0024$0024$0024get_Zero();
+export const get_One = BigInteger$0024$0024$0024get_One();
+export function op_Addition(arg00, arg01) {
+  return BigInteger$0024$0024$0024op_Addition$0024$002456F059C0(arg00, arg01);
 }
-export function fromInt64(n) {
-    if (n.CompareTo(fromBits(0, 0, false)) >= 0) {
-        return new BigInteger(1, nat(ofInt64(n)));
-    }
-    else if (n.Equals(fromBits(0, 2147483648, false))) {
-        return new BigInteger(-1, nat(add(ofInt64(fromBits(4294967295, 2147483647, false)), bigNatOne)));
-    }
-    else {
-        return new BigInteger(-1, nat(ofInt64(neg_1(n))));
-    }
+export function op_Subtraction(arg00$$1, arg01$$1) {
+  return BigInteger$0024$0024$0024op_Subtraction$0024$002456F059C0(arg00$$1, arg01$$1);
 }
-export function nat(n) {
-    if (isSmall(n) ? getSmall(n) < smallLim : false) {
-        return smallPosTab[getSmall(n)];
-    }
-    else {
-        return n;
-    }
+export function op_Multiply(arg00$$2, arg01$$2) {
+  return BigInteger$0024$0024$0024op_Multiply$0024$002456F059C0(arg00$$2, arg01$$2);
 }
-export function create(s, n) {
-    return new BigInteger(s, nat(n));
+export function op_Division(arg00$$3, arg01$$3) {
+  return BigInteger$0024$0024$0024op_Division$0024$002456F059C0(arg00$$3, arg01$$3);
 }
-export function posn(n) {
-    return new BigInteger(1, nat(n));
+export function op_Modulus(arg00$$4, arg01$$4) {
+  return BigInteger$0024$0024$0024op_Modulus$0024$002456F059C0(arg00$$4, arg01$$4);
 }
-export function negn(n) {
-    return new BigInteger(-1, nat(n));
+export function op_UnaryNegation(arg00$$5) {
+  return BigInteger$0024$0024$0024op_UnaryNegation$0024$0024Z665282C2(arg00$$5);
 }
-export function op_Equality(x, y) {
-    const matchValue = [x.SignInt, y.SignInt];
-    if (matchValue[0] === -1) {
-        if (matchValue[1] === -1) {
-            return equal(x.V, y.V);
-        }
-        else if (matchValue[1] === 0) {
-            return isZero(x.V);
-        }
-        else if (matchValue[1] === 1) {
-            if (isZero(x.V)) {
-                return isZero(y.V);
-            }
-            else {
-                return false;
-            }
-        }
-        else {
-            throw new Error("signs should be +/- 1 or 0" + "\nParameter name: " + "x");
-        }
-    }
-    else if (matchValue[0] === 0) {
-        if (matchValue[1] === -1) {
-            return isZero(y.V);
-        }
-        else if (matchValue[1] === 0) {
-            return true;
-        }
-        else if (matchValue[1] === 1) {
-            return isZero(y.V);
-        }
-        else {
-            throw new Error("signs should be +/- 1 or 0" + "\nParameter name: " + "x");
-        }
-    }
-    else if (matchValue[0] === 1) {
-        if (matchValue[1] === -1) {
-            if (isZero(x.V)) {
-                return isZero(y.V);
-            }
-            else {
-                return false;
-            }
-        }
-        else if (matchValue[1] === 0) {
-            return isZero(x.V);
-        }
-        else if (matchValue[1] === 1) {
-            return equal(x.V, y.V);
-        }
-        else {
-            throw new Error("signs should be +/- 1 or 0" + "\nParameter name: " + "x");
-        }
-    }
-    else {
-        throw new Error("signs should be +/- 1 or 0" + "\nParameter name: " + "x");
-    }
+export function op_UnaryPlus(arg00$$6) {
+  return BigInteger$0024$0024$0024op_UnaryPlus$0024$0024Z665282C2(arg00$$6);
 }
-export function op_Inequality(x, y) {
-    return !op_Equality(x, y);
+export function op_RightShift(arg00$$7, arg01$$5) {
+  return BigInteger$0024$0024$0024op_RightShift$0024$002462E082A2(arg00$$7, arg01$$5);
 }
-export function op_LessThan(x, y) {
-    const matchValue = [x.SignInt, y.SignInt];
-    if (matchValue[0] === -1) {
-        if (matchValue[1] === -1) {
-            return lt(y.V, x.V);
-        }
-        else if (matchValue[1] === 0) {
-            return !isZero(x.V);
-        }
-        else if (matchValue[1] === 1) {
-            if (!isZero(x.V)) {
-                return true;
-            }
-            else {
-                return !isZero(y.V);
-            }
-        }
-        else {
-            throw new Error("signs should be +/- 1 or 0" + "\nParameter name: " + "x");
-        }
-    }
-    else if (matchValue[0] === 0) {
-        if (matchValue[1] === -1) {
-            return false;
-        }
-        else if (matchValue[1] === 0) {
-            return false;
-        }
-        else if (matchValue[1] === 1) {
-            return !isZero(y.V);
-        }
-        else {
-            throw new Error("signs should be +/- 1 or 0" + "\nParameter name: " + "x");
-        }
-    }
-    else if (matchValue[0] === 1) {
-        if (matchValue[1] === -1) {
-            return false;
-        }
-        else if (matchValue[1] === 0) {
-            return false;
-        }
-        else if (matchValue[1] === 1) {
-            return lt(x.V, y.V);
-        }
-        else {
-            throw new Error("signs should be +/- 1 or 0" + "\nParameter name: " + "x");
-        }
-    }
-    else {
-        throw new Error("signs should be +/- 1 or 0" + "\nParameter name: " + "x");
-    }
+export function op_LeftShift(arg00$$8, arg01$$6) {
+  return BigInteger$0024$0024$0024op_LeftShift$0024$002462E082A2(arg00$$8, arg01$$6);
 }
-export function op_GreaterThan(x, y) {
-    const matchValue = [x.SignInt, y.SignInt];
-    if (matchValue[0] === -1) {
-        if (matchValue[1] === -1) {
-            return gt(y.V, x.V);
-        }
-        else if (matchValue[1] === 0) {
-            return false;
-        }
-        else if (matchValue[1] === 1) {
-            return false;
-        }
-        else {
-            throw new Error("signs should be +/- 1 or 0" + "\nParameter name: " + "x");
-        }
-    }
-    else if (matchValue[0] === 0) {
-        if (matchValue[1] === -1) {
-            return !isZero(y.V);
-        }
-        else if (matchValue[1] === 0) {
-            return false;
-        }
-        else if (matchValue[1] === 1) {
-            return false;
-        }
-        else {
-            throw new Error("signs should be +/- 1 or 0" + "\nParameter name: " + "x");
-        }
-    }
-    else if (matchValue[0] === 1) {
-        if (matchValue[1] === -1) {
-            if (!isZero(x.V)) {
-                return true;
-            }
-            else {
-                return !isZero(y.V);
-            }
-        }
-        else if (matchValue[1] === 0) {
-            return !isZero(x.V);
-        }
-        else if (matchValue[1] === 1) {
-            return gt(x.V, y.V);
-        }
-        else {
-            throw new Error("signs should be +/- 1 or 0" + "\nParameter name: " + "x");
-        }
-    }
-    else {
-        throw new Error("signs should be +/- 1 or 0" + "\nParameter name: " + "x");
-    }
+export function op_BitwiseAnd(arg00$$9, arg01$$7) {
+  return BigInteger$0024$0024$0024op_BitwiseAnd$0024$002456F059C0(arg00$$9, arg01$$7);
 }
-export function compare(n, nn) {
-    if (op_LessThan(n, nn)) {
-        return -1;
-    }
-    else if (op_Equality(n, nn)) {
-        return 0;
-    }
-    else {
-        return 1;
-    }
+export function op_BitwiseOr(arg00$$10, arg01$$8) {
+  return BigInteger$0024$0024$0024op_BitwiseOr$0024$002456F059C0(arg00$$10, arg01$$8);
 }
-export function hash(z) {
-    if (z.SignInt === 0) {
-        return 1;
-    }
-    else {
-        return z.SignInt + bigNatHash(z.V);
-    }
+export function op_LessThan(arg00$$11, arg01$$9) {
+  return BigInteger$0024$0024$0024op_LessThan$0024$002456F059C0(arg00$$11, arg01$$9);
 }
-export function op_UnaryNegation(z) {
-    const matchValue = z.SignInt;
-    if (matchValue === 0) {
-        return zero;
-    }
-    else {
-        return create(-matchValue, z.V);
-    }
+export function op_LessThanOrEqual(arg00$$12, arg01$$10) {
+  return BigInteger$0024$0024$0024op_LessThanOrEqual$0024$002456F059C0(arg00$$12, arg01$$10);
 }
-export function scale(k, z) {
-    if (z.SignInt === 0) {
-        return zero;
-    }
-    else if (k < 0) {
-        return create(-z.SignInt, bigNatScale(-k, z.V));
-    }
-    else {
-        return create(z.SignInt, bigNatScale(k, z.V));
-    }
+export function op_GreaterThan(arg00$$13, arg01$$11) {
+  return BigInteger$0024$0024$0024op_GreaterThan$0024$002456F059C0(arg00$$13, arg01$$11);
 }
-export function subnn(nx, ny) {
-    if (gte(nx, ny)) {
-        return posn(sub(nx, ny));
-    }
-    else {
-        return negn(sub(ny, nx));
-    }
+export function op_GreaterThanOrEqual(arg00$$14, arg01$$12) {
+  return BigInteger$0024$0024$0024op_GreaterThanOrEqual$0024$002456F059C0(arg00$$14, arg01$$12);
 }
-export function addnn(nx, ny) {
-    return posn(add(nx, ny));
+export function op_Equality(arg00$$15, arg01$$13) {
+  return BigInteger$0024$0024$0024op_Equality$0024$002456F059C0(arg00$$15, arg01$$13);
 }
-export function op_Addition(x, y) {
-    if (y.IsZero) {
-        return x;
-    }
-    else if (x.IsZero) {
-        return y;
-    }
-    else {
-        const matchValue = [x.SignInt, y.SignInt];
-        if (matchValue[0] === -1) {
-            if (matchValue[1] === -1) {
-                return op_UnaryNegation(addnn(x.V, y.V));
-            }
-            else if (matchValue[1] === 1) {
-                return subnn(y.V, x.V);
-            }
-            else {
-                throw new Error("signs should be +/- 1" + "\nParameter name: " + "x");
-            }
-        }
-        else if (matchValue[0] === 1) {
-            if (matchValue[1] === -1) {
-                return subnn(x.V, y.V);
-            }
-            else if (matchValue[1] === 1) {
-                return addnn(x.V, y.V);
-            }
-            else {
-                throw new Error("signs should be +/- 1" + "\nParameter name: " + "x");
-            }
-        }
-        else {
-            throw new Error("signs should be +/- 1" + "\nParameter name: " + "x");
-        }
-    }
+export function op_Inequality(arg00$$16, arg01$$14) {
+  return BigInteger$0024$0024$0024op_Inequality$0024$002456F059C0(arg00$$16, arg01$$14);
 }
-export function op_Subtraction(x, y) {
-    if (y.IsZero) {
-        return x;
-    }
-    else if (x.IsZero) {
-        return op_UnaryNegation(y);
-    }
-    else {
-        const matchValue = [x.SignInt, y.SignInt];
-        if (matchValue[0] === -1) {
-            if (matchValue[1] === -1) {
-                return subnn(y.V, x.V);
-            }
-            else if (matchValue[1] === 1) {
-                return op_UnaryNegation(addnn(x.V, y.V));
-            }
-            else {
-                throw new Error("signs should be +/- 1" + "\nParameter name: " + "x");
-            }
-        }
-        else if (matchValue[0] === 1) {
-            if (matchValue[1] === -1) {
-                return addnn(x.V, y.V);
-            }
-            else if (matchValue[1] === 1) {
-                return subnn(x.V, y.V);
-            }
-            else {
-                throw new Error("signs should be +/- 1" + "\nParameter name: " + "x");
-            }
-        }
-        else {
-            throw new Error("signs should be +/- 1" + "\nParameter name: " + "x");
-        }
-    }
+export function parse(arg00$$17) {
+  return BigInteger$0024$0024$0024Parse$0024$0024Z721C83C5(arg00$$17);
 }
-export function op_Multiply(x, y) {
-    if (x.IsZero) {
-        return x;
-    }
-    else if (y.IsZero) {
-        return y;
-    }
-    else if (x.IsOne) {
-        return y;
-    }
-    else if (y.IsOne) {
-        return x;
-    }
-    else {
-        const m = mul(x.V, y.V);
-        return create(x.SignInt * y.SignInt, m);
-    }
+export function divRem(arg00$$18, arg01$$15) {
+  return BigInteger$0024$0024$0024DivRem$0024$002456F059C0(arg00$$18, arg01$$15);
 }
-export function divRem(x, y) {
-    if (y.IsZero) {
-        throw new Error();
-    }
-    if (x.IsZero) {
-        return [zero, zero];
-    }
-    else {
-        const patternInput = divmod(x.V, y.V);
-        const matchValue = [x.SignInt, y.SignInt];
-        if (matchValue[0] === -1) {
-            if (matchValue[1] === -1) {
-                return [posn(patternInput[0]), negn(patternInput[1])];
-            }
-            else if (matchValue[1] === 1) {
-                return [negn(patternInput[0]), negn(patternInput[1])];
-            }
-            else {
-                throw new Error("signs should be +/- 1" + "\nParameter name: " + "x");
-            }
-        }
-        else if (matchValue[0] === 1) {
-            if (matchValue[1] === -1) {
-                return [negn(patternInput[0]), posn(patternInput[1])];
-            }
-            else if (matchValue[1] === 1) {
-                return [posn(patternInput[0]), posn(patternInput[1])];
-            }
-            else {
-                throw new Error("signs should be +/- 1" + "\nParameter name: " + "x");
-            }
-        }
-        else {
-            throw new Error("signs should be +/- 1" + "\nParameter name: " + "x");
-        }
-    }
+export function greatestCommonDivisor(arg00$$19, arg01$$16) {
+  return BigInteger$0024$0024$0024GreatestCommonDivisor$0024$002456F059C0(arg00$$19, arg01$$16);
 }
-export function op_Division(x, y) {
-    return divRem(x, y)[0];
+export function pow(arg00$$20, arg01$$17) {
+  return BigInteger$0024$0024$0024Pow$0024$002462E082A2(arg00$$20, arg01$$17);
 }
-export function op_Modulus(x, y) {
-    return divRem(x, y)[1];
+export function abs(arg00$$21) {
+  return BigInteger$0024$0024$0024Abs$0024$0024Z665282C2(arg00$$21);
 }
-export function op_RightShift(x, y) {
-    return op_Division(x, pow(two, y));
+export const zero = BigInteger$0024$0024$0024get_Zero();
+export const one = BigInteger$0024$0024$0024get_One();
+export const two = BigInteger$0024$0024$0024get_Two();
+export function fromZero() {
+  return BigInteger$0024$0024$0024get_Zero();
 }
-export function op_LeftShift(x, y) {
-    return op_Multiply(x, pow(two, y));
+export function fromOne() {
+  return BigInteger$0024$0024$0024get_One();
 }
-export function op_BitwiseAnd(x, y) {
-    return posn(bitAnd(x.V, y.V));
+export function fromInt32(i) {
+  return BigInteger$0024$0024$0024$0024002Ector$0024$0024Z524259A4(i);
 }
-export function op_BitwiseOr(x, y) {
-    return posn(bitOr(x.V, y.V));
+export function fromInt64(i$$1) {
+  return BigInteger$0024$0024$0024$0024002Ector$0024$0024Z524259C1(i$$1);
 }
-export function greatestCommonDivisor(x, y) {
-    const matchValue = [x.SignInt, y.SignInt];
-    if (matchValue[0] === 0) {
-        if (matchValue[1] === 0) {
-            return zero;
-        }
-        else {
-            return posn(y.V);
-        }
-    }
-    else if (matchValue[1] === 0) {
-        return posn(x.V);
-    }
-    else {
-        return posn(hcf(x.V, y.V));
-    }
+export function fromString(s) {
+  return BigInteger$0024$0024$0024Parse$0024$0024Z721C83C5(s);
 }
-export function abs(x) {
-    if (x.SignInt === -1) {
-        return op_UnaryNegation(x);
-    }
-    else {
-        return x;
-    }
+export function toSByte(x$$1) {
+  return BigInteger$0024$0024get_ToSByte(x$$1);
 }
-export function op_LessThanOrEqual(x, y) {
-    const matchValue = [x.SignInt, y.SignInt];
-    if (matchValue[0] === -1) {
-        if (matchValue[1] === -1) {
-            return lte(y.V, x.V);
-        }
-        else if (matchValue[1] === 0) {
-            return true;
-        }
-        else if (matchValue[1] === 1) {
-            return true;
-        }
-        else {
-            throw new Error("signs should be +/- 1 or 0" + "\nParameter name: " + "x");
-        }
-    }
-    else if (matchValue[0] === 0) {
-        if (matchValue[1] === -1) {
-            return isZero(y.V);
-        }
-        else if (matchValue[1] === 0) {
-            return true;
-        }
-        else if (matchValue[1] === 1) {
-            return true;
-        }
-        else {
-            throw new Error("signs should be +/- 1 or 0" + "\nParameter name: " + "x");
-        }
-    }
-    else if (matchValue[0] === 1) {
-        if (matchValue[1] === -1) {
-            if (isZero(x.V)) {
-                return isZero(y.V);
-            }
-            else {
-                return false;
-            }
-        }
-        else if (matchValue[1] === 0) {
-            return isZero(x.V);
-        }
-        else if (matchValue[1] === 1) {
-            return lte(x.V, y.V);
-        }
-        else {
-            throw new Error("signs should be +/- 1 or 0" + "\nParameter name: " + "x");
-        }
-    }
-    else {
-        throw new Error("signs should be +/- 1 or 0" + "\nParameter name: " + "x");
-    }
+export function toByte(x$$2) {
+  return BigInteger$0024$0024get_ToByte(x$$2);
 }
-export function op_GreaterThanOrEqual(x, y) {
-    const matchValue = [x.SignInt, y.SignInt];
-    if (matchValue[0] === -1) {
-        if (matchValue[1] === -1) {
-            return gte(y.V, x.V);
-        }
-        else if (matchValue[1] === 0) {
-            return isZero(x.V);
-        }
-        else if (matchValue[1] === 1) {
-            if (isZero(x.V)) {
-                return isZero(y.V);
-            }
-            else {
-                return false;
-            }
-        }
-        else {
-            throw new Error("signs should be +/- 1 or 0" + "\nParameter name: " + "x");
-        }
-    }
-    else if (matchValue[0] === 0) {
-        if (matchValue[1] === -1) {
-            return true;
-        }
-        else if (matchValue[1] === 0) {
-            return true;
-        }
-        else if (matchValue[1] === 1) {
-            return isZero(y.V);
-        }
-        else {
-            throw new Error("signs should be +/- 1 or 0" + "\nParameter name: " + "x");
-        }
-    }
-    else if (matchValue[0] === 1) {
-        if (matchValue[1] === -1) {
-            return true;
-        }
-        else if (matchValue[1] === 0) {
-            return true;
-        }
-        else if (matchValue[1] === 1) {
-            return gte(x.V, y.V);
-        }
-        else {
-            throw new Error("signs should be +/- 1 or 0" + "\nParameter name: " + "x");
-        }
-    }
-    else {
-        throw new Error("signs should be +/- 1 or 0" + "\nParameter name: " + "x");
-    }
+export function toInt16(x$$3) {
+  return BigInteger$0024$0024get_ToInt16(x$$3);
 }
-export function toSByte(x) {
-    return (toInt32(x) + 0x80 & 0xFF) - 0x80;
+export function toUInt16(x$$4) {
+  return BigInteger$0024$0024get_ToUInt16(x$$4);
 }
-export function toByte(x) {
-    return toUInt32(x) & 0xFF;
+export function toInt32(x$$5) {
+  return BigInteger$0024$0024get_ToInt32(x$$5);
 }
-export function toInt16(x) {
-    return (toInt32(x) + 0x8000 & 0xFFFF) - 0x8000;
+export function toUInt32(x$$6) {
+  return BigInteger$0024$0024get_ToUInt32(x$$6);
 }
-export function toUInt16(x) {
-    return toUInt32(x) & 0xFFFF;
+export function toInt64(x$$7) {
+  return BigInteger$0024$0024get_ToInt64(x$$7);
 }
-export function toInt32(x) {
-    if (x.IsZero) {
-        return 0;
-    }
-    else {
-        const u = bigNattoUInt32(x.V);
-        if (u <= 2147483647 >>> 0) {
-            return x.SignInt * ~~u;
-        }
-        else if (x.SignInt === -1 ? u === 2147483647 + 1 >>> 0 : false) {
-            return -2147483648;
-        }
-        else {
-            throw new Error();
-        }
-    }
+export function toUInt64(x$$8) {
+  return BigInteger$0024$0024get_ToUInt64(x$$8);
 }
-export function toUInt32(x) {
-    if (x.IsZero) {
-        return 0;
-    }
-    else {
-        return bigNattoUInt32(x.V);
-    }
+export function toSingle(x$$9) {
+  return BigInteger$0024$0024get_ToSingle(x$$9);
 }
-export function toInt64(x) {
-    if (x.IsZero) {
-        return fromBits(0, 0, false);
-    }
-    else {
-        const u = bigNattoUInt64(x.V);
-        if (u.CompareTo(fromBits(4294967295, 2147483647, false)) <= 0) {
-            return mul_1(fromNumber(x.SignInt, false), u);
-        }
-        else if (x.SignInt === -1 ? u.Equals(add_1(fromBits(4294967295, 2147483647, false), fromBits(1, 0, false))) : false) {
-            return fromBits(0, 2147483648, false);
-        }
-        else {
-            throw new Error();
-        }
-    }
+export function toDouble(x$$10) {
+  return BigInteger$0024$0024get_ToDouble(x$$10);
 }
-export function toUInt64(x) {
-    if (x.IsZero) {
-        return fromBits(0, 0, true);
-    }
-    else {
-        return bigNattoUInt64(x.V);
-    }
+export function toDecimal(x$$11) {
+  return BigInteger$0024$0024get_ToDecimal(x$$11);
 }
-export function toDouble(x) {
-    const matchValue = x.SignInt;
-    let $var20 = null;
-    switch (matchValue) {
-        case 1:
-            $var20 = toFloat(x.V);
-            break;
-        case -1:
-            $var20 = -toFloat(x.V);
-            break;
-        case 0:
-            $var20 = 0;
-            break;
-        default:
-            throw new Error("signs should be +/- 1 or 0" + "\nParameter name: " + "x");
-    }
-    return $var20;
+export function sign(x$$12) {
+  return BigInteger$0024$0024get_Sign(x$$12);
 }
-export function toSingle(x) {
-    return Math.fround(toDouble(x));
+export function isZero(x$$13) {
+  return BigInteger$0024$0024get_IsZero(x$$13);
 }
-export function toDecimal(x) {
-    return toDouble(x); //TODO: fix when decimal is implemented
+export function isOne(x$$14) {
+  return BigInteger$0024$0024get_IsOne(x$$14);
 }
-export function parse(text) {
-    if (text == null) {
-        throw new Error("text");
-    }
-    const text_1 = trim(text, "both");
-    const len = text_1.length;
-    if (len === 0) {
-        throw new Error();
-    }
-    const matchValue = [text_1[0], len];
-    if (matchValue[0] === "+") {
-        if (matchValue[1] === 1) {
-            throw new Error();
-        }
-        else {
-            return posn(ofString(text_1.slice(1, len - 1 + 1)));
-        }
-    }
-    else if (matchValue[0] === "-") {
-        if (matchValue[1] === 1) {
-            throw new Error();
-        }
-        else {
-            return negn(ofString(text_1.slice(1, len - 1 + 1)));
-        }
-    }
-    else {
-        return posn(ofString(text_1));
-    }
+export function hash(x$$15) {
+  return structuralHash(x$$15);
 }
-export function factorial(x) {
-    if (x.IsNegative) {
-        throw new Error("mustBeNonNegative" + "\nParameter name: " + "x");
-    }
-    if (x.IsPositive) {
-        return posn(bigNatFactorial(x.V));
-    }
-    else {
-        return one;
-    }
+export function compare(x$$16, y) {
+  return x$$16.CompareTo(y);
 }
-export function op_UnaryPlus(n1) {
-    return n1;
+export function equals(x$$17, y$$1) {
+  return equals$$1(x$$17, y$$1);
 }
-export function pow(x, y) {
-    if (y < 0) {
-        throw new Error("y");
-    }
-    const matchValue = [x.IsZero, y];
-    if (matchValue[0]) {
-        if (matchValue[1] === 0) {
-            return one;
-        }
-        else {
-            return zero;
-        }
-    }
-    else {
-        const yval = fromInt32(y);
-        return create(isZero(rem(yval.V, bigNatTwo)) ? 1 : x.SignInt, bigNatPow(x.V, yval.V));
-    }
+export function toString(x$$18) {
+  return String(x$$18);
 }
