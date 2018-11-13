@@ -1,10 +1,11 @@
 import { L, FSharpException, declare, Union } from "../../fable-core/Types.js";
-import { toFail, toText, printf, validateGuid, join } from "../../fable-core/String.js";
+import { toText, printf, validateGuid, join } from "../../fable-core/String.js";
 import { defaultArg, mapOk, some, Result } from "../../fable-core/Option.js";
 import { fromString as fromString$$1, toNumber, fromBits, tryParse, fromInteger } from "../../fable-core/Long.js";
 import { parse } from "../../fable-core/Int32.js";
 import { parse as parse$$1, fromInt32 } from "../../fable-core/BigInt.js";
-import { parse as parse$$2 } from "../../fable-core/Double.js";
+import { parse as parse$$2 } from "../../fable-core/Decimal.js";
+import Decimal from "../../fable-core/Decimal.js";
 import { tryParse as tryParse$$1 } from "../../fable-core/Date.js";
 import { tryParse as tryParse$$2 } from "../../fable-core/DateOffset.js";
 import { append, ofSeq, slice } from "../../fable-core/List.js";
@@ -335,7 +336,7 @@ export function float$(path$$15, value$$28) {
 }
 export function decimal(path$$16, value$$29) {
   if (typeof value$$29 === "number") {
-    return new Result(0, "Ok", value$$29);
+    return new Result(0, "Ok", new Decimal(value$$29));
   } else if (typeof value$$29 === "string") {
     try {
       return new Result(0, "Ok", parse$$2(value$$29, 10));
@@ -1174,6 +1175,16 @@ export function tuple8(decoder1$$6, decoder2$$6, decoder3$$5, decoder4$$4, decod
     };
   };
 }
+export const FieldType = declare(function FieldType(tag, name, ...fields) {
+  Union.call(this, tag, name, ...fields);
+}, Union);
+export function FieldType$$get_ToBool(this$) {
+  if (this$.tag === 1) {
+    return false;
+  } else {
+    return true;
+  }
+}
 
 function toMap(xs) {
   return ofSeq$$1(xs, {
@@ -1189,14 +1200,14 @@ function autoObject(decoderInfos, path$$120, value$$132) {
       if (acc.tag === 0) {
         const result$$1 = acc.fields[0];
 
-        if (tupledArg[0]) {
-          return mapOk(function mapping$$3(v$$14) {
-            return L(v$$14, result$$1);
-          }, optional(tupledArg[1], uncurry(2, tupledArg[2]), path$$120, value$$132));
-        } else {
+        if (tupledArg[0].tag === 1) {
           return mapOk(function mapping$$4(v$$15) {
             return L(v$$15, result$$1);
           }, field(tupledArg[1], uncurry(2, tupledArg[2]), path$$120, value$$132));
+        } else {
+          return mapOk(function mapping$$3(v$$14) {
+            return L(v$$14, result$$1);
+          }, optional(tupledArg[1], uncurry(2, tupledArg[2]), path$$120, value$$132));
         }
       } else {
         return acc;
@@ -1231,19 +1242,19 @@ function mixedArray(msg$$12, decoders$$2, path$$121, values) {
 function makeUnion(t$$2, isCamelCase, name$$1, path$$122, values$$1) {
   const matchValue$$23 = tryFind(function predicate(x$$6) {
     return name$$5(x$$6) === name$$1;
-  }, getUnionCases(t$$2));
+  }, getUnionCases(t$$2, 16 | 32));
 
   if (matchValue$$23 != null) {
     const uci = matchValue$$23;
 
     if (values$$1.length === 0) {
-      return new Result(0, "Ok", makeUnion$$1(uci, []));
+      return new Result(0, "Ok", makeUnion$$1(uci, [], 16 | 32));
     } else {
       const decoders$$3 = map$$1(function mapping$$6(fi) {
-        return autoDecoder(isCamelCase, fi[1]);
+        return autoDecoder(isCamelCase, false, fi[1]);
       }, getUnionCaseFields(uci), Array);
       return mapOk(function mapping$$7(values$$2) {
-        return makeUnion$$1(uci, ofList$$1(values$$2, Array));
+        return makeUnion$$1(uci, ofList$$1(values$$2, Array), 16 | 32);
       }, mixedArray("union fields", decoders$$3, path$$122, values$$1));
     }
   } else {
@@ -1251,8 +1262,8 @@ function makeUnion(t$$2, isCamelCase, name$$1, path$$122, values$$1) {
   }
 }
 
-function autoDecodeRecordsAndUnions(t$$3, isCamelCase$$1) {
-  if (isRecord(t$$3)) {
+function autoDecodeRecordsAndUnions(t$$3, isCamelCase$$1, isOptional) {
+  if (isRecord(t$$3, 16 | 32)) {
     return function (path$$123) {
       return function (value$$134) {
         const decoders$$4 = map$$1(function mapping$$8(fi$$1) {
@@ -1261,19 +1272,19 @@ function autoDecodeRecordsAndUnions(t$$3, isCamelCase$$1) {
 
           if (isGenericType(fi$$1[1])) {
             const fullname = fullName(getGenericTypeDefinition(fi$$1[1]));
-            patternInput = fullname === "Microsoft.FSharp.Core.FSharpOption`1[System.Object]" ? [true, getGenerics(fi$$1[1])[0]] : [false, fi$$1[1]];
+            patternInput = fullname === "Microsoft.FSharp.Core.FSharpOption`1[System.Object]" ? [new FieldType(0, "Optional"), getGenerics(fi$$1[1])[0]] : [new FieldType(1, "Required"), fi$$1[1]];
           } else {
-            patternInput = [false, fi$$1[1]];
+            patternInput = [new FieldType(1, "Required"), fi$$1[1]];
           }
 
-          return [patternInput[0], name$$2, autoDecoder(isCamelCase$$1, patternInput[1])];
-        }, getRecordElements(t$$3), Array);
+          return [patternInput[0], name$$2, autoDecoder(isCamelCase$$1, FieldType$$get_ToBool(patternInput[0]), patternInput[1])];
+        }, getRecordElements(t$$3, 16 | 32), Array);
         return mapOk(function mapping$$9(xs$$1) {
-          return makeRecord(t$$3, ofList$$1(xs$$1, Array));
+          return makeRecord(t$$3, ofList$$1(xs$$1, Array), 16 | 32);
         }, autoObject(decoders$$4, path$$123, value$$134));
       };
     };
-  } else if (isUnion(t$$3)) {
+  } else if (isUnion(t$$3, 32)) {
     return function (path$$124) {
       return function (value$$135) {
         if (typeof value$$135 === "string") {
@@ -1289,35 +1300,35 @@ function autoDecodeRecordsAndUnions(t$$3, isCamelCase$$1) {
       };
     };
   } else {
-    return function (arg20$$1) {
-      return function (arg30$$1) {
-        return toFail(printf("Class types cannot be automatically deserialized: %s"))(fullName(t$$3))(arg20$$1)(arg30$$1);
+    return function (path$$125) {
+      return function (_arg1$$3) {
+        return isOptional ? new Result(1, "Error", [path$$125, new ErrorReason(0, "BadPrimitive", "Generating an error message as the field is optional so the `option` decoders will return `None` instead of failing", null)]) : new Result(1, "Error", [path$$125, new ErrorReason(7, "FailMessage", toText(printf("Class types cannot be automatically deserialized: %s"))(fullName(t$$3)))]);
       };
     };
   }
 }
 
-function autoDecoder(isCamelCase$$2, t$$4) {
+function autoDecoder(isCamelCase$$2, isOptional$$1, t$$4) {
   if (isArray(t$$4)) {
     const decoder$$106 = function (t$$5) {
-      return autoDecoder(isCamelCase$$2, t$$5);
+      return autoDecoder(isCamelCase$$2, false, t$$5);
     }(getElementType(t$$4));
 
     return function (d) {
       return curry(2, d);
-    }(function (path$$125, value$$136) {
-      return array(uncurry(2, decoder$$106), path$$125, value$$136);
+    }(function (path$$126, value$$136) {
+      return array(uncurry(2, decoder$$106), path$$126, value$$136);
     });
   } else if (isGenericType(t$$4)) {
     if (isTuple(t$$4)) {
       const decoders$$5 = map$$1(function mapping$$10(t$$6) {
-        return autoDecoder(isCamelCase$$2, t$$6);
+        return autoDecoder(isCamelCase$$2, false, t$$6);
       }, getTupleElements(t$$4), Array);
-      return function (path$$126) {
+      return function (path$$127) {
         return function (value$$137) {
           return Array.isArray(value$$137) ? mapOk(function mapping$$11(xs$$2) {
             return makeTuple(ofList$$1(xs$$2, Array), t$$4);
-          }, mixedArray("tuple elements", decoders$$5, path$$126, value$$137)) : new Result(1, "Error", [path$$126, new ErrorReason(0, "BadPrimitive", "an array", value$$137)]);
+          }, mixedArray("tuple elements", decoders$$5, path$$127, value$$137)) : new Result(1, "Error", [path$$127, new ErrorReason(0, "BadPrimitive", "an array", value$$137)]);
         };
       };
     } else {
@@ -1326,31 +1337,31 @@ function autoDecoder(isCamelCase$$2, t$$4) {
       if (fullname$$1 === "Microsoft.FSharp.Core.FSharpOption`1[System.Object]") {
         return function (d$$2) {
           return curry(2, d$$2);
-        }(function (path$$127, value$$138) {
+        }(function (path$$128, value$$138) {
           return option(uncurry(2, function (t$$7) {
-            return autoDecoder(isCamelCase$$2, t$$7);
-          }(getGenerics(t$$4)[0])), path$$127, value$$138);
+            return autoDecoder(isCamelCase$$2, true, t$$7);
+          }(getGenerics(t$$4)[0])), path$$128, value$$138);
         });
       } else if (fullname$$1 === "Microsoft.FSharp.Collections.FSharpList`1[System.Object]") {
         return function (d$$4) {
           return curry(2, d$$4);
-        }(function (path$$128, value$$139) {
+        }(function (path$$129, value$$139) {
           return list(uncurry(2, function (t$$8) {
-            return autoDecoder(isCamelCase$$2, t$$8);
-          }(getGenerics(t$$4)[0])), path$$128, value$$139);
+            return autoDecoder(isCamelCase$$2, false, t$$8);
+          }(getGenerics(t$$4)[0])), path$$129, value$$139);
         });
       } else if (fullname$$1 === "Microsoft.FSharp.Collections.FSharpMap`2[System.Object,System.Object]") {
         const decoder1$$7 = function (t$$9) {
-          return autoDecoder(isCamelCase$$2, t$$9);
+          return autoDecoder(isCamelCase$$2, false, t$$9);
         }(getGenerics(t$$4)[0]);
 
         const decoder2$$7 = function (t$$10) {
-          return autoDecoder(isCamelCase$$2, t$$10);
+          return autoDecoder(isCamelCase$$2, false, t$$10);
         }(getGenerics(t$$4)[1]);
 
-        return function (path$$129) {
+        return function (path$$130) {
           return function (value$$140) {
-            const matchValue$$24 = array(uncurry(2, tuple2(uncurry(2, decoder1$$7), uncurry(2, decoder2$$7))), path$$129, value$$140);
+            const matchValue$$24 = array(uncurry(2, tuple2(uncurry(2, decoder1$$7), uncurry(2, decoder2$$7))), path$$130, value$$140);
 
             if (matchValue$$24.tag === 0) {
               const ar = matchValue$$24.fields[0];
@@ -1362,82 +1373,82 @@ function autoDecoder(isCamelCase$$2, t$$4) {
           };
         };
       } else {
-        return autoDecodeRecordsAndUnions(t$$4, isCamelCase$$2);
+        return autoDecodeRecordsAndUnions(t$$4, isCamelCase$$2, isOptional$$1);
       }
     }
   } else {
     const fullname$$2 = fullName(t$$4);
 
     if (fullname$$2 === "System.Boolean") {
-      return function d$$6(path$$130) {
+      return function d$$6(path$$131) {
         return function (value$$142) {
-          return bool(path$$130, value$$142);
+          return bool(path$$131, value$$142);
         };
       };
     } else if (fullname$$2 === "System.String") {
-      return function d$$7(path$$131) {
+      return function d$$7(path$$132) {
         return function (value$$143) {
-          return string(path$$131, value$$143);
+          return string(path$$132, value$$143);
         };
       };
     } else if (fullname$$2 === "System.Int32") {
-      return function d$$8(path$$132) {
+      return function d$$8(path$$133) {
         return function (value$$144) {
-          return int$(path$$132, value$$144);
+          return int$(path$$133, value$$144);
         };
       };
     } else if (fullname$$2 === "System.Double") {
-      return function d$$9(path$$133) {
+      return function d$$9(path$$134) {
         return function (value$$145) {
-          return float$(path$$133, value$$145);
+          return float$(path$$134, value$$145);
         };
       };
     } else if (fullname$$2 === "System.Decimal") {
-      return function d$$10(path$$134) {
+      return function d$$10(path$$135) {
         return function (value$$146) {
-          return decimal(path$$134, value$$146);
+          return decimal(path$$135, value$$146);
         };
       };
     } else if (fullname$$2 === "System.Int64") {
-      return function d$$11(path$$135) {
+      return function d$$11(path$$136) {
         return function (value$$147) {
-          return int64(path$$135, value$$147);
+          return int64(path$$136, value$$147);
         };
       };
     } else if (fullname$$2 === "System.UInt32") {
-      return function d$$12(path$$136) {
+      return function d$$12(path$$137) {
         return function (value$$148) {
-          return uint32(path$$136, value$$148);
+          return uint32(path$$137, value$$148);
         };
       };
     } else if (fullname$$2 === "System.UInt64") {
-      return function d$$13(path$$137) {
+      return function d$$13(path$$138) {
         return function (value$$149) {
-          return uint64(path$$137, value$$149);
+          return uint64(path$$138, value$$149);
         };
       };
     } else if (fullname$$2 === "System.Numerics.BigInteger") {
-      return function d$$14(path$$138) {
+      return function d$$14(path$$139) {
         return function (value$$150) {
-          return bigint(path$$138, value$$150);
+          return bigint(path$$139, value$$150);
         };
       };
     } else if (fullname$$2 === "System.DateTime") {
-      return function d$$15(path$$139) {
+      return function d$$15(path$$140) {
         return function (value$$151) {
-          return datetime(path$$139, value$$151);
+          return datetime(path$$140, value$$151);
         };
       };
     } else if (fullname$$2 === "System.DateTimeOffset") {
-      return function d$$16(path$$140) {
+      return function d$$16(path$$141) {
         return function (value$$152) {
-          return datetimeOffset(path$$140, value$$152);
+          return datetimeOffset(path$$141, value$$152);
         };
       };
     } else if (fullname$$2 === "System.Guid") {
-      return function d$$17(path$$141) {
+      return function d$$17(path$$142) {
         return function (value$$153) {
-          return guid(path$$141, value$$153);
+          return guid(path$$142, value$$153);
         };
       };
     } else if (fullname$$2 === "System.Object") {
@@ -1447,7 +1458,7 @@ function autoDecoder(isCamelCase$$2, t$$4) {
         };
       };
     } else {
-      return autoDecodeRecordsAndUnions(t$$4, isCamelCase$$2);
+      return autoDecodeRecordsAndUnions(t$$4, isCamelCase$$2, isOptional$$1);
     }
   }
 }
@@ -1458,7 +1469,7 @@ export function Auto$$$generateDecoder$$38AE3D3E(isCamelCase$$3, resolver) {
   return function (d$$18) {
     return curry(2, d$$18);
   }(uncurry(2, function (t$$11) {
-    return autoDecoder(isCamelCase$$4, t$$11);
+    return autoDecoder(isCamelCase$$4, false, t$$11);
   }(resolver.ResolveType())));
 }
 export function Auto$$$fromString$$Z4741753B(json$$1, isCamelCase$$5, resolver$$1) {

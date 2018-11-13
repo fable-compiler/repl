@@ -1,7 +1,7 @@
 import { L, Union, declare } from "../../fable-core/Types.js";
 import { int32ToString, createObj } from "../../fable-core/Util.js";
 import { Promise$$$result as Promise$0024$0024$0024result } from "./Promise.js";
-import { fromValue, unwrap } from "../Thoth.Json/Decode.js";
+import { fromString } from "../Thoth.Json/Decode.js";
 import { Result } from "../../fable-core/Option.js";
 import { Auto$$$toString$$Z17AB748 as Auto$0024$0024$0024toString$0024$0024Z17AB748 } from "../Thoth.Json/Encode.js";
 import { append } from "../../fable-core/List.js";
@@ -40,19 +40,27 @@ export function fetchAs(url$$2, decoder, init$$2) {
     if (!response$$2.ok) {
       throw new Error(errorString(response$$2));
     } else {
-      return response$$2.json().then(function a$$2(value) {
-        return unwrap("$", decoder, value);
+      return response$$2.text().then(function a$$2(res) {
+        const matchValue = fromString(decoder, res);
+
+        if (matchValue.tag === 1) {
+          const error = matchValue.fields[0];
+          throw new Error(error);
+        } else {
+          const successValue = matchValue.fields[0];
+          return successValue;
+        }
       });
     }
   });
 }
-export function tryFetchAs(url$$3, decoder$$2, init$$3) {
+export function tryFetchAs(url$$3, decoder$$1, init$$3) {
   return fetch(url$$3, createObj(init$$3, 1)).then(function a$$6(response$$3) {
     if (!response$$3.ok) {
       return Promise.resolve(new Result(1, "Error", errorString(response$$3)));
     } else {
-      return response$$3.json().then(function a$$5(value$$1) {
-        return fromValue("$", decoder$$2, value$$1);
+      return response$$3.text().then(function a$$5(value) {
+        return fromString(decoder$$1, value);
       });
     }
   });

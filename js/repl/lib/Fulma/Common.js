@@ -178,7 +178,7 @@ export function TextSize$$$only(screen$$1, size$$2) {
     case 1:
       {
         const x = screen$$1;
-        console.warn("Screen `%s` does not support `is-size-xxx-only`." + x.toString());
+        console.warn("Screen `%s` does not support `is-size-xxx-only`." + String(x));
         return "";
       }
   }
@@ -217,7 +217,7 @@ export function TextAlignment$$$only(screen$$3, alignment$$1) {
     case 1:
       {
         const x$$1 = screen$$3;
-        console.warn("Screen `%s` does not support `is-size-xxx-only`." + x$$1.toString());
+        console.warn("Screen `%s` does not support `is-size-xxx-only`." + String(x$$1));
         return "";
       }
   }
@@ -294,7 +294,7 @@ export function Display$$$toDisplayOnlyClass(screen$$6, display$$2) {
     case 1:
       {
         const x$$2 = screen$$6;
-        console.warn("Screen `%s` does not support display only." + x$$2.toString());
+        console.warn("Screen `%s` does not support display only." + String(x$$2));
         return "";
       }
   }
@@ -546,7 +546,7 @@ export function Modifier$$$ofInvisibleOnly(screen$$10) {
     case 1:
       {
         const x$$3 = screen$$10;
-        console.warn("Screen `%s` does not support `is-invisible-xxx-only`." + x$$3.toString());
+        console.warn("Screen `%s` does not support `is-invisible-xxx-only`." + String(x$$3));
         return "";
       }
   }
@@ -574,7 +574,7 @@ export function Modifier$$$ofHiddenOnly(screen$$11) {
     case 1:
       {
         const x$$4 = screen$$11;
-        console.warn("Screen `%s` does not support `is-hidden-xxx-only`." + x$$4.toString());
+        console.warn("Screen `%s` does not support `is-hidden-xxx-only`." + String(x$$4));
         return "";
       }
   }
@@ -622,11 +622,11 @@ export function Modifier$$$parseModifiers(options) {
     } else if (opt.tag === 3) {
       return new Modifier$002EOptions(result.BackgroundColor, result.TextColor, result.TextWeight, result.TextSize + " " + ("is-size-" + TextSize$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0])), result.TextSizeOnly, result.TextAlignment, result.TextAlignmentOnly, result.TextTransform, result.IsClearfix, result.IsPulledLeft, result.IsPulledRight, result.IsMarginless, result.IsPaddingless, result.IsOverlay, result.IsClipped, result.IsRadiusless, result.IsShadowless, result.IsUnselectable, result.IsInvisible, result.IsHidden, result.IsInvisibleOnly, result.IsHiddenOnly, result.Display, result.DisplayOnly);
     } else if (opt.tag === 4) {
-      return new Modifier$002EOptions(result.BackgroundColor, result.TextColor, result.TextWeight, result.TextSize + " " + (opt.fields[0].tag === 2 ? "is-size-" + TextSize$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : opt.fields[0].tag === 1 ? "is-size-" + TextSize$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : opt.fields[0].tag === 4 ? "is-size-" + TextSize$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : (x$$5 = opt.fields[0], (console.warn("Screen `%s` does not support `is-size-xxx-only`." + x$$5.toString()), ""))), result.TextSizeOnly, result.TextAlignment, result.TextAlignmentOnly, result.TextTransform, result.IsClearfix, result.IsPulledLeft, result.IsPulledRight, result.IsMarginless, result.IsPaddingless, result.IsOverlay, result.IsClipped, result.IsRadiusless, result.IsShadowless, result.IsUnselectable, result.IsInvisible, result.IsHidden, result.IsInvisibleOnly, result.IsHiddenOnly, result.Display, result.DisplayOnly);
+      return new Modifier$002EOptions(result.BackgroundColor, result.TextColor, result.TextWeight, result.TextSize + " " + (opt.fields[0].tag === 2 ? "is-size-" + TextSize$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : opt.fields[0].tag === 1 ? "is-size-" + TextSize$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : opt.fields[0].tag === 4 ? "is-size-" + TextSize$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : (x$$5 = opt.fields[0], (console.warn("Screen `%s` does not support `is-size-xxx-only`." + String(x$$5)), ""))), result.TextSizeOnly, result.TextAlignment, result.TextAlignmentOnly, result.TextTransform, result.IsClearfix, result.IsPulledLeft, result.IsPulledRight, result.IsMarginless, result.IsPaddingless, result.IsOverlay, result.IsClipped, result.IsRadiusless, result.IsShadowless, result.IsUnselectable, result.IsInvisible, result.IsHidden, result.IsInvisibleOnly, result.IsHiddenOnly, result.Display, result.DisplayOnly);
     } else if (opt.tag === 5) {
       return new Modifier$002EOptions(result.BackgroundColor, result.TextColor, result.TextWeight, result.TextSize, result.TextSizeOnly, result.TextAlignment + " " + (TextAlignment$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0])), result.TextAlignmentOnly, result.TextTransform, result.IsClearfix, result.IsPulledLeft, result.IsPulledRight, result.IsMarginless, result.IsPaddingless, result.IsOverlay, result.IsClipped, result.IsRadiusless, result.IsShadowless, result.IsUnselectable, result.IsInvisible, result.IsHidden, result.IsInvisibleOnly, result.IsHiddenOnly, result.Display, result.DisplayOnly);
     } else if (opt.tag === 6) {
-      return new Modifier$002EOptions(result.BackgroundColor, result.TextColor, result.TextWeight, result.TextSize, result.TextSizeOnly, result.TextAlignment + " " + (opt.fields[0].tag === 2 ? TextAlignment$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : opt.fields[0].tag === 1 ? TextAlignment$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : opt.fields[0].tag === 4 ? TextAlignment$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : (x$$6 = opt.fields[0], (console.warn("Screen `%s` does not support `is-size-xxx-only`." + x$$6.toString()), ""))), result.TextAlignmentOnly, result.TextTransform, result.IsClearfix, result.IsPulledLeft, result.IsPulledRight, result.IsMarginless, result.IsPaddingless, result.IsOverlay, result.IsClipped, result.IsRadiusless, result.IsShadowless, result.IsUnselectable, result.IsInvisible, result.IsHidden, result.IsInvisibleOnly, result.IsHiddenOnly, result.Display, result.DisplayOnly);
+      return new Modifier$002EOptions(result.BackgroundColor, result.TextColor, result.TextWeight, result.TextSize, result.TextSizeOnly, result.TextAlignment + " " + (opt.fields[0].tag === 2 ? TextAlignment$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : opt.fields[0].tag === 1 ? TextAlignment$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : opt.fields[0].tag === 4 ? TextAlignment$002EOption$$$get_toString()(opt.fields[1]) + Screen$$$get_toString()(opt.fields[0]) + "-only" : (x$$6 = opt.fields[0], (console.warn("Screen `%s` does not support `is-size-xxx-only`." + String(x$$6)), ""))), result.TextAlignmentOnly, result.TextTransform, result.IsClearfix, result.IsPulledLeft, result.IsPulledRight, result.IsMarginless, result.IsPaddingless, result.IsOverlay, result.IsClipped, result.IsRadiusless, result.IsShadowless, result.IsUnselectable, result.IsInvisible, result.IsHidden, result.IsInvisibleOnly, result.IsHiddenOnly, result.Display, result.DisplayOnly);
     } else if (opt.tag === 7) {
       return new Modifier$002EOptions(result.BackgroundColor, result.TextColor, result.TextWeight, result.TextSize, result.TextSizeOnly, result.TextAlignment, result.TextAlignmentOnly, result.TextTransform + " " + (opt.fields[0].tag === 1 ? "is-lowercase" : opt.fields[0].tag === 2 ? "is-uppercase" : opt.fields[0].tag === 3 ? "is-italic" : "is-capitalized"), result.IsClearfix, result.IsPulledLeft, result.IsPulledRight, result.IsMarginless, result.IsPaddingless, result.IsOverlay, result.IsClipped, result.IsRadiusless, result.IsShadowless, result.IsUnselectable, result.IsInvisible, result.IsHidden, result.IsInvisibleOnly, result.IsHiddenOnly, result.Display, result.DisplayOnly);
     } else if (opt.tag === 8) {

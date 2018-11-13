@@ -1018,7 +1018,7 @@ export function column(options, children) {
                                                                                           default:
                                                                                             {
                                                                                               const x = _arg1$$2;
-                                                                                              console.warn("Error when parsing column option " + x.toString());
+                                                                                              console.warn("Error when parsing column option " + String(x));
                                                                                               return result;
                                                                                             }
                                                                                         }

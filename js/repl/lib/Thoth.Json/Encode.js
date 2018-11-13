@@ -1,15 +1,16 @@
+import { toNumber } from "../../fable-core/Decimal.js";
 import { iterate } from "../../fable-core/Seq.js";
 import { toList } from "../../fable-core/Map.js";
 import { toString as toString$$1 } from "../../fable-core/Date.js";
-import { isIterable, uncurry, toString as toString$$2 } from "../../fable-core/Util.js";
-import { toString as toString$$3 } from "../../fable-core/Long.js";
+import { toString as toString$$2 } from "../../fable-core/Long.js";
+import { isIterable, uncurry } from "../../fable-core/Util.js";
 import { defaultArgWith, defaultArg } from "../../fable-core/Option.js";
 import { declare } from "../../fable-core/Types.js";
 export function string(value) {
   return value;
 }
 export function guid(value$$1) {
-  return value$$1.toString();
+  return String(value$$1);
 }
 export function int$(value$$2) {
   return value$$2;
@@ -18,7 +19,7 @@ export function float$(value$$3) {
   return value$$3;
 }
 export function decimal(value$$4) {
-  return value$$4;
+  return toNumber(value$$4);
 }
 export const nil = null;
 export function bool(value$$7) {
@@ -41,16 +42,16 @@ export function dict(values$$3) {
   return object(toList(values$$3));
 }
 export function bigint(value$$9) {
-  return value$$9.toString();
+  return String(value$$9);
 }
 export function datetimeOffset(value$$10) {
   return toString$$1(value$$10, "O", {});
 }
 export function int64(value$$13) {
-  return toString$$2(value$$13);
+  return String(value$$13);
 }
 export function uint64(value$$14) {
-  return toString$$3(value$$14);
+  return toString$$2(value$$14);
 }
 export function tuple2(enc1, enc2, v1, v2) {
   return [enc1(v1), enc2(v2)];
