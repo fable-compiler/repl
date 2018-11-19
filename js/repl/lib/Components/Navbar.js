@@ -1,6 +1,6 @@
-import { L, Record, declare, Union } from "../../fable-core/Types.js";
+import { List, Record, declare, Union } from "../../fable-core/Types.js";
 import { Color$$$ofColor as Color$0024$0024$0024ofColor, Common$$$genericParse as Common$0024$0024$0024genericParse, Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers } from "../Fulma/Common.js";
-import { fold } from "../../fable-core/List.js";
+import { ofArray, fold } from "../../fable-core/List.js";
 import { createObj } from "../../fable-core/Util.js";
 const createElement = React.createElement;
 export const Option = declare(function Option(tag, name, ...fields) {
@@ -16,7 +16,7 @@ export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, ar
   this.Modifiers = arg7;
 }, Record);
 export function Options$$$get_Empty() {
-  return new Options(false, null, false, null, null, L(), L());
+  return new Options(false, null, false, null, null, new List(), new List());
 }
 export const Menu$002EOption = declare(function Menu$002EOption(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
@@ -28,7 +28,7 @@ export const Menu$002EOptions = declare(function Menu$002EOptions(arg1, arg2, ar
   this.Modifiers = arg4;
 }, Record);
 export function Menu$002EOptions$$$get_Empty() {
-  return new Menu$002EOptions(false, null, L(), L());
+  return new Menu$002EOptions(false, null, new List(), new List());
 }
 export const Item$002EOption = declare(function Item$002EOption(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
@@ -44,7 +44,7 @@ export const Item$002EOptions = declare(function Item$002EOptions(arg1, arg2, ar
   this.Modifiers = arg8;
 }, Record);
 export function Item$002EOptions$$$get_Empty() {
-  return new Item$002EOptions(false, false, false, false, false, null, L(), L());
+  return new Item$002EOptions(false, false, false, false, false, null, new List(), new List());
 }
 export function Item$$$item(element, options, children) {
   const parseOptions = function parseOptions(result, opt) {
@@ -96,8 +96,8 @@ export function Item$$$item(element, options, children) {
   };
 
   const opts = fold(parseOptions, Item$002EOptions$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("navbar-item", L(opts.CustomClass, opts.Modifiers), L(["is-active", opts.IsActive], L(["is-tab", opts.IsTab], L(["is-hoverable", opts.IsHoverable], L(["has-dropdown", opts.HasDropdown], L(["is-expanded", opts.IsExpanded], L()))))));
-  return element(L(classes, opts.Props), children);
+  const classes = Common$0024002EHelpers$0024$0024$0024classes("navbar-item", new List(opts.CustomClass, opts.Modifiers), ofArray([["is-active", opts.IsActive], ["is-tab", opts.IsTab], ["is-hoverable", opts.IsHoverable], ["has-dropdown", opts.HasDropdown], ["is-expanded", opts.IsExpanded]]));
+  return element(new List(classes, opts.Props), children);
 }
 export function Item$$$div(x, y) {
   return Item$$$item(function (b, c) {
@@ -119,7 +119,7 @@ export const Link$002EOptions = declare(function Link$002EOptions(arg1, arg2, ar
   this.Modifiers = arg4;
 }, Record);
 export function Link$002EOptions$$$get_Empty() {
-  return new Link$002EOptions(false, null, L(), L());
+  return new Link$002EOptions(false, null, new List(), new List());
 }
 export function Link$$$link(element$$1, options$$2, children$$3) {
   const parseOptions$$1 = function parseOptions$$1(result$$1, opt$$1) {
@@ -151,8 +151,8 @@ export function Link$$$link(element$$1, options$$2, children$$3) {
   };
 
   const opts$$1 = fold(parseOptions$$1, Link$002EOptions$$$get_Empty(), options$$2);
-  const classes$$1 = Common$0024002EHelpers$0024$0024$0024classes("navbar-link", L(opts$$1.CustomClass, opts$$1.Modifiers), L(["is-active", opts$$1.IsActive], L()));
-  return element$$1(L(classes$$1, opts$$1.Props), children$$3);
+  const classes$$1 = Common$0024002EHelpers$0024$0024$0024classes("navbar-link", new List(opts$$1.CustomClass, opts$$1.Modifiers), new List(["is-active", opts$$1.IsActive], new List()));
+  return element$$1(new List(classes$$1, opts$$1.Props), children$$3);
 }
 export function Link$$$div(x$$2, y$$2) {
   return Link$$$link(function (b$$4, c$$4) {
@@ -176,7 +176,7 @@ export const Dropdown$002EOptions = declare(function Dropdown$002EOptions(arg1, 
   this.Modifiers = arg6;
 }, Record);
 export function Dropdown$002EOptions$$$get_Empty() {
-  return new Dropdown$002EOptions(false, false, false, L(), null, L());
+  return new Dropdown$002EOptions(false, false, false, new List(), null, new List());
 }
 export function Dropdown$$$dropdown(element$$2, options$$4, children$$6) {
   const parseOptions$$2 = function parseOptions$$2(result$$2, opt$$2) {
@@ -218,8 +218,8 @@ export function Dropdown$$$dropdown(element$$2, options$$4, children$$6) {
   };
 
   const opts$$2 = fold(parseOptions$$2, Dropdown$002EOptions$$$get_Empty(), options$$4);
-  const classes$$2 = Common$0024002EHelpers$0024$0024$0024classes("navbar-dropdown", L(opts$$2.CustomClass, opts$$2.Modifiers), L(["is-boxed", opts$$2.IsBoxed], L(["is-right", opts$$2.IsRight], L(["is-active", opts$$2.IsActive], L()))));
-  return element$$2(L(classes$$2, opts$$2.Props), children$$6);
+  const classes$$2 = Common$0024002EHelpers$0024$0024$0024classes("navbar-dropdown", new List(opts$$2.CustomClass, opts$$2.Modifiers), ofArray([["is-boxed", opts$$2.IsBoxed], ["is-right", opts$$2.IsRight], ["is-active", opts$$2.IsActive]]));
+  return element$$2(new List(classes$$2, opts$$2.Props), children$$6);
 }
 export function Dropdown$$$div(x$$4, y$$4) {
   return Dropdown$$$dropdown(function (b$$8, c$$8) {
@@ -233,8 +233,8 @@ export function Dropdown$$$a(x$$5, y$$5) {
 }
 export function Brand$$$brand(element$$3, options$$6, children$$9) {
   const opts$$3 = Common$0024$0024$0024genericParse(options$$6);
-  const classes$$3 = Common$0024002EHelpers$0024$0024$0024classes("navbar-brand", L(opts$$3.CustomClass, opts$$3.Modifiers), L());
-  return element$$3(L(classes$$3, opts$$3.Props), children$$9);
+  const classes$$3 = Common$0024002EHelpers$0024$0024$0024classes("navbar-brand", new List(opts$$3.CustomClass, opts$$3.Modifiers), new List());
+  return element$$3(new List(classes$$3, opts$$3.Props), children$$9);
 }
 export function Brand$$$div(x$$6, y$$6) {
   return Brand$$$brand(function (b$$12, c$$12) {
@@ -248,8 +248,8 @@ export function Brand$$$a(x$$7, y$$7) {
 }
 export function Start$$$start(element$$4, options$$7, children$$12) {
   const opts$$4 = Common$0024$0024$0024genericParse(options$$7);
-  const classes$$4 = Common$0024002EHelpers$0024$0024$0024classes("navbar-start", L(opts$$4.CustomClass, opts$$4.Modifiers), L());
-  return element$$4(L(classes$$4, opts$$4.Props), children$$12);
+  const classes$$4 = Common$0024002EHelpers$0024$0024$0024classes("navbar-start", new List(opts$$4.CustomClass, opts$$4.Modifiers), new List());
+  return element$$4(new List(classes$$4, opts$$4.Props), children$$12);
 }
 export function Start$$$div(x$$8, y$$8) {
   return Start$$$start(function (b$$16, c$$16) {
@@ -263,8 +263,8 @@ export function Start$$$a(x$$9, y$$9) {
 }
 export function End$$$end(element$$5, options$$8, children$$15) {
   const opts$$5 = Common$0024$0024$0024genericParse(options$$8);
-  const classes$$5 = Common$0024002EHelpers$0024$0024$0024classes("navbar-end", L(opts$$5.CustomClass, opts$$5.Modifiers), L());
-  return element$$5(L(classes$$5, opts$$5.Props), children$$15);
+  const classes$$5 = Common$0024002EHelpers$0024$0024$0024classes("navbar-end", new List(opts$$5.CustomClass, opts$$5.Modifiers), new List());
+  return element$$5(new List(classes$$5, opts$$5.Props), children$$15);
 }
 export function End$$$div(x$$10, y$$10) {
   return End$$$end(function (b$$20, c$$20) {
@@ -326,8 +326,8 @@ export function navbar(options$$9, children$$18) {
   };
 
   const opts$$6 = fold(parseOptions$$3, Options$$$get_Empty(), options$$9);
-  const classes$$6 = Common$0024002EHelpers$0024$0024$0024classes("navbar", L(opts$$6.CustomClass, L(opts$$6.Color, L(opts$$6.FixedInfo, opts$$6.Modifiers))), L(["has-shadow", opts$$6.HasShadow], L(["is-transparent", opts$$6.IsTransparent], L())));
-  return createElement("nav", createObj(L(classes$$6, opts$$6.Props), 1), ...children$$18);
+  const classes$$6 = Common$0024002EHelpers$0024$0024$0024classes("navbar", new List(opts$$6.CustomClass, new List(opts$$6.Color, new List(opts$$6.FixedInfo, opts$$6.Modifiers))), ofArray([["has-shadow", opts$$6.HasShadow], ["is-transparent", opts$$6.IsTransparent]]));
+  return createElement("nav", createObj(new List(classes$$6, opts$$6.Props), 1), ...children$$18);
 }
 export function menu(options$$11, children$$20) {
   const parseOptions$$4 = function parseOptions$$4(result$$4, opt$$4) {
@@ -359,21 +359,21 @@ export function menu(options$$11, children$$20) {
   };
 
   const opts$$7 = fold(parseOptions$$4, Menu$002EOptions$$$get_Empty(), options$$11);
-  const classes$$7 = Common$0024002EHelpers$0024$0024$0024classes("navbar-menu", L(opts$$7.CustomClass, opts$$7.Modifiers), L(["is-active", opts$$7.IsActive], L()));
-  return createElement("div", createObj(L(classes$$7, opts$$7.Props), 1), ...children$$20);
+  const classes$$7 = Common$0024002EHelpers$0024$0024$0024classes("navbar-menu", new List(opts$$7.CustomClass, opts$$7.Modifiers), new List(["is-active", opts$$7.IsActive], new List()));
+  return createElement("div", createObj(new List(classes$$7, opts$$7.Props), 1), ...children$$20);
 }
 export function burger(options$$13, children$$22) {
   const opts$$8 = Common$0024$0024$0024genericParse(options$$13);
-  const classes$$8 = Common$0024002EHelpers$0024$0024$0024classes("navbar-burger", L(opts$$8.CustomClass, opts$$8.Modifiers), L());
-  return createElement("div", createObj(L(classes$$8, opts$$8.Props), 1), ...children$$22);
+  const classes$$8 = Common$0024002EHelpers$0024$0024$0024classes("navbar-burger", new List(opts$$8.CustomClass, opts$$8.Modifiers), new List());
+  return createElement("div", createObj(new List(classes$$8, opts$$8.Props), 1), ...children$$22);
 }
 export function content(options$$14, children$$24) {
   const opts$$9 = Common$0024$0024$0024genericParse(options$$14);
-  const classes$$9 = Common$0024002EHelpers$0024$0024$0024classes("navbar-content", L(opts$$9.CustomClass, opts$$9.Modifiers), L());
-  return createElement("div", createObj(L(classes$$9, opts$$9.Props), 1), ...children$$24);
+  const classes$$9 = Common$0024002EHelpers$0024$0024$0024classes("navbar-content", new List(opts$$9.CustomClass, opts$$9.Modifiers), new List());
+  return createElement("div", createObj(new List(classes$$9, opts$$9.Props), 1), ...children$$24);
 }
 export function divider(options$$15, children$$26) {
   const opts$$10 = Common$0024$0024$0024genericParse(options$$15);
-  const classes$$10 = Common$0024002EHelpers$0024$0024$0024classes("navbar-divider", L(opts$$10.CustomClass, opts$$10.Modifiers), L());
-  return createElement("div", createObj(L(classes$$10, opts$$10.Props), 1), ...children$$26);
+  const classes$$10 = Common$0024002EHelpers$0024$0024$0024classes("navbar-divider", new List(opts$$10.CustomClass, opts$$10.Modifiers), new List());
+  return createElement("div", createObj(new List(classes$$10, opts$$10.Props), 1), ...children$$26);
 }

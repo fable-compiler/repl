@@ -1,6 +1,6 @@
-import { L, Record, declare, Union } from "../../fable-core/Types.js";
+import { List as List$$1, Record, declare, Union } from "../../fable-core/Types.js";
 import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Size$$$ofSize as Size$0024$0024$0024ofSize, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Color$$$ofColor as Color$0024$0024$0024ofColor } from "../Fulma/Common.js";
-import { fold } from "../../fable-core/List.js";
+import { ofArray, fold } from "../../fable-core/List.js";
 import { createObj } from "../../fable-core/Util.js";
 const createElement = React.createElement;
 export const Option = declare(function Option(tag, name, ...fields) {
@@ -15,7 +15,7 @@ export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, ar
   this.Modifiers = arg6;
 }, Record);
 export function Options$$$get_Empty() {
-  return new Options(null, null, false, L(), null, L());
+  return new Options(null, null, false, new List$$1(), null, new List$$1());
 }
 export function tag(options, children) {
   const parseOption = function parseOption(result, opt) {
@@ -38,11 +38,11 @@ export function tag(options, children) {
   };
 
   const opts = fold(parseOption, Options$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("tag", L(opts.Size, L(opts.Color, L(opts.CustomClass, opts.Modifiers))), L(["is-delete", opts.IsDelete], L()));
-  return createElement("span", createObj(L(classes, opts.Props), 1), ...children);
+  const classes = Common$0024002EHelpers$0024$0024$0024classes("tag", new List$$1(opts.Size, new List$$1(opts.Color, new List$$1(opts.CustomClass, opts.Modifiers))), new List$$1(["is-delete", opts.IsDelete], new List$$1()));
+  return createElement("span", createObj(new List$$1(classes, opts.Props), 1), ...children);
 }
 export function delete$(options$$2, children$$2) {
-  return tag(L(new Option(2, "IsDelete"), options$$2), children$$2);
+  return tag(new List$$1(new Option(2, "IsDelete"), options$$2), children$$2);
 }
 export const List$002EOption = declare(function List$002EOption(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
@@ -56,7 +56,7 @@ export const List$002EOptions = declare(function List$002EOptions(arg1, arg2, ar
   this.Modifiers = arg6;
 }, Record);
 export function List$002EOptions$$$get_Empty() {
-  return new List$002EOptions(false, false, false, L(), null, L());
+  return new List$002EOptions(false, false, false, new List$$1(), null, new List$$1());
 }
 export function list(options$$3, children$$3) {
   const parseOption$$1 = function parseOption$$1(result$$1, opt$$1) {
@@ -97,6 +97,6 @@ export function list(options$$3, children$$3) {
   };
 
   const opts$$1 = fold(parseOption$$1, List$002EOptions$$$get_Empty(), options$$3);
-  const classes$$1 = Common$0024002EHelpers$0024$0024$0024classes("tags", L(opts$$1.CustomClass, opts$$1.Modifiers), L(["has-addons", opts$$1.HasAddons], L(["is-centered", opts$$1.IsCentered], L(["is-right", opts$$1.IsRight], L()))));
-  return createElement("div", createObj(L(classes$$1, opts$$1.Props), 1), ...children$$3);
+  const classes$$1 = Common$0024002EHelpers$0024$0024$0024classes("tags", new List$$1(opts$$1.CustomClass, opts$$1.Modifiers), ofArray([["has-addons", opts$$1.HasAddons], ["is-centered", opts$$1.IsCentered], ["is-right", opts$$1.IsRight]]));
+  return createElement("div", createObj(new List$$1(classes$$1, opts$$1.Props), 1), ...children$$3);
 }

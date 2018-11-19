@@ -1,5 +1,5 @@
-import { L, Record, declare, Union } from "../../fable-core/Types.js";
-import { fold } from "../../fable-core/List.js";
+import { List, Record, declare, Union } from "../../fable-core/Types.js";
+import { ofArray, fold } from "../../fable-core/List.js";
 import { Common$$$genericParse as Common$0024$0024$0024genericParse, Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes } from "../Fulma/Common.js";
 import { createObj } from "../../fable-core/Util.js";
 import { icon } from "../Elements/Icon.js";
@@ -211,7 +211,7 @@ export function Icon$$$stackChild(faOptions) {
   };
 
   const opts = fold(parseOptions, Fa$002ETypes$002EStackChildOptions$$$get_Empty(), faOptions);
-  return createElement("i", createObj([Common$0024002EHelpers$0024$0024$0024classes("fa", L(opts.Icon, L(opts.Size, L(opts.Color, L()))), L())], 1), ...[]);
+  return createElement("i", createObj([Common$0024002EHelpers$0024$0024$0024classes("fa", ofArray([opts.Icon, opts.Size, opts.Color]), new List())], 1), ...[]);
 }
 export function Icon$$$stackParent(faOptions$$1, children$$1) {
   const parseOptions$$1 = function parseOptions$$1(result$$1, option$$1) {
@@ -220,7 +220,7 @@ export function Icon$$$stackParent(faOptions$$1, children$$1) {
   };
 
   const opts$$1 = fold(parseOptions$$1, Fa$002ETypes$002EStackParentOptions$$$get_Empty(), faOptions$$1);
-  return createElement("span", createObj([Common$0024002EHelpers$0024$0024$0024classes("fa-stack", L(opts$$1.Size, L()), L())], 1), ...children$$1);
+  return createElement("span", createObj([Common$0024002EHelpers$0024$0024$0024classes("fa-stack", new List(opts$$1.Size, new List()), new List())], 1), ...children$$1);
 }
 export function Icon$$$toIconOptions(faOptions$$2) {
   const parseOptions$$2 = function parseOptions$$2(result$$2, option$$2) {
@@ -283,7 +283,7 @@ export function Icon$$$toIconOptions(faOptions$$2) {
   return fold(parseOptions$$2, Fa$002ETypes$002EIconOptions$$$get_Empty(), faOptions$$2);
 }
 export function Icon$$$displayIcon(baseClass, opts$$2) {
-  return createElement("i", createObj([Common$0024002EHelpers$0024$0024$0024classes(baseClass, L(opts$$2.Icon, L(opts$$2.Size, L(opts$$2.Border, L(opts$$2.Pull, L(opts$$2.Animation, L(opts$$2.Rotation, L(opts$$2.Flip, L(opts$$2.Color, L())))))))), L())], 1), ...[]);
+  return createElement("i", createObj([Common$0024002EHelpers$0024$0024$0024classes(baseClass, ofArray([opts$$2.Icon, opts$$2.Size, opts$$2.Border, opts$$2.Pull, opts$$2.Animation, opts$$2.Rotation, opts$$2.Flip, opts$$2.Color]), new List())], 1), ...[]);
 }
 export function Icon$$$faIcon(options, faOptions$$3) {
   const opts$$3 = Icon$$$toIconOptions(faOptions$$3);
@@ -291,6 +291,6 @@ export function Icon$$$faIcon(options, faOptions$$3) {
 }
 export function Icon$$$fa_ul(options$$1, children$$4) {
   const opts$$4 = Common$0024$0024$0024genericParse(options$$1);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("fa-ul", L(opts$$4.CustomClass, L()), L());
-  return createElement("ul", createObj(L(classes, opts$$4.Props), 1), ...children$$4);
+  const classes = Common$0024002EHelpers$0024$0024$0024classes("fa-ul", new List(opts$$4.CustomClass, new List()), new List());
+  return createElement("ul", createObj(new List(classes, opts$$4.Props), 1), ...children$$4);
 }

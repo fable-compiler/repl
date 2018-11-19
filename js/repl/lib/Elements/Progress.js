@@ -1,4 +1,4 @@
-import { L, Record, declare, Union } from "../../fable-core/Types.js";
+import { List, Record, declare, Union } from "../../fable-core/Types.js";
 import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Size$$$ofSize as Size$0024$0024$0024ofSize, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Color$$$ofColor as Color$0024$0024$0024ofColor } from "../Fulma/Common.js";
 import { ofSeq, fold } from "../../fable-core/List.js";
 import { append, delay, empty, singleton } from "../../fable-core/Seq.js";
@@ -18,7 +18,7 @@ export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, ar
   this.Modifiers = arg7;
 }, Record);
 export function Options$$$get_Empty() {
-  return new Options(null, null, L(), null, null, null, L());
+  return new Options(null, null, new List(), null, null, null, new List());
 }
 export function progress(options, children) {
   const parseOptions = function parseOptions(result, _arg1) {
@@ -68,7 +68,7 @@ export function progress(options, children) {
   };
 
   const opts = fold(parseOptions, Options$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("progress", L(opts.Size, L(opts.Color, L(opts.CustomClass, opts.Modifiers))), L());
+  const classes = Common$0024002EHelpers$0024$0024$0024classes("progress", new List(opts.Size, new List(opts.Color, new List(opts.CustomClass, opts.Modifiers))), new List());
   return createElement("progress", createObj(ofSeq(delay(function () {
     return append(singleton(classes), delay(function () {
       return append(opts.Props, delay(function () {

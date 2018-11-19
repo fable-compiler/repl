@@ -1,5 +1,5 @@
-import { L, Record, declare, Union } from "../../fable-core/Types.js";
-import { fold } from "../../fable-core/List.js";
+import { List, Record, declare, Union } from "../../fable-core/Types.js";
+import { ofArray, fold } from "../../fable-core/List.js";
 import { Props$002EHTMLAttr as Props$0024002EHTMLAttr } from "../Fable.React/Fable.Helpers.React.js";
 import { createObj } from "../../fable-core/Util.js";
 const createElement = React.createElement;
@@ -685,7 +685,7 @@ export function Modifier$$$parseModifiers(options) {
   };
 
   const opts = fold(parseOption, Modifier$002EOptions$$$get_Empty(), options);
-  return L(opts.BackgroundColor, L(opts.TextColor, L(opts.TextWeight, L(opts.TextSize, L(opts.TextSizeOnly, L(opts.TextAlignment, L(opts.TextAlignmentOnly, L(opts.TextTransform, L(opts.IsClearfix, L(opts.IsPulledLeft, L(opts.IsPulledRight, L(opts.IsMarginless, L(opts.IsPaddingless, L(opts.IsOverlay, L(opts.IsClipped, L(opts.IsRadiusless, L(opts.IsShadowless, L(opts.IsUnselectable, L(opts.IsInvisible, L(opts.IsHidden, L(opts.IsInvisibleOnly, L(opts.IsHiddenOnly, L(opts.Display, L(opts.DisplayOnly, L()))))))))))))))))))))))));
+  return ofArray([opts.BackgroundColor, opts.TextColor, opts.TextWeight, opts.TextSize, opts.TextSizeOnly, opts.TextAlignment, opts.TextAlignmentOnly, opts.TextTransform, opts.IsClearfix, opts.IsPulledLeft, opts.IsPulledRight, opts.IsMarginless, opts.IsPaddingless, opts.IsOverlay, opts.IsClipped, opts.IsRadiusless, opts.IsShadowless, opts.IsUnselectable, opts.IsInvisible, opts.IsHidden, opts.IsInvisibleOnly, opts.IsHiddenOnly, opts.Display, opts.DisplayOnly]);
 }
 export const Common$002EGenericOption = declare(function Common$002EGenericOption(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
@@ -696,7 +696,7 @@ export const Common$002EGenericOptions = declare(function Common$002EGenericOpti
   this.Modifiers = arg3;
 }, Record);
 export function Common$002EGenericOptions$$$get_Empty() {
-  return new Common$002EGenericOptions(null, L(), L());
+  return new Common$002EGenericOptions(null, new List(), new List());
 }
 export function Common$$$genericParse(options$$1) {
   const parseOptions = function parseOptions(result$$1, opt$$1) {
@@ -742,16 +742,16 @@ export function Common$002EHelpers$$$classes(std, options$$3, booleans) {
 }
 export function Text$$$p(options$$4, children) {
   const opts$$1 = Common$$$genericParse(options$$4);
-  const classes = Common$002EHelpers$$$classes("", L(opts$$1.CustomClass, opts$$1.Modifiers), L());
-  return createElement("p", createObj(L(classes, opts$$1.Props), 1), ...children);
+  const classes = Common$002EHelpers$$$classes("", new List(opts$$1.CustomClass, opts$$1.Modifiers), new List());
+  return createElement("p", createObj(new List(classes, opts$$1.Props), 1), ...children);
 }
 export function Text$$$div(options$$5, children$$2) {
   const opts$$2 = Common$$$genericParse(options$$5);
-  const classes$$1 = Common$002EHelpers$$$classes("", L(opts$$2.CustomClass, opts$$2.Modifiers), L());
-  return createElement("div", createObj(L(classes$$1, opts$$2.Props), 1), ...children$$2);
+  const classes$$1 = Common$002EHelpers$$$classes("", new List(opts$$2.CustomClass, opts$$2.Modifiers), new List());
+  return createElement("div", createObj(new List(classes$$1, opts$$2.Props), 1), ...children$$2);
 }
 export function Text$$$span(options$$6, children$$4) {
   const opts$$3 = Common$$$genericParse(options$$6);
-  const classes$$2 = Common$002EHelpers$$$classes("", L(opts$$3.CustomClass, opts$$3.Modifiers), L());
-  return createElement("span", createObj(L(classes$$2, opts$$3.Props), 1), ...children$$4);
+  const classes$$2 = Common$002EHelpers$$$classes("", new List(opts$$3.CustomClass, opts$$3.Modifiers), new List());
+  return createElement("span", createObj(new List(classes$$2, opts$$3.Props), 1), ...children$$4);
 }

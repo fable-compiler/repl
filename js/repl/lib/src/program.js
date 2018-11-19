@@ -1,9 +1,9 @@
-import { L, declare, Record } from "../../fable-core/Types.js";
+import { declare, Record } from "../../fable-core/Types.js";
 import { Cmd$$$exec as Cmd$0024$0024$0024exec, Cmd$$$batch as Cmd$0024$0024$0024batch, Cmd$$$none as Cmd$0024$0024$0024none } from "./cmd.js";
 import { toConsole, onError as onError$$1 } from "./prelude.js";
+import { append, ofArray } from "../../fable-core/List.js";
 import { singleton } from "../../fable-core/AsyncBuilder.js";
 import { start, post, receive } from "../../fable-core/MailboxProcessor.js";
-import { append } from "../../fable-core/List.js";
 export const Program$00604 = declare(function Program$00604(arg1, arg2, arg3, arg4, arg5, arg6) {
   this.init = arg1;
   this.update = arg2;
@@ -36,7 +36,7 @@ export function ProgramModule$$$mkSimple(init$$1, update$$1, view$$1) {
 }
 export function ProgramModule$$$withSubscription(subscribe, program) {
   const sub = function sub(model$$2) {
-    return Cmd$0024$0024$0024batch(L(program.subscribe(model$$2), L(subscribe(model$$2), L())));
+    return Cmd$0024$0024$0024batch(ofArray([program.subscribe(model$$2), subscribe(model$$2)]));
   };
 
   return new Program$00604(program.init, program.update, sub, program.view, program.setState, program.onError);

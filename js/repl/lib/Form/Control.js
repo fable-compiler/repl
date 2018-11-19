@@ -1,6 +1,6 @@
-import { L, Record, declare, Union } from "../../fable-core/Types.js";
+import { List, Record, declare, Union } from "../../fable-core/Types.js";
 import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers } from "../Fulma/Common.js";
-import { fold } from "../../fable-core/List.js";
+import { ofArray, fold } from "../../fable-core/List.js";
 import { createObj } from "../../fable-core/Util.js";
 const createElement = React.createElement;
 export const Option = declare(function Option(tag, name, ...fields) {
@@ -16,7 +16,7 @@ export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, ar
   this.Modifiers = arg7;
 }, Record);
 export function Options$$$get_Empty() {
-  return new Options(false, false, null, L(), false, false, L());
+  return new Options(false, false, null, new List(), false, false, new List());
 }
 export function controlView(element, options, children) {
   const parseOptions = function parseOptions(result, _arg1) {
@@ -63,8 +63,8 @@ export function controlView(element, options, children) {
   };
 
   const opts = fold(parseOptions, Options$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("control", L(opts.CustomClass, opts.Modifiers), L(["is-loading", opts.IsLoading], L(["has-icons-right", opts.HasIconRight], L(["has-icons-left", opts.HasIconLeft], L(["is-expanded", opts.IsExpanded], L())))));
-  return element(L(classes, opts.Props), children);
+  const classes = Common$0024002EHelpers$0024$0024$0024classes("control", new List(opts.CustomClass, opts.Modifiers), ofArray([["is-loading", opts.IsLoading], ["has-icons-right", opts.HasIconRight], ["has-icons-left", opts.HasIconLeft], ["is-expanded", opts.IsExpanded]]));
+  return element(new List(classes, opts.Props), children);
 }
 export function div(x, y) {
   return controlView(function (b, c) {

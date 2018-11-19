@@ -1,6 +1,6 @@
-import { L, Record, declare, Union } from "../../fable-core/Types.js";
+import { List, Record, declare, Union } from "../../fable-core/Types.js";
 import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Size$$$ofSize as Size$0024$0024$0024ofSize, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Color$$$ofColor as Color$0024$0024$0024ofColor } from "../Fulma/Common.js";
-import { ofSeq, fold } from "../../fable-core/List.js";
+import { ofSeq, ofArray, fold } from "../../fable-core/List.js";
 import { append, delay, empty, singleton } from "../../fable-core/Seq.js";
 import { Props$002EDOMAttr as Props$0024002EDOMAttr, Props$002EProp as Props$0024002EProp, Props$002EHTMLAttr as Props$0024002EHTMLAttr } from "../Fable.React/Fable.Helpers.React.js";
 import { createObj, equals } from "../../fable-core/Util.js";
@@ -29,7 +29,7 @@ export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, ar
   this.Modifiers = arg18;
 }, Record);
 export function Options$$$get_Empty() {
-  return new Options(null, false, false, false, null, null, false, false, false, null, null, null, null, null, null, L(), null, L());
+  return new Options(null, false, false, false, null, null, false, false, false, null, null, null, null, null, null, new List(), null, new List());
 }
 export function textarea(options, children) {
   const parseOptions = function parseOptions(result, option) {
@@ -154,7 +154,7 @@ export function textarea(options, children) {
   };
 
   const opts = fold(parseOptions, Options$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("textarea", L(opts.Color, L(opts.CustomClass, L(opts.Size, opts.Modifiers))), L(["has-fixed-size", opts.HasFixedSize], L(["is-loading", opts.IsLoading], L(["is-focused", opts.IsFocused], L(["is-active", opts.IsActive], L())))));
+  const classes = Common$0024002EHelpers$0024$0024$0024classes("textarea", new List(opts.Color, new List(opts.CustomClass, new List(opts.Size, opts.Modifiers))), ofArray([["has-fixed-size", opts.HasFixedSize], ["is-loading", opts.IsLoading], ["is-focused", opts.IsFocused], ["is-active", opts.IsActive]]));
   return createElement("textarea", createObj(ofSeq(delay(function () {
     return append(singleton(classes), delay(function () {
       return append(singleton(new Props$0024002EHTMLAttr(37, "Disabled", opts.Disabled)), delay(function () {

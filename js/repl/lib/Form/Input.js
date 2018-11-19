@@ -1,6 +1,6 @@
-import { L, Record, declare, Union } from "../../fable-core/Types.js";
+import { List, Record, declare, Union } from "../../fable-core/Types.js";
 import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Size$$$ofSize as Size$0024$0024$0024ofSize, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Color$$$ofColor as Color$0024$0024$0024ofColor } from "../Fulma/Common.js";
-import { append as append$$1, ofSeq, fold } from "../../fable-core/List.js";
+import { append as append$$1, ofSeq, ofArray, fold } from "../../fable-core/List.js";
 import { append, delay, empty, singleton } from "../../fable-core/Seq.js";
 import { Props$002EDOMAttr as Props$0024002EDOMAttr, Props$002EProp as Props$0024002EProp, Props$002EHTMLAttr as Props$0024002EHTMLAttr } from "../Fable.React/Fable.Helpers.React.js";
 import { createObj, equals } from "../../fable-core/Util.js";
@@ -31,7 +31,7 @@ export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, ar
   this.Modifiers = arg17;
 }, Record);
 export function Options$$$get_Empty() {
-  return new Options(null, "", null, null, false, false, false, false, null, null, null, null, null, null, L(), null, L());
+  return new Options(null, "", null, null, false, false, false, false, null, null, null, null, null, null, new List(), null, new List());
 }
 
 function ofType(_arg1) {
@@ -210,7 +210,7 @@ export function input(options) {
   };
 
   const opts = fold(parseOptions, Options$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("input", L(opts.Size, L(opts.Color, L(opts.CustomClass, opts.Modifiers))), L(["is-static", opts.IsStatic], L(["is-rounded", opts.IsRounded], L())));
+  const classes = Common$0024002EHelpers$0024$0024$0024classes("input", new List(opts.Size, new List(opts.Color, new List(opts.CustomClass, opts.Modifiers))), ofArray([["is-static", opts.IsStatic], ["is-rounded", opts.IsRounded]]));
   return createElement("input", createObj(append$$1(ofSeq(delay(function () {
     return append(singleton(classes), delay(function () {
       return append(singleton(new Props$0024002EHTMLAttr(37, "Disabled", opts.Disabled)), delay(function () {
@@ -237,44 +237,44 @@ export function input(options) {
         }));
       }));
     }));
-  })), opts.Props), 1), ...L());
+  })), opts.Props), 1), ...new List());
 }
 export function text(options$$2) {
-  return input(L(new Option(1, "Type", new IInputType(0, "Text")), options$$2));
+  return input(new List(new Option(1, "Type", new IInputType(0, "Text")), options$$2));
 }
 export function password(options$$3) {
-  return input(L(new Option(1, "Type", new IInputType(1, "Password")), options$$3));
+  return input(new List(new Option(1, "Type", new IInputType(1, "Password")), options$$3));
 }
 export function datetimeLocal(options$$4) {
-  return input(L(new Option(1, "Type", new IInputType(2, "DatetimeLocal")), options$$4));
+  return input(new List(new Option(1, "Type", new IInputType(2, "DatetimeLocal")), options$$4));
 }
 export function date(options$$5) {
-  return input(L(new Option(1, "Type", new IInputType(3, "Date")), options$$5));
+  return input(new List(new Option(1, "Type", new IInputType(3, "Date")), options$$5));
 }
 export function month(options$$6) {
-  return input(L(new Option(1, "Type", new IInputType(4, "Month")), options$$6));
+  return input(new List(new Option(1, "Type", new IInputType(4, "Month")), options$$6));
 }
 export function time(options$$7) {
-  return input(L(new Option(1, "Type", new IInputType(5, "Time")), options$$7));
+  return input(new List(new Option(1, "Type", new IInputType(5, "Time")), options$$7));
 }
 export function week(options$$8) {
-  return input(L(new Option(1, "Type", new IInputType(6, "Week")), options$$8));
+  return input(new List(new Option(1, "Type", new IInputType(6, "Week")), options$$8));
 }
 export function number(options$$9) {
-  return input(L(new Option(1, "Type", new IInputType(7, "Number")), options$$9));
+  return input(new List(new Option(1, "Type", new IInputType(7, "Number")), options$$9));
 }
 export function email(options$$10) {
-  return input(L(new Option(1, "Type", new IInputType(8, "Email")), options$$10));
+  return input(new List(new Option(1, "Type", new IInputType(8, "Email")), options$$10));
 }
 export function url(options$$11) {
-  return input(L(new Option(1, "Type", new IInputType(9, "Url")), options$$11));
+  return input(new List(new Option(1, "Type", new IInputType(9, "Url")), options$$11));
 }
 export function search(options$$12) {
-  return input(L(new Option(1, "Type", new IInputType(10, "Search")), options$$12));
+  return input(new List(new Option(1, "Type", new IInputType(10, "Search")), options$$12));
 }
 export function tel(options$$13) {
-  return input(L(new Option(1, "Type", new IInputType(11, "Tel")), options$$13));
+  return input(new List(new Option(1, "Type", new IInputType(11, "Tel")), options$$13));
 }
 export function color(options$$14) {
-  return input(L(new Option(1, "Type", new IInputType(12, "ColorType")), options$$14));
+  return input(new List(new Option(1, "Type", new IInputType(12, "ColorType")), options$$14));
 }

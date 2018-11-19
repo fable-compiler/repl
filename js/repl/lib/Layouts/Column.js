@@ -1,4 +1,4 @@
-import { L, Record, declare, Union } from "../../fable-core/Types.js";
+import { List, Record, declare, Union } from "../../fable-core/Types.js";
 import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Screen, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers } from "../Fulma/Common.js";
 import { createObj, equals } from "../../fable-core/Util.js";
 import { fold } from "../../fable-core/List.js";
@@ -683,7 +683,7 @@ export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, ar
   this.Modifiers = arg17;
 }, Record);
 export function Options$$$get_Empty() {
-  return new Options(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, L(), L());
+  return new Options(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, new List(), new List());
 }
 export function column(options, children) {
   const parseOptions = function parseOptions(result, _arg1$$2) {
@@ -1053,6 +1053,6 @@ export function column(options, children) {
   };
 
   const opts = fold(parseOptions, Options$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("column", L(opts.Width, L(opts.Offset, L(opts.DesktopWidth, L(opts.DesktopOffset, L(opts.MobileWidth, L(opts.MobileOffset, L(opts.TabletpWidth, L(opts.TabletpOffset, L(opts.WideScreenWidth, L(opts.WideScreenOffset, L(opts.FullHDWidth, L(opts.FullHDOffset, L(opts.TouchWidth, L(opts.TouchOffset, L(opts.CustomClass, opts.Modifiers))))))))))))))), L());
-  return createElement("div", createObj(L(classes, opts.Props), 1), ...children);
+  const classes = Common$0024002EHelpers$0024$0024$0024classes("column", new List(opts.Width, new List(opts.Offset, new List(opts.DesktopWidth, new List(opts.DesktopOffset, new List(opts.MobileWidth, new List(opts.MobileOffset, new List(opts.TabletpWidth, new List(opts.TabletpOffset, new List(opts.WideScreenWidth, new List(opts.WideScreenOffset, new List(opts.FullHDWidth, new List(opts.FullHDOffset, new List(opts.TouchWidth, new List(opts.TouchOffset, new List(opts.CustomClass, opts.Modifiers))))))))))))))), new List());
+  return createElement("div", createObj(new List(classes, opts.Props), 1), ...children);
 }

@@ -1,4 +1,4 @@
-import { L, Record, declare, Union } from "../../fable-core/Types.js";
+import { List, Record, declare, Union } from "../../fable-core/Types.js";
 import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Size$$$ofSize as Size$0024$0024$0024ofSize } from "../Fulma/Common.js";
 import { ofSeq, fold } from "../../fable-core/List.js";
 import { createObj } from "../../fable-core/Util.js";
@@ -16,7 +16,7 @@ export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, ar
   this.Modifiers = arg6;
 }, Record);
 export function Options$$$get_Empty() {
-  return new Options(L(), null, null, null, null, L());
+  return new Options(new List(), null, null, null, null, new List());
 }
 export function breadcrumb(options, children) {
   const parseOptions = function parseOptions(result, _arg1) {
@@ -78,8 +78,8 @@ export function breadcrumb(options, children) {
   };
 
   const opts = fold(parseOptions, Options$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("breadcrumb", L(opts.Alignment, L(opts.Separator, L(opts.Size, L(opts.CustomClass, opts.Modifiers)))), L());
-  return createElement("nav", createObj(L(classes, opts.Props), 1), ...[createElement("ul", {}, ...children)]);
+  const classes = Common$0024002EHelpers$0024$0024$0024classes("breadcrumb", new List(opts.Alignment, new List(opts.Separator, new List(opts.Size, new List(opts.CustomClass, opts.Modifiers)))), new List());
+  return createElement("nav", createObj(new List(classes, opts.Props), 1), ...[createElement("ul", {}, ...children)]);
 }
 export const Item$002EOption = declare(function Item$002EOption(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
@@ -91,7 +91,7 @@ export const Item$002EOptions = declare(function Item$002EOptions(arg1, arg2, ar
   this.Modifiers = arg4;
 }, Record);
 export function Item$002EOptions$$$get_Empty() {
-  return new Item$002EOptions(L(), false, null, L());
+  return new Item$002EOptions(new List(), false, null, new List());
 }
 export function item(options$$2, children$$3) {
   const parseOptions$$1 = function parseOptions$$1(result$$1, _arg1$$1) {
@@ -124,7 +124,7 @@ export function item(options$$2, children$$3) {
 
   const opts$$1 = fold(parseOptions$$1, Item$002EOptions$$$get_Empty(), options$$2);
   return createElement("li", createObj(ofSeq(delay(function () {
-    return append(singleton(Common$0024002EHelpers$0024$0024$0024classes("", L(opts$$1.CustomClass, opts$$1.Modifiers), L(["is-active", opts$$1.IsActive], L()))), delay(function () {
+    return append(singleton(Common$0024002EHelpers$0024$0024$0024classes("", new List(opts$$1.CustomClass, opts$$1.Modifiers), new List(["is-active", opts$$1.IsActive], new List()))), delay(function () {
       return opts$$1.Props;
     }));
   })), 1), ...children$$3);

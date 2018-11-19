@@ -1,4 +1,4 @@
-import { L, Record, declare, Union } from "../../fable-core/Types.js";
+import { List, Record, declare, Union } from "../../fable-core/Types.js";
 import { Common$$$genericParse as Common$0024$0024$0024genericParse, Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Color$$$ofColor as Color$0024$0024$0024ofColor, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers } from "../Fulma/Common.js";
 import { ofSeq, fold } from "../../fable-core/List.js";
 import { createObj } from "../../fable-core/Util.js";
@@ -14,7 +14,7 @@ export const Options = declare(function Options(arg1, arg2, arg3, arg4) {
   this.Modifiers = arg4;
 }, Record);
 export function Options$$$get_Empty() {
-  return new Options(null, null, L(), L());
+  return new Options(null, null, new List(), new List());
 }
 export function notification(options, children) {
   const parseOptions = function parseOptions(result, opt) {
@@ -46,13 +46,13 @@ export function notification(options, children) {
   };
 
   const opts = fold(parseOptions, Options$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("notification", L(opts.CustomClass, L(opts.Color, opts.Modifiers)), L());
-  return createElement("div", createObj(L(classes, opts.Props), 1), ...children);
+  const classes = Common$0024002EHelpers$0024$0024$0024classes("notification", new List(opts.CustomClass, new List(opts.Color, opts.Modifiers)), new List());
+  return createElement("div", createObj(new List(classes, opts.Props), 1), ...children);
 }
 export function delete$(options$$2, children$$2) {
   const opts$$1 = Common$0024$0024$0024genericParse(options$$2);
   return createElement("button", createObj(ofSeq(delay(function () {
-    return append(singleton(Common$0024002EHelpers$0024$0024$0024classes("delete", L(opts$$1.CustomClass, opts$$1.Modifiers), L())), delay(function () {
+    return append(singleton(Common$0024002EHelpers$0024$0024$0024classes("delete", new List(opts$$1.CustomClass, opts$$1.Modifiers), new List())), delay(function () {
       return opts$$1.Props;
     }));
   })), 1), ...children$$2);

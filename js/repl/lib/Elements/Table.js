@@ -1,6 +1,6 @@
-import { L, Record, declare, Union } from "../../fable-core/Types.js";
+import { List, Record, declare, Union } from "../../fable-core/Types.js";
 import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers } from "../Fulma/Common.js";
-import { fold } from "../../fable-core/List.js";
+import { ofArray, fold } from "../../fable-core/List.js";
 import { createObj } from "../../fable-core/Util.js";
 const createElement = React.createElement;
 export const TableOption = declare(function TableOption(tag, name, ...fields) {
@@ -18,7 +18,7 @@ const TableOptions = declare(function TableOptions(arg1, arg2, arg3, arg4, arg5,
 }, Record);
 
 function TableOptions$$$get_Empty() {
-  return new TableOptions(false, false, false, false, false, null, L(), L());
+  return new TableOptions(false, false, false, false, false, null, new List(), new List());
 }
 
 export function table(options, children) {
@@ -70,6 +70,6 @@ export function table(options, children) {
   };
 
   const opts = fold(parseOptions, TableOptions$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("table", L(opts.CustomClass, opts.Modifiers), L(["is-bordered", opts.IsBordered], L(["is-striped", opts.IsStriped], L(["is-fullwidth", opts.IsFullwidth], L(["is-narrow", opts.IsNarrow], L(["is-hoverable", opts.IsHoverable], L()))))));
-  return createElement("table", createObj(L(classes, opts.Props), 1), ...children);
+  const classes = Common$0024002EHelpers$0024$0024$0024classes("table", new List(opts.CustomClass, opts.Modifiers), ofArray([["is-bordered", opts.IsBordered], ["is-striped", opts.IsStriped], ["is-fullwidth", opts.IsFullwidth], ["is-narrow", opts.IsNarrow], ["is-hoverable", opts.IsHoverable]]));
+  return createElement("table", createObj(new List(classes, opts.Props), 1), ...children);
 }

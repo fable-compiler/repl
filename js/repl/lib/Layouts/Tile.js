@@ -1,4 +1,4 @@
-import { L, Record, declare, Union } from "../../fable-core/Types.js";
+import { List, Record, declare, Union } from "../../fable-core/Types.js";
 import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers } from "../Fulma/Common.js";
 import { ofSeq, fold } from "../../fable-core/List.js";
 import { append, delay, singleton } from "../../fable-core/Seq.js";
@@ -82,7 +82,7 @@ export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, ar
   this.Modifiers = arg6;
 }, Record);
 export function Options$$$get_Empty() {
-  return new Options(null, false, null, L(), null, L());
+  return new Options(null, false, null, new List(), null, new List());
 }
 export function tile(options, children) {
   const parseOptions = function parseOptions(result, _arg1$$1) {
@@ -135,17 +135,17 @@ export function tile(options, children) {
 
   const opts = fold(parseOptions, Options$$$get_Empty(), options);
   return createElement("div", createObj(ofSeq(delay(function () {
-    return append(singleton(Common$0024002EHelpers$0024$0024$0024classes("tile", L(opts.CustomClass, L(opts.Context, L(opts.Size, opts.Modifiers))), L(["is-vertical", opts.IsVertical], L()))), delay(function () {
+    return append(singleton(Common$0024002EHelpers$0024$0024$0024classes("tile", new List(opts.CustomClass, new List(opts.Context, new List(opts.Size, opts.Modifiers))), new List(["is-vertical", opts.IsVertical], new List()))), delay(function () {
       return opts.Props;
     }));
   })), 1), ...children);
 }
 export function parent(options$$2, children$$2) {
-  return tile(L(new Option(5, "IsParent"), options$$2), children$$2);
+  return tile(new List(new Option(5, "IsParent"), options$$2), children$$2);
 }
 export function child(options$$3, children$$3) {
-  return tile(L(new Option(3, "IsChild"), options$$3), children$$3);
+  return tile(new List(new Option(3, "IsChild"), options$$3), children$$3);
 }
 export function ancestor(options$$4, children$$4) {
-  return tile(L(new Option(4, "IsAncestor"), options$$4), children$$4);
+  return tile(new List(new Option(4, "IsAncestor"), options$$4), children$$4);
 }

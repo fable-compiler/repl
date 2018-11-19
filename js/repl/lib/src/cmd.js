@@ -1,5 +1,5 @@
 import { concat, map, iterate } from "../../fable-core/List.js";
-import { L } from "../../fable-core/Types.js";
+import { List } from "../../fable-core/Types.js";
 import { singleton } from "../../fable-core/AsyncBuilder.js";
 import { startImmediate, catchAsync } from "../../fable-core/Async.js";
 export function Cmd$$$exec(dispatch, cmd) {
@@ -8,12 +8,12 @@ export function Cmd$$$exec(dispatch, cmd) {
   }, cmd);
 }
 export function Cmd$$$none() {
-  return L();
+  return new List();
 }
 export function Cmd$$$ofMsg(msg) {
-  return L(function (dispatch$$1) {
+  return new List(function (dispatch$$1) {
     dispatch$$1(msg);
-  }, L());
+  }, new List());
 }
 export function Cmd$$$map(f, cmd$$1) {
   return map(function mapping(g) {
@@ -40,9 +40,9 @@ export function Cmd$$$ofAsync(task, arg, ofSuccess, ofError) {
     });
   };
 
-  return L(function ($arg$$3) {
+  return new List(function ($arg$$3) {
     startImmediate(bind($arg$$3));
-  }, L());
+  }, new List());
 }
 export function Cmd$$$ofFunc(task$$1, arg$$1, ofSuccess$$1, ofError$$1) {
   const bind$$1 = function bind$$1(dispatch$$4) {
@@ -53,7 +53,7 @@ export function Cmd$$$ofFunc(task$$1, arg$$1, ofSuccess$$1, ofError$$1) {
     }
   };
 
-  return L(bind$$1, L());
+  return new List(bind$$1, new List());
 }
 export function Cmd$$$performFunc(task$$2, arg$$2, ofSuccess$$2) {
   const bind$$2 = function bind$$2(dispatch$$5) {
@@ -62,7 +62,7 @@ export function Cmd$$$performFunc(task$$2, arg$$2, ofSuccess$$2) {
     } catch (x$$3) {}
   };
 
-  return L(bind$$2, L());
+  return new List(bind$$2, new List());
 }
 export function Cmd$$$attemptFunc(task$$3, arg$$3, ofError$$2) {
   const bind$$3 = function bind$$3(dispatch$$6) {
@@ -73,10 +73,10 @@ export function Cmd$$$attemptFunc(task$$3, arg$$3, ofError$$2) {
     }
   };
 
-  return L(bind$$3, L());
+  return new List(bind$$3, new List());
 }
 export function Cmd$$$ofSub(sub$$1) {
-  return L(sub$$1, L());
+  return new List(sub$$1, new List());
 }
 export function Cmd$$$ofPromise(task$$4, arg$$4, ofSuccess$$3, ofError$$3) {
   const bind$$4 = function bind$$4(dispatch$$7) {
@@ -87,5 +87,5 @@ export function Cmd$$$ofPromise(task$$4, arg$$4, ofSuccess$$3, ofError$$3) {
     });
   };
 
-  return L(bind$$4, L());
+  return new List(bind$$4, new List());
 }

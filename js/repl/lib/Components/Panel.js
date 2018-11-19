@@ -1,4 +1,4 @@
-import { L, Record, declare, Union } from "../../fable-core/Types.js";
+import { List, Record, declare, Union } from "../../fable-core/Types.js";
 import { Common$$$genericParse as Common$0024$0024$0024genericParse, Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers } from "../Fulma/Common.js";
 import { fold } from "../../fable-core/List.js";
 import { createObj } from "../../fable-core/Util.js";
@@ -13,7 +13,7 @@ export const Block$002EOptions = declare(function Block$002EOptions(arg1, arg2, 
   this.Modifiers = arg4;
 }, Record);
 export function Block$002EOptions$$$get_Empty() {
-  return new Block$002EOptions(L(), null, false, L());
+  return new Block$002EOptions(new List(), null, false, new List());
 }
 export const Tab$002EOption = declare(function Tab$002EOption(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
@@ -25,7 +25,7 @@ export const Tab$002EOptions = declare(function Tab$002EOptions(arg1, arg2, arg3
   this.Modifiers = arg4;
 }, Record);
 export function Tab$002EOptions$$$get_Empty() {
-  return new Tab$002EOptions(L(), null, false, L());
+  return new Tab$002EOptions(new List(), null, false, new List());
 }
 export function block(options, children) {
   const parseOptions = function parseOptions(result, opt) {
@@ -57,8 +57,8 @@ export function block(options, children) {
   };
 
   const opts = fold(parseOptions, Block$002EOptions$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("panel-block", L(opts.CustomClass, opts.Modifiers), L(["is-active", opts.IsActive], L()));
-  return createElement("div", createObj(L(classes, opts.Props), 1), ...children);
+  const classes = Common$0024002EHelpers$0024$0024$0024classes("panel-block", new List(opts.CustomClass, opts.Modifiers), new List(["is-active", opts.IsActive], new List()));
+  return createElement("div", createObj(new List(classes, opts.Props), 1), ...children);
 }
 export function checkbox(options$$2, children$$2) {
   const parseOptions$$1 = function parseOptions$$1(result$$1, opt$$1) {
@@ -90,23 +90,23 @@ export function checkbox(options$$2, children$$2) {
   };
 
   const opts$$1 = fold(parseOptions$$1, Block$002EOptions$$$get_Empty(), options$$2);
-  const classes$$1 = Common$0024002EHelpers$0024$0024$0024classes("panel-block", L(opts$$1.CustomClass, opts$$1.Modifiers), L(["is-active", opts$$1.IsActive], L()));
-  return createElement("label", createObj(L(classes$$1, opts$$1.Props), 1), ...children$$2);
+  const classes$$1 = Common$0024002EHelpers$0024$0024$0024classes("panel-block", new List(opts$$1.CustomClass, opts$$1.Modifiers), new List(["is-active", opts$$1.IsActive], new List()));
+  return createElement("label", createObj(new List(classes$$1, opts$$1.Props), 1), ...children$$2);
 }
 export function panel(options$$4, children$$4) {
   const opts$$2 = Common$0024$0024$0024genericParse(options$$4);
-  const classes$$2 = Common$0024002EHelpers$0024$0024$0024classes("panel", L(opts$$2.CustomClass, opts$$2.Modifiers), L());
-  return createElement("nav", createObj(L(classes$$2, opts$$2.Props), 1), ...children$$4);
+  const classes$$2 = Common$0024002EHelpers$0024$0024$0024classes("panel", new List(opts$$2.CustomClass, opts$$2.Modifiers), new List());
+  return createElement("nav", createObj(new List(classes$$2, opts$$2.Props), 1), ...children$$4);
 }
 export function heading(options$$5, children$$6) {
   const opts$$3 = Common$0024$0024$0024genericParse(options$$5);
-  const classes$$3 = Common$0024002EHelpers$0024$0024$0024classes("panel-heading", L(opts$$3.CustomClass, opts$$3.Modifiers), L());
-  return createElement("div", createObj(L(classes$$3, opts$$3.Props), 1), ...children$$6);
+  const classes$$3 = Common$0024002EHelpers$0024$0024$0024classes("panel-heading", new List(opts$$3.CustomClass, opts$$3.Modifiers), new List());
+  return createElement("div", createObj(new List(classes$$3, opts$$3.Props), 1), ...children$$6);
 }
 export function tabs(options$$6, children$$8) {
   const opts$$4 = Common$0024$0024$0024genericParse(options$$6);
-  const classes$$4 = Common$0024002EHelpers$0024$0024$0024classes("panel-tabs", L(opts$$4.CustomClass, opts$$4.Modifiers), L());
-  return createElement("div", createObj(L(classes$$4, opts$$4.Props), 1), ...children$$8);
+  const classes$$4 = Common$0024002EHelpers$0024$0024$0024classes("panel-tabs", new List(opts$$4.CustomClass, opts$$4.Modifiers), new List());
+  return createElement("div", createObj(new List(classes$$4, opts$$4.Props), 1), ...children$$8);
 }
 export function tab(options$$7, children$$10) {
   const parseOptions$$2 = function parseOptions$$2(result$$2, opt$$2) {
@@ -138,11 +138,11 @@ export function tab(options$$7, children$$10) {
   };
 
   const opts$$5 = fold(parseOptions$$2, Tab$002EOptions$$$get_Empty(), options$$7);
-  const classes$$5 = Common$0024002EHelpers$0024$0024$0024classes("", L(opts$$5.CustomClass, opts$$5.Modifiers), L(["is-active", opts$$5.IsActive], L()));
-  return createElement("a", createObj(L(classes$$5, opts$$5.Props), 1), ...children$$10);
+  const classes$$5 = Common$0024002EHelpers$0024$0024$0024classes("", new List(opts$$5.CustomClass, opts$$5.Modifiers), new List(["is-active", opts$$5.IsActive], new List()));
+  return createElement("a", createObj(new List(classes$$5, opts$$5.Props), 1), ...children$$10);
 }
 export function icon(options$$9, children$$12) {
   const opts$$6 = Common$0024$0024$0024genericParse(options$$9);
-  const classes$$6 = Common$0024002EHelpers$0024$0024$0024classes("panel-icon", L(opts$$6.CustomClass, opts$$6.Modifiers), L());
-  return createElement("span", createObj(L(classes$$6, opts$$6.Props), 1), ...children$$12);
+  const classes$$6 = Common$0024002EHelpers$0024$0024$0024classes("panel-icon", new List(opts$$6.CustomClass, opts$$6.Modifiers), new List());
+  return createElement("span", createObj(new List(classes$$6, opts$$6.Props), 1), ...children$$12);
 }

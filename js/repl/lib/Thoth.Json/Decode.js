@@ -1,4 +1,4 @@
-import { L, FSharpException, declare, Union } from "../../fable-core/Types.js";
+import { List, FSharpException, declare, Union } from "../../fable-core/Types.js";
 import { toText, printf, validateGuid, join } from "../../fable-core/String.js";
 import { defaultArg, mapOk, some, Result } from "../../fable-core/Option.js";
 import { fromString as fromString$$1, toNumber, fromBits, tryParse, fromInteger } from "../../fable-core/Long.js";
@@ -636,7 +636,7 @@ export function oneOf(decoders, path$$31, value$$45) {
           const error$$11 = matchValue$$15.fields[0];
           const $errors$$57 = errors;
           decoders$$1 = tail;
-          errors = append($errors$$57, L(error$$11, L()));
+          errors = append($errors$$57, new List(error$$11, new List()));
           continue runner;
         } else {
           const v$$5 = matchValue$$15.fields[0];
@@ -648,7 +648,7 @@ export function oneOf(decoders, path$$31, value$$45) {
     }
   };
 
-  return runner(decoders, L());
+  return runner(decoders, new List());
 }
 export function nil(output, path$$32, value$$46) {
   if (value$$46 == null) {
@@ -1202,17 +1202,17 @@ function autoObject(decoderInfos, path$$120, value$$132) {
 
         if (tupledArg[0].tag === 1) {
           return mapOk(function mapping$$4(v$$15) {
-            return L(v$$15, result$$1);
+            return new List(v$$15, result$$1);
           }, field(tupledArg[1], uncurry(2, tupledArg[2]), path$$120, value$$132));
         } else {
           return mapOk(function mapping$$3(v$$14) {
-            return L(v$$14, result$$1);
+            return new List(v$$14, result$$1);
           }, optional(tupledArg[1], uncurry(2, tupledArg[2]), path$$120, value$$132));
         }
       } else {
         return acc;
       }
-    }, decoderInfos, new Result(0, "Ok", L()));
+    }, decoderInfos, new Result(0, "Ok", new List()));
   }
 }
 
@@ -1227,7 +1227,7 @@ function mixedArray(msg$$12, decoders$$2, path$$121, values) {
             if (acc$$1.tag === 0) {
               const result$$4 = acc$$1.fields[0];
               return mapOk(function mapping$$5(v$$16) {
-                return L(v$$16, result$$4);
+                return new List(v$$16, result$$4);
               }, decoder$$105(path$$121, value$$133));
             } else {
               return acc$$1;
@@ -1235,7 +1235,7 @@ function mixedArray(msg$$12, decoders$$2, path$$121, values) {
           };
         };
       }($arg$$5)(uncurry(2, $arg$$6))($arg$$7);
-    }, values, decoders$$2, new Result(0, "Ok", L()));
+    }, values, decoders$$2, new Result(0, "Ok", new List()));
   }
 }
 

@@ -1,4 +1,4 @@
-import { L, Record, declare, Union } from "../../fable-core/Types.js";
+import { List, Record, declare, Union } from "../../fable-core/Types.js";
 import { Common$$$genericParse as Common$0024$0024$0024genericParse, Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Size$$$ofSize as Size$0024$0024$0024ofSize, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers } from "../Fulma/Common.js";
 import { fold } from "../../fable-core/List.js";
 import { createObj } from "../../fable-core/Util.js";
@@ -15,7 +15,7 @@ export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, ar
   this.Modifiers = arg6;
 }, Record);
 export function Options$$$get_Empty() {
-  return new Options(null, null, null, null, L(), L());
+  return new Options(null, null, null, null, new List(), new List());
 }
 export const Label$002EOption = declare(function Label$002EOption(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
@@ -27,7 +27,7 @@ export const Label$002EOptions = declare(function Label$002EOptions(arg1, arg2, 
   this.Modifiers = arg4;
 }, Record);
 export function Label$002EOptions$$$get_Empty() {
-  return new Label$002EOptions(null, null, L(), L());
+  return new Label$002EOptions(null, null, new List(), new List());
 }
 export function label(options, children) {
   const parseOptions = function parseOptions(result, _arg1) {
@@ -64,13 +64,13 @@ export function label(options, children) {
   };
 
   const opts = fold(parseOptions, Label$002EOptions$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("field-label", L(opts.Size, L(opts.CustomClass, opts.Modifiers)), L());
-  return createElement("div", createObj(L(classes, opts.Props), 1), ...children);
+  const classes = Common$0024002EHelpers$0024$0024$0024classes("field-label", new List(opts.Size, new List(opts.CustomClass, opts.Modifiers)), new List());
+  return createElement("div", createObj(new List(classes, opts.Props), 1), ...children);
 }
 export function body(options$$2, children$$2) {
   const opts$$1 = Common$0024$0024$0024genericParse(options$$2);
-  const classes$$1 = Common$0024002EHelpers$0024$0024$0024classes("field-body", L(opts$$1.CustomClass, opts$$1.Modifiers), L());
-  return createElement("div", createObj(L(classes$$1, opts$$1.Props), 1), ...children$$2);
+  const classes$$1 = Common$0024002EHelpers$0024$0024$0024classes("field-body", new List(opts$$1.CustomClass, opts$$1.Modifiers), new List());
+  return createElement("div", createObj(new List(classes$$1, opts$$1.Props), 1), ...children$$2);
 }
 export function fieldView(element, options$$3, children$$4) {
   const parseOptions$$1 = function parseOptions$$1(result$$1, _arg1$$1) {
@@ -136,8 +136,8 @@ export function fieldView(element, options$$3, children$$4) {
   };
 
   const opts$$2 = fold(parseOptions$$1, Options$$$get_Empty(), options$$3);
-  const classes$$2 = Common$0024002EHelpers$0024$0024$0024classes("field", L(opts$$2.HasAddons, L(opts$$2.IsGrouped, L(opts$$2.Layout, L(opts$$2.CustomClass, opts$$2.Modifiers)))), L());
-  return element(L(classes$$2, opts$$2.Props), children$$4);
+  const classes$$2 = Common$0024002EHelpers$0024$0024$0024classes("field", new List(opts$$2.HasAddons, new List(opts$$2.IsGrouped, new List(opts$$2.Layout, new List(opts$$2.CustomClass, opts$$2.Modifiers)))), new List());
+  return element(new List(classes$$2, opts$$2.Props), children$$4);
 }
 export function div(x, y) {
   return fieldView(function (b$$2, c$$2) {

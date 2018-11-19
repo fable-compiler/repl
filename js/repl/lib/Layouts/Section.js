@@ -1,4 +1,4 @@
-import { L, Record, declare, Union } from "../../fable-core/Types.js";
+import { List, Record, declare, Union } from "../../fable-core/Types.js";
 import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers } from "../Fulma/Common.js";
 import { fold } from "../../fable-core/List.js";
 import { createObj } from "../../fable-core/Util.js";
@@ -13,7 +13,7 @@ export const Options = declare(function Options(arg1, arg2, arg3, arg4) {
   this.Modifiers = arg4;
 }, Record);
 export function Options$$$get_Empty() {
-  return new Options(L(), null, null, L());
+  return new Options(new List(), null, null, new List());
 }
 export function section(options, children) {
   const parseOptions = function parseOptions(result, opt) {
@@ -49,6 +49,6 @@ export function section(options, children) {
   };
 
   const opts = fold(parseOptions, Options$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("section", L(opts.CustomClass, L(opts.Spacing, opts.Modifiers)), L());
-  return createElement("section", createObj(L(classes, opts.Props), 1), ...children);
+  const classes = Common$0024002EHelpers$0024$0024$0024classes("section", new List(opts.CustomClass, new List(opts.Spacing, opts.Modifiers)), new List());
+  return createElement("section", createObj(new List(classes, opts.Props), 1), ...children);
 }

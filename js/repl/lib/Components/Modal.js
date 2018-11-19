@@ -1,4 +1,4 @@
-import { L, Record, declare, Union } from "../../fable-core/Types.js";
+import { List, Record, declare, Union } from "../../fable-core/Types.js";
 import { Common$$$genericParse as Common$0024$0024$0024genericParse, Size$$$ofSize as Size$0024$0024$0024ofSize, Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers } from "../Fulma/Common.js";
 import { fold } from "../../fable-core/List.js";
 import { createObj } from "../../fable-core/Util.js";
@@ -14,7 +14,7 @@ export const Options = declare(function Options(arg1, arg2, arg3, arg4) {
   this.Modifiers = arg4;
 }, Record);
 export function Options$$$get_Empty() {
-  return new Options(L(), false, null, L());
+  return new Options(new List(), false, null, new List());
 }
 export const Close$002EOption = declare(function Close$002EOption(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
@@ -27,7 +27,7 @@ export const Close$002EOptions = declare(function Close$002EOptions(arg1, arg2, 
   this.Modifiers = arg5;
 }, Record);
 export function Close$002EOptions$$$get_Empty() {
-  return new Close$002EOptions(L(), null, null, null, L());
+  return new Close$002EOptions(new List(), null, null, null, new List());
 }
 export function modal(options, children) {
   const parseOptions = function parseOptions(result, opt) {
@@ -59,8 +59,8 @@ export function modal(options, children) {
   };
 
   const opts = fold(parseOptions, Options$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("modal", L(opts.CustomClass, opts.Modifiers), L(["is-active", opts.IsActive], L()));
-  return createElement("div", createObj(L(classes, opts.Props), 1), ...children);
+  const classes = Common$0024002EHelpers$0024$0024$0024classes("modal", new List(opts.CustomClass, opts.Modifiers), new List(["is-active", opts.IsActive], new List()));
+  return createElement("div", createObj(new List(classes, opts.Props), 1), ...children);
 }
 export function close(options$$2, children$$2) {
   const parseOptions$$1 = function parseOptions$$1(result$$1, opt$$1) {
@@ -124,50 +124,50 @@ export function close(options$$2, children$$2) {
   };
 
   const opts$$1 = fold(parseOptions$$1, Close$002EOptions$$$get_Empty(), options$$2);
-  const classes$$1 = Common$0024002EHelpers$0024$0024$0024classes("modal-close", L(opts$$1.Size, L(opts$$1.CustomClass, opts$$1.Modifiers)), L());
+  const classes$$1 = Common$0024002EHelpers$0024$0024$0024classes("modal-close", new List(opts$$1.Size, new List(opts$$1.CustomClass, opts$$1.Modifiers)), new List());
   let opts$$2;
 
   if (opts$$1.OnClick == null) {
-    opts$$2 = L(classes$$1, opts$$1.Props);
+    opts$$2 = new List(classes$$1, opts$$1.Props);
   } else {
     const v = opts$$1.OnClick;
-    opts$$2 = L(classes$$1, L(new Props$0024002EDOMAttr(40, "OnClick", v), opts$$1.Props));
+    opts$$2 = new List(classes$$1, new List(new Props$0024002EDOMAttr(40, "OnClick", v), opts$$1.Props));
   }
 
   return createElement("button", createObj(opts$$2, 1), ...children$$2);
 }
 export function background(options$$4, children$$4) {
   const opts$$3 = Common$0024$0024$0024genericParse(options$$4);
-  const classes$$2 = Common$0024002EHelpers$0024$0024$0024classes("modal-background", L(opts$$3.CustomClass, opts$$3.Modifiers), L());
-  return createElement("div", createObj(L(classes$$2, opts$$3.Props), 1), ...children$$4);
+  const classes$$2 = Common$0024002EHelpers$0024$0024$0024classes("modal-background", new List(opts$$3.CustomClass, opts$$3.Modifiers), new List());
+  return createElement("div", createObj(new List(classes$$2, opts$$3.Props), 1), ...children$$4);
 }
 export function content(options$$5, children$$6) {
   const opts$$4 = Common$0024$0024$0024genericParse(options$$5);
-  const classes$$3 = Common$0024002EHelpers$0024$0024$0024classes("modal-content", L(opts$$4.CustomClass, opts$$4.Modifiers), L());
-  return createElement("div", createObj(L(classes$$3, opts$$4.Props), 1), ...children$$6);
+  const classes$$3 = Common$0024002EHelpers$0024$0024$0024classes("modal-content", new List(opts$$4.CustomClass, opts$$4.Modifiers), new List());
+  return createElement("div", createObj(new List(classes$$3, opts$$4.Props), 1), ...children$$6);
 }
 export function Card$$$card(options$$6, children$$8) {
   const opts$$5 = Common$0024$0024$0024genericParse(options$$6);
-  const classes$$4 = Common$0024002EHelpers$0024$0024$0024classes("modal-card", L(opts$$5.CustomClass, opts$$5.Modifiers), L());
-  return createElement("div", createObj(L(classes$$4, opts$$5.Props), 1), ...children$$8);
+  const classes$$4 = Common$0024002EHelpers$0024$0024$0024classes("modal-card", new List(opts$$5.CustomClass, opts$$5.Modifiers), new List());
+  return createElement("div", createObj(new List(classes$$4, opts$$5.Props), 1), ...children$$8);
 }
 export function Card$$$head(options$$7, children$$10) {
   const opts$$6 = Common$0024$0024$0024genericParse(options$$7);
-  const classes$$5 = Common$0024002EHelpers$0024$0024$0024classes("modal-card-head", L(opts$$6.CustomClass, opts$$6.Modifiers), L());
-  return createElement("header", createObj(L(classes$$5, opts$$6.Props), 1), ...children$$10);
+  const classes$$5 = Common$0024002EHelpers$0024$0024$0024classes("modal-card-head", new List(opts$$6.CustomClass, opts$$6.Modifiers), new List());
+  return createElement("header", createObj(new List(classes$$5, opts$$6.Props), 1), ...children$$10);
 }
 export function Card$$$foot(options$$8, children$$12) {
   const opts$$7 = Common$0024$0024$0024genericParse(options$$8);
-  const classes$$6 = Common$0024002EHelpers$0024$0024$0024classes("modal-card-foot", L(opts$$7.CustomClass, opts$$7.Modifiers), L());
-  return createElement("footer", createObj(L(classes$$6, opts$$7.Props), 1), ...children$$12);
+  const classes$$6 = Common$0024002EHelpers$0024$0024$0024classes("modal-card-foot", new List(opts$$7.CustomClass, opts$$7.Modifiers), new List());
+  return createElement("footer", createObj(new List(classes$$6, opts$$7.Props), 1), ...children$$12);
 }
 export function Card$$$title(options$$9, children$$14) {
   const opts$$8 = Common$0024$0024$0024genericParse(options$$9);
-  const classes$$7 = Common$0024002EHelpers$0024$0024$0024classes("modal-card-title", L(opts$$8.CustomClass, opts$$8.Modifiers), L());
-  return createElement("div", createObj(L(classes$$7, opts$$8.Props), 1), ...children$$14);
+  const classes$$7 = Common$0024002EHelpers$0024$0024$0024classes("modal-card-title", new List(opts$$8.CustomClass, opts$$8.Modifiers), new List());
+  return createElement("div", createObj(new List(classes$$7, opts$$8.Props), 1), ...children$$14);
 }
 export function Card$$$body(options$$10, children$$16) {
   const opts$$9 = Common$0024$0024$0024genericParse(options$$10);
-  const classes$$8 = Common$0024002EHelpers$0024$0024$0024classes("modal-card-body", L(opts$$9.CustomClass, opts$$9.Modifiers), L());
-  return createElement("section", createObj(L(classes$$8, opts$$9.Props), 1), ...children$$16);
+  const classes$$8 = Common$0024002EHelpers$0024$0024$0024classes("modal-card-body", new List(opts$$9.CustomClass, opts$$9.Modifiers), new List());
+  return createElement("section", createObj(new List(classes$$8, opts$$9.Props), 1), ...children$$16);
 }

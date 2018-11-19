@@ -1,4 +1,4 @@
-import { L, Record, declare, Union } from "../../fable-core/Types.js";
+import { List, Record, declare, Union } from "../../fable-core/Types.js";
 import { Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Common$$$genericParse as Common$0024$0024$0024genericParse } from "../Fulma/Common.js";
 import { createObj } from "../../fable-core/Util.js";
 import { fold } from "../../fable-core/List.js";
@@ -14,12 +14,12 @@ export const Input$002EOptions = declare(function Input$002EOptions(arg1, arg2, 
   this.Modifiers = arg4;
 }, Record);
 export function Input$002EOptions$$$get_Empty() {
-  return new Input$002EOptions(null, L(), null, L());
+  return new Input$002EOptions(null, new List(), null, new List());
 }
 export function radio(options, children) {
   const opts = Common$0024$0024$0024genericParse(options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("radio", L(opts.CustomClass, L()), L());
-  return createElement("label", createObj(L(classes, opts.Props), 1), ...children);
+  const classes = Common$0024002EHelpers$0024$0024$0024classes("radio", new List(opts.CustomClass, new List()), new List());
+  return createElement("label", createObj(new List(classes, opts.Props), 1), ...children);
 }
 export function input(options$$1) {
   const parseOptions = function parseOptions(result, option) {
@@ -51,16 +51,16 @@ export function input(options$$1) {
   };
 
   const opts$$1 = fold(parseOptions, Input$002EOptions$$$get_Empty(), options$$1);
-  const classes$$1 = Common$0024002EHelpers$0024$0024$0024classes("radio", L(opts$$1.CustomClass, opts$$1.Modifiers), L());
+  const classes$$1 = Common$0024002EHelpers$0024$0024$0024classes("radio", new List(opts$$1.CustomClass, opts$$1.Modifiers), new List());
   const t = new Props$0024002EHTMLAttr(117, "Type", "radio");
   let attrs;
 
   if (opts$$1.Name == null) {
-    attrs = L(classes$$1, L(t, opts$$1.Props));
+    attrs = new List(classes$$1, new List(t, opts$$1.Props));
   } else {
     const name$$1 = opts$$1.Name;
-    attrs = L(classes$$1, L(t, L(new Props$0024002EHTMLAttr(81, "Name", name$$1), opts$$1.Props)));
+    attrs = new List(classes$$1, new List(t, new List(new Props$0024002EHTMLAttr(81, "Name", name$$1), opts$$1.Props)));
   }
 
-  return createElement("input", createObj(attrs, 1), ...L());
+  return createElement("input", createObj(attrs, 1), ...new List());
 }

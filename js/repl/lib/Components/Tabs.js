@@ -1,6 +1,6 @@
-import { L, Record, declare, Union } from "../../fable-core/Types.js";
+import { List, Record, declare, Union } from "../../fable-core/Types.js";
 import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Size$$$ofSize as Size$0024$0024$0024ofSize } from "../Fulma/Common.js";
-import { fold } from "../../fable-core/List.js";
+import { ofArray, fold } from "../../fable-core/List.js";
 import { createObj } from "../../fable-core/Util.js";
 const createElement = React.createElement;
 export const Option = declare(function Option(tag, name, ...fields) {
@@ -18,7 +18,7 @@ export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, ar
   this.Modifiers = arg9;
 }, Record);
 export function Options$$$get_Empty() {
-  return new Options(null, null, false, false, false, false, null, L(), L());
+  return new Options(null, null, false, false, false, false, null, new List(), new List());
 }
 export const Tab$002EOption = declare(function Tab$002EOption(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
@@ -30,7 +30,7 @@ export const Tab$002EOptions = declare(function Tab$002EOptions(arg1, arg2, arg3
   this.Modifiers = arg4;
 }, Record);
 export function Tab$002EOptions$$$get_Empty() {
-  return new Tab$002EOptions(false, null, L(), L());
+  return new Tab$002EOptions(false, null, new List(), new List());
 }
 export function tabs(options, children) {
   const parseOptions = function parseOptions(result, opt) {
@@ -92,8 +92,8 @@ export function tabs(options, children) {
   };
 
   const opts = fold(parseOptions, Options$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("tabs", L(opts.Alignment, L(opts.Size, L(opts.CustomClass, opts.Modifiers))), L(["is-boxed", opts.IsBoxed], L(["is-fullwidth", opts.IsFullwidth], L(["is-toggle", opts.IsToggle], L(["is-toggle-rounded", opts.IsToggleRounded], L())))));
-  return createElement("div", createObj(L(classes, opts.Props), 1), ...[createElement("ul", {}, ...children)]);
+  const classes = Common$0024002EHelpers$0024$0024$0024classes("tabs", new List(opts.Alignment, new List(opts.Size, new List(opts.CustomClass, opts.Modifiers))), ofArray([["is-boxed", opts.IsBoxed], ["is-fullwidth", opts.IsFullwidth], ["is-toggle", opts.IsToggle], ["is-toggle-rounded", opts.IsToggleRounded]]));
+  return createElement("div", createObj(new List(classes, opts.Props), 1), ...[createElement("ul", {}, ...children)]);
 }
 export function tab(options$$2, children$$3) {
   const parseOptions$$1 = function parseOptions$$1(result$$1, opt$$1) {
@@ -125,6 +125,6 @@ export function tab(options$$2, children$$3) {
   };
 
   const opts$$1 = fold(parseOptions$$1, Tab$002EOptions$$$get_Empty(), options$$2);
-  const classes$$1 = Common$0024002EHelpers$0024$0024$0024classes("", L(opts$$1.CustomClass, opts$$1.Modifiers), L(["is-active", opts$$1.IsActive], L()));
-  return createElement("li", createObj(L(classes$$1, opts$$1.Props), 1), ...children$$3);
+  const classes$$1 = Common$0024002EHelpers$0024$0024$0024classes("", new List(opts$$1.CustomClass, opts$$1.Modifiers), new List(["is-active", opts$$1.IsActive], new List()));
+  return createElement("li", createObj(new List(classes$$1, opts$$1.Props), 1), ...children$$3);
 }

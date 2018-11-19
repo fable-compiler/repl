@@ -1,4 +1,4 @@
-import { L, Record, declare, Union } from "../../fable-core/Types.js";
+import { List, Record, declare, Union } from "../../fable-core/Types.js";
 import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Size$$$ofSize as Size$0024$0024$0024ofSize, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers } from "../Fulma/Common.js";
 import { ofSeq, fold } from "../../fable-core/List.js";
 import { append, delay, empty, singleton } from "../../fable-core/Seq.js";
@@ -16,7 +16,7 @@ export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5) {
   this.Modifiers = arg5;
 }, Record);
 export function Options$$$get_Empty() {
-  return new Options(null, null, null, L(), L());
+  return new Options(null, null, null, new List(), new List());
 }
 export function label(options, children) {
   const parseOptions = function parseOptions(result, _arg1) {
@@ -54,7 +54,7 @@ export function label(options, children) {
   };
 
   const opts = fold(parseOptions, Options$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("label", L(opts.Size, L(opts.CustomClass, opts.Modifiers)), L());
+  const classes = Common$0024002EHelpers$0024$0024$0024classes("label", new List(opts.Size, new List(opts.CustomClass, opts.Modifiers)), new List());
   return createElement("label", createObj(ofSeq(delay(function () {
     return append(singleton(classes), delay(function () {
       return append(opts.HtmlFor != null ? singleton(new Props$0024002EHTMLAttr(54, "HtmlFor", opts.HtmlFor)) : empty(), delay(function () {

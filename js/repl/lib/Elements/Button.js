@@ -1,6 +1,6 @@
-import { L, Record, declare, Union } from "../../fable-core/Types.js";
+import { List as List$$1, Record, declare, Union } from "../../fable-core/Types.js";
 import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Color$$$ofColor as Color$0024$0024$0024ofColor, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Size$$$ofSize as Size$0024$0024$0024ofSize } from "../Fulma/Common.js";
-import { map, exists, ofSeq, fold } from "../../fable-core/List.js";
+import { map, exists, ofSeq, ofArray, fold } from "../../fable-core/List.js";
 import { append, delay, empty, singleton } from "../../fable-core/Seq.js";
 import { Props$002EDOMAttr as Props$0024002EDOMAttr, Props$002EHTMLAttr as Props$0024002EHTMLAttr } from "../Fable.React/Fable.Helpers.React.js";
 import { createObj } from "../../fable-core/Util.js";
@@ -29,7 +29,7 @@ export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, ar
   this.Modifiers = arg18;
 }, Record);
 export function Options$$$get_Empty() {
-  return new Options(null, null, false, false, false, false, false, false, false, false, false, false, false, false, L(), null, null, L());
+  return new Options(null, null, false, false, false, false, false, false, false, false, false, false, false, false, new List$$1(), null, null, new List$$1());
 }
 export function btnView(element, options, children) {
   const parseOption = function parseOption(result, opt) {
@@ -144,7 +144,7 @@ export function btnView(element, options, children) {
   };
 
   const opts = fold(parseOption, Options$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("button", L(opts.Level, L(opts.Size, L(opts.CustomClass, opts.Modifiers))), L(["is-outlined", opts.IsOutlined], L(["is-inverted", opts.IsInverted], L(["is-text", opts.IsText], L(["is-rounded", opts.IsRounded], L(["is-expanded", opts.IsExpanded], L(["is-hovered", opts.IsHovered], L(["is-focus", opts.IsFocused], L(["is-active", opts.IsActive], L(["is-loading", opts.IsLoading], L(["is-static", opts.IsStatic], L(["is-fullwidth", opts.IsFullWidth], L()))))))))))));
+  const classes = Common$0024002EHelpers$0024$0024$0024classes("button", new List$$1(opts.Level, new List$$1(opts.Size, new List$$1(opts.CustomClass, opts.Modifiers))), ofArray([["is-outlined", opts.IsOutlined], ["is-inverted", opts.IsInverted], ["is-text", opts.IsText], ["is-rounded", opts.IsRounded], ["is-expanded", opts.IsExpanded], ["is-hovered", opts.IsHovered], ["is-focus", opts.IsFocused], ["is-active", opts.IsActive], ["is-loading", opts.IsLoading], ["is-static", opts.IsStatic], ["is-fullwidth", opts.IsFullWidth]]));
   return element(ofSeq(delay(function () {
     return append(singleton(classes), delay(function () {
       return append(singleton(new Props$0024002EHTMLAttr(37, "Disabled", opts.IsDisabled)), delay(function () {
@@ -183,19 +183,19 @@ export function Input$$$btnInput(typ, options$$5) {
     const newOptions = map(function mapping(opts$$2) {
       if (opts$$2.tag === 15) {
         const props$$4 = opts$$2.fields[0];
-        return new Option(15, "Props", L(new Props$0024002EHTMLAttr(117, "Type", typ), props$$4));
+        return new Option(15, "Props", new List$$1(new Props$0024002EHTMLAttr(117, "Type", typ), props$$4));
       } else {
         const forward = opts$$2;
         return forward;
       }
     }, options$$5);
     return btnView(function (options$$6, _arg1) {
-      return createElement("input", createObj(options$$6, 1), ...L());
-    }, newOptions, L());
+      return createElement("input", createObj(options$$6, 1), ...new List$$1());
+    }, newOptions, new List$$1());
   } else {
     return btnView(function (options$$7, _arg2) {
-      return createElement("input", createObj(options$$7, 1), ...L());
-    }, L(new Option(15, "Props", L(new Props$0024002EHTMLAttr(117, "Type", typ), L())), options$$5), L());
+      return createElement("input", createObj(options$$7, 1), ...new List$$1());
+    }, new List$$1(new Option(15, "Props", new List$$1(new Props$0024002EHTMLAttr(117, "Type", typ), new List$$1())), options$$5), new List$$1());
   }
 }
 export function Input$$$reset(options$$8) {
@@ -216,7 +216,7 @@ export const List$002EOptions = declare(function List$002EOptions(arg1, arg2, ar
   this.Modifiers = arg6;
 }, Record);
 export function List$002EOptions$$$get_Empty() {
-  return new List$002EOptions(false, false, false, L(), null, L());
+  return new List$002EOptions(false, false, false, new List$$1(), null, new List$$1());
 }
 export function list(options$$10, children$$7) {
   const parseOption$$1 = function parseOption$$1(result$$1, opt$$1) {
@@ -257,6 +257,6 @@ export function list(options$$10, children$$7) {
   };
 
   const opts$$3 = fold(parseOption$$1, List$002EOptions$$$get_Empty(), options$$10);
-  const classes$$1 = Common$0024002EHelpers$0024$0024$0024classes("buttons", L(opts$$3.CustomClass, opts$$3.Modifiers), L(["has-addons", opts$$3.HasAddons], L(["is-centered", opts$$3.IsCentered], L(["is-right", opts$$3.IsRight], L()))));
-  return createElement("div", createObj(L(classes$$1, opts$$3.Props), 1), ...children$$7);
+  const classes$$1 = Common$0024002EHelpers$0024$0024$0024classes("buttons", new List$$1(opts$$3.CustomClass, opts$$3.Modifiers), ofArray([["has-addons", opts$$3.HasAddons], ["is-centered", opts$$3.IsCentered], ["is-right", opts$$3.IsRight]]));
+  return createElement("div", createObj(new List$$1(classes$$1, opts$$3.Props), 1), ...children$$7);
 }

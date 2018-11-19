@@ -1,4 +1,4 @@
-import { L, Record, declare, Union } from "../../fable-core/Types.js";
+import { List, Record, declare, Union } from "../../fable-core/Types.js";
 import { createObj } from "../../fable-core/Util.js";
 import { ofList as ofList$$1 } from "../../fable-core/Array.js";
 import { fold } from "../../fable-core/List.js";
@@ -86,7 +86,7 @@ export function domEl(tag$$1, props$$6, children$$6) {
   return createElement$$1(tag$$1, createObj(props$$6, 1), ...children$$6);
 }
 export function voidEl(tag$$2, props$$7) {
-  return createElement$$1(tag$$2, createObj(props$$7, 1), ...L());
+  return createElement$$1(tag$$2, createObj(props$$7, 1), ...new List());
 }
 export function svgEl(tag$$3, props$$8, children$$7) {
   return createElement$$1(tag$$3, createObj(props$$8, 1), ...children$$7);
@@ -386,52 +386,52 @@ export function video(b$$96, c$$96) {
   return createElement$$1("video", createObj(b$$96, 1), ...c$$96);
 }
 export function area(b$$97) {
-  return createElement$$1("area", createObj(b$$97, 1), ...L());
+  return createElement$$1("area", createObj(b$$97, 1), ...new List());
 }
 export function base(b$$98) {
-  return createElement$$1("base", createObj(b$$98, 1), ...L());
+  return createElement$$1("base", createObj(b$$98, 1), ...new List());
 }
 export function br(b$$99) {
-  return createElement$$1("br", createObj(b$$99, 1), ...L());
+  return createElement$$1("br", createObj(b$$99, 1), ...new List());
 }
 export function col(b$$100) {
-  return createElement$$1("col", createObj(b$$100, 1), ...L());
+  return createElement$$1("col", createObj(b$$100, 1), ...new List());
 }
 export function embed(b$$101) {
-  return createElement$$1("embed", createObj(b$$101, 1), ...L());
+  return createElement$$1("embed", createObj(b$$101, 1), ...new List());
 }
 export function hr(b$$102) {
-  return createElement$$1("hr", createObj(b$$102, 1), ...L());
+  return createElement$$1("hr", createObj(b$$102, 1), ...new List());
 }
 export function img(b$$103) {
-  return createElement$$1("img", createObj(b$$103, 1), ...L());
+  return createElement$$1("img", createObj(b$$103, 1), ...new List());
 }
 export function input(b$$104) {
-  return createElement$$1("input", createObj(b$$104, 1), ...L());
+  return createElement$$1("input", createObj(b$$104, 1), ...new List());
 }
 export function keygen(b$$105) {
-  return createElement$$1("keygen", createObj(b$$105, 1), ...L());
+  return createElement$$1("keygen", createObj(b$$105, 1), ...new List());
 }
 export function link(b$$106) {
-  return createElement$$1("link", createObj(b$$106, 1), ...L());
+  return createElement$$1("link", createObj(b$$106, 1), ...new List());
 }
 export function menuitem(b$$107) {
-  return createElement$$1("menuitem", createObj(b$$107, 1), ...L());
+  return createElement$$1("menuitem", createObj(b$$107, 1), ...new List());
 }
 export function meta(b$$108) {
-  return createElement$$1("meta", createObj(b$$108, 1), ...L());
+  return createElement$$1("meta", createObj(b$$108, 1), ...new List());
 }
 export function param(b$$109) {
-  return createElement$$1("param", createObj(b$$109, 1), ...L());
+  return createElement$$1("param", createObj(b$$109, 1), ...new List());
 }
 export function source(b$$110) {
-  return createElement$$1("source", createObj(b$$110, 1), ...L());
+  return createElement$$1("source", createObj(b$$110, 1), ...new List());
 }
 export function track(b$$111) {
-  return createElement$$1("track", createObj(b$$111, 1), ...L());
+  return createElement$$1("track", createObj(b$$111, 1), ...new List());
 }
 export function wbr(b$$112) {
-  return createElement$$1("wbr", createObj(b$$112, 1), ...L());
+  return createElement$$1("wbr", createObj(b$$112, 1), ...new List());
 }
 export function svg(b$$113, c$$97) {
   return createElement$$1("svg", createObj(b$$113, 1), ...c$$97);
@@ -508,6 +508,6 @@ export function mountById(domElId, reactEl) {
 export function mountBySelector(domElSelector, reactEl$$1) {
   render(reactEl$$1, document.querySelector(domElSelector));
 }
-export function FormEvent$002Eget_Value(this$) {
+export function Fable$002EImport$002EReact$002EFormEvent$$FormEvent$002Eget_Value(this$) {
   return this$.target.value;
 }

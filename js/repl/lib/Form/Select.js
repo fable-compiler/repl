@@ -1,6 +1,6 @@
-import { L, Record, declare, Union } from "../../fable-core/Types.js";
+import { List, Record, declare, Union } from "../../fable-core/Types.js";
 import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Size$$$ofSize as Size$0024$0024$0024ofSize, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Color$$$ofColor as Color$0024$0024$0024ofColor } from "../Fulma/Common.js";
-import { fold } from "../../fable-core/List.js";
+import { ofArray, fold } from "../../fable-core/List.js";
 import { createObj } from "../../fable-core/Util.js";
 const createElement = React.createElement;
 export const Option = declare(function Option(tag, name, ...fields) {
@@ -19,7 +19,7 @@ export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, ar
   this.Modifiers = arg10;
 }, Record);
 export function Options$$$get_Empty() {
-  return new Options(null, null, false, false, false, false, false, L(), null, L());
+  return new Options(null, null, false, false, false, false, false, new List(), null, new List());
 }
 export function select(options, children) {
   const parseOptions = function parseOptions(result, _arg1) {
@@ -96,6 +96,6 @@ export function select(options, children) {
   };
 
   const opts = fold(parseOptions, Options$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("select", L(opts.Size, L(opts.Color, L(opts.CustomClass, opts.Modifiers))), L(["is-loading", opts.IsLoading], L(["is-focused", opts.IsFocused], L(["is-active", opts.IsActive], L(["is-disabled", opts.IsDisabled], L(["is-rounded", opts.IsRounded], L()))))));
-  return createElement("div", createObj(L(classes, opts.Props), 1), ...children);
+  const classes = Common$0024002EHelpers$0024$0024$0024classes("select", new List(opts.Size, new List(opts.Color, new List(opts.CustomClass, opts.Modifiers))), ofArray([["is-loading", opts.IsLoading], ["is-focused", opts.IsFocused], ["is-active", opts.IsActive], ["is-disabled", opts.IsDisabled], ["is-rounded", opts.IsRounded]]));
+  return createElement("div", createObj(new List(classes, opts.Props), 1), ...children);
 }
