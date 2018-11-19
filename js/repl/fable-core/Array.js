@@ -3,7 +3,7 @@ import { compare, addToSet, tryGetValue, comparerFromEqualityComparer, max as ma
 import { createMutable } from "./Map.js";
 import { iterate as iterate$$1 } from "./Seq.js";
 import { createMutable as createMutable$$1 } from "./Set.js";
-import { L } from "./Types.js";
+import { List } from "./Types.js";
 
 function indexNotFound() {
   throw new Error("An index satisfying the predicate was not found in the collection.");
@@ -1169,10 +1169,10 @@ export function ofList(source$$9, cons$$32) {
 }
 export function toList(source$$10) {
   const len$$20 = source$$10.length | 0;
-  let target$$7 = L();
+  let target$$7 = new List();
 
   for (let i$$50 = len$$20 - 1; i$$50 >= 0; i$$50--) {
-    target$$7 = L(source$$10[i$$50], target$$7);
+    target$$7 = new List(source$$10[i$$50], target$$7);
   }
 
   return target$$7;

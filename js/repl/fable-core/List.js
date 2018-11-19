@@ -1,5 +1,5 @@
 import { defaultArg, value as value$$1, some } from "./Option.js";
-import { FSharpRef, L } from "./Types.js";
+import { FSharpRef, List } from "./Types.js";
 import { iterate as iterate$$1, collect as collect$$1, scanBack as scanBack$$1, scan as scan$$1, foldBack2 as foldBack2$$1, fold2 as fold2$$1, fold as fold$$1, map as map$$1 } from "./Seq.js";
 import { permute as permute$$1, findIndexBack as findIndexBack$$1, tryFindIndexBack as tryFindIndexBack$$1, foldBack as foldBack$$1 } from "./Array.js";
 import { ofList } from "./Array.js";
@@ -147,8 +147,8 @@ export function fold($arg$$14, $arg$$15, $arg$$16) {
 }
 export function reverse(xs$$9) {
   return fold(function (acc$$1, x$$6) {
-    return L(x$$6, acc$$1);
-  }, L(), xs$$9);
+    return new List(x$$6, acc$$1);
+  }, new List(), xs$$9);
 }
 export function foldBack(f$$3, xs$$10, state$$2) {
   return fold(function (acc$$2, x$$7) {
@@ -162,15 +162,15 @@ export function toSeq(xs$$11) {
 }
 export function ofSeq(xs$$12) {
   return reverse(fold$$1(function (acc$$3, x$$9) {
-    return L(x$$9, acc$$3);
-  }, L(), xs$$12));
+    return new List(x$$9, acc$$3);
+  }, new List(), xs$$12));
 }
 export function concat(lists) {
   return reverse(fold$$1(function (state$$3, xs$$14) {
     return fold(function f$$4(acc$$4, x$$10) {
-      return L(x$$10, acc$$4);
+      return new List(x$$10, acc$$4);
     }, state$$3, xs$$14);
-  }, L(), lists));
+  }, new List(), lists));
 }
 export function foldIndexed2Aux($arg$$20, $arg$$21, $arg$$22, $arg$$23, $arg$$24) {
   foldIndexed2Aux: while (true) {
@@ -241,7 +241,7 @@ export function unfold(f$$9, state$$7) {
         const x$$12 = matchValue$$3[0];
         const state$$9 = matchValue$$3[1];
         const $acc$$6$$40 = acc$$6;
-        acc$$6 = L(x$$12, $acc$$6$$40);
+        acc$$6 = new List(x$$12, $acc$$6$$40);
         state$$8 = state$$9;
         continue unfoldInner;
       } else {
@@ -252,7 +252,7 @@ export function unfold(f$$9, state$$7) {
     }
   };
 
-  return unfoldInner(L(), state$$7);
+  return unfoldInner(new List(), state$$7);
 }
 export function foldIndexed3Aux($arg$$41, $arg$$42, $arg$$43, $arg$$44, $arg$$45, $arg$$46) {
   foldIndexed3Aux: while (true) {
@@ -338,7 +338,7 @@ export function length(xs$$27) {
 }
 export function append(xs$$28, ys$$10) {
   return fold(function (acc$$10, x$$15) {
-    return L(x$$15, acc$$10);
+    return new List(x$$15, acc$$10);
   }, ys$$10, reverse(xs$$28));
 }
 export function collect(f$$15, xs$$29) {
@@ -346,13 +346,13 @@ export function collect(f$$15, xs$$29) {
 }
 export function map(f$$16, xs$$31) {
   return reverse(fold(function (acc$$11, x$$16) {
-    return L(f$$16(x$$16), acc$$11);
-  }, L(), xs$$31));
+    return new List(f$$16(x$$16), acc$$11);
+  }, new List(), xs$$31));
 }
 export function mapIndexed(f$$17, xs$$33) {
   return reverse(foldIndexed(function (i$$3, acc$$12, x$$17) {
-    return L(f$$17(i$$3, x$$17), acc$$12);
-  }, L(), xs$$33));
+    return new List(f$$17(i$$3, x$$17), acc$$12);
+  }, new List(), xs$$33));
 }
 export function indexed(xs$$35) {
   return mapIndexed(function (i$$4, x$$18) {
@@ -361,31 +361,31 @@ export function indexed(xs$$35) {
 }
 export function map2(f$$18, xs$$36, ys$$11) {
   return reverse(fold2(function (acc$$13, x$$19, y$$4) {
-    return L(f$$18(x$$19, y$$4), acc$$13);
-  }, L(), xs$$36, ys$$11));
+    return new List(f$$18(x$$19, y$$4), acc$$13);
+  }, new List(), xs$$36, ys$$11));
 }
 export function mapIndexed2(f$$19, xs$$38, ys$$12) {
   return reverse(foldIndexed2(function (i$$5, acc$$14, x$$20, y$$5) {
-    return L(f$$19(i$$5, x$$20, y$$5), acc$$14);
-  }, L(), xs$$38, ys$$12));
+    return new List(f$$19(i$$5, x$$20, y$$5), acc$$14);
+  }, new List(), xs$$38, ys$$12));
 }
 export function map3(f$$20, xs$$40, ys$$13, zs$$3) {
   return reverse(fold3(function (acc$$15, x$$21, y$$6, z$$2) {
-    return L(f$$20(x$$21, y$$6, z$$2), acc$$15);
-  }, L(), xs$$40, ys$$13, zs$$3));
+    return new List(f$$20(x$$21, y$$6, z$$2), acc$$15);
+  }, new List(), xs$$40, ys$$13, zs$$3));
 }
 export function mapIndexed3(f$$21, xs$$42, ys$$14, zs$$4) {
   return reverse(foldIndexed3(function (i$$6, acc$$16, x$$22, y$$7, z$$3) {
-    return L(f$$21(i$$6, x$$22, y$$7, z$$3), acc$$16);
-  }, L(), xs$$42, ys$$14, zs$$4));
+    return new List(f$$21(i$$6, x$$22, y$$7, z$$3), acc$$16);
+  }, new List(), xs$$42, ys$$14, zs$$4));
 }
 export function mapFold(f$$22, s, xs$$44) {
   const foldFn = function foldFn(tupledArg, x$$23) {
     const patternInput = f$$22(tupledArg[1], x$$23);
-    return [L(patternInput[0], tupledArg[0]), patternInput[1]];
+    return [new List(patternInput[0], tupledArg[0]), patternInput[1]];
   };
 
-  const patternInput$$1 = fold(foldFn, [L(), s], xs$$44);
+  const patternInput$$1 = fold(foldFn, [new List(), s], xs$$44);
   return [reverse(patternInput$$1[0]), patternInput$$1[1]];
 }
 export function mapFoldBack(f$$23, xs$$45, s$$2) {
@@ -415,11 +415,11 @@ export function iterateIndexed2(f$$27, xs$$49, ys$$16) {
 }
 export function ofArray(xs$$50) {
   return foldBack$$1(function (x$$28, acc$$17) {
-    return L(x$$28, acc$$17);
-  }, xs$$50, L());
+    return new List(x$$28, acc$$17);
+  }, xs$$50, new List());
 }
 export function empty() {
-  return L();
+  return new List();
 }
 export function isEmpty(_arg1$$8) {
   if (_arg1$$8.tail == null) {
@@ -536,13 +536,13 @@ export function tryItem(n$$1, xs$$70) {
 }
 export function filter(f$$42, xs$$71) {
   return foldBack(function (x$$38, acc$$18) {
-    return f$$42(x$$38) ? L(x$$38, acc$$18) : acc$$18;
-  }, xs$$71, L());
+    return f$$42(x$$38) ? new List(x$$38, acc$$18) : acc$$18;
+  }, xs$$71, new List());
 }
 export function partition(f$$43, xs$$72) {
   return fold(function (tupledArg$$1, x$$39) {
-    return f$$43(x$$39) ? [L(x$$39, tupledArg$$1[0]), tupledArg$$1[1]] : [tupledArg$$1[0], L(x$$39, tupledArg$$1[1])];
-  }, [L(), L()], reverse(xs$$72));
+    return f$$43(x$$39) ? [new List(x$$39, tupledArg$$1[0]), tupledArg$$1[1]] : [tupledArg$$1[0], new List(x$$39, tupledArg$$1[1])];
+  }, [new List(), new List()], reverse(xs$$72));
 }
 export function choose(f$$44, xs$$73) {
   return reverse(fold(function (acc$$19, x$$40) {
@@ -552,9 +552,9 @@ export function choose(f$$44, xs$$73) {
       return acc$$19;
     } else {
       const y$$10 = value$$1(matchValue$$8);
-      return L(y$$10, acc$$19);
+      return new List(y$$10, acc$$19);
     }
-  }, L(), xs$$73));
+  }, new List(), xs$$73));
 }
 export function contains(value, list, eq) {
   const loop$$1 = function loop$$1(xs$$75) {
@@ -590,10 +590,10 @@ export function except(itemsToExclude, array$$2, eq$$1) {
   }
 }
 export function initialize(n$$2, f$$46) {
-  let xs$$77 = L();
+  let xs$$77 = new List();
 
   for (let i$$14 = 1; i$$14 <= n$$2; i$$14++) {
-    xs$$77 = L(f$$46(n$$2 - i$$14), xs$$77);
+    xs$$77 = new List(f$$46(n$$2 - i$$14), xs$$77);
   }
 
   return xs$$77;
@@ -707,13 +707,13 @@ export function exists2($arg$$148, $arg$$149, $arg$$150) {
 }
 export function unzip(xs$$82) {
   return foldBack(function (tupledArg$$2, tupledArg$$3) {
-    return [L(tupledArg$$2[0], tupledArg$$3[0]), L(tupledArg$$2[1], tupledArg$$3[1])];
-  }, xs$$82, [L(), L()]);
+    return [new List(tupledArg$$2[0], tupledArg$$3[0]), new List(tupledArg$$2[1], tupledArg$$3[1])];
+  }, xs$$82, [new List(), new List()]);
 }
 export function unzip3(xs$$83) {
   return foldBack(function (tupledArg$$4, tupledArg$$5) {
-    return [L(tupledArg$$4[0], tupledArg$$5[0]), L(tupledArg$$4[1], tupledArg$$5[1]), L(tupledArg$$4[2], tupledArg$$5[2])];
-  }, xs$$83, [L(), L(), L()]);
+    return [new List(tupledArg$$4[0], tupledArg$$5[0]), new List(tupledArg$$4[1], tupledArg$$5[1]), new List(tupledArg$$4[2], tupledArg$$5[2])];
+  }, xs$$83, [new List(), new List(), new List()]);
 }
 export function zip(xs$$84, ys$$19) {
   return map2(function (x$$48, y$$15) {
@@ -912,7 +912,7 @@ export function takeSplitAux(error, i$$20, acc$$26, xs$$116) {
       const $i$$20$$180 = i$$20;
       error = $error$$179;
       i$$20 = $i$$20$$180 - 1;
-      acc$$26 = L(x$$62, $acc$$26$$181);
+      acc$$26 = new List(x$$62, $acc$$26$$181);
       xs$$116 = xs$$117;
       continue takeSplitAux;
     } else {
@@ -953,18 +953,18 @@ export function take(i$$21, xs$$118) {
     switch ($target$$182) {
       case 0:
         {
-          return L();
+          return new List();
         }
 
       case 1:
         {
           const x$$63 = matchValue$$13[1].head;
-          return L(x$$63, L());
+          return new List(x$$63, new List());
         }
 
       case 2:
         {
-          return takeSplitAux(true, i$$24, L(), xs$$119)[0];
+          return takeSplitAux(true, i$$24, new List(), xs$$119)[0];
         }
     }
   }
@@ -979,9 +979,9 @@ export function takeWhile(predicate$$1, xs$$120) {
       }
     } else {
       if (!predicate$$1(xs$$120.head)) {
-        return L();
+        return new List();
       } else {
-        return L(xs$$120.head, takeWhile(predicate$$1, xs$$120.tail));
+        return new List(xs$$120.head, takeWhile(predicate$$1, xs$$120.tail));
       }
     }
   } else {
@@ -1015,18 +1015,18 @@ export function truncate(i$$25, xs$$122) {
     switch ($target$$185) {
       case 0:
         {
-          return L();
+          return new List();
         }
 
       case 1:
         {
           const x$$66 = matchValue$$14[1].head;
-          return L(x$$66, L());
+          return new List(x$$66, new List());
         }
 
       case 2:
         {
-          return takeSplitAux(false, i$$28, L(), xs$$123)[0];
+          return takeSplitAux(false, i$$28, new List(), xs$$123)[0];
         }
     }
   }
@@ -1058,19 +1058,19 @@ export function splitAt(i$$29, xs$$124) {
     switch ($target$$186) {
       case 0:
         {
-          return [L(), xs$$124];
+          return [new List(), xs$$124];
         }
 
       case 1:
         {
           const xs$$125 = matchValue$$15[1].tail;
           const x$$67 = matchValue$$15[1].head;
-          return [L(x$$67, L()), xs$$125];
+          return [new List(x$$67, new List()), xs$$125];
         }
 
       case 2:
         {
-          return takeSplitAux(true, i$$32, L(), xs$$126);
+          return takeSplitAux(true, i$$32, new List(), xs$$126);
         }
     }
   }
@@ -1080,11 +1080,11 @@ export function slice(lower, upper, xs$$127) {
   const upper$$1 = defaultArg(upper, -1) | 0;
   return reverse(foldIndexed(function f$$56(i$$33, acc$$27, x$$68) {
     if ((lower$$1 === -1 ? true : lower$$1 <= i$$33) ? upper$$1 === -1 ? true : i$$33 <= upper$$1 : false) {
-      return L(x$$68, acc$$27);
+      return new List(x$$68, acc$$27);
     } else {
       return acc$$27;
     }
-  }, L(), xs$$127));
+  }, new List(), xs$$127));
 }
 export function distinctBy(projection$$4, xs$$130, eq$$2) {
   const hashSet = createMutable([], comparerFromEqualityComparer(eq$$2));
@@ -1103,9 +1103,9 @@ export function groupBy(projection$$5, xs$$133, eq$$4) {
     const key = projection$$5(v$$2);
 
     if (dict.has(key)) {
-      dict.set(key, L(v$$2, dict.get(key)));
+      dict.set(key, new List(v$$2, dict.get(key)));
     } else {
-      dict.set(key, L(v$$2, L()));
+      dict.set(key, new List(v$$2, new List()));
     }
   }, xs$$133);
   return ofSeq(map$$1(function mapping(kv) {
@@ -1124,9 +1124,9 @@ export function countBy(projection$$6, xs$$135, eq$$5) {
       dict$$1.set(key$$1, new FSharpRef(1));
     }
   }, xs$$135);
-  let result$$1 = L();
+  let result$$1 = new List();
   iterate$$1(function (group) {
-    result$$1 = L([group[0], group[1].contents], result$$1);
+    result$$1 = new List([group[0], group[1].contents], result$$1);
   }, dict$$1);
   return result$$1;
 }

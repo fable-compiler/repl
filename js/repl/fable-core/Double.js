@@ -1,22 +1,19 @@
-// TODO does this perfectly match the .NET behavior ?
-export function tryParse(s, radix, initial) {
-    if (s != null && /\S/.test(s)) {
-        if (radix === 10) {
-            const v = +s;
-            if (!Number.isNaN(v)) {
-                return [true, v];
-            }
+export function tryParse(str) {
+    // TODO: test if value is valid and in range
+    if (str != null && /\S/.test(str)) {
+        const v = +str;
+        if (!Number.isNaN(v)) {
+            return [true, v];
         }
     }
-    return [false, initial != null ? initial : 0];
+    return [false, 0];
 }
-export function parse(s, radix = 10) {
-    const a = tryParse(s, radix, 0);
-    if (a[0]) {
-        return a[1];
+export function parse(str) {
+    const [ok, value] = tryParse(str);
+    if (ok) {
+        return value;
     }
     else {
-        // TODO FormatException ?
         throw new Error("Input string was not in a correct format.");
     }
 }

@@ -62,7 +62,7 @@ open Data
 let margin t r b l =
     Chart.Margin { top = t; bottom = b; right = r; left = l }
 
-let lineChartSample() =
+let lineChartSample =
     lineChart
         [ margin 5. 20. 5. 0.
           Chart.Width 600.
@@ -83,7 +83,7 @@ let lineChartSample() =
           tooltip [] []
         ]
 
-let barChartSample() =
+let barChartSample =
     barChart
         [ margin 5. 20. 5. 0.
           Chart.Width 600.
@@ -98,7 +98,7 @@ let barChartSample() =
           bar [Cartesian.DataKey "uv"; Cartesian.StackId "a"; P.Fill "#82ca9d"] []
         ]
 
-let areaChartSample() =
+let areaChartSample =
     areaChart
         [ margin 10. 30. 0. 0.
           Chart.Width 730.
@@ -133,8 +133,8 @@ let areaChartSample() =
         ]
 
 let renderApp() =
-    R.mountById "container1" <| lineChartSample()
-    R.mountById "container2" <| barChartSample()
-    R.mountById "container3" <| areaChartSample()
+    R.mountById "container1" lineChartSample
+    R.mountById "container2" barChartSample
+    R.mountById "container3" areaChartSample
 
 renderApp()

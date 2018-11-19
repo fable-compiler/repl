@@ -2,6 +2,9 @@ import Decimal from "./lib/big.js";
 export default Decimal;
 export const get_Zero = new Decimal(0);
 export const get_One = new Decimal(1);
+export const get_MinusOne = new Decimal(-1);
+export const get_MaxValue = new Decimal("79228162514264337593543950335");
+export const get_MinValue = new Decimal("-79228162514264337593543950335");
 export function compare(x, y) {
     return x.cmp(y);
 }
@@ -49,15 +52,21 @@ export function op_UnaryNegation(x) {
 export function toString(x) {
     return x.toString();
 }
-export function parse(str) {
-    return new Decimal(str.trim());
-}
-export function tryParse(str, defaultValue) {
+export function tryParse(str) {
     try {
         return [true, new Decimal(str.trim())];
     }
     catch (_a) {
-        return [false, defaultValue];
+        return [false, get_Zero];
+    }
+}
+export function parse(str) {
+    const [ok, value] = tryParse(str);
+    if (ok) {
+        return value;
+    }
+    else {
+        throw new Error("Input string was not in a correct format.");
     }
 }
 export function toNumber(x) {

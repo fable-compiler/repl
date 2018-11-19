@@ -1,4 +1,4 @@
-import { L, Record, declare, Union } from "./Types.js";
+import { List, Record, declare, Union } from "./Types.js";
 import { value as value$$2, some, Choice } from "./Option.js";
 import { iterate as iterate$$1, empty as empty$$1, fold as fold$$1, toIterator, map as map$$1, reduce, getEnumerator, unfold } from "./Seq.js";
 import { structuralHash, isDisposable } from "./Util.js";
@@ -999,7 +999,7 @@ export function SetTreeModule$$$collapseLHS(stack) {
         return stack;
       } else if (stack.head.tag === 1) {
         const $stack$$47 = stack;
-        stack = L($stack$$47.head.fields[1], L(SetTreeModule$$$SetOne($stack$$47.head.fields[0]), L($stack$$47.head.fields[2], $stack$$47.tail)));
+        stack = new List($stack$$47.head.fields[1], new List(SetTreeModule$$$SetOne($stack$$47.head.fields[0]), new List($stack$$47.head.fields[2], $stack$$47.tail)));
         continue SetTreeModule$$$collapseLHS;
       } else {
         const $stack$$48 = stack;
@@ -1007,14 +1007,14 @@ export function SetTreeModule$$$collapseLHS(stack) {
         continue SetTreeModule$$$collapseLHS;
       }
     } else {
-      return L();
+      return new List();
     }
 
     break;
   }
 }
 export function SetTreeModule$$$mkIterator(s$$13) {
-  return new SetTreeModule$002ESetIterator$00601(SetTreeModule$$$collapseLHS(L(s$$13, L())), false);
+  return new SetTreeModule$002ESetIterator$00601(SetTreeModule$$$collapseLHS(new List(s$$13, new List())), false);
 }
 export function SetTreeModule$$$notStarted() {
   throw new Error("Enumeration not started");
@@ -1251,8 +1251,8 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
           } else {
             const $comparer$$17$$52 = comparer$$17;
             comparer$$17 = $comparer$$17$$52;
-            l1 = L(new SetTree$00601(0, "SetEmpty"), t1$$8);
-            l2 = L(n2r, t2$$8);
+            l1 = new List(new SetTree$00601(0, "SetEmpty"), t1$$8);
+            l2 = new List(n2r, t2$$8);
             continue SetTreeModule$$$compareStacks;
           }
         }
@@ -1266,8 +1266,8 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
           } else {
             const $comparer$$17$$53 = comparer$$17;
             comparer$$17 = $comparer$$17$$53;
-            l1 = L(n1r, t1$$9);
-            l2 = L(emp, t2$$9);
+            l1 = new List(n1r, t1$$9);
+            l2 = new List(emp, t2$$9);
             continue SetTreeModule$$$compareStacks;
           }
         }
@@ -1281,8 +1281,8 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
           } else {
             const $comparer$$17$$54 = comparer$$17;
             comparer$$17 = $comparer$$17$$54;
-            l1 = L(n1r$$1, t1$$10);
-            l2 = L(n2r$$1, t2$$10);
+            l1 = new List(n1r$$1, t1$$10);
+            l2 = new List(n2r$$1, t2$$10);
             continue SetTreeModule$$$compareStacks;
           }
         }
@@ -1292,7 +1292,7 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
           const $comparer$$17$$55 = comparer$$17;
           const $l2$$56 = l2;
           comparer$$17 = $comparer$$17$$55;
-          l1 = L(new SetTree$00601(0, "SetEmpty"), L(SetTreeModule$$$SetOne(n1k$$4), t1$$11));
+          l1 = new List(new SetTree$00601(0, "SetEmpty"), new List(SetTreeModule$$$SetOne(n1k$$4), t1$$11));
           l2 = $l2$$56;
           continue SetTreeModule$$$compareStacks;
         }
@@ -1302,7 +1302,7 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
           const $comparer$$17$$57 = comparer$$17;
           const $l2$$58 = l2;
           comparer$$17 = $comparer$$17$$57;
-          l1 = L(n1l, L(SetTreeModule$$$SetNode(n1k$$5, new SetTree$00601(0, "SetEmpty"), n1r$$2, 0), t1$$12));
+          l1 = new List(n1l, new List(SetTreeModule$$$SetNode(n1k$$5, new SetTree$00601(0, "SetEmpty"), n1r$$2, 0), t1$$12));
           l2 = $l2$$58;
           continue SetTreeModule$$$compareStacks;
         }
@@ -1313,7 +1313,7 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
           const $l1$$60 = l1;
           comparer$$17 = $comparer$$17$$59;
           l1 = $l1$$60;
-          l2 = L(new SetTree$00601(0, "SetEmpty"), L(SetTreeModule$$$SetOne(n2k$$4), t2$$11));
+          l2 = new List(new SetTree$00601(0, "SetEmpty"), new List(SetTreeModule$$$SetOne(n2k$$4), t2$$11));
           continue SetTreeModule$$$compareStacks;
         }
 
@@ -1323,7 +1323,7 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
           const $l1$$62 = l1;
           comparer$$17 = $comparer$$17$$61;
           l1 = $l1$$62;
-          l2 = L(n2l, L(SetTreeModule$$$SetNode(n2k$$5, new SetTree$00601(0, "SetEmpty"), n2r$$2, 0), t2$$12));
+          l2 = new List(n2l, new List(SetTreeModule$$$SetNode(n2k$$5, new SetTree$00601(0, "SetEmpty"), n2r$$2, 0), t2$$12));
           continue SetTreeModule$$$compareStacks;
         }
     }
@@ -1343,7 +1343,7 @@ export function SetTreeModule$$$compare(comparer$$18, s1, s2) {
   } else if (matchValue$$9[1].tag === 0) {
     return 1;
   } else {
-    return SetTreeModule$$$compareStacks(comparer$$18, L(s1, L()), L(s2, L())) | 0;
+    return SetTreeModule$$$compareStacks(comparer$$18, new List(s1, new List()), new List(s2, new List())) | 0;
   }
 }
 export function SetTreeModule$$$choose(s$$17) {
@@ -1355,7 +1355,7 @@ export function SetTreeModule$$$loop(m$$8, acc$$10) {
       case 2:
         {
           const k$$32 = m$$8.fields[0];
-          return L(k$$32, acc$$10);
+          return new List(k$$32, acc$$10);
         }
 
       case 0:
@@ -1370,7 +1370,7 @@ export function SetTreeModule$$$loop(m$$8, acc$$10) {
           const k$$31 = m$$8.fields[0];
           const $acc$$10$$63 = acc$$10;
           m$$8 = l$$20;
-          acc$$10 = L(k$$31, SetTreeModule$$$loop(r$$20, $acc$$10$$63));
+          acc$$10 = new List(k$$31, SetTreeModule$$$loop(r$$20, $acc$$10$$63));
           continue SetTreeModule$$$loop;
         }
     }
@@ -1379,7 +1379,7 @@ export function SetTreeModule$$$loop(m$$8, acc$$10) {
   }
 }
 export function SetTreeModule$$$toList(s$$18) {
-  return SetTreeModule$$$loop(s$$18, L());
+  return SetTreeModule$$$loop(s$$18, new List());
 }
 export function SetTreeModule$$$copyToArray(s$$19, arr, i$$2) {
   let j = i$$2 | 0;

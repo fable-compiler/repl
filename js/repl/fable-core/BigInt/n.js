@@ -1,4 +1,4 @@
-import { L, declare, Record } from "../Types.js";
+import { List, declare, Record } from "../Types.js";
 import { op_LeftShift, op_BitwiseAnd, op_Addition, compare, op_Subtraction, op_Division, equals, toInt, op_Modulus, op_Multiply, fromInteger, fromBits } from "../Long.js";
 import { ofList, copy, initialize, map, fill } from "../Array.js";
 import { int32ToString } from "../Util.js";
@@ -1297,12 +1297,12 @@ export function BigNatModule$$$toString(n$$46) {
   const route = function route(prior, k$$11, ten2k) {
     route: while (true) {
       if (BigNatModule$$$degree(ten2k) > degn) {
-        return L([k$$11, ten2k], prior);
+        return new List([k$$11, ten2k], prior);
       } else {
         const $k$$11$$64 = k$$11;
         const $prior$$63 = prior;
         const $ten2k$$65 = ten2k;
-        prior = L([$k$$11$$64, $ten2k$$65], $prior$$63);
+        prior = new List([$k$$11$$64, $ten2k$$65], $prior$$63);
         k$$11 = $k$$11$$64 + 1;
         ten2k = BigNatModule$$$mul($ten2k$$65, $ten2k$$65);
         continue route;
@@ -1312,7 +1312,7 @@ export function BigNatModule$$$toString(n$$46) {
     }
   };
 
-  const kten2ks = route(L(), 0, BigNatModule$$$embed(10));
+  const kten2ks = route(new List(), 0, BigNatModule$$$embed(10));
 
   const collect = function collect(isLeading, digits, n$$47, _arg1$$3) {
     if (_arg1$$3.tail != null) {
@@ -1334,13 +1334,13 @@ export function BigNatModule$$$toString(n$$46) {
       if (isLeading ? n$$48 === 0 : false) {
         return digits;
       } else {
-        return L(int32ToString(n$$48), digits);
+        return new List(int32ToString(n$$48), digits);
       }
     }
   };
 
   const prior$$2 = kten2ks;
-  const digits$$4 = collect(true, L(), n$$46, prior$$2);
+  const digits$$4 = collect(true, new List(), n$$46, prior$$2);
 
   if (digits$$4.tail == null) {
     return "0";

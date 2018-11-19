@@ -1,4 +1,4 @@
-import { Record, L, declare, Union } from "./Types.js";
+import { Record, List, declare, Union } from "./Types.js";
 import { value as value$$3, some } from "./Option.js";
 import { iterate as iterate$$1, empty as empty$$1, toIterator, map as map$$1, unfold, getEnumerator, fold as fold$$1 } from "./Seq.js";
 import { compare, structuralHash, isDisposable } from "./Util.js";
@@ -847,7 +847,7 @@ export function MapTreeModule$$$loop(m$$19, acc$$8) {
         {
           const v$$19 = m$$19.fields[1];
           const k$$23 = m$$19.fields[0];
-          return L([k$$23, v$$19], acc$$8);
+          return new List([k$$23, v$$19], acc$$8);
         }
 
       case 2:
@@ -858,7 +858,7 @@ export function MapTreeModule$$$loop(m$$19, acc$$8) {
           const k$$24 = m$$19.fields[0];
           const $acc$$8$$73 = acc$$8;
           m$$19 = l$$19;
-          acc$$8 = L([k$$24, v$$20], MapTreeModule$$$loop(r$$19, $acc$$8$$73));
+          acc$$8 = new List([k$$24, v$$20], MapTreeModule$$$loop(r$$19, $acc$$8$$73));
           continue MapTreeModule$$$loop;
         }
 
@@ -872,7 +872,7 @@ export function MapTreeModule$$$loop(m$$19, acc$$8) {
   }
 }
 export function MapTreeModule$$$toList(m$$20) {
-  return MapTreeModule$$$loop(m$$20, L());
+  return MapTreeModule$$$loop(m$$20, new List());
 }
 export function MapTreeModule$$$ofList(comparer$$13, l$$20) {
   return fold$$1(function (acc$$9, tupledArg) {
@@ -936,7 +936,7 @@ export function MapTreeModule$$$collapseLHS(stack) {
         return stack;
       } else if (stack.head.tag === 2) {
         const $stack$$77 = stack;
-        stack = L($stack$$77.head.fields[2], L(new MapTree$00602(1, "MapOne", $stack$$77.head.fields[0], $stack$$77.head.fields[1]), L($stack$$77.head.fields[3], $stack$$77.tail)));
+        stack = new List($stack$$77.head.fields[2], new List(new MapTree$00602(1, "MapOne", $stack$$77.head.fields[0], $stack$$77.head.fields[1]), new List($stack$$77.head.fields[3], $stack$$77.tail)));
         continue MapTreeModule$$$collapseLHS;
       } else {
         const $stack$$78 = stack;
@@ -944,14 +944,14 @@ export function MapTreeModule$$$collapseLHS(stack) {
         continue MapTreeModule$$$collapseLHS;
       }
     } else {
-      return L();
+      return new List();
     }
 
     break;
   }
 }
 export function MapTreeModule$$$mkIterator(s$$5) {
-  return new MapTreeModule$002EMapIterator$00602(MapTreeModule$$$collapseLHS(L(s$$5, L())), false);
+  return new MapTreeModule$002EMapIterator$00602(MapTreeModule$$$collapseLHS(new List(s$$5, new List())), false);
 }
 export function MapTreeModule$$$notStarted() {
   throw new Error("enumeration not started");
