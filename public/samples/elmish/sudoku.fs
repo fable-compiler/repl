@@ -20,12 +20,14 @@ let getBoxIndex count row col =
    n * count + m
 
 let boxes (sudoku:Sudoku) =
-    let d = sudoku |> Array.length |> float |> System.Math.Sqrt |> int
+    let l = sudoku |> Array.length
+    let d = float l |> System.Math.Sqrt |> int
     let list = new List<_>()
-    for a in 0..(d*d) - 1 do list.Add(new List<_>())
+    for a in 0..l - 1 do 
+        list.Add(new List<_>())
 
-    for a in 0..(Array.length sudoku - 1) do
-        for b in 0..(Array.length sudoku - 1) do
+    for a in 0..(l - 1) do
+        for b in 0..(l - 1) do
             list.[getBoxIndex d a b].Add(sudoku.[a].[b])
 
     list
