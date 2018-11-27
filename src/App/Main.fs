@@ -2,6 +2,7 @@ module Fable.Repl.Main
 
 open Fable.Core.JsInterop
 open Fable.Import
+open Fable.PowerPack
 open Fulma
 open Fulma.FontAwesome
 open Fulma.Extensions
@@ -10,6 +11,9 @@ open Thoth.Elmish
 open Shared
 open Editor
 open Mouse
+open Thoth.Json
+open Fable.PowerPack
+open Fable.PowerPack.Fetch.Fetch_types
 
 type ISavedState =
     abstract code: string
@@ -75,11 +79,17 @@ type Msg =
     | LoadFail
     | Reset
     | UrlHashChange
+    | GistLoaded of string*string*string
+    | LoadGistError of exn
+    | LoadGist of string
     | MarkEditorErrors of Fable.Repl.Error[]
     | StartCompile of string option
     | EndCompile of EndCompileStatus
     | UpdateStats of CompileStats
     | ShareableUrlReady of unit
+    | GistUrlReady of string
+    | ShareGistError of exn
+    | NoToken
     | SetOutputTab of OutputTab
     | SetCodeTab of CodeTab
     | ToggleProblemsPanel
@@ -116,6 +126,56 @@ let private clamp min max value =
     elif value <= min
     then min
     else value
+
+let private postToGist =
+    let decoder = Decode.object (fun get -> get.Required.Field "id" Decode.string)
+    let toContent str = Encode.object ["content", Encode.string str]
+    fun (token,code,html,css) ->
+        promise {
+            let data =
+              Encode.object [
+                "public", Encode.bool true
+                "description", Encode.string "Created with Fable REPL"
+                "files", Encode.object [
+                    "fable-repl.fs", toContent code
+                    "fable-repl.html", toContent html
+                    "fable-repl.css", toContent css
+                ] ] |> Encode.toString 0
+
+            return! Fetch.fetchAs "https://api.github.com/gists" decoder
+                [ RequestProperties.Method HttpMethod.POST
+                  RequestProperties.Body !^data
+                  Fable.PowerPack.Fetch.requestHeaders [HttpRequestHeaders.Authorization ("token " + token)]
+                  ]
+    }
+let private loadGist =
+    let recover choice =
+        promise {
+            match choice with
+            | Choice1Of2 url ->
+                return! Fetch.fetchAs url Decode.string []
+            | Choice2Of2 content ->
+                return content }
+    let inline getDecoder extension =
+        let file = "fable-repl" + extension
+        Decode.object (fun get ->
+            if get.Required.At [file; "truncated"] Decode.bool then
+                get.Required.At [file; "raw_url"] Decode.string |> Choice1Of2
+            else
+                get.Required.At [file; "content"] Decode.string |> Choice2Of2)
+    let decoder =
+        Decode.object (fun get ->
+            get.Required.Field "files" (getDecoder ".fs"),
+            get.Required.Field "files" (getDecoder ".html"),
+            get.Required.Field "files" (getDecoder ".css"))
+    fun gist ->
+        let url = "https://api.github.com/gists/" + gist
+        promise {
+            let! (code,html,css) = Fetch.fetchAs url decoder []
+            let! code = recover code
+            let! html = recover html
+            let! css = recover css
+            return (code, html, css) }
 
 let private parseEditorCode (worker: ObservableWorker<_>) (model: Monaco.Editor.IModel) =
     let content = model.getValue (Monaco.Editor.EndOfLinePreference.TextDefined, true)
@@ -168,6 +228,9 @@ let update msg (model : Model) =
     | ToggleProblemsPanel ->
         { model with IsProblemsPanelExpanded = not model.IsProblemsPanelExpanded }, Cmd.none
 
+    | LoadGist gist ->
+        model, Cmd.ofPromise loadGist gist GistLoaded LoadGistError
+
     | Reset ->
         Browser.window.localStorage.removeItem(Literals.STORAGE_KEY)
         let saved = loadState(Literals.STORAGE_KEY)
@@ -178,9 +241,30 @@ let update msg (model : Model) =
                      IFrameUrl = ""
                      Logs = [] }, Router.modifyUrl Router.Home
 
+    | GistLoaded (code, html, css) ->
+        { model with FSharpCode = code; HtmlCode = html; CssCode = css }, Cmd.ofMsg (StartCompile (Some code))
+
+    | GistUrlReady gist ->
+        model, Cmd.batch [
+            Router.modifyUrl (Router.LoadGist (Some gist))
+            Cmd.ofMsg (ShareableUrlReady ()) ]
+
+    | ShareGistError exn ->
+        Browser.console.error exn
+        model, Toast.message "An error occured when creating the gist. Is the token valid?"
+                |> Toast.icon Fa.I.Warning
+                |> Toast.position Toast.BottomRight
+                |> Toast.warning
+
+    | NoToken ->
+        model, Toast.message "You need to register your GitHub API token before sharing to Gist"
+                |> Toast.icon Fa.I.Warning
+                |> Toast.position Toast.BottomRight
+                |> Toast.warning
+
     | UrlHashChange ->
         let parsed = loadState(Literals.STORAGE_KEY)
-        { model with FSharpCode = parsed.code; HtmlCode = parsed.html }, Cmd.ofMsg (StartCompile (Some parsed.code))
+        { model with FSharpCode = parsed.code; HtmlCode = parsed.html; CssCode = parsed.css }, Cmd.ofMsg (StartCompile (Some parsed.code))
 
     | MarkEditorErrors errors ->
         { model with FSharpErrors = mapErrorToMarker errors }, Cmd.none
@@ -286,6 +370,13 @@ let update msg (model : Model) =
                 model, Cmd.ofFunc updateQuery (model.FSharpCode, model.HtmlCode, model.CssCode) ShareableUrlReady UpdateQueryFailed
             | Sidebar.Reset ->
                 model, Router.newUrl Router.Reset
+            | Sidebar.ShareToGist ->
+                model,
+                    match subModel.Options.GistToken with
+                    | Some token ->
+                        Cmd.ofPromise postToGist (token, model.FSharpCode, model.HtmlCode, model.CssCode) GistUrlReady ShareGistError
+                    | None ->
+                        Cmd.ofMsg NoToken
 
         { newModel with Sidebar = subModel }, Cmd.batch [ Cmd.map SidebarMsg cmd
                                                           extraCmd ]
@@ -306,6 +397,13 @@ let update msg (model : Model) =
                 |> Toast.icon Fa.I.InfoCircle
                 |> Toast.timeout (System.TimeSpan.FromSeconds 5.)
                 |> Toast.info
+
+    | LoadGistError exn ->
+        Browser.console.error exn
+        model, Toast.message "An error occured when loading the gist"
+                |> Toast.icon Fa.I.Warning
+                |> Toast.position Toast.BottomRight
+                |> Toast.warning
 
     | UpdateQueryFailed exn ->
         Browser.console.error exn

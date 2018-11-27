@@ -23,6 +23,7 @@ type ExternalMsg =
     | NoOp
     | Reset
     | Share
+    | ShareToGist
 
 let init () =
     let samplesModel, samplesCmd = Widgets.Samples.init ()
@@ -61,6 +62,8 @@ let update msg model =
             | Widgets.General.NoOp -> NoOp
             | Widgets.General.Reset -> Reset
             | Widgets.General.ExternalMessage.Share -> Share
+            | Widgets.General.ExternalMessage.ShareToGist -> ShareToGist
+
 
         { model with General = generalModel }, Cmd.none, externalMsg
 
@@ -162,7 +165,7 @@ let private expandButton dispatch =
 
 let view (model: Model) (actionAreaExpanded, actionAreaCollapsed) dispatch =
     let widgets =
-        [ "General", Fa.I.Th, Widgets.General.view model.General (GeneralMsg >> dispatch), None
+        [ "General", Fa.I.Th, Widgets.General.view model.Options.GistToken model.General (GeneralMsg >> dispatch), None
           "Samples", Fa.I.Book, Widgets.Samples.view model.Samples (SamplesMsg >> dispatch), Some "500px"
           "Options", Fa.I.Cog, Widgets.Options.view model.Options (OptionsMsg >> dispatch), None
           "Statistics", Fa.I.ClockO, Widgets.Stats.view model.Statistics, None

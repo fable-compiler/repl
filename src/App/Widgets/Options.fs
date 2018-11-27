@@ -6,6 +6,7 @@ open Fulma
 open Fulma.Extensions
 open Thoth.Json
 open Fable.Import
+open Fulma
 
 [<Literal>]
 let private MONACO_DEFAULT_FONT_FAMILY = "Menlo, Monaco, \"Courier New\", monospace"
@@ -16,12 +17,16 @@ let private LOCAL_STORAGE_REPL_SETTING = "fable_repl_settings"
 type Model =
     { Optimize : bool
       FontSize : float
-      FontFamily : string }
+      FontFamily : string
+      GistToken : string option
+      GistTokenField : string }
 
     static member Default =
         { Optimize = false
           FontSize = 14.
-          FontFamily = MONACO_DEFAULT_FONT_FAMILY }
+          FontFamily = MONACO_DEFAULT_FONT_FAMILY
+          GistToken = None
+          GistTokenField = "" }
 
     static member Decoder =
         Decode.object (fun get ->
@@ -32,19 +37,28 @@ type Model =
               FontSize = get.Optional.Field "fontSize" Decode.float
                             |> Option.defaultValue 14.
               FontFamily = get.Optional.Field "fontFamily" Decode.string
-                            |> Option.defaultValue MONACO_DEFAULT_FONT_FAMILY } : Model
+                            |> Option.defaultValue MONACO_DEFAULT_FONT_FAMILY
+              GistToken = get.Optional.Field "gistToken" Decode.string
+              GistTokenField = "" } : Model
         )
 
     static member Encoder (model : Model) =
         Encode.object
-            [ "optimize", Encode.bool model.Optimize
-              "fontSize", Encode.float model.FontSize
-              "fontFamily", Encode.string model.FontFamily ]
+            [ yield "optimize", Encode.bool model.Optimize
+              yield "fontSize", Encode.float model.FontSize
+              yield "fontFamily", Encode.string model.FontFamily
+              match model.GistToken with
+              | Some token -> yield "gistToken", Encode.string token
+              | None -> () ]
 
 type Msg =
     | ToggleOptimize
     | ChangeFontSize of float
     | ChangeFontFamily of string
+    | ChangeGistToken of string
+    | SaveToken
+    | DeleteToken
+
 
 let init () =
     match Browser.localStorage.getItem(LOCAL_STORAGE_REPL_SETTING) :?> string with
@@ -77,6 +91,17 @@ let update msg model =
 
     | ChangeFontFamily newFont ->
         { model with FontFamily = newFont }
+
+    | ChangeGistToken token ->
+        { model with GistTokenField = token }
+
+    | SaveToken ->
+        { model with GistTokenField = ""
+                     GistToken = Some model.GistTokenField }
+
+    | DeleteToken ->
+        { model with GistToken = None}
+
     // Save the setting in localStorage
     // Like that they are persistant between REPL reload
     |> saveSettings
@@ -132,10 +157,39 @@ let inline private optimizeSetting (isActive : bool) dispatch =
                               Switch.OnChange (fun _ -> dispatch ToggleOptimize) ]
                 [ str label ] ] ]
 
+let inline private gistTokenSetting (token : string option) (tokenField : string) dispatch =
+    match token with
+    | Some _ ->
+        Field.div []
+            [ Button.a
+                    [ Button.OnClick (fun _ -> dispatch DeleteToken)
+                      Button.IsFullWidth]
+            [str "Delete gist token"] ]
+    | None ->
+        Field.div []
+            [ Label.label []
+                [ str "Github token"
+                  a
+                    [ Target "_blank"
+                      Href "https://github.com/settings/tokens/new?description=fable-repl&scopes=gist"]
+                    [ str "  (Create)"] ]
+              Field.div [ Field.HasAddons ][
+                  yield Input.input
+                    [ Input.OnChange (fun e -> e.Value |> ChangeGistToken |> dispatch)
+                      Input.Placeholder "Token with gist scope"]
+                  if tokenField.Length = 40 then
+                    yield Button.a
+                        [ Button.OnClick (fun _ -> dispatch SaveToken) ]
+                        [ str "Save"]
+              ]
+         ]
+
+
 let view (model: Model) dispatch =
     div [ ]
         [ fontFamilySetting model.FontFamily dispatch
           fontSizeSetting model.FontSize dispatch
+          gistTokenSetting model.GistToken model.GistTokenField dispatch
           // TODO: Optimize is disable to prevent problems with inline functions in REPL Lib
         //   optimizeSetting model.Optimize dispatch
         ]

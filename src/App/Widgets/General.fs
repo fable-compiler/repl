@@ -17,11 +17,13 @@ type Msg =
     | ConfirmReset
     | CancelReset
     | Share
+    | ShareToGist
 
 type ExternalMessage =
     | NoOp
     | Reset
     | Share
+    | ShareToGist
 
 let init () =
     { ResetState = Default }
@@ -40,12 +42,15 @@ let update msg model =
     | Msg.Share ->
         model, ExternalMessage.Share
 
-let view (model: Model) dispatch =
+    | Msg.ShareToGist ->
+        model, ExternalMessage.ShareToGist
+
+let view gistToken (model: Model) dispatch =
     let content =
         match model.ResetState with
         | Default ->
             div [ ]
-                [ Field.div [ Field.HasAddons ]
+                [ yield Field.div [ Field.HasAddons ]
                     [ Control.div [ ]
                         [ Button.button [ Button.OnClick (fun _ -> dispatch AskReset) ]
                             [ Icon.faIcon [ ]
@@ -56,7 +61,7 @@ let view (model: Model) dispatch =
                                           Button.IsFullWidth ]
                             [ Text.span [ ]
                                 [ str "Click here to reset" ] ] ] ]
-                  Field.div [ Field.HasAddons ]
+                  yield Field.div [ Field.HasAddons ]
                     [ Control.div [ ]
                         [ Button.button [ Button.OnClick (fun _ -> dispatch Msg.Share) ]
                             [ Icon.faIcon [ ]
@@ -66,7 +71,21 @@ let view (model: Model) dispatch =
                                           Button.IsText
                                           Button.IsFullWidth ]
                             [ Text.span [ ]
-                                [ str "Share" ] ] ] ] ]
+                                [ str "Share" ] ] ] ]
+                  match gistToken with
+                  | Some _ ->
+                    yield Field.div [ Field.HasAddons ]
+                        [ Control.div [ ]
+                            [ Button.button [ Button.OnClick (fun _ -> dispatch Msg.ShareToGist) ]
+                                [ Icon.faIcon [ ]
+                                    [ Fa.icon Fa.I.Github ] ] ]
+                          Control.div [ Control.IsExpanded ]
+                            [ Button.button [ Button.OnClick (fun _ -> dispatch Msg.ShareToGist)
+                                              Button.IsText
+                                              Button.IsFullWidth ]
+                                [ Text.span [ ]
+                                    [ str "Share to Gist" ] ] ] ]
+                  | None -> () ]
         | Confirm ->
             Field.div [ ]
                 [ Help.help [ Help.Color IsWarning ]

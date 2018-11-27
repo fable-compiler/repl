@@ -34,7 +34,7 @@ let urlUpdate (result: Option<Router.Page>) model =
             let (mainModel, mainCmd) = Main.init()
             Running mainModel, Cmd.map MainMsg mainCmd
 
-        | Running model -> Running model, Cmd.none
+        | Running model -> Running model, Cmd.ofMsg (MainMsg Main.UrlHashChange)
 
         | InvalidPlatform -> InvalidPlatform, Cmd.none
 
@@ -46,8 +46,11 @@ let urlUpdate (result: Option<Router.Page>) model =
 
     | Some page ->
         match page with
-        | Router.Home ->
+        | Router.Home | Router.LoadGist None->
             model, cmd
+        | Router.LoadGist (Some gist) ->
+            model, Cmd.batch [ cmd
+                               Cmd.ofMsg (MainMsg (Main.LoadGist gist)) ]
         // If user ask for reset, send a Reset message
         | Router.Reset ->
             model, Cmd.batch [ cmd
