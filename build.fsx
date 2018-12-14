@@ -185,11 +185,11 @@ Target "CopyModules" (fun _ ->
 )
 
 Target "WatchApp" (fun _ ->
-    runDotnet APP_DIR "fable webpack-dev-server"
+    runYarn CWD "webpack-dev-server"
 )
 
 Target "BuildApp" (fun _ ->
-    runDotnet APP_DIR "fable webpack-cli"
+    runYarn CWD "webpack"
 )
 
 Target "PublishGithubPages" (fun _->
@@ -208,13 +208,7 @@ Target "GetBundleLocally" (fun _ ->
 )
 
 Target "BuildLib" (fun _ ->
-    // fable-splitter will adjust the fable-core path
-    let fableCoreDir = "force:${outDir}../fable-core"
-    let fableCommand =
-        "fable"
-        // "run -c Release -p ../../../Fable/src/dotnet/Fable.Compiler/" // Local version
-    sprintf "%s fable-splitter --fable-core %s --args \"-c src/Lib/splitter.config.js\"" fableCommand fableCoreDir
-    |> runDotnet APP_DIR
+    runYarn CWD "fable-splitter -c src/Lib/splitter.config.js"
 
     // Ensure that all imports end with .js
     let outDir = REPL_OUTPUT </> "lib"
@@ -235,8 +229,9 @@ Target "BuildSamples" (fun _ ->
     let libProj = "public/samples/Samples.fsproj"
     let outDir = "temp"
     let splitterArgs = sprintf "%s -o %s --allFiles" libProj outDir
-    runDotnet CWD
-        (sprintf "run -c Release -p ../fable/src/dotnet/Fable.Compiler fable-splitter --fable-core %s --args \"%s\"" fableCoreDir splitterArgs)
+    sprintf "run -p ../fable/src/dotnet/Fable.Compiler fable-splitter --fable-core %s --args \"%s\""
+        fableCoreDir splitterArgs
+    |> runDotnet CWD
 )
 
 Target "All" DoNothing

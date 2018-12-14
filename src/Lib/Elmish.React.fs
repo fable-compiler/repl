@@ -5,7 +5,7 @@ module Program =
     open Fable.Import.Browser
 
     /// Setup rendering of root React component inside html element identified by placeholderId
-    let withReact placeholderId (program:Elmish.Program<_,_,_,_>) =
+    let withReactSynchronous placeholderId (program:Elmish.Program<_,_,_,_>) =
         let setState model dispatch =
             Fable.Import.ReactDom.render(
                 program.view model dispatch,

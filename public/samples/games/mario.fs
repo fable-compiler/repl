@@ -22,8 +22,8 @@ module Keyboard =
         (code 39 - code 37, code 38 - code 40)
 
     let initKeyboard () =
-        document.addEventListener_keydown(fun e -> update(e, true))
-        document.addEventListener_keyup(fun e -> update(e, false))
+        document.addEventListener("keydown", fun e -> update(e :?> _, true))
+        document.addEventListener("keyup", fun e -> update(e :?> _, false))
 
 module Physics =
 
@@ -65,7 +65,7 @@ module Canvas =
     open Fable.Import.Browser
 
     // Get the canvas context for drawing
-    let canvas = document.getElementsByTagName_canvas().[0]
+    let canvas = document.getElementsByTagName("canvas").[0] :?> HTMLCanvasElement
     let context = canvas.getContext_2d()
 
     // Format RGB color as "rgb(r,g,b)"
@@ -80,8 +80,8 @@ module Canvas =
 
     /// Move element to a specified X Y position
     let position (x,y) (img : HTMLImageElement) =
-        img.style.left <- x.ToString() + "px"
-        img.style.top <- (canvas.offsetTop + y).ToString() + "px"
+        img?style?left <- x.ToString() + "px"
+        img?style?top <- (canvas.offsetTop + y).ToString() + "px"
 
     let getWindowDimensions () =
         canvas.width, canvas.height
@@ -89,7 +89,7 @@ module Canvas =
     /// Get the first <img /> element and set `src` (do
     /// nothing if it is the right one to keep animation)
     let image (src:string) =
-        let image = document.getElementsByTagName_img().[0]
+        let image = document.getElementsByTagName("img").[0] :?> HTMLImageElement
         if image.src.IndexOf(src) = -1 then image.src <- src
         image
 

@@ -9,7 +9,7 @@ Small application showing how to use:
 open System
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
-open Fable.PowerPack
+open Fable.SimpleHttp
 open Fable.Import
 open Elmish
 open Elmish.React
@@ -80,14 +80,15 @@ let init () = Loading None, Cmd.ofMsg FetchRandomUser
 
 // UPDATE
 
-let private getRandomUser () = promise {
+let private getRandomUser () = async {
     // We add a delay of 300ms so the button animation is more visible
-    do! Promise.sleep 300
-    let! response = Fetch.fetch "https://randomuser.me/api/" []
-    let! text = response.text()
+    do! Async.Sleep 300
+    let! response =
+        Http.request "https://randomuser.me/api/"
+        |> Http.send
     let resultDecoder =
         Decode.field "results" (Decode.index 0 User.Decoder)
-    return Decode.fromString resultDecoder text
+    return Decode.fromString resultDecoder response.responseText
 }
 let update (msg:Msg) (model:Model) =
     match msg with
@@ -100,7 +101,7 @@ let update (msg:Msg) (model:Model) =
                 Loading (Some user)
             | _ -> Loading None
 
-        newModel, Cmd.ofPromise getRandomUser () FetchResponse FetchError
+        newModel, Cmd.ofAsync getRandomUser () FetchResponse FetchError
 
     // We got a response and decoding succeded
     | FetchResponse (Ok user) ->
@@ -199,5 +200,5 @@ let view model dispatch =
 
 // App
 Program.mkProgram init update view
-|> Program.withReact "elmish-app"
+|> Program.withReactSynchronous "elmish-app"
 |> Program.run

@@ -11,6 +11,36 @@ let [<Global>] importScripts(path: string): unit = jsNative
 
 importScripts Literals.REPL_BUNDLE_URL
 
+let refs = [|
+    "Fable.Core"
+    // "Fable.Import.Browser"
+    "Fable.Repl.Lib"
+    "FSharp.Core"
+    "mscorlib"
+    "netstandard"
+    "System.Collections"
+    "System.Console"
+    "System.Core"
+    "System.Diagnostics.Debug"
+    "System"
+    "System.IO"
+    "System.Numerics"
+    "System.Reflection"
+    "System.Reflection.Extensions"
+    "System.Reflection.Metadata"
+    "System.Reflection.Primitives"
+    "System.Reflection.TypeExtensions"
+    "System.Runtime"
+    "System.Runtime.Extensions"
+    "System.Runtime.Numerics"
+    "System.Text.Encoding"
+    "System.Text.Encoding.Extensions"
+    "System.Text.RegularExpressions"
+    "System.ValueTuple"
+    "System.Threading"
+    "System.Threading.Tasks"
+|]
+
 let private getAssemblyReader(_refs: string[]): JS.Promise<string->byte[]> = importMember "./util.js"
 let private compileBabelAst(_ast: obj): string = importMember "./util.js"
 let resolveLibCall(entityName: string): (string*string) option = importMember "./util.js"
@@ -26,7 +56,6 @@ let init() = async {
     let worker = ObservableWorker<WorkerRequest>(self, WorkerRequest.Decoder, name="WORKER")
     try
         // Create checker
-        let refs = [| yield! Metadata.references false; yield "Fable.Repl.Lib" |]
         let! reader = getAssemblyReader refs |> Async.AwaitPromise
         let (checker, checkerTime) = measureTime "FCS checker" Fable.CreateChecker (refs, reader, None) // Highly computing-expensive
         let mutable currentResults: IParseResults option = None
@@ -42,7 +71,7 @@ let init() = async {
                 try
                     let (parseResults, parsingTime) = measureTime "FCS parsing" Fable.ParseFSharpScript (checker, Literals.FILE_NAME, fsharpCode)
                     let (res, fableTransformTime) = measureTime "Fable transform" (fun () ->
-                        Fable.CompileToBabelAst("fable-core", parseResults, Literals.FILE_NAME, optimize, resolveLibCall)) ()
+                        Fable.CompileToBabelAst("fable-library", parseResults, Literals.FILE_NAME, optimize, resolveLibCall)) ()
                     let (jsCode, babelTime) = measureTime "Babel generation" compileBabelAst res.BabelAst
 
                     let stats : CompileStats =

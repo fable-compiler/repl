@@ -5,15 +5,21 @@
     <DefineConstants>$(DefineConstants);FABLE_COMPILER;FABLE_REPL_LIB</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="../../paket-files/MangelMaxime/Thoth/src/Thoth.Json/Decode.fs" />
-    <Compile Include="../../paket-files/MangelMaxime/Thoth/src/Thoth.Json/Encode.fs" />
+    <Compile Include="../../paket-files/fable-compiler/fable-import/Browser.Minimal/Fable.Import.Browser.fs" />
 
-    <Compile Include="../../paket-files/fable-compiler/fable-powerpack/src/Result.fs" />
-    <Compile Include="../../paket-files/fable-compiler/fable-powerpack/src/Promise.fs" />
-    <Compile Include="../../paket-files/fable-compiler/fable-powerpack/src/Fetch.fs" />
+    <Compile Include="../../paket-files/alfonsogarciacaro/Thoth/src/Thoth.Json/Types.fs" />
+    <Compile Include="../../paket-files/alfonsogarciacaro/Thoth/src/Thoth.Json/Decode.fs" />
+    <Compile Include="../../paket-files/alfonsogarciacaro/Thoth/src/Thoth.Json/Encode.fs" />
+    <!-- <Compile Include="../../paket-files/alfonsogarciacaro/Thoth/src/Thoth.Json/Extra.fs" /> -->
+
+    <Compile Include="../../paket-files/fable-compiler/fable-promise/src/Promise.fs" />
+    <Compile Include="../../paket-files/fable-compiler/fable-promise/src/PromiseImpl.fs" />
+
+    <Compile Include="../../paket-files/alfonsogarciacaro/Fable.SimpleHttp/src/Http.fs" />
 
     <Compile Include="../../paket-files/elmish/elmish/src/prelude.fs" />
     <Compile Include="../../paket-files/elmish/elmish/src/cmd.fs" />
+    <Compile Include="../../paket-files/elmish/elmish/src/ring.fs" />
     <Compile Include="../../paket-files/elmish/elmish/src/program.fs" />
 
     <Compile Include="../../paket-files/fable-compiler/fable-react/src/Fable.React/Fable.Import.React.fs" />

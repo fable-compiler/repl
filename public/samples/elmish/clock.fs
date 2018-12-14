@@ -93,5 +93,5 @@ let view (CurrentTime time) dispatch =
 // App
 Program.mkProgram initialState update view
 |> Program.withSubscription (fun _ -> Cmd.ofSub timerTick)
-|> Program.withReact "elmish-app"
+|> Program.withReactSynchronous "elmish-app"
 |> Program.run

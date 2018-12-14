@@ -144,5 +144,5 @@ let view model dispatch =
 
 // App
 Program.mkSimple initialModel update view
-|> Program.withReact "elmish-app"
+|> Program.withReactSynchronous "elmish-app"
 |> Program.run

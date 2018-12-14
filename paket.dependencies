@@ -1,12 +1,11 @@
 source https://nuget.org/api/v2
 storage:none
 
-clitool dotnet-fable
 nuget Fable.Core
 nuget Fable.Elmish.Browser
 nuget Fable.Import.Browser
 nuget Fable.React
-nuget Fulma
+nuget Fulma 1.0
 nuget Fulma.Extensions
 nuget Fable.Elmish
 nuget Fable.Elmish.React
@@ -19,15 +18,23 @@ github fable-compiler/Fable:master src/dotnet/Fable.Repl/Interfaces.fs
 github fable-compiler/Fable:master src/dotnet/Fable.Repl/Metadata.fs
 
 # REPL Lib
-github MangelMaxime/Thoth:master src/Thoth.Json/Decode.fs
-github MangelMaxime/Thoth:master src/Thoth.Json/Encode.fs
+github fable-compiler/fable-import:browser-min Browser.Minimal/Fable.Import.Browser.fs
 
-github fable-compiler/fable-powerpack:master src/Result.fs
-github fable-compiler/fable-powerpack:master src/Promise.fs
-github fable-compiler/fable-powerpack:master src/Fetch.fs
+github alfonsogarciacaro/Thoth:auto-encode src/Thoth.Json/Types.fs
+github alfonsogarciacaro/Thoth:auto-encode src/Thoth.Json/Decode.fs
+github alfonsogarciacaro/Thoth:auto-encode src/Thoth.Json/Encode.fs
+github alfonsogarciacaro/Thoth:auto-encode src/Thoth.Json/Extra.fs
+
+github fable-compiler/fable-promise:master src/Promise.fs
+github fable-compiler/fable-promise:master src/PromiseImpl.fs
+
+github alfonsogarciacaro/Fable.SimpleHttp:patch-3 src/Http.fs
+#github Zaid-Ajaj/Fable.SimpleHttp:master src/Types.fs
+#github Zaid-Ajaj/Fable.SimpleHttp:master src/Http.fs
 
 github elmish/elmish:master src/prelude.fs
 github elmish/elmish:master src/cmd.fs
+github elmish/elmish:master src/ring.fs
 github elmish/elmish:master src/program.fs
 
 github fable-compiler/fable-react:repl-lib src/Fable.React/Fable.Import.React.fs
@@ -37,7 +44,7 @@ github fable-compiler/fable-react:repl-lib src/Fable.Recharts/Fable.Recharts.fs
 github elmish/react:master src/common.fs
 github elmish/react:master src/react.fs
 
-github MangelMaxime/Fulma
+github MangelMaxime/Fulma:f4b330891715f94e9b735cd0ed2f01b7bb13d73d
 
 group Build
 framework: net46

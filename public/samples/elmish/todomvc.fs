@@ -271,6 +271,6 @@ let view model dispatch =
 
 // App
 Program.mkSimple emptyModel update view
-|> Program.withReact "todoapp"
+|> Program.withReactSynchronous "todoapp"
 |> Program.withConsoleTrace
 |> Program.run

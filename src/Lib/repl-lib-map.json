@@ -1,10 +1,12 @@
 {
     "Thoth.Json.Decode": ["Thoth.Json.Decode", "Thoth.Json/Decode"],
     "Thoth.Json.Encode": ["Thoth.Json.Encode", "Thoth.Json/Encode"],
+    "Thoth.Json.Extra": ["Thoth.Json.Extra", "Thoth.Json/Extra"],
+    "Thoth.Json": ["Thoth.Json", "Thoth.Json/Types"],
 
-    "Fable.PowerPack.Result": ["Fable.PowerPack.Result", "src/Result"],
-    "Fable.PowerPack.Promise": ["Fable.PowerPack", "src/Promise"],
-    "Fable.PowerPack.Fetch": ["Fable.PowerPack.Fetch", "src/Fetch"],
+    "Fable.PromiseImpl": ["Fable.Promise", "src/PromiseImpl"],
+    "Fable.Promise": ["Fable.Promise", "src/Promise"],
+    "Fable.SimpleHttp": ["Fable.SimpleHttp", "src/Http"],
 
     "Elmish.Log": ["Elmish.Log", "src/prelude"],
     "Elmish.Cmd": ["Elmish", "src/cmd"],

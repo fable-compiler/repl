@@ -2,7 +2,7 @@
 
 import * as Babel from "@babel/standalone";
 import BabelTemplate from "@babel/template";
-import * as BabelPlugins from "fable-utils/babel-plugins";
+import * as BabelPlugins from "fable-babel-plugins";
 import ReplLibMap from "../Lib/repl-lib-map.json";
 
 export function resolveLibCall(entityName) {

@@ -20,8 +20,8 @@ module Keyboard =
         keysPressed <- op keyCode keysPressed
 
     let init () =
-        Browser.window.addEventListener_keydown(fun e -> update(e, true))
-        Browser.window.addEventListener_keyup(fun e -> update(e, false))
+        Browser.window.addEventListener("keydown", fun e -> update(e :?> _, true))
+        Browser.window.addEventListener("keyup", fun e -> update(e :?> _, false))
 
 // Main
 
@@ -39,7 +39,7 @@ let atmosHeight = 300.
 
 Keyboard.init()
 
-let canvas = Browser.document.getElementsByTagName_canvas().[0]
+let canvas = Browser.document.getElementsByTagName("canvas").[0] :?> Browser.HTMLCanvasElement
 let ctx = canvas.getContext_2d()
 canvas.width <- width
 canvas.height <- height

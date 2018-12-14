@@ -95,15 +95,12 @@ Browser.navigator.serviceWorker.register("./service-worker.js") |> ignore
 #endif
 
 open Elmish.React
-open Elmish.HMR
+// open Elmish.HMR
 open Elmish.Browser.Navigation
 open Elmish.Browser.UrlParser
 
 Program.mkProgram init update view
 |> Program.toNavigable (parseHash Router.pageParser) urlUpdate
 |> Toast.Program.withToast Toast.renderToastWithFulma
-#if DEBUG
-|> Program.withHMR
-#endif
 |> Program.withReact "app-container"
 |> Program.run

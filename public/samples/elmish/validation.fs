@@ -6,8 +6,7 @@ open System
 open Fable.Core
 open Elmish
 open Elmish.React
-open Fable.PowerPack
-open Fable.Import.React
+open Fable.Import
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
 
@@ -41,10 +40,10 @@ type State = {
 
 
 module Http =
-    let private loginPromise (info: LoginInfo) =
-        promise {
+    let private loginAsync (info: LoginInfo) =
+        async {
             // simulate server word
-            do! Promise.sleep 1500
+            do! Async.Sleep 1500
             return LoginResult.Success "my-secure-access-token"
         }
 
@@ -56,7 +55,7 @@ module Http =
             | PasswordIncorrect -> LoginFailed "The password you entered is incorrect"
             | LoginError error -> LoginFailed error
 
-        Cmd.ofPromise loginPromise info
+        Cmd.ofAsync loginAsync info
                       successHandler
                       (fun ex -> LoginFailed "Unknown error occured while logging you in")
 
@@ -149,7 +148,9 @@ let textInput inputLabel initial inputType (onChange: string -> unit) =
               Type inputType
               DefaultValue initial
               Placeholder inputLabel
-              OnChange (fun e -> onChange e.Value) ] ]
+              OnChange (fun e ->
+                let el = e.target :?> Browser.HTMLInputElement
+                onChange el.value) ] ]
 
 let loginFormStyle =
   Style [ Width "400px"
@@ -213,5 +214,5 @@ let render (state: State) dispatch =
 
 
 Program.mkProgram init update render
-|> Program.withReact "elmish-app"
+|> Program.withReactSynchronous "elmish-app"
 |> Program.run

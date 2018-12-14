@@ -116,5 +116,5 @@ let render () = async {
 
 /// Setup button event handler to start the rendering
 let go : HTMLButtonElement = document?go
-go.addEventListener_click(fun _ ->
+go.addEventListener("click", fun _ ->
   render() |> Async.StartImmediate)

@@ -18,7 +18,7 @@ module Literals =
 #else
         "https://fable.io/repl"
 #endif
-    let [<Literal>] FABLE_CORE_DIR = HOST + "/js/repl/fable-core"
+    let [<Literal>] FABLE_LIBRARY_DIR = HOST + "/js/repl/fable-library"
     let [<Literal>] FABLE_REPL_LIB_DIR = HOST + "/js/repl/lib"
     let [<Literal>] MAX_LOGS_LENGTH = 200
     /// This is the name of the source code file passed to FCS

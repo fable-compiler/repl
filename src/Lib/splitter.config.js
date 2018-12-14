@@ -10,5 +10,10 @@ module.exports = {
     },
     fable: {
         define: ["FABLE_REPL_LIB"]
+    },
+    cli: {
+        fableCore: "force:${outDir}../fable-core",
+        // verbose: true,
+        // path: "../fable/src/dotnet/Fable.Compiler"
     }
 };

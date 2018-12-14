@@ -23,7 +23,7 @@ let boxes (sudoku:Sudoku) =
     let l = sudoku |> Array.length
     let d = float l |> System.Math.Sqrt |> int
     let list = new List<_>()
-    for a in 0..l - 1 do 
+    for a in 0..l - 1 do
         list.Add(new List<_>())
 
     for a in 0..(l - 1) do
@@ -123,5 +123,5 @@ let view (model:Model) dispatch =
 
 // App
 Program.mkSimple init update view
-|> Program.withReact "elmish-app"
+|> Program.withReactSynchronous "elmish-app"
 |> Program.run
