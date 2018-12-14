@@ -1,0 +1,3 @@
+C:\Users\alfon\dev\repl\public\samples\obj\Debug\netstandard2.0\Samples.fsprojAssemblyReference.cache
+C:\Users\alfon\dev\repl\public\samples\obj\Debug\netstandard2.0\Samples.AssemblyInfoInputs.cache
+C:\Users\alfon\dev\repl\public\samples\obj\Debug\netstandard2.0\Samples.AssemblyInfo.fs

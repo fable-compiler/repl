@@ -290,5 +290,5 @@ let initial () =
   Cmd.none
 
 Program.mkProgram initial update view
-|> Program.withReact "main"
+|> Program.withReactSynchronous "main"
 |> Program.run

@@ -1,19 +1,26 @@
-import { List, Record, declare, Union } from "../../fable-core/Types.js";
-import { ofArray, fold } from "../../fable-core/List.js";
+import { List, Record, declare, Union } from "../fable-library.2.1.8/Types.js";
+import { list as list$$4, type, record, option, bool, string, union } from "../fable-library.2.1.8/Reflection.js";
+import { ofArray, fold } from "../fable-library.2.1.8/List.js";
 import { Props$002EHTMLAttr as Props$0024002EHTMLAttr } from "../Fable.React/Fable.Helpers.React.js";
-import { createObj } from "../../fable-core/Util.js";
+import { createObj } from "../fable-library.2.1.8/Util.js";
 const createElement = React.createElement;
-export const Screen = declare(function Screen(tag, name, ...fields) {
+export const Screen = declare(function Fulma_Screen(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
+export function Screen$reflection() {
+  return union("Fulma.Screen", [], Screen, () => ["All", "Desktop", "Tablet", "Mobile", "WideScreen", "Touch", "FullHD"]);
+}
 export function Screen$$$get_toString() {
   return function (_arg1) {
     return _arg1.tag === 1 ? "-desktop" : _arg1.tag === 2 ? "-tablet" : _arg1.tag === 3 ? "-mobile" : _arg1.tag === 4 ? "-widescreen" : _arg1.tag === 5 ? "-touch" : _arg1.tag === 6 ? "-fullhd" : "";
   };
 }
-export const Color$002EIColor = declare(function Color$002EIColor(tag, name, ...fields) {
+export const Color$002EIColor = declare(function Fulma_Color_IColor(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
+export function Color$002EIColor$reflection() {
+  return union("Fulma.Color.IColor", [], Color$002EIColor, () => ["IsBlack", "IsDark", "IsLight", "IsWhite", "IsPrimary", "IsInfo", "IsSuccess", "IsWarning", "IsDanger", "IsLink", "IsBlackBis", "IsBlackTer", "IsGreyDarker", "IsGreyDark", "IsGrey", "IsGreyLight", "IsGreyLighter", "IsWhiteTer", "IsWhiteBis", ["IsCustomColor", [string]], "NoColor"]);
+}
 export function Color$$$ofColor(level) {
   switch (level.tag) {
     case 1:
@@ -123,9 +130,12 @@ export function Color$$$ofColor(level) {
       }
   }
 }
-export const Size$002EISize = declare(function Size$002EISize(tag, name, ...fields) {
+export const Size$002EISize = declare(function Fulma_Size_ISize(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
+export function Size$002EISize$reflection() {
+  return union("Fulma.Size.ISize", [], Size$002EISize, () => ["IsSmall", "IsMedium", "IsLarge"]);
+}
 export function Size$$$ofSize(size) {
   switch (size.tag) {
     case 1:
@@ -144,9 +154,12 @@ export function Size$$$ofSize(size) {
       }
   }
 }
-export const TextSize$002EOption = declare(function TextSize$002EOption(tag, name, ...fields) {
+export const TextSize$002EOption = declare(function Fulma_TextSize_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
+export function TextSize$002EOption$reflection() {
+  return union("Fulma.TextSize.Option", [], TextSize$002EOption, () => ["Is1", "Is2", "Is3", "Is4", "Is5", "Is6", "Is7"]);
+}
 export function TextSize$002EOption$$$get_toString() {
   return function (_arg1$$1) {
     return _arg1$$1.tag === 1 ? "2" : _arg1$$1.tag === 2 ? "3" : _arg1$$1.tag === 3 ? "4" : _arg1$$1.tag === 4 ? "5" : _arg1$$1.tag === 5 ? "6" : _arg1$$1.tag === 6 ? "7" : "1";
@@ -183,9 +196,12 @@ export function TextSize$$$only(screen$$1, size$$2) {
       }
   }
 }
-export const TextAlignment$002EOption = declare(function TextAlignment$002EOption(tag, name, ...fields) {
+export const TextAlignment$002EOption = declare(function Fulma_TextAlignment_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
+export function TextAlignment$002EOption$reflection() {
+  return union("Fulma.TextAlignment.Option", [], TextAlignment$002EOption, () => ["Centered", "Justified", "Left", "Right"]);
+}
 export function TextAlignment$002EOption$$$get_toString() {
   return function (_arg1$$2) {
     return _arg1$$2.tag === 1 ? "has-text-justified" : _arg1$$2.tag === 2 ? "has-text-left" : _arg1$$2.tag === 3 ? "has-text-right" : "has-text-centered";
@@ -222,9 +238,12 @@ export function TextAlignment$$$only(screen$$3, alignment$$1) {
       }
   }
 }
-export const TextWeight$002EOption = declare(function TextWeight$002EOption(tag, name, ...fields) {
+export const TextWeight$002EOption = declare(function Fulma_TextWeight_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
+export function TextWeight$002EOption$reflection() {
+  return union("Fulma.TextWeight.Option", [], TextWeight$002EOption, () => ["Light", "Normal", "SemiBold", "Bold"]);
+}
 export function TextWeight$$$ofOption(_arg1$$3) {
   switch (_arg1$$3.tag) {
     case 1:
@@ -248,17 +267,23 @@ export function TextWeight$$$ofOption(_arg1$$3) {
       }
   }
 }
-export const TextTransform$002EOption = declare(function TextTransform$002EOption(tag, name, ...fields) {
+export const TextTransform$002EOption = declare(function Fulma_TextTransform_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
+export function TextTransform$002EOption$reflection() {
+  return union("Fulma.TextTransform.Option", [], TextTransform$002EOption, () => ["Capitalized", "LowerCase", "UpperCase", "Italic"]);
+}
 export function TextTransform$002EOption$$$get_toClass() {
   return function (_arg1$$4) {
     return _arg1$$4.tag === 1 ? "is-lowercase" : _arg1$$4.tag === 2 ? "is-uppercase" : _arg1$$4.tag === 3 ? "is-italic" : "is-capitalized";
   };
 }
-export const Display$002EOption = declare(function Display$002EOption(tag, name, ...fields) {
+export const Display$002EOption = declare(function Fulma_Display_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
+export function Display$002EOption$reflection() {
+  return union("Fulma.Display.Option", [], Display$002EOption, () => ["Block", "Flex", "Inline", "InlineBlock", "InlineFlex"]);
+}
 export function Display$002EOption$$$get_toClass() {
   return function (_arg1$$5) {
     return _arg1$$5.tag === 1 ? "flex" : _arg1$$5.tag === 2 ? "inline" : _arg1$$5.tag === 3 ? "inline-block" : _arg1$$5.tag === 4 ? "inline-flex" : "block";
@@ -579,10 +604,13 @@ export function Modifier$$$ofHiddenOnly(screen$$11) {
       }
   }
 }
-export const Modifier$002EIModifier = declare(function Modifier$002EIModifier(tag, name, ...fields) {
+export const Modifier$002EIModifier = declare(function Fulma_Modifier_IModifier(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export const Modifier$002EOptions = declare(function Modifier$002EOptions(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20, arg21, arg22, arg23, arg24) {
+export function Modifier$002EIModifier$reflection() {
+  return union("Fulma.Modifier.IModifier", [], Modifier$002EIModifier, () => [["BackgroundColor", [Color$002EIColor$reflection()]], ["TextColor", [Color$002EIColor$reflection()]], ["TextWeight", [TextWeight$002EOption$reflection()]], ["TextSize", [Screen$reflection(), TextSize$002EOption$reflection()]], ["TextSizeOnly", [Screen$reflection(), TextSize$002EOption$reflection()]], ["TextAlignment", [Screen$reflection(), TextAlignment$002EOption$reflection()]], ["TextAlignmentOnly", [Screen$reflection(), TextAlignment$002EOption$reflection()]], ["TextTransform", [TextTransform$002EOption$reflection()]], ["Display", [Screen$reflection(), Display$002EOption$reflection()]], ["DisplayOnly", [Screen$reflection(), Display$002EOption$reflection()]], "IsClearfix", "IsPulledLeft", "IsPulledRight", "IsMarginless", "IsPaddingless", "IsOverlay", "IsClipped", "IsRadiusless", "IsShadowless", "IsUnselectable", ["IsInvisible", [Screen$reflection(), bool]], ["IsHidden", [Screen$reflection(), bool]], ["IsInvisibleOnly", [Screen$reflection(), bool]], ["IsHiddenOnly", [Screen$reflection(), bool]]]);
+}
+export const Modifier$002EOptions = declare(function Fulma_Modifier_Options(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20, arg21, arg22, arg23, arg24) {
   this.BackgroundColor = arg1;
   this.TextColor = arg2;
   this.TextWeight = arg3;
@@ -608,6 +636,9 @@ export const Modifier$002EOptions = declare(function Modifier$002EOptions(arg1, 
   this.Display = arg23;
   this.DisplayOnly = arg24;
 }, Record);
+export function Modifier$002EOptions$reflection() {
+  return record("Fulma.Modifier.Options", [], Modifier$002EOptions, () => [["BackgroundColor", option(string)], ["TextColor", option(string)], ["TextWeight", option(string)], ["TextSize", string], ["TextSizeOnly", string], ["TextAlignment", string], ["TextAlignmentOnly", string], ["TextTransform", string], ["IsClearfix", option(string)], ["IsPulledLeft", option(string)], ["IsPulledRight", option(string)], ["IsMarginless", option(string)], ["IsPaddingless", option(string)], ["IsOverlay", option(string)], ["IsClipped", option(string)], ["IsRadiusless", option(string)], ["IsShadowless", option(string)], ["IsUnselectable", option(string)], ["IsInvisible", string], ["IsHidden", string], ["IsInvisibleOnly", string], ["IsHiddenOnly", string], ["Display", string], ["DisplayOnly", string]]);
+}
 export function Modifier$002EOptions$$$get_Empty() {
   return new Modifier$002EOptions(null, null, null, "", "", "", "", "", null, null, null, null, null, null, null, null, null, null, "", "", "", "", "", "");
 }
@@ -687,14 +718,20 @@ export function Modifier$$$parseModifiers(options) {
   const opts = fold(parseOption, Modifier$002EOptions$$$get_Empty(), options);
   return ofArray([opts.BackgroundColor, opts.TextColor, opts.TextWeight, opts.TextSize, opts.TextSizeOnly, opts.TextAlignment, opts.TextAlignmentOnly, opts.TextTransform, opts.IsClearfix, opts.IsPulledLeft, opts.IsPulledRight, opts.IsMarginless, opts.IsPaddingless, opts.IsOverlay, opts.IsClipped, opts.IsRadiusless, opts.IsShadowless, opts.IsUnselectable, opts.IsInvisible, opts.IsHidden, opts.IsInvisibleOnly, opts.IsHiddenOnly, opts.Display, opts.DisplayOnly]);
 }
-export const Common$002EGenericOption = declare(function Common$002EGenericOption(tag, name, ...fields) {
+export const Common$002EGenericOption = declare(function Fulma_Common_GenericOption(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export const Common$002EGenericOptions = declare(function Common$002EGenericOptions(arg1, arg2, arg3) {
+export function Common$002EGenericOption$reflection() {
+  return union("Fulma.Common.GenericOption", [], Common$002EGenericOption, () => [["CustomClass", [string]], ["Props", [list$$4(type("Fable.Helpers.React.Props.IHTMLProp"))]], ["Modifiers", [list$$4(Modifier$002EIModifier$reflection())]]]);
+}
+export const Common$002EGenericOptions = declare(function Fulma_Common_GenericOptions(arg1, arg2, arg3) {
   this.CustomClass = arg1;
   this.Props = arg2;
   this.Modifiers = arg3;
 }, Record);
+export function Common$002EGenericOptions$reflection() {
+  return record("Fulma.Common.GenericOptions", [], Common$002EGenericOptions, () => [["CustomClass", option(string)], ["Props", list$$4(type("Fable.Helpers.React.Props.IHTMLProp"))], ["Modifiers", list$$4(option(string))]]);
+}
 export function Common$002EGenericOptions$$$get_Empty() {
   return new Common$002EGenericOptions(null, new List(), new List());
 }
@@ -745,13 +782,13 @@ export function Text$$$p(options$$4, children) {
   const classes = Common$002EHelpers$$$classes("", new List(opts$$1.CustomClass, opts$$1.Modifiers), new List());
   return createElement("p", createObj(new List(classes, opts$$1.Props), 1), ...children);
 }
-export function Text$$$div(options$$5, children$$2) {
+export function Text$$$div(options$$5, children$$3) {
   const opts$$2 = Common$$$genericParse(options$$5);
   const classes$$1 = Common$002EHelpers$$$classes("", new List(opts$$2.CustomClass, opts$$2.Modifiers), new List());
-  return createElement("div", createObj(new List(classes$$1, opts$$2.Props), 1), ...children$$2);
+  return createElement("div", createObj(new List(classes$$1, opts$$2.Props), 1), ...children$$3);
 }
-export function Text$$$span(options$$6, children$$4) {
+export function Text$$$span(options$$6, children$$6) {
   const opts$$3 = Common$$$genericParse(options$$6);
   const classes$$2 = Common$002EHelpers$$$classes("", new List(opts$$3.CustomClass, opts$$3.Modifiers), new List());
-  return createElement("span", createObj(new List(classes$$2, opts$$3.Props), 1), ...children$$4);
+  return createElement("span", createObj(new List(classes$$2, opts$$3.Props), 1), ...children$$6);
 }

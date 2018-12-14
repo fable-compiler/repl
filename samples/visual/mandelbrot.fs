@@ -5,6 +5,7 @@ module Mandelbrot
 open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Import.Browser
+open Fable.Import.React
 
 type Complex = { r : double; i : double }
 type Color = { r : int; g : int; b : int; a : int }
@@ -45,7 +46,8 @@ let getCoordColor (x : int, y : int) : Color =
     { r = 255/(i%5); g = 255/(i%3); b = 255/(i%7); a = 255}
 
 let showSet() =
-    let ctx = document.getElementsByTagName_canvas().[0].getContext_2d()
+    let canvas = document.getElementsByTagName("canvas").[0] :?> HTMLCanvasElement
+    let ctx = canvas.getContext_2d()
 
     let img = ctx.createImageData(U2.Case1 (float width), float height)
     for y = 0 to height-1 do
@@ -62,20 +64,23 @@ let showSet() =
     ctx.fillRect (rectX, rectY, rectW, rectH)
 
 
-document.addEventListener_mousedown(fun de ->
+document.addEventListener("mousedown", fun de ->
+    let de = de :?> MouseEvent
     rectX <- de.clientX
     rectY <- de.clientY
     rectW <- 0.0
     rectH <- 0.0
     showSet())
 
-document.addEventListener_mousemove(fun de ->
+document.addEventListener("mousemove", fun de ->
+    let de = de :?> MouseEvent
     if de.buttons = 1.0 then
         rectW <- de.clientX - rectX
         rectH <- de.clientY - rectY
         showSet())
 
-document.addEventListener_mouseup(fun de ->
+document.addEventListener("mouseup", fun de ->
+    let de = de :?> MouseEvent
     let p1 = getCoord (int rectX, int rectY)
     let p2 = getCoord (int (rectX + rectW), int (rectY + rectH))
     minX <- min p1.r p2.r

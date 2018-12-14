@@ -241,7 +241,8 @@ module Scenes =
 open Fable.Import.Browser
 
 let renderScene scene (x, y, width, height) =
-    let ctx = document.getElementsByTagName_canvas().[0].getContext_2d()
+    let canvas = document.getElementsByTagName("canvas").[0] :?> HTMLCanvasElement
+    let ctx = canvas.getContext_2d()
     let img = ctx.createImageData(Fable.Core.U2.Case1 (float width), float height)
     RayTracer.Render scene img.data (x, y, width, height)
     ctx.putImageData(img, float -x, float -y)

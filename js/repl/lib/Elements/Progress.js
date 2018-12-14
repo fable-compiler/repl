@@ -1,14 +1,18 @@
-import { List, Record, declare, Union } from "../../fable-core/Types.js";
-import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Size$$$ofSize as Size$0024$0024$0024ofSize, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Color$$$ofColor as Color$0024$0024$0024ofColor } from "../Fulma/Common.js";
-import { ofSeq, fold } from "../../fable-core/List.js";
-import { append, delay, empty, singleton } from "../../fable-core/Seq.js";
+import { List, Record, declare, Union } from "../fable-library.2.1.8/Types.js";
+import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Size$$$ofSize as Size$0024$0024$0024ofSize, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Color$$$ofColor as Color$0024$0024$0024ofColor, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Color$002EIColor$reflection as Color$0024002EIColor$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection } from "../Fulma/Common.js";
+import { record, option, union, string, int32, list as list$$1, type } from "../fable-library.2.1.8/Reflection.js";
+import { ofSeq, fold } from "../fable-library.2.1.8/List.js";
+import { append, delay, empty, singleton } from "../fable-library.2.1.8/Seq.js";
 import { Props$002EHTMLAttr as Props$0024002EHTMLAttr } from "../Fable.React/Fable.Helpers.React.js";
-import { createObj, int32ToString } from "../../fable-core/Util.js";
+import { createObj, int32ToString } from "../fable-library.2.1.8/Util.js";
 const createElement = React.createElement;
-export const Option = declare(function Option(tag, name, ...fields) {
+export const Option = declare(function Fulma_Progress_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, arg6, arg7) {
+export function Option$reflection() {
+  return union("Fulma.Progress.Option", [], Option, () => [["Size", [Size$0024002EISize$0024reflection()]], ["Color", [Color$0024002EIColor$0024reflection()]], ["Props", [list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))]], ["Value", [int32]], ["Max", [int32]], ["CustomClass", [string]], ["Modifiers", [list$$1(Modifier$0024002EIModifier$0024reflection())]]]);
+}
+export const Options = declare(function Fulma_Progress_Options(arg1, arg2, arg3, arg4, arg5, arg6, arg7) {
   this.Size = arg1;
   this.Color = arg2;
   this.Props = arg3;
@@ -17,6 +21,9 @@ export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, ar
   this.CustomClass = arg6;
   this.Modifiers = arg7;
 }, Record);
+export function Options$reflection() {
+  return record("Fulma.Progress.Options", [], Options, () => [["Size", option(string)], ["Color", option(string)], ["Props", list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))], ["Max", option(int32)], ["Value", option(int32)], ["CustomClass", option(string)], ["Modifiers", list$$1(option(string))]]);
+}
 export function Options$$$get_Empty() {
   return new Options(null, null, new List(), null, null, null, new List());
 }

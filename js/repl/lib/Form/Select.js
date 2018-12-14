@@ -1,12 +1,16 @@
-import { List, Record, declare, Union } from "../../fable-core/Types.js";
-import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Size$$$ofSize as Size$0024$0024$0024ofSize, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Color$$$ofColor as Color$0024$0024$0024ofColor } from "../Fulma/Common.js";
-import { ofArray, fold } from "../../fable-core/List.js";
-import { createObj } from "../../fable-core/Util.js";
+import { List, Record, declare, Union } from "../fable-library.2.1.8/Types.js";
+import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Size$$$ofSize as Size$0024$0024$0024ofSize, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Color$$$ofColor as Color$0024$0024$0024ofColor, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Color$002EIColor$reflection as Color$0024002EIColor$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection } from "../Fulma/Common.js";
+import { record, option, union, string, list as list$$1, type, bool } from "../fable-library.2.1.8/Reflection.js";
+import { ofArray, fold } from "../fable-library.2.1.8/List.js";
+import { createObj } from "../fable-library.2.1.8/Util.js";
 const createElement = React.createElement;
-export const Option = declare(function Option(tag, name, ...fields) {
+export const Option = declare(function Fulma_Select_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) {
+export function Option$reflection() {
+  return union("Fulma.Select.Option", [], Option, () => [["Size", [Size$0024002EISize$0024reflection()]], "IsFullWidth", "IsInline", ["IsLoading", [bool]], ["IsFocused", [bool]], ["IsActive", [bool]], ["Disabled", [bool]], ["Color", [Color$0024002EIColor$0024reflection()]], "IsRounded", ["Props", [list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))]], ["CustomClass", [string]], ["Modifiers", [list$$1(Modifier$0024002EIModifier$0024reflection())]]]);
+}
+export const Options = declare(function Fulma_Select_Options(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) {
   this.Size = arg1;
   this.Color = arg2;
   this.IsLoading = arg3;
@@ -18,6 +22,9 @@ export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, ar
   this.CustomClass = arg9;
   this.Modifiers = arg10;
 }, Record);
+export function Options$reflection() {
+  return record("Fulma.Select.Options", [], Options, () => [["Size", option(string)], ["Color", option(string)], ["IsLoading", bool], ["IsFocused", bool], ["IsActive", bool], ["IsDisabled", bool], ["IsRounded", bool], ["Props", list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))], ["CustomClass", option(string)], ["Modifiers", list$$1(option(string))]]);
+}
 export function Options$$$get_Empty() {
   return new Options(null, null, false, false, false, false, false, new List(), null, new List());
 }

@@ -1,20 +1,27 @@
-import { List, Record, declare, Union } from "../../fable-core/Types.js";
-import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Size$$$ofSize as Size$0024$0024$0024ofSize, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers } from "../Fulma/Common.js";
-import { ofSeq, fold } from "../../fable-core/List.js";
-import { append, delay, empty, singleton } from "../../fable-core/Seq.js";
+import { List, Record, declare, Union } from "../fable-library.2.1.8/Types.js";
+import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Size$$$ofSize as Size$0024$0024$0024ofSize, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection } from "../Fulma/Common.js";
+import { record, option, union, lambda, unit, string, list as list$$1, type } from "../fable-library.2.1.8/Reflection.js";
+import { ofSeq, fold } from "../fable-library.2.1.8/List.js";
+import { append, delay, empty, singleton } from "../fable-library.2.1.8/Seq.js";
 import { Props$002EDOMAttr as Props$0024002EDOMAttr } from "../Fable.React/Fable.Helpers.React.js";
-import { createObj } from "../../fable-core/Util.js";
+import { createObj } from "../fable-library.2.1.8/Util.js";
 const createElement = React.createElement;
-export const Option = declare(function Option(tag, name, ...fields) {
+export const Option = declare(function Fulma_Delete_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5) {
+export function Option$reflection() {
+  return union("Fulma.Delete.Option", [], Option, () => [["Size", [Size$0024002EISize$0024reflection()]], ["Props", [list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))]], ["CustomClass", [string]], ["OnClick", [lambda(type("Fable.Import.React.MouseEvent"), unit)]], ["Modifiers", [list$$1(Modifier$0024002EIModifier$0024reflection())]]]);
+}
+export const Options = declare(function Fulma_Delete_Options(arg1, arg2, arg3, arg4, arg5) {
   this.Size = arg1;
   this.Props = arg2;
   this.CustomClass = arg3;
   this.OnClick = arg4;
   this.Modifiers = arg5;
 }, Record);
+export function Options$reflection() {
+  return record("Fulma.Delete.Options", [], Options, () => [["Size", option(string)], ["Props", list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))], ["CustomClass", option(string)], ["OnClick", option(lambda(type("Fable.Import.React.MouseEvent"), unit))], ["Modifiers", list$$1(option(string))]]);
+}
 export function Options$$$get_Empty() {
   return new Options(null, new List(), null, null, new List());
 }

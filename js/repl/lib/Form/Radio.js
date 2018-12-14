@@ -1,18 +1,25 @@
-import { List, Record, declare, Union } from "../../fable-core/Types.js";
-import { Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Common$$$genericParse as Common$0024$0024$0024genericParse } from "../Fulma/Common.js";
-import { createObj } from "../../fable-core/Util.js";
-import { fold } from "../../fable-core/List.js";
+import { List, Record, declare, Union } from "../fable-library.2.1.8/Types.js";
+import { record, option as option$$1, union, list as list$$1, type, string } from "../fable-library.2.1.8/Reflection.js";
+import { Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Common$$$genericParse as Common$0024$0024$0024genericParse, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection } from "../Fulma/Common.js";
+import { createObj } from "../fable-library.2.1.8/Util.js";
+import { fold } from "../fable-library.2.1.8/List.js";
 import { Props$002EHTMLAttr as Props$0024002EHTMLAttr } from "../Fable.React/Fable.Helpers.React.js";
 const createElement = React.createElement;
-export const Input$002EOption = declare(function Input$002EOption(tag, name, ...fields) {
+export const Input$002EOption = declare(function Fulma_Radio_Input_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export const Input$002EOptions = declare(function Input$002EOptions(arg1, arg2, arg3, arg4) {
+export function Input$002EOption$reflection() {
+  return union("Fulma.Radio.Input.Option", [], Input$002EOption, () => [["CustomClass", [string]], ["Props", [list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))]], ["Name", [string]], ["Modifiers", [list$$1(Modifier$0024002EIModifier$0024reflection())]]]);
+}
+export const Input$002EOptions = declare(function Fulma_Radio_Input_Options(arg1, arg2, arg3, arg4) {
   this.CustomClass = arg1;
   this.Props = arg2;
   this.Name = arg3;
   this.Modifiers = arg4;
 }, Record);
+export function Input$002EOptions$reflection() {
+  return record("Fulma.Radio.Input.Options", [], Input$002EOptions, () => [["CustomClass", option$$1(string)], ["Props", list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))], ["Name", option$$1(string)], ["Modifiers", list$$1(option$$1(string))]]);
+}
 export function Input$002EOptions$$$get_Empty() {
   return new Input$002EOptions(null, new List(), null, new List());
 }
@@ -32,8 +39,8 @@ export function input(options$$1) {
 
       case 1:
         {
-          const props$$1 = option.fields[0];
-          return new Input$002EOptions(result.CustomClass, props$$1, result.Name, result.Modifiers);
+          const props$$2 = option.fields[0];
+          return new Input$002EOptions(result.CustomClass, props$$2, result.Name, result.Modifiers);
         }
 
       case 3:

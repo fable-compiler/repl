@@ -42,7 +42,7 @@ module Images =
 
     // Create image using the specified data
     let createImage data =
-      let img = Browser.document.createElement_img()
+      let img = Browser.document.createElement("img") :?> Browser.HTMLImageElement
       img.src <- data
       img
 
@@ -94,8 +94,8 @@ module Keyboard =
 
     /// Register DOM event handlers
     let init () =
-      Browser.window.addEventListener_keydown(fun e -> update(e, true))
-      Browser.window.addEventListener_keyup(fun e -> update(e, false))
+      Browser.window.addEventListener("keydown", fun e -> update(e :?> _, true))
+      Browser.window.addEventListener("keyup", fun e -> update(e :?> _, false))
 
 module Types =
     (**
@@ -273,7 +273,7 @@ then iterates over the maze tiles and renders individual walls:
 *)
 let createBackground () =
   // Fill background with black
-  let background = Browser.document.createElement_canvas()
+  let background = Browser.document.createElement("canvas") :?> Browser.HTMLCanvasElement
   background.width <- 256.
   background.height <- 256.
   let context = background.getContext_2d()
@@ -433,7 +433,7 @@ let playLevel (onLevelCompleted, onGameOver) =
   creates other graphical elements - namely the game background, ghosts and eyes:
   *)
   // Fill the canvas element
-  let canvas = Browser.document.getElementsByTagName_canvas().[0]
+  let canvas = Browser.document.getElementsByTagName("canvas").[0] :?> Browser.HTMLCanvasElement
   canvas.width <- 256.
   canvas.height <- 256.
   let context = canvas.getContext_2d()
@@ -650,7 +650,7 @@ the starting state of the game (with "CLICK TO START" text) and start the game!
 let rec game () =
   // Initialize keyboard and canvas
   Keyboard.reset()
-  let canvas = Browser.document.getElementsByTagName_canvas().[0]
+  let canvas = Browser.document.getElementsByTagName("canvas").[0] :?> Browser.HTMLCanvasElement
   let context = canvas.getContext_2d()
 
   // A helper function to draw text
@@ -677,13 +677,13 @@ let rec game () =
     context.font <- "bold 8px";
     drawText("CLICK TO START", 88., 96.)
     let mutable playing = false
-    canvas.addEventListener_click(fun _ ->
+    canvas.addEventListener("click", fun _ ->
         if not playing then
             playing <- true
             playLevel (levelCompleted, gameOver))
 
   // Resize canvas and get ready for a game
-  let canvas = Browser.document.getElementsByTagName_canvas().[0]
+  let canvas = Browser.document.getElementsByTagName("canvas").[0] :?> Browser.HTMLCanvasElement
   canvas.width <- 256.
   canvas.height <- 256.
   start()

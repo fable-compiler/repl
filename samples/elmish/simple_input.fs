@@ -43,5 +43,5 @@ let view model dispatch =
 // App
 Program.mkProgram init update view
 |> Program.withConsoleTrace
-|> Program.withReact "elmish-app"
+|> Program.withReactSynchronous "elmish-app"
 |> Program.run

@@ -1,14 +1,18 @@
-import { List as List$$1, Record, declare, Union } from "../../fable-core/Types.js";
-import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Color$$$ofColor as Color$0024$0024$0024ofColor, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Size$$$ofSize as Size$0024$0024$0024ofSize } from "../Fulma/Common.js";
-import { map, exists, ofSeq, ofArray, fold } from "../../fable-core/List.js";
-import { append, delay, empty, singleton } from "../../fable-core/Seq.js";
+import { List, Record, declare, Union } from "../fable-library.2.1.8/Types.js";
+import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Color$$$ofColor as Color$0024$0024$0024ofColor, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Size$$$ofSize as Size$0024$0024$0024ofSize, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection, Color$002EIColor$reflection as Color$0024002EIColor$0024reflection } from "../Fulma/Common.js";
+import { record, option, union, string, lambda, unit, list as list$$5, type, bool } from "../fable-library.2.1.8/Reflection.js";
+import { map, exists, ofSeq, ofArray, fold } from "../fable-library.2.1.8/List.js";
+import { append, delay, empty, singleton } from "../fable-library.2.1.8/Seq.js";
 import { Props$002EDOMAttr as Props$0024002EDOMAttr, Props$002EHTMLAttr as Props$0024002EHTMLAttr } from "../Fable.React/Fable.Helpers.React.js";
-import { createObj } from "../../fable-core/Util.js";
+import { createObj } from "../fable-library.2.1.8/Util.js";
 const createElement = React.createElement;
-export const Option = declare(function Option(tag, name, ...fields) {
+export const Option = declare(function Fulma_Button_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18) {
+export function Option$reflection() {
+  return union("Fulma.Button.Option", [], Option, () => [["Color", [Color$0024002EIColor$0024reflection()]], ["Size", [Size$0024002EISize$0024reflection()]], "IsFullWidth", "IsLink", "IsOutlined", "IsInverted", "IsText", "IsRounded", "IsExpanded", ["IsHovered", [bool]], ["IsFocused", [bool]], ["IsActive", [bool]], ["IsLoading", [bool]], ["IsStatic", [bool]], ["Disabled", [bool]], ["Props", [list$$5(type("Fable.Helpers.React.Props.IHTMLProp"))]], ["OnClick", [lambda(type("Fable.Import.React.MouseEvent"), unit)]], ["CustomClass", [string]], ["Modifiers", [list$$5(Modifier$0024002EIModifier$0024reflection())]]]);
+}
+export const Options = declare(function Fulma_Button_Options(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18) {
   this.Level = arg1;
   this.Size = arg2;
   this.IsOutlined = arg3;
@@ -28,8 +32,11 @@ export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, ar
   this.OnClick = arg17;
   this.Modifiers = arg18;
 }, Record);
+export function Options$reflection() {
+  return record("Fulma.Button.Options", [], Options, () => [["Level", option(string)], ["Size", option(string)], ["IsOutlined", bool], ["IsInverted", bool], ["IsDisabled", bool], ["IsHovered", bool], ["IsFocused", bool], ["IsExpanded", bool], ["IsText", bool], ["IsRounded", bool], ["IsActive", bool], ["IsLoading", bool], ["IsStatic", bool], ["IsFullWidth", bool], ["Props", list$$5(type("Fable.Helpers.React.Props.IHTMLProp"))], ["CustomClass", option(string)], ["OnClick", option(lambda(type("Fable.Import.React.MouseEvent"), unit))], ["Modifiers", list$$5(option(string))]]);
+}
 export function Options$$$get_Empty() {
-  return new Options(null, null, false, false, false, false, false, false, false, false, false, false, false, false, new List$$1(), null, null, new List$$1());
+  return new Options(null, null, false, false, false, false, false, false, false, false, false, false, false, false, new List(), null, null, new List());
 }
 export function btnView(element, options, children) {
   const parseOption = function parseOption(result, opt) {
@@ -144,7 +151,7 @@ export function btnView(element, options, children) {
   };
 
   const opts = fold(parseOption, Options$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("button", new List$$1(opts.Level, new List$$1(opts.Size, new List$$1(opts.CustomClass, opts.Modifiers))), ofArray([["is-outlined", opts.IsOutlined], ["is-inverted", opts.IsInverted], ["is-text", opts.IsText], ["is-rounded", opts.IsRounded], ["is-expanded", opts.IsExpanded], ["is-hovered", opts.IsHovered], ["is-focus", opts.IsFocused], ["is-active", opts.IsActive], ["is-loading", opts.IsLoading], ["is-static", opts.IsStatic], ["is-fullwidth", opts.IsFullWidth]]));
+  const classes = Common$0024002EHelpers$0024$0024$0024classes("button", new List(opts.Level, new List(opts.Size, new List(opts.CustomClass, opts.Modifiers))), ofArray([["is-outlined", opts.IsOutlined], ["is-inverted", opts.IsInverted], ["is-text", opts.IsText], ["is-rounded", opts.IsRounded], ["is-expanded", opts.IsExpanded], ["is-hovered", opts.IsHovered], ["is-focus", opts.IsFocused], ["is-active", opts.IsActive], ["is-loading", opts.IsLoading], ["is-static", opts.IsStatic], ["is-fullwidth", opts.IsFullWidth]]));
   return element(ofSeq(delay(function () {
     return append(singleton(classes), delay(function () {
       return append(singleton(new Props$0024002EHTMLAttr(37, "Disabled", opts.IsDisabled)), delay(function () {
@@ -156,19 +163,19 @@ export function btnView(element, options, children) {
   })), children);
 }
 export function button(options$$2, children$$1) {
-  return btnView(function (b, c) {
-    return createElement("button", createObj(b, 1), ...c);
+  return btnView(function (props$$1, children$$2) {
+    return createElement("button", createObj(props$$1, 1), ...children$$2);
   }, options$$2, children$$1);
 }
-export function span(options$$3, children$$3) {
-  return btnView(function (b$$2, c$$2) {
-    return createElement("span", createObj(b$$2, 1), ...c$$2);
-  }, options$$3, children$$3);
+export function span(options$$3, children$$5) {
+  return btnView(function (props$$4, children$$6) {
+    return createElement("span", createObj(props$$4, 1), ...children$$6);
+  }, options$$3, children$$5);
 }
-export function a(options$$4, children$$5) {
-  return btnView(function (b$$4, c$$4) {
-    return createElement("a", createObj(b$$4, 1), ...c$$4);
-  }, options$$4, children$$5);
+export function a(options$$4, children$$9) {
+  return btnView(function (props$$7, children$$10) {
+    return createElement("a", createObj(props$$7, 1), ...children$$10);
+  }, options$$4, children$$9);
 }
 export function Input$$$btnInput(typ, options$$5) {
   const hasProps = exists(function predicate(opts$$1) {
@@ -182,20 +189,20 @@ export function Input$$$btnInput(typ, options$$5) {
   if (hasProps) {
     const newOptions = map(function mapping(opts$$2) {
       if (opts$$2.tag === 15) {
-        const props$$4 = opts$$2.fields[0];
-        return new Option(15, "Props", new List$$1(new Props$0024002EHTMLAttr(117, "Type", typ), props$$4));
+        const props$$10 = opts$$2.fields[0];
+        return new Option(15, "Props", new List(new Props$0024002EHTMLAttr(117, "Type", typ), props$$10));
       } else {
         const forward = opts$$2;
         return forward;
       }
     }, options$$5);
     return btnView(function (options$$6, _arg1) {
-      return createElement("input", createObj(options$$6, 1), ...new List$$1());
-    }, newOptions, new List$$1());
+      return createElement("input", createObj(options$$6, 1), ...new List());
+    }, newOptions, new List());
   } else {
     return btnView(function (options$$7, _arg2) {
-      return createElement("input", createObj(options$$7, 1), ...new List$$1());
-    }, new List$$1(new Option(15, "Props", new List$$1(new Props$0024002EHTMLAttr(117, "Type", typ), new List$$1())), options$$5), new List$$1());
+      return createElement("input", createObj(options$$7, 1), ...new List());
+    }, new List(new Option(15, "Props", new List(new Props$0024002EHTMLAttr(117, "Type", typ), new List())), options$$5), new List());
   }
 }
 export function Input$$$reset(options$$8) {
@@ -204,10 +211,13 @@ export function Input$$$reset(options$$8) {
 export function Input$$$submit(options$$9) {
   return Input$$$btnInput("submit", options$$9);
 }
-export const List$002EOption = declare(function List$002EOption(tag, name, ...fields) {
+export const List$002EOption = declare(function Fulma_Button_List_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export const List$002EOptions = declare(function List$002EOptions(arg1, arg2, arg3, arg4, arg5, arg6) {
+export function List$002EOption$reflection() {
+  return union("Fulma.Button.List.Option", [], List$002EOption, () => ["HasAddons", "IsCentered", "IsRight", ["Props", [list$$5(type("Fable.Helpers.React.Props.IHTMLProp"))]], ["CustomClass", [string]], ["Modifiers", [list$$5(Modifier$0024002EIModifier$0024reflection())]]]);
+}
+export const List$002EOptions = declare(function Fulma_Button_List_Options(arg1, arg2, arg3, arg4, arg5, arg6) {
   this.HasAddons = arg1;
   this.IsCentered = arg2;
   this.IsRight = arg3;
@@ -215,10 +225,13 @@ export const List$002EOptions = declare(function List$002EOptions(arg1, arg2, ar
   this.CustomClass = arg5;
   this.Modifiers = arg6;
 }, Record);
-export function List$002EOptions$$$get_Empty() {
-  return new List$002EOptions(false, false, false, new List$$1(), null, new List$$1());
+export function List$002EOptions$reflection() {
+  return record("Fulma.Button.List.Options", [], List$002EOptions, () => [["HasAddons", bool], ["IsCentered", bool], ["IsRight", bool], ["Props", list$$5(type("Fable.Helpers.React.Props.IHTMLProp"))], ["CustomClass", option(string)], ["Modifiers", list$$5(option(string))]]);
 }
-export function list(options$$10, children$$7) {
+export function List$002EOptions$$$get_Empty() {
+  return new List$002EOptions(false, false, false, new List(), null, new List());
+}
+export function list(options$$10, children$$13) {
   const parseOption$$1 = function parseOption$$1(result$$1, opt$$1) {
     switch (opt$$1.tag) {
       case 1:
@@ -233,8 +246,8 @@ export function list(options$$10, children$$7) {
 
       case 3:
         {
-          const props$$7 = opt$$1.fields[0];
-          return new List$002EOptions(result$$1.HasAddons, result$$1.IsCentered, result$$1.IsRight, props$$7, result$$1.CustomClass, result$$1.Modifiers);
+          const props$$15 = opt$$1.fields[0];
+          return new List$002EOptions(result$$1.HasAddons, result$$1.IsCentered, result$$1.IsRight, props$$15, result$$1.CustomClass, result$$1.Modifiers);
         }
 
       case 4:
@@ -257,6 +270,6 @@ export function list(options$$10, children$$7) {
   };
 
   const opts$$3 = fold(parseOption$$1, List$002EOptions$$$get_Empty(), options$$10);
-  const classes$$1 = Common$0024002EHelpers$0024$0024$0024classes("buttons", new List$$1(opts$$3.CustomClass, opts$$3.Modifiers), ofArray([["has-addons", opts$$3.HasAddons], ["is-centered", opts$$3.IsCentered], ["is-right", opts$$3.IsRight]]));
-  return createElement("div", createObj(new List$$1(classes$$1, opts$$3.Props), 1), ...children$$7);
+  const classes$$1 = Common$0024002EHelpers$0024$0024$0024classes("buttons", new List(opts$$3.CustomClass, opts$$3.Modifiers), ofArray([["has-addons", opts$$3.HasAddons], ["is-centered", opts$$3.IsCentered], ["is-right", opts$$3.IsRight]]));
+  return createElement("div", createObj(new List(classes$$1, opts$$3.Props), 1), ...children$$13);
 }

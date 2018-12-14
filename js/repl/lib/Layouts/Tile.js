@@ -1,12 +1,16 @@
-import { List, Record, declare, Union } from "../../fable-core/Types.js";
-import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers } from "../Fulma/Common.js";
-import { ofSeq, fold } from "../../fable-core/List.js";
-import { append, delay, singleton } from "../../fable-core/Seq.js";
-import { createObj } from "../../fable-core/Util.js";
+import { List, Record, declare, Union } from "../fable-library.2.1.8/Types.js";
+import { record, bool, option, list as list$$1, type, string, union } from "../fable-library.2.1.8/Reflection.js";
+import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection } from "../Fulma/Common.js";
+import { ofSeq, fold } from "../fable-library.2.1.8/List.js";
+import { append, delay, singleton } from "../fable-library.2.1.8/Seq.js";
+import { createObj } from "../fable-library.2.1.8/Util.js";
 const createElement = React.createElement;
-export const ISize = declare(function ISize(tag, name, ...fields) {
+export const ISize = declare(function Fulma_Tile_ISize(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
+export function ISize$reflection() {
+  return union("Fulma.Tile.ISize", [], ISize, () => ["Is1", "Is2", "Is3", "Is4", "Is5", "Is6", "Is7", "Is8", "Is9", "Is10", "Is11", "Is12"]);
+}
 export function ofSize(_arg1) {
   switch (_arg1.tag) {
     case 1:
@@ -70,10 +74,13 @@ export function ofSize(_arg1) {
       }
   }
 }
-export const Option = declare(function Option(tag, name, ...fields) {
+export const Option = declare(function Fulma_Tile_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, arg6) {
+export function Option$reflection() {
+  return union("Fulma.Tile.Option", [], Option, () => [["Size", [ISize$reflection()]], ["CustomClass", [string]], ["Props", [list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))]], "IsChild", "IsAncestor", "IsParent", "IsVertical", ["Modifiers", [list$$1(Modifier$0024002EIModifier$0024reflection())]]]);
+}
+export const Options = declare(function Fulma_Tile_Options(arg1, arg2, arg3, arg4, arg5, arg6) {
   this.Size = arg1;
   this.IsVertical = arg2;
   this.CustomClass = arg3;
@@ -81,6 +88,9 @@ export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, ar
   this.Context = arg5;
   this.Modifiers = arg6;
 }, Record);
+export function Options$reflection() {
+  return record("Fulma.Tile.Options", [], Options, () => [["Size", option(string)], ["IsVertical", bool], ["CustomClass", option(string)], ["Props", list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))], ["Context", option(string)], ["Modifiers", list$$1(option(string))]]);
+}
 export function Options$$$get_Empty() {
   return new Options(null, false, null, new List(), null, new List());
 }
@@ -140,12 +150,12 @@ export function tile(options, children) {
     }));
   })), 1), ...children);
 }
-export function parent(options$$2, children$$2) {
-  return tile(new List(new Option(5, "IsParent"), options$$2), children$$2);
+export function parent(options$$2, children$$3) {
+  return tile(new List(new Option(5, "IsParent"), options$$2), children$$3);
 }
-export function child(options$$3, children$$3) {
-  return tile(new List(new Option(3, "IsChild"), options$$3), children$$3);
+export function child(options$$3, children$$4) {
+  return tile(new List(new Option(3, "IsChild"), options$$3), children$$4);
 }
-export function ancestor(options$$4, children$$4) {
-  return tile(new List(new Option(4, "IsAncestor"), options$$4), children$$4);
+export function ancestor(options$$4, children$$5) {
+  return tile(new List(new Option(4, "IsAncestor"), options$$4), children$$5);
 }

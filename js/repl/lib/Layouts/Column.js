@@ -1,14 +1,21 @@
-import { List, Record, declare, Union } from "../../fable-core/Types.js";
-import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Screen, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers } from "../Fulma/Common.js";
-import { createObj, equals } from "../../fable-core/Util.js";
-import { fold } from "../../fable-core/List.js";
+import { List, Record, declare, Union } from "../fable-library.2.1.8/Types.js";
+import { record, option, list as list$$1, type, string, union } from "../fable-library.2.1.8/Reflection.js";
+import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Screen, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Screen$reflection as Screen$0024reflection } from "../Fulma/Common.js";
+import { createObj, equals } from "../fable-library.2.1.8/Util.js";
+import { fold } from "../fable-library.2.1.8/List.js";
 const createElement = React.createElement;
-export const ISize = declare(function ISize(tag, name, ...fields) {
+export const ISize = declare(function Fulma_Column_ISize(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
-export const Option = declare(function Option(tag, name, ...fields) {
+export function ISize$reflection() {
+  return union("Fulma.Column.ISize", [], ISize, () => ["IsOneQuarter", "IsOneThird", "IsHalf", "IsTwoThirds", "IsThreeQuarters", "Is1", "Is2", "Is3", "Is4", "Is5", "Is6", "Is7", "Is8", "Is9", "Is10", "Is11", "IsNarrow", "IsFull", "IsOneFifth", "IsTwoFifths", "IsThreeFifths", "IsFourFifths"]);
+}
+export const Option = declare(function Fulma_Column_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
+export function Option$reflection() {
+  return union("Fulma.Column.Option", [], Option, () => [["Width", [Screen$0024reflection(), ISize$reflection()]], ["Offset", [Screen$0024reflection(), ISize$reflection()]], ["CustomClass", [string]], ["Props", [list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))]], ["Modifiers", [list$$1(Modifier$0024002EIModifier$0024reflection())]]]);
+}
 export function ofWidth(_arg1_0, _arg1_1) {
   const _arg1 = [_arg1_0, _arg1_1];
 
@@ -663,7 +670,7 @@ export function ofOffset(_arg1_0$$1, _arg1_1$$1) {
     }
   }
 }
-export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17) {
+export const Options = declare(function Fulma_Column_Options(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17) {
   this.Width = arg1;
   this.Offset = arg2;
   this.DesktopWidth = arg3;
@@ -682,6 +689,9 @@ export const Options = declare(function Options(arg1, arg2, arg3, arg4, arg5, ar
   this.Props = arg16;
   this.Modifiers = arg17;
 }, Record);
+export function Options$reflection() {
+  return record("Fulma.Column.Options", [], Options, () => [["Width", option(string)], ["Offset", option(string)], ["DesktopWidth", option(string)], ["DesktopOffset", option(string)], ["TabletpWidth", option(string)], ["TabletpOffset", option(string)], ["MobileWidth", option(string)], ["MobileOffset", option(string)], ["WideScreenWidth", option(string)], ["WideScreenOffset", option(string)], ["FullHDWidth", option(string)], ["FullHDOffset", option(string)], ["TouchWidth", option(string)], ["TouchOffset", option(string)], ["CustomClass", option(string)], ["Props", list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))], ["Modifiers", list$$1(option(string))]]);
+}
 export function Options$$$get_Empty() {
   return new Options(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, new List(), new List());
 }
