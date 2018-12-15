@@ -68,8 +68,8 @@ var commonPlugins = [
             'find',
             // 'folding',
             // 'format',
-            'gotoDeclarationCommands',
-            'gotoDeclarationMouse',
+            'goToDefinitionCommands',
+            'goToDefinitionMouse',
             'gotoError',
             'gotoLine',
             'hover',
@@ -146,7 +146,12 @@ module.exports = {
             },
             {
                 test: /\.fs(x|proj)?$/,
-                use: "fable-loader"
+                use: {
+                    loader: "fable-loader",
+                    options: {
+                        babel: CONFIG.babel
+                    }
+                }
             },
             {
                 test: /\.js$/,

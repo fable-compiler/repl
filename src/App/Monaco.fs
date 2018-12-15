@@ -15,7 +15,6 @@ module Monaco =
 
     type [<AllowNullLiteral>] IExports =
         abstract Emitter: EmitterStatic
-        abstract Promise: Promise
         abstract CancellationTokenSource: CancellationTokenSource
         abstract Uri: UriStatic
         abstract KeyMod: KeyMod
@@ -25,9 +24,6 @@ module Monaco =
         abstract Token: Token
         abstract languages : Languages.IExports
         abstract editor : Editor.IExports
-
-    type Thenable<'T> =
-        PromiseLike<'T>
 
     type [<AllowNullLiteral>] IDisposable =
         abstract dispose: unit -> unit
@@ -66,12 +62,6 @@ module Monaco =
     type [<AllowNullLiteral>] ProgressCallback<'TProgress> =
         [<Emit "$0($1...)">] abstract Invoke: progress: 'TProgress -> unit
 
-    type Promise<'TProgress> =
-        Promise<obj, 'TProgress>
-
-    type Promise =
-        Promise<obj, obj>
-
     type [<AllowNullLiteral>] Promise<'T, 'TProgress> =
         abstract ``then``: ?onfulfilled: ('T -> U2<'TResult1, PromiseLike<'TResult1>>) option * ?onrejected: (obj option -> U2<'TResult2, PromiseLike<'TResult2>>) option * ?onprogress: ('TProgress -> unit) -> Promise<U2<'TResult1, 'TResult2>, 'TProgress>
         abstract ``done``: ?onfulfilled: ('T -> unit) * ?onrejected: (obj option -> unit) * ?onprogress: ('TProgress -> unit) -> unit
@@ -87,8 +77,8 @@ module Monaco =
         abstract is: value: obj option -> bool
         abstract timeout: delay: float -> Promise<unit>
         abstract join: promises: U2<'T1, PromiseLike<'T1>> * U2<'T2, PromiseLike<'T2>> -> Promise<'T1 * 'T2>
-        abstract join: promises: ResizeArray<U2<'T, PromiseLike<'T>>> -> Promise<ResizeArray<'T>>
-        abstract any: promises: ResizeArray<U2<'T, PromiseLike<'T>>> -> Promise<obj>
+        abstract join: promises: array<U2<'T, PromiseLike<'T>>> -> Promise<array<'T>>
+        abstract any: promises: array<U2<'T, PromiseLike<'T>>> -> Promise<obj>
         abstract wrap: value: U2<'T, PromiseLike<'T>> -> Promise<'T>
         abstract wrapError: error: Error -> Promise<'T>
 
@@ -525,7 +515,7 @@ module Monaco =
         /// Create a `Selection` from an `ISelection`.
         abstract liftSelection: sel: ISelection -> Selection
         /// `a` equals `b`.
-        abstract selectionsArrEqual: a: ResizeArray<ISelection> * b: ResizeArray<ISelection> -> bool
+        abstract selectionsArrEqual: a: array<ISelection> * b: array<ISelection> -> bool
         /// Test if `obj` is an `ISelection`.
         abstract isISelection: obj: obj option -> bool
         /// Create with a direction.
@@ -566,14 +556,14 @@ module Monaco =
             /// Change the language for a model.
             abstract setModelLanguage: model: ITextModel * languageId: string -> unit
             /// Set the markers for a model.
-            abstract setModelMarkers: model: ITextModel * owner: string * markers: ResizeArray<IMarkerData> -> unit
+            abstract setModelMarkers: model: ITextModel * owner: string * markers: array<IMarkerData> -> unit
             /// <summary>Get markers for owner and/or resource</summary>
             /// <param name="filter"></param>
-            abstract getModelMarkers: filter: GetModelMarkersFilter -> ResizeArray<IMarker>
+            abstract getModelMarkers: filter: GetModelMarkersFilter -> array<IMarker>
             /// Get the model that has `uri` if it exists.
             abstract getModel: uri: Uri -> ITextModel
             /// Get all the created models.
-            abstract getModels: unit -> ResizeArray<ITextModel>
+            abstract getModels: unit -> array<ITextModel>
             /// Emitted when a model is created.
             abstract onDidCreateModel: listener: (ITextModel -> unit) -> IDisposable
             /// Emitted right before a model is disposed.
@@ -590,7 +580,7 @@ module Monaco =
             /// Colorize a line in a model.
             abstract colorizeModelLine: model: ITextModel * lineNumber: float * ?tabSize: float -> string
             /// Tokenize `text` using language `languageId`
-            abstract tokenize: text: string * languageId: string -> ResizeArray<ResizeArray<Token>>
+            abstract tokenize: text: string * languageId: string -> array<array<Token>>
             /// Define a new theme or update an existing theme.
             abstract defineTheme: themeName: string * themeData: IStandaloneThemeData -> unit
             /// Switches to a theme.
@@ -626,8 +616,8 @@ module Monaco =
         type [<AllowNullLiteral>] IStandaloneThemeData =
             abstract ``base``: BuiltinTheme with get, set
             abstract ``inherit``: bool with get, set
-            abstract rules: ResizeArray<ITokenThemeRule> with get, set
-            abstract encodedTokensColors: ResizeArray<string> option with get, set
+            abstract rules: array<ITokenThemeRule> with get, set
+            abstract encodedTokensColors: array<string> option with get, set
             abstract colors: IColors with get, set
 
         type [<AllowNullLiteral>] IColors =
@@ -647,7 +637,7 @@ module Monaco =
             abstract getProxy: unit -> Promise<'T>
             /// Synchronize (send) the models at `resources` to the web worker,
             /// making them available in the monaco.worker.getMirrorModels().
-            abstract withSyncedResources: resources: ResizeArray<Uri> -> Promise<'T>
+            abstract withSyncedResources: resources: array<Uri> -> Promise<'T>
 
         type [<AllowNullLiteral>] IWebWorkerOptions =
             /// The AMD moduleId to load.
@@ -667,7 +657,7 @@ module Monaco =
             /// Precondition rule.
             abstract precondition: string option with get, set
             /// An array of keybindings for the action.
-            abstract keybindings: ResizeArray<float> option with get, set
+            abstract keybindings: array<float> option with get, set
             /// The keybinding rule (condition on top of precondition).
             abstract keybindingContext: string option with get, set
             /// Control if the action should show up in the context menu and where.
@@ -730,7 +720,7 @@ module Monaco =
             abstract getModifiedEditor: unit -> IStandaloneCodeEditor
 
         type [<AllowNullLiteral>] ICommandHandler =
-            [<Emit "$0($1...)">] abstract Invoke: [<ParamArray>] args: ResizeArray<obj option> -> unit
+            [<Emit "$0($1...)">] abstract Invoke: [<ParamArray>] args: array<obj option> -> unit
 
         type [<AllowNullLiteral>] IContextKey<'T> =
             abstract set: value: 'T -> unit
@@ -751,8 +741,8 @@ module Monaco =
             abstract startColumn: int with get, set
             abstract endLineNumber: int with get, set
             abstract endColumn: int with get, set
-            abstract relatedInformation: ResizeArray<IRelatedInformation> option with get, set
-            abstract tags: ResizeArray<MarkerTag> option with get, set
+            abstract relatedInformation: array<IRelatedInformation> option with get, set
+            abstract tags: array<MarkerTag> option with get, set
 
         /// A structure defining a problem/warning/etc.
         type [<AllowNullLiteral>] IMarkerData =
@@ -764,8 +754,8 @@ module Monaco =
             abstract startColumn: int with get, set
             abstract endLineNumber: int with get, set
             abstract endColumn: int with get, set
-            abstract relatedInformation: ResizeArray<IRelatedInformation> option with get, set
-            abstract tags: ResizeArray<MarkerTag> option with get, set
+            abstract relatedInformation: array<IRelatedInformation> option with get, set
+            abstract tags: array<MarkerTag> option with get, set
 
         type [<AllowNullLiteral>] IRelatedInformation =
             abstract resource: Uri with get, set
@@ -819,9 +809,9 @@ module Monaco =
             /// CSS class name describing the decoration.
             abstract className: string option with get, set
             /// Message to be rendered when hovering over the glyph margin decoration.
-            abstract glyphMarginHoverMessage: U2<IMarkdownString, ResizeArray<IMarkdownString>> option with get, set
+            abstract glyphMarginHoverMessage: U2<IMarkdownString, array<IMarkdownString>> option with get, set
             /// Array of MarkdownString to render as the decoration message.
-            abstract hoverMessage: U2<IMarkdownString, ResizeArray<IMarkdownString>> option with get, set
+            abstract hoverMessage: U2<IMarkdownString, array<IMarkdownString>> option with get, set
             /// Should the decoration expand to encompass a whole line.
             abstract isWholeLine: bool option with get, set
             /// Specifies the stack order of a decoration.
@@ -917,7 +907,7 @@ module Monaco =
         /// A callback that can compute the cursor state after applying a series of edit operations.
         type [<AllowNullLiteral>] ICursorStateComputer =
             /// A callback that can compute the resulting cursors state after some edit operations have been executed.
-            [<Emit "$0($1...)">] abstract Invoke: inverseEditOperations: ResizeArray<IIdentifiedSingleEditOperation> -> ResizeArray<Selection>
+            [<Emit "$0($1...)">] abstract Invoke: inverseEditOperations: array<IIdentifiedSingleEditOperation> -> array<Selection>
 
         type [<AllowNullLiteral>] TextModelResolvedOptions =
             abstract _textModelResolvedOptionsBrand: unit with get
@@ -937,7 +927,7 @@ module Monaco =
         type [<AllowNullLiteral>] FindMatch =
             abstract _findMatchBrand: unit with get
             abstract range: Range
-            abstract matches: ResizeArray<string>
+            abstract matches: array<string>
 
         type [<AllowNullLiteral>] FindMatchStatic =
             [<Emit "new $0($1...)">] abstract Create: unit -> FindMatch
@@ -985,7 +975,7 @@ module Monaco =
             /// Get the text length for a certain line.
             abstract getLineLength: lineNumber: int -> int
             /// Get the text for all lines.
-            abstract getLinesContent: unit -> ResizeArray<string>
+            abstract getLinesContent: unit -> array<string>
             /// Get the end of line sequence predominantly used in the text buffer.
             abstract getEOL: unit -> string
             /// Get the minimum legal column for line at `lineNumber`
@@ -1031,7 +1021,7 @@ module Monaco =
             /// <param name="wordSeparators">Force the matching to match entire words only. Pass null otherwise.</param>
             /// <param name="captureMatches">The result will contain the captured groups.</param>
             /// <param name="limitResultCount">Limit the number of results</param>
-            abstract findMatches: searchString: string * searchOnlyEditableRange: bool * isRegex: bool * matchCase: bool * wordSeparators: string option * captureMatches: bool * ?limitResultCount: float -> ResizeArray<FindMatch>
+            abstract findMatches: searchString: string * searchOnlyEditableRange: bool * isRegex: bool * matchCase: bool * wordSeparators: string option * captureMatches: bool * ?limitResultCount: float -> array<FindMatch>
             /// <summary>Search the model.</summary>
             /// <param name="searchString">The string used to search. If it is a regular expression, set `isRegex` to true.</param>
             /// <param name="searchScope">Limit the searching to only search inside this range.</param>
@@ -1040,7 +1030,7 @@ module Monaco =
             /// <param name="wordSeparators">Force the matching to match entire words only. Pass null otherwise.</param>
             /// <param name="captureMatches">The result will contain the captured groups.</param>
             /// <param name="limitResultCount">Limit the number of results</param>
-            abstract findMatches: searchString: string * searchScope: IRange * isRegex: bool * matchCase: bool * wordSeparators: string option * captureMatches: bool * ?limitResultCount: float -> ResizeArray<FindMatch>
+            abstract findMatches: searchString: string * searchScope: IRange * isRegex: bool * matchCase: bool * wordSeparators: string option * captureMatches: bool * ?limitResultCount: float -> array<FindMatch>
             /// <summary>Search the model for the next match. Loops to the beginning of the model if needed.</summary>
             /// <param name="searchString">The string used to search. If it is a regular expression, set `isRegex` to true.</param>
             /// <param name="searchStart">Start the searching at the specified position.</param>
@@ -1071,7 +1061,7 @@ module Monaco =
             /// <param name="oldDecorations">Array containing previous decorations identifiers.</param>
             /// <param name="newDecorations">Array describing what decorations should result after the call.</param>
             /// <param name="ownerId">Identifies the editor id in which these decorations should appear. If no `ownerId` is provided, the decorations will appear in all editors that attach this model.</param>
-            abstract deltaDecorations: oldDecorations: ResizeArray<string> * newDecorations: ResizeArray<IModelDeltaDecoration> * ?ownerId: float -> ResizeArray<string>
+            abstract deltaDecorations: oldDecorations: array<string> * newDecorations: array<IModelDeltaDecoration> * ?ownerId: float -> array<string>
             /// <summary>Get the options associated with a decoration.</summary>
             /// <param name="id">The decoration id.</param>
             abstract getDecorationOptions: id: string -> IModelDecorationOptions
@@ -1082,27 +1072,27 @@ module Monaco =
             /// <param name="lineNumber">The line number</param>
             /// <param name="ownerId">If set, it will ignore decorations belonging to other owners.</param>
             /// <param name="filterOutValidation">If set, it will ignore decorations specific to validation (i.e. warnings, errors).</param>
-            abstract getLineDecorations: lineNumber: float * ?ownerId: float * ?filterOutValidation: bool -> ResizeArray<IModelDecoration>
+            abstract getLineDecorations: lineNumber: float * ?ownerId: float * ?filterOutValidation: bool -> array<IModelDecoration>
             /// <summary>Gets all the decorations for the lines between `startLineNumber` and `endLineNumber` as an array.</summary>
             /// <param name="startLineNumber">The start line number</param>
             /// <param name="endLineNumber">The end line number</param>
             /// <param name="ownerId">If set, it will ignore decorations belonging to other owners.</param>
             /// <param name="filterOutValidation">If set, it will ignore decorations specific to validation (i.e. warnings, errors).</param>
-            abstract getLinesDecorations: startLineNumber: float * endLineNumber: float * ?ownerId: float * ?filterOutValidation: bool -> ResizeArray<IModelDecoration>
+            abstract getLinesDecorations: startLineNumber: float * endLineNumber: float * ?ownerId: float * ?filterOutValidation: bool -> array<IModelDecoration>
             /// <summary>Gets all the deocorations in a range as an array. Only `startLineNumber` and `endLineNumber` from `range` are used for filtering.
             /// So for now it returns all the decorations on the same line as `range`.</summary>
             /// <param name="range">The range to search in</param>
             /// <param name="ownerId">If set, it will ignore decorations belonging to other owners.</param>
             /// <param name="filterOutValidation">If set, it will ignore decorations specific to validation (i.e. warnings, errors).</param>
-            abstract getDecorationsInRange: range: IRange * ?ownerId: float * ?filterOutValidation: bool -> ResizeArray<IModelDecoration>
+            abstract getDecorationsInRange: range: IRange * ?ownerId: float * ?filterOutValidation: bool -> array<IModelDecoration>
             /// <summary>Gets all the decorations as an array.</summary>
             /// <param name="ownerId">If set, it will ignore decorations belonging to other owners.</param>
             /// <param name="filterOutValidation">If set, it will ignore decorations specific to validation (i.e. warnings, errors).</param>
-            abstract getAllDecorations: ?ownerId: float * ?filterOutValidation: bool -> ResizeArray<IModelDecoration>
+            abstract getAllDecorations: ?ownerId: float * ?filterOutValidation: bool -> array<IModelDecoration>
             /// <summary>Gets all the decorations that should be rendered in the overview ruler as an array.</summary>
             /// <param name="ownerId">If set, it will ignore decorations belonging to other owners.</param>
             /// <param name="filterOutValidation">If set, it will ignore decorations specific to validation (i.e. warnings, errors).</param>
-            abstract getOverviewRulerDecorations: ?ownerId: float * ?filterOutValidation: bool -> ResizeArray<IModelDecoration>
+            abstract getOverviewRulerDecorations: ?ownerId: float * ?filterOutValidation: bool -> array<IModelDecoration>
             /// Normalize a string containing whitespace according to indentation rules (converts to spaces or to tabs).
             abstract normalizeIndentation: str: string -> string
             /// Get what is considered to be one indent (e.g. a tab character or 4 spaces, etc.).
@@ -1120,14 +1110,14 @@ module Monaco =
             /// <param name="beforeCursorState">The cursor state before the edit operaions. This cursor state will be returned when `undo` or `redo` are invoked.</param>
             /// <param name="editOperations">The edit operations.</param>
             /// <param name="cursorStateComputer">A callback that can compute the resulting cursors state after the edit operations have been executed.</param>
-            abstract pushEditOperations: beforeCursorState: ResizeArray<Selection> * editOperations: ResizeArray<IIdentifiedSingleEditOperation> * cursorStateComputer: ICursorStateComputer -> ResizeArray<Selection>
+            abstract pushEditOperations: beforeCursorState: array<Selection> * editOperations: array<IIdentifiedSingleEditOperation> * cursorStateComputer: ICursorStateComputer -> array<Selection>
             /// Change the end of line sequence. This is the preferred way of
             /// changing the eol sequence. This will land on the undo stack.
             abstract pushEOL: eol: EndOfLineSequence -> unit
             /// <summary>Edit the model without adding the edits to the undo stack.
             /// This can have dire consequences on the undo stack! See @pushEditOperations for the preferred way.</summary>
             /// <param name="operations">The edit operations.</param>
-            abstract applyEdits: operations: ResizeArray<IIdentifiedSingleEditOperation> -> ResizeArray<IIdentifiedSingleEditOperation>
+            abstract applyEdits: operations: array<IIdentifiedSingleEditOperation> -> array<IIdentifiedSingleEditOperation>
             /// Change the end of line sequence without recording in the undo stack.
             /// This can have dire consequences on the undo stack! See @pushEOL for the preferred way.
             abstract setEOL: eol: EndOfLineSequence -> unit
@@ -1169,7 +1159,7 @@ module Monaco =
         /// A helper for computing cursor state after a command.
         type [<AllowNullLiteral>] ICursorStateComputerData =
             /// Get the inverse edit operations of the added edit operations.
-            abstract getInverseEditOperations: unit -> ResizeArray<IIdentifiedSingleEditOperation>
+            abstract getInverseEditOperations: unit -> array<IIdentifiedSingleEditOperation>
             /// <summary>Get a previously tracked selection.</summary>
             /// <param name="id">The unique identifier returned by `trackSelection`.</param>
             abstract getTrackedSelection: id: string -> Selection
@@ -1221,7 +1211,7 @@ module Monaco =
         /// A line change
         type [<AllowNullLiteral>] ILineChange =
             inherit IChange
-            abstract charChanges: ResizeArray<ICharChange>
+            abstract charChanges: array<ICharChange>
 
         type [<AllowNullLiteral>] INewScrollPosition =
             abstract scrollLeft: float option with get, set
@@ -1264,7 +1254,7 @@ module Monaco =
 
         /// A (serializable) state of the code editor.
         type [<AllowNullLiteral>] ICodeEditorViewState =
-            abstract cursorState: ResizeArray<ICursorState> with get, set
+            abstract cursorState: array<ICursorState> with get, set
             abstract viewState: IViewState with get, set
             abstract contributionsState: obj with get, set
 
@@ -1310,7 +1300,7 @@ module Monaco =
             /// Returns true if the text inside this editor is focused (i.e. cursor is blinking).
             abstract hasTextFocus: unit -> bool
             /// Returns all actions associated with this editor.
-            abstract getSupportedActions: unit -> ResizeArray<IEditorAction>
+            abstract getSupportedActions: unit -> array<IEditorAction>
             /// Saves current view state of the editor in a serializable object.
             abstract saveViewState: unit -> IEditorViewState
             /// Restores the view state of the editor from a serializable object generated by `saveViewState`.
@@ -1337,7 +1327,7 @@ module Monaco =
             /// Returns the primary selection of the editor.
             abstract getSelection: unit -> Selection
             /// Returns all the selections of the editor.
-            abstract getSelections: unit -> ResizeArray<Selection>
+            abstract getSelections: unit -> array<Selection>
             /// <summary>Set the primary selection of the editor. This will remove any secondary cursors.</summary>
             /// <param name="selection">The new selection</param>
             abstract setSelection: selection: IRange -> unit
@@ -1352,7 +1342,7 @@ module Monaco =
             abstract setSelection: selection: Selection -> unit
             /// Set the selections for all the cursors of the editor.
             /// Cursors will be removed or added, as necessary.
-            abstract setSelections: selections: ResizeArray<ISelection> -> unit
+            abstract setSelections: selections: array<ISelection> -> unit
             /// Scroll vertically as necessary and reveal lines.
             abstract revealLines: startLineNumber: float * endLineNumber: float * ?scrollType: ScrollType -> unit
             /// Scroll vertically as necessary and reveal lines centered vertically.
@@ -1416,7 +1406,7 @@ module Monaco =
 
         /// An event describing a change in the text of a model.
         type [<AllowNullLiteral>] IModelContentChangedEvent =
-            abstract changes: ResizeArray<IModelContentChange>
+            abstract changes: array<IModelContentChange>
             /// The (new) end-of-line character.
             abstract eol: string
             /// The new version id the model has transitioned to.
@@ -1435,7 +1425,7 @@ module Monaco =
 
         /// An event describing that some ranges of lines have been tokenized (their tokens have changed).
         type [<AllowNullLiteral>] IModelTokensChangedEvent =
-            abstract ranges: ResizeArray<obj>
+            abstract ranges: array<obj>
 
         type [<AllowNullLiteral>] IModelOptionsChangedEvent =
             abstract tabSize: bool
@@ -1456,7 +1446,7 @@ module Monaco =
             /// Primary cursor's position.
             abstract position: Position
             /// Secondary cursors' position.
-            abstract secondaryPositions: ResizeArray<Position>
+            abstract secondaryPositions: array<Position>
             /// Reason.
             abstract reason: CursorChangeReason
             /// Source of the call that caused the event.
@@ -1467,7 +1457,7 @@ module Monaco =
             /// The primary selection.
             abstract selection: Selection
             /// The secondary selections.
-            abstract secondarySelections: ResizeArray<Selection>
+            abstract secondarySelections: array<Selection>
             /// Source of the call that caused the event.
             abstract source: string
             /// Reason.
@@ -1570,7 +1560,7 @@ module Monaco =
             abstract ariaLabel: string option with get, set
             /// Render vertical lines at the specified columns.
             /// Defaults to empty array.
-            abstract rulers: ResizeArray<float> option with get, set
+            abstract rulers: array<float> option with get, set
             /// A string containing the word separators used when doing word navigation.
             /// Defaults to `~!@#$%^&*()-=+[{]}\\|;:\'",.<>/?
             abstract wordSeparators: string option with get, set
@@ -1928,7 +1918,7 @@ module Monaco =
         type [<AllowNullLiteral>] InternalEditorViewOptions =
             abstract extraEditorClassName: string
             abstract disableMonospaceOptimizations: bool
-            abstract rulers: ResizeArray<float>
+            abstract rulers: array<float>
             abstract ariaLabel: string
             abstract renderLineNumbers: RenderLineNumbersType
             abstract renderCustomLineNumbers: (float -> string)
@@ -2152,7 +2142,7 @@ module Monaco =
             /// `preference` will also affect the placement.
             abstract position: IPosition with get, set
             /// Placement preference for position, in order of preference.
-            abstract preference: ResizeArray<ContentWidgetPositionPreference> with get, set
+            abstract preference: array<ContentWidgetPositionPreference> with get, set
 
         /// A content widget renders inline with the text and can be easily placed 'near' an editor position.
         type [<AllowNullLiteral>] IContentWidget =
@@ -2314,19 +2304,19 @@ module Monaco =
             /// <param name="source">The source of the call.</param>
             /// <param name="edits">The edits to execute.</param>
             /// <param name="endCursorState">Cursor state after the edits were applied.</param>
-            abstract executeEdits: source: string * edits: ResizeArray<IIdentifiedSingleEditOperation> * ?endCursorState: ResizeArray<Selection> -> bool
+            abstract executeEdits: source: string * edits: array<IIdentifiedSingleEditOperation> * ?endCursorState: array<Selection> -> bool
             /// <summary>Execute multiple (concommitent) commands on the editor.</summary>
             /// <param name="source">The source of the call.</param>
-            abstract executeCommands: source: string * commands: ResizeArray<ICommand> -> unit
+            abstract executeCommands: source: string * commands: array<ICommand> -> unit
             /// Get all the decorations on a line (filtering out decorations from other editors).
-            abstract getLineDecorations: lineNumber: float -> ResizeArray<IModelDecoration>
+            abstract getLineDecorations: lineNumber: float -> array<IModelDecoration>
             /// All decorations added through this call will get the ownerId of this editor.
-            abstract deltaDecorations: oldDecorations: ResizeArray<string> * newDecorations: ResizeArray<IModelDeltaDecoration> -> ResizeArray<string>
+            abstract deltaDecorations: oldDecorations: array<string> * newDecorations: array<IModelDeltaDecoration> -> array<string>
             /// Get the layout info for the editor.
             abstract getLayoutInfo: unit -> EditorLayoutInfo
             /// Returns the ranges that are currently visible.
             /// Does not account for horizontal scrolling.
-            abstract getVisibleRanges: unit -> ResizeArray<Range>
+            abstract getVisibleRanges: unit -> array<Range>
             /// Get the vertical position (top offset) for the line w.r.t. to the first line.
             abstract getTopForLineNumber: lineNumber: float -> float
             /// Get the vertical position (top offset) for the position w.r.t. to the first line.
@@ -2392,7 +2382,7 @@ module Monaco =
             /// Get the `modified` editor.
             abstract getModifiedEditor: unit -> ICodeEditor
             /// Get the computed diff information.
-            abstract getLineChanges: unit -> ResizeArray<ILineChange>
+            abstract getLineChanges: unit -> array<ILineChange>
             /// Get information based on computed diff about a line number from the original model.
             /// If the diff computation is not finished or the model is missing, will return null.
             abstract getDiffLineInformationForOriginal: lineNumber: float -> IDiffLineInformation
@@ -2440,7 +2430,7 @@ module Monaco =
 
         type [<AllowNullLiteral>] IWorkerContext =
             /// Get all available mirror models in this worker.
-            abstract getMirrorModels: unit -> ResizeArray<IMirrorModel>
+            abstract getMirrorModels: unit -> array<IMirrorModel>
 
     module Languages =
 
@@ -2448,7 +2438,7 @@ module Monaco =
             /// Register information about a new language.
             abstract register: language: ILanguageExtensionPoint -> unit
             /// Get the information of all the registered languages.
-            abstract getLanguages: unit -> ResizeArray<ILanguageExtensionPoint>
+            abstract getLanguages: unit -> array<ILanguageExtensionPoint>
             abstract getEncodedLanguageId: languageId: string -> float
             /// An event emitted when a language is first time needed (e.g. a model has it set).
             abstract onLanguage: languageId: string * callback: (unit -> unit) -> IDisposable
@@ -2504,7 +2494,7 @@ module Monaco =
         /// The result of a line tokenization.
         type [<AllowNullLiteral>] ILineTokens =
             /// The list of tokens on the line.
-            abstract tokens: ResizeArray<IToken> with get, set
+            abstract tokens: array<IToken> with get, set
             /// The tokenization end state.
             /// A pointer will be held to this and the object should not be modified by the tokenizer after the pointer is returned.
             abstract endState: IState with get, set
@@ -2552,7 +2542,7 @@ module Monaco =
         /// a [code action](#CodeActionProvider.provideCodeActions) is run.
         type [<AllowNullLiteral>] CodeActionContext =
             /// An array of diagnostics.
-            abstract markers: ResizeArray<Editor.IMarkerData>
+            abstract markers: array<Editor.IMarkerData>
             /// Requested kind of actions to return.
             abstract only: string option
 
@@ -2560,7 +2550,7 @@ module Monaco =
         /// the [light bulb](https://code.visualstudio.com/docs/editor/editingevolved#_code-action) feature.
         type [<AllowNullLiteral>] CodeActionProvider =
             /// Provide commands for the given document and range.
-            abstract provideCodeActions: model: Editor.ITextModel * range: Range * context: CodeActionContext * token: CancellationToken -> U2<ResizeArray<U2<Command, CodeAction>>, Thenable<ResizeArray<U2<Command, CodeAction>>>>
+            abstract provideCodeActions: model: Editor.ITextModel * range: Range * context: CodeActionContext * token: CancellationToken -> U2<array<U2<Command, CodeAction>>, Promise<array<U2<Command, CodeAction>>>>
 
         type [<RequireQualifiedAccess>] CompletionItemKind =
             | Text = 0
@@ -2635,21 +2625,21 @@ module Monaco =
             /// An optional set of characters that when pressed while this completion is active will accept it first and
             /// then type that character. *Note* that all commit characters should have `length=1` and that superfluous
             /// characters will be ignored.
-            abstract commitCharacters: ResizeArray<string> option with get, set
+            abstract commitCharacters: array<string> option with get, set
             abstract textEdit: Editor.ISingleEditOperation option with get, set
             /// An optional array of additional text edits that are applied when
             /// selecting this completion. Edits must not overlap with the main edit
             /// nor with themselves.
-            abstract additionalTextEdits: ResizeArray<Editor.ISingleEditOperation> option with get, set
+            abstract additionalTextEdits: array<Editor.ISingleEditOperation> option with get, set
 
         /// Represents a collection of [completion items](#CompletionItem) to be presented
         /// in the editor.
         type [<AllowNullLiteral>] CompletionList =
             /// This list it not complete. Further typing should result in recomputing
             /// this list.
-            abstract isIncomplete: bool option with get, set
+            abstract incomplete: bool option with get, set
             /// The completion items.
-            abstract items: ResizeArray<CompletionItem> with get, set
+            abstract suggestions: CompletionItem[] with get, set
 
         /// Contains additional information about the context in which
         /// [completion provider](#CompletionItemProvider.provideCompletionItems) is triggered.
@@ -2671,14 +2661,14 @@ module Monaco =
         /// when a completion item is shown in the UI and gains focus this provider is asked to resolve
         /// the item, like adding [doc-comment](#CompletionItem.documentation) or [details](#CompletionItem.detail).
         type [<AllowNullLiteral>] CompletionItemProvider =
-            abstract triggerCharacters: ResizeArray<string> option with get, set
+            abstract triggerCharacters: string[]
             /// Provide completion items for the given position and document.
-            abstract provideCompletionItems: document: Editor.ITextModel * position: Position * token: CancellationToken * context: CompletionContext -> U4<ResizeArray<CompletionItem>, Thenable<ResizeArray<CompletionItem>>, CompletionList, Thenable<CompletionList>>
+            abstract provideCompletionItems: document: Editor.ITextModel * position: Position * context: CompletionContext * token: CancellationToken -> U2<CompletionList, JS.Promise<CompletionList>>
             /// Given a completion item fill in more data, like [doc-comment](#CompletionItem.documentation)
             /// or [details](#CompletionItem.detail).
             ///
             /// The editor will only resolve a completion item once.
-            abstract resolveCompletionItem: item: CompletionItem * token: CancellationToken -> U2<CompletionItem, Thenable<CompletionItem>>
+            abstract resolveCompletionItem: document: Editor.ITextModel * position: Position * item: CompletionItem * token: CancellationToken -> U2<CompletionItem, JS.Promise<CompletionItem>>
 
         /// Describes how comments for a language work.
         type [<AllowNullLiteral>] CommentRule =
@@ -2694,7 +2684,7 @@ module Monaco =
             abstract comments: CommentRule option with get, set
             /// The language's brackets.
             /// This configuration implicitly affects pressing Enter around these brackets.
-            abstract brackets: ResizeArray<CharacterPair> option with get, set
+            abstract brackets: array<CharacterPair> option with get, set
             /// The language's word definition.
             /// If the language supports Unicode identifiers (e.g. JavaScript), it is preferable
             /// to provide a word definition that uses exclusion of known separators.
@@ -2704,14 +2694,14 @@ module Monaco =
             /// The language's indentation settings.
             abstract indentationRules: IndentationRule option with get, set
             /// The language's rules to be evaluated when pressing Enter.
-            abstract onEnterRules: ResizeArray<OnEnterRule> option with get, set
+            abstract onEnterRules: array<OnEnterRule> option with get, set
             /// The language's auto closing pairs. The 'close' character is automatically inserted with the
             /// 'open' character is typed. If not set, the configured brackets will be used.
-            abstract autoClosingPairs: ResizeArray<IAutoClosingPairConditional> option with get, set
+            abstract autoClosingPairs: array<IAutoClosingPairConditional> option with get, set
             /// The language's surrounding pairs. When the 'open' character is typed on a selection, the
             /// selected string is surrounded by the open and close characters. If not set, the autoclosing pairs
             /// settings will be used.
-            abstract surroundingPairs: ResizeArray<IAutoClosingPair> option with get, set
+            abstract surroundingPairs: array<IAutoClosingPair> option with get, set
             /// The language's folding rules.
             abstract folding: FoldingRules option with get, set
             /// **Deprecated** Do not use.
@@ -2774,7 +2764,7 @@ module Monaco =
 
         type [<AllowNullLiteral>] IAutoClosingPairConditional =
             inherit IAutoClosingPair
-            abstract notIn: ResizeArray<string> option with get, set
+            abstract notIn: array<string> option with get, set
 
         type [<RequireQualifiedAccess>] IndentAction =
             | None = 0
@@ -2804,7 +2794,7 @@ module Monaco =
         /// rendered in a tooltip-like widget.
         type [<AllowNullLiteral>] Hover =
             /// The contents of this hover.
-            abstract contents: ResizeArray<IMarkdownString> with get, set
+            abstract contents: array<IMarkdownString> with get, set
             /// The range to which this hover applies. When missing, the
             /// editor will use the range at the current position or the
             /// current position itself.
@@ -2816,7 +2806,7 @@ module Monaco =
             /// Provide a hover for the given position and document. Multiple hovers at the same
             /// position will be merged by the editor. A hover can have a range which defaults
             /// to the word range at the position when omitted.
-            abstract provideHover: model: Editor.ITextModel * position: Position * token: CancellationToken -> U2<Hover, Thenable<Hover>>
+            abstract provideHover: model: Editor.ITextModel * position: Position * token: CancellationToken -> U2<Hover, Promise<Hover>>
 
         type [<RequireQualifiedAccess>] SuggestTriggerKind =
             | Invoke = 0
@@ -2827,7 +2817,7 @@ module Monaco =
             abstract title: string with get, set
             abstract command: Command option with get, set
             abstract edit: WorkspaceEdit option with get, set
-            abstract diagnostics: ResizeArray<Editor.IMarkerData> option with get, set
+            abstract diagnostics: array<Editor.IMarkerData> option with get, set
             abstract kind: string option with get, set
 
         /// Represents a parameter of a callable-signature. A parameter can
@@ -2851,14 +2841,14 @@ module Monaco =
             /// in the UI but can be omitted.
             abstract documentation: U2<string, IMarkdownString> option with get, set
             /// The parameters of this signature.
-            abstract parameters: ResizeArray<ParameterInformation> with get, set
+            abstract parameters: array<ParameterInformation> with get, set
 
         /// Signature help represents the signature of something
         /// callable. There can be multiple signatures but only one
         /// active and only one active parameter.
         type [<AllowNullLiteral>] SignatureHelp =
             /// One or more signatures.
-            abstract signatures: ResizeArray<SignatureInformation> with get, set
+            abstract signatures: array<SignatureInformation> with get, set
             /// The active signature.
             abstract activeSignature: float with get, set
             /// The active parameter of the active signature.
@@ -2867,9 +2857,9 @@ module Monaco =
         /// The signature help provider interface defines the contract between extensions and
         /// the [parameter hints](https://code.visualstudio.com/docs/editor/intellisense)-feature.
         type [<AllowNullLiteral>] SignatureHelpProvider =
-            abstract signatureHelpTriggerCharacters: ResizeArray<string> with get, set
+            abstract signatureHelpTriggerCharacters: array<string> with get, set
             /// Provide help for the signature at the given position and document.
-            abstract provideSignatureHelp: model: Editor.ITextModel * position: Position * token: CancellationToken -> U2<SignatureHelp, Thenable<SignatureHelp>>
+            abstract provideSignatureHelp: model: Editor.ITextModel * position: Position * token: CancellationToken -> U2<SignatureHelp, Promise<SignatureHelp>>
 
         type [<RequireQualifiedAccess>] DocumentHighlightKind =
             | Text = 0
@@ -2890,7 +2880,7 @@ module Monaco =
         type [<AllowNullLiteral>] DocumentHighlightProvider =
             /// Provide a set of document highlights, like all occurrences of a variable or
             /// all exit-points of a function.
-            abstract provideDocumentHighlights: model: Editor.ITextModel * position: Position * token: CancellationToken -> U2<ResizeArray<DocumentHighlight>, Thenable<ResizeArray<DocumentHighlight>>>
+            abstract provideDocumentHighlights: model: Editor.ITextModel * position: Position * token: CancellationToken -> U2<array<DocumentHighlight>, Promise<array<DocumentHighlight>>>
 
         /// Value-object that contains additional information when
         /// requesting references.
@@ -2902,7 +2892,7 @@ module Monaco =
         /// the [find references](https://code.visualstudio.com/docs/editor/editingevolved#_peek)-feature.
         type [<AllowNullLiteral>] ReferenceProvider =
             /// Provide a set of project-wide references for the given position and document.
-            abstract provideReferences: model: Editor.ITextModel * position: Position * context: ReferenceContext * token: CancellationToken -> U2<ResizeArray<Location>, Thenable<ResizeArray<Location>>>
+            abstract provideReferences: model: Editor.ITextModel * position: Position * context: ReferenceContext * token: CancellationToken -> U2<array<Location>, Promise<array<Location>>>
 
         /// Represents a location inside a resource, such as a line
         /// inside a text file.
@@ -2913,16 +2903,8 @@ module Monaco =
             abstract range: IRange with get, set
 
         type Definition =
-            U2<Location, ResizeArray<Location>>
-
-        [<RequireQualifiedAccess; CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-        module Definition =
-            let ofLocation v: Definition = v |> U2.Case1
-            let isLocation (v: Definition) = match v with U2.Case1 _ -> true | _ -> false
-            let asLocation (v: Definition) = match v with U2.Case1 o -> Some o | _ -> None
-            let ofLocationArray v: Definition = v |> U2.Case2
-            let isLocationArray (v: Definition) = match v with U2.Case2 _ -> true | _ -> false
-            let asLocationArray (v: Definition) = match v with U2.Case2 o -> Some o | _ -> None
+            Location
+            // U2<Location, array<Location>>
 
         type [<AllowNullLiteral>] DefinitionLink =
             abstract origin: IRange option with get, set
@@ -2935,19 +2917,19 @@ module Monaco =
         /// and peek definition features.
         type [<AllowNullLiteral>] DefinitionProvider =
             /// Provide the definition of the symbol at the given position and document.
-            abstract provideDefinition: model: Editor.ITextModel * position: Position * token: CancellationToken -> U3<Definition, ResizeArray<DefinitionLink>, Thenable<U2<Definition, ResizeArray<DefinitionLink>>>>
+            abstract provideDefinition: model: Editor.ITextModel * position: Position * token: CancellationToken -> U2<Definition, Promise<Definition>>
 
         /// The implementation provider interface defines the contract between extensions and
         /// the go to implementation feature.
         type [<AllowNullLiteral>] ImplementationProvider =
             /// Provide the implementation of the symbol at the given position and document.
-            abstract provideImplementation: model: Editor.ITextModel * position: Position * token: CancellationToken -> U3<Definition, ResizeArray<DefinitionLink>, Thenable<U2<Definition, ResizeArray<DefinitionLink>>>>
+            abstract provideImplementation: model: Editor.ITextModel * position: Position * token: CancellationToken -> U3<Definition, array<DefinitionLink>, Promise<U2<Definition, array<DefinitionLink>>>>
 
         /// The type definition provider interface defines the contract between extensions and
         /// the go to type definition feature.
         type [<AllowNullLiteral>] TypeDefinitionProvider =
             /// Provide the type definition of the symbol at the given position and document.
-            abstract provideTypeDefinition: model: Editor.ITextModel * position: Position * token: CancellationToken -> U3<Definition, ResizeArray<DefinitionLink>, Thenable<U2<Definition, ResizeArray<DefinitionLink>>>>
+            abstract provideTypeDefinition: model: Editor.ITextModel * position: Position * token: CancellationToken -> U3<Definition, array<DefinitionLink>, Promise<U2<Definition, array<DefinitionLink>>>>
 
         type [<RequireQualifiedAccess>] SymbolKind =
             | File = 0
@@ -2984,14 +2966,14 @@ module Monaco =
             abstract containerName: string option with get, set
             abstract range: IRange with get, set
             abstract selectionRange: IRange with get, set
-            abstract children: ResizeArray<DocumentSymbol> option with get, set
+            abstract children: array<DocumentSymbol> option with get, set
 
         /// The document symbol provider interface defines the contract between extensions and
         /// the [go to symbol](https://code.visualstudio.com/docs/editor/editingevolved#_goto-symbol)-feature.
         type [<AllowNullLiteral>] DocumentSymbolProvider =
             abstract displayName: string option with get, set
             /// Provide symbol information for the given document.
-            abstract provideDocumentSymbols: model: Editor.ITextModel * token: CancellationToken -> U2<ResizeArray<DocumentSymbol>, Thenable<ResizeArray<DocumentSymbol>>>
+            abstract provideDocumentSymbols: model: Editor.ITextModel * token: CancellationToken -> U2<array<DocumentSymbol>, Promise<array<DocumentSymbol>>>
 
         type [<AllowNullLiteral>] TextEdit =
             abstract range: IRange with get, set
@@ -3009,7 +2991,7 @@ module Monaco =
         /// the formatting-feature.
         type [<AllowNullLiteral>] DocumentFormattingEditProvider =
             /// Provide formatting edits for a whole document.
-            abstract provideDocumentFormattingEdits: model: Editor.ITextModel * options: FormattingOptions * token: CancellationToken -> U2<ResizeArray<TextEdit>, Thenable<ResizeArray<TextEdit>>>
+            abstract provideDocumentFormattingEdits: model: Editor.ITextModel * options: FormattingOptions * token: CancellationToken -> U2<array<TextEdit>, Promise<array<TextEdit>>>
 
         /// The document formatting provider interface defines the contract between extensions and
         /// the formatting-feature.
@@ -3019,18 +3001,18 @@ module Monaco =
             /// The given range is a hint and providers can decide to format a smaller
             /// or larger range. Often this is done by adjusting the start and end
             /// of the range to full syntax nodes.
-            abstract provideDocumentRangeFormattingEdits: model: Editor.ITextModel * range: Range * options: FormattingOptions * token: CancellationToken -> U2<ResizeArray<TextEdit>, Thenable<ResizeArray<TextEdit>>>
+            abstract provideDocumentRangeFormattingEdits: model: Editor.ITextModel * range: Range * options: FormattingOptions * token: CancellationToken -> U2<array<TextEdit>, Promise<array<TextEdit>>>
 
         /// The document formatting provider interface defines the contract between extensions and
         /// the formatting-feature.
         type [<AllowNullLiteral>] OnTypeFormattingEditProvider =
-            abstract autoFormatTriggerCharacters: ResizeArray<string> with get, set
+            abstract autoFormatTriggerCharacters: array<string> with get, set
             /// Provide formatting edits after a character has been typed.
             ///
             /// The given position and character should hint to the provider
             /// what range the position to expand to, like find the matching `{`
             /// when `}` has been entered.
-            abstract provideOnTypeFormattingEdits: model: Editor.ITextModel * position: Position * ch: string * options: FormattingOptions * token: CancellationToken -> U2<ResizeArray<TextEdit>, Thenable<ResizeArray<TextEdit>>>
+            abstract provideOnTypeFormattingEdits: model: Editor.ITextModel * position: Position * ch: string * options: FormattingOptions * token: CancellationToken -> U2<array<TextEdit>, Promise<array<TextEdit>>>
 
         /// A link inside the editor.
         type [<AllowNullLiteral>] ILink =
@@ -3039,8 +3021,8 @@ module Monaco =
 
         /// A provider of links.
         type [<AllowNullLiteral>] LinkProvider =
-            abstract provideLinks: model: Editor.ITextModel * token: CancellationToken -> U2<ResizeArray<ILink>, Thenable<ResizeArray<ILink>>>
-            abstract resolveLink: (ILink -> CancellationToken -> U2<ILink, Thenable<ILink>>) option with get, set
+            abstract provideLinks: model: Editor.ITextModel * token: CancellationToken -> U2<array<ILink>, Promise<array<ILink>>>
+            abstract resolveLink: (ILink -> CancellationToken -> U2<ILink, Promise<ILink>>) option with get, set
 
         /// A color in RGBA format.
         type [<AllowNullLiteral>] IColor =
@@ -3064,7 +3046,7 @@ module Monaco =
             abstract textEdit: TextEdit option with get, set
             /// An optional array of additional [text edits](#TextEdit) that are applied when
             /// selecting this color presentation.
-            abstract additionalTextEdits: ResizeArray<TextEdit> option with get, set
+            abstract additionalTextEdits: array<TextEdit> option with get, set
 
         /// A color range is a range in a text model which represents a color.
         type [<AllowNullLiteral>] IColorInformation =
@@ -3076,9 +3058,9 @@ module Monaco =
         /// A provider of colors for editor models.
         type [<AllowNullLiteral>] DocumentColorProvider =
             /// Provides the color ranges for a specific model.
-            abstract provideDocumentColors: model: Editor.ITextModel * token: CancellationToken -> U2<ResizeArray<IColorInformation>, Thenable<ResizeArray<IColorInformation>>>
+            abstract provideDocumentColors: model: Editor.ITextModel * token: CancellationToken -> U2<array<IColorInformation>, Promise<array<IColorInformation>>>
             /// Provide the string representations for a color.
-            abstract provideColorPresentations: model: Editor.ITextModel * colorInfo: IColorInformation * token: CancellationToken -> U2<ResizeArray<IColorPresentation>, Thenable<ResizeArray<IColorPresentation>>>
+            abstract provideColorPresentations: model: Editor.ITextModel * colorInfo: IColorInformation * token: CancellationToken -> U2<array<IColorPresentation>, Promise<array<IColorPresentation>>>
 
         type [<AllowNullLiteral>] FoldingContext =
             interface end
@@ -3086,7 +3068,7 @@ module Monaco =
         /// A provider of colors for editor models.
         type [<AllowNullLiteral>] FoldingRangeProvider =
             /// Provides the color ranges for a specific model.
-            abstract provideFoldingRanges: model: Editor.ITextModel * context: FoldingContext * token: CancellationToken -> U2<ResizeArray<FoldingRange>, Thenable<ResizeArray<FoldingRange>>>
+            abstract provideFoldingRanges: model: Editor.ITextModel * context: FoldingContext * token: CancellationToken -> U2<array<FoldingRange>, Promise<array<FoldingRange>>>
 
         type [<AllowNullLiteral>] FoldingRange =
             /// The one-based start line of the range to fold. The folded area starts after the line's last character.
@@ -3122,7 +3104,7 @@ module Monaco =
         type [<AllowNullLiteral>] ResourceTextEdit =
             abstract resource: Uri with get, set
             abstract modelVersionId: float option with get, set
-            abstract edits: ResizeArray<TextEdit> with get, set
+            abstract edits: array<TextEdit> with get, set
 
         type [<AllowNullLiteral>] WorkspaceEdit =
             abstract edits: Array<U2<ResourceTextEdit, ResourceFileEdit>> with get, set
@@ -3133,14 +3115,14 @@ module Monaco =
             abstract text: string with get, set
 
         type [<AllowNullLiteral>] RenameProvider =
-            abstract provideRenameEdits: model: Editor.ITextModel * position: Position * newName: string * token: CancellationToken -> U2<WorkspaceEdit, Thenable<WorkspaceEdit>>
-            abstract resolveRenameLocation: model: Editor.ITextModel * position: Position * token: CancellationToken -> U2<RenameLocation, Thenable<RenameLocation>>
+            abstract provideRenameEdits: model: Editor.ITextModel * position: Position * newName: string * token: CancellationToken -> U2<WorkspaceEdit, Promise<WorkspaceEdit>>
+            abstract resolveRenameLocation: model: Editor.ITextModel * position: Position * token: CancellationToken -> U2<RenameLocation, Promise<RenameLocation>>
 
         type [<AllowNullLiteral>] Command =
             abstract id: string with get, set
             abstract title: string with get, set
             abstract tooltip: string option with get, set
-            abstract arguments: ResizeArray<obj option> option with get, set
+            abstract arguments: array<obj option> option with get, set
 
         type [<AllowNullLiteral>] ICodeLensSymbol =
             abstract range: IRange with get, set
@@ -3149,17 +3131,17 @@ module Monaco =
 
         type [<AllowNullLiteral>] CodeLensProvider =
             abstract onDidChange: IEvent<CodeLensProvider> option with get, set
-            abstract provideCodeLenses: model: Editor.ITextModel * token: CancellationToken -> U2<ResizeArray<ICodeLensSymbol>, Thenable<ResizeArray<ICodeLensSymbol>>>
-            abstract resolveCodeLens: model: Editor.ITextModel * codeLens: ICodeLensSymbol * token: CancellationToken -> U2<ICodeLensSymbol, Thenable<ICodeLensSymbol>>
+            abstract provideCodeLenses: model: Editor.ITextModel * token: CancellationToken -> U2<array<ICodeLensSymbol>, Promise<array<ICodeLensSymbol>>>
+            abstract resolveCodeLens: model: Editor.ITextModel * codeLens: ICodeLensSymbol * token: CancellationToken -> U2<ICodeLensSymbol, Promise<ICodeLensSymbol>>
 
         type [<AllowNullLiteral>] ILanguageExtensionPoint =
             abstract id: string with get, set
-            abstract extensions: ResizeArray<string> option with get, set
-            abstract filenames: ResizeArray<string> option with get, set
-            abstract filenamePatterns: ResizeArray<string> option with get, set
+            abstract extensions: array<string> option with get, set
+            abstract filenames: array<string> option with get, set
+            abstract filenamePatterns: array<string> option with get, set
             abstract firstLine: string option with get, set
-            abstract aliases: ResizeArray<string> option with get, set
-            abstract mimetypes: ResizeArray<string> option with get, set
+            abstract aliases: array<string> option with get, set
+            abstract mimetypes: array<string> option with get, set
             abstract configuration: Uri option with get, set
 
         /// A Monarch language definition
@@ -3171,7 +3153,7 @@ module Monaco =
             /// if no match in the tokenizer assign this token class (default 'source')
             abstract defaultToken: string option with get, set
             /// for example [['{','}','delimiter.curly']]
-            abstract brackets: ResizeArray<IMonarchLanguageBracket> option with get, set
+            abstract brackets: array<IMonarchLanguageBracket> option with get, set
             /// start symbol in the tokenizer (by default the first entry is used)
             abstract start: string option with get, set
             /// attach this to every token class (by default '.' + name)
@@ -3197,24 +3179,12 @@ module Monaco =
         type IMonarchLanguageRule =
             U3<IShortMonarchLanguageRule1, IShortMonarchLanguageRule2, IExpandedMonarchLanguageRule>
 
-        [<RequireQualifiedAccess; CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-        module IMonarchLanguageRule =
-            let ofIShortMonarchLanguageRule1 v: IMonarchLanguageRule = v |> U3.Case1
-            let isIShortMonarchLanguageRule1 (v: IMonarchLanguageRule) = match v with U3.Case1 _ -> true | _ -> false
-            let asIShortMonarchLanguageRule1 (v: IMonarchLanguageRule) = match v with U3.Case1 o -> Some o | _ -> None
-            let ofIShortMonarchLanguageRule2 v: IMonarchLanguageRule = v |> U3.Case2
-            let isIShortMonarchLanguageRule2 (v: IMonarchLanguageRule) = match v with U3.Case2 _ -> true | _ -> false
-            let asIShortMonarchLanguageRule2 (v: IMonarchLanguageRule) = match v with U3.Case2 o -> Some o | _ -> None
-            let ofIExpandedMonarchLanguageRule v: IMonarchLanguageRule = v |> U3.Case3
-            let isIExpandedMonarchLanguageRule (v: IMonarchLanguageRule) = match v with U3.Case3 _ -> true | _ -> false
-            let asIExpandedMonarchLanguageRule (v: IMonarchLanguageRule) = match v with U3.Case3 o -> Some o | _ -> None
-
         /// An action is either an array of actions...
         /// ... or a case statement with guards...
         /// ... or a basic action with a token value.
         type [<AllowNullLiteral>] IMonarchLanguageAction =
             /// array of actions for each parenthesized match group
-            abstract group: ResizeArray<IMonarchLanguageAction> option with get, set
+            abstract group: array<IMonarchLanguageAction> option with get, set
             /// map from string to ILanguageAction
             abstract cases: Object option with get, set
             /// token class (ie. css class) (or "@brackets" or "@rematch")
@@ -3289,34 +3259,7 @@ module Monaco =
                 [<Emit "$0[$1]{{=$2}}">] abstract Item: index: string -> 'T with get, set
 
             type CompilerOptionsValue =
-                U6<string, float, bool, ResizeArray<U2<string, float>>, ResizeArray<string>, MapLike<ResizeArray<string>>> option
-
-            [<RequireQualifiedAccess; CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-            module CompilerOptionsValue =
-                let ofStringOption v: CompilerOptionsValue = v |> Microsoft.FSharp.Core.Option.map U6.Case1
-                let ofString v: CompilerOptionsValue = v |> U6.Case1 |> Some
-                let isString (v: CompilerOptionsValue) = match v with None -> false | Some o -> match o with U6.Case1 _ -> true | _ -> false
-                let asString (v: CompilerOptionsValue) = match v with None -> None | Some o -> match o with U6.Case1 o -> Some o | _ -> None
-                let ofFloatOption v: CompilerOptionsValue = v |> Microsoft.FSharp.Core.Option.map U6.Case2
-                let ofFloat v: CompilerOptionsValue = v |> U6.Case2 |> Some
-                let isFloat (v: CompilerOptionsValue) = match v with None -> false | Some o -> match o with U6.Case2 _ -> true | _ -> false
-                let asFloat (v: CompilerOptionsValue) = match v with None -> None | Some o -> match o with U6.Case2 o -> Some o | _ -> None
-                let ofBoolOption v: CompilerOptionsValue = v |> Microsoft.FSharp.Core.Option.map U6.Case3
-                let ofBool v: CompilerOptionsValue = v |> U6.Case3 |> Some
-                let isBool (v: CompilerOptionsValue) = match v with None -> false | Some o -> match o with U6.Case3 _ -> true | _ -> false
-                let asBool (v: CompilerOptionsValue) = match v with None -> None | Some o -> match o with U6.Case3 o -> Some o | _ -> None
-                let ofCase4Option v: CompilerOptionsValue = v |> Microsoft.FSharp.Core.Option.map U6.Case4
-                let ofCase4 v: CompilerOptionsValue = v |> U6.Case4 |> Some
-                let isCase4 (v: CompilerOptionsValue) = match v with None -> false | Some o -> match o with U6.Case4 _ -> true | _ -> false
-                let asCase4 (v: CompilerOptionsValue) = match v with None -> None | Some o -> match o with U6.Case4 o -> Some o | _ -> None
-                let ofStringArrayOption v: CompilerOptionsValue = v |> Microsoft.FSharp.Core.Option.map U6.Case5
-                let ofStringArray v: CompilerOptionsValue = v |> U6.Case5 |> Some
-                let isStringArray (v: CompilerOptionsValue) = match v with None -> false | Some o -> match o with U6.Case5 _ -> true | _ -> false
-                let asStringArray (v: CompilerOptionsValue) = match v with None -> None | Some o -> match o with U6.Case5 o -> Some o | _ -> None
-                let ofMapLikeOption v: CompilerOptionsValue = v |> Microsoft.FSharp.Core.Option.map U6.Case6
-                let ofMapLike v: CompilerOptionsValue = v |> U6.Case6 |> Some
-                let isMapLike (v: CompilerOptionsValue) = match v with None -> false | Some o -> match o with U6.Case6 _ -> true | _ -> false
-                let asMapLike (v: CompilerOptionsValue) = match v with None -> None | Some o -> match o with U6.Case6 o -> Some o | _ -> None
+                U6<string, float, bool, array<U2<string, float>>, array<string>, MapLike<array<string>>> option
 
             type [<AllowNullLiteral>] CompilerOptions =
                 abstract allowJs: bool option with get, set
@@ -3343,7 +3286,7 @@ module Monaco =
                 abstract isolatedModules: bool option with get, set
                 abstract jsx: JsxEmit option with get, set
                 abstract keyofStringsOnly: bool option with get, set
-                abstract lib: ResizeArray<string> option with get, set
+                abstract lib: array<string> option with get, set
                 abstract locale: string option with get, set
                 abstract mapRoot: string option with get, set
                 abstract maxNodeModuleJsDepth: float option with get, set
@@ -3367,7 +3310,7 @@ module Monaco =
                 abstract out: string option with get, set
                 abstract outDir: string option with get, set
                 abstract outFile: string option with get, set
-                abstract paths: MapLike<ResizeArray<string>> option with get, set
+                abstract paths: MapLike<array<string>> option with get, set
                 abstract preserveConstEnums: bool option with get, set
                 abstract preserveSymlinks: bool option with get, set
                 abstract project: string option with get, set
@@ -3376,7 +3319,7 @@ module Monaco =
                 abstract composite: bool option with get, set
                 abstract removeComments: bool option with get, set
                 abstract rootDir: string option with get, set
-                abstract rootDirs: ResizeArray<string> option with get, set
+                abstract rootDirs: array<string> option with get, set
                 abstract skipLibCheck: bool option with get, set
                 abstract skipDefaultLibCheck: bool option with get, set
                 abstract sourceMap: bool option with get, set
@@ -3390,9 +3333,9 @@ module Monaco =
                 abstract target: ScriptTarget option with get, set
                 abstract traceResolution: bool option with get, set
                 abstract resolveJsonModule: bool option with get, set
-                abstract types: ResizeArray<string> option with get, set
+                abstract types: array<string> option with get, set
                 /// Paths used to compute primary types search locations
-                abstract typeRoots: ResizeArray<string> option with get, set
+                abstract typeRoots: array<string> option with get, set
                 abstract esModuleInterop: bool option with get, set
                 [<Emit "$0[$1]{{=$2}}">] abstract Item: option: string -> CompilerOptionsValue option with get, set
 
@@ -3453,7 +3396,7 @@ module Monaco =
                 /// If set, comments are tolerated. If set to false, syntax errors will be emmited for comments.
                 abstract allowComments: bool option
                 /// A list of known schemas and/or associations of schemas to file names.
-                abstract schemas: ResizeArray<obj> option
+                abstract schemas: array<obj> option
 
             type [<AllowNullLiteral>] LanguageServiceDefaults =
                 abstract onDidChange: IEvent<LanguageServiceDefaults>

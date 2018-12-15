@@ -37,9 +37,13 @@ let convertGlyph glyph =
     | Glyph.Error | Glyph.Event -> Monaco.Languages.CompletionItemKind.Text
 
 
+let inline completionList suggestions =
+    jsOptions<Monaco.Languages.CompletionList>(fun o ->
+        o.suggestions <- suggestions)
+
 let createCompletionProvider getCompletions =
     { new Monaco.Languages.CompletionItemProvider with
-        member __.provideCompletionItems(model, position, _token, _context) =
+        member __.provideCompletionItems(model, position, _context, _token) =
             async {
                 let lineText = model.getLineContent(position.lineNumber)
                 let! completions = getCompletions position.lineNumber position.column lineText
@@ -49,19 +53,15 @@ let createCompletionProvider getCompletions =
                         jsOptions<Monaco.Languages.CompletionItem>(fun ci ->
                             ci.label <- c.Name
                             ci.kind <- convertGlyph c.Glyph
-                            // ci.insertText <- Some !^d.ReplacementText
                         ))
-                    |> ResizeArray
+                    |> completionList
             }
             |> Async.StartAsPromise
-            |> Promise.toThenable
-            |> U4.Case2
+            |> U2.Case2
 
-        member __.resolveCompletionItem(item, _token) = !^item
+        member __.resolveCompletionItem(_model, _position, item, _token) = !^item
 
-        member __.triggerCharacters
-            with get () = Some (ResizeArray([|"."|]))
-            and set _ = ()
+        member __.triggerCharacters = [|"."|]
     }
 
 let createDefinitionProvider getDeclarationLocation =
@@ -72,7 +72,7 @@ let createDefinitionProvider getDeclarationLocation =
                 let! loc = getDeclarationLocation pos.lineNumber pos.column lineText
                 match loc with
                 | Some(uri, startLine, startColumn, endLine, endColumn) ->
-                    let loc = jsOptions(fun (loc2: Monaco.Languages.Location) ->
+                    return jsOptions(fun (loc2: Monaco.Languages.Location) ->
                         loc2.uri <- uri
                         loc2.range <- jsOptions(fun r ->
                             r.startLineNumber <- startLine
@@ -80,12 +80,10 @@ let createDefinitionProvider getDeclarationLocation =
                             r.endLineNumber <- endLine
                             r.endColumn <- endColumn + 1
                     ))
-                    return U2.Case1 loc |> U2.Case1
-                | None -> return createEmpty
+                | None -> return null
             }
             |> Async.StartAsPromise
-            |> Promise.toThenable
-            |> U3.Case3
+            |> U2.Case2
     }
 
 let createTooltipProvider getTooltip =
@@ -111,17 +109,14 @@ let createTooltipProvider getTooltip =
                                     if i = 0 then
                                         s.value <- "```fsharp\n" + line + "\n```\n"
                                     else s.value <- line ))
-                            |> ResizeArray
+                            |> Seq.toArray
                         h.range <- Some r
                     )
                 | None -> return createEmpty<Monaco.Languages.Hover>
             }
             |> Async.StartAsPromise
-            |> Promise.toThenable
             |> U2.Case2
     }
-
-
 
 /// **Description**
 /// Map the Fable errors into Marker type used by Monaco
@@ -134,8 +129,7 @@ let createTooltipProvider getTooltip =
 /// **Exceptions**
 ///
 let mapErrorToMarker (errors: Error[]) =
-    errors
-    |> Array.map (fun err ->
+    errors |> Array.map (fun err ->
         jsOptions<Monaco.Editor.IMarkerData>(fun m ->
             m.startLineNumber <- err.StartLineAlternate
             m.endLineNumber <- err.EndLineAlternate
@@ -146,4 +140,3 @@ let mapErrorToMarker (errors: Error[]) =
                 match err.IsWarning with
                 | false -> Monaco.MarkerSeverity.Error
                 | true -> Monaco.MarkerSeverity.Warning))
-    |> ResizeArray

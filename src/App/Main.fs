@@ -62,7 +62,7 @@ type Model =
       CodeTab : CodeTab
       CodeES2015: string
       FSharpCode : string
-      FSharpErrors : ResizeArray<Monaco.Editor.IMarkerData>
+      FSharpErrors : Monaco.Editor.IMarkerData[]
       HtmlCode: string
       CssCode: string
       DragTarget : DragTarget
@@ -474,7 +474,7 @@ let init () =
       CodeTab = CodeTab.FSharp
       CodeES2015 = ""
       FSharpCode = saved.code
-      FSharpErrors = ResizeArray [||]
+      FSharpErrors = [||]
       HtmlCode = saved.html
       CssCode = saved.css
       DragTarget = NoTarget
@@ -554,7 +554,7 @@ let private editorTabs (activeTab : CodeTab) dispatch =
                      ] ]
             [ a [ ] [ str "CSS" ] ] ]
 
-let private problemsPanel (isExpanded : bool) (errors : ResizeArray<Monaco.Editor.IMarkerData>) (currentTab : CodeTab) dispatch =
+let private problemsPanel (isExpanded : bool) (errors : Monaco.Editor.IMarkerData[]) (currentTab : CodeTab) dispatch =
     let bodyDisplay =
         if isExpanded then
             ""
@@ -568,14 +568,14 @@ let private problemsPanel (isExpanded : bool) (errors : ResizeArray<Monaco.Edito
             Fa.I.AngleUp
 
     let title =
-        if errors.Count = 0 then
+        if errors.Length = 0 then
             span [ ]
                 [ str "Problems" ]
         else
             span [ ]
                 [ str "Problems: "
                   Text.span [ Props [ Style [ MarginLeft ".5rem" ] ] ]
-                    [ str (string errors.Count ) ] ]
+                    [ str (string errors.Length ) ] ]
 
     div [ Class "scrollable-panel is-problem" ]
         [ div [ Class "scrollable-panel-header"
@@ -682,7 +682,6 @@ let private editorArea model dispatch =
                                             let! res = model.Worker.PostAndAwaitResponse(GetDeclarationLocation(line, column, lineText))
                                             match res with
                                             | FoundDeclarationLocation res ->
-                                                // printfn "FoundDeclarationLocation %A" res
                                                 return res |> Option.map (fun (line1, col1, line2, col2) ->
                                                     uri, line1, col1, line2, col2)
                                             | _ -> return None

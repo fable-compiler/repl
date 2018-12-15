@@ -17,7 +17,7 @@ type Props =
     | Options of Monaco.Editor.IEditorConstructionOptions
     /// Errors to set into the editor
     /// Currently only used for the F# editor
-    | Errors of ResizeArray<Monaco.Editor.IMarkerData>
+    | Errors of Monaco.Editor.IMarkerData[]
     /// If specified the editor will listen to the provided event key
     /// When sending the event, you need to provide an `eventType` in the detail
     /// Additional data might also be sent using others properties
