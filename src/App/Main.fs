@@ -270,15 +270,15 @@ let update msg (model : Model) =
         { model with FSharpErrors = mapErrorToMarker errors }, Cmd.none
 
     | StartCompile code ->
-        if model.State <> Compiling then
+        match model.State with
+        | Loading | Compiling -> model, Cmd.none
+        | Compiled | Idle ->
             let code =
                 match code with
                 | Some code -> code
                 | None -> model.FSharpCode
             CompileCode(code, model.Sidebar.Options.Optimize) |> model.Worker.Post
             { model with State = Compiling }, Cmd.none
-        else
-         model, Cmd.none
 
     | EndCompile result ->
         match result with
@@ -751,6 +751,13 @@ let private viewCodeEditor (model: Model) =
                          ReactEditor.CustomClass (fontSizeClass model.Sidebar.Options.FontSize) ]
 
 let private outputArea model dispatch =
+    let placeholder msg =
+        [ br [ ]
+          Text.div [ Modifiers [ Modifier.TextAlignment (Screen.All, TextAlignment.Centered) ]
+                     Props [ Style [ Width "100%" ] ] ]
+            [ Heading.h4 [ Heading.IsSubtitle ]
+                [ str msg ] ] ]
+
     let content =
         match model.State with
         | Compiling | Compiled ->
@@ -759,12 +766,8 @@ let private outputArea model dispatch =
                 [ viewIframe (model.OutputTab = OutputTab.Live) model.IFrameUrl
                   viewCodeEditor model
                   ConsolePanel.view model.Logs ] ]
-        | _ ->
-            [ br [ ]
-              Text.div [ Modifiers [ Modifier.TextAlignment (Screen.All, TextAlignment.Centered) ]
-                         Props [ Style [ Width "100%" ] ] ]
-                [ Heading.h4 [ Heading.IsSubtitle ]
-                    [ str "You need to compile an application first" ] ] ]
+        | Idle -> placeholder "Please compile an application"
+        | Loading -> placeholder "Compiler is getting ready..."
 
     div [ Class "output-container"
           Style [ Width (numberToPercent (1. - model.PanelSplitRatio)) ] ]
@@ -778,10 +781,11 @@ let private actionArea (state : State) dispatch =
         else
             [ Fa.icon Fa.I.Play ]
 
-    let collapsed =
+    let expanded =
         div [ Class "actions-area" ]
             [ div [ Class "action-button" ]
                 [ Button.button [ Button.IsOutlined
+                                  Button.Disabled (state = Loading)
                                   Button.OnClick (fun _ -> dispatch (StartCompile None)) ]
                     [ Icon.faIcon [ Icon.Size IsSmall ]
                         compileIcon
@@ -789,26 +793,29 @@ let private actionArea (state : State) dispatch =
                         [ str "Compile" ] ] ]
               div [ Class "action-button" ]
                 [ Button.button [ Button.IsOutlined
+                                  Button.Disabled (state = Loading)
                                   Button.OnClick (fun _ -> dispatch RefreshIframe) ]
                     [ Icon.faIcon [ Icon.Size IsSmall ]
                         [ Fa.icon Fa.I.Refresh ]
                       span [ ]
                         [ str "Refresh" ] ] ] ]
 
-    let expanded =
+    let collapsed =
         div [ Class "actions-area" ]
             [ div [ Class "action-button" ]
                 [ Button.button [ Button.IsOutlined
+                                  Button.Disabled (state = Loading)
                                   Button.OnClick (fun _ -> dispatch (StartCompile None)) ]
                     [ Icon.faIcon [ Icon.Size IsLarge ]
                         compileIcon ] ]
               div [ Class "action-button" ]
                 [ Button.button [ Button.IsOutlined
+                                  Button.Disabled (state = Loading)
                                   Button.OnClick (fun _ -> dispatch RefreshIframe) ]
                     [ Icon.faIcon [ Icon.Size IsLarge ]
                         [ Fa.icon Fa.I.Refresh ] ] ] ]
 
-    (collapsed, expanded)
+    (expanded, collapsed)
 
 let view (model: Model) dispatch =
     Elmish.React.Common.lazyView2
@@ -818,16 +825,18 @@ let view (model: Model) dispatch =
                 | PanelSplitter -> true
                 | NoTarget -> false
             div [ classList [ "is-unselectable", isDragging ] ]
-                [ PageLoader.pageLoader [ PageLoader.Color IsPrimary
-                                          PageLoader.IsActive (model.State = Loading) ]
-                                        [ div [ Class "title has-text-centered"; Style [FontSize "1.2em"] ]
-                                            [ p [] [str "We are getting everything ready for you"]
-                                              br []
-                                              p []
-                                                [ str "Trouble loading the repl? "
-                                                  a [ Router.href Router.Reset
-                                                      Style [ TextDecoration "underline" ] ] [ str "Click here"]
-                                                  str " to reset." ] ] ]
+                [
+                // Disable the loader so users can look immediately at the code
+                //   PageLoader.pageLoader [ PageLoader.Color IsPrimary
+                //                           PageLoader.IsActive (model.State = Loading) ]
+                //                         [ div [ Class "title has-text-centered"; Style [FontSize "1.2em"] ]
+                //                             [ p [] [str "We are getting everything ready for you"]
+                //                               br []
+                //                               p []
+                //                                 [ str "Trouble loading the repl? "
+                //                                   a [ Router.href Router.Reset
+                //                                       Style [ TextDecoration "underline" ] ] [ str "Click here"]
+                //                                   str " to reset." ] ] ]
 
                   div [ Class "page-content" ]
                     [ Sidebar.view model.Sidebar (actionArea model.State dispatch) (SidebarMsg >> dispatch)
