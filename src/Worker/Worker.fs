@@ -85,31 +85,32 @@ let init() = async {
                 with er ->
                     Browser.console.error er
                     CompilerCrashed er.Message |> worker.Post
-            | GetTooltip(line, col, lineText) ->
+            | GetTooltip(id, line, col, lineText) ->
                 async {
                     let! tooltipLines =
                         match currentResults with
                         | None -> async.Return [||]
                         | Some res -> Fable.GetToolTipText(res, int line, int col, lineText)
-                    FoundTooltip tooltipLines |> worker.Post
+                    FoundTooltip(id, tooltipLines) |> worker.Post
                 } |> Async.StartImmediate
-            | GetCompletions(line, col, lineText) ->
+            | GetCompletions(id, line, col, lineText) ->
                 async {
                     let! completions =
                         match currentResults with
                         | None -> async.Return [||]
                         | Some res -> Fable.GetCompletionsAtLocation(res, int line, int col, lineText)
-                    FoundCompletions completions |> worker.Post
+                    FoundCompletions(id, completions) |> worker.Post
                 } |> Async.StartImmediate
-            | GetDeclarationLocation(line, col, lineText) ->
+            | GetDeclarationLocation(id, line, col, lineText) ->
                 async {
                     let! result =
                         match currentResults with
                         | None -> async.Return None
                         | Some res -> Fable.GetDeclarationLocation(res, int line, int col, lineText)
-                    result |> Option.map (fun x ->
-                        x.StartLine, x.StartColumn, x.EndLine, x.EndColumn)
-                    |> FoundDeclarationLocation |> worker.Post
+                    match result with
+                    | Some x -> FoundDeclarationLocation(id, Some(x.StartLine, x.StartColumn, x.EndLine, x.EndColumn))
+                    | None -> FoundDeclarationLocation(id, None)
+                    |> worker.Post
                 } |> Async.StartImmediate
         )
     with _ ->

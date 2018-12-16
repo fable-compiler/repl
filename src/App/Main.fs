@@ -668,10 +668,10 @@ let private editorArea model dispatch =
                                     // register the different provider needed for F# editor
                                     let getTooltip line column lineText =
                                         async {
-                                            let! res = model.Worker.PostAndAwaitResponse(GetTooltip(line, column, lineText))
-                                            match res with
-                                            | FoundTooltip lines -> return lines
-                                            | _ -> return [||]
+                                            let id = System.Guid.NewGuid()
+                                            return! model.Worker.PostAndAwaitResponse(GetTooltip(id, line, column, lineText), function
+                                                | FoundTooltip(id2, lines) when id = id2 -> Some lines
+                                                | _ -> None)
                                         }
 
                                     let tooltipProvider = Editor.createTooltipProvider getTooltip
@@ -679,12 +679,12 @@ let private editorArea model dispatch =
 
                                     let getDeclarationLocation uri line column lineText =
                                         async {
-                                            let! res = model.Worker.PostAndAwaitResponse(GetDeclarationLocation(line, column, lineText))
-                                            match res with
-                                            | FoundDeclarationLocation res ->
-                                                return res |> Option.map (fun (line1, col1, line2, col2) ->
-                                                    uri, line1, col1, line2, col2)
-                                            | _ -> return None
+                                            let id = System.Guid.NewGuid()
+                                            return! model.Worker.PostAndAwaitResponse(GetDeclarationLocation(id, line, column, lineText), function
+                                                | FoundDeclarationLocation(id2, res) when id = id2 ->
+                                                    res |> Option.map (fun (line1, col1, line2, col2) ->
+                                                        uri, line1, col1, line2, col2) |> Some
+                                                | _ -> None)
                                         }
 
                                     let editorUri = editor.getModel().uri
@@ -693,10 +693,10 @@ let private editorArea model dispatch =
 
                                     let getCompletion line column lineText =
                                         async {
-                                            let! res = model.Worker.PostAndAwaitResponse(GetCompletions(line, column, lineText))
-                                            match res with
-                                            | FoundCompletions lines -> return lines
-                                            | _ -> return [||]
+                                            let id = System.Guid.NewGuid()
+                                            return! model.Worker.PostAndAwaitResponse(GetCompletions(id, line, column, lineText), function
+                                                | FoundCompletions(id2, lines) when id = id2 -> Some lines
+                                                | _ -> None)
                                         }
 
                                     let completionProvider = Editor.createCompletionProvider getCompletion

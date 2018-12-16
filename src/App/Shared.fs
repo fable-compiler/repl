@@ -29,9 +29,9 @@ let [<Global>] private setTimeout(f: unit->unit, ms: int): unit = jsNative
 type WorkerRequest =
     | ParseCode of fsharpCode: string
     | CompileCode of fsharpCode: string * optimize: bool
-    | GetTooltip of line: int * column: int * lineText: string
-    | GetCompletions of line: int * column: int * lineText: string
-    | GetDeclarationLocation of line: int * column: int * lineText: string
+    | GetTooltip of id: Guid * line: int * column: int * lineText: string
+    | GetCompletions of id: Guid * line: int * column: int * lineText: string
+    | GetDeclarationLocation of id: Guid * line: int * column: int * lineText: string
     static member Decoder =
         Decode.Auto.generateDecoder<WorkerRequest>()
 
@@ -47,9 +47,9 @@ type WorkerAnswer =
     | ParsedCode of errors: Fable.Repl.Error[]
     | CompilationFinished of jsCode: string * errors: Fable.Repl.Error[] * stats: CompileStats
     | CompilerCrashed of message: string
-    | FoundTooltip of lines: string[]
-    | FoundCompletions of Fable.Repl.Completion[]
-    | FoundDeclarationLocation of (* line1, col1, line2, col2 *) (int * int * int * int) option
+    | FoundTooltip of id: Guid * lines: string[]
+    | FoundCompletions of id: Guid * Fable.Repl.Completion[]
+    | FoundDeclarationLocation of id: Guid * (* line1, col1, line2, col2 *) (int * int * int * int) option
     static member Decoder =
         Decode.Auto.generateDecoder<WorkerAnswer>()
 
@@ -70,12 +70,15 @@ type ObservableWorker<'InMsg>(worker: Browser.Worker, decoder: Decode.Decoder<'I
         listeners.Count > 0
     member __.Post msg =
         worker.postMessage(Encode.Auto.toString(0, msg))
-    member this.PostAndAwaitResponse msg =
+    member this.PostAndAwaitResponse(msg, picker) =
         Async.FromContinuations(fun (cont, err, cancel) ->
             let mutable disp = Unchecked.defaultof<IDisposable>
             disp <- this |> Observable.subscribe(fun msg ->
-                disp.Dispose()
-                cont msg)
+                match picker msg with
+                | Some res ->
+                    disp.Dispose()
+                    cont res
+                | None -> ())
             worker.postMessage(Encode.Auto.toString(0, msg))
         )
     member __.Subscribe obs =

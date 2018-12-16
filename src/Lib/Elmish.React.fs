@@ -13,3 +13,6 @@ module Program =
             )
 
         { program with setState = setState }
+
+    let withReact placeholderId (program:Elmish.Program<_,_,_,_>) =
+        withReactSynchronous placeholderId program

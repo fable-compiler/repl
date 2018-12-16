@@ -46,13 +46,16 @@ let createCompletionProvider getCompletions =
         member __.provideCompletionItems(model, position, _context, _token) =
             async {
                 let lineText = model.getLineContent(position.lineNumber)
+                printfn "Get completion for L%i-%i: %s" position.lineNumber position.column lineText
                 let! completions = getCompletions position.lineNumber position.column lineText
+                printfn "Found completions: %i" (Array.length completions)
                 return
                     completions
                     |> Array.map (fun (c: Fable.Repl.Completion) ->
                         jsOptions<Monaco.Languages.CompletionItem>(fun ci ->
                             ci.label <- c.Name
                             ci.kind <- convertGlyph c.Glyph
+                            ci.insertText <- Some !^c.Name
                         ))
                     |> completionList
             }
