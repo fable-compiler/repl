@@ -751,23 +751,16 @@ let private viewCodeEditor (model: Model) =
                          ReactEditor.CustomClass (fontSizeClass model.Sidebar.Options.FontSize) ]
 
 let private outputArea model dispatch =
-    let placeholder msg =
-        [ br [ ]
-          Text.div [ Modifiers [ Modifier.TextAlignment (Screen.All, TextAlignment.Centered) ]
-                     Props [ Style [ Width "100%" ] ] ]
-            [ Heading.h4 [ Heading.IsSubtitle ]
-                [ str msg ] ] ]
-
+    let isLiveViewShown = model.OutputTab = OutputTab.Live
     let content =
-        match model.State with
-        | Compiling | Compiled ->
-            [ outputTabs model.OutputTab dispatch
-              div [ Class "output-content" ]
-                [ viewIframe (model.OutputTab = OutputTab.Live) model.IFrameUrl
-                  viewCodeEditor model
-                  ConsolePanel.view model.Logs ] ]
-        | Idle -> placeholder "Please compile an application"
-        | Loading -> placeholder "Compiler is getting ready..."
+        [ outputTabs model.OutputTab dispatch
+          div [ Class "output-content"; Style [Height "100%"] ]
+            [ (if model.State = Loading then
+                    div [Class ("is-loading title has-text-centered " + (toggleDisplay isLiveViewShown))
+                         Style [Height "100%"; FontSize "1.2em"]] []
+                else viewIframe isLiveViewShown model.IFrameUrl)
+              viewCodeEditor model
+              ConsolePanel.view model.Logs ] ]
 
     div [ Class "output-container"
           Style [ Width (numberToPercent (1. - model.PanelSplitRatio)) ] ]
@@ -825,20 +818,7 @@ let view (model: Model) dispatch =
                 | PanelSplitter -> true
                 | NoTarget -> false
             div [ classList [ "is-unselectable", isDragging ] ]
-                [
-                // Disable the loader so users can look immediately at the code
-                //   PageLoader.pageLoader [ PageLoader.Color IsPrimary
-                //                           PageLoader.IsActive (model.State = Loading) ]
-                //                         [ div [ Class "title has-text-centered"; Style [FontSize "1.2em"] ]
-                //                             [ p [] [str "We are getting everything ready for you"]
-                //                               br []
-                //                               p []
-                //                                 [ str "Trouble loading the repl? "
-                //                                   a [ Router.href Router.Reset
-                //                                       Style [ TextDecoration "underline" ] ] [ str "Click here"]
-                //                                   str " to reset." ] ] ]
-
-                  div [ Class "page-content" ]
+                [ div [ Class "page-content" ]
                     [ Sidebar.view model.Sidebar (actionArea model.State dispatch) (SidebarMsg >> dispatch)
                       div [ Class "main-content" ]
                         [ editorArea model dispatch
