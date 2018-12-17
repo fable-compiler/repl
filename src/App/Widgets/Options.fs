@@ -174,7 +174,7 @@ let inline private gistTokenSetting (token : string option) (tokenField : string
                       Href "https://github.com/settings/tokens/new?description=fable-repl&scopes=gist"]
                     [ str "  (Create)"] ]
               Field.div [ Field.HasAddons ][
-                  yield Input.input
+                  yield Input.password
                     [ Input.OnChange (fun e -> e.Value |> ChangeGistToken |> dispatch)
                       Input.Placeholder "Token with gist scope"]
                   if tokenField.Length = 40 then
