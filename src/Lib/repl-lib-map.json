@@ -4,8 +4,8 @@
     "Thoth.Json.Extra": ["Thoth.Json.Extra", "Thoth.Json/Extra"],
     "Thoth.Json": ["Thoth.Json", "Thoth.Json/Types"],
 
-    "Fable.PromiseImpl": ["Fable.Promise", "src/PromiseImpl"],
-    "Fable.Promise": ["Fable.Promise", "src/Promise"],
+    "PromiseImpl": ["PromiseImpl", "src/PromiseImpl"],
+    "Promise": ["Promise", "src/Promise"],
     "Fable.SimpleHttp": ["Fable.SimpleHttp", "src/Http"],
 
     "Elmish.Log": ["Elmish.Log", "src/prelude"],

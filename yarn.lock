@@ -2617,22 +2617,22 @@ fable-babel-plugins@^2.1.0, fable-babel-plugins@~2.1.0:
   resolved "https://registry.yarnpkg.com/fable-babel-plugins/-/fable-babel-plugins-2.1.0.tgz#b3202a25f51a6acdf6bc34dc10dd13cf732d291d"
   integrity sha512-5ZUVrlflbvgA3saIyGJhB1ANqoyZ8UJo12iYSROivql1x9PfKjv16pteNoDFCe6UC1Tn+HaQX46BxyllzLsBTw==
 
-fable-compiler@^2.1.8:
-  version "2.1.8"
-  resolved "https://registry.yarnpkg.com/fable-compiler/-/fable-compiler-2.1.8.tgz#56753813dd872be7e85fcb98b3461cdfb293206f"
-  integrity sha512-/QE2Irq7lET2jJEQtq49cUKUAxnoIBCi1oMURTCl0rYiZxQX2p199vQ8aTqthDYQ1tOA1TTXVIvj7YjO6c7Kew==
+fable-compiler@^2.1.11:
+  version "2.1.11"
+  resolved "https://registry.yarnpkg.com/fable-compiler/-/fable-compiler-2.1.11.tgz#8ccf1c5c33ab56a0fa388582007b98a976f0334e"
+  integrity sha512-7letl+qsFczoitLRLIzmE05yu/IXAAYCK5QiLcZlWJix0TDDlUsaHdb+VcdNa1zKSjLDeezeUF+CLeqNbDeslw==
 
-fable-loader@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/fable-loader/-/fable-loader-2.1.1.tgz#715b6c9d3b2c038ae5c6437f045591c901bce423"
-  integrity sha512-e+r0mUPgo9Rt6MwyIG7oId2wqcpsZkNhymvo3JUC/ZLrHcjlOh+z/A8e7j+XwK3hoNkm0PZ3ppE86lkwDS76rA==
+fable-loader@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/fable-loader/-/fable-loader-2.1.2.tgz#7e6b720c99e7f520356ade5a5aa01409d5335b8c"
+  integrity sha512-/ALI32SKCgHWe61pTS0hFB8MR8My4To71mBXbX/1PRZLu+23wUFsRfBapnS8egtJlb/bMcLb5fkcWwaOwbbEjw==
   dependencies:
     fable-babel-plugins "~2.1.0"
 
-fable-splitter@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/fable-splitter/-/fable-splitter-2.1.0.tgz#fff04a0e730300fec1711a01cd9975581fda52aa"
-  integrity sha512-5Crdx+1lsT6qxdtCeijXgejeDYtwWS2mfF2fMCoRG04P20Gc6RtSYpS5sdrrBODbqLnfK0hTXUDCsrt8/XvTfA==
+fable-splitter@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/fable-splitter/-/fable-splitter-2.1.2.tgz#ac0f4f259305e6a4e117b8243e54dee76a282fdb"
+  integrity sha512-0e/LhaZi88XkfVzHZDlZ/o1PyZEGiQiIXVvB2iH6955EauQpcnti/Xwbvp0/D22GcoYTMiSpVwsFgblqfFi4EA==
   dependencies:
     "@babel/core" "^7.1.6"
     "@babel/plugin-transform-modules-commonjs" "^7.1.0"
