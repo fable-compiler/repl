@@ -1,6 +1,6 @@
 import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Common$$$genericParse as Common$0024$0024$0024genericParse } from "../Fulma/Common.js";
-import { List } from "../fable-library.2.1.8/Types.js";
-import { createObj } from "../fable-library.2.1.8/Util.js";
+import { List } from "../fable-library.2.1.11/Types.js";
+import { createObj } from "../fable-library.2.1.11/Util.js";
 const createElement = React.createElement;
 export function box$0027(options, children) {
   const opts = Common$0024$0024$0024genericParse(options);

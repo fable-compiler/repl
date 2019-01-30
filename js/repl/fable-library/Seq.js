@@ -237,6 +237,12 @@ export function exists2(f, xs, ys) {
     }
     return false;
 }
+export function forAll(f, xs) {
+    return !exists((x) => !f(x), xs);
+}
+export function forAll2(f, xs, ys) {
+    return !exists2((x, y) => !f(x, y), xs, ys);
+}
 export function contains(i, xs) {
     return exists((x) => equals(x, i), xs);
 }
@@ -300,12 +306,6 @@ export function foldBack2(f, xs, ys, acc) {
         acc = f(ar1[i], ar2[i], acc, i);
     }
     return acc;
-}
-export function forAll(f, xs) {
-    return fold((acc, x) => acc && f(x), true, xs);
-}
-export function forAll2(f, xs, ys) {
-    return fold2((acc, x, y) => acc && f(x, y), true, xs, ys);
 }
 export function tryHead(xs) {
     const iter = xs[Symbol.iterator]();
@@ -701,4 +701,29 @@ export function zip(xs, ys) {
 }
 export function zip3(xs, ys, zs) {
     return map3((x, y, z) => [x, y, z], xs, ys, zs);
+}
+export function windowed(windowSize, source) {
+    if (windowSize <= 0) {
+        throw new Error("windowSize must be positive");
+    }
+    return {
+        [Symbol.iterator]: () => {
+            let window = [];
+            const iter = source[Symbol.iterator]();
+            return {
+                next: () => {
+                    let cur;
+                    while (window.length < windowSize) {
+                        if ((cur = iter.next()).done) {
+                            return { done: true };
+                        }
+                        window.push(cur.value);
+                    }
+                    const value = window;
+                    window = window.slice(1);
+                    return { done: false, value };
+                },
+            };
+        },
+    };
 }

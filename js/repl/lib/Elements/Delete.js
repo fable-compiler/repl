@@ -1,10 +1,10 @@
-import { List, Record, declare, Union } from "../fable-library.2.1.8/Types.js";
+import { List, Record, declare, Union } from "../fable-library.2.1.11/Types.js";
 import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Size$$$ofSize as Size$0024$0024$0024ofSize, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection } from "../Fulma/Common.js";
-import { record, option, union, lambda, unit, string, list as list$$1, type } from "../fable-library.2.1.8/Reflection.js";
-import { ofSeq, fold } from "../fable-library.2.1.8/List.js";
-import { append, delay, empty, singleton } from "../fable-library.2.1.8/Seq.js";
+import { record, option, union, lambda, unit, string, list as list$$1, type } from "../fable-library.2.1.11/Reflection.js";
+import { ofSeq, fold } from "../fable-library.2.1.11/List.js";
+import { append, delay, empty, singleton } from "../fable-library.2.1.11/Seq.js";
 import { Props$002EDOMAttr as Props$0024002EDOMAttr } from "../Fable.React/Fable.Helpers.React.js";
-import { createObj } from "../fable-library.2.1.8/Util.js";
+import { createObj } from "../fable-library.2.1.11/Util.js";
 const createElement = React.createElement;
 export const Option = declare(function Fulma_Delete_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);

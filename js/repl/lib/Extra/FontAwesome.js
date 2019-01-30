@@ -1,8 +1,8 @@
-import { List, Record, declare, Union } from "../fable-library.2.1.8/Types.js";
-import { record, bool, option as option$$3, string, type, union } from "../fable-library.2.1.8/Reflection.js";
-import { ofArray, fold } from "../fable-library.2.1.8/List.js";
+import { List, Record, declare, Union } from "../fable-library.2.1.11/Types.js";
+import { record, bool, option as option$$3, string, type, union } from "../fable-library.2.1.11/Reflection.js";
+import { ofArray, fold } from "../fable-library.2.1.11/List.js";
 import { Common$$$genericParse as Common$0024$0024$0024genericParse, Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes } from "../Fulma/Common.js";
-import { createObj } from "../fable-library.2.1.8/Util.js";
+import { createObj } from "../fable-library.2.1.11/Util.js";
 import { icon } from "../Elements/Icon.js";
 const createElement = React.createElement;
 export function Fa$002EI$$$Tags() {

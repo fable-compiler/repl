@@ -1,8 +1,8 @@
-import { List, Record, declare, Union } from "../fable-library.2.1.8/Types.js";
-import { record, option as option$$1, union, list as list$$1, type, string } from "../fable-library.2.1.8/Reflection.js";
+import { List, Record, declare, Union } from "../fable-library.2.1.11/Types.js";
+import { record, option as option$$1, union, list as list$$1, type, string } from "../fable-library.2.1.11/Reflection.js";
 import { Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Common$$$genericParse as Common$0024$0024$0024genericParse, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection } from "../Fulma/Common.js";
-import { createObj } from "../fable-library.2.1.8/Util.js";
-import { fold } from "../fable-library.2.1.8/List.js";
+import { createObj } from "../fable-library.2.1.11/Util.js";
+import { fold } from "../fable-library.2.1.11/List.js";
 import { Props$002EHTMLAttr as Props$0024002EHTMLAttr } from "../Fable.React/Fable.Helpers.React.js";
 const createElement = React.createElement;
 export const Input$002EOption = declare(function Fulma_Radio_Input_Option(tag, name, ...fields) {

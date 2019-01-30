@@ -1,6 +1,6 @@
-import { Union, declare, Record } from "../fable-library.2.1.8/Types.js";
-import { union, lambda, unit, bool, obj, type, string, record, float64 } from "../fable-library.2.1.8/Reflection.js";
-import { createObj } from "../fable-library.2.1.8/Util.js";
+import { Union, declare, Record } from "../fable-library.2.1.11/Types.js";
+import { union, lambda, unit, bool, obj, type, string, record, float64 } from "../fable-library.2.1.11/Reflection.js";
+import { createObj } from "../fable-library.2.1.11/Util.js";
 const createElement = React.createElement;
 export const Props$002EPoint2 = declare(function Fable_Recharts_Props_Point2(arg1, arg2) {
   this.x = arg1;

@@ -96,6 +96,16 @@ export function padWithZeros(i, length) {
     }
     return str;
 }
+export function padLeftAndRightWithZeros(i, lengthLeft, lengthRight) {
+    let str = i.toString(10);
+    while (str.length < lengthLeft) {
+        str = "0" + str;
+    }
+    while (str.length < lengthRight) {
+        str = str + "0";
+    }
+    return str;
+}
 export function dateOffset(date) {
     const date1 = date;
     return typeof date1.offset === "number"

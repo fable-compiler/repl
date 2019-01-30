@@ -14,8 +14,11 @@ export function equals(x, y) {
 export function abs(x) {
     return x.abs();
 }
-export function round(x) {
-    return x.round(0, x.cmp(0) >= 0 ? 1 /* ROUND_HALF_UP */ : 2 /* ROUND_HALF_EVEN */);
+export function round(x, digits = 0) {
+    return x.round(digits, x.cmp(0) >= 0 ? 1 /* ROUND_HALF_UP */ : 2 /* ROUND_HALF_EVEN */);
+}
+export function truncate(x) {
+    return x.round(0, 0 /* ROUND_DOWN */);
 }
 export function ceil(x) {
     return x.round(0, x.cmp(0) >= 0 ? 3 /* ROUND_UP */ : 0 /* ROUND_DOWN */);

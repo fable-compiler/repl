@@ -298,7 +298,7 @@ export function parse(str, style, unsigned, bitsize, radix) {
 }
 export function tryParse(str, style, unsigned, bitsize) {
     try {
-        const v = parse(str, style, unsigned, bitsize, radix);
+        const v = parse(str, style, unsigned, bitsize);
         return [true, v];
     }
     catch (_a) {

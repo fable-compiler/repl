@@ -1,10 +1,10 @@
-import { List, Record, declare, Union } from "../fable-library.2.1.8/Types.js";
-import { record, option as option$$1, list as list$$1, lambda, unit, type, bool, string, union } from "../fable-library.2.1.8/Reflection.js";
+import { List, Record, declare, Union } from "../fable-library.2.1.11/Types.js";
+import { record, option as option$$1, list as list$$1, lambda, unit, type, bool, string, union } from "../fable-library.2.1.11/Reflection.js";
 import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Size$$$ofSize as Size$0024$0024$0024ofSize, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Color$$$ofColor as Color$0024$0024$0024ofColor, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Color$002EIColor$reflection as Color$0024002EIColor$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection } from "../Fulma/Common.js";
-import { append as append$$1, ofSeq, ofArray, fold } from "../fable-library.2.1.8/List.js";
-import { append, delay, empty, singleton } from "../fable-library.2.1.8/Seq.js";
+import { append as append$$1, ofSeq, ofArray, fold } from "../fable-library.2.1.11/List.js";
+import { append, delay, empty, singleton } from "../fable-library.2.1.11/Seq.js";
 import { Props$002EDOMAttr as Props$0024002EDOMAttr, Props$002EProp as Props$0024002EProp, Props$002EHTMLAttr as Props$0024002EHTMLAttr } from "../Fable.React/Fable.Helpers.React.js";
-import { createObj, equals } from "../fable-library.2.1.8/Util.js";
+import { createObj, equals } from "../fable-library.2.1.11/Util.js";
 const createElement = React.createElement;
 export const IInputType = declare(function Fulma_Input_IInputType(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);

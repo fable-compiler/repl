@@ -1,8 +1,8 @@
-import { List, Record, declare, Union } from "../fable-library.2.1.8/Types.js";
-import { list as list$$4, type, record, option, bool, string, union } from "../fable-library.2.1.8/Reflection.js";
-import { ofArray, fold } from "../fable-library.2.1.8/List.js";
+import { List, Record, declare, Union } from "../fable-library.2.1.11/Types.js";
+import { list as list$$4, type, record, option, bool, string, union } from "../fable-library.2.1.11/Reflection.js";
+import { ofArray, fold } from "../fable-library.2.1.11/List.js";
 import { Props$002EHTMLAttr as Props$0024002EHTMLAttr } from "../Fable.React/Fable.Helpers.React.js";
-import { createObj } from "../fable-library.2.1.8/Util.js";
+import { createObj } from "../fable-library.2.1.11/Util.js";
 const createElement = React.createElement;
 export const Screen = declare(function Fulma_Screen(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
@@ -169,26 +169,15 @@ export function TextSize$$$generic(screen, size$$1) {
   return "is-size-" + TextSize$002EOption$$$get_toString()(size$$1) + Screen$$$get_toString()(screen);
 }
 export function TextSize$$$only(screen$$1, size$$2) {
-  var $target$$1;
-
   switch (screen$$1.tag) {
     case 2:
     case 1:
     case 4:
-      $target$$1 = 0;
-      break;
-
-    default:
-      $target$$1 = 1;
-  }
-
-  switch ($target$$1) {
-    case 0:
       {
         return "is-size-" + TextSize$002EOption$$$get_toString()(size$$2) + Screen$$$get_toString()(screen$$1) + "-only";
       }
 
-    case 1:
+    default:
       {
         const x = screen$$1;
         console.warn("Screen `%s` does not support `is-size-xxx-only`." + String(x));
@@ -211,26 +200,15 @@ export function TextAlignment$$$generic(screen$$2, alignment) {
   return TextAlignment$002EOption$$$get_toString()(alignment) + Screen$$$get_toString()(screen$$2);
 }
 export function TextAlignment$$$only(screen$$3, alignment$$1) {
-  var $target$$2;
-
   switch (screen$$3.tag) {
     case 2:
     case 1:
     case 4:
-      $target$$2 = 0;
-      break;
-
-    default:
-      $target$$2 = 1;
-  }
-
-  switch ($target$$2) {
-    case 0:
       {
         return TextAlignment$002EOption$$$get_toString()(alignment$$1) + Screen$$$get_toString()(screen$$3) + "-only";
       }
 
-    case 1:
+    default:
       {
         const x$$1 = screen$$3;
         console.warn("Screen `%s` does not support `is-size-xxx-only`." + String(x$$1));
@@ -295,28 +273,17 @@ export function Display$$$toDisplayClass(screen$$4, display) {
   return "is-" + display$$1 + screen$$5;
 }
 export function Display$$$toDisplayOnlyClass(screen$$6, display$$2) {
-  var $target$$3;
-
   switch (screen$$6.tag) {
     case 2:
     case 1:
     case 4:
-      $target$$3 = 0;
-      break;
-
-    default:
-      $target$$3 = 1;
-  }
-
-  switch ($target$$3) {
-    case 0:
       {
         const display$$3 = display$$2.tag === 1 ? "flex" : display$$2.tag === 2 ? "inline" : display$$2.tag === 3 ? "inline-block" : display$$2.tag === 4 ? "inline-flex" : "block";
         const screen$$7 = Screen$$$get_toString()(screen$$6);
         return "is-" + display$$3 + screen$$7 + "-only";
       }
 
-    case 1:
+    default:
       {
         const x$$2 = screen$$6;
         console.warn("Screen `%s` does not support display only." + String(x$$2));
@@ -549,26 +516,15 @@ export function Modifier$$$ofHidden(screen$$9) {
   return "is-hidden" + Screen$$$get_toString()(screen$$9);
 }
 export function Modifier$$$ofInvisibleOnly(screen$$10) {
-  var $target$$4;
-
   switch (screen$$10.tag) {
     case 2:
     case 1:
     case 4:
-      $target$$4 = 0;
-      break;
-
-    default:
-      $target$$4 = 1;
-  }
-
-  switch ($target$$4) {
-    case 0:
       {
         return "is-invisible" + Screen$$$get_toString()(screen$$10) + "-only";
       }
 
-    case 1:
+    default:
       {
         const x$$3 = screen$$10;
         console.warn("Screen `%s` does not support `is-invisible-xxx-only`." + String(x$$3));
@@ -577,26 +533,15 @@ export function Modifier$$$ofInvisibleOnly(screen$$10) {
   }
 }
 export function Modifier$$$ofHiddenOnly(screen$$11) {
-  var $target$$5;
-
   switch (screen$$11.tag) {
     case 2:
     case 1:
     case 4:
-      $target$$5 = 0;
-      break;
-
-    default:
-      $target$$5 = 1;
-  }
-
-  switch ($target$$5) {
-    case 0:
       {
         return "is-hidden" + Screen$$$get_toString()(screen$$11) + "-only";
       }
 
-    case 1:
+    default:
       {
         const x$$4 = screen$$11;
         console.warn("Screen `%s` does not support `is-hidden-xxx-only`." + String(x$$4));
