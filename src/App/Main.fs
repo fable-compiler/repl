@@ -22,7 +22,7 @@ type ISavedState =
     abstract css: string
 
 let private Worker(): Browser.Worker =
-    // importDefault "worker-loader!../../../Fable/src/fable-web-worker/src/Worker.fsproj"
+    // importDefault "worker-loader!../../../Fable/src/fable-standalone/src/Worker/Worker.fsproj"
     Browser.Worker.Create(Literals.WORKER_BUNDLE_URL)
 
 let private loadState(_key: string): ISavedState = importMember "./js/util.js"

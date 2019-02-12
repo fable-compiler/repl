@@ -168,16 +168,14 @@ Target "CopyModules" (fun _ ->
 
     // Metadata
     CopyDir METADATA_OUTPUT "node_modules/fable-metadata/lib" (fun _ -> true)
-    !! "public/metadata-extra" |> Seq.iter(fun filename ->
-        CopyFile METADATA_OUTPUT filename)
     CopyDir METADATA_OUTPUT "public/metadata-extra" (fun _ -> true)
     // Change extension to .txt so Github pages compress the files when being served
     !! (METADATA_OUTPUT </> "*.dll") |> Seq.iter(fun filename ->
         Rename (filename + ".txt") filename)
 
     // Fable WebWorker
-    CopyDir (REPL_OUTPUT </> "fable-library") "node_modules/fable-web-worker/dist/fable-library" (fun _ -> true)
-    CopyFile REPL_OUTPUT "node_modules/fable-web-worker/dist/fable-web-worker.min.js"
+    CopyDir (REPL_OUTPUT </> "fable-library") "node_modules/fable-standalone/dist/fable-library" (fun _ -> true)
+    CopyDir (REPL_OUTPUT </> "worker") "node_modules/fable-standalone/dist/worker" (fun _ -> true)
 )
 
 Target "WatchApp" (fun _ ->
