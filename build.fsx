@@ -3,19 +3,13 @@ open System.IO
 open System.Net
 open System.Text.RegularExpressions
 
-let FABLE_BRANCH = "master"
-let APPVEYOR_REPL_ARTIFACT_URL_PARAMS = "?branch=" + FABLE_BRANCH + "&pr=false"
-let APPVEYOR_REPL_ARTIFACT_URL =
-    "https://ci.appveyor.com/api/projects/fable-compiler/Fable/artifacts/src/dotnet/Fable.Repl/repl-bundle.zip"
-    + APPVEYOR_REPL_ARTIFACT_URL_PARAMS
-
 let CWD = __SOURCE_DIRECTORY__
 let NCAVE_FCS_REPO = Path.Combine(CWD, "../FSharp.Compiler.Service_fable")
 let FABLE_REPO = Path.Combine(CWD, "../Fable")
 
 let LIBS_OUTPUT = Path.Combine(CWD, "public/libs")
 let REPL_OUTPUT = Path.Combine(CWD, "public/js/repl")
-let METADATA_OUTPUT = Path.Combine(CWD, "public/metadata2")
+let METADATA_OUTPUT = Path.Combine(CWD, "public/metadata")
 let METADATA_SOURCE = Path.Combine(NCAVE_FCS_REPO, "temp/metadata2")
 
 let METADATA_EXPORT_DIR = Path.Combine(CWD, "src/Export")
@@ -63,16 +57,6 @@ let runYarn dir command =
                 Command = Custom command
             })
 
-let downloadArtifact path (url: string) =
-    let tempFile = Path.ChangeExtension(Path.GetTempFileName(), ".zip")
-    use client = new WebClient()
-    printfn "GET %s" url
-    client.DownloadFile(Uri url, tempFile)
-    CleanDir path
-    Unzip path tempFile
-    File.Delete tempFile
-    printfn "Artifact unzipped at %s" path
-
 let rec waitUserResponse _ =
     let userInput = Console.ReadLine()
     match userInput.ToUpper() with
@@ -115,6 +99,7 @@ let ensureRepoSetup (info : RepoSetupInfo) =
         // Ensure this is the correct branch
         runSimpleGitCommand info.FolderPath ("checkout " + info.GithubBranch) |> ignore
 
+// TODO: Get version from fable-web-worker package
 let updateVersion () =
     let version = File.ReadAllText(REPL_OUTPUT </> "version.txt")
     let reg = Regex(@"\bVERSION\s*=\s*""(.*?)""")
@@ -137,13 +122,10 @@ Target "BuildFcsExport" (fun _ ->
     |> runScript NCAVE_FCS_REPO "fcs\\build"
 )
 
+// TODO: Move this to Fable repo
 Target "GenerateMetadata" (fun _ ->
     CleanDir METADATA_OUTPUT
     CopyDir METADATA_OUTPUT METADATA_SOURCE (fun _ -> true)
-    !! (METADATA_OUTPUT </> "*.dll")
-    |> Seq.iter(fun filename ->
-        Rename (filename + ".txt") filename
-    )
 )
 
 Target "InstallDotNetCore" (fun _ ->
@@ -156,6 +138,7 @@ Target "InstallDotNetCore" (fun _ ->
 Target "Clean" (fun _ ->
     !! "public/js"
     ++ LIBS_OUTPUT
+    ++ METADATA_OUTPUT
     ++ "deploy"
   |> CleanDirs
 )
@@ -181,7 +164,20 @@ Target "CopyModules" (fun _ ->
     CopyFile LIBS_OUTPUT "node_modules/react-dom/umd/react-dom.production.min.js"
     CopyFile cssOutput "node_modules/bulma/css/bulma.min.css"
     CopyFile cssOutput "node_modules/font-awesome/css/font-awesome.min.css"
-    CopyDir (LIBS_OUTPUT </> "fonts")  "node_modules/font-awesome/fonts" (fun _ -> true)
+    CopyDir (LIBS_OUTPUT </> "fonts") "node_modules/font-awesome/fonts" (fun _ -> true)
+
+    // Metadata
+    CopyDir METADATA_OUTPUT "node_modules/fable-metadata/lib" (fun _ -> true)
+    !! "public/metadata-extra" |> Seq.iter(fun filename ->
+        CopyFile METADATA_OUTPUT filename)
+    CopyDir METADATA_OUTPUT "public/metadata-extra" (fun _ -> true)
+    // Change extension to .txt so Github pages compress the files when being served
+    !! (METADATA_OUTPUT </> "*.dll") |> Seq.iter(fun filename ->
+        Rename (filename + ".txt") filename)
+
+    // Fable WebWorker
+    CopyDir (REPL_OUTPUT </> "fable-library") "node_modules/fable-web-worker/dist/fable-library" (fun _ -> true)
+    CopyFile REPL_OUTPUT "node_modules/fable-web-worker/dist/fable-web-worker.min.js"
 )
 
 Target "WatchApp" (fun _ ->
@@ -194,17 +190,6 @@ Target "BuildApp" (fun _ ->
 
 Target "PublishGithubPages" (fun _->
     runYarn CWD "gh-pages -d deploy"
-)
-
-Target "GetBundleFromAppveyor" (fun _ ->
-    downloadArtifact REPL_OUTPUT APPVEYOR_REPL_ARTIFACT_URL
-    updateVersion ()
-)
-
-// Assume the bundle has been built in a sibling Fable repo
-Target "GetBundleLocally" (fun _ ->
-    FileUtils.cp_r (FABLE_REPO </> "src/dotnet/Fable.Repl/bundle") REPL_OUTPUT
-    updateVersion ()
 )
 
 Target "BuildLib" (fun _ ->
@@ -242,7 +227,6 @@ Target "All" DoNothing
     ==> "Restore"
     ==> "YarnInstall"
     ==> "CopyModules"
-    ==> "GetBundleFromAppveyor"
     ==> "BuildLib"
     ==> "BuildApp"
     ==> "All"

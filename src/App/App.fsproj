@@ -4,13 +4,11 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\..\paket-files\fable-compiler\Fable\src\dotnet\Fable.Repl\Interfaces.fs">
-      <Paket>True</Paket>
-      <Link>paket-files/Interfaces.fs</Link>
-    </Compile>
+    <Compile Include="..\..\node_modules\fable-web-worker\src\Interfaces.fs" />
+    <Compile Include="..\..\node_modules\fable-web-worker\src\Shared.fs" />
     <Compile Include="Libs/ReactDeviceDetect.fs" />
     <Compile Include="Monaco.fs" />
-    <Compile Include="Shared.fs" />
+    <Compile Include="Prelude.fs" />
     <Compile Include="Helpers.fs" />
     <Compile Include="Editor.fs" />
     <Compile Include="Generator.fs" />

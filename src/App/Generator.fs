@@ -4,7 +4,7 @@ module Fable.Repl.Generator
 open System.Text.RegularExpressions
 open Fable.Core.JsInterop
 open Fable.Import.Browser
-open Shared
+open Prelude
 
 let defaultHtmlCode =
     """

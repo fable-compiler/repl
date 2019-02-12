@@ -8,19 +8,23 @@ open Fulma.FontAwesome
 open Fulma.Extensions
 open Elmish
 open Thoth.Elmish
-open Shared
+open Prelude
 open Editor
 open Mouse
 open Thoth.Json
 open Fable.PowerPack
 open Fable.PowerPack.Fetch.Fetch_types
+open Fable.WebWorker
 
 type ISavedState =
     abstract code: string
     abstract html: string
     abstract css: string
 
-let private Worker(): Browser.Worker = importDefault "worker-loader!../Worker/Worker.fsproj"
+let private Worker(): Browser.Worker =
+    // importDefault "worker-loader!../../../Fable/src/fable-web-worker/src/Worker.fsproj"
+    Browser.Worker.Create(Literals.WORKER_BUNDLE_URL)
+
 let private loadState(_key: string): ISavedState = importMember "./js/util.js"
 let private saveState(_key: string, _code: string, _html: string, _cssCode : string): unit = importMember "./js/util.js"
 let private updateQuery(_fsharpCode : string, _htmlCode : string, _cssCode : string): unit = importMember "./js/util.js"
@@ -71,7 +75,7 @@ type Model =
       IsProblemsPanelExpanded : bool
       Logs : ConsolePanel.Log list }
 
-type EndCompileStatus = Result<string * Fable.Repl.Error[], string>
+type EndCompileStatus = Result<string * Fable.Standalone.Error[], string>
 
 type Msg =
     | SetFSharpEditor of IEditor
@@ -82,7 +86,7 @@ type Msg =
     | GistLoaded of string*string*string
     | LoadGistError of exn
     | LoadGist of string
-    | MarkEditorErrors of Fable.Repl.Error[]
+    | MarkEditorErrors of Fable.Standalone.Error[]
     | StartCompile of string option
     | EndCompile of EndCompileStatus
     | UpdateStats of CompileStats
@@ -450,8 +454,10 @@ let workerCmd (worker : ObservableWorker<_>)=
     [ handler ]
 
 let init () =
-    let worker = ObservableWorker(Worker(), WorkerAnswer.Decoder)
-
+    let worker = ObservableWorker(Worker() |> unbox, WorkerAnswer.Decoder, "MAIN APP")
+    CreateChecker(Literals.METADATA_DIR, Literals.EXTRA_REFS,
+                  Some ".txt", Some Literals.REPL_LIB_MAP_JSON_URL)
+    |> worker.Post
     let saved = loadState(Literals.STORAGE_KEY)
     let sidebarModel, sidebarCmd = Sidebar.init ()
     let cmd = Cmd.batch [

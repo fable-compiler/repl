@@ -3,7 +3,7 @@ module Widgets.About
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
 open Fulma
-open Fable.Repl.Shared
+open Fable.Repl.Prelude
 
 let view =
     Content.content [ ]

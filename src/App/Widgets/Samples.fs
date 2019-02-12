@@ -7,7 +7,7 @@ open Fable.Helpers.React.Props
 open Fulma.FontAwesome
 open Fable.Import
 open Fable.PowerPack
-open Fable.Repl.Shared
+open Fable.Repl.Prelude
 
   /////////////////////
  // Sample def DSL  //

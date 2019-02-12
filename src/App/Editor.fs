@@ -6,14 +6,14 @@ open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Import
 open Fable.PowerPack
-open Fable.Repl
+open Fable.Standalone
 
 //---------------------------------------------------
 // Features providers
 //---------------------------------------------------
 
 /// **Description**
-/// Convert `Fable.Repl.Glyph` type into the `Monaco.Languages.CompletionItemKind`
+/// Convert `Fable.Standalone.Glyph` type into the `Monaco.Languages.CompletionItemKind`
 /// **Parameters**
 ///   * `glyph` - parameter of type `Glyph`
 ///
@@ -49,7 +49,7 @@ let createCompletionProvider getCompletions =
                 let! completions = getCompletions position.lineNumber position.column lineText
                 return
                     completions
-                    |> Array.map (fun (c: Fable.Repl.Completion) ->
+                    |> Array.map (fun (c: Fable.Standalone.Completion) ->
                         jsOptions<Monaco.Languages.CompletionItem>(fun ci ->
                             ci.label <- c.Name
                             ci.kind <- convertGlyph c.Glyph

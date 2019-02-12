@@ -4,7 +4,8 @@ open Fable.Helpers.React
 open Fable.Helpers.React.Props
 open Fable.Core.JsInterop
 open Fulma
-open Fable.Repl.Shared
+open Fable.Repl.Prelude
+open Fable.WebWorker
 
 type Model = CompileStats
 

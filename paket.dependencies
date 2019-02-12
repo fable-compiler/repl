@@ -14,9 +14,6 @@ nuget Thoth.Json
 nuget Thoth.Elmish.Toast
 nuget Fable.PowerPack
 
-github fable-compiler/Fable:master src/dotnet/Fable.Repl/Interfaces.fs
-github fable-compiler/Fable:master src/dotnet/Fable.Repl/Metadata.fs
-
 # REPL Lib
 github fable-compiler/fable-import:browser-min Browser.Minimal/Fable.Import.Browser.fs
 
