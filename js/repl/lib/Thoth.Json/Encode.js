@@ -1,13 +1,13 @@
-import { mapIndexed, map as map$$1, fold, iterate } from "../fable-library.2.1.11/Seq.js";
-import { empty, tryFind, toList } from "../fable-library.2.1.11/Map.js";
-import { toString as toString$$1 } from "../fable-library.2.1.11/Date.js";
-import { toString as toString$$2 } from "../fable-library.2.1.11/Long.js";
-import { comparePrimitives, uncurry } from "../fable-library.2.1.11/Util.js";
-import { defaultArgWith, defaultArg } from "../fable-library.2.1.11/Option.js";
-import { type, getGenerics, getGenericTypeDefinition, getTupleFields, getTupleElements, isTuple, isGenericType, getElementType, isArray, fullName, getUnionCaseFields, getUnionFields, isUnion, getRecordElements, getRecordField, name, isRecord } from "../fable-library.2.1.11/Reflection.js";
-import { fill, map } from "../fable-library.2.1.11/Array.js";
-import { toFail, printf } from "../fable-library.2.1.11/String.js";
-import { declare } from "../fable-library.2.1.11/Types.js";
+import { mapIndexed, map as map$$1, fold, iterate } from "../fable-library.2.2.0-beta-006/Seq.js";
+import { empty, tryFind, toList } from "../fable-library.2.2.0-beta-006/Map.js";
+import { toString as toString$$1 } from "../fable-library.2.2.0-beta-006/Date.js";
+import { toString as toString$$2 } from "../fable-library.2.2.0-beta-006/Long.js";
+import { comparePrimitives, uncurry } from "../fable-library.2.2.0-beta-006/Util.js";
+import { defaultArgWith, defaultArg } from "../fable-library.2.2.0-beta-006/Option.js";
+import { type, getGenerics, getGenericTypeDefinition, getTupleFields, getTupleElements, isTuple, isGenericType, getElementType, isArray, fullName, getUnionCaseFields, getUnionFields, isUnion, getRecordElements, getRecordField, name, isRecord } from "../fable-library.2.2.0-beta-006/Reflection.js";
+import { fill, map } from "../fable-library.2.2.0-beta-006/Array.js";
+import { toFail, printf } from "../fable-library.2.2.0-beta-006/String.js";
+import { declare } from "../fable-library.2.2.0-beta-006/Types.js";
 import { Cache$$$Encoders as Cache$0024$0024$0024Encoders, Cache$002ECache$00601$$GetOrAdd$$43981464 as Cache$0024002ECache$002400601$0024$0024GetOrAdd$0024$002443981464 } from "./Types.js";
 export function string(value) {
   return value;

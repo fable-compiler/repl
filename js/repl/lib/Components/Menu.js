@@ -1,10 +1,10 @@
 import { Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Common$$$genericParse as Common$0024$0024$0024genericParse } from "../Fulma/Common.js";
-import { Record, declare, Union, List } from "../fable-library.2.1.11/Types.js";
-import { createObj } from "../fable-library.2.1.11/Util.js";
-import { record, option, union, lambda, unit, string, list as list$$2, type, bool } from "../fable-library.2.1.11/Reflection.js";
-import { ofSeq, fold } from "../fable-library.2.1.11/List.js";
+import { Record, declare, Union, List } from "../fable-library.2.2.0-beta-006/Types.js";
+import { createObj } from "../fable-library.2.2.0-beta-006/Util.js";
+import { record, option, union, lambda, unit, string, list as list$$2, type, bool } from "../fable-library.2.2.0-beta-006/Reflection.js";
+import { ofSeq, fold } from "../fable-library.2.2.0-beta-006/List.js";
 import { Props$002EHTMLAttr as Props$0024002EHTMLAttr, Props$002EDOMAttr as Props$0024002EDOMAttr } from "../Fable.React/Fable.Helpers.React.js";
-import { append, delay, empty, singleton } from "../fable-library.2.1.11/Seq.js";
+import { append, delay, empty, singleton } from "../fable-library.2.2.0-beta-006/Seq.js";
 const createElement = React.createElement;
 export function menu(options, children) {
   const opts = Common$0024$0024$0024genericParse(options);

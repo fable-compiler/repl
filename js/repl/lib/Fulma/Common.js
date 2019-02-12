@@ -1,8 +1,8 @@
-import { List, Record, declare, Union } from "../fable-library.2.1.11/Types.js";
-import { list as list$$4, type, record, option, bool, string, union } from "../fable-library.2.1.11/Reflection.js";
-import { ofArray, fold } from "../fable-library.2.1.11/List.js";
+import { List, Record, declare, Union } from "../fable-library.2.2.0-beta-006/Types.js";
+import { list as list$$4, type, record, option, bool, string, union } from "../fable-library.2.2.0-beta-006/Reflection.js";
+import { ofArray, fold } from "../fable-library.2.2.0-beta-006/List.js";
 import { Props$002EHTMLAttr as Props$0024002EHTMLAttr } from "../Fable.React/Fable.Helpers.React.js";
-import { createObj } from "../fable-library.2.1.11/Util.js";
+import { createObj } from "../fable-library.2.2.0-beta-006/Util.js";
 const createElement = React.createElement;
 export const Screen = declare(function Fulma_Screen(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);

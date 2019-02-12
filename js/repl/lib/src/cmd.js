@@ -1,7 +1,7 @@
-import { concat, map, iterate } from "../fable-library.2.1.11/List.js";
-import { List } from "../fable-library.2.1.11/Types.js";
-import { singleton } from "../fable-library.2.1.11/AsyncBuilder.js";
-import { startImmediate, catchAsync } from "../fable-library.2.1.11/Async.js";
+import { concat, map, iterate } from "../fable-library.2.2.0-beta-006/List.js";
+import { List } from "../fable-library.2.2.0-beta-006/Types.js";
+import { singleton } from "../fable-library.2.2.0-beta-006/AsyncBuilder.js";
+import { startImmediate, catchAsync } from "../fable-library.2.2.0-beta-006/Async.js";
 export function Cmd$$$exec(dispatch, cmd) {
   iterate(function action(sub) {
     sub(dispatch);

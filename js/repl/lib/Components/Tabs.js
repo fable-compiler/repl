@@ -1,8 +1,8 @@
-import { List, Record, declare, Union } from "../fable-library.2.1.11/Types.js";
+import { List, Record, declare, Union } from "../fable-library.2.2.0-beta-006/Types.js";
 import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Size$$$ofSize as Size$0024$0024$0024ofSize, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection } from "../Fulma/Common.js";
-import { record, bool, option, union, list as list$$2, type, string } from "../fable-library.2.1.11/Reflection.js";
-import { ofArray, fold } from "../fable-library.2.1.11/List.js";
-import { createObj } from "../fable-library.2.1.11/Util.js";
+import { record, bool, option, union, list as list$$2, type, string } from "../fable-library.2.2.0-beta-006/Reflection.js";
+import { ofArray, fold } from "../fable-library.2.2.0-beta-006/List.js";
+import { createObj } from "../fable-library.2.2.0-beta-006/Util.js";
 const createElement = React.createElement;
 export const Option = declare(function Fulma_Tabs_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);

@@ -1,9 +1,9 @@
-import { List, Record, declare, Union } from "../fable-library.2.1.11/Types.js";
-import { record, bool, option, list as list$$1, type, string, union } from "../fable-library.2.1.11/Reflection.js";
+import { List, Record, declare, Union } from "../fable-library.2.2.0-beta-006/Types.js";
+import { record, bool, option, list as list$$1, type, string, union } from "../fable-library.2.2.0-beta-006/Reflection.js";
 import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection } from "../Fulma/Common.js";
-import { ofSeq, fold } from "../fable-library.2.1.11/List.js";
-import { append, delay, singleton } from "../fable-library.2.1.11/Seq.js";
-import { createObj } from "../fable-library.2.1.11/Util.js";
+import { ofSeq, fold } from "../fable-library.2.2.0-beta-006/List.js";
+import { append, delay, singleton } from "../fable-library.2.2.0-beta-006/Seq.js";
+import { createObj } from "../fable-library.2.2.0-beta-006/Util.js";
 const createElement = React.createElement;
 export const ISize = declare(function Fulma_Tile_ISize(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);

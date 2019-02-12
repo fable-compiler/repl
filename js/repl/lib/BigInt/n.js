@@ -1,9 +1,9 @@
-import { List, declare, Record } from "../fable-library.2.1.11/Types.js";
-import { record, array, int32 } from "../fable-library.2.1.11/Reflection.js";
-import { op_LeftShift, op_BitwiseAnd, op_Addition, compare, op_Subtraction, op_Division, equals, toInt, op_Modulus, op_Multiply, fromInteger, fromBits } from "../fable-library.2.1.11/Long.js";
-import { ofList, copy, initialize, map, fill } from "../fable-library.2.1.11/Array.js";
-import { int32ToString } from "../fable-library.2.1.11/Util.js";
-import { isNullOrEmpty, join } from "../fable-library.2.1.11/String.js";
+import { List, declare, Record } from "../fable-library.2.2.0-beta-006/Types.js";
+import { record, array, int32 } from "../fable-library.2.2.0-beta-006/Reflection.js";
+import { op_LeftShift, op_BitwiseAnd, op_Addition, compare, op_Subtraction, op_Division, equals, toInt, op_Modulus, op_Multiply, fromInteger, fromBits } from "../fable-library.2.2.0-beta-006/Long.js";
+import { ofList, copy, initialize, map, fill } from "../fable-library.2.2.0-beta-006/Array.js";
+import { int32ToString } from "../fable-library.2.2.0-beta-006/Util.js";
+import { isNullOrEmpty, join } from "../fable-library.2.2.0-beta-006/String.js";
 export const BigNat = declare(function BigInt_BigNat(arg1, arg2) {
   this.bound = arg1 | 0;
   this.digits = arg2;

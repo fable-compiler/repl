@@ -73,6 +73,9 @@ function dateToStringWithCustomFormat(date, format, utc) {
             case "s":
                 rep = utc ? date.getUTCSeconds() : date.getSeconds();
                 break;
+            case "f":
+                rep = utc ? date.getUTCMilliseconds() : date.getMilliseconds();
+                break;
         }
         if (rep !== match && rep < 10 && match.length > 1) {
             rep = "0" + rep;

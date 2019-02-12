@@ -1,13 +1,12 @@
 import { toString as dateToString } from "./Date.js";
-import Decimal from "./Decimal.js";
 import Long, { fromBytes as longFromBytes, toBytes as longToBytes, toString as longToString } from "./Long.js";
 import { escape } from "./RegExp.js";
 const fsFormatRegExp = /(^|[^%])%([0+ ]*)(-?\d+)?(?:\.(\d+))?(\w)/;
 const formatRegExp = /\{(\d+)(,-?\d+)?(?:\:(.+?))?\}/g;
 // RFC 4122 compliant. From https://stackoverflow.com/a/13653180/3922220
-// const guidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+// const guidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 // Relax GUID parsing, see #1637
-const guidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const guidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 function cmp(x, y, ic) {
     function isIgnoreCase(i) {
         return i === true ||
@@ -178,7 +177,7 @@ export function format(str, ...args) {
     return str.replace(formatRegExp, (match, idx, pad, pattern) => {
         let rep = args[idx];
         let padSymbol = " ";
-        if (typeof rep === "number" || rep instanceof Long || rep instanceof Decimal) {
+        if (typeof rep === "number") {
             switch ((pattern || "").substring(0, 1)) {
                 case "f":
                 case "F":
@@ -210,6 +209,25 @@ export function format(str, ...args) {
                             rep = rep.toFixed(decs = m[2].length - 1);
                         }
                         pad = "," + (m[1].length + (decs ? decs + 1 : 0)).toString();
+                        padSymbol = "0";
+                    }
+                    else if (pattern) {
+                        rep = pattern;
+                    }
+            }
+        }
+        else if (rep instanceof Long) { // TODO: Other numeric types? Decimal, BigInt
+            switch ((pattern || "").substring(0, 1)) {
+                case "x":
+                    rep = toHex(rep);
+                    break;
+                case "X":
+                    rep = toHex(rep).toUpperCase();
+                    break;
+                default:
+                    const m = /^(0+)(\.0+)?$/.exec(pattern);
+                    if (m != null) {
+                        pad = "," + m[1].length.toString();
                         padSymbol = "0";
                     }
                     else if (pattern) {
@@ -265,9 +283,9 @@ export function joinWithIndices(delimiter, xs, startIndex, count) {
 }
 /** Validates UUID as specified in RFC4122 (versions 1-5). Trims braces. */
 export function validateGuid(str, doNotThrow) {
-    const trimmed = trim(str, "{", "}");
-    if (guidRegex.test(trimmed)) {
-        return doNotThrow ? [true, trimmed] : trimmed;
+    const trimmedAndLowered = trim(str, "{", "}").toLowerCase();
+    if (guidRegex.test(trimmedAndLowered)) {
+        return doNotThrow ? [true, trimmedAndLowered] : trimmedAndLowered;
     }
     else if (doNotThrow) {
         return [false, "00000000-0000-0000-0000-000000000000"];
