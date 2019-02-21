@@ -1,5 +1,5 @@
-import { Record, Union } from "./Types.js";
-import { compareArraysWith, equalArraysWith } from "./Util.js";
+import { Record, Union } from "./Types";
+import { compareArraysWith, equalArraysWith } from "./Util";
 export class CaseInfo {
     constructor(declaringType, tag, name, fields) {
         this.declaringType = declaringType;

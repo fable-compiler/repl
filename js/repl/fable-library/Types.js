@@ -1,4 +1,4 @@
-import { combineHashCodes, compare, compareArrays, equals, equalArrays, identityHash, structuralHash, numberHash } from "./Util.js";
+import { combineHashCodes, compare, compareArrays, equals, equalArrays, identityHash, structuralHash, numberHash } from "./Util";
 function sameType(x, y) {
     return y != null && Object.getPrototypeOf(x).constructor === Object.getPrototypeOf(y).constructor;
 }
@@ -198,6 +198,9 @@ Record.prototype.Equals = function (other) {
 Record.prototype.CompareTo = function (other) {
     return recordCompare(this, other);
 };
+export function anonRecord(o) {
+    return Object.assign(Object.create(Record), o);
+}
 export const FSharpRef = declare(function FSharpRef(contents) {
     this.contents = contents;
 }, Record);

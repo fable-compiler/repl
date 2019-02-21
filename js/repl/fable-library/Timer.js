@@ -1,4 +1,4 @@
-import Event from "./Event.js";
+import Event from "./Event";
 export default class Timer {
     constructor(interval) {
         this.Interval = interval > 0 ? interval : 100;

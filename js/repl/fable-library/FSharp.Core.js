@@ -1,6 +1,6 @@
 import { structuralHash, equals } from "./Util.js";
-import { HashIdentity$$$Structural as HashIdentity$0024$0024$0024Structural, ComparisonIdentity$$$Structural as ComparisonIdentity$0024$0024$0024Structural } from "./FSharp.Collections.js";
-import { StringBuilder$$Append$$Z721C83C5 as StringBuilder$0024$0024Append$0024$0024Z721C83C5 } from "./System.Text.js";
+import { HashIdentity$$$Structural as HashIdentity$0024$0024$0024Structural, ComparisonIdentity$$$Structural as ComparisonIdentity$0024$0024$0024Structural } from "./FSharp.Collections";
+import { StringBuilder$$Append$$Z721C83C5 as StringBuilder$0024$0024Append$0024$0024Z721C83C5 } from "./System.Text";
 export const LanguagePrimitives$$$GenericEqualityComparer = {
   Equals(x, y) {
     return equals(x, y);

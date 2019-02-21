@@ -1,12 +1,12 @@
-import { List, Record, declare, Union } from "../fable-library.2.2.0-beta-006/Types.js";
-import { int32, obj, record, option, list, type, string, union } from "../fable-library.2.2.0-beta-006/Reflection.js";
-import { fromContinuations } from "../fable-library.2.2.0-beta-006/Async.js";
-import { ofArray, append } from "../fable-library.2.2.0-beta-006/List.js";
-import { join } from "../fable-library.2.2.0-beta-006/String.js";
-import { choose } from "../fable-library.2.2.0-beta-006/Array.js";
-import { comparePrimitives } from "../fable-library.2.2.0-beta-006/Util.js";
-import { ofArray as ofArray$$1 } from "../fable-library.2.2.0-beta-006/Map.js";
-import { iterate } from "../fable-library.2.2.0-beta-006/Seq.js";
+import { List, Record, declare, Union } from "../fable-library.2.2.0-beta-008/Types.js";
+import { int32, obj, record, option, list, type, string, union } from "../fable-library.2.2.0-beta-008/Reflection.js";
+import { fromContinuations } from "../fable-library.2.2.0-beta-008/Async.js";
+import { ofArray, append } from "../fable-library.2.2.0-beta-008/List.js";
+import { join } from "../fable-library.2.2.0-beta-008/String.js";
+import { choose } from "../fable-library.2.2.0-beta-008/Array.js";
+import { comparePrimitives } from "../fable-library.2.2.0-beta-008/Util.js";
+import { ofArray as ofArray$$1 } from "../fable-library.2.2.0-beta-008/Map.js";
+import { iterate } from "../fable-library.2.2.0-beta-008/Seq.js";
 export const HttpMethod = declare(function Fable_SimpleHttp_HttpMethod(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);

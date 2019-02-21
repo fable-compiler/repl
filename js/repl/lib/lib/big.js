@@ -1,7 +1,7 @@
 // https://github.com/MikeMcl/big.js/blob/01b3ce3a6b0ba7b42442ea48ec4ffc88d1669ec4/big.mjs
 
 /* tslint:disable */
-import { combineHashCodes } from "../fable-library.2.2.0-beta-006/Util.js"; // The shared prototype object.
+import { combineHashCodes } from "../fable-library.2.2.0-beta-008/Util.js"; // The shared prototype object.
 
 var P = {
   GetHashCode() {

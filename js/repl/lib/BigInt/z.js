@@ -1,9 +1,10 @@
-import { declare, Record } from "../fable-library.2.2.0-beta-006/Types.js";
-import { type } from "../fable-library.2.2.0-beta-006/Reflection.js";
+import { declare, Record } from "../fable-library.2.2.0-beta-008/Types.js";
+import { type } from "../fable-library.2.2.0-beta-008/Reflection.js";
 import { BigNatModule$$$factorial as BigNatModule$0024$0024$0024factorial, BigNatModule$$$ofString as BigNatModule$0024$0024$0024ofString, BigNatModule$$$toFloat as BigNatModule$0024$0024$0024toFloat, BigNatModule$$$toUInt64 as BigNatModule$0024$0024$0024toUInt64, BigNatModule$$$toUInt32 as BigNatModule$0024$0024$0024toUInt32, BigNatModule$$$pow as BigNatModule$0024$0024$0024pow, BigNatModule$$$rem as BigNatModule$0024$0024$0024rem, BigNatModule$$$two as BigNatModule$0024$0024$0024two, BigNatModule$$$lte as BigNatModule$0024$0024$0024lte, BigNatModule$$$hcf as BigNatModule$0024$0024$0024hcf, BigNatModule$$$bitOr as BigNatModule$0024$0024$0024bitOr, BigNatModule$$$bitAnd as BigNatModule$0024$0024$0024bitAnd, BigNatModule$$$divmod as BigNatModule$0024$0024$0024divmod, BigNatModule$$$mul as BigNatModule$0024$0024$0024mul, BigNatModule$$$isOne as BigNatModule$0024$0024$0024isOne, BigNatModule$$$sub as BigNatModule$0024$0024$0024sub, BigNatModule$$$gte as BigNatModule$0024$0024$0024gte, BigNatModule$$$scale as BigNatModule$0024$0024$0024scale, BigNatModule$$$add as BigNatModule$0024$0024$0024add, BigNatModule$$$one as BigNatModule$0024$0024$0024one, BigNatModule$$$ofInt64 as BigNatModule$0024$0024$0024ofInt64, BigNatModule$$$toString as BigNatModule$0024$0024$0024toString, BigNatModule$$$hash as BigNatModule$0024$0024$0024hash, BigNatModule$$$gt as BigNatModule$0024$0024$0024gt, BigNatModule$$$lt as BigNatModule$0024$0024$0024lt, BigNatModule$$$isZero as BigNatModule$0024$0024$0024isZero, BigNatModule$$$equal as BigNatModule$0024$0024$0024equal, BigNatModule$$$getSmall as BigNatModule$0024$0024$0024getSmall, BigNatModule$$$isSmall as BigNatModule$0024$0024$0024isSmall, BigNatModule$$$ofInt32 as BigNatModule$0024$0024$0024ofInt32 } from "./n.js";
-import { initialize } from "../fable-library.2.2.0-beta-006/Array.js";
-import { op_Addition, op_Multiply, fromValue, equals, compare, fromBits, op_UnaryNegation, fromInteger } from "../fable-library.2.2.0-beta-006/Long.js";
-import Decimal from "../fable-library.2.2.0-beta-006/Decimal.js";
+import { initialize } from "../fable-library.2.2.0-beta-008/Array.js";
+import { op_Addition, op_Multiply, fromValue, equals, compare, fromBits, op_UnaryNegation, fromInteger } from "../fable-library.2.2.0-beta-008/Long.js";
+import { op_UnaryNegation_Int32 } from "../fable-library.2.2.0-beta-008/Int32.js";
+import Decimal from "../fable-library.2.2.0-beta-008/Decimal.js";
 export const BigInteger = declare(function BigInt_BigInteger(signInt, v) {
   const $this$$1 = this;
   $this$$1.signInt = signInt;
@@ -412,7 +413,7 @@ export function BigInteger$$$$002Ector$$Z524259A4(n$$6) {
   } else if (n$$6 === -2147483648) {
     return BigInteger$$$$002Ector$$Z2BE94A1.call(this, -1, BigInteger$$$nat$$Z67CCE57D(BigNatModule$0024$0024$0024ofInt64(op_UnaryNegation(fromInteger(n$$6, false, 2)))));
   } else {
-    return BigInteger$$$$002Ector$$Z2BE94A1.call(this, -1, BigInteger$$$nat$$Z67CCE57D(BigNatModule$0024$0024$0024ofInt32(-n$$6)));
+    return BigInteger$$$$002Ector$$Z2BE94A1.call(this, -1, BigInteger$$$nat$$Z67CCE57D(BigNatModule$0024$0024$0024ofInt32(op_UnaryNegation_Int32(n$$6))));
   }
 }
 export function BigInteger$$$$002Ector$$Z524259C1(n$$7) {
@@ -440,14 +441,14 @@ export function BigInteger$$$op_UnaryNegation$$Z665282C2(z$$1) {
     return BigInteger$$$get_Zero();
   } else {
     const i = matchValue$$4 | 0;
-    return BigInteger$$$create$$Z2BE94A1(-i, BigInteger$$get_V(z$$1));
+    return BigInteger$$$create$$Z2BE94A1(op_UnaryNegation_Int32(i), BigInteger$$get_V(z$$1));
   }
 }
 export function BigInteger$$$Scale$$Z320F31E(k, z$$2) {
   if (BigInteger$$get_SignInt(z$$2) === 0) {
     return BigInteger$$$get_Zero();
   } else if (k < 0) {
-    return BigInteger$$$create$$Z2BE94A1(-BigInteger$$get_SignInt(z$$2), BigNatModule$0024$0024$0024scale(-k, BigInteger$$get_V(z$$2)));
+    return BigInteger$$$create$$Z2BE94A1(op_UnaryNegation_Int32(BigInteger$$get_SignInt(z$$2)), BigNatModule$0024$0024$0024scale(op_UnaryNegation_Int32(k), BigInteger$$get_V(z$$2)));
   } else {
     return BigInteger$$$create$$Z2BE94A1(BigInteger$$get_SignInt(z$$2), BigNatModule$0024$0024$0024scale(k, BigInteger$$get_V(z$$2)));
   }

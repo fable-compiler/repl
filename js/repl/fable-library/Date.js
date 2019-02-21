@@ -7,8 +7,8 @@
  *
  * Basically; invariant: date.getTime() always return UTC time.
  */
-import { fromValue, ticksToUnixEpochMilliseconds, unixEpochMillisecondsToTicks } from "./Long.js";
-import { compareDates, dateOffset, padWithZeros } from "./Util.js";
+import { fromValue, ticksToUnixEpochMilliseconds, unixEpochMillisecondsToTicks } from "./Long";
+import { compareDates, dateOffset, padWithZeros } from "./Util";
 export const offsetRegex = /(?:Z|[+-](\d+):?([0-5]?\d)?)\s*$/;
 export function dateOffsetToString(offset) {
     const isMinus = offset < 0;

@@ -105,3 +105,12 @@ export function tryParse(str, style, unsigned, bitsize) {
     }
     return [false, 0];
 }
+export function op_UnaryNegation_Int8(x) {
+    return x === -128 ? x : -x;
+}
+export function op_UnaryNegation_Int16(x) {
+    return x === -32768 ? x : -x;
+}
+export function op_UnaryNegation_Int32(x) {
+    return x === -2147483648 ? x : -x;
+}

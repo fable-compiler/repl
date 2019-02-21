@@ -1,6 +1,6 @@
-import { makeRangeStepFunction } from "./Long.js";
-import { some, value } from "./Option.js";
-import { compare, equals } from "./Util.js";
+import { makeRangeStepFunction } from "./Long";
+import { some, value } from "./Option";
+import { compare, equals } from "./Util";
 export class Enumerator {
     constructor(iter) {
         this.iter = iter;

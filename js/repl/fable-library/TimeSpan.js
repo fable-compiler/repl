@@ -1,5 +1,5 @@
-import { fromNumber, op_Division, op_Multiply, toNumber } from "./Long.js";
-import { comparePrimitives, padLeftAndRightWithZeros, padWithZeros } from "./Util.js";
+import { fromNumber, op_Division, op_Multiply, toNumber } from "./Long";
+import { comparePrimitives, padLeftAndRightWithZeros, padWithZeros } from "./Util";
 // TimeSpan in runtime just becomes a number representing milliseconds
 export function create(d = 0, h = 0, m = 0, s = 0, ms = 0) {
     switch (arguments.length) {

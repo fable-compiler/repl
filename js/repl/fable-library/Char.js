@@ -1,6 +1,6 @@
 // Adapted from: https://github.com/hakatashi/general-category
-import * as Encoding from "./Encoding.js";
-import packedUnicode from "./Unicode.9.0.0.js";
+import * as Encoding from "./Encoding";
+import packedUnicode from "./Unicode.9.0.0";
 function decodeVByteToIntegerArray(buffer) {
     const ret = [];
     let carried = 0;

@@ -1,10 +1,10 @@
-import { List, Record, declare, Union } from "../fable-library.2.2.0-beta-006/Types.js";
+import { List, Record, declare, Union } from "../fable-library.2.2.0-beta-008/Types.js";
 import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Size$$$ofSize as Size$0024$0024$0024ofSize, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Color$$$ofColor as Color$0024$0024$0024ofColor, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Color$002EIColor$reflection as Color$0024002EIColor$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection } from "../Fulma/Common.js";
-import { record, option as option$$1, union, lambda, unit, list as list$$1, type, string, bool } from "../fable-library.2.2.0-beta-006/Reflection.js";
-import { ofSeq, ofArray, fold } from "../fable-library.2.2.0-beta-006/List.js";
-import { append, delay, empty, singleton } from "../fable-library.2.2.0-beta-006/Seq.js";
+import { record, option as option$$1, union, lambda, unit, list as list$$1, type, string, bool } from "../fable-library.2.2.0-beta-008/Reflection.js";
+import { ofSeq, ofArray, fold } from "../fable-library.2.2.0-beta-008/List.js";
+import { append, delay, empty, singleton } from "../fable-library.2.2.0-beta-008/Seq.js";
 import { Props$002EDOMAttr as Props$0024002EDOMAttr, Props$002EProp as Props$0024002EProp, Props$002EHTMLAttr as Props$0024002EHTMLAttr } from "../Fable.React/Fable.Helpers.React.js";
-import { createObj, equals } from "../fable-library.2.2.0-beta-006/Util.js";
+import { createObj, equals } from "../fable-library.2.2.0-beta-008/Util.js";
 const createElement = React.createElement;
 export const Option = declare(function Fulma_Textarea_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);

@@ -1,8 +1,8 @@
-import { List, Record, declare, Union } from "../fable-library.2.2.0-beta-006/Types.js";
-import { array, float64, int32, bool, obj, record, lambda, unit, type, union, string } from "../fable-library.2.2.0-beta-006/Reflection.js";
-import { uncurry, createObj } from "../fable-library.2.2.0-beta-006/Util.js";
-import { ofList as ofList$$1 } from "../fable-library.2.2.0-beta-006/Array.js";
-import { fold } from "../fable-library.2.2.0-beta-006/List.js";
+import { List, Record, declare, Union } from "../fable-library.2.2.0-beta-008/Types.js";
+import { array, float64, int32, bool, obj, record, lambda, unit, type, union, string } from "../fable-library.2.2.0-beta-008/Reflection.js";
+import { uncurry, createObj } from "../fable-library.2.2.0-beta-008/Util.js";
+import { ofList as ofList$$1 } from "../fable-library.2.2.0-beta-008/Array.js";
+import { fold } from "../fable-library.2.2.0-beta-008/List.js";
 const Fragment = React.Fragment,
       memo = React.memo,
       createElement$$1 = React.createElement;

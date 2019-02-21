@@ -1,6 +1,6 @@
 // https://github.com/MikeMcl/big.js/blob/01b3ce3a6b0ba7b42442ea48ec4ffc88d1669ec4/big.mjs
 /* tslint:disable */
-import { combineHashCodes } from "../Util.js";
+import { combineHashCodes } from "../Util";
 // The shared prototype object.
 var P = {
     GetHashCode() { return combineHashCodes([this.s, this.e].concat(this.c)); },
