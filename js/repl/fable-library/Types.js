@@ -199,7 +199,7 @@ Record.prototype.CompareTo = function (other) {
     return recordCompare(this, other);
 };
 export function anonRecord(o) {
-    return Object.assign(Object.create(Record), o);
+    return Object.assign(Object.create(Record.prototype), o);
 }
 export const FSharpRef = declare(function FSharpRef(contents) {
     this.contents = contents;

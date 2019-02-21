@@ -1,8 +1,8 @@
-import { mapError, mapOk, Result } from "../fable-library.2.2.0-beta-008/Option.js";
-import { declare } from "../fable-library.2.2.0-beta-008/Types.js";
-import { type } from "../fable-library.2.2.0-beta-008/Reflection.js";
-import { iterate } from "../fable-library.2.2.0-beta-008/Seq.js";
-import { equals } from "../fable-library.2.2.0-beta-008/Util.js";
+import { mapError, mapOk, Result } from "../fable-library.2.2.0-beta-010/Option.js";
+import { declare } from "../fable-library.2.2.0-beta-010/Types.js";
+import { type } from "../fable-library.2.2.0-beta-010/Reflection.js";
+import { iterate } from "../fable-library.2.2.0-beta-010/Seq.js";
+import { equals } from "../fable-library.2.2.0-beta-010/Util.js";
 export function result(a) {
   return a.then(function ($arg$$1) {
     return new Result(0, "Ok", $arg$$1);

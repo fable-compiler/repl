@@ -1,8 +1,8 @@
 import { Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Common$$$genericParse as Common$0024$0024$0024genericParse } from "../Fulma/Common.js";
-import { Record, declare, Union, List } from "../fable-library.2.2.0-beta-008/Types.js";
-import { createObj } from "../fable-library.2.2.0-beta-008/Util.js";
-import { record, option, bool, union, string, list as list$$1, type } from "../fable-library.2.2.0-beta-008/Reflection.js";
-import { fold } from "../fable-library.2.2.0-beta-008/List.js";
+import { Record, declare, Union, List } from "../fable-library.2.2.0-beta-010/Types.js";
+import { createObj } from "../fable-library.2.2.0-beta-010/Util.js";
+import { record, option, bool, union, string, list as list$$1, type } from "../fable-library.2.2.0-beta-010/Reflection.js";
+import { fold } from "../fable-library.2.2.0-beta-010/List.js";
 const createElement = React.createElement;
 export function card(options, children) {
   const opts = Common$0024$0024$0024genericParse(options);

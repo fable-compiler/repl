@@ -1,21 +1,21 @@
-import { toText, printf, validateGuid, join } from "../fable-library.2.2.0-beta-008/String.js";
-import { List, declare, FSharpException } from "../fable-library.2.2.0-beta-008/Types.js";
-import { getGenerics, getGenericTypeDefinition, makeTuple, getTupleElements, isTuple, isGenericType, getElementType, isArray, isUnion, makeRecord, getRecordElements, isRecord, fullName, getUnionCaseFields, makeUnion as makeUnion$$1, getUnionCases, name as name$$6, type } from "../fable-library.2.2.0-beta-008/Reflection.js";
-import { mapOk, some, defaultArg, Result } from "../fable-library.2.2.0-beta-008/Option.js";
+import { toText, printf, validateGuid, join } from "../fable-library.2.2.0-beta-010/String.js";
+import { List, declare, FSharpException } from "../fable-library.2.2.0-beta-010/Types.js";
+import { getGenerics, getGenericTypeDefinition, makeTuple, getTupleElements, isTuple, isGenericType, getElementType, isArray, isUnion, makeRecord, getRecordElements, isRecord, fullName, getUnionCaseFields, makeUnion as makeUnion$$1, getUnionCases, name as name$$6, type } from "../fable-library.2.2.0-beta-010/Reflection.js";
+import { mapOk, some, defaultArg, Result } from "../fable-library.2.2.0-beta-010/Option.js";
 import { Cache$$$Decoders as Cache$0024$0024$0024Decoders, Cache$002ECache$00601$$GetOrAdd$$43981464 as Cache$0024002ECache$002400601$0024$0024GetOrAdd$0024$002443981464, ErrorReason } from "./Types.js";
-import { tryParse } from "../fable-library.2.2.0-beta-008/Int32.js";
-import { toNumber, fromBits, tryParse as tryParse$$1, fromInteger } from "../fable-library.2.2.0-beta-008/Long.js";
-import { parse, fromInt32 } from "../fable-library.2.2.0-beta-008/BigInt.js";
-import { tryParse as tryParse$$2 } from "../fable-library.2.2.0-beta-008/Decimal.js";
-import Decimal from "../fable-library.2.2.0-beta-008/Decimal.js";
-import { toUniversalTime, tryParse as tryParse$$3 } from "../fable-library.2.2.0-beta-008/Date.js";
-import { tryParse as tryParse$$4 } from "../fable-library.2.2.0-beta-008/DateOffset.js";
-import { ofArray, append, reverse, tryLast, fold } from "../fable-library.2.2.0-beta-008/List.js";
-import { compare, curry, comparePrimitives, uncurry, int32ToString } from "../fable-library.2.2.0-beta-008/Util.js";
-import { ofList as ofList$$1, map as map$$1, tryFind, foldBack2, foldBack, fill, fold as fold$$1 } from "../fable-library.2.2.0-beta-008/Array.js";
-import { fold as fold$$2 } from "../fable-library.2.2.0-beta-008/Seq.js";
-import { empty, tryFind as tryFind$$1, ofSeq, ofList } from "../fable-library.2.2.0-beta-008/Map.js";
-import { ofSeq as ofSeq$$1 } from "../fable-library.2.2.0-beta-008/Set.js";
+import { tryParse } from "../fable-library.2.2.0-beta-010/Int32.js";
+import { toNumber, fromBits, tryParse as tryParse$$1, fromInteger } from "../fable-library.2.2.0-beta-010/Long.js";
+import { parse, fromInt32 } from "../fable-library.2.2.0-beta-010/BigInt.js";
+import { tryParse as tryParse$$2 } from "../fable-library.2.2.0-beta-010/Decimal.js";
+import Decimal from "../fable-library.2.2.0-beta-010/Decimal.js";
+import { toUniversalTime, tryParse as tryParse$$3 } from "../fable-library.2.2.0-beta-010/Date.js";
+import { tryParse as tryParse$$4 } from "../fable-library.2.2.0-beta-010/DateOffset.js";
+import { ofArray, append, reverse, tryLast, fold } from "../fable-library.2.2.0-beta-010/List.js";
+import { compare, curry, comparePrimitives, uncurry, int32ToString } from "../fable-library.2.2.0-beta-010/Util.js";
+import { ofList as ofList$$1, map as map$$1, tryFind, foldBack2, foldBack, fill, fold as fold$$1 } from "../fable-library.2.2.0-beta-010/Array.js";
+import { fold as fold$$2 } from "../fable-library.2.2.0-beta-010/Seq.js";
+import { empty, tryFind as tryFind$$1, ofSeq, ofList } from "../fable-library.2.2.0-beta-010/Map.js";
+import { ofSeq as ofSeq$$1 } from "../fable-library.2.2.0-beta-010/Set.js";
 export function Helpers$$$getField(fieldName, o) {
   return o[fieldName];
 }
