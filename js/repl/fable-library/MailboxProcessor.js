@@ -1,6 +1,6 @@
-import { defaultCancellationToken } from "./Async";
-import { fromContinuations } from "./Async";
-import { startImmediate } from "./Async";
+import { defaultCancellationToken } from "./Async.js";
+import { fromContinuations } from "./Async.js";
+import { startImmediate } from "./Async.js";
 class QueueCell {
     constructor(message) {
         this.value = message;

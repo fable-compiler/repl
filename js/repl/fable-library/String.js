@@ -1,6 +1,6 @@
-import { toString as dateToString } from "./Date";
-import Long, { fromBytes as longFromBytes, toBytes as longToBytes, toString as longToString } from "./Long";
-import { escape } from "./RegExp";
+import { toString as dateToString } from "./Date.js";
+import Long, { fromBytes as longFromBytes, toBytes as longToBytes, toString as longToString } from "./Long.js";
+import { escape } from "./RegExp.js";
 const fsFormatRegExp = /(^|[^%])%([0+ ]*)(-?\d+)?(?:\.(\d+))?(\w)/;
 const formatRegExp = /\{(\d+)(,-?\d+)?(?:\:(.+?))?\}/g;
 // RFC 4122 compliant. From https://stackoverflow.com/a/13653180/3922220

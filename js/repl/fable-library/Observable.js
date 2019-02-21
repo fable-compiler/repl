@@ -1,4 +1,4 @@
-import { tryValueIfChoice1, tryValueIfChoice2, value } from "./Option";
+import { tryValueIfChoice1, tryValueIfChoice2, value } from "./Option.js";
 export class Observer {
     constructor(onNext, onError, onCompleted) {
         this.OnNext = onNext;

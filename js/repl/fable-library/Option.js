@@ -1,5 +1,5 @@
-import { declare, Union } from "./Types";
-import { compare, equals, structuralHash } from "./Util";
+import { declare, Union } from "./Types.js";
+import { compare, equals, structuralHash } from "./Util.js";
 // Options are erased in runtime by Fable, but we have
 // the `Some` type below to wrap values that would evaluate
 // to null in runtime. These two rules must be followed:

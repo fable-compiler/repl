@@ -1,6 +1,6 @@
-import { Observer, protect } from "./Observable";
-import { tryValueIfChoice1, tryValueIfChoice2, value } from "./Option";
-import { iterate as seqIterate } from "./Seq";
+import { Observer, protect } from "./Observable.js";
+import { tryValueIfChoice1, tryValueIfChoice2, value } from "./Option.js";
+import { iterate as seqIterate } from "./Seq.js";
 export default class Event {
     constructor(_subscriber, delegates) {
         this._subscriber = _subscriber;

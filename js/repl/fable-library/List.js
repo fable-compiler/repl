@@ -3,7 +3,7 @@ import { FSharpRef, List } from "./Types.js";
 import { delay, rangeNumber, iterate as iterate$$1, collect as collect$$1, scanBack as scanBack$$1, scan as scan$$1, foldBack2 as foldBack2$$1, fold2 as fold2$$1, fold as fold$$1, map as map$$1 } from "./Seq.js";
 import { tryGetValue, addToSet, comparerFromEqualityComparer, count } from "./Util.js";
 import { ofList } from "./Array.js";
-import { permute as permute$$1, findIndexBack as findIndexBack$$1, tryFindIndexBack as tryFindIndexBack$$1 } from "./Array";
+import { permute as permute$$1, findIndexBack as findIndexBack$$1, tryFindIndexBack as tryFindIndexBack$$1 } from "./Array.js";
 import { createMutable } from "./Set.js";
 import { ofSeq as ofSeq$$1, slice as slice$$1, item as item$$1, length as length$$1 } from "./List.js";
 import { createMutable as createMutable$$1 } from "./Map.js";

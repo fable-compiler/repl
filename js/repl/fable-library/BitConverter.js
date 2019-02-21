@@ -1,4 +1,4 @@
-import { fromBits, getHighBits, getHighBitsUnsigned, getLowBits, getLowBitsUnsigned } from "./Long";
+import { fromBits, getHighBits, getHighBitsUnsigned, getLowBits, getLowBitsUnsigned } from "./Long.js";
 const littleEndian = true;
 export function isLittleEndian() {
     return littleEndian;

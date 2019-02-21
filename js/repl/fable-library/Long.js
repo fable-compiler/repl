@@ -1,8 +1,8 @@
 // Adapted from: https://github.com/dcodeIO/long.js/blob/f572e3a17d313730cf11eb838f6d2a5e31626f8a/src/long.js
 // Apache License 2.0: https://github.com/dcodeIO/long.js/blob/master/LICENSE
 /* tslint:disable */
-import { isValid } from "./Int32";
-import { combineHashCodes } from "./Util";
+import { isValid } from "./Int32.js";
+import { combineHashCodes } from "./Util.js";
 /**
  * wasm optimizations, to do native i64 multiplication and divide
  */

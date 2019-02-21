@@ -12,9 +12,9 @@
  *
  * Basically; invariant: date.getTime() always return UTC time.
  */
-import { create as createDate, dateOffsetToString, daysInMonth, offsetRegex, parseRaw } from "./Date";
-import { fromValue, ticksToUnixEpochMilliseconds, unixEpochMillisecondsToTicks } from "./Long";
-import { compareDates, padWithZeros } from "./Util";
+import { create as createDate, dateOffsetToString, daysInMonth, offsetRegex, parseRaw } from "./Date.js";
+import { fromValue, ticksToUnixEpochMilliseconds, unixEpochMillisecondsToTicks } from "./Long.js";
+import { compareDates, padWithZeros } from "./Util.js";
 export default function DateTimeOffset(value, offset) {
     const d = new Date(value);
     d.offset = offset != null ? offset : new Date().getTimezoneOffset() * -60000;

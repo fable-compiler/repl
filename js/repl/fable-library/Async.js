@@ -1,9 +1,9 @@
-import { OperationCanceledError, Trampoline } from "./AsyncBuilder";
-import { protectedCont } from "./AsyncBuilder";
-import { protectedBind } from "./AsyncBuilder";
-import { protectedReturn } from "./AsyncBuilder";
-import { choice1, choice2 } from "./Option";
-import { map } from "./Seq";
+import { OperationCanceledError, Trampoline } from "./AsyncBuilder.js";
+import { protectedCont } from "./AsyncBuilder.js";
+import { protectedBind } from "./AsyncBuilder.js";
+import { protectedReturn } from "./AsyncBuilder.js";
+import { choice1, choice2 } from "./Option.js";
+import { map } from "./Seq.js";
 // Implemented just for type references
 export default class Async {
 }
