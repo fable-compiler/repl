@@ -110,14 +110,18 @@ let private addLinkTag (cssCode : string) =
         ""
 
 let generateHtmlBlobUrl (htmlCode : string) (cssCode : string) (jsCode : string) =
-    // We need to convert import paths to absolute urls and add .js at the end
+    // We need to convert import paths to absolute urls and add .js at the end if necessary
     let reg = Regex(@"^import (.*)""(fable-library|fable-repl-lib)(.*)""(.*)$", RegexOptions.Multiline)
     let jsCode = reg.Replace(jsCode, fun m ->
         let baseDir =
             if m.Groups.[2].Value = "fable-repl-lib"
             then Literals.FABLE_REPL_LIB_DIR
             else Literals.FABLE_LIBRARY_DIR
-        sprintf "import %s\"%s%s.js\"%s" m.Groups.[1].Value baseDir m.Groups.[3].Value m.Groups.[4].Value)
+        let filename = m.Groups.[3].Value
+        sprintf "import %s\"%s%s%s\"%s"
+            m.Groups.[1].Value baseDir filename
+            (if filename.EndsWith(".js") then "" else ".js")
+            m.Groups.[4].Value)
     let htmlCode = htmlCode.Replace("__HOST__", Literals.HOST)
     // Replacement function in JS is causing problems with $ symbol
     let i = htmlCode.IndexOf("</body>")

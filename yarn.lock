@@ -2535,10 +2535,10 @@ fable-babel-plugins@^2.1.0, fable-babel-plugins@~2.1.0:
   resolved "https://registry.yarnpkg.com/fable-babel-plugins/-/fable-babel-plugins-2.1.0.tgz#b3202a25f51a6acdf6bc34dc10dd13cf732d291d"
   integrity sha512-5ZUVrlflbvgA3saIyGJhB1ANqoyZ8UJo12iYSROivql1x9PfKjv16pteNoDFCe6UC1Tn+HaQX46BxyllzLsBTw==
 
-fable-compiler@^2.2.0-beta-006:
-  version "2.2.0-beta-006"
-  resolved "https://registry.yarnpkg.com/fable-compiler/-/fable-compiler-2.2.0-beta-006.tgz#7e037cf985a7a4e53c75633e87923ad0d9e2756d"
-  integrity sha512-Wq7cI3MxTeNCF+jMougeeddPPrtLWc2ck8zxWR6BvreViq7E/nip54HQY6T68xqEydKS18+PHNVmXiaKgNKCnQ==
+fable-compiler@^2.2.0-beta-008:
+  version "2.2.0-beta-008"
+  resolved "https://registry.yarnpkg.com/fable-compiler/-/fable-compiler-2.2.0-beta-008.tgz#95fb3393bd762ac3408079b59de5d35843581572"
+  integrity sha512-esiTpVb+uo1qqtqL8pmOjhKc0IXIOUPBg02mSG/ttGZbNYfLyeuwN1+x5uvW479dKbSB6jbYxBKXxqOwKFllRQ==
 
 fable-loader@^2.1.3:
   version "2.1.3"
@@ -2564,10 +2564,10 @@ fable-splitter@^2.1.5:
     fable-babel-plugins "^2.1.0"
     fs-extra "^7.0.0"
 
-fable-standalone@^1.0.0-beta-003:
-  version "1.0.0-beta-003"
-  resolved "https://registry.yarnpkg.com/fable-standalone/-/fable-standalone-1.0.0-beta-003.tgz#f1506f407af9950e5eb2864dc5d211fee862c679"
-  integrity sha512-Kckh3NEdUYRZ+Oy6Im6++QJuoGbZVK7vywUA41t8wbkBBmYn1XPT8PSKB1HvhG/uZPOA7ISOrBNwSsGUyiUODA==
+fable-standalone@^1.0.0-beta-005:
+  version "1.0.0-beta-005"
+  resolved "https://registry.yarnpkg.com/fable-standalone/-/fable-standalone-1.0.0-beta-005.tgz#c2c820e74378c53eeeaf59117523902a8fc239bc"
+  integrity sha512-UyxS/7+f32TgVIDlT9fKOLrB3E6agDcaTWQJJBzRRUU9N8ekz1Pp2mfxXU0VqF+8Z8YVYmR3m2yIAnp+mqkyzg==
 
 fast-deep-equal@^1.0.0:
   version "1.1.0"
