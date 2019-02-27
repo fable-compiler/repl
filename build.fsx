@@ -173,9 +173,8 @@ Target "CopyModules" (fun _ ->
     !! (METADATA_OUTPUT </> "*.dll") |> Seq.iter(fun filename ->
         Rename (filename + ".txt") filename)
 
-    // Fable WebWorker
-    CopyDir (REPL_OUTPUT </> "fable-library") "node_modules/fable-standalone/dist/fable-library" (fun _ -> true)
-    CopyDir (REPL_OUTPUT </> "worker") "node_modules/fable-standalone/dist/worker" (fun _ -> true)
+    // Fable Standalone
+    CopyDir REPL_OUTPUT "node_modules/fable-standalone/dist" (fun _ -> true)
 )
 
 Target "WatchApp" (fun _ ->

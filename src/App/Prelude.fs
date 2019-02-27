@@ -19,7 +19,7 @@ module Literals =
 #endif
     let [<Literal>] SAMPLES_JSON_URL = HOST + "/samples/samples.json"
     let [<Literal>] REPL_LIB_MAP_JSON_URL = HOST + "/repl-lib-map.json"
-    let [<Literal>] WORKER_BUNDLE_URL = HOST + "/js/repl/worker/index.js"
+    let [<Literal>] WORKER_BUNDLE_URL = HOST + "/js/repl/worker.min.js"
     let [<Literal>] FABLE_LIBRARY_DIR = HOST + "/js/repl/fable-library"
     let [<Literal>] FABLE_REPL_LIB_DIR = HOST + "/js/repl/lib"
     let [<Literal>] METADATA_DIR = HOST + "/metadata"

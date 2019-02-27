@@ -454,7 +454,7 @@ let workerCmd (worker : ObservableWorker<_>)=
     [ handler ]
 
 let init () =
-    let worker = ObservableWorker(Worker() |> unbox, WorkerAnswer.Decoder, "MAIN APP")
+    let worker = ObservableWorker(Worker(), WorkerAnswer.Decoder, "MAIN APP")
     CreateChecker(Literals.METADATA_DIR, Literals.EXTRA_REFS,
                   Some ".txt", Some Literals.REPL_LIB_MAP_JSON_URL)
     |> worker.Post
