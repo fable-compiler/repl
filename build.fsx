@@ -1,11 +1,9 @@
 open System
 open System.IO
-open System.Net
 open System.Text.RegularExpressions
 
 let CWD = __SOURCE_DIRECTORY__
 let NCAVE_FCS_REPO = Path.Combine(CWD, "../FSharp.Compiler.Service_fable")
-let FABLE_REPO = Path.Combine(CWD, "../Fable")
 
 let LIBS_OUTPUT = Path.Combine(CWD, "public/libs")
 let REPL_OUTPUT = Path.Combine(CWD, "public/js/repl")
@@ -13,7 +11,6 @@ let METADATA_OUTPUT = Path.Combine(CWD, "public/metadata")
 let METADATA_SOURCE = Path.Combine(NCAVE_FCS_REPO, "temp/metadata2")
 
 let METADATA_EXPORT_DIR = Path.Combine(CWD, "src/Export")
-let APP_DIR = Path.Combine(CWD, "src/App")
 
 // include Fake libs
 #r "./packages/build/FAKE/tools/FakeLib.dll"
@@ -23,7 +20,7 @@ let APP_DIR = Path.Combine(CWD, "src/App")
 
 open Fake
 open Fake.Git
-open Fake.YarnHelper
+open Fake.NpmHelper
 open Fable.FakeHelpers
 
 let mutable dotnetExePath = "dotnet"
@@ -50,8 +47,8 @@ let runScript workingDir (fileName: string) args =
             info.Arguments <- args) TimeSpan.MaxValue
     if not ok then failwith (sprintf "'%s> %s %s' task failed" workingDir fileName args)
 
-let runYarn dir command =
-    Yarn (fun p ->
+let runNpm dir command =
+    Npm (fun p ->
             { p with
                 WorkingDirectory = dir
                 Command = Custom command
@@ -147,8 +144,8 @@ Target "Restore" (fun _ ->
     runDotnet CWD "restore Fable.REPL.sln"
 )
 
-Target "YarnInstall" (fun _ ->
-    Yarn (fun p ->
+Target "NpmInstall" (fun _ ->
+    Npm (fun p ->
             { p with
                 Command = Install Standard
             })
@@ -178,19 +175,19 @@ Target "CopyModules" (fun _ ->
 )
 
 Target "WatchApp" (fun _ ->
-    runYarn CWD "webpack-dev-server"
+    runNpm CWD "start"
 )
 
 Target "BuildApp" (fun _ ->
-    runYarn CWD "webpack"
+    runNpm CWD "run build"
 )
 
 Target "PublishGithubPages" (fun _->
-    runYarn CWD "gh-pages -d deploy"
+    runNpm CWD "run deploy"
 )
 
 Target "BuildLib" (fun _ ->
-    runYarn CWD "fable-splitter -c src/Lib/splitter.config.js"
+    runNpm CWD "run build-lib"
 
     // Ensure that all imports end with .js
     let outDir = REPL_OUTPUT </> "lib"
@@ -222,7 +219,7 @@ Target "All" DoNothing
 "Clean"
     ==> "InstallDotNetCore"
     ==> "Restore"
-    ==> "YarnInstall"
+    ==> "NpmInstall"
     ==> "CopyModules"
     ==> "BuildLib"
     ==> "BuildApp"

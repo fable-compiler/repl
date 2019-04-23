@@ -6,7 +6,12 @@
   "keywords": [],
   "author": "",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+      "build-lib": "fable-splitter -c src/Lib/splitter.config.js",
+      "build": "webpack",
+      "start": "webpack-dev-server",
+      "deploy": "gh-pages -d deploy"
+  },
   "dependencies": {
     "@babel/core": "^7.4.3",
     "@babel/plugin-proposal-class-properties": "^7.4.0",
