@@ -27,6 +27,15 @@ function parseQuery() {
     }, {});
 }
 
+// see: https://github.com/webpack-contrib/raw-loader/issues/72
+function getString(a) {
+  if ("default" in a) {
+    return a.default;
+  } else {
+    return a;
+  }
+}
+
 export function updateQuery(code, html, css) {
     var object =
         { code : lzString.compressToEncodedURIComponent(code),
@@ -42,11 +51,11 @@ export function updateQuery(code, html, css) {
 export function loadState(key) {
     return Object.assign({
         // @ts-ignore
-        code: require("!raw-loader!./../../../public/samples/elmish/simple_input.fs"),
+        code: getString(require("!raw-loader!./../../../public/samples/elmish/simple_input.fs")),
         // @ts-ignore
-        html: require("!raw-loader!./../../../public/samples/elmish/simple_input.html"),
+        html: getString(require("!raw-loader!./../../../public/samples/elmish/simple_input.html")),
         // @ts-ignore
-        css: require("!raw-loader!./../../../public/samples/elmish/simple_input.css")
+        css: getString(require("!raw-loader!./../../../public/samples/elmish/simple_input.css"))
       },
       JSON.parse(window.localStorage.getItem(key)) || {},
       parseQuery()
