@@ -1,3 +1,7 @@
+// fixup bad codepage for SharpZipLib
+#r @"packages\build\FAKE\tools\ICSharpCode.SharpZipLib.dll"
+do ICSharpCode.SharpZipLib.Zip.ZipConstants.DefaultCodePage <- 437
+
 open System
 open System.IO
 open System.Text.RegularExpressions
