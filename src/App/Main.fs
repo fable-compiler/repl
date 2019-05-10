@@ -157,9 +157,10 @@ let private postToGist =
                 "public", Encode.bool true
                 "description", Encode.string "Created with Fable REPL"
                 "files", Encode.object [
-                    "fable-repl.fs", toContent code
-                    "fable-repl.html", toContent html
-                    "fable-repl.css", toContent css
+                    yield "fable-repl.fs", toContent code
+                    yield "fable-repl.html", toContent html
+                    if (css:string).Trim() <> "" then
+                       yield "fable-repl.css", toContent css
                 ] ] |> Encode.toString 0
 
             return! fetchAs "https://api.github.com/gists" decoder
@@ -176,25 +177,25 @@ let private loadGist =
                 return! fetchAs url Decode.string []
             | Choice2Of2 content ->
                 return content }
-    let inline getDecoder extension =
-        let file = "fable-repl" + extension
+    let innerDecoder =
         Decode.object (fun get ->
-            if get.Required.At [file; "truncated"] Decode.bool then
-                get.Required.At [file; "raw_url"] Decode.string |> Choice1Of2
+            if get.Required.Field "truncated" Decode.bool then
+                get.Required.Field "raw_url" Decode.string |> Choice1Of2
             else
-                get.Required.At [file; "content"] Decode.string |> Choice2Of2)
+                get.Required.Field "content" Decode.string |> Choice2Of2)
+
     let decoder =
         Decode.object (fun get ->
-            get.Required.Field "files" (getDecoder ".fs"),
-            get.Required.Field "files" (getDecoder ".html"),
-            get.Required.Field "files" (getDecoder ".css"))
+            get.Required.At ["files";"fable-repl.fs"] innerDecoder,
+            get.Required.At ["files";"fable-repl.html"] innerDecoder,
+            get.Optional.At ["files";"fable-repl.css"] innerDecoder)
     fun gist ->
         let url = "https://api.github.com/gists/" + gist
         promise {
             let! (code,html,css) = fetchAs url decoder []
             let! code = recover code
             let! html = recover html
-            let! css = recover css
+            let! css = css |> Option.map recover |> Option.defaultValue (Promise.lift "")
             return (code, html, css) }
 
 let private parseEditorCode (worker: ObservableWorker<_>) (model: Monaco.Editor.IModel) =
