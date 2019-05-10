@@ -21,8 +21,10 @@ github fable-compiler/fable-promise:master
 github fable-compiler/fable-fetch:master
 #github alfonsogarciacaro/Fable.SimpleHttp:patch-3 src/Http.fs
 
-github elmish/elmish:master
 github fable-compiler/fable-react:master
+github fable-compiler/fable-recharts:master
+
+github elmish/elmish:master
 #github elmish/react:master
 github fulma/Fulma:master
 

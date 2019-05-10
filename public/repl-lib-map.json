@@ -18,7 +18,7 @@
     "Fable.React.Helpers": ["Fable.React", "src/Fable.React.Helpers"],
     "Fable.React.Standard": ["Fable.React.Standard", "src/Fable.React.Standard"],
     "Fable.React.FunctionComponent": ["Fable.React", "src/Fable.React.FunctionComponent"],
-    "Fable.Recharts": ["Fable.Recharts", "Fable.Recharts/Fable.Recharts"],
+    "Fable.Recharts": ["Fable.Recharts", "src/Fable.Recharts"],
 
     "Elmish.React": ["Elmish.React.Program", "Elmish.React"],
 

@@ -101,6 +101,10 @@ GITHUB
     FULLPROJECT (e96a1ba7db446d1f12360fbc451814a32dac98a1)
   remote: fable-compiler/fable-fetch
     FULLPROJECT (d5dbc4e97aafe487059f1845b5bbe3206f0aa355)
+  remote: fable-compiler/fable-react
+    FULLPROJECT (634e0409ccc0d8310e37f778ea6c6e82c67e5fc8)
+  remote: fable-compiler/fable-recharts
+    FULLPROJECT (066ef0f71a6dced545c67792b6bd04f0a7da6ee9)
   remote: elmish/elmish
     FULLPROJECT (69569e39876213e91c283c1c76bbe0fb88fba208)
       Fable.Core
@@ -112,8 +116,6 @@ GITHUB
       NUnit3TestAdapter
       SourceLink.Create.CommandLine
       Unquote
-  remote: fable-compiler/fable-react
-    FULLPROJECT (e904add886bab45003c074cd2b06b8834fddf65b)
   remote: fulma/Fulma
     FULLPROJECT (1e763d852112307370675a0cf692415a53d1993f)
       Fable.Date
