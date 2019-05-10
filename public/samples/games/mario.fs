@@ -1,8 +1,11 @@
 module Mario
 
-module Keyboard =
+open Fable.Core
+open Fable.Core.JsInterop
+open Browser.Types
+open Browser
 
-    open Fable.Import.Browser
+module Keyboard =
 
     let mutable keysPressed = Set.empty
 
@@ -61,9 +64,6 @@ module Physics =
 
 module Canvas =
 
-    open Fable.Core.JsInterop
-    open Fable.Import.Browser
-
     // Get the canvas context for drawing
     let canvas = document.getElementsByTagName("canvas").[0] :?> HTMLCanvasElement
     let context = canvas.getContext_2d()
@@ -95,7 +95,6 @@ module Canvas =
 
 open Canvas
 open Physics
-open Fable.Import.Browser
 
 let origin =
     // Sample is running in an iframe, so get the location of parent

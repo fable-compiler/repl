@@ -1,13 +1,10 @@
 // ts2fable 0.6.1
 module rec ReactDeviceDetect
 
-open System
 open Fable.Core
 open Fable.Core.JsInterop
-open Fable.Import.JS
-open Fable.Import
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 
 let [<Import("*","react-device-detect")>] exports: React_device_detect.IExports = jsNative
 
@@ -47,48 +44,48 @@ module React_device_detect =
     type Props =
         | ViewClassName of string
         | Style of CSSProp list
-        | Children of React.ReactElement
+        | Children of ReactElement
         | RenderWithFragment of bool
 
     type CustomViewProps =
         | ViewClassName of string
         | Style of CSSProp list
-        | Children of React.ReactElement
+        | Children of ReactElement
         | RenderWithFragment of bool
         | Condition of bool
 
-    let inline browserView (props: Props list) : React.ReactElement =
+    let inline browserView (props: Props list) : ReactElement =
         ofImport "BrowserView" "react-device-detect" (keyValueList CaseRules.LowerFirst props) []
 
-    let inline mobileView (props: Props list) : React.ReactElement =
+    let inline mobileView (props: Props list) : ReactElement =
         ofImport "MobileView" "react-device-detect" (keyValueList CaseRules.LowerFirst props) []
 
-    let inline androidView (props: Props list) : React.ReactElement =
+    let inline androidView (props: Props list) : ReactElement =
         ofImport "AndroidView" "react-device-detect" (keyValueList CaseRules.LowerFirst props) []
 
-    let inline iEView (props: Props list) : React.ReactElement =
+    let inline iEView (props: Props list) : ReactElement =
         ofImport "IEView" "react-device-detect" (keyValueList CaseRules.LowerFirst props) []
 
-    let inline iOSView (props: Props list) : React.ReactElement =
+    let inline iOSView (props: Props list) : ReactElement =
         ofImport "IOSView" "react-device-detect" (keyValueList CaseRules.LowerFirst props) []
 
-    let inline tabletView (props: Props list) : React.ReactElement =
+    let inline tabletView (props: Props list) : ReactElement =
         ofImport "TabletView" "react-device-detect" (keyValueList CaseRules.LowerFirst props) []
 
-    let inline winPhoneView (props: Props list) : React.ReactElement =
+    let inline winPhoneView (props: Props list) : ReactElement =
         ofImport "WinPhoneView" "react-device-detect" (keyValueList CaseRules.LowerFirst props) []
 
-    let inline mobileOnlyView (props: Props list) : React.ReactElement =
+    let inline mobileOnlyView (props: Props list) : ReactElement =
         ofImport "MobileOnlyView" "react-device-detect" (keyValueList CaseRules.LowerFirst props) []
 
-    let inline smartTVView (props: Props list) : React.ReactElement =
+    let inline smartTVView (props: Props list) : ReactElement =
         ofImport "SmartTVView" "react-device-detect" (keyValueList CaseRules.LowerFirst props) []
 
-    let inline consoleView (props: Props list) : React.ReactElement =
+    let inline consoleView (props: Props list) : ReactElement =
         ofImport "ConsoleView" "react-device-detect" (keyValueList CaseRules.LowerFirst props) []
 
-    let inline wearableView (props: Props list) : React.ReactElement =
+    let inline wearableView (props: Props list) : ReactElement =
         ofImport "WearableView" "react-device-detect" (keyValueList CaseRules.LowerFirst props) []
 
-    let inline customView (props: CustomViewProps list) : React.ReactElement =
+    let inline customView (props: CustomViewProps list) : ReactElement =
         ofImport "CustomView" "react-device-detect" (keyValueList CaseRules.LowerFirst props) []

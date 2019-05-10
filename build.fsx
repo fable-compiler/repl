@@ -1,5 +1,5 @@
 // fixup bad codepage for SharpZipLib
-#r @"packages\build\FAKE\tools\ICSharpCode.SharpZipLib.dll"
+#r @"packages/build/FAKE/tools/ICSharpCode.SharpZipLib.dll"
 do ICSharpCode.SharpZipLib.Zip.ZipConstants.DefaultCodePage <- 437
 
 open System
@@ -123,7 +123,8 @@ Target "BuildFcsExport" (fun _ ->
     |> runScript NCAVE_FCS_REPO "fcs\\build"
 )
 
-// TODO: Move this to Fable repo
+// TODO: Generate metadata for Fable.Repl.Lib as before?
+// See metadata-extra in CopyModules
 Target "GenerateMetadata" (fun _ ->
     CleanDir METADATA_OUTPUT
     CopyDir METADATA_OUTPUT METADATA_SOURCE (fun _ -> true)
@@ -164,12 +165,12 @@ Target "CopyModules" (fun _ ->
     CopyFile LIBS_OUTPUT "node_modules/react/umd/react.production.min.js"
     CopyFile LIBS_OUTPUT "node_modules/react-dom/umd/react-dom.production.min.js"
     CopyFile cssOutput "node_modules/bulma/css/bulma.min.css"
-    CopyFile cssOutput "node_modules/font-awesome/css/font-awesome.min.css"
-    CopyDir (LIBS_OUTPUT </> "fonts") "node_modules/font-awesome/fonts" (fun _ -> true)
+    CopyFile cssOutput "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
+    CopyDir (LIBS_OUTPUT </> "webfonts") "node_modules/@fortawesome/fontawesome-free/webfonts" (fun _ -> true)
 
     // Metadata
     CopyDir METADATA_OUTPUT "node_modules/fable-metadata/lib" (fun _ -> true)
-    CopyDir METADATA_OUTPUT "public/metadata-extra" (fun _ -> true)
+    // CopyDir METADATA_OUTPUT "public/metadata-extra" (fun _ -> true)
     // Change extension to .txt so Github pages compress the files when being served
     !! (METADATA_OUTPUT </> "*.dll") |> Seq.iter(fun filename ->
         Rename (filename + ".txt") filename)

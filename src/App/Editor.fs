@@ -4,8 +4,6 @@ module Fable.Repl.Editor
 
 open Fable.Core
 open Fable.Core.JsInterop
-open Fable.Import
-open Fable.PowerPack
 open Fable.Standalone
 
 //---------------------------------------------------

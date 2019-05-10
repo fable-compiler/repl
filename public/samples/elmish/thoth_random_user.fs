@@ -7,10 +7,9 @@ Small application showing how to use:
 *)
 
 open System
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
-open Fable.SimpleHttp
-open Fable.Import
+open Fable.Core
+open Fable.React
+open Fable.React.Props
 open Elmish
 open Elmish.React
 open Thoth.Json
@@ -80,15 +79,13 @@ let init () = Loading None, Cmd.ofMsg FetchRandomUser
 
 // UPDATE
 
-let private getRandomUser () = async {
+let private getRandomUser () = promise {
     // We add a delay of 300ms so the button animation is more visible
-    do! Async.Sleep 300
-    let! response =
-        Http.request "https://randomuser.me/api/"
-        |> Http.send
-    let resultDecoder =
-        Decode.field "results" (Decode.index 0 User.Decoder)
-    return Decode.fromString resultDecoder response.responseText
+    do! Promise.sleep 300
+    let! response = Fetch.fetch "https://randomuser.me/api/" []
+    let! responseText = response.text()
+    let resultDecoder = Decode.field "results" (Decode.index 0 User.Decoder)
+    return Decode.fromString resultDecoder responseText
 }
 let update (msg:Msg) (model:Model) =
     match msg with
@@ -101,7 +98,7 @@ let update (msg:Msg) (model:Model) =
                 Loading (Some user)
             | _ -> Loading None
 
-        newModel, Cmd.ofAsync getRandomUser () FetchResponse FetchError
+        newModel, Cmd.OfPromise.either getRandomUser () FetchResponse FetchError
 
     // We got a response and decoding succeded
     | FetchResponse (Ok user) ->
@@ -109,12 +106,12 @@ let update (msg:Msg) (model:Model) =
 
     // We got a response and decoding failed
     | FetchResponse (Error msg) ->
-        Browser.console.error msg
+        JS.console.error msg
         Errored, Cmd.none
 
     // An error occured, when fetching the new user
     | FetchError error ->
-        Browser.console.error error.Message
+        JS.console.error error.Message
         Errored, Cmd.none
 
 // VIEW (rendered with React)

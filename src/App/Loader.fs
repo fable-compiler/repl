@@ -1,7 +1,8 @@
 module Fable.Repl.Loader
 
-open Fable.Import
+open Fable.Core
 open Fulma
+open Browser
 open Elmish
 open Thoth.Elmish
 open Mouse
@@ -40,7 +41,7 @@ let urlUpdate (result: Option<Router.Page>) model =
 
     match result with
     | None ->
-        Browser.console.error("Error parsing url: " + Browser.window.location.href)
+        JS.console.error("Error parsing url: " + window.location.href)
         model, Cmd.batch [ cmd
                            Router.modifyUrl Router.Home ]
 
@@ -62,8 +63,8 @@ let init (result: Option<Router.Page>) =
     else
         urlUpdate result Initializing
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 
 let private view (model: Model) dispatch =
     match model with
@@ -79,7 +80,7 @@ let private view (model: Model) dispatch =
                 [ Hero.body [ ]
                     [ Container.container [ ]
                         [ img [ Src "img/fable-ionide.png"
-                                Style [ Display "block"
+                                Style [ Display DisplayOptions.Block
                                         Width "auto"
                                         Margin "auto" ] ]
                           br [ ]
@@ -91,16 +92,19 @@ let private view (model: Model) dispatch =
                             [ str "is only available on desktop" ] ] ] ] ]
 
 #if !DEBUG
-Browser.navigator.serviceWorker.register("./service-worker.js") |> ignore
+open Fable.Core.JsInterop
+
+let [<Global>] navigator: obj = jsNative
+navigator?serviceWorker?register("./service-worker.js")
 #endif
 
 open Elmish.React
 // open Elmish.HMR
-open Elmish.Browser.Navigation
-open Elmish.Browser.UrlParser
+open Elmish.Navigation
+open Elmish.UrlParser
 
 Program.mkProgram init update view
 |> Program.toNavigable (parseHash Router.pageParser) urlUpdate
 |> Toast.Program.withToast Toast.renderToastWithFulma
-|> Program.withReact "app-container"
+|> Program.withReactSynchronous "app-container"
 |> Program.run

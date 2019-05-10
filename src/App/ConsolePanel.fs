@@ -1,11 +1,12 @@
 module Fable.Repl.ConsolePanel
 
-open Fable.Import
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
 open Fable.Core.JsInterop
+open Fable.React
+open Fable.React.Props
+open Fable.FontAwesome
+open Browser.Types
+open Browser
 open Fulma
-open Fulma.FontAwesome
 
 [<RequireQualifiedAccess>]
 type Log =
@@ -21,10 +22,10 @@ type ConsolePanelState =
     { IsExpanded : bool }
 
 type ConsolePanel(props) =
-    inherit React.Component<ConsolePanelProps, ConsolePanelState>(props)
+    inherit Component<ConsolePanelProps, ConsolePanelState>(props)
     do base.setInitState({ IsExpanded = true })
 
-    let mutable consoleEnd : Browser.HTMLElement = null
+    let mutable consoleEnd : HTMLElement = null
     let mutable autoScroll = true
 
     member __.scroolToBottom() =
@@ -42,14 +43,15 @@ type ConsolePanel(props) =
     override this.componentDidMount() =
         this.scroolToBottom()
 
-    member __.ShowLog (icon : Fa.I.FontAwesomeIcons option) color content =
+    member __.ShowLog icon color content =
         let colorClass = ofColor color
 
         div [ Class ("scrollable-panel-body-row " + colorClass) ]
-            [ Icon.faIcon [ Icon.Size IsSmall
-                            Icon.CustomClass colorClass ]
-                [ if icon.IsSome then
-                    yield Fa.icon icon.Value ]
+            [ Icon.icon [ Icon.Size IsSmall
+                          Icon.CustomClass colorClass ]
+                [ match icon with
+                  | Some icon -> yield Fa.i [icon] []
+                  | None -> () ]
               span [ Class "scrollable-panel-body-row-description" ]
                 [ str content ] ]
 
@@ -58,8 +60,8 @@ type ConsolePanel(props) =
               Style [ JustifyContent "center" ] ]
             [ str "Iframe loaded" ]
 
-    member __.OnContainerScroll( ev : React.WheelEvent) =
-        let elt = ev.currentTarget :?> Browser.HTMLDivElement
+    member __.OnContainerScroll( ev : WheelEvent) =
+        let elt = ev.currentTarget :?> HTMLDivElement
         let isAtBottom = elt.scrollHeight - elt.scrollTop = elt.clientHeight
         // If autoScroll is activated
         if autoScroll && not isAtBottom then
@@ -81,14 +83,14 @@ type ConsolePanel(props) =
                 | Log.Info content ->
                     yield this.ShowLog None IColor.NoColor content
                 | Log.Warn content ->
-                    yield this.ShowLog (Some Fa.I.ExclamationTriangle) IColor.IsWarning content
+                    yield this.ShowLog (Some Fa.Solid.ExclamationTriangle) IColor.IsWarning content
                 | Log.Error content ->
-                    yield this.ShowLog (Some Fa.I.TimesCircleO) IColor.IsDanger content
+                    yield this.ShowLog (Some Fa.Regular.TimesCircle) IColor.IsDanger content
                 | Log.Separator ->
                     yield this.ShowSeparator
               yield div [ Ref (fun el ->
-                            consoleEnd <- el :?> Browser.HTMLElement
-                            Browser.window?test <- el ) ]
+                            consoleEnd <- el :?> HTMLElement
+                            window?test <- el ) ]
                 [ ] ]
 
     member this.ToggleDisplay _ev =
@@ -97,23 +99,21 @@ type ConsolePanel(props) =
     override this.render() =
         let headerIcon =
             if this.state.IsExpanded then
-                Fa.I.AngleDown
+                Fa.Solid.AngleDown
             else
-                Fa.I.AngleUp
+                Fa.Solid.AngleUp
 
         div [ Class "scrollable-panel is-console" ]
             [ div [ Class "scrollable-panel-header"
                     OnClick this.ToggleDisplay ]
                 [ div [ Class "scrollable-panel-header-icon" ]
-                    [ Icon.faIcon [ ]
-                        [ Fa.faLg
-                          Fa.icon headerIcon ] ]
+                    [ Icon.icon [ ]
+                        [ Fa.i [ headerIcon; Fa.Size Fa.FaLarge ] [] ] ]
                   div [ Class "scrollable-panel-header-title" ]
                     [ str "Console" ]
                   div [ Class "scrollable-panel-header-icon" ]
-                    [ Icon.faIcon [ ]
-                        [ Fa.faLg
-                          Fa.icon headerIcon ] ] ]
+                    [ Icon.icon [ ]
+                        [ Fa.i [ headerIcon; Fa.Size Fa.FaLarge ] [] ] ] ]
               this.body ]
 
 let inline view logs =

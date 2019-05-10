@@ -3,8 +3,6 @@ module Fable.Repl.Prelude
 open System
 open System.Collections.Generic
 open Fable.Core
-open Fable.Import
-open Thoth.Json
 
 [<RequireQualifiedAccess>]
 module Literals =
@@ -24,7 +22,12 @@ module Literals =
     let [<Literal>] FABLE_REPL_LIB_DIR = HOST + "/js/repl/lib"
     let [<Literal>] METADATA_DIR = HOST + "/metadata"
 
-    let EXTRA_REFS = [|"Fable.Import.Browser"; "Fable.Repl.Lib"|]
+    let EXTRA_REFS =
+        [|"Browser.Blob"
+          "Browser.Event"
+          "Browser.WebStorage"
+          "Browser.Dom"
+          "Fable.Repl.Lib"|]
 
 let [<Global>] private setTimeout(f: unit->unit, ms: int): unit = jsNative
 

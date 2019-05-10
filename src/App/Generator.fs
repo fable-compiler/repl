@@ -2,9 +2,13 @@
 module Fable.Repl.Generator
 
 open System.Text.RegularExpressions
+open Fable.Core
 open Fable.Core.JsInterop
-open Fable.Import.Browser
+open Browser.Types
+open Browser
 open Prelude
+
+let [<Global>] URL: obj = jsNative
 
 let defaultHtmlCode =
     """
@@ -92,14 +96,14 @@ type MimeType =
     | Css
 
 let generateBlobURL content mimeType : string =
-    let parts = new ResizeArray<obj>([| content |])
+    let parts: obj[] = [| content |]
     let options =
         jsOptions<BlobPropertyBag>(fun o ->
             o.``type`` <-
                 match mimeType with
-                | Html -> Some "text/html"
-                | JavaScript -> Some "text/javascript"
-                | Css -> Some "text/css")
+                | Html -> "text/html"
+                | JavaScript -> "text/javascript"
+                | Css -> "text/css")
     URL?createObjectURL(Blob.Create(parts, options))
 
 let private addLinkTag (cssCode : string) =

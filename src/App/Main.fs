@@ -1,19 +1,18 @@
 module Fable.Repl.Main
 
+open Fable.Core
 open Fable.Core.JsInterop
-open Fable.Import
-open Fable.PowerPack
+open Fable.FontAwesome
+open Browser.Types
+open Browser
+open Fetch.Types
 open Fulma
-open Fulma.FontAwesome
-open Fulma.Extensions
 open Elmish
 open Thoth.Elmish
 open Prelude
 open Editor
 open Mouse
 open Thoth.Json
-open Fable.PowerPack
-open Fable.PowerPack.Fetch.Fetch_types
 open Fable.WebWorker
 
 type ISavedState =
@@ -21,9 +20,9 @@ type ISavedState =
     abstract html: string
     abstract css: string
 
-let private Worker(): Browser.Worker =
+let private Worker(): Worker =
     // importDefault "worker-loader!../../../Fable/src/fable-standalone/src/Worker/Worker.fsproj"
-    Browser.Worker.Create(Literals.WORKER_BUNDLE_URL)
+    Worker.Create(Literals.WORKER_BUNDLE_URL)
 
 let private loadState(_key: string): ISavedState = importMember "./js/util.js"
 let private saveState(_key: string, _code: string, _html: string, _cssCode : string): unit = importMember "./js/util.js"
@@ -113,6 +112,23 @@ type Msg =
     | UpdateQueryFailed of exn
     | RefreshIframe
 
+// Custom error message
+let errorString (response: Response) =
+    string response.Status + " " + response.StatusText + " for URL " + response.Url
+
+let fetchAs<'T> (url: string) (decoder: Decoder<'T>) (init: RequestProperties list) =
+    promise {
+        let! response = GlobalFetch.fetch(RequestInfo.Url url, Fetch.requestProps init)
+        if not response.Ok then
+            return errorString response |> failwith
+        else
+            let! txt = response.text()
+            return
+                match Decode.fromString decoder txt with
+                | Ok res -> res
+                | Error er -> failwith er
+    }
+
 let private addLog log (model : Model) =
     { model with Logs =
                     if model.Logs.Length >= Literals.MAX_LOGS_LENGTH then
@@ -146,18 +162,18 @@ let private postToGist =
                     "fable-repl.css", toContent css
                 ] ] |> Encode.toString 0
 
-            return! Fetch.fetchAs "https://api.github.com/gists" decoder
+            return! fetchAs "https://api.github.com/gists" decoder
                 [ RequestProperties.Method HttpMethod.POST
                   RequestProperties.Body !^data
-                  Fable.PowerPack.Fetch.requestHeaders [HttpRequestHeaders.Authorization ("token " + token)]
-                  ]
+                  Fetch.requestHeaders [HttpRequestHeaders.Authorization ("token " + token)]
+                ]
     }
 let private loadGist =
     let recover choice =
         promise {
             match choice with
             | Choice1Of2 url ->
-                return! Fetch.fetchAs url Decode.string []
+                return! fetchAs url Decode.string []
             | Choice2Of2 content ->
                 return content }
     let inline getDecoder extension =
@@ -175,7 +191,7 @@ let private loadGist =
     fun gist ->
         let url = "https://api.github.com/gists/" + gist
         promise {
-            let! (code,html,css) = Fetch.fetchAs url decoder []
+            let! (code,html,css) = fetchAs url decoder []
             let! code = recover code
             let! html = recover html
             let! css = recover css
@@ -189,7 +205,7 @@ let private showGlobalErrorToast msg =
     Toast.message msg
     |> Toast.title "Failed to compile"
     |> Toast.position Toast.BottomRight
-    |> Toast.icon Fa.I.Exclamation
+    |> Toast.icon Fa.Solid.Exclamation
     |> Toast.noTimeout
     |> Toast.withCloseButton
     |> Toast.error
@@ -211,7 +227,7 @@ let update msg (model : Model) =
                 && not ReactDeviceDetect.exports.isSafari then
 
                 Toast.message "We recommend using Chrome or Safari, for best performance"
-                |> Toast.icon Fa.I.Info
+                |> Toast.icon Fa.Solid.Info
                 |> Toast.position Toast.BottomRight
                 |> Toast.timeout (System.TimeSpan.FromSeconds 5.)
                 |> Toast.dismissOnClick
@@ -233,10 +249,10 @@ let update msg (model : Model) =
         { model with IsProblemsPanelExpanded = not model.IsProblemsPanelExpanded }, Cmd.none
 
     | LoadGist gist ->
-        model, Cmd.ofPromise loadGist gist GistLoaded LoadGistError
+        model, Cmd.OfPromise.either loadGist gist GistLoaded LoadGistError
 
     | Reset ->
-        Browser.window.localStorage.removeItem(Literals.STORAGE_KEY)
+        window.localStorage.removeItem(Literals.STORAGE_KEY)
         let saved = loadState(Literals.STORAGE_KEY)
         { model with FSharpCode = saved.code
                      HtmlCode = saved.html
@@ -254,15 +270,15 @@ let update msg (model : Model) =
             Cmd.ofMsg (ShareableUrlReady ()) ]
 
     | ShareGistError exn ->
-        Browser.console.error exn
+        JS.console.error exn
         model, Toast.message "An error occured when creating the gist. Is the token valid?"
-                |> Toast.icon Fa.I.Warning
+                |> Toast.icon Fa.Solid.ExclamationTriangle
                 |> Toast.position Toast.BottomRight
                 |> Toast.warning
 
     | NoToken ->
         model, Toast.message "You need to register your GitHub API token before sharing to Gist"
-                |> Toast.icon Fa.I.Warning
+                |> Toast.icon Fa.Solid.ExclamationTriangle
                 |> Toast.position Toast.BottomRight
                 |> Toast.warning
 
@@ -292,7 +308,7 @@ let update msg (model : Model) =
                 let toastCmd =
                     Toast.message "Failed to compile"
                     |> Toast.position Toast.BottomRight
-                    |> Toast.icon Fa.I.Exclamation
+                    |> Toast.icon Fa.Solid.Exclamation
                     |> Toast.dismissOnClick
                     |> Toast.error
                 { model with State = Compiled
@@ -302,14 +318,14 @@ let update msg (model : Model) =
                 let toastCmd =
                     Toast.message "Compiled successfuly"
                     |> Toast.position Toast.BottomRight
-                    |> Toast.icon Fa.I.Check
+                    |> Toast.icon Fa.Solid.Check
                     |> Toast.dismissOnClick
                     |> Toast.success
                 { model with CodeES2015 = codeES2015
                              State = Compiled
                              FSharpErrors = mapErrorToMarker errors
                              Logs = [ ConsolePanel.Log.Separator ] },
-                Cmd.batch [ Cmd.performFunc (generateHtmlUrl model) codeES2015 SetIFrameUrl; toastCmd ]
+                Cmd.batch [ Cmd.OfFunc.perform (generateHtmlUrl model) codeES2015 SetIFrameUrl; toastCmd ]
 
         | Error msg ->
             { model with State = Compiled }, showGlobalErrorToast msg
@@ -351,10 +367,10 @@ let update msg (model : Model) =
         let splitRatio =
             position
             |> (fun p -> p.X - offset)
-            |> (fun w -> w / (Browser.window.innerWidth - offset))
+            |> (fun w -> w / (window.innerWidth - offset))
             |> clamp 0.2 0.8
         // printfn "PANELDRAG: x %f offset %f innerWidth %f splitRatio %f"
-        //     position.X offset Browser.window.innerWidth splitRatio
+        //     position.X offset window.innerWidth splitRatio
         { model with PanelSplitRatio = splitRatio }, Cmd.none
 
     | SidebarMsg msg ->
@@ -371,14 +387,14 @@ let update msg (model : Model) =
                              HtmlCode = htmlCode
                              CssCode = cssCode }, cmd
             | Sidebar.Share ->
-                model, Cmd.ofFunc updateQuery (model.FSharpCode, model.HtmlCode, model.CssCode) ShareableUrlReady UpdateQueryFailed
+                model, Cmd.OfFunc.either updateQuery (model.FSharpCode, model.HtmlCode, model.CssCode) ShareableUrlReady UpdateQueryFailed
             | Sidebar.Reset ->
                 model, Router.newUrl Router.Reset
             | Sidebar.ShareToGist ->
                 model,
                     match subModel.Options.GistToken with
                     | Some token ->
-                        Cmd.ofPromise postToGist (token, model.FSharpCode, model.HtmlCode, model.CssCode) GistUrlReady ShareGistError
+                        Cmd.OfPromise.either postToGist (token, model.FSharpCode, model.HtmlCode, model.CssCode) GistUrlReady ShareGistError
                     | None ->
                         Cmd.ofMsg NoToken
 
@@ -398,21 +414,21 @@ let update msg (model : Model) =
         model, Toast.message "Copy it from the address bar"
                 |> Toast.title "Shareable link is ready"
                 |> Toast.position Toast.BottomRight
-                |> Toast.icon Fa.I.InfoCircle
+                |> Toast.icon Fa.Solid.InfoCircle
                 |> Toast.timeout (System.TimeSpan.FromSeconds 5.)
                 |> Toast.info
 
     | LoadGistError exn ->
-        Browser.console.error exn
+        JS.console.error exn
         model, Toast.message "An error occured when loading the gist"
-                |> Toast.icon Fa.I.Warning
+                |> Toast.icon Fa.Solid.ExclamationTriangle
                 |> Toast.position Toast.BottomRight
                 |> Toast.warning
 
     | UpdateQueryFailed exn ->
-        Browser.console.error exn
+        JS.console.error exn
         model, Toast.message "An error occured when updating the URL"
-                |> Toast.icon Fa.I.Warning
+                |> Toast.icon Fa.Solid.ExclamationTriangle
                 |> Toast.position Toast.BottomRight
                 |> Toast.warning
 
@@ -420,7 +436,7 @@ let update msg (model : Model) =
         model, Cmd.ofMsg (SidebarMsg (Sidebar.UpdateStats stats))
 
     | RefreshIframe ->
-        { model with Logs = [ ConsolePanel.Log.Separator ] }, Cmd.performFunc (Generator.generateHtmlBlobUrl model.HtmlCode model.CssCode) model.CodeES2015 SetIFrameUrl
+        { model with Logs = [ ConsolePanel.Log.Separator ] }, Cmd.OfFunc.perform (Generator.generateHtmlBlobUrl model.HtmlCode model.CssCode) model.CodeES2015 SetIFrameUrl
 
     | AddConsoleLog content ->
         model
@@ -489,8 +505,8 @@ let init () =
       IsProblemsPanelExpanded = true
       Logs = [] }, cmd
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 
 let private numberToPercent number =
     string (number * 100.) + "%"
@@ -569,9 +585,9 @@ let private problemsPanel (isExpanded : bool) (errors : Monaco.Editor.IMarkerDat
 
     let headerIcon =
         if isExpanded then
-            Fa.I.AngleDown
+            Fa.Solid.AngleDown
         else
-            Fa.I.AngleUp
+            Fa.Solid.AngleUp
 
     let title =
         if errors.Length = 0 then
@@ -587,15 +603,13 @@ let private problemsPanel (isExpanded : bool) (errors : Monaco.Editor.IMarkerDat
         [ div [ Class "scrollable-panel-header"
                 OnClick (fun _ -> dispatch ToggleProblemsPanel) ]
             [ div [ Class "scrollable-panel-header-icon" ]
-                [ Icon.faIcon [ ]
-                    [ Fa.faLg
-                      Fa.icon headerIcon ] ]
+                [ Icon.icon [ ]
+                    [ Fa.i [ headerIcon; Fa.Size Fa.FaLarge ] [] ] ]
               div [ Class "scrollable-panel-header-title" ]
                 [ title ]
               div [ Class "scrollable-panel-header-icon" ]
-                [ Icon.faIcon [ ]
-                    [ Fa.faLg
-                      Fa.icon headerIcon ] ] ]
+                [ Icon.icon [ ]
+                    [ Fa.i [ headerIcon; Fa.Size Fa.FaLarge ] [] ] ] ]
 
           div [ Class ("scrollable-panel-body " + bodyDisplay) ]
             [ for error in errors do
@@ -604,8 +618,8 @@ let private problemsPanel (isExpanded : bool) (errors : Monaco.Editor.IMarkerDat
                 | Monaco.MarkerSeverity.Warning ->
                     let (icon, colorClass) =
                         match error.severity with
-                        | Monaco.MarkerSeverity.Error -> Fa.I.TimesCircle, ofColor IsDanger
-                        | Monaco.MarkerSeverity.Warning -> Fa.I.ExclamationTriangle, ofColor IsWarning
+                        | Monaco.MarkerSeverity.Error -> Fa.Solid.TimesCircle, ofColor IsDanger
+                        | Monaco.MarkerSeverity.Warning -> Fa.Solid.ExclamationTriangle, ofColor IsWarning
                         | _ -> failwith "Should not happen", ofColor NoColor
 
                     yield div [ Class ("scrollable-panel-body-row " + colorClass)
@@ -615,9 +629,9 @@ let private problemsPanel (isExpanded : bool) (errors : Monaco.Editor.IMarkerDat
                                         SetCodeTab CodeTab.FSharp |> dispatch
                                     ReactEditor.Dispatch.cursorMove "fsharp_cursor_jump" error
                                 ) ]
-                            [ Icon.faIcon [ Icon.Size IsSmall
-                                            Icon.CustomClass colorClass ]
-                                [ Fa.icon icon ]
+                            [ Icon.icon [ Icon.Size IsSmall
+                                          Icon.CustomClass colorClass ]
+                                [ Fa.i [ icon ] [] ]
                               span [ Class "scrollable-panel-body-row-description" ]
                                 [ str error.message ]
                               span [ Class "scrollable-panel-body-row-position" ]
@@ -636,7 +650,7 @@ let private registerCompileCommand dispatch (editor : Monaco.Editor.IStandaloneC
 let private editorArea model dispatch =
     div [ Class "vertical-panel"
           Style [ Width (numberToPercent model.PanelSplitRatio)
-                  Position "relative" ] ]
+                  Position PositionOptions.Relative ] ]
         [ editorTabs model.CodeTab dispatch
           // Html editor
           ReactEditor.editor [ ReactEditor.Options (htmlEditorOptions
@@ -775,10 +789,9 @@ let private outputArea model dispatch =
 let private actionArea (state : State) dispatch =
     let compileIcon =
         if state = State.Compiling then
-            [ Fa.icon Fa.I.Spinner
-              Fa.spin ]
+            [ Fa.i [ Fa.Solid.Spinner; Fa.Spin ] [] ]
         else
-            [ Fa.icon Fa.I.Play ]
+            [ Fa.i [ Fa.Solid.Play ] [] ]
 
     let expanded =
         div [ Class "actions-area" ]
@@ -786,7 +799,7 @@ let private actionArea (state : State) dispatch =
                 [ Button.button [ Button.IsOutlined
                                   Button.Disabled (state = Loading)
                                   Button.OnClick (fun _ -> dispatch (StartCompile None)) ]
-                    [ Icon.faIcon [ Icon.Size IsSmall ]
+                    [ Icon.icon [ Icon.Size IsSmall ]
                         compileIcon
                       span [ ]
                         [ str "Compile" ] ] ]
@@ -794,8 +807,8 @@ let private actionArea (state : State) dispatch =
                 [ Button.button [ Button.IsOutlined
                                   Button.Disabled (state = Loading)
                                   Button.OnClick (fun _ -> dispatch RefreshIframe) ]
-                    [ Icon.faIcon [ Icon.Size IsSmall ]
-                        [ Fa.icon Fa.I.Refresh ]
+                    [ Icon.icon [ Icon.Size IsSmall ]
+                        [ Fa.i [ Fa.Solid.SyncAlt ] [] ]
                       span [ ]
                         [ str "Refresh" ] ] ] ]
 
@@ -805,14 +818,13 @@ let private actionArea (state : State) dispatch =
                 [ Button.button [ Button.IsOutlined
                                   Button.Disabled (state = Loading)
                                   Button.OnClick (fun _ -> dispatch (StartCompile None)) ]
-                    [ Icon.faIcon [ Icon.Size IsLarge ]
-                        compileIcon ] ]
+                    [ Icon.icon [ Icon.Size IsLarge ] compileIcon ] ]
               div [ Class "action-button" ]
                 [ Button.button [ Button.IsOutlined
                                   Button.Disabled (state = Loading)
                                   Button.OnClick (fun _ -> dispatch RefreshIframe) ]
-                    [ Icon.faIcon [ Icon.Size IsLarge ]
-                        [ Fa.icon Fa.I.Refresh ] ] ] ]
+                    [ Icon.icon [ Icon.Size IsLarge ]
+                        [ Fa.i [ Fa.Solid.SyncAlt ] [] ] ] ] ]
 
     (expanded, collapsed)
 

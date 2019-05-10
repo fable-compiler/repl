@@ -1,13 +1,13 @@
 module Toast
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 open Fulma
-open Fulma.FontAwesome
+open Fable.FontAwesome
 open Thoth.Elmish
 
 let renderToastWithFulma =
-    { new Toast.IRenderer<Fa.I.FontAwesomeIcons> with
+    { new Toast.IRenderer<_> with
         member __.Toast children color =
             Notification.notification [ Notification.CustomClass color ]
                 children
@@ -27,10 +27,9 @@ let renderToastWithFulma =
         member __.Title txt =
             Heading.h5 []
                 [ str txt ]
-        member __.Icon (icon : Fa.I.FontAwesomeIcons) =
-            Icon.faIcon [ Icon.Size IsMedium ]
-                [ Fa.icon icon
-                  Fa.fa2x ]
+        member __.Icon icon =
+            Icon.icon [ Icon.Size IsMedium ]
+                [ Fa.i [ icon; Fa.Size Fa.Fa2x ] [] ]
         member __.SingleLayout title message =
             div [ ]
                 [ title; message ]

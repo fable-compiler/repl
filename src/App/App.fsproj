@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -6,8 +6,8 @@
   <ItemGroup>
     <Compile Include="..\..\node_modules\fable-Standalone\src\Interfaces.fs" />
     <Compile Include="..\..\node_modules\fable-Standalone\src\Worker\Shared.fs" />
+    <Compile Include="Libs\Monaco.fs" />
     <Compile Include="Libs/ReactDeviceDetect.fs" />
-    <Compile Include="Monaco.fs" />
     <Compile Include="Prelude.fs" />
     <Compile Include="Helpers.fs" />
     <Compile Include="Editor.fs" />

@@ -1,10 +1,9 @@
 // More info about Fulma at https://mangelmaxime.github.io/Fulma/
 module Fulma.Form
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 open Fulma
-open Fulma.FontAwesome
 
 let basic() =
     form [ ]
@@ -22,8 +21,8 @@ let basic() =
                                 Control.HasIconRight ]
                     [ Input.text [ Input.Color IsSuccess
                                    Input.DefaultValue "Maxime" ]
-                      Icon.faIcon [ Icon.Size IsSmall; Icon.IsLeft ] [ Fa.icon Fa.I.User ]
-                      Icon.faIcon [ Icon.Size IsSmall; Icon.IsRight ] [ Fa.icon Fa.I.Check ] ]
+                      Icon.icon [ Icon.Size IsSmall; Icon.IsLeft ] [ i [ Class "fas fa-user" ] [] ]
+                      Icon.icon [ Icon.Size IsSmall; Icon.IsRight ] [ i [ Class "fas fa-check" ] [] ] ]
                   Help.help [ Help.Color IsSuccess ]
                     [ str "This username is available" ] ]
            // Email field
@@ -34,8 +33,8 @@ let basic() =
                                 Control.HasIconRight ]
                     [ Input.email [ Input.Color IsDanger
                                     Input.DefaultValue "hello@" ]
-                      Icon.faIcon [ Icon.Size IsSmall; Icon.IsLeft ] [ Fa.icon Fa.I.Envelope ]
-                      Icon.faIcon [ Icon.Size IsSmall; Icon.IsRight ] [ Fa.icon Fa.I.Warning ] ]
+                      Icon.icon [ Icon.Size IsSmall; Icon.IsLeft ] [ i [ Class "fas fa-envelope" ] [] ]
+                      Icon.icon [ Icon.Size IsSmall; Icon.IsRight ] [ i [ Class "fas fa-exclamation-triangle" ] [] ] ]
                   Help.help [ Help.Color IsDanger ]
                     [ str "This email is invalid" ] ]
            // Phone field
@@ -85,7 +84,7 @@ let basic() =
                         [ File.input [ ]
                           File.cta [ ]
                             [ File.icon [ ]
-                                [ Icon.faIcon [ ] [ Fa.icon Fa.I.Upload ] ]
+                                [ Icon.icon [ ] [ i [ Class "fas fa-upload" ] [] ] ]
                               File.label [ ]
                                 [ str "Choose a file..." ] ]
                           File.name [ ]

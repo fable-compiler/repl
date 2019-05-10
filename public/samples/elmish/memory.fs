@@ -5,9 +5,9 @@ module Elmish.Memory
  You can find more info about Emish architecture and samples at https://elmish.github.io/
 *)
 
-open Fable.Import
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
+open Browser
 open Elmish
 open Elmish.React
 
@@ -35,7 +35,7 @@ let random = new System.Random()
 
 let origin =
     // Sample is running in an iframe, so get the location of parent
-    let topLocation = Browser.window.top.location
+    let topLocation = window.top.location
     topLocation.origin + topLocation.pathname
 
 let getCards() =

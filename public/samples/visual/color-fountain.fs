@@ -2,9 +2,10 @@ module Color.Fountain
 
 // Color Fountain by Erik Novales: https://github.com/enovales
 
+open Fable.Core
 open Fable.Core.JsInterop
-open Fable.Import
-open Fable.Import.Browser
+open Browser.Types
+open Browser
 
 let canvas = document.getElementsByTagName("canvas").[0] :?> HTMLCanvasElement
 canvas.width <- 1000.

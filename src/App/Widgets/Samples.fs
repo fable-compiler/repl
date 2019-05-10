@@ -1,13 +1,12 @@
 module Widgets.Samples
 
-open Thoth.Json
-open Fulma
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
-open Fulma.FontAwesome
-open Fable.Import
-open Fable.PowerPack
+open Fable.Core
+open Fable.React
+open Fable.React.Props
+open Fable.FontAwesome
 open Fable.Repl.Prelude
+open Fulma
+open Thoth.Json
 
   /////////////////////
  // Sample def DSL  //
@@ -169,10 +168,10 @@ let fetchSamples () =
     |> Promise.bind (fun res -> res.json())
 
 let fetchSamplesCmd () =
-    Cmd.ofPromise fetchSamples () FetchSamplesSuccess FetchSamplesError
+    Cmd.OfPromise.either fetchSamples () FetchSamplesSuccess FetchSamplesError
 
 let fetchCodeCmd (fsharpUrl, htmlInfo, cssInfo) =
-    Cmd.ofPromise getCodeFromUrl (fsharpUrl, htmlInfo, cssInfo) FetchCodeSuccess FetchCodeError
+    Cmd.OfPromise.either getCodeFromUrl (fsharpUrl, htmlInfo, cssInfo) FetchCodeSuccess FetchCodeError
 
 let init () =
     { MenuInfos = [] }, fetchSamplesCmd()
@@ -182,7 +181,7 @@ let update msg model =
     | FetchSamplesSuccess sampleJson ->
         match Decode.fromValue "$" decodeSampleJson sampleJson with
         | Ok infos -> { MenuInfos = infos }, Cmd.none, NoOp
-        | Error error -> Browser.console.error error; model, Cmd.none, NoOp
+        | Error error -> JS.console.error error; model, Cmd.none, NoOp
 
     | ToggleMenuState path ->
         let newMenuInfos = updateSubCategoryState path model.MenuInfos
@@ -196,7 +195,7 @@ let update msg model =
 
     | FetchSamplesError error
     | FetchCodeError error ->
-        Browser.console.error error
+        JS.console.error error
         model, Cmd.none, NoOp
 
 let inline genKey key = Props [ Key key ]
@@ -218,9 +217,8 @@ let private subMenu label currentPath isActive children dispatch =
        [ a [ Class "menu-group"
              OnClick (fun _ -> ToggleMenuState currentPath |> dispatch ) ]
            [ span [ ] [ str label ]
-             Icon.faIcon [ ]
-                [ Fa.faLg
-                  Fa.icon Fa.I.AngleDown ] ]
+             Icon.icon [ ]
+                [ Fa.i [ Fa.Solid.AngleDown; Fa.Size Fa.FaLarge ] []] ]
          ofOption children ]
 
 let rec private render (path : int list) index (sample : MenuType) dispatch =
@@ -266,8 +264,8 @@ let view model dispatch =
         (Field.div [ Field.HasAddons ]
             [ Control.div [ ]
                 [ Button.button [ Button.OnClick fetchSamplesMsg ]
-                    [ Icon.faIcon [ ]
-                        [ Fa.icon Fa.I.Refresh ] ] ]
+                    [ Icon.icon [ ]
+                        [ Fa.i [ Fa.Solid.SyncAlt ] [] ] ] ]
               Control.div [ Control.IsExpanded ]
                 [ Button.button [ Button.OnClick fetchSamplesMsg
                                   Button.IsText

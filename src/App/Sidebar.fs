@@ -82,26 +82,25 @@ let update msg model =
     | UpdateStats stats ->
         { model with Statistics = stats }, Cmd.none, NoOp
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 open Fulma
-open Fulma.FontAwesome
+open Fable.FontAwesome
 
 let private renderExpandedWidgets (states : Set<string>) dispatch (title, icon, widget, maxHeight) =
     let baseView headerIcon content =
         Card.card [ ]
             [ Card.header [ Common.Props [ OnClick (fun _ -> ToggleWidget title |> dispatch ) ] ]
                 [ Card.Header.title [ ]
-                    [ Icon.faIcon [ Icon.Props [ Style [ MarginRight ".5em" ] ] ]
-                        [ Fa.faLg
-                          Fa.icon icon ]
+                    [ Icon.icon [ Icon.Props [ Style [ MarginRight ".5em" ] ] ]
+                        [ Fa.i [ icon; Fa.Size Fa.FaLarge ] [] ]
                       str title ]
                   Card.Header.icon [ ]
-                    [ Icon.faIcon [ ] [ Fa.faLg; Fa.icon headerIcon] ] ]
+                    [ Icon.icon [ ] [ Fa.i [ headerIcon ; Fa.Size Fa.FaLarge ] [] ] ] ]
               ofOption content ]
 
     if states.Contains title then
-            baseView Fa.I.AngleDown None
+            baseView Fa.Solid.AngleDown None
         else
             let props =
                 match maxHeight with
@@ -109,7 +108,7 @@ let private renderExpandedWidgets (states : Set<string>) dispatch (title, icon, 
                     [ Props [ Style [ MaxHeight maxHeight
                                       OverflowY "auto" ] ] ]
                 | None -> [ ]
-            baseView Fa.I.AngleUp (Some (Card.content props [ widget ]))
+            baseView Fa.Solid.AngleUp (Some (Card.content props [ widget ]))
 
 
 let renderCollapsedWidgets dispatch (title, icon, widget, maxHeight) =
@@ -121,9 +120,8 @@ let renderCollapsedWidgets dispatch (title, icon, widget, maxHeight) =
         | None -> [ ]
 
     div [ Class "item" ]
-        [ Icon.faIcon [ Icon.Size IsLarge ]
-            [ Fa.faLg
-              Fa.icon icon ]
+        [ Icon.icon [ Icon.Size IsLarge ]
+            [ Fa.i [ icon; Fa.Size Fa.FaLarge ] [] ]
           Card.card [ CustomClass "item-content" ]
             [ Card.header [ Common.Props [ OnClick (fun _ -> ToggleWidget title |> dispatch ) ] ]
                 [ Card.Header.title [ ]
@@ -143,7 +141,7 @@ let private collapseButton dispatch =
         [ Card.header [ ]
             [ Card.Header.title [ ] [ str "Collapse sidebar" ]
               Card.Header.icon [ ]
-                [ Icon.faIcon [ ] [ Fa.faLg; Fa.icon Fa.I.AngleDoubleLeft] ] ] ]
+                [ Icon.icon [ ] [ Fa.i [ Fa.Solid.AngleDoubleLeft; Fa.Size Fa.FaLarge ] [] ] ] ] ]
 
 let private sidebarContainer dispatch sections =
     div [ Class "sidebar is-expanded" ]
@@ -159,17 +157,16 @@ let private expandButton dispatch =
     Card.card [ Props [ OnClick (fun _ -> dispatch ToggleState ) ] ]
         [ Card.header [ ]
             [ Card.Header.icon [ ]
-                [ Icon.faIcon [ ]
-                    [ Fa.faLg
-                      Fa.icon Fa.I.AngleDoubleRight ] ] ] ]
+                [ Icon.icon [ ]
+                    [ Fa.i [ Fa.Solid.AngleDoubleRight; Fa.Size Fa.FaLarge ] [] ] ] ] ]
 
 let view (model: Model) (actionAreaExpanded, actionAreaCollapsed) dispatch =
     let widgets =
-        [ "General", Fa.I.Th, Widgets.General.view model.Options.GistToken model.General (GeneralMsg >> dispatch), None
-          "Samples", Fa.I.Book, Widgets.Samples.view model.Samples (SamplesMsg >> dispatch), Some "500px"
-          "Options", Fa.I.Cog, Widgets.Options.view model.Options (OptionsMsg >> dispatch), None
-          "Statistics", Fa.I.ClockO, Widgets.Stats.view model.Statistics, None
-          "About", Fa.I.Info, Widgets.About.view, None ]
+        [ "General", Fa.Solid.Th, Widgets.General.view model.Options.GistToken model.General (GeneralMsg >> dispatch), None
+          "Samples", Fa.Solid.Book, Widgets.Samples.view model.Samples (SamplesMsg >> dispatch), Some "500px"
+          "Options", Fa.Solid.Cog, Widgets.Options.view model.Options (OptionsMsg >> dispatch), None
+          "Statistics", Fa.Regular.Clock, Widgets.Stats.view model.Statistics, None
+          "About", Fa.Solid.Info, Widgets.About.view, None ]
         |> List.map (renderWidgets model dispatch)
 
     if model.IsExpanded then

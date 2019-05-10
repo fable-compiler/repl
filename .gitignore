@@ -3,6 +3,7 @@ public/libs
 public/metadata
 deploy/
 temp/
+.idea
 
 # Logs
 logs

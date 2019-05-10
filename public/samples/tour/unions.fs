@@ -164,7 +164,7 @@ module PatternMatching =
         | (true, item) -> Some item
         | (false, _) -> None
 
-    let parseDateTimeOffset = parseHelper DateTimeOffset.TryParse
+    let parseDateTimeOffset: string -> _ = parseHelper DateTimeOffset.TryParse
 
     let result = parseDateTimeOffset "1970-01-01"
     match result with
@@ -172,9 +172,9 @@ module PatternMatching =
     | None -> printfn "It didn't parse!"
 
     // Define some more functions which parse with the helper function.
-    let parseInt = parseHelper Int32.TryParse
-    let parseDouble = parseHelper Double.TryParse
-    let parseTimeSpan = parseHelper TimeSpan.TryParse
+    let parseInt: string -> _  = parseHelper Int32.TryParse
+    let parseDouble: string -> _  = parseHelper Double.TryParse
+    let parseTimeSpan: string -> _  = parseHelper TimeSpan.TryParse
 
 
     // Active Patterns are another powerful construct to use with pattern matching.

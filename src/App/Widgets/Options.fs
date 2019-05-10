@@ -1,12 +1,12 @@
 module Widgets.Options
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.Core
+open Fable.React
+open Fable.React.Props
 open Fulma
-open Fulma.Extensions
+open Fulma.Extensions.Wikiki
 open Thoth.Json
-open Fable.Import
-open Fulma
+open Browser
 
 [<Literal>]
 let private MONACO_DEFAULT_FONT_FAMILY = "Menlo, Monaco, \"Courier New\", monospace"
@@ -61,7 +61,7 @@ type Msg =
 
 
 let init () =
-    match Browser.localStorage.getItem(LOCAL_STORAGE_REPL_SETTING) :?> string with
+    match localStorage.getItem(LOCAL_STORAGE_REPL_SETTING) with
     | null -> Model.Default
 
     | settings ->
@@ -70,7 +70,7 @@ let init () =
             settings
 
         | Error msg ->
-            Browser.console.log("Error while loading your settings from localStorage:\n", msg)
+            JS.console.log("Error while loading your settings from localStorage:\n", msg)
             Model.Default
 
 let saveSettings (model : Model) =
@@ -78,7 +78,7 @@ let saveSettings (model : Model) =
         Model.Encoder model
         |> Encode.toString 0
 
-    Browser.localStorage.setItem(LOCAL_STORAGE_REPL_SETTING, data)
+    localStorage.setItem(LOCAL_STORAGE_REPL_SETTING, data)
     model
 
 let update msg model =

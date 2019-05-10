@@ -2,9 +2,10 @@ module ReactEditor
 
 open Fable.Core
 open Fable.Core.JsInterop
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
-open Fable.Import
+open Fable.React
+open Fable.React.Props
+open Browser.Types
+open Browser
 
 type Props =
     /// Triggered when the value of the Editor changed
@@ -31,7 +32,7 @@ type Props =
 let inline Style (css: CSSProp seq): Props =
     !!("style", keyValueList CaseRules.LowerFirst css)
 
-let inline editor (props: Props list) : React.ReactElement =
+let inline editor (props: Props list) : ReactElement =
     ofImport "default" "./js/react-editor.js" (keyValueList CaseRules.LowerFirst props) []
 
 
@@ -39,7 +40,7 @@ module Dispatch =
 
     let cursorMove (eventId : string) (range : Monaco.Editor.IMarkerData) =
         let data =
-            jsOptions<Browser.CustomEventInit>(fun o ->
+            jsOptions<CustomEventInit>(fun o ->
                 o.detail <- createObj [
                     "eventType" ==> "cursorMove"
                     "range" ==> jsOptions<Monaco.IRange>(fun o ->
@@ -50,5 +51,5 @@ module Dispatch =
                     )
                 ] |> Some
             )
-        let event = Browser.CustomEvent.Create(eventId, data)
-        Browser.window.dispatchEvent(event) |> ignore
+        let event = CustomEvent.Create(eventId, data)
+        window.dispatchEvent(event) |> ignore

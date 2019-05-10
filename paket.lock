@@ -1,105 +1,126 @@
 STORAGE: NONE
+RESTRICTION: == netstandard2.0
 NUGET
   remote: https://www.nuget.org/api/v2
-    Fable.Core (2.0.3)
-      FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
-    Fable.Elmish (2.0.3)
-      Fable.Core (>= 2.0) - restriction: >= netstandard2.0
-      Fable.PowerPack (>= 2.0.1) - restriction: >= netstandard2.0
-      FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
-    Fable.Elmish.Browser (2.1)
-      Fable.Core (>= 2.0) - restriction: >= netstandard2.0
-      Fable.Elmish (>= 2.0) - restriction: >= netstandard2.0
-      Fable.Import.Browser (>= 1.3) - restriction: >= netstandard2.0
-      FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
-    Fable.Elmish.Debugger (2.0.2)
-      Fable.Core (>= 2.0) - restriction: >= netstandard2.0
-      Fable.Elmish (>= 2.0) - restriction: >= netstandard2.0
-      FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
-    Fable.Elmish.HMR (3.0.2)
-      Fable.Core (>= 2.0.1) - restriction: >= netstandard2.0
-      Fable.Elmish (>= 2.0.3) - restriction: >= netstandard2.0
-      Fable.Elmish.Browser (>= 2.1) - restriction: >= netstandard2.0
-      Fable.Elmish.React (>= 2.1) - restriction: >= netstandard2.0
-      Fable.Import.HMR (>= 0.1) - restriction: >= netstandard2.0
-      Fable.React (>= 4.1.3) - restriction: >= netstandard2.0
-      FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
-    Fable.Elmish.React (2.1)
-      Fable.Core (>= 2.0) - restriction: >= netstandard2.0
-      Fable.Elmish (>= 2.0) - restriction: >= netstandard2.0
-      Fable.PowerPack (>= 2.0.1) - restriction: >= netstandard2.0
-      Fable.React (>= 4.0.1) - restriction: >= netstandard2.0
-      FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
-    Fable.Import.Browser (1.3)
-      Fable.Core (>= 1.3.17) - restriction: >= netstandard1.6
-    Fable.Import.HMR (0.1) - restriction: >= netstandard2.0
-      Fable.Core (>= 1.3.17) - restriction: >= netstandard1.6
-    Fable.PowerPack (3.0)
-      Fable.Core (>= 2.0) - restriction: >= netstandard2.0
-      Fable.Import.Browser (>= 1.3) - restriction: >= netstandard2.0
-      FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
-      Thoth.Json (>= 2.0) - restriction: >= netstandard2.0
-    Fable.React (4.1.3)
-      Fable.Core (>= 2.0) - restriction: >= netstandard2.0
-      Fable.Import.Browser (>= 1.3) - restriction: >= netstandard2.0
-      FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
-    FSharp.Core (4.5.4) - restriction: >= netstandard2.0
-    Fulma (1.0)
-      Fable.Core (>= 2.0) - restriction: >= netstandard2.0
-      Fable.React (>= 4.0.1) - restriction: >= netstandard2.0
-    Fulma.Extensions (1.0)
-      Fable.Core (>= 2.0) - restriction: >= netstandard2.0
-      Fable.React (>= 4.0.1) - restriction: >= netstandard2.0
-      Fulma (>= 1.0) - restriction: >= netstandard2.0
-    Thoth.Elmish.Toast (1.0)
-      Fable.Core (>= 2.0) - restriction: >= netstandard2.0
-      Fable.Elmish (>= 2.0) - restriction: >= netstandard2.0
-      Fable.Import.HMR (>= 0.1) - restriction: >= netstandard2.0
-      Fable.PowerPack (>= 2.0.1) - restriction: >= netstandard2.0
-      Fable.React (>= 4.1.3) - restriction: >= netstandard2.0
-      FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
-    Thoth.Json (2.5)
-      Fable.Core (>= 2.0) - restriction: >= netstandard2.0
-      FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
+    Fable.Browser.Blob (1.0)
+      Fable.Core (>= 3.0)
+      FSharp.Core (>= 4.5.2)
+    Fable.Browser.Dom (1.0)
+      Fable.Browser.Blob (>= 1.0)
+      Fable.Browser.Event (>= 1.0)
+      Fable.Browser.WebStorage (>= 1.0)
+      Fable.Core (>= 3.0)
+      FSharp.Core (>= 4.5.2)
+    Fable.Browser.Event (1.0)
+      Fable.Core (>= 3.0)
+      FSharp.Core (>= 4.5.2)
+    Fable.Browser.WebStorage (1.0)
+      Fable.Browser.Event (>= 1.0)
+      Fable.Core (>= 3.0)
+      FSharp.Core (>= 4.5.2)
+    Fable.Core (3.0)
+      FSharp.Core (>= 4.5.2)
+    Fable.Date (1.0)
+      Fable.Core (>= 2.0.2)
+      FSharp.Core (>= 4.5.2)
+    Fable.Elmish (3.0)
+      Fable.Core (>= 3.0)
+      FSharp.Core (>= 4.6.2)
+    Fable.Elmish.Browser (3.0)
+      Fable.Browser.Dom (>= 1.0)
+      Fable.Core (>= 3.0)
+      Fable.Elmish (>= 3.0)
+      FSharp.Core (>= 4.6.2)
+    Fable.Elmish.HMR (4.0.1)
+      Fable.Core (>= 3.0)
+      Fable.Elmish.Browser (>= 3.0)
+      Fable.Elmish.React (>= 3.0.1)
+      FSharp.Core (>= 4.6.2)
+    Fable.Elmish.React (3.0.1)
+      Fable.Core (>= 3.0)
+      Fable.Elmish (>= 3.0)
+      Fable.React (>= 5.1)
+      FSharp.Core (>= 4.6.2)
+    Fable.Fetch (2.0)
+      Fable.Browser.Blob (>= 1.0)
+      Fable.Core (>= 3.0)
+      Fable.Promise (>= 2.0)
+      FSharp.Core (>= 4.5.2)
+    Fable.FontAwesome (2.0)
+      Fable.Core (>= 3.0)
+      Fable.React (>= 5.1)
+    Fable.FontAwesome.Free (2.0)
+      Fable.Core (>= 3.0)
+      Fable.FontAwesome (>= 2.0)
+      Fable.React (>= 5.1)
+    Fable.Promise (2.0)
+      Fable.Core (>= 3.0)
+      FSharp.Core (>= 4.5.2)
+    Fable.React (5.2.3)
+      Fable.Browser.Dom (>= 1.0)
+      Fable.Core (>= 3.0)
+      FSharp.Core (>= 4.6.2)
+    FsCheck (2.14)
+      FSharp.Core (>= 4.2.3)
+    FsCheck.NUnit (2.14)
+      FsCheck (2.14)
+      NUnit (>= 3.10.1 < 4.0)
+    FSharp.Core (4.6.2)
+    Fulma (2.1)
+      Fable.Core (>= 3.0)
+      Fable.React (>= 5.1)
+    Fulma.Extensions.Wikiki.Switch (2.0)
+      Fable.Core (>= 3.0)
+      Fable.React (>= 5.1)
+      Fulma (>= 2.0)
+    Microsoft.NET.Test.Sdk (16.1)
+    Microsoft.NETCore.Platforms (2.2)
+    NETStandard.Library (2.0.3)
+      Microsoft.NETCore.Platforms (>= 1.1)
+    NUnit (3.11)
+      NETStandard.Library (>= 2.0)
+    NUnit3TestAdapter (3.13)
+    SourceLink.Create.CommandLine (2.8.3)
+    Thoth.Elmish.Toast (2.0)
+      Fable.Core (>= 3.0)
+      Fable.Elmish (>= 3.0)
+      Fable.Promise (>= 2.0)
+      Fable.React (>= 5.1)
+      FSharp.Core (>= 4.6.2)
+    Thoth.Json (3.1)
+      Fable.Core (>= 3.0)
+      FSharp.Core (>= 4.6.2)
+    Unquote (4.0)
+      FSharp.Core (>= 4.2.3)
 GITHUB
-  remote: fable-compiler/Fable
-    src/dotnet/Fable.Repl/Interfaces.fs (f4fa98d6050155f2f87285e49646cf7c9029b3a3)
-    src/dotnet/Fable.Repl/Metadata.fs (f4fa98d6050155f2f87285e49646cf7c9029b3a3)
-  remote: fable-compiler/fable-import
-    Browser.Minimal/Fable.Import.Browser.fs (a98968492d42f5fc8133eefb3a50d7d6c8f3afad)
-  remote: alfonsogarciacaro/Thoth
-    src/Thoth.Json/Decode.fs (2d5d763a52239dae4b6a9cee5927033120c76307)
-    src/Thoth.Json/Encode.fs (2d5d763a52239dae4b6a9cee5927033120c76307)
-    src/Thoth.Json/Extra.fs (2d5d763a52239dae4b6a9cee5927033120c76307)
-    src/Thoth.Json/Types.fs (2d5d763a52239dae4b6a9cee5927033120c76307)
-  remote: fable-compiler/fable-promise
-    src/Promise.fs (356e17d54ee72d9d4f385adfd883636a7ac7be67)
-    src/PromiseImpl.fs (356e17d54ee72d9d4f385adfd883636a7ac7be67)
-  remote: alfonsogarciacaro/Fable.SimpleHttp
-    src/Http.fs (30585e612f1c4c13616498cff07a1872a333c421)
-  remote: elmish/elmish
-    src/cmd.fs (9f0b551882c043e5cc69563e8082386b342dadbc)
-    src/prelude.fs (9f0b551882c043e5cc69563e8082386b342dadbc)
-    src/program.fs (9f0b551882c043e5cc69563e8082386b342dadbc)
-    src/ring.fs (9f0b551882c043e5cc69563e8082386b342dadbc)
-  remote: fable-compiler/fable-react
-    src/Fable.React/Fable.Helpers.React.fs (e07a6565bfeca60a8c3eb1322d1762b0509466e5)
-    src/Fable.React/Fable.Import.React.fs (e07a6565bfeca60a8c3eb1322d1762b0509466e5)
-    src/Fable.Recharts/Fable.Recharts.fs (e07a6565bfeca60a8c3eb1322d1762b0509466e5)
-  remote: elmish/react
-    src/common.fs (9cd6b7084fba255a56b2382cf0b49df420bba8bf)
-    src/react.fs (9cd6b7084fba255a56b2382cf0b49df420bba8bf)
-  remote: MangelMaxime/Fulma
-    FULLPROJECT (f4b330891715f94e9b735cd0ed2f01b7bb13d73d)
+  remote: thoth-org/Thoth.Json
+    FULLPROJECT (647d6f82da84bca2b0659e924e951cd09cba6cc9)
       Fable.Core
-      Fable.Elmish
+      FSharp.Core
+  remote: fable-compiler/fable-promise
+    FULLPROJECT (e96a1ba7db446d1f12360fbc451814a32dac98a1)
+  remote: fable-compiler/fable-fetch
+    FULLPROJECT (d5dbc4e97aafe487059f1845b5bbe3206f0aa355)
+  remote: elmish/elmish
+    FULLPROJECT (69569e39876213e91c283c1c76bbe0fb88fba208)
+      Fable.Core
+      FsCheck
+      FsCheck.NUnit
+      FSharp.Core
+      Microsoft.NET.Test.Sdk
+      nunit
+      NUnit3TestAdapter
+      SourceLink.Create.CommandLine
+      Unquote
+  remote: fable-compiler/fable-react
+    FULLPROJECT (e904add886bab45003c074cd2b06b8834fddf65b)
+  remote: fulma/Fulma
+    FULLPROJECT (1e763d852112307370675a0cf692415a53d1993f)
+      Fable.Date
       Fable.Elmish.Browser
-      Fable.Elmish.Debugger
-      Fable.Elmish.HMR
       Fable.Elmish.React
-      Fable.PowerPack
-      Fable.React
-      Thoth.Elmish.Toast
+      Fable.Fetch
+      Fable.Promise
 GROUP Build
 RESTRICTION: == net46
 NUGET

@@ -1,6 +1,8 @@
 module Fable.Repl.Mouse
 
-open Fable.Import.Browser
+open Fable.Core.JsInterop
+open Browser
+open Browser.Types
 open Thoth.Json
 
 type Position =
@@ -12,13 +14,14 @@ module Cmd =
 
     let ups messageCtor =
         let handler dispatch =
-            window.addEventListener_mouseup(fun _ ->
+            window.addEventListener("mouseup", fun _ ->
                 dispatch messageCtor)
         [ handler ]
 
     let move messageCtor =
         let handler dispatch =
-            window.addEventListener_mousemove(fun ev ->
+            window.addEventListener("mousemove", fun ev ->
+                let ev = ev :?> MouseEvent
                 { X = ev.pageX
                   Y = ev.pageY }
                 |> messageCtor
@@ -34,7 +37,7 @@ module Cmd =
 
     let iframeMessage (args : IframeMessageArgs<'Msg>) =
         let handler dispatch =
-            window.addEventListener_message(fun ev ->
+            window.addEventListener("message", fun ev ->
                 let iframeMessageDecoder =
                     Decode.field "type" Decode.string
                     |> Decode.option
@@ -61,7 +64,7 @@ module Cmd =
                             sprintf "`%A` is not a known value for an iframe message" x
                             |> Decode.fail
                     )
-                Decode.fromValue "$" iframeMessageDecoder ev.data
+                Decode.fromValue "$" iframeMessageDecoder ev?data
                 |> function
                     | Ok msg -> dispatch msg
                     | Error error -> console.warn error

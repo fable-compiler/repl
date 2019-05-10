@@ -1,9 +1,8 @@
 module Widgets.General
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
 open Fulma
-open Fulma.FontAwesome
+open Fable.FontAwesome
 
 type ResetState =
     | Default
@@ -53,8 +52,8 @@ let view gistToken (model: Model) dispatch =
                 [ yield Field.div [ Field.HasAddons ]
                     [ Control.div [ ]
                         [ Button.button [ Button.OnClick (fun _ -> dispatch AskReset) ]
-                            [ Icon.faIcon [ ]
-                                [ Fa.icon Fa.I.Refresh ] ] ]
+                            [ Icon.icon [ ]
+                                [ Fa.i [ Fa.Solid.SyncAlt ] [] ] ] ]
                       Control.div [ Control.IsExpanded ]
                         [ Button.button [ Button.OnClick (fun _ -> dispatch AskReset)
                                           Button.IsText
@@ -64,8 +63,8 @@ let view gistToken (model: Model) dispatch =
                   yield Field.div [ Field.HasAddons ]
                     [ Control.div [ ]
                         [ Button.button [ Button.OnClick (fun _ -> dispatch Msg.Share) ]
-                            [ Icon.faIcon [ ]
-                                [ Fa.icon Fa.I.Share ] ] ]
+                            [ Icon.icon [ ]
+                                [ Fa.i [ Fa.Solid.Share ] [] ] ] ]
                       Control.div [ Control.IsExpanded ]
                         [ Button.button [ Button.OnClick (fun _ -> dispatch Msg.Share)
                                           Button.IsText
@@ -77,8 +76,8 @@ let view gistToken (model: Model) dispatch =
                     yield Field.div [ Field.HasAddons ]
                         [ Control.div [ ]
                             [ Button.button [ Button.OnClick (fun _ -> dispatch Msg.ShareToGist) ]
-                                [ Icon.faIcon [ ]
-                                    [ Fa.icon Fa.I.Github ] ] ]
+                                [ Icon.icon [ ]
+                                    [ Fa.i [ Fa.Brand.Github ] [] ] ] ]
                           Control.div [ Control.IsExpanded ]
                             [ Button.button [ Button.OnClick (fun _ -> dispatch Msg.ShareToGist)
                                               Button.IsText
@@ -95,15 +94,15 @@ let view gistToken (model: Model) dispatch =
                       Control.p [ ]
                         [ Button.button [ Button.OnClick (fun _ -> dispatch ConfirmReset)
                                           Button.Color IsSuccess ]
-                            [ Icon.faIcon [ ]
-                                [ Fa.icon Fa.I.Check ]
+                            [ Icon.icon [ ]
+                                [ Fa.i [ Fa.Solid.Check ] [] ]
                               Text.span [ ]
                                 [ str "Confirm" ] ] ]
                       Control.p [ ]
                         [ Button.button [ Button.OnClick (fun _ -> dispatch CancelReset)
                                           Button.Color IsDanger ]
-                            [ Icon.faIcon [ ]
-                                [ Fa.icon Fa.I.Times ]
+                            [ Icon.icon [ ]
+                                [ Fa.i [ Fa.Solid.Times ] [] ]
                               Text.span [ ]
                                 [ str "Cancel" ] ] ] ] ]
 

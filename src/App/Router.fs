@@ -1,9 +1,9 @@
 module Router
 
-open Fable.Import
-open Fable.Helpers.React.Props
-open Elmish.Browser.Navigation
-open Elmish.Browser.UrlParser
+open Fable.React.Props
+open Elmish.Navigation
+open Elmish.UrlParser
+open Browser
 
 let inline (</>) a b = a + "/" + string b
 
@@ -38,4 +38,4 @@ let newUrl route =
     route |> toHash |> Navigation.newUrl
 
 let modifyLocation route =
-    Browser.window.location.href <- toHash route
+    window.location.href <- toHash route

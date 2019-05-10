@@ -1,13 +1,16 @@
 @import './_variables';
 @import '~bulma/bulma';
 @import './monaco-editor-hover-content.sass';
-@import '../../node_modules/bulma-switch/dist/css/bulma-switch.sass';
+@import '~bulma-switch/dist/css/bulma-switch.sass';
 @import './menu-group';
 @import './toast.scss';
 @import './scrollable-panel.scss';
 
-$fa-font-path: "~font-awesome/fonts/";
-@import '~font-awesome/scss/font-awesome';
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts/";
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+@import '~@fortawesome/fontawesome-free/scss/brands';
 @import './fira_code.scss';
 
 $tabs-header-height: 42px;

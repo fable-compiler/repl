@@ -1,10 +1,9 @@
 module Widgets.Stats
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 open Fable.Core.JsInterop
 open Fulma
-open Fable.Repl.Prelude
 open Fable.WebWorker
 
 type Model = CompileStats
@@ -16,7 +15,7 @@ let private row (label : string) (value : float)=
           td [ ]
             [ Text.span [ Modifiers [ Modifier.TextColor IsSuccess
                                       Modifier.TextAlignment (Screen.All, TextAlignment.Right) ]
-                          Props [ Style [ Display "block" ] ] ]
+                          Props [ Style [ Display DisplayOptions.Block ] ] ]
                 [ str value?toLocaleString$() ] ] ]
 
 let view (model : Model) =
