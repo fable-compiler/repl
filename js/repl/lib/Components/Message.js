@@ -1,74 +1,59 @@
-import { List, Record, declare, Union } from "../fable-library.2.2.0-beta-010/Types.js";
-import { record, option, union, string, list as list$$1, type } from "../fable-library.2.2.0-beta-010/Reflection.js";
-import { Common$$$genericParse as Common$0024$0024$0024genericParse, Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Size$$$ofSize as Size$0024$0024$0024ofSize, Color$$$ofColor as Color$0024$0024$0024ofColor, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection, Color$002EIColor$reflection as Color$0024002EIColor$0024reflection } from "../Fulma/Common.js";
-import { fold } from "../fable-library.2.2.0-beta-010/List.js";
-import { createObj } from "../fable-library.2.2.0-beta-010/Util.js";
-const createElement = React.createElement;
+import { declare, Union } from "../fable-library.2.3.7/Types.js";
+import { Common$$$parseOptions as Common$0024$0024$0024parseOptions, Common$002EGenericOptions$$$Parse$$9AE2F7C as Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C, Common$002EGenericOptions$$ToReactElement$$Z6D3CD4B7 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7, Color$$$ofColor as Color$0024$0024$0024ofColor, Common$002EGenericOptions$$AddModifiers$$5BB435D5 as Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5, Common$002EGenericOptions$$AddProps$$416C4D0B as Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B, Common$002EGenericOptions$$AddClass$$Z721C83C5 as Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5, Reflection$$$getCaseName as Reflection$0024$0024$0024getCaseName, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection, Color$002EIColor$reflection as Color$0024002EIColor$0024reflection } from "../Fulma/Common.js";
+import { union, string, list, type } from "../fable-library.2.3.7/Reflection.js";
+import { createObj } from "../fable-library.2.3.7/Util.js";
 export const Option = declare(function Fulma_Message_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
 export function Option$reflection() {
-  return union("Fulma.Message.Option", [], Option, () => [["Props", [list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))]], ["Color", [Color$0024002EIColor$0024reflection()]], ["Size", [Size$0024002EISize$0024reflection()]], ["CustomClass", [string]], ["Modifiers", [list$$1(Modifier$0024002EIModifier$0024reflection())]]]);
-}
-export const Options = declare(function Fulma_Message_Options(arg1, arg2, arg3, arg4, arg5) {
-  this.Props = arg1;
-  this.Color = arg2;
-  this.Size = arg3;
-  this.CustomClass = arg4;
-  this.Modifiers = arg5;
-}, Record);
-export function Options$reflection() {
-  return record("Fulma.Message.Options", [], Options, () => [["Props", list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))], ["Color", option(string)], ["Size", option(string)], ["CustomClass", option(string)], ["Modifiers", list$$1(option(string))]]);
-}
-export function Options$$$get_Empty() {
-  return new Options(new List(), null, null, null, new List());
+  return union("Fulma.Message.Option", [], Option, () => [["Color", [Color$0024002EIColor$0024reflection()]], ["Size", [Size$0024002EISize$0024reflection()]], ["Props", [list(type("Fable.React.Props.IHTMLProp"))]], ["CustomClass", [string]], ["Modifiers", [list(Modifier$0024002EIModifier$0024reflection())]]]);
 }
 export function message(options, children) {
-  const parseOptions = function parseOptions(result, opt) {
-    switch (opt.tag) {
+  const parseOptions = function parseOptions(result, option) {
+    switch (option.tag) {
       case 1:
         {
-          const color = opt.fields[0];
-          return new Options(result.Props, Color$0024$0024$0024ofColor(color), result.Size, result.CustomClass, result.Modifiers);
-        }
-
-      case 3:
-        {
-          const customClass = opt.fields[0];
-          return new Options(result.Props, result.Color, result.Size, customClass, result.Modifiers);
+          const size = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, Reflection$0024$0024$0024getCaseName(size));
         }
 
       case 2:
         {
-          const size = opt.fields[0];
-          return new Options(result.Props, result.Color, Size$0024$0024$0024ofSize(size), result.CustomClass, result.Modifiers);
+          const props = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B(result, props);
+        }
+
+      case 3:
+        {
+          const customClass = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, customClass);
         }
 
       case 4:
         {
-          const modifiers = opt.fields[0];
-          return new Options(result.Props, result.Color, result.Size, result.CustomClass, Modifier$0024$0024$0024parseModifiers(modifiers));
+          const modifiers = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5(result, modifiers);
         }
 
       default:
         {
-          const props = opt.fields[0];
-          return new Options(props, result.Color, result.Size, result.CustomClass, result.Modifiers);
+          const color = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, Color$0024$0024$0024ofColor(color));
         }
     }
   };
 
-  const opts = fold(parseOptions, Options$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("message", new List(opts.Color, new List(opts.CustomClass, new List(opts.Size, opts.Modifiers))), new List());
-  return createElement("article", createObj(new List(classes, opts.Props), 1), ...children);
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options, parseOptions, "message"), function (props$$1, children$$1) {
+    return React.createElement("article", createObj(props$$1, 1), ...children$$1);
+  }, children);
 }
-export function header(options$$2, children$$3) {
-  const opts$$1 = Common$0024$0024$0024genericParse(options$$2);
-  const classes$$1 = Common$0024002EHelpers$0024$0024$0024classes("message-header", new List(opts$$1.CustomClass, opts$$1.Modifiers), new List());
-  return createElement("div", createObj(new List(classes$$1, opts$$1.Props), 1), ...children$$3);
+export function header(options$$1, children$$4) {
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$1, Common$0024$0024$0024parseOptions, "message-header"), function (props$$4, children$$5) {
+    return React.createElement("div", createObj(props$$4, 1), ...children$$5);
+  }, children$$4);
 }
-export function body(options$$3, children$$6) {
-  const opts$$2 = Common$0024$0024$0024genericParse(options$$3);
-  const classes$$2 = Common$0024002EHelpers$0024$0024$0024classes("message-body", new List(opts$$2.CustomClass, opts$$2.Modifiers), new List());
-  return createElement("div", createObj(new List(classes$$2, opts$$2.Props), 1), ...children$$6);
+export function body(options$$2, children$$8) {
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$2, Common$0024$0024$0024parseOptions, "message-body"), function (props$$7, children$$9) {
+    return React.createElement("div", createObj(props$$7, 1), ...children$$9);
+  }, children$$8);
 }

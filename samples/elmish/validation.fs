@@ -4,11 +4,11 @@ module Elmish.Validation
 
 open System
 open Fable.Core
+open Browser.Types
 open Elmish
 open Elmish.React
-open Fable.Import
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 
 type LoginResult =
     | Success of token:string
@@ -55,9 +55,9 @@ module Http =
             | PasswordIncorrect -> LoginFailed "The password you entered is incorrect"
             | LoginError error -> LoginFailed error
 
-        Cmd.ofAsync loginAsync info
-                      successHandler
-                      (fun ex -> LoginFailed "Unknown error occured while logging you in")
+        Cmd.OfAsync.either loginAsync info
+            successHandler
+            (fun ex -> LoginFailed "Unknown error occured while logging you in")
 
 
 let init() =
@@ -149,17 +149,17 @@ let textInput inputLabel initial inputType (onChange: string -> unit) =
               DefaultValue initial
               Placeholder inputLabel
               OnChange (fun e ->
-                let el = e.target :?> Browser.HTMLInputElement
+                let el = e.target :?> HTMLInputElement
                 onChange el.value) ] ]
 
 let loginFormStyle =
   Style [ Width "400px"
           MarginTop "70px"
-          TextAlign "center" ]
+          TextAlign TextAlignOptions.Center ]
 
 let cardBlockStyle =
   Style [ Padding "30px"
-          TextAlign "left"
+          TextAlign TextAlignOptions.Left
           BorderRadius 10 ]
 
 let errorMessagesIfAny triedLogin = function
@@ -178,7 +178,7 @@ let appIcon =
 let render (state: State) dispatch =
 
     let loginBtnContent =
-      if state.LoggingIn then i [ Class "fa fa-circle-o-notch fa-spin" ] []
+      if state.LoggingIn then i [ Class "fas fa-circle-notch fa-spin" ] []
       else str "Login"
 
     let validationRules =
@@ -198,7 +198,7 @@ let render (state: State) dispatch =
          [ div
              [ Class "card-block"; cardBlockStyle ]
              [ div
-                [ Style [ TextAlign "center" ] ]
+                [ Style [ TextAlign TextAlignOptions.Center ] ]
                 [ appIcon ]
                br []
                textInput "Username" state.InputUsername Text (ChangeUsername >> dispatch)
@@ -206,7 +206,7 @@ let render (state: State) dispatch =
                textInput "Password" state.InputPassword Password (ChangePassword >> dispatch)
                ofOption (errorMessagesIfAny state.HasTriedToLogin state.PasswordValidationErrors)
                div
-                [ Style [ TextAlign "center" ] ]
+                [ Style [ TextAlign TextAlignOptions.Center ] ]
                 [ button
                     [ Class btnClass
                       OnClick (fun e -> dispatch Login) ]

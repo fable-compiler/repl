@@ -233,6 +233,10 @@ export function parse(str, detectUTC = false) {
 }
 export function tryParse(v) {
     try {
+        // if value is null or whitespace, parsing fails
+        if (v === null || v.trim() === "") {
+            return [false, minValue()];
+        }
         return [true, parse(v)];
     }
     catch (_err) {

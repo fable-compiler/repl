@@ -2,7 +2,8 @@ module BasicCanvas
 
 open Fable.Core
 open Fable.Core.JsInterop
-open Fable.Import.Browser
+open Browser.Types
+open Browser
 
 let init() =
     let canvas = document.querySelector(".view") :?> HTMLCanvasElement

@@ -1,72 +1,50 @@
-import { List, Record, declare, Union } from "../fable-library.2.2.0-beta-010/Types.js";
-import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Size$$$ofSize as Size$0024$0024$0024ofSize, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection } from "../Fulma/Common.js";
-import { record, option, union, lambda, unit, string, list as list$$1, type } from "../fable-library.2.2.0-beta-010/Reflection.js";
-import { ofSeq, fold } from "../fable-library.2.2.0-beta-010/List.js";
-import { append, delay, empty, singleton } from "../fable-library.2.2.0-beta-010/Seq.js";
-import { Props$002EDOMAttr as Props$0024002EDOMAttr } from "../Fable.React/Fable.Helpers.React.js";
-import { createObj } from "../fable-library.2.2.0-beta-010/Util.js";
-const createElement = React.createElement;
+import { declare, Union } from "../fable-library.2.3.7/Types.js";
+import { Common$002EGenericOptions$$$Parse$$9AE2F7C as Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C, Common$002EGenericOptions$$ToReactElement$$Z6D3CD4B7 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7, Reflection$$$getCaseName as Reflection$0024$0024$0024getCaseName, Common$002EGenericOptions$$AddModifiers$$5BB435D5 as Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5, Common$002EGenericOptions$$AddClass$$Z721C83C5 as Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5, Common$002EGenericOptions$$AddProps$$416C4D0B as Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B, Common$002EGenericOptions$$AddProp$$7BFEDA81 as Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection } from "../Fulma/Common.js";
+import { union, lambda, unit, string, list, type } from "../fable-library.2.3.7/Reflection.js";
+import { DOMAttr } from "../src/Fable.React.Props.js";
+import { createObj } from "../fable-library.2.3.7/Util.js";
 export const Option = declare(function Fulma_Delete_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
 export function Option$reflection() {
-  return union("Fulma.Delete.Option", [], Option, () => [["Size", [Size$0024002EISize$0024reflection()]], ["Props", [list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))]], ["CustomClass", [string]], ["OnClick", [lambda(type("Fable.Import.React.MouseEvent"), unit)]], ["Modifiers", [list$$1(Modifier$0024002EIModifier$0024reflection())]]]);
-}
-export const Options = declare(function Fulma_Delete_Options(arg1, arg2, arg3, arg4, arg5) {
-  this.Size = arg1;
-  this.Props = arg2;
-  this.CustomClass = arg3;
-  this.OnClick = arg4;
-  this.Modifiers = arg5;
-}, Record);
-export function Options$reflection() {
-  return record("Fulma.Delete.Options", [], Options, () => [["Size", option(string)], ["Props", list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))], ["CustomClass", option(string)], ["OnClick", option(lambda(type("Fable.Import.React.MouseEvent"), unit))], ["Modifiers", list$$1(option(string))]]);
-}
-export function Options$$$get_Empty() {
-  return new Options(null, new List(), null, null, new List());
+  return union("Fulma.Delete.Option", [], Option, () => [["Size", [Size$0024002EISize$0024reflection()]], ["Props", [list(type("Fable.React.Props.IHTMLProp"))]], ["CustomClass", [string]], ["OnClick", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["Modifiers", [list(Modifier$0024002EIModifier$0024reflection())]]]);
 }
 export function delete$(options, children) {
-  const parseOption = function parseOption(result, opt) {
-    switch (opt.tag) {
+  const parseOptions = function parseOptions(result, option) {
+    switch (option.tag) {
+      case 3:
+        {
+          const cb = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, new DOMAttr(40, "OnClick", cb));
+        }
+
       case 1:
         {
-          const props = opt.fields[0];
-          return new Options(result.Size, props, result.CustomClass, result.OnClick, result.Modifiers);
+          const props = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B(result, props);
         }
 
       case 2:
         {
-          const customClass = opt.fields[0];
-          return new Options(result.Size, result.Props, customClass, result.OnClick, result.Modifiers);
-        }
-
-      case 3:
-        {
-          const cb = opt.fields[0];
-          return new Options(result.Size, result.Props, result.CustomClass, cb, result.Modifiers);
+          const customClass = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, customClass);
         }
 
       case 4:
         {
-          const modifiers = opt.fields[0];
-          return new Options(result.Size, result.Props, result.CustomClass, result.OnClick, Modifier$0024$0024$0024parseModifiers(modifiers));
+          const modifiers = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5(result, modifiers);
         }
 
       default:
         {
-          const size = opt.fields[0];
-          return new Options(Size$0024$0024$0024ofSize(size), result.Props, result.CustomClass, result.OnClick, result.Modifiers);
+          const size = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, Reflection$0024$0024$0024getCaseName(size));
         }
     }
   };
 
-  const opts = fold(parseOption, Options$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("delete", new List(opts.Size, new List(opts.CustomClass, opts.Modifiers)), new List());
-  return createElement("a", createObj(ofSeq(delay(function () {
-    return append(singleton(classes), delay(function () {
-      return append(opts.Props, delay(function () {
-        return opts.OnClick != null ? singleton(new Props$0024002EDOMAttr(40, "OnClick", opts.OnClick)) : empty();
-      }));
-    }));
-  })), 1), ...children);
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options, parseOptions, "delete"), function (props$$1, children$$1) {
+    return React.createElement("a", createObj(props$$1, 1), ...children$$1);
+  }, children);
 }

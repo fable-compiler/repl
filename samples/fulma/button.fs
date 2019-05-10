@@ -1,10 +1,9 @@
 // More info about Fulma at https://mangelmaxime.github.io/Fulma/
 module Fulma.Button
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 open Fulma
-open Fulma.FontAwesome
 
 let colorInteractive () =
     Columns.columns [ ]
@@ -75,9 +74,9 @@ let disabled () =
 
 let icons () =
     div [ Class "block" ]
-        [ Button.button [ ] [ Icon.faIcon [ ] [ Fa.icon Fa.I.Bold ] ]
-          Button.button [ ] [ Icon.faIcon [ ] [ Fa.icon Fa.I.Italic ] ]
-          Button.button [ ] [ Icon.faIcon [ ] [ Fa.icon Fa.I.Underline ] ]
+        [ Button.button [ ] [ Icon.icon [ ] [ i [ Class "fas fa-bold" ] [] ] ]
+          Button.button [ ] [ Icon.icon [ ] [ i [ Class "fas fa-italic" ] [] ] ]
+          Button.button [ ] [ Icon.icon [ ] [ i [ Class "fas fa-underline" ] [] ] ]
           Button.button [ Button.Color IsDanger
                           Button.IsOutlined ] [ str "Danger" ] ]
 

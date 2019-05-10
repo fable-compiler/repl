@@ -1,9 +1,9 @@
-import { declare, Union } from "../fable-library.2.2.0-beta-010/Types.js";
-import { type, union, int32, array } from "../fable-library.2.2.0-beta-010/Reflection.js";
-import { max, comparePrimitives } from "../fable-library.2.2.0-beta-010/Util.js";
-import { ofSeq, fill } from "../fable-library.2.2.0-beta-010/Array.js";
-import { some } from "../fable-library.2.2.0-beta-010/Option.js";
-import { append, delay, collect, rangeNumber, singleton, take, skip } from "../fable-library.2.2.0-beta-010/Seq.js";
+import { declare, Union } from "../fable-library.2.3.7/Types.js";
+import { type, union, int32, array } from "../fable-library.2.3.7/Reflection.js";
+import { max, comparePrimitives } from "../fable-library.2.3.7/Util.js";
+import { ofSeq, fill } from "../fable-library.2.3.7/Array.js";
+import { some } from "../fable-library.2.3.7/Option.js";
+import { append, delay, collect, rangeNumber, singleton, take, skip } from "../fable-library.2.3.7/Seq.js";
 export const RingState$00601 = declare(function Elmish_RingState(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
@@ -18,7 +18,7 @@ export function RingBuffer$00601$reflection($gen$$5) {
   return type("Elmish.RingBuffer`1", [$gen$$5]);
 }
 export function RingBuffer$00601$$$$002Ector$$Z524259A4(size) {
-  return this != null ? RingBuffer$00601.call(this, size) : new RingBuffer$00601(size);
+  return this instanceof RingBuffer$00601 ? RingBuffer$00601.call(this, size) : new RingBuffer$00601(size);
 }
 export function RingBuffer$00601$$Pop(__) {
   const matchValue = __.state;
@@ -49,8 +49,9 @@ export function RingBuffer$00601$$Push$$2B595(__$$1, item) {
     const items$$2 = matchValue$$2.fields[0];
     items$$2[wix$$2] = item;
     const wix$0027 = (wix$$2 + 1) % items$$2.length | 0;
+    const matchValue$$3 = wix$0027 === rix$$1;
 
-    if (wix$0027 === rix$$1) {
+    if (matchValue$$3) {
       const items$$4 = RingBuffer$00601$$doubleSize(__$$1, rix$$1, items$$2);
       __$$1.state = new RingState$00601(1, "ReadWritable", items$$4, wix$0027, 0);
     } else {

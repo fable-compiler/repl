@@ -19,7 +19,7 @@ var P = {
  * The maximum number of decimal places (DP) of the results of operations involving division:
  * div and sqrt, and pow with negative exponents.
  */
-var DP = 20, // 0 to MAX_DP
+var DP = 28, // 0 to MAX_DP
 /*
  * The rounding mode (RM) used when rounding to the above decimal places.
  *
@@ -38,14 +38,14 @@ MAX_POWER = 1E6, // 1 to 1000000
  * (JavaScript numbers: -7)
  * -1000000 is the minimum recommended exponent value of a Big.
  */
-NE = -7, // 0 to -1000000
+NE = -29, // 0 to -1000000
 /*
  * The positive exponent (PE) at and above which toString returns exponential notation.
  * (JavaScript numbers: 21)
  * 1000000 is the maximum recommended exponent value of a Big.
  * (This limit is not enforced or checked.)
  */
-PE = 21, // 0 to 1000000
+PE = 29, // 0 to 1000000
 /**************************************************************************************************/
 // Error messages.
 NAME = '[big.js] ', INVALID = NAME + 'Invalid ', INVALID_DP = INVALID + 'decimal places', INVALID_RM = INVALID + 'rounding mode', DIV_BY_ZERO = NAME + 'Division by zero', UNDEFINED = void 0, NUMERIC = /^-?(\d+(\.\d*)?|\.\d+)(e[+-]?\d+)?$/i;
@@ -70,6 +70,7 @@ function _Big_() {
             x.s = n.s;
             x.e = n.e;
             x.c = n.c.slice();
+            normalize(x);
         }
         else {
             parse(x, n);
@@ -87,6 +88,14 @@ function _Big_() {
     Big.PE = PE;
     Big.version = '5.2.2';
     return Big;
+}
+function normalize(x) {
+    x = round(x, DP, 0);
+    if (x.c.length > 1 && !x.c[0]) {
+        let i = x.c.findIndex(x => x);
+        x.c = x.c.slice(i);
+        x.e = x.e - i;
+    }
 }
 /*
  * Parse the number or string value passed to a Big constructor.
@@ -119,23 +128,29 @@ function parse(x, n) {
         e = n.length;
     }
     nl = n.length;
-    // Determine leading zeros.
-    for (i = 0; i < nl && n.charAt(i) == '0';)
+    // Determine leading zeros before decimal point.
+    for (i = 0; i < e && i < nl && n.charAt(i) == '0';)
         ++i;
+    // older version (ignores decimal point).
+    // // Determine leading zeros.
+    // for (i = 0; i < nl && n.charAt(i) == '0';) ++i;
     if (i == nl) {
         // Zero.
         x.c = [x.e = 0];
     }
     else {
-        // Determine trailing zeros.
-        for (; nl > 0 && n.charAt(--nl) == '0';)
-            ;
         x.e = e - i - 1;
         x.c = [];
-        // Convert string to array of digits without leading/trailing zeros.
-        for (e = 0; i <= nl;)
+        // Convert string to array of digits without leading zeros
+        for (e = 0; i < nl;)
             x.c[e++] = +n.charAt(i++);
+        // older version (doesn't keep trailing zeroes).
+        // // Determine trailing zeros.
+        // for (; nl > 0 && n.charAt(--nl) == '0';);
+        // // Convert string to array of digits without leading/trailing zeros.
+        // for (e = 0; i <= nl;) x.c[e++] = +n.charAt(i++);
     }
+    x = round(x, Big.DP, Big.RM);
     return x;
 }
 /*
@@ -274,7 +289,7 @@ P.abs = function () {
  *        0 if they have the same value.
 */
 P.cmp = function (y) {
-    var isneg, x = this, xc = x.c, yc = (y = new x.constructor(y)).c, i = x.s, j = y.s, k = x.e, l = y.e;
+    var isneg, Big = this.constructor, x = new Big(this), y = new Big(y), xc = x.c, yc = y.c, i = x.s, j = y.s, k = x.e, l = y.e;
     // Either zero?
     if (!xc[0] || !yc[0])
         return !xc[0] ? !yc[0] ? 0 : -j : i;
@@ -285,22 +300,31 @@ P.cmp = function (y) {
     // Compare exponents.
     if (k != l)
         return k > l ^ isneg ? 1 : -1;
-    j = (k = xc.length) < (l = yc.length) ? k : l;
     // Compare digit by digit.
-    for (i = -1; ++i < j;) {
-        if (xc[i] != yc[i])
-            return xc[i] > yc[i] ^ isneg ? 1 : -1;
+    j = Math.max(xc.length, yc.length);
+    for (i = 0; i < j; i++) {
+        k = i < xc.length ? xc[i] : 0;
+        l = i < yc.length ? yc[i] : 0;
+        if (k != l)
+            return k > l ^ isneg ? 1 : -1;
     }
-    // Compare lengths.
-    return k == l ? 0 : k > l ^ isneg ? 1 : -1;
+    return 0;
+    // old version (doesn't compare well trailing zeroes, e.g. 1.0 with 1.00)
+    // j = (k = xc.length) < (l = yc.length) ? k : l;
+    // // Compare digit by digit.
+    // for (i = -1; ++i < j;) {
+    //   if (xc[i] != yc[i]) return xc[i] > yc[i] ^ isneg ? 1 : -1;
+    // }
+    // // Compare lengths.
+    // return k == l ? 0 : k > l ^ isneg ? 1 : -1;
 };
 /*
  * Return a new Big whose value is the value of this Big divided by the value of Big y, rounded,
  * if necessary, to a maximum of Big.DP decimal places using rounding mode Big.RM.
  */
 P.div = function (y) {
-    var x = this, Big = x.constructor, a = x.c, // dividend
-    b = (y = new Big(y)).c, // divisor
+    var Big = this.constructor, x = new Big(this), y = new Big(y), a = x.c, // dividend
+    b = y.c, // divisor
     k = x.s == y.s ? 1 : -1, dp = Big.DP;
     if (dp !== ~~dp || dp < 0 || dp > MAX_DP)
         throw Error(INVALID_DP);
@@ -412,7 +436,7 @@ P.lte = function (y) {
  * Return a new Big whose value is the value of this Big minus the value of Big y.
  */
 P.minus = P.sub = function (y) {
-    var i, j, t, xlty, x = this, Big = x.constructor, a = x.s, b = (y = new Big(y)).s;
+    var i, j, t, xlty, Big = this.constructor, x = new Big(this), y = new Big(y), a = x.s, b = y.s;
     // Signs differ?
     if (a != b) {
         y.s = -b;
@@ -495,7 +519,7 @@ P.minus = P.sub = function (y) {
  * Return a new Big whose value is the value of this Big modulo the value of Big y.
  */
 P.mod = function (y) {
-    var ygtx, x = this, Big = x.constructor, a = x.s, b = (y = new Big(y)).s;
+    var ygtx, Big = this.constructor, x = new Big(this), y = new Big(y), a = x.s, b = y.s;
     if (!y.c[0])
         throw Error(DIV_BY_ZERO);
     x.s = y.s = 1;
@@ -516,7 +540,7 @@ P.mod = function (y) {
  * Return a new Big whose value is the value of this Big plus the value of Big y.
  */
 P.plus = P.add = function (y) {
-    var t, x = this, Big = x.constructor, a = x.s, b = (y = new Big(y)).s;
+    var t, Big = this.constructor, x = new Big(this), y = new Big(y), a = x.s, b = y.s;
     // Signs differ?
     if (a != b) {
         y.s = -b;
@@ -573,7 +597,7 @@ P.plus = P.add = function (y) {
  * n {number} Integer, -MAX_POWER to MAX_POWER inclusive.
  */
 P.pow = function (n) {
-    var x = this, one = new x.constructor(1), y = one, isneg = n < 0;
+    var Big = this.constructor, x = new Big(this), y = new Big(1), one = new Big(1), isneg = n < 0;
     if (n !== ~~n || n < -MAX_POWER || n > MAX_POWER)
         throw Error(INVALID + 'exponent');
     if (isneg)
@@ -611,7 +635,7 @@ P.round = function (dp, rm) {
  * necessary, to a maximum of Big.DP decimal places using rounding mode Big.RM.
  */
 P.sqrt = function () {
-    var r, c, t, x = this, Big = x.constructor, s = x.s, e = x.e, half = new Big(0.5);
+    var r, c, t, Big = this.constructor, x = new Big(this), s = x.s, e = x.e, half = new Big(0.5);
     // Zero?
     if (!x.c[0])
         return new Big(x);
@@ -645,7 +669,7 @@ P.sqrt = function () {
  * Return a new Big whose value is the value of this Big times the value of Big y.
  */
 P.times = P.mul = function (y) {
-    var c, x = this, Big = x.constructor, xc = x.c, yc = (y = new Big(y)).c, a = xc.length, b = yc.length, i = x.e, j = y.e;
+    var c, Big = this.constructor, x = new Big(this), y = new Big(y), xc = x.c, yc = y.c, a = xc.length, b = yc.length, i = x.e, j = y.e;
     // Determine sign of result.
     y.s = x.s == y.s ? 1 : -1;
     // Return signed 0 if either 0.

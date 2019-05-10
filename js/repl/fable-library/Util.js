@@ -358,6 +358,9 @@ export function compare(x, y) {
         return 1;
     }
 }
+export function ignore(x) {
+    return;
+}
 export function min(comparer, x, y) {
     return comparer(x, y) < 0 ? x : y;
 }
@@ -449,6 +452,23 @@ export function sign(x) {
 }
 export function randomNext(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
+}
+export function randomBytes(buffer) {
+    if (buffer == null) {
+        throw new Error("Buffer cannot be null");
+    }
+    for (let i = 0; i < buffer.length; i += 6) {
+        // Pick random 48-bit number. Fill buffer in 2 24-bit chunks to avoid bitwise truncation.
+        let r = Math.floor(Math.random() * 281474976710656); // Low 24 bits = chunk 1.
+        const rhi = Math.floor(r / 16777216); // High 24 bits shifted via division = chunk 2.
+        for (let j = 0; j < 6 && i + j < buffer.length; j++) {
+            if (j === 3) {
+                r = rhi;
+            }
+            buffer[i + j] = r & 255;
+            r >>>= 8;
+        }
+    }
 }
 export function unescapeDataString(s) {
     // https://stackoverflow.com/a/4458580/524236
@@ -563,5 +583,19 @@ export function partialApply(arity, f, args) {
             default:
                 throw new Error("Partially applying to more than 8-arity is not supported: " + arity);
         }
+    }
+}
+export function addToDict(dict, k, v) {
+    if (dict.has(k)) {
+        throw new Error("An item with the same key has already been added. Key: " + k);
+    }
+    dict.set(k, v);
+}
+export function getItemFromDict(map, key) {
+    if (map.has(key)) {
+        return map.get(key);
+    }
+    else {
+        throw new Error(`The given key '${key}' was not present in the dictionary.`);
     }
 }

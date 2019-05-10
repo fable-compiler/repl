@@ -1,66 +1,48 @@
-import { List, Record, declare, Union } from "../fable-library.2.2.0-beta-010/Types.js";
-import { Common$$$genericParse as Common$0024$0024$0024genericParse, Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Color$$$ofColor as Color$0024$0024$0024ofColor, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Color$002EIColor$reflection as Color$0024002EIColor$0024reflection } from "../Fulma/Common.js";
-import { record, option, union, list as list$$1, type, string } from "../fable-library.2.2.0-beta-010/Reflection.js";
-import { ofSeq, fold } from "../fable-library.2.2.0-beta-010/List.js";
-import { createObj } from "../fable-library.2.2.0-beta-010/Util.js";
-import { append, delay, singleton } from "../fable-library.2.2.0-beta-010/Seq.js";
-const createElement = React.createElement;
+import { declare, Union } from "../fable-library.2.3.7/Types.js";
+import { Common$$$parseOptions as Common$0024$0024$0024parseOptions, Common$002EGenericOptions$$$Parse$$9AE2F7C as Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C, Common$002EGenericOptions$$ToReactElement$$Z6D3CD4B7 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7, Color$$$ofColor as Color$0024$0024$0024ofColor, Common$002EGenericOptions$$AddModifiers$$5BB435D5 as Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5, Common$002EGenericOptions$$AddClass$$Z721C83C5 as Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5, Common$002EGenericOptions$$AddProps$$416C4D0B as Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Color$002EIColor$reflection as Color$0024002EIColor$0024reflection } from "../Fulma/Common.js";
+import { union, list, type, string } from "../fable-library.2.3.7/Reflection.js";
+import { createObj } from "../fable-library.2.3.7/Util.js";
 export const Option = declare(function Fulma_Notification_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
 export function Option$reflection() {
-  return union("Fulma.Notification.Option", [], Option, () => [["Color", [Color$0024002EIColor$0024reflection()]], ["CustomClass", [string]], ["Props", [list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))]], ["Modifiers", [list$$1(Modifier$0024002EIModifier$0024reflection())]]]);
-}
-export const Options = declare(function Fulma_Notification_Options(arg1, arg2, arg3, arg4) {
-  this.Color = arg1;
-  this.CustomClass = arg2;
-  this.Props = arg3;
-  this.Modifiers = arg4;
-}, Record);
-export function Options$reflection() {
-  return record("Fulma.Notification.Options", [], Options, () => [["Color", option(string)], ["CustomClass", option(string)], ["Props", list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))], ["Modifiers", list$$1(option(string))]]);
-}
-export function Options$$$get_Empty() {
-  return new Options(null, null, new List(), new List());
+  return union("Fulma.Notification.Option", [], Option, () => [["Color", [Color$0024002EIColor$0024reflection()]], ["CustomClass", [string]], ["Props", [list(type("Fable.React.Props.IHTMLProp"))]], ["Modifiers", [list(Modifier$0024002EIModifier$0024reflection())]]]);
 }
 export function notification(options, children) {
-  const parseOptions = function parseOptions(result, opt) {
-    switch (opt.tag) {
-      case 1:
-        {
-          const customClass = opt.fields[0];
-          return new Options(result.Color, customClass, result.Props, result.Modifiers);
-        }
-
+  const parseOptions = function parseOptions(result, option) {
+    switch (option.tag) {
       case 2:
         {
-          const props = opt.fields[0];
-          return new Options(result.Color, result.CustomClass, props, result.Modifiers);
+          const props = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B(result, props);
+        }
+
+      case 1:
+        {
+          const customClass = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, customClass);
         }
 
       case 3:
         {
-          const modifiers = opt.fields[0];
-          return new Options(result.Color, result.CustomClass, result.Props, Modifier$0024$0024$0024parseModifiers(modifiers));
+          const modifiers = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5(result, modifiers);
         }
 
       default:
         {
-          const color = opt.fields[0];
-          return new Options(Color$0024$0024$0024ofColor(color), result.CustomClass, result.Props, result.Modifiers);
+          const color = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, Color$0024$0024$0024ofColor(color));
         }
     }
   };
 
-  const opts = fold(parseOptions, Options$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("notification", new List(opts.CustomClass, new List(opts.Color, opts.Modifiers)), new List());
-  return createElement("div", createObj(new List(classes, opts.Props), 1), ...children);
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options, parseOptions, "notification"), function (props$$1, children$$1) {
+    return React.createElement("div", createObj(props$$1, 1), ...children$$1);
+  }, children);
 }
-export function delete$(options$$2, children$$3) {
-  const opts$$1 = Common$0024$0024$0024genericParse(options$$2);
-  return createElement("button", createObj(ofSeq(delay(function () {
-    return append(singleton(Common$0024002EHelpers$0024$0024$0024classes("delete", new List(opts$$1.CustomClass, opts$$1.Modifiers), new List())), delay(function () {
-      return opts$$1.Props;
-    }));
-  })), 1), ...children$$3);
+export function delete$(options$$1, children$$4) {
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$1, Common$0024$0024$0024parseOptions, "delete"), function (props$$4, children$$5) {
+    return React.createElement("button", createObj(props$$4, 1), ...children$$5);
+  }, children$$4);
 }

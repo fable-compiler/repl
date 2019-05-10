@@ -4,17 +4,22 @@ module Pacman
 // AI for the ghosts, user interaction and even playing sound effects. There is
 // some brief commentary, but if you're a beginner look at the other examples first.
 
+open Fable.Core
 open Fable.Core.JsInterop
-open Fable.Import
+open Browser.Types
+open Browser
 
 module Sound =
+    let [<Global>] Audio: obj = jsNative
+
     let origin =
         // Sample is running in an iframe, so get the location of parent
-        let topLocation = Browser.window.top.location
+        let topLocation = window.top.location
         topLocation.origin + topLocation.pathname
 
     let play (fileName: string) =
-        Browser.Audio.Create(origin + "img/pacman/" + fileName + ".wav").play()
+        let audio = createNew Audio (origin + "img/pacman/" + fileName + ".wav")
+        audio?play()
 
 module Images =
     (**
@@ -42,7 +47,7 @@ module Images =
 
     // Create image using the specified data
     let createImage data =
-      let img = Browser.document.createElement("img") :?> Browser.HTMLImageElement
+      let img = document.createElement("img") :?> HTMLImageElement
       img.src <- data
       img
 
@@ -87,15 +92,15 @@ module Keyboard =
     let isPressed keyCode = Set.contains keyCode keysPressed
 
     /// Triggered when key is pressed/released
-    let update (e : Browser.KeyboardEvent, pressed) =
+    let update (e : KeyboardEvent, pressed) =
       let keyCode = int e.keyCode
       let op =  if pressed then Set.add else Set.remove
       keysPressed <- op keyCode keysPressed
 
     /// Register DOM event handlers
     let init () =
-      Browser.window.addEventListener("keydown", fun e -> update(e :?> _, true))
-      Browser.window.addEventListener("keyup", fun e -> update(e :?> _, false))
+      window.addEventListener("keydown", fun e -> update(e :?> _, true))
+      window.addEventListener("keyup", fun e -> update(e :?> _, false))
 
 module Types =
     (**
@@ -115,7 +120,7 @@ module Types =
       x + dx, y + dy
 
     /// Mutable representation of a ghost
-    type Ghost(image: Browser.HTMLImageElement,x,y,v) =
+    type Ghost(image: HTMLImageElement,x,y,v) =
       let mutable x' = x
       let mutable y' = y
       let mutable v' = v
@@ -260,11 +265,11 @@ let draw f (lines:int[]) =
       if pattern <> 0 then f (x,y) )
 
 /// Creates a brush for rendering the given RGBA color
-let createBrush (context:Browser.CanvasRenderingContext2D) (r,g,b,a) =
-  let id = context.createImageData(!^ 1.0, 1.0)
+let createBrush (context:CanvasRenderingContext2D) (r,g,b,a) =
+  let id = context.createImageData(1.0, 1.0)
   let d = id.data
-  d.[0] <- float r; d.[1] <- float g
-  d.[2] <- float b; d.[3] <- float a
+  d.[0] <- r; d.[1] <- g
+  d.[2] <- b; d.[3] <- a
   id
 
 (**
@@ -273,7 +278,7 @@ then iterates over the maze tiles and renders individual walls:
 *)
 let createBackground () =
   // Fill background with black
-  let background = Browser.document.createElement("canvas") :?> Browser.HTMLCanvasElement
+  let background = document.createElement("canvas") :?> HTMLCanvasElement
   background.width <- 256.
   background.height <- 256.
   let context = background.getContext_2d()
@@ -281,8 +286,8 @@ let createBackground () =
   context.fillRect (0., 0. , 256., 256.);
 
   // Render individual tiles of the maze
-  let blue = createBrush context (63,63,255,255)
-  let yellow = createBrush context (255,255,0,255)
+  let blue = createBrush context (63uy, 63uy, 255uy, 255uy)
+  let yellow = createBrush context (255uy, 255uy, 0uy, 255uy)
   let lines = maze
   for y = 0 to lines.Length-1 do
     let line = lines.[y]
@@ -297,7 +302,7 @@ let createBackground () =
   background
 
 /// Clear whatever is rendered in the specified Maze cell
-let clearCell (background : Browser.HTMLCanvasElement) (x,y) =
+let clearCell (background : HTMLCanvasElement) (x,y) =
   let context = background.getContext_2d()
   context.fillStyle <- !^ "rgb(0,0,0)"
   context.fillRect (float (x*8), float (y*8), 8., 8.)
@@ -433,7 +438,7 @@ let playLevel (onLevelCompleted, onGameOver) =
   creates other graphical elements - namely the game background, ghosts and eyes:
   *)
   // Fill the canvas element
-  let canvas = Browser.document.getElementsByTagName("canvas").[0] :?> Browser.HTMLCanvasElement
+  let canvas = document.getElementsByTagName("canvas").[0] :?> HTMLCanvasElement
   canvas.width <- 256.
   canvas.height <- 256.
   let context = canvas.getContext_2d()
@@ -636,7 +641,7 @@ The next three functions render ghosts, current score and bonuses:
     render ()
     if !dotsLeft = 0 then onLevelCompleted()
     elif !energy <= 0 then onGameOver()
-    else Browser.window.setTimeout(update, 1000 / 60) |> ignore
+    else window.setTimeout(update, 1000 / 60) |> ignore
 
   update()
 
@@ -650,7 +655,7 @@ the starting state of the game (with "CLICK TO START" text) and start the game!
 let rec game () =
   // Initialize keyboard and canvas
   Keyboard.reset()
-  let canvas = Browser.document.getElementsByTagName("canvas").[0] :?> Browser.HTMLCanvasElement
+  let canvas = document.getElementsByTagName("canvas").[0] :?> HTMLCanvasElement
   let context = canvas.getContext_2d()
 
   // A helper function to draw text
@@ -662,12 +667,12 @@ let rec game () =
   // Called when level is completed
   let levelCompleted () =
     drawText("COMPLETED",96.,96.)
-    Browser.window.setTimeout(game, 5000) |> ignore
+    window.setTimeout(game, 5000) |> ignore
 
   // Called when the game ends
   let gameOver () =
     drawText("GAME OVER",96.,96.)
-    Browser.window.setTimeout(game, 5000) |> ignore
+    window.setTimeout(game, 5000) |> ignore
 
   // Start a new game after click!
   let start () =
@@ -683,7 +688,7 @@ let rec game () =
             playLevel (levelCompleted, gameOver))
 
   // Resize canvas and get ready for a game
-  let canvas = Browser.document.getElementsByTagName("canvas").[0] :?> Browser.HTMLCanvasElement
+  let canvas = document.getElementsByTagName("canvas").[0] :?> HTMLCanvasElement
   canvas.width <- 256.
   canvas.height <- 256.
   start()

@@ -4,11 +4,11 @@ module Mandelbrot
 
 open Fable.Core
 open Fable.Core.JsInterop
-open Fable.Import.Browser
-open Fable.Import.React
+open Browser.Types
+open Browser
 
 type Complex = { r : double; i : double }
-type Color = { r : int; g : int; b : int; a : int }
+type Color = { r : uint8; g : uint8; b : uint8; a : uint8 }
 
 let maxIter = 255
 
@@ -43,21 +43,21 @@ let getCoord (x : int, y : int) : Complex =
 let getCoordColor (x : int, y : int) : Color =
     let p = getCoord (x, y)
     let i = getIterationCount p
-    { r = 255/(i%5); g = 255/(i%3); b = 255/(i%7); a = 255}
+    { r = uint8 (255/(i%5)); g = uint8 (255/(i%3)); b = uint8 (255/(i%7)); a = 255uy }
 
 let showSet() =
     let canvas = document.getElementsByTagName("canvas").[0] :?> HTMLCanvasElement
     let ctx = canvas.getContext_2d()
 
-    let img = ctx.createImageData(U2.Case1 (float width), float height)
+    let img = ctx.createImageData(float width, float height)
     for y = 0 to height-1 do
         for x = 0 to width-1 do
             let index = (x + y * width) * 4
             let color = getCoordColor (x, y)
-            img.data.[index+0] <- float color.r
-            img.data.[index+1] <- float color.g
-            img.data.[index+2] <- float color.b
-            img.data.[index+3] <- float color.a
+            img.data.[index+0] <- color.r
+            img.data.[index+1] <- color.g
+            img.data.[index+2] <- color.b
+            img.data.[index+3] <- color.a
     ctx.putImageData(img, 0., 0.)
 
     ctx.fillStyle <- !^"rgba(200,0,0,0.5)"

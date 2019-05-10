@@ -7,7 +7,8 @@ Japanese art and renders The Great Wave by Hokusai using the Julia fractal.
 *)
 
 open Fable.Core
-open Fable.Import.Browser
+open Browser.Types
+open Browser
 
 type Complex =
   | Complex of float * float
@@ -53,25 +54,26 @@ let countIterations max x y =
 
 // Transition between colors in 'count' steps
 let (--) clr count = clr, count
-let (-->) ((r1,g1,b1), count) (r2,g2,b2) = [
+let (-->) ((r1, g1, b1), count) (r2, g2, b2) = [
   for c in 0 .. count - 1 ->
-    let k = float c / float count
+    let k = c / count |> byte
     let mid v1 v2 =
-      (float v1 + ((float v2) - (float v1)) * k)
+      (v1 + (v2 - v1) * k)
     (mid r1 r2, mid g1 g2, mid b1 b2) ]
 
 // Palette with colors used by Hokusai
 let palette =
   [| // 3x sky color & transition to light blue
-     yield! (245,219,184) --3--> (245,219,184)
-     yield! (245,219,184) --4--> (138,173,179)
+     yield! (245uy, 219uy, 184uy) --3--> (245uy, 219uy, 184uy)
+     yield! (245uy, 219uy, 184uy) --4--> (138uy, 173uy, 179uy)
      // to dark blue and then medium dark blue
-     yield! (138,173,179) --4--> (2,12,74)
-     yield! (2,12,74)     --4--> (61,102,130)
-     // to wave color, then light blue & back to wave
-     yield! (61,102,130)  -- 8--> (249,243,221)
-     yield! (249,243,221) --32--> (138,173,179)
-     yield! (138,173,179) --32--> (61,102,130) |]
+     yield! (138uy, 173uy, 179uy) --4--> (2uy, 12uy, 74uy)
+     yield! (2uy, 12uy, 74uy)     --4--> (61uy, 102uy, 130uy)
+     // to wave coloruy,  then light blue & back to wave
+     yield! (61uy, 102uy, 130uy)  -- 8--> (249uy, 243uy, 221uy)
+     yield! (249uy, 243uy, 221uy) --32--> (138uy, 173uy, 179uy)
+     yield! (138uy, 173uy, 179uy) --32--> (61uy, 102uy, 130uy)
+  |]
 
 // Specifies what range of the set to draw
 let w = -0.4, 0.4
@@ -88,7 +90,7 @@ let setPixel (img:ImageData) x y width (r, g, b) =
   img.data.[index+0] <- r
   img.data.[index+1] <- g
   img.data.[index+2] <- b
-  img.data.[index+3] <- 255.0
+  img.data.[index+3] <- 255uy
 
 /// Dynamic operator that returns HTML element by ID
 let (?) (doc:Document) name :'R =
@@ -99,7 +101,7 @@ let render () = async {
   // Get <canvas> element & create image for drawing
   let canv : HTMLCanvasElement = document?canvas
   let ctx = canv.getContext_2d()
-  let img = ctx.createImageData(U2.Case1 (float width), float height)
+  let img = ctx.createImageData(float width, float height)
 
   // For each pixel, transform to the specified range
   // and get color using countInterations and palette
@@ -108,7 +110,7 @@ let render () = async {
       let x' = (float x / width * (snd w - fst w)) + fst w
       let y' = (float y / height * (snd h - fst h)) + fst h
       let it = countIterations palette.Length x' y'
-      setPixel img x y width palette.[it]
+      setPixel img x y width (palette.[it])
 
     // Insert non-blocking waiting & update the fractal
     do! Async.Sleep(1)

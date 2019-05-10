@@ -1,7 +1,7 @@
 // https://github.com/MikeMcl/big.js/blob/01b3ce3a6b0ba7b42442ea48ec4ffc88d1669ec4/big.mjs
 
 /* tslint:disable */
-import { combineHashCodes } from "../fable-library.2.2.0-beta-010/Util.js"; // The shared prototype object.
+import { combineHashCodes } from "../fable-library.2.3.7/Util.js"; // The shared prototype object.
 
 var P = {
   GetHashCode() {
@@ -32,7 +32,7 @@ var P = {
  * div and sqrt, and pow with negative exponents.
  */
 
-var DP = 20,
+var DP = 28,
     // 0 to MAX_DP
 
 /*
@@ -57,7 +57,7 @@ MAX_POWER = 1E6,
  * (JavaScript numbers: -7)
  * -1000000 is the minimum recommended exponent value of a Big.
  */
-NE = -7,
+NE = -29,
     // 0 to -1000000
 
 /*
@@ -66,7 +66,7 @@ NE = -7,
  * 1000000 is the maximum recommended exponent value of a Big.
  * (This limit is not enforced or checked.)
  */
-PE = 21,
+PE = 29,
     // 0 to 1000000
 
 /**************************************************************************************************/
@@ -99,6 +99,7 @@ function _Big_() {
       x.s = n.s;
       x.e = n.e;
       x.c = n.c.slice();
+      normalize(x);
     } else {
       parse(x, n);
     }
@@ -118,6 +119,16 @@ function _Big_() {
   Big.PE = PE;
   Big.version = "5.2.2";
   return Big;
+}
+
+function normalize(x) {
+  x = round(x, DP, 0);
+
+  if (x.c.length > 1 && !x.c[0]) {
+    let i = x.c.findIndex(x => x);
+    x.c = x.c.slice(i);
+    x.e = x.e - i;
+  }
 }
 /*
  * Parse the number or string value passed to a Big constructor.
@@ -146,23 +157,29 @@ function parse(x, n) {
     e = n.length;
   }
 
-  nl = n.length; // Determine leading zeros.
+  nl = n.length; // Determine leading zeros before decimal point.
 
-  for (i = 0; i < nl && n.charAt(i) == "0";) ++i;
+  for (i = 0; i < e && i < nl && n.charAt(i) == "0";) ++i; // older version (ignores decimal point).
+  // // Determine leading zeros.
+  // for (i = 0; i < nl && n.charAt(i) == '0';) ++i;
+
 
   if (i == nl) {
     // Zero.
     x.c = [x.e = 0];
   } else {
-    // Determine trailing zeros.
-    for (; nl > 0 && n.charAt(--nl) == "0";);
-
     x.e = e - i - 1;
-    x.c = []; // Convert string to array of digits without leading/trailing zeros.
+    x.c = []; // Convert string to array of digits without leading zeros
 
-    for (e = 0; i <= nl;) x.c[e++] = +n.charAt(i++);
+    for (e = 0; i < nl;) x.c[e++] = +n.charAt(i++); // older version (doesn't keep trailing zeroes).
+    // // Determine trailing zeros.
+    // for (; nl > 0 && n.charAt(--nl) == '0';);
+    // // Convert string to array of digits without leading/trailing zeros.
+    // for (e = 0; i <= nl;) x.c[e++] = +n.charAt(i++);
+
   }
 
+  x = round(x, Big.DP, Big.RM);
   return x;
 }
 /*
@@ -304,9 +321,11 @@ P.abs = function () {
 
 P.cmp = function (y) {
   var isneg,
-      x = this,
+      Big = this.constructor,
+      x = new Big(this),
+      y = new Big(y),
       xc = x.c,
-      yc = (y = new x.constructor(y)).c,
+      yc = y.c,
       i = x.s,
       j = y.s,
       k = x.e,
@@ -317,15 +336,24 @@ P.cmp = function (y) {
   if (i != j) return i;
   isneg = i < 0; // Compare exponents.
 
-  if (k != l) return k > l ^ isneg ? 1 : -1;
-  j = (k = xc.length) < (l = yc.length) ? k : l; // Compare digit by digit.
+  if (k != l) return k > l ^ isneg ? 1 : -1; // Compare digit by digit.
 
-  for (i = -1; ++i < j;) {
-    if (xc[i] != yc[i]) return xc[i] > yc[i] ^ isneg ? 1 : -1;
-  } // Compare lengths.
+  j = Math.max(xc.length, yc.length);
 
+  for (i = 0; i < j; i++) {
+    k = i < xc.length ? xc[i] : 0;
+    l = i < yc.length ? yc[i] : 0;
+    if (k != l) return k > l ^ isneg ? 1 : -1;
+  }
 
-  return k == l ? 0 : k > l ^ isneg ? 1 : -1;
+  return 0; // old version (doesn't compare well trailing zeroes, e.g. 1.0 with 1.00)
+  // j = (k = xc.length) < (l = yc.length) ? k : l;
+  // // Compare digit by digit.
+  // for (i = -1; ++i < j;) {
+  //   if (xc[i] != yc[i]) return xc[i] > yc[i] ^ isneg ? 1 : -1;
+  // }
+  // // Compare lengths.
+  // return k == l ? 0 : k > l ^ isneg ? 1 : -1;
 };
 /*
  * Return a new Big whose value is the value of this Big divided by the value of Big y, rounded,
@@ -334,11 +362,12 @@ P.cmp = function (y) {
 
 
 P.div = function (y) {
-  var x = this,
-      Big = x.constructor,
+  var Big = this.constructor,
+      x = new Big(this),
+      y = new Big(y),
       a = x.c,
       // dividend
-  b = (y = new Big(y)).c,
+  b = y.c,
       // divisor
   k = x.s == y.s ? 1 : -1,
       dp = Big.DP;
@@ -479,10 +508,11 @@ P.minus = P.sub = function (y) {
       j,
       t,
       xlty,
-      x = this,
-      Big = x.constructor,
+      Big = this.constructor,
+      x = new Big(this),
+      y = new Big(y),
       a = x.s,
-      b = (y = new Big(y)).s; // Signs differ?
+      b = y.s; // Signs differ?
 
   if (a != b) {
     y.s = -b;
@@ -579,10 +609,11 @@ P.minus = P.sub = function (y) {
 
 P.mod = function (y) {
   var ygtx,
-      x = this,
-      Big = x.constructor,
+      Big = this.constructor,
+      x = new Big(this),
+      y = new Big(y),
       a = x.s,
-      b = (y = new Big(y)).s;
+      b = y.s;
   if (!y.c[0]) throw Error(DIV_BY_ZERO);
   x.s = y.s = 1;
   ygtx = y.cmp(x) == 1;
@@ -604,10 +635,11 @@ P.mod = function (y) {
 
 P.plus = P.add = function (y) {
   var t,
-      x = this,
-      Big = x.constructor,
+      Big = this.constructor,
+      x = new Big(this),
+      y = new Big(y),
       a = x.s,
-      b = (y = new Big(y)).s; // Signs differ?
+      b = y.s; // Signs differ?
 
   if (a != b) {
     y.s = -b;
@@ -673,9 +705,10 @@ P.plus = P.add = function (y) {
 
 
 P.pow = function (n) {
-  var x = this,
-      one = new x.constructor(1),
-      y = one,
+  var Big = this.constructor,
+      x = new Big(this),
+      y = new Big(1),
+      one = new Big(1),
       isneg = n < 0;
   if (n !== ~~n || n < -MAX_POWER || n > MAX_POWER) throw Error(INVALID + "exponent");
   if (isneg) n = -n;
@@ -716,8 +749,8 @@ P.sqrt = function () {
   var r,
       c,
       t,
-      x = this,
-      Big = x.constructor,
+      Big = this.constructor,
+      x = new Big(this),
       s = x.s,
       e = x.e,
       half = new Big(0.5); // Zero?
@@ -755,10 +788,11 @@ P.sqrt = function () {
 
 P.times = P.mul = function (y) {
   var c,
-      x = this,
-      Big = x.constructor,
+      Big = this.constructor,
+      x = new Big(this),
+      y = new Big(y),
       xc = x.c,
-      yc = (y = new Big(y)).c,
+      yc = y.c,
       a = xc.length,
       b = yc.length,
       i = x.e,

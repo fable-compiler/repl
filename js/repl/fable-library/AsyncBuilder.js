@@ -1,3 +1,34 @@
+export class CancellationToken {
+    constructor(cancelled = false) {
+        this._id = 0;
+        this._cancelled = cancelled;
+        this._listeners = new Map();
+    }
+    get isCancelled() {
+        return this._cancelled;
+    }
+    cancel() {
+        if (!this._cancelled) {
+            this._cancelled = true;
+            for (const [, listener] of this._listeners) {
+                listener();
+            }
+        }
+    }
+    addListener(f) {
+        const id = this._id;
+        this._listeners.set(this._id++, f);
+        return id;
+    }
+    removeListener(id) {
+        return this._listeners.delete(id);
+    }
+    register(f, state) {
+        const $ = this;
+        const id = this.addListener(state == null ? f : () => f(state));
+        return { Dispose() { $.removeListener(id); } };
+    }
+}
 export class OperationCanceledError extends Error {
     constructor() {
         super("The operation was canceled");

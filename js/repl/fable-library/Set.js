@@ -2,7 +2,7 @@ import { List, Record, declare, Union } from "./Types.js";
 import { type, record, bool, list, union as union$$1, int32 } from "./Reflection.js";
 import { value as value$$2, some, Choice } from "./Option.js";
 import { iterate as iterate$$1, empty as empty$$1, fold as fold$$1, toIterator, map as map$$1, reduce, getEnumerator, unfold } from "./Seq.js";
-import { structuralHash, isDisposable } from "./Util.js";
+import { ignore, structuralHash, isDisposable } from "./Util.js";
 import { join } from "./String.js";
 export const SetTree$00601 = declare(function Set_SetTree(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
@@ -1070,7 +1070,7 @@ export function SetTreeModule$002EmkIEnumerator$00601$reflection($gen$$51) {
   return type("Set.SetTreeModule.mkIEnumerator`1", [$gen$$51]);
 }
 export function SetTreeModule$002EmkIEnumerator$00601$$$$002Ector$$Z5B395D56(s$$14) {
-  return this != null ? SetTreeModule$002EmkIEnumerator$00601.call(this, s$$14) : new SetTreeModule$002EmkIEnumerator$00601(s$$14);
+  return this instanceof SetTreeModule$002EmkIEnumerator$00601 ? SetTreeModule$002EmkIEnumerator$00601.call(this, s$$14) : new SetTreeModule$002EmkIEnumerator$00601(s$$14);
 }
 Object.defineProperty(SetTreeModule$002EmkIEnumerator$00601.prototype, "Current", {
   "get": function () {
@@ -1444,7 +1444,7 @@ export function FSharpSet$reflection($gen$$70) {
   return type("Set.FSharpSet", [$gen$$70]);
 }
 export function FSharpSet$$$$002Ector$$2528C5CB(comparer$$22, tree) {
-  return this != null ? FSharpSet.call(this, comparer$$22, tree) : new FSharpSet(comparer$$22, tree);
+  return this instanceof FSharpSet ? FSharpSet.call(this, comparer$$22, tree) : new FSharpSet(comparer$$22, tree);
 }
 export function FSharpSet$$get_Comparer(__$$4) {
   return __$$4.comparer;
@@ -1781,13 +1781,13 @@ export function intersectWith(s1$$5, s2$$5, comparer$$35) {
   const s2$$6 = ofSeq(s2$$5, comparer$$35);
   iterate$$1(function (x$$39) {
     if (!FSharpSet$$Contains$$2B595(s2$$6, x$$39)) {
-      s1$$5.delete(x$$39);
+      ignore(s1$$5.delete(x$$39));
     }
   }, s1$$5);
 }
 export function exceptWith(s1$$6, s2$$7) {
   iterate$$1(function (x$$40) {
-    s1$$6.delete(x$$40);
+    ignore(s1$$6.delete(x$$40));
   }, s2$$7);
 }
 export function isSubsetOf(s1$$7, s2$$8, comparer$$36) {

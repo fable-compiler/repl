@@ -13,7 +13,7 @@ export function StringBuilder$reflection() {
   return type("System.Text.StringBuilder");
 }
 export function StringBuilder$$$$002Ector$$Z18115A39(value, capacity) {
-  return this != null ? StringBuilder.call(this, value, capacity) : new StringBuilder(value, capacity);
+  return this instanceof StringBuilder ? StringBuilder.call(this, value, capacity) : new StringBuilder(value, capacity);
 }
 export function StringBuilder$$$$002Ector$$Z524259A4(capacity$$1) {
   return StringBuilder$$$$002Ector$$Z18115A39.call(this, null, capacity$$1);

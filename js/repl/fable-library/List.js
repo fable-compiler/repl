@@ -1,11 +1,10 @@
 import { defaultArg, value as value$$1, some } from "./Option.js";
 import { FSharpRef, List } from "./Types.js";
-import { delay, rangeNumber, iterate as iterate$$1, collect as collect$$1, scanBack as scanBack$$1, scan as scan$$1, foldBack2 as foldBack2$$1, fold2 as fold2$$1, fold as fold$$1, map as map$$1 } from "./Seq.js";
-import { tryGetValue, addToSet, comparerFromEqualityComparer, count } from "./Util.js";
+import { iterate as iterate$$1, collect as collect$$1, scanBack as scanBack$$1, scan as scan$$1, foldBack2 as foldBack2$$1, fold2 as fold2$$1, fold as fold$$1, map as map$$1 } from "./Seq.js";
+import { partialApply, getItemFromDict, addToDict, tryGetValue, addToSet, comparerFromEqualityComparer, count } from "./Util.js";
 import { ofList } from "./Array.js";
 import { permute as permute$$1, findIndexBack as findIndexBack$$1, tryFindIndexBack as tryFindIndexBack$$1 } from "./Array.js";
 import { createMutable } from "./Set.js";
-import { ofSeq as ofSeq$$1, slice as slice$$1, item as item$$1, length as length$$1 } from "./List.js";
 import { createMutable as createMutable$$1 } from "./Map.js";
 export function head(_arg1) {
   if (_arg1.tail != null) {
@@ -1080,62 +1079,88 @@ export function splitAt(i$$30, xs$$125) {
     }
   }
 }
-export function slice(lower, upper, xs$$128) {
-  const lower$$1 = defaultArg(lower, -1) | 0;
-  const upper$$1 = defaultArg(upper, -1) | 0;
-  return reverse(foldIndexed(function f$$56(i$$34, acc$$26, x$$67) {
-    if ((lower$$1 === -1 ? true : lower$$1 <= i$$34) ? upper$$1 === -1 ? true : i$$34 <= upper$$1 : false) {
-      return new List(x$$67, acc$$26);
-    } else {
-      return acc$$26;
-    }
-  }, new List(), xs$$128));
+export function outOfRange() {
+  throw new Error("Index out of range");
 }
-export function distinctBy(projection$$4, xs$$131, eq$$2) {
+export function slice(lower, upper, xs$$128) {
+  const lower$$1 = defaultArg(lower, 0) | 0;
+  const hasUpper = upper != null;
+
+  if (lower$$1 < 0) {
+    return outOfRange();
+  } else if (hasUpper ? upper < lower$$1 : false) {
+    return new List();
+  } else {
+    let lastIndex = -1 | 0;
+    let res$$2;
+    const state$$13 = new List();
+    res$$2 = foldIndexed(function f$$56(i$$34, acc$$26, x$$67) {
+      lastIndex = i$$34;
+
+      if (lower$$1 <= i$$34 ? !hasUpper ? true : i$$34 <= upper : false) {
+        return new List(x$$67, acc$$26);
+      } else {
+        return acc$$26;
+      }
+    }, state$$13, xs$$128);
+
+    if (lower$$1 > lastIndex + 1 ? true : hasUpper ? upper > lastIndex : false) {
+      outOfRange();
+    }
+
+    return reverse(res$$2);
+  }
+}
+export function distinctBy(projection$$4, xs$$130, eq$$2) {
   const hashSet = createMutable([], comparerFromEqualityComparer(eq$$2));
   return filter(function f$$57($arg$$1) {
     return addToSet(projection$$4($arg$$1), hashSet);
-  }, xs$$131);
+  }, xs$$130);
 }
-export function distinct(xs$$133, eq$$3) {
+export function distinct(xs$$132, eq$$3) {
   return distinctBy(function (x$$68) {
     return x$$68;
-  }, xs$$133, eq$$3);
+  }, xs$$132, eq$$3);
 }
-export function exactlyOne(xs$$134) {
-  if (length$$1(xs$$134) === 1) {
-    return item$$1(0, xs$$134);
-  } else if (length$$1(xs$$134) === 0) {
-    throw new Error("The input sequence was empty\\nParameter name: list");
+export function exactlyOne(xs$$133) {
+  if (xs$$133.tail != null) {
+    if (xs$$133.tail.tail != null) {
+      throw new Error("Input list too long\\nParameter name: list");
+    } else {
+      return xs$$133.head;
+    }
   } else {
-    throw new Error("Input list too long\\nParameter name: list");
+    throw new Error("The input sequence was empty\\nParameter name: list");
   }
 }
 export function groupBy(projection$$5, xs$$135, eq$$4) {
   const dict = createMutable$$1([], comparerFromEqualityComparer(eq$$4));
+  const keys = [];
   iterate$$1(function (v$$2) {
     const key = projection$$5(v$$2);
+    const matchValue$$16 = tryGetValue(dict, key, null);
 
-    if (dict.has(key)) {
-      dict.set(key, new List(v$$2, dict.get(key)));
+    if (matchValue$$16[0]) {
+      dict.set(key, new List(v$$2, matchValue$$16[1]));
     } else {
-      dict.set(key, new List(v$$2, new List()));
+      addToDict(dict, key, new List(v$$2, new List()));
+      keys.push(key);
     }
   }, xs$$135);
-  return ofSeq(map$$1(function mapping(kv) {
-    return [kv[0], reverse(kv[1])];
-  }, dict));
+  return ofSeq(map$$1(function mapping(key$$1) {
+    return [key$$1, reverse(getItemFromDict(dict, key$$1))];
+  }, keys));
 }
 export function countBy(projection$$6, xs$$137, eq$$5) {
   const dict$$1 = createMutable$$1([], comparerFromEqualityComparer(eq$$5));
   iterate(function (v$$3) {
-    const key$$1 = projection$$6(v$$3);
-    const matchValue$$16 = tryGetValue(dict$$1, key$$1, null);
+    const key$$2 = projection$$6(v$$3);
+    const matchValue$$17 = tryGetValue(dict$$1, key$$2, null);
 
-    if (matchValue$$16[0]) {
-      matchValue$$16[1].contents = matchValue$$16[1].contents + 1;
+    if (matchValue$$17[0]) {
+      matchValue$$17[1].contents = matchValue$$17[1].contents + 1;
     } else {
-      dict$$1.set(key$$1, new FSharpRef(1));
+      dict$$1.set(key$$2, new FSharpRef(1));
     }
   }, xs$$137);
   let result$$1 = new List();
@@ -1148,16 +1173,16 @@ export function where(predicate$$2, xs$$138) {
   return filter(predicate$$2, xs$$138);
 }
 export function pairwise(xs$$139) {
-  const inner = function inner(xs$$140, acc$$27, x1) {
+  const inner = function inner(xs$$140, acc$$27, x1$$1) {
     inner: while (true) {
       if (xs$$140.tail != null) {
         const xs$$141 = xs$$140.tail;
-        const x2 = xs$$140.head;
-        acc$$27.push([x1, x2]);
+        const x2$$1 = xs$$140.head;
+        acc$$27.push([x1$$1, x2$$1]);
         const $acc$$27$$198 = acc$$27;
         xs$$140 = xs$$141;
         acc$$27 = $acc$$27$$198;
-        x1 = x2;
+        x1$$1 = x2$$1;
         continue inner;
       } else {
         return ofArray(acc$$27);
@@ -1167,13 +1192,13 @@ export function pairwise(xs$$139) {
     }
   };
 
-  var $target$$199, x1$$1, x2$$1, xs$$142;
+  var $target$$199, x1$$2, x2$$2, xs$$142;
 
   if (xs$$139.tail != null) {
     if (xs$$139.tail.tail != null) {
       $target$$199 = 1;
-      x1$$1 = xs$$139.head;
-      x2$$1 = xs$$139.tail.head;
+      x1$$2 = xs$$139.head;
+      x2$$2 = xs$$139.tail.head;
       xs$$142 = xs$$139.tail.tail;
     } else {
       $target$$199 = 0;
@@ -1191,8 +1216,16 @@ export function pairwise(xs$$139) {
     case 1:
       {
         const acc$$28 = [];
-        acc$$28.push([x1$$1, x2$$1]);
-        return inner(xs$$142, acc$$28, x2$$1);
+        acc$$28.push([x1$$2, x2$$2]);
+        return function (arg00$$2) {
+          const clo1 = partialApply(2, inner, [arg00$$2]);
+          return function (arg10) {
+            const clo2 = clo1(arg10);
+            return function (arg20) {
+              return clo2(arg20);
+            };
+          };
+        }(xs$$142)(acc$$28)(x2$$2);
       }
   }
 }
@@ -1201,9 +1234,11 @@ export function windowed(windowSize, source$$1) {
     throw new Error("windowSize must be positive");
   }
 
-  return ofSeq$$1(delay(function () {
-    return map$$1(function (i$$35) {
-      return slice$$1(i$$35 - windowSize, i$$35 - 1, source$$1);
-    }, rangeNumber(windowSize, 1, length$$1(source$$1)));
-  }));
+  let res$$3 = new List();
+
+  for (let i$$35 = length(source$$1); i$$35 >= windowSize; i$$35--) {
+    res$$3 = new List(slice(i$$35 - windowSize, i$$35 - 1, source$$1), res$$3);
+  }
+
+  return res$$3;
 }

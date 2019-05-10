@@ -157,8 +157,8 @@ module RayTracer =
         let RecenterY y = -(float y - (float height / 2.0)) / (2.0 * float height)
         Vector.Norm (camera.Forward + RecenterX (x) * camera.Right + RecenterY (y) * camera.Up)
 
-    let Render scene (data: Fable.Import.JS.Uint8ClampedArray) (x, y, width, height) =
-        let clamp v = Math.Floor (255.0 * Math.Min(v, 1.0))
+    let Render scene (data: byte[]) (x, y, width, height) =
+        let clamp v = Math.Floor (255.0 * Math.Min(v, 1.0)) |> byte
         for y = y to height-1 do
             let stride = y * width
             for x = x to width-1 do
@@ -169,7 +169,7 @@ module RayTracer =
                 data.[index+0] <- clamp color.R
                 data.[index+1] <- clamp color.G
                 data.[index+2] <- clamp color.B
-                data.[index+3] <- 255.
+                data.[index+3] <- 255uy
 
 module SceneObjects =
 
@@ -237,20 +237,21 @@ module Scenes =
                      { Pos = { X = 0.0; Y = 3.5; Z = 0.0 }; Color = { R = 0.21; G = 0.21; B = 0.35 } } ];
           Camera = Camera ({ X = 3.0; Y = 2.0; Z = 4.0 }, { X = -1.0; Y = 0.5; Z = 0.0 }) }
 
-
-open Fable.Import.Browser
+open Fable.Core.JsInterop
+open Browser.Types
+open Browser
 
 let renderScene scene (x, y, width, height) =
     let canvas = document.getElementsByTagName("canvas").[0] :?> HTMLCanvasElement
     let ctx = canvas.getContext_2d()
-    let img = ctx.createImageData(Fable.Core.U2.Case1 (float width), float height)
+    let img = ctx.createImageData(float width, float height)
     RayTracer.Render scene img.data (x, y, width, height)
     ctx.putImageData(img, float -x, float -y)
 
 let measure f x y =
-    let dtStart = window.performance.now()
+    let dtStart = window?performance?now()
     let res = f x y
-    let elapsed = window.performance.now() - dtStart
+    let elapsed = window?performance?now() - dtStart
     res, elapsed
 
 let x, y, w, h = (0, 0, 512, 512)

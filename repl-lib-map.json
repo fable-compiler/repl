@@ -6,14 +6,19 @@
 
     "PromiseImpl": ["PromiseImpl", "src/PromiseImpl"],
     "Promise": ["Promise", "src/Promise"],
+    "Fetch": ["Fetch", "src/Fetch"],
     "Fable.SimpleHttp": ["Fable.SimpleHttp", "src/Http"],
 
     "Elmish.Log": ["Elmish.Log", "src/prelude"],
     "Elmish.Cmd": ["Elmish", "src/cmd"],
     "Elmish.Program": ["Elmish", "src/program"],
 
-    "Fable.Helpers.React": ["Fable.Helpers.React", "Fable.React/Fable.Helpers.React"],
-    "Fable.Recharts": ["Fable.Recharts", "Fable.Recharts/Fable.Recharts"],
+    "Fable.React.Hooks": ["Fable.React.Hooks", "src/Fable.React.Hooks"],
+    "Fable.React.Props": ["Fable.React.Props", "src/Fable.React.Props"],
+    "Fable.React.Helpers": ["Fable.React", "src/Fable.React.Helpers"],
+    "Fable.React.Standard": ["Fable.React.Standard", "src/Fable.React.Standard"],
+    "Fable.React.FunctionComponent": ["Fable.React", "src/Fable.React.FunctionComponent"],
+    "Fable.Recharts": ["Fable.Recharts", "src/Fable.Recharts"],
 
     "Elmish.React": ["Elmish.React.Program", "Elmish.React"],
 

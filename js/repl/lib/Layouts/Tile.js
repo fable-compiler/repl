@@ -1,161 +1,69 @@
-import { List, Record, declare, Union } from "../fable-library.2.2.0-beta-010/Types.js";
-import { record, bool, option, list as list$$1, type, string, union } from "../fable-library.2.2.0-beta-010/Reflection.js";
-import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection } from "../Fulma/Common.js";
-import { ofSeq, fold } from "../fable-library.2.2.0-beta-010/List.js";
-import { append, delay, singleton } from "../fable-library.2.2.0-beta-010/Seq.js";
-import { createObj } from "../fable-library.2.2.0-beta-010/Util.js";
-const createElement = React.createElement;
+import { List, declare, Union } from "../fable-library.2.3.7/Types.js";
+import { list, type, string, union } from "../fable-library.2.3.7/Reflection.js";
+import { Common$002EGenericOptions$$$Parse$$9AE2F7C as Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C, Common$002EGenericOptions$$ToReactElement$$Z6D3CD4B7 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7, Common$002EGenericOptions$$AddModifiers$$5BB435D5 as Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5, Common$002EGenericOptions$$AddClass$$Z721C83C5 as Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5, Common$002EGenericOptions$$AddProps$$416C4D0B as Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B, Common$002EGenericOptions$$AddCaseName$$1505 as Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Reflection$$$getCaseName as Reflection$0024$0024$0024getCaseName } from "../Fulma/Common.js";
+import { createObj } from "../fable-library.2.3.7/Util.js";
 export const ISize = declare(function Fulma_Tile_ISize(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
 export function ISize$reflection() {
-  return union("Fulma.Tile.ISize", [], ISize, () => ["Is1", "Is2", "Is3", "Is4", "Is5", "Is6", "Is7", "Is8", "Is9", "Is10", "Is11", "Is12"]);
+  return union("Fulma.Tile.ISize", [], ISize, () => ["is-1", "is-2", "is-3", "is-4", "is-5", "is-6", "is-7", "is-8", "is-9", "is-10", "is-11", "is-12"]);
 }
-export function ofSize(_arg1) {
-  switch (_arg1.tag) {
-    case 1:
-      {
-        return "is-2";
-      }
-
-    case 2:
-      {
-        return "is-3";
-      }
-
-    case 3:
-      {
-        return "is-4";
-      }
-
-    case 4:
-      {
-        return "is-5";
-      }
-
-    case 5:
-      {
-        return "is-6";
-      }
-
-    case 6:
-      {
-        return "is-7";
-      }
-
-    case 7:
-      {
-        return "is-8";
-      }
-
-    case 8:
-      {
-        return "is-9";
-      }
-
-    case 9:
-      {
-        return "is-10";
-      }
-
-    case 10:
-      {
-        return "is-11";
-      }
-
-    case 11:
-      {
-        return "is-12";
-      }
-
-    default:
-      {
-        return "is-1";
-      }
-  }
+export function ISize$$$ToString$$Z15E9EFF2(x) {
+  return Reflection$0024$0024$0024getCaseName(x);
 }
 export const Option = declare(function Fulma_Tile_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
 export function Option$reflection() {
-  return union("Fulma.Tile.Option", [], Option, () => [["Size", [ISize$reflection()]], ["CustomClass", [string]], ["Props", [list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))]], "IsChild", "IsAncestor", "IsParent", "IsVertical", ["Modifiers", [list$$1(Modifier$0024002EIModifier$0024reflection())]]]);
-}
-export const Options = declare(function Fulma_Tile_Options(arg1, arg2, arg3, arg4, arg5, arg6) {
-  this.Size = arg1;
-  this.IsVertical = arg2;
-  this.CustomClass = arg3;
-  this.Props = arg4;
-  this.Context = arg5;
-  this.Modifiers = arg6;
-}, Record);
-export function Options$reflection() {
-  return record("Fulma.Tile.Options", [], Options, () => [["Size", option(string)], ["IsVertical", bool], ["CustomClass", option(string)], ["Props", list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))], ["Context", option(string)], ["Modifiers", list$$1(option(string))]]);
-}
-export function Options$$$get_Empty() {
-  return new Options(null, false, null, new List(), null, new List());
+  return union("Fulma.Tile.Option", [], Option, () => [["Size", [ISize$reflection()]], ["CustomClass", [string]], ["Props", [list(type("Fable.React.Props.IHTMLProp"))]], "is-child", "is-ancestor", "is-parent", "is-vertical", ["Modifiers", [list(Modifier$0024002EIModifier$0024reflection())]]]);
 }
 export function tile(options, children) {
-  const parseOptions = function parseOptions(result, _arg1$$1) {
-    switch (_arg1$$1.tag) {
-      case 2:
-        {
-          const props = _arg1$$1.fields[0];
-          return new Options(result.Size, result.IsVertical, result.CustomClass, props, result.Context, result.Modifiers);
-        }
-
-      case 0:
-        {
-          const size = _arg1$$1.fields[0];
-          return new Options(ofSize(size), result.IsVertical, result.CustomClass, result.Props, result.Context, result.Modifiers);
-        }
-
+  const parseOptions = function parseOptions(result, option) {
+    switch (option.tag) {
       case 3:
-        {
-          return new Options(result.Size, result.IsVertical, result.CustomClass, result.Props, "is-child", result.Modifiers);
-        }
-
       case 4:
-        {
-          return new Options(result.Size, result.IsVertical, result.CustomClass, result.Props, "is-ancestor", result.Modifiers);
-        }
-
       case 5:
-        {
-          return new Options(result.Size, result.IsVertical, result.CustomClass, result.Props, "is-parent", result.Modifiers);
-        }
-
       case 6:
         {
-          return new Options(result.Size, true, result.CustomClass, result.Props, result.Context, result.Modifiers);
+          return Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505(result, option);
+        }
+
+      case 2:
+        {
+          const props = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B(result, props);
+        }
+
+      case 1:
+        {
+          const customClass = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, customClass);
         }
 
       case 7:
         {
-          const modifiers = _arg1$$1.fields[0];
-          return new Options(result.Size, result.IsVertical, result.CustomClass, result.Props, result.Context, Modifier$0024$0024$0024parseModifiers(modifiers));
+          const modifiers = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5(result, modifiers);
         }
 
       default:
         {
-          const customClass = _arg1$$1.fields[0];
-          return new Options(result.Size, result.IsVertical, customClass, result.Props, result.Context, result.Modifiers);
+          const size = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, ISize$$$ToString$$Z15E9EFF2(size));
         }
     }
   };
 
-  const opts = fold(parseOptions, Options$$$get_Empty(), options);
-  return createElement("div", createObj(ofSeq(delay(function () {
-    return append(singleton(Common$0024002EHelpers$0024$0024$0024classes("tile", new List(opts.CustomClass, new List(opts.Context, new List(opts.Size, opts.Modifiers))), new List(["is-vertical", opts.IsVertical], new List()))), delay(function () {
-      return opts.Props;
-    }));
-  })), 1), ...children);
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options, parseOptions, "tile"), function (props$$1, children$$1) {
+    return React.createElement("div", createObj(props$$1, 1), ...children$$1);
+  }, children);
 }
-export function parent(options$$2, children$$3) {
-  return tile(new List(new Option(5, "IsParent"), options$$2), children$$3);
+export function parent(options$$1, children$$4) {
+  return tile(new List(new Option(5, "is-parent"), options$$1), children$$4);
 }
-export function child(options$$3, children$$4) {
-  return tile(new List(new Option(3, "IsChild"), options$$3), children$$4);
+export function child(options$$2, children$$5) {
+  return tile(new List(new Option(3, "is-child"), options$$2), children$$5);
 }
-export function ancestor(options$$4, children$$5) {
-  return tile(new List(new Option(4, "IsAncestor"), options$$4), children$$5);
+export function ancestor(options$$3, children$$6) {
+  return tile(new List(new Option(4, "is-ancestor"), options$$3), children$$6);
 }

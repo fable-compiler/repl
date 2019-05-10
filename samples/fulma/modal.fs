@@ -1,8 +1,8 @@
 // More info about Fulma at https://mangelmaxime.github.io/Fulma/
 module Fulma.Modal
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 open Fulma
 open Fable.Core
 open Fable.Import

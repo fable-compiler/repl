@@ -1,186 +1,153 @@
-import { List, Record, declare, Union } from "../fable-library.2.2.0-beta-010/Types.js";
-import { lambda, unit, record, option, union, string, bool, list as list$$2, type } from "../fable-library.2.2.0-beta-010/Reflection.js";
-import { Common$$$genericParse as Common$0024$0024$0024genericParse, Size$$$ofSize as Size$0024$0024$0024ofSize, Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Size$002EISize$reflection as Size$0024002EISize$0024reflection, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection } from "../Fulma/Common.js";
-import { fold } from "../fable-library.2.2.0-beta-010/List.js";
-import { createObj } from "../fable-library.2.2.0-beta-010/Util.js";
-import { Props$002EDOMAttr as Props$0024002EDOMAttr } from "../Fable.React/Fable.Helpers.React.js";
-const createElement = React.createElement;
+import { declare, Union } from "../fable-library.2.3.7/Types.js";
+import { lambda, unit, union, string, bool, list, type } from "../fable-library.2.3.7/Reflection.js";
+import { Common$$$parseOptions as Common$0024$0024$0024parseOptions, Common$002EGenericOptions$$AddProp$$7BFEDA81 as Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81, Reflection$$$getCaseName as Reflection$0024$0024$0024getCaseName, Common$002EGenericOptions$$$Parse$$9AE2F7C as Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C, Common$002EGenericOptions$$ToReactElement$$Z6D3CD4B7 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7, Common$002EGenericOptions$$AddCaseName$$1505 as Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505, Common$002EGenericOptions$$AddModifiers$$5BB435D5 as Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5, Common$002EGenericOptions$$AddClass$$Z721C83C5 as Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5, Common$002EGenericOptions$$AddProps$$416C4D0B as Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B, Size$002EISize$reflection as Size$0024002EISize$0024reflection, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection } from "../Fulma/Common.js";
+import { createObj } from "../fable-library.2.3.7/Util.js";
+import { DOMAttr } from "../src/Fable.React.Props.js";
 export const Option = declare(function Fulma_Modal_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
 export function Option$reflection() {
-  return union("Fulma.Modal.Option", [], Option, () => [["Props", [list$$2(type("Fable.Helpers.React.Props.IHTMLProp"))]], ["IsActive", [bool]], ["CustomClass", [string]], ["Modifiers", [list$$2(Modifier$0024002EIModifier$0024reflection())]]]);
-}
-export const Options = declare(function Fulma_Modal_Options(arg1, arg2, arg3, arg4) {
-  this.Props = arg1;
-  this.IsActive = arg2;
-  this.CustomClass = arg3;
-  this.Modifiers = arg4;
-}, Record);
-export function Options$reflection() {
-  return record("Fulma.Modal.Options", [], Options, () => [["Props", list$$2(type("Fable.Helpers.React.Props.IHTMLProp"))], ["IsActive", bool], ["CustomClass", option(string)], ["Modifiers", list$$2(option(string))]]);
-}
-export function Options$$$get_Empty() {
-  return new Options(new List(), false, null, new List());
+  return union("Fulma.Modal.Option", [], Option, () => [["Props", [list(type("Fable.React.Props.IHTMLProp"))]], ["is-active", [bool]], ["CustomClass", [string]], ["Modifiers", [list(Modifier$0024002EIModifier$0024reflection())]]]);
 }
 export const Close$002EOption = declare(function Fulma_Modal_Close_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
 export function Close$002EOption$reflection() {
-  return union("Fulma.Modal.Close.Option", [], Close$002EOption, () => [["Props", [list$$2(type("Fable.Helpers.React.Props.IHTMLProp"))]], ["Size", [Size$0024002EISize$0024reflection()]], ["CustomClass", [string]], ["OnClick", [lambda(type("Fable.Import.React.MouseEvent"), unit)]], ["Modifiers", [list$$2(Modifier$0024002EIModifier$0024reflection())]]]);
-}
-export const Close$002EOptions = declare(function Fulma_Modal_Close_Options(arg1, arg2, arg3, arg4, arg5) {
-  this.Props = arg1;
-  this.Size = arg2;
-  this.CustomClass = arg3;
-  this.OnClick = arg4;
-  this.Modifiers = arg5;
-}, Record);
-export function Close$002EOptions$reflection() {
-  return record("Fulma.Modal.Close.Options", [], Close$002EOptions, () => [["Props", list$$2(type("Fable.Helpers.React.Props.IHTMLProp"))], ["Size", option(string)], ["CustomClass", option(string)], ["OnClick", option(lambda(type("Fable.Import.React.MouseEvent"), unit))], ["Modifiers", list$$2(option(string))]]);
-}
-export function Close$002EOptions$$$get_Empty() {
-  return new Close$002EOptions(new List(), null, null, null, new List());
+  return union("Fulma.Modal.Close.Option", [], Close$002EOption, () => [["Size", [Size$0024002EISize$0024reflection()]], ["OnClick", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["Props", [list(type("Fable.React.Props.IHTMLProp"))]], ["CustomClass", [string]], ["Modifiers", [list(Modifier$0024002EIModifier$0024reflection())]]]);
 }
 export function modal(options, children) {
-  const parseOptions = function parseOptions(result, opt) {
-    switch (opt.tag) {
-      case 2:
+  const parseOptions = function parseOptions(result, option) {
+    switch (option.tag) {
+      case 0:
         {
-          const customClass = opt.fields[0];
-          return new Options(result.Props, result.IsActive, customClass, result.Modifiers);
+          const props = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B(result, props);
         }
 
-      case 1:
+      case 2:
         {
-          const state = opt.fields[0];
-          return new Options(result.Props, state, result.CustomClass, result.Modifiers);
+          const customClass = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, customClass);
         }
 
       case 3:
         {
-          const modifiers = opt.fields[0];
-          return new Options(result.Props, result.IsActive, result.CustomClass, Modifier$0024$0024$0024parseModifiers(modifiers));
+          const modifiers = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5(result, modifiers);
         }
 
       default:
         {
-          const props = opt.fields[0];
-          return new Options(props, result.IsActive, result.CustomClass, result.Modifiers);
+          const state = option.fields[0];
+
+          if (state) {
+            return Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505(result, option);
+          } else {
+            return result;
+          }
         }
     }
   };
 
-  const opts = fold(parseOptions, Options$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("modal", new List(opts.CustomClass, opts.Modifiers), new List(["is-active", opts.IsActive], new List()));
-  return createElement("div", createObj(new List(classes, opts.Props), 1), ...children);
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options, parseOptions, "modal"), function (props$$1, children$$1) {
+    return React.createElement("div", createObj(props$$1, 1), ...children$$1);
+  }, children);
 }
-export function close(options$$2, children$$3) {
-  const parseOptions$$1 = function parseOptions$$1(result$$1, opt$$1) {
-    var $target$$1, props$$3, customClass$$1, size, cb, modifiers$$1;
+export function close(options$$1, children$$4) {
+  const parseOptions$$1 = function parseOptions$$1(result$$1, option$$1) {
+    var $target$$1, size, cb, props$$4, customClass$$1, modifiers$$1;
 
-    if (opt$$1.tag === 2) {
-      $target$$1 = 1;
-      customClass$$1 = opt$$1.fields[0];
-    } else if (opt$$1.tag === 1) {
-      if (opt$$1.fields[0].tag === 0) {
-        $target$$1 = 2;
-      } else if (opt$$1.fields[0].tag === 1) {
-        $target$$1 = 2;
-      } else {
-        $target$$1 = 3;
-        size = opt$$1.fields[0];
-      }
-    } else if (opt$$1.tag === 3) {
+    if (option$$1.tag === 1) {
+      $target$$1 = 2;
+      cb = option$$1.fields[0];
+    } else if (option$$1.tag === 2) {
+      $target$$1 = 3;
+      props$$4 = option$$1.fields[0];
+    } else if (option$$1.tag === 3) {
       $target$$1 = 4;
-      cb = opt$$1.fields[0];
-    } else if (opt$$1.tag === 4) {
+      customClass$$1 = option$$1.fields[0];
+    } else if (option$$1.tag === 4) {
       $target$$1 = 5;
-      modifiers$$1 = opt$$1.fields[0];
-    } else {
+      modifiers$$1 = option$$1.fields[0];
+    } else if (option$$1.fields[0].tag === 0) {
       $target$$1 = 0;
-      props$$3 = opt$$1.fields[0];
+    } else if (option$$1.fields[0].tag === 1) {
+      $target$$1 = 0;
+    } else {
+      $target$$1 = 1;
+      size = option$$1.fields[0];
     }
 
     switch ($target$$1) {
       case 0:
         {
-          return new Close$002EOptions(props$$3, result$$1.Size, result$$1.CustomClass, result$$1.OnClick, result$$1.Modifiers);
-        }
-
-      case 1:
-        {
-          return new Close$002EOptions(result$$1.Props, result$$1.Size, customClass$$1, result$$1.OnClick, result$$1.Modifiers);
-        }
-
-      case 2:
-        {
           console.warn("`is-small` and `is-medium` are not valid sizes for 'modal close'");
           return result$$1;
         }
 
+      case 1:
+        {
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result$$1, Reflection$0024$0024$0024getCaseName(size));
+        }
+
+      case 2:
+        {
+          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result$$1, new DOMAttr(40, "OnClick", cb));
+        }
+
       case 3:
         {
-          return new Close$002EOptions(result$$1.Props, Size$0024$0024$0024ofSize(size), result$$1.CustomClass, result$$1.OnClick, result$$1.Modifiers);
+          return Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B(result$$1, props$$4);
         }
 
       case 4:
         {
-          return new Close$002EOptions(result$$1.Props, result$$1.Size, result$$1.CustomClass, cb, result$$1.Modifiers);
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result$$1, customClass$$1);
         }
 
       case 5:
         {
-          return new Close$002EOptions(result$$1.Props, result$$1.Size, result$$1.CustomClass, result$$1.OnClick, Modifier$0024$0024$0024parseModifiers(modifiers$$1));
+          return Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5(result$$1, modifiers$$1);
         }
     }
   };
 
-  const opts$$1 = fold(parseOptions$$1, Close$002EOptions$$$get_Empty(), options$$2);
-  const classes$$1 = Common$0024002EHelpers$0024$0024$0024classes("modal-close", new List(opts$$1.Size, new List(opts$$1.CustomClass, opts$$1.Modifiers)), new List());
-  let opts$$2;
-
-  if (opts$$1.OnClick == null) {
-    opts$$2 = new List(classes$$1, opts$$1.Props);
-  } else {
-    const v = opts$$1.OnClick;
-    opts$$2 = new List(classes$$1, new List(new Props$0024002EDOMAttr(40, "OnClick", v), opts$$1.Props));
-  }
-
-  return createElement("button", createObj(opts$$2, 1), ...children$$3);
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$1, parseOptions$$1, "modal-close"), function (props$$5, children$$5) {
+    return React.createElement("button", createObj(props$$5, 1), ...children$$5);
+  }, children$$4);
 }
-export function background(options$$4, children$$6) {
-  const opts$$3 = Common$0024$0024$0024genericParse(options$$4);
-  const classes$$2 = Common$0024002EHelpers$0024$0024$0024classes("modal-background", new List(opts$$3.CustomClass, opts$$3.Modifiers), new List());
-  return createElement("div", createObj(new List(classes$$2, opts$$3.Props), 1), ...children$$6);
+export function background(options$$2, children$$8) {
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$2, Common$0024$0024$0024parseOptions, "modal-background"), function (props$$8, children$$9) {
+    return React.createElement("div", createObj(props$$8, 1), ...children$$9);
+  }, children$$8);
 }
-export function content(options$$5, children$$9) {
-  const opts$$4 = Common$0024$0024$0024genericParse(options$$5);
-  const classes$$3 = Common$0024002EHelpers$0024$0024$0024classes("modal-content", new List(opts$$4.CustomClass, opts$$4.Modifiers), new List());
-  return createElement("div", createObj(new List(classes$$3, opts$$4.Props), 1), ...children$$9);
+export function content(options$$3, children$$12) {
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$3, Common$0024$0024$0024parseOptions, "modal-content"), function (props$$11, children$$13) {
+    return React.createElement("div", createObj(props$$11, 1), ...children$$13);
+  }, children$$12);
 }
-export function Card$$$card(options$$6, children$$12) {
-  const opts$$5 = Common$0024$0024$0024genericParse(options$$6);
-  const classes$$4 = Common$0024002EHelpers$0024$0024$0024classes("modal-card", new List(opts$$5.CustomClass, opts$$5.Modifiers), new List());
-  return createElement("div", createObj(new List(classes$$4, opts$$5.Props), 1), ...children$$12);
+export function Card$$$card(options$$4, children$$16) {
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$4, Common$0024$0024$0024parseOptions, "modal-card"), function (props$$14, children$$17) {
+    return React.createElement("div", createObj(props$$14, 1), ...children$$17);
+  }, children$$16);
 }
-export function Card$$$head(options$$7, children$$15) {
-  const opts$$6 = Common$0024$0024$0024genericParse(options$$7);
-  const classes$$5 = Common$0024002EHelpers$0024$0024$0024classes("modal-card-head", new List(opts$$6.CustomClass, opts$$6.Modifiers), new List());
-  return createElement("header", createObj(new List(classes$$5, opts$$6.Props), 1), ...children$$15);
+export function Card$$$head(options$$5, children$$20) {
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$5, Common$0024$0024$0024parseOptions, "modal-card-head"), function (props$$17, children$$21) {
+    return React.createElement("header", createObj(props$$17, 1), ...children$$21);
+  }, children$$20);
 }
-export function Card$$$foot(options$$8, children$$18) {
-  const opts$$7 = Common$0024$0024$0024genericParse(options$$8);
-  const classes$$6 = Common$0024002EHelpers$0024$0024$0024classes("modal-card-foot", new List(opts$$7.CustomClass, opts$$7.Modifiers), new List());
-  return createElement("footer", createObj(new List(classes$$6, opts$$7.Props), 1), ...children$$18);
+export function Card$$$foot(options$$6, children$$24) {
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$6, Common$0024$0024$0024parseOptions, "modal-card-foot"), function (props$$20, children$$25) {
+    return React.createElement("footer", createObj(props$$20, 1), ...children$$25);
+  }, children$$24);
 }
-export function Card$$$title(options$$9, children$$21) {
-  const opts$$8 = Common$0024$0024$0024genericParse(options$$9);
-  const classes$$7 = Common$0024002EHelpers$0024$0024$0024classes("modal-card-title", new List(opts$$8.CustomClass, opts$$8.Modifiers), new List());
-  return createElement("div", createObj(new List(classes$$7, opts$$8.Props), 1), ...children$$21);
+export function Card$$$title(options$$7, children$$28) {
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$7, Common$0024$0024$0024parseOptions, "modal-card-title"), function (props$$23, children$$29) {
+    return React.createElement("div", createObj(props$$23, 1), ...children$$29);
+  }, children$$28);
 }
-export function Card$$$body(options$$10, children$$24) {
-  const opts$$9 = Common$0024$0024$0024genericParse(options$$10);
-  const classes$$8 = Common$0024002EHelpers$0024$0024$0024classes("modal-card-body", new List(opts$$9.CustomClass, opts$$9.Modifiers), new List());
-  return createElement("section", createObj(new List(classes$$8, opts$$9.Props), 1), ...children$$24);
+export function Card$$$body(options$$8, children$$32) {
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$8, Common$0024$0024$0024parseOptions, "modal-card-body"), function (props$$26, children$$33) {
+    return React.createElement("section", createObj(props$$26, 1), ...children$$33);
+  }, children$$32);
 }

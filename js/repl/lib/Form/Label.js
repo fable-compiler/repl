@@ -1,72 +1,50 @@
-import { List, Record, declare, Union } from "../fable-library.2.2.0-beta-010/Types.js";
-import { Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Size$$$ofSize as Size$0024$0024$0024ofSize, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection } from "../Fulma/Common.js";
-import { record, option, union, list as list$$1, type, string } from "../fable-library.2.2.0-beta-010/Reflection.js";
-import { ofSeq, fold } from "../fable-library.2.2.0-beta-010/List.js";
-import { append, delay, empty, singleton } from "../fable-library.2.2.0-beta-010/Seq.js";
-import { Props$002EHTMLAttr as Props$0024002EHTMLAttr } from "../Fable.React/Fable.Helpers.React.js";
-import { createObj } from "../fable-library.2.2.0-beta-010/Util.js";
-const createElement = React.createElement;
+import { declare, Union } from "../fable-library.2.3.7/Types.js";
+import { Common$002EGenericOptions$$$Parse$$9AE2F7C as Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C, Common$002EGenericOptions$$ToReactElement$$Z6D3CD4B7 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7, Reflection$$$getCaseName as Reflection$0024$0024$0024getCaseName, Common$002EGenericOptions$$AddModifiers$$5BB435D5 as Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5, Common$002EGenericOptions$$AddClass$$Z721C83C5 as Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5, Common$002EGenericOptions$$AddProps$$416C4D0B as Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B, Common$002EGenericOptions$$AddProp$$7BFEDA81 as Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection } from "../Fulma/Common.js";
+import { union, list, type, string } from "../fable-library.2.3.7/Reflection.js";
+import { HTMLAttr } from "../src/Fable.React.Props.js";
+import { createObj } from "../fable-library.2.3.7/Util.js";
 export const Option = declare(function Fulma_Label_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
 export function Option$reflection() {
-  return union("Fulma.Label.Option", [], Option, () => [["Size", [Size$0024002EISize$0024reflection()]], ["For", [string]], ["CustomClass", [string]], ["Props", [list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))]], ["Modifiers", [list$$1(Modifier$0024002EIModifier$0024reflection())]]]);
-}
-export const Options = declare(function Fulma_Label_Options(arg1, arg2, arg3, arg4, arg5) {
-  this.Size = arg1;
-  this.HtmlFor = arg2;
-  this.CustomClass = arg3;
-  this.Props = arg4;
-  this.Modifiers = arg5;
-}, Record);
-export function Options$reflection() {
-  return record("Fulma.Label.Options", [], Options, () => [["Size", option(string)], ["HtmlFor", option(string)], ["CustomClass", option(string)], ["Props", list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))], ["Modifiers", list$$1(option(string))]]);
-}
-export function Options$$$get_Empty() {
-  return new Options(null, null, null, new List(), new List());
+  return union("Fulma.Label.Option", [], Option, () => [["Size", [Size$0024002EISize$0024reflection()]], ["For", [string]], ["CustomClass", [string]], ["Props", [list(type("Fable.React.Props.IHTMLProp"))]], ["Modifiers", [list(Modifier$0024002EIModifier$0024reflection())]]]);
 }
 export function label(options, children) {
-  const parseOptions = function parseOptions(result, _arg1) {
-    switch (_arg1.tag) {
+  const parseOptions = function parseOptions(result, option) {
+    switch (option.tag) {
       case 1:
         {
-          const htmlFor = _arg1.fields[0];
-          return new Options(result.Size, htmlFor, result.CustomClass, result.Props, result.Modifiers);
-        }
-
-      case 2:
-        {
-          const customClass = _arg1.fields[0];
-          return new Options(result.Size, result.HtmlFor, customClass, result.Props, result.Modifiers);
+          const htmlFor = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, new HTMLAttr(56, "HtmlFor", htmlFor));
         }
 
       case 3:
         {
-          const props = _arg1.fields[0];
-          return new Options(result.Size, result.HtmlFor, result.CustomClass, props, result.Modifiers);
+          const props = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B(result, props);
+        }
+
+      case 2:
+        {
+          const customClass = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, customClass);
         }
 
       case 4:
         {
-          const modifiers = _arg1.fields[0];
-          return new Options(result.Size, result.HtmlFor, result.CustomClass, result.Props, Modifier$0024$0024$0024parseModifiers(modifiers));
+          const modifiers = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5(result, modifiers);
         }
 
       default:
         {
-          const size = _arg1.fields[0];
-          return new Options(Size$0024$0024$0024ofSize(size), result.HtmlFor, result.CustomClass, result.Props, result.Modifiers);
+          const size = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, Reflection$0024$0024$0024getCaseName(size));
         }
     }
   };
 
-  const opts = fold(parseOptions, Options$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("label", new List(opts.Size, new List(opts.CustomClass, opts.Modifiers)), new List());
-  return createElement("label", createObj(ofSeq(delay(function () {
-    return append(singleton(classes), delay(function () {
-      return append(opts.HtmlFor != null ? singleton(new Props$0024002EHTMLAttr(54, "HtmlFor", opts.HtmlFor)) : empty(), delay(function () {
-        return opts.Props;
-      }));
-    }));
-  })), 1), ...children);
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options, parseOptions, "label"), function (props$$1, children$$1) {
+    return React.createElement("label", createObj(props$$1, 1), ...children$$1);
+  }, children);
 }

@@ -4,9 +4,12 @@ module Ozmo
 // Shows how to handle keyboard events and use HTML5 canvas.
 // You can also get it (as a JavaScript app) from the Windows Store.
 
-module Keyboard =
+open Fable.Core
+open Fable.Core.JsInterop
+open Browser.Types
+open Browser
 
-    open Fable.Import
+module Keyboard =
 
     let mutable keysPressed = Set.empty
 
@@ -14,19 +17,16 @@ module Keyboard =
 
     let arrows () = (code 39 - code 37, code 38 - code 40)
 
-    let update (e : Browser.KeyboardEvent, pressed) =
+    let update (e : KeyboardEvent, pressed) =
         let keyCode = int e.keyCode
         let op = if pressed then Set.add else Set.remove
         keysPressed <- op keyCode keysPressed
 
     let init () =
-        Browser.window.addEventListener("keydown", fun e -> update(e :?> _, true))
-        Browser.window.addEventListener("keyup", fun e -> update(e :?> _, false))
+        window.addEventListener("keydown", fun e -> update(e :?> _, true))
+        window.addEventListener("keyup", fun e -> update(e :?> _, false))
 
 // Main
-
-open Fable.Import
-open Fable.Core.JsInterop
 
 /// The width of the canvas
 let width = 900.
@@ -39,15 +39,15 @@ let atmosHeight = 300.
 
 Keyboard.init()
 
-let canvas = Browser.document.getElementsByTagName("canvas").[0] :?> Browser.HTMLCanvasElement
+let canvas = document.getElementsByTagName("canvas").[0] :?> HTMLCanvasElement
 let ctx = canvas.getContext_2d()
 canvas.width <- width
 canvas.height <- height
 
 
 /// Draw gradient between two Y offsets and two colours
-let drawGrd (ctx:Browser.CanvasRenderingContext2D)
-    (canvas:Browser.HTMLCanvasElement) (y0,y1) (c0,c1) =
+let drawGrd (ctx:CanvasRenderingContext2D)
+    (canvas:HTMLCanvasElement) (y0,y1) (c0,c1) =
     let grd = ctx.createLinearGradient(0.,y0,0.,y1)
     grd.addColorStop(0.,c0)
     grd.addColorStop(1.,c1)
@@ -79,8 +79,8 @@ type Blob =
       vx:float; vy:float;
       Radius:float; color:string }
 
-let drawBlob (ctx:Browser.CanvasRenderingContext2D)
-    (canvas:Browser.HTMLCanvasElement) (blob:Blob) =
+let drawBlob (ctx:CanvasRenderingContext2D)
+    (canvas:HTMLCanvasElement) (blob:Blob) =
     ctx.beginPath()
     ctx.arc
         ( blob.X, canvas.height - (blob.Y + floorHeight + blob.Radius),

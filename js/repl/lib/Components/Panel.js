@@ -1,161 +1,150 @@
-import { List, Record, declare, Union } from "../fable-library.2.2.0-beta-010/Types.js";
-import { record, option, union, string, bool, list as list$$3, type } from "../fable-library.2.2.0-beta-010/Reflection.js";
-import { Common$$$genericParse as Common$0024$0024$0024genericParse, Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection } from "../Fulma/Common.js";
-import { fold } from "../fable-library.2.2.0-beta-010/List.js";
-import { createObj } from "../fable-library.2.2.0-beta-010/Util.js";
-const createElement = React.createElement;
+import { declare, Union } from "../fable-library.2.3.7/Types.js";
+import { union, string, list, type, bool } from "../fable-library.2.3.7/Reflection.js";
+import { Common$$$parseOptions as Common$0024$0024$0024parseOptions, Common$002EGenericOptions$$$Parse$$9AE2F7C as Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C, Common$002EGenericOptions$$ToReactElement$$Z6D3CD4B7 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7, Common$002EGenericOptions$$AddCaseName$$1505 as Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505, Common$002EGenericOptions$$AddModifiers$$5BB435D5 as Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5, Common$002EGenericOptions$$AddClass$$Z721C83C5 as Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5, Common$002EGenericOptions$$AddProps$$416C4D0B as Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection } from "../Fulma/Common.js";
+import { createObj } from "../fable-library.2.3.7/Util.js";
 export const Block$002EOption = declare(function Fulma_Panel_Block_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
 export function Block$002EOption$reflection() {
-  return union("Fulma.Panel.Block.Option", [], Block$002EOption, () => [["Props", [list$$3(type("Fable.Helpers.React.Props.IHTMLProp"))]], ["IsActive", [bool]], ["CustomClass", [string]], ["Modifiers", [list$$3(Modifier$0024002EIModifier$0024reflection())]]]);
-}
-export const Block$002EOptions = declare(function Fulma_Panel_Block_Options(arg1, arg2, arg3, arg4) {
-  this.Props = arg1;
-  this.CustomClass = arg2;
-  this.IsActive = arg3;
-  this.Modifiers = arg4;
-}, Record);
-export function Block$002EOptions$reflection() {
-  return record("Fulma.Panel.Block.Options", [], Block$002EOptions, () => [["Props", list$$3(type("Fable.Helpers.React.Props.IHTMLProp"))], ["CustomClass", option(string)], ["IsActive", bool], ["Modifiers", list$$3(option(string))]]);
-}
-export function Block$002EOptions$$$get_Empty() {
-  return new Block$002EOptions(new List(), null, false, new List());
+  return union("Fulma.Panel.Block.Option", [], Block$002EOption, () => [["is-active", [bool]], ["Props", [list(type("Fable.React.Props.IHTMLProp"))]], ["CustomClass", [string]], ["Modifiers", [list(Modifier$0024002EIModifier$0024reflection())]]]);
 }
 export const Tab$002EOption = declare(function Fulma_Panel_Tab_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
 export function Tab$002EOption$reflection() {
-  return union("Fulma.Panel.Tab.Option", [], Tab$002EOption, () => [["Props", [list$$3(type("Fable.Helpers.React.Props.IHTMLProp"))]], ["IsActive", [bool]], ["CustomClass", [string]], ["Modifiers", [list$$3(Modifier$0024002EIModifier$0024reflection())]]]);
-}
-export const Tab$002EOptions = declare(function Fulma_Panel_Tab_Options(arg1, arg2, arg3, arg4) {
-  this.Props = arg1;
-  this.CustomClass = arg2;
-  this.IsActive = arg3;
-  this.Modifiers = arg4;
-}, Record);
-export function Tab$002EOptions$reflection() {
-  return record("Fulma.Panel.Tab.Options", [], Tab$002EOptions, () => [["Props", list$$3(type("Fable.Helpers.React.Props.IHTMLProp"))], ["CustomClass", option(string)], ["IsActive", bool], ["Modifiers", list$$3(option(string))]]);
-}
-export function Tab$002EOptions$$$get_Empty() {
-  return new Tab$002EOptions(new List(), null, false, new List());
+  return union("Fulma.Panel.Tab.Option", [], Tab$002EOption, () => [["is-active", [bool]], ["Props", [list(type("Fable.React.Props.IHTMLProp"))]], ["CustomClass", [string]], ["Modifiers", [list(Modifier$0024002EIModifier$0024reflection())]]]);
 }
 export function block(options, children) {
-  const parseOptions = function parseOptions(result, opt) {
-    switch (opt.tag) {
+  const parseOptions = function parseOptions(result, option) {
+    switch (option.tag) {
       case 1:
         {
-          const state = opt.fields[0];
-          return new Block$002EOptions(result.Props, result.CustomClass, state, result.Modifiers);
+          const props = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B(result, props);
         }
 
       case 2:
         {
-          const customClass = opt.fields[0];
-          return new Block$002EOptions(result.Props, customClass, result.IsActive, result.Modifiers);
+          const customClass = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, customClass);
         }
 
       case 3:
         {
-          const modifiers = opt.fields[0];
-          return new Block$002EOptions(result.Props, result.CustomClass, result.IsActive, Modifier$0024$0024$0024parseModifiers(modifiers));
+          const modifiers = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5(result, modifiers);
         }
 
       default:
         {
-          const props = opt.fields[0];
-          return new Block$002EOptions(props, result.CustomClass, result.IsActive, result.Modifiers);
+          const state = option.fields[0];
+
+          if (state) {
+            return Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505(result, option);
+          } else {
+            return result;
+          }
         }
     }
   };
 
-  const opts = fold(parseOptions, Block$002EOptions$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("panel-block", new List(opts.CustomClass, opts.Modifiers), new List(["is-active", opts.IsActive], new List()));
-  return createElement("div", createObj(new List(classes, opts.Props), 1), ...children);
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options, parseOptions, "panel-block"), function (props$$1, children$$1) {
+    return React.createElement("div", createObj(props$$1, 1), ...children$$1);
+  }, children);
 }
-export function checkbox(options$$2, children$$3) {
-  const parseOptions$$1 = function parseOptions$$1(result$$1, opt$$1) {
-    switch (opt$$1.tag) {
+export function checkbox(options$$1, children$$4) {
+  const parseOptions$$1 = function parseOptions$$1(result$$1, option$$1) {
+    switch (option$$1.tag) {
       case 1:
         {
-          const state$$2 = opt$$1.fields[0];
-          return new Block$002EOptions(result$$1.Props, result$$1.CustomClass, state$$2, result$$1.Modifiers);
+          const props$$4 = option$$1.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B(result$$1, props$$4);
         }
 
       case 2:
         {
-          const customClass$$1 = opt$$1.fields[0];
-          return new Block$002EOptions(result$$1.Props, customClass$$1, result$$1.IsActive, result$$1.Modifiers);
+          const customClass$$1 = option$$1.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result$$1, customClass$$1);
         }
 
       case 3:
         {
-          const modifiers$$1 = opt$$1.fields[0];
-          return new Block$002EOptions(result$$1.Props, result$$1.CustomClass, result$$1.IsActive, Modifier$0024$0024$0024parseModifiers(modifiers$$1));
+          const modifiers$$1 = option$$1.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5(result$$1, modifiers$$1);
         }
 
       default:
         {
-          const props$$3 = opt$$1.fields[0];
-          return new Block$002EOptions(props$$3, result$$1.CustomClass, result$$1.IsActive, result$$1.Modifiers);
+          const state$$1 = option$$1.fields[0];
+
+          if (state$$1) {
+            return Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505(result$$1, option$$1);
+          } else {
+            return result$$1;
+          }
         }
     }
   };
 
-  const opts$$1 = fold(parseOptions$$1, Block$002EOptions$$$get_Empty(), options$$2);
-  const classes$$1 = Common$0024002EHelpers$0024$0024$0024classes("panel-block", new List(opts$$1.CustomClass, opts$$1.Modifiers), new List(["is-active", opts$$1.IsActive], new List()));
-  return createElement("label", createObj(new List(classes$$1, opts$$1.Props), 1), ...children$$3);
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$1, parseOptions$$1, "panel-block"), function (props$$5, children$$5) {
+    return React.createElement("label", createObj(props$$5, 1), ...children$$5);
+  }, children$$4);
 }
-export function panel(options$$4, children$$6) {
-  const opts$$2 = Common$0024$0024$0024genericParse(options$$4);
-  const classes$$2 = Common$0024002EHelpers$0024$0024$0024classes("panel", new List(opts$$2.CustomClass, opts$$2.Modifiers), new List());
-  return createElement("nav", createObj(new List(classes$$2, opts$$2.Props), 1), ...children$$6);
+export function panel(options$$2, children$$8) {
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$2, Common$0024$0024$0024parseOptions, "panel"), function (props$$8, children$$9) {
+    return React.createElement("nav", createObj(props$$8, 1), ...children$$9);
+  }, children$$8);
 }
-export function heading(options$$5, children$$9) {
-  const opts$$3 = Common$0024$0024$0024genericParse(options$$5);
-  const classes$$3 = Common$0024002EHelpers$0024$0024$0024classes("panel-heading", new List(opts$$3.CustomClass, opts$$3.Modifiers), new List());
-  return createElement("div", createObj(new List(classes$$3, opts$$3.Props), 1), ...children$$9);
+export function heading(options$$3, children$$12) {
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$3, Common$0024$0024$0024parseOptions, "panel-heading"), function (props$$11, children$$13) {
+    return React.createElement("div", createObj(props$$11, 1), ...children$$13);
+  }, children$$12);
 }
-export function tabs(options$$6, children$$12) {
-  const opts$$4 = Common$0024$0024$0024genericParse(options$$6);
-  const classes$$4 = Common$0024002EHelpers$0024$0024$0024classes("panel-tabs", new List(opts$$4.CustomClass, opts$$4.Modifiers), new List());
-  return createElement("div", createObj(new List(classes$$4, opts$$4.Props), 1), ...children$$12);
+export function tabs(options$$4, children$$16) {
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$4, Common$0024$0024$0024parseOptions, "panel-tabs"), function (props$$14, children$$17) {
+    return React.createElement("div", createObj(props$$14, 1), ...children$$17);
+  }, children$$16);
 }
-export function tab(options$$7, children$$15) {
-  const parseOptions$$2 = function parseOptions$$2(result$$2, opt$$2) {
-    switch (opt$$2.tag) {
+export function tab(options$$5, children$$20) {
+  const parseOptions$$2 = function parseOptions$$2(result$$5, option$$5) {
+    switch (option$$5.tag) {
       case 1:
         {
-          const state$$4 = opt$$2.fields[0];
-          return new Tab$002EOptions(result$$2.Props, result$$2.CustomClass, state$$4, result$$2.Modifiers);
+          const props$$17 = option$$5.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B(result$$5, props$$17);
         }
 
       case 2:
         {
-          const customClass$$2 = opt$$2.fields[0];
-          return new Tab$002EOptions(result$$2.Props, customClass$$2, result$$2.IsActive, result$$2.Modifiers);
+          const customClass$$2 = option$$5.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result$$5, customClass$$2);
         }
 
       case 3:
         {
-          const modifiers$$2 = opt$$2.fields[0];
-          return new Tab$002EOptions(result$$2.Props, result$$2.CustomClass, result$$2.IsActive, Modifier$0024$0024$0024parseModifiers(modifiers$$2));
+          const modifiers$$2 = option$$5.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5(result$$5, modifiers$$2);
         }
 
       default:
         {
-          const props$$12 = opt$$2.fields[0];
-          return new Tab$002EOptions(props$$12, result$$2.CustomClass, result$$2.IsActive, result$$2.Modifiers);
+          const state$$2 = option$$5.fields[0];
+
+          if (state$$2) {
+            return Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505(result$$5, option$$5);
+          } else {
+            return result$$5;
+          }
         }
     }
   };
 
-  const opts$$5 = fold(parseOptions$$2, Tab$002EOptions$$$get_Empty(), options$$7);
-  const classes$$5 = Common$0024002EHelpers$0024$0024$0024classes("", new List(opts$$5.CustomClass, opts$$5.Modifiers), new List(["is-active", opts$$5.IsActive], new List()));
-  return createElement("a", createObj(new List(classes$$5, opts$$5.Props), 1), ...children$$15);
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$5, parseOptions$$2), function (props$$18, children$$21) {
+    return React.createElement("a", createObj(props$$18, 1), ...children$$21);
+  }, children$$20);
 }
-export function icon(options$$9, children$$18) {
-  const opts$$6 = Common$0024$0024$0024genericParse(options$$9);
-  const classes$$6 = Common$0024002EHelpers$0024$0024$0024classes("panel-icon", new List(opts$$6.CustomClass, opts$$6.Modifiers), new List());
-  return createElement("span", createObj(new List(classes$$6, opts$$6.Props), 1), ...children$$18);
+export function icon(options$$6, children$$24) {
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$6, Common$0024$0024$0024parseOptions, "panel-icon"), function (props$$21, children$$25) {
+    return React.createElement("span", createObj(props$$21, 1), ...children$$25);
+  }, children$$24);
 }

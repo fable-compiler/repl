@@ -1,146 +1,140 @@
-import { List, Record, declare, Union } from "../fable-library.2.2.0-beta-010/Types.js";
-import { record, option as option$$1, union, bool, list as list$$1, type, string } from "../fable-library.2.2.0-beta-010/Reflection.js";
-import { Common$$$genericParse as Common$0024$0024$0024genericParse, Common$002EHelpers$$$classes as Common$0024002EHelpers$0024$0024$0024classes, Modifier$$$parseModifiers as Modifier$0024$0024$0024parseModifiers, Color$$$ofColor as Color$0024$0024$0024ofColor, Size$$$ofSize as Size$0024$0024$0024ofSize, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Color$002EIColor$reflection as Color$0024002EIColor$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection } from "../Fulma/Common.js";
-import { ofArray, fold } from "../fable-library.2.2.0-beta-010/List.js";
-import { createObj } from "../fable-library.2.2.0-beta-010/Util.js";
-import { Props$002EHTMLAttr as Props$0024002EHTMLAttr } from "../Fable.React/Fable.Helpers.React.js";
-const createElement = React.createElement;
+import { List, declare, Union } from "../fable-library.2.3.7/Types.js";
+import { union, bool, list, type, string } from "../fable-library.2.3.7/Reflection.js";
+import { Common$002EGenericOptions$$ToReactElement$$Z46A53D36 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z46A53D36, Common$$$parseOptions as Common$0024$0024$0024parseOptions, Common$002EGenericOptions$$$Parse$$9AE2F7C as Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C, Common$002EGenericOptions$$ToReactElement$$Z6D3CD4B7 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7, Common$002EGenericOptions$$AddModifiers$$5BB435D5 as Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5, Common$002EGenericOptions$$AddProps$$416C4D0B as Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B, Color$$$ofColor as Color$0024$0024$0024ofColor, Common$002EGenericOptions$$AddCaseName$$1505 as Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505, Common$002EGenericOptions$$AddClass$$Z721C83C5 as Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5, Reflection$$$getCaseName as Reflection$0024$0024$0024getCaseName, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Color$002EIColor$reflection as Color$0024002EIColor$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection } from "../Fulma/Common.js";
+import { createObj } from "../fable-library.2.3.7/Util.js";
+import { HTMLAttr } from "../src/Fable.React.Props.js";
 export const Option = declare(function Fulma_File_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
 export function Option$reflection() {
-  return union("Fulma.File.Option", [], Option, () => [["CustomClass", [string]], ["Props", [list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))]], ["IsFocused", [bool]], ["IsActive", [bool]], ["IsHovered", [bool]], ["Size", [Size$0024002EISize$0024reflection()]], "IsFullWidth", "IsCentered", "IsRight", "IsBoxed", "HasName", ["IsEmpty", [bool]], ["Color", [Color$0024002EIColor$0024reflection()]], ["Modifiers", [list$$1(Modifier$0024002EIModifier$0024reflection())]]]);
-}
-export const Options = declare(function Fulma_File_Options(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12) {
-  this.CustomClass = arg1;
-  this.Props = arg2;
-  this.IsFocused = arg3;
-  this.IsActive = arg4;
-  this.IsHovered = arg5;
-  this.Size = arg6;
-  this.Alignment = arg7;
-  this.IsBoxed = arg8;
-  this.Color = arg9;
-  this.HasName = arg10;
-  this.IsEmpty = arg11;
-  this.Modifiers = arg12;
-}, Record);
-export function Options$reflection() {
-  return record("Fulma.File.Options", [], Options, () => [["CustomClass", option$$1(string)], ["Props", list$$1(type("Fable.Helpers.React.Props.IHTMLProp"))], ["IsFocused", bool], ["IsActive", bool], ["IsHovered", bool], ["Size", option$$1(string)], ["Alignment", option$$1(string)], ["IsBoxed", bool], ["Color", option$$1(string)], ["HasName", bool], ["IsEmpty", bool], ["Modifiers", list$$1(option$$1(string))]]);
-}
-export function Options$$$get_Empty() {
-  return new Options(null, new List(), false, false, false, null, null, false, null, false, false, new List());
+  return union("Fulma.File.Option", [], Option, () => [["CustomClass", [string]], ["Props", [list(type("Fable.React.Props.IHTMLProp"))]], ["Size", [Size$0024002EISize$0024reflection()]], ["is-focused", [bool]], ["is-active", [bool]], ["is-hovered", [bool]], "is-fullwidth", "is-centered", "is-right", "is-boxed", "has-name", ["is-empty", [bool]], ["Color", [Color$0024002EIColor$0024reflection()]], ["Modifiers", [list(Modifier$0024002EIModifier$0024reflection())]]]);
 }
 export function file(options, children) {
   const parseOptions = function parseOptions(result, option) {
+    var $target$$1, state;
+
     switch (option.tag) {
+      case 6:
+      case 7:
+      case 8:
+      case 9:
+      case 10:
+        $target$$1 = 1;
+        break;
+
+      case 12:
+        $target$$1 = 2;
+        break;
+
+      case 3:
+        $target$$1 = 3;
+        state = option.fields[0];
+        break;
+
+      case 4:
+        $target$$1 = 3;
+        state = option.fields[0];
+        break;
+
+      case 5:
+        $target$$1 = 3;
+        state = option.fields[0];
+        break;
+
+      case 11:
+        $target$$1 = 3;
+        state = option.fields[0];
+        break;
+
+      case 1:
+        $target$$1 = 4;
+        break;
+
+      case 0:
+        $target$$1 = 5;
+        break;
+
+      case 13:
+        $target$$1 = 6;
+        break;
+
+      default:
+        $target$$1 = 0;
+    }
+
+    switch ($target$$1) {
+      case 0:
+        {
+          const size = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, Reflection$0024$0024$0024getCaseName(size));
+        }
+
       case 1:
         {
-          const props = option.fields[0];
-          return new Options(result.CustomClass, props, result.IsFocused, result.IsActive, result.IsHovered, result.Size, result.Alignment, result.IsBoxed, result.Color, result.HasName, result.IsEmpty, result.Modifiers);
+          return Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505(result, option);
         }
 
       case 2:
         {
-          const state = option.fields[0];
-          return new Options(result.CustomClass, result.Props, state, result.IsActive, result.IsHovered, result.Size, result.Alignment, result.IsBoxed, result.Color, result.HasName, result.IsEmpty, result.Modifiers);
+          const color = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, Color$0024$0024$0024ofColor(color));
         }
 
       case 3:
         {
-          const state$$1 = option.fields[0];
-          return new Options(result.CustomClass, result.Props, result.IsFocused, state$$1, result.IsHovered, result.Size, result.Alignment, result.IsBoxed, result.Color, result.HasName, result.IsEmpty, result.Modifiers);
+          if (state) {
+            return Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505(result, option);
+          } else {
+            return result;
+          }
         }
 
       case 4:
         {
-          const state$$2 = option.fields[0];
-          return new Options(result.CustomClass, result.Props, result.IsFocused, result.IsActive, state$$2, result.Size, result.Alignment, result.IsBoxed, result.Color, result.HasName, result.IsEmpty, result.Modifiers);
+          const props = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B(result, props);
         }
 
       case 5:
         {
-          const size = option.fields[0];
-          return new Options(result.CustomClass, result.Props, result.IsFocused, result.IsActive, result.IsHovered, Size$0024$0024$0024ofSize(size), result.Alignment, result.IsBoxed, result.Color, result.HasName, result.IsEmpty, result.Modifiers);
+          const customClass = option.fields[0];
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, customClass);
         }
 
       case 6:
         {
-          return new Options(result.CustomClass, result.Props, result.IsFocused, result.IsActive, result.IsHovered, "is-fullwidth", result.Alignment, result.IsBoxed, result.Color, result.HasName, result.IsEmpty, result.Modifiers);
-        }
-
-      case 7:
-        {
-          return new Options(result.CustomClass, result.Props, result.IsFocused, result.IsActive, result.IsHovered, result.Size, "is-centered", result.IsBoxed, result.Color, result.HasName, result.IsEmpty, result.Modifiers);
-        }
-
-      case 8:
-        {
-          return new Options(result.CustomClass, result.Props, result.IsFocused, result.IsActive, result.IsHovered, result.Size, "is-right", result.IsBoxed, result.Color, result.HasName, result.IsEmpty, result.Modifiers);
-        }
-
-      case 12:
-        {
-          const color = option.fields[0];
-          return new Options(result.CustomClass, result.Props, result.IsFocused, result.IsActive, result.IsHovered, result.Size, result.Alignment, result.IsBoxed, Color$0024$0024$0024ofColor(color), result.HasName, result.IsEmpty, result.Modifiers);
-        }
-
-      case 9:
-        {
-          return new Options(result.CustomClass, result.Props, result.IsFocused, result.IsActive, result.IsHovered, result.Size, result.Alignment, true, result.Color, result.HasName, result.IsEmpty, result.Modifiers);
-        }
-
-      case 10:
-        {
-          return new Options(result.CustomClass, result.Props, result.IsFocused, result.IsActive, result.IsHovered, result.Size, result.Alignment, result.IsBoxed, result.Color, true, result.IsEmpty, result.Modifiers);
-        }
-
-      case 11:
-        {
-          const state$$3 = option.fields[0];
-          return new Options(result.CustomClass, result.Props, result.IsFocused, result.IsActive, result.IsHovered, result.Size, result.Alignment, result.IsBoxed, result.Color, result.HasName, state$$3, result.Modifiers);
-        }
-
-      case 13:
-        {
           const modifiers = option.fields[0];
-          return new Options(result.CustomClass, result.Props, result.IsFocused, result.IsActive, result.IsHovered, result.Size, result.Alignment, result.IsBoxed, result.Color, result.HasName, result.IsEmpty, Modifier$0024$0024$0024parseModifiers(modifiers));
-        }
-
-      default:
-        {
-          const customClass = option.fields[0];
-          return new Options(customClass, result.Props, result.IsFocused, result.IsActive, result.IsHovered, result.Size, result.Alignment, result.IsBoxed, result.Color, result.HasName, result.IsEmpty, result.Modifiers);
+          return Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5(result, modifiers);
         }
     }
   };
 
-  const opts = fold(parseOptions, Options$$$get_Empty(), options);
-  const classes = Common$0024002EHelpers$0024$0024$0024classes("file", new List(opts.CustomClass, new List(opts.Size, new List(opts.Alignment, new List(opts.Color, opts.Modifiers)))), ofArray([["is-boxed", opts.IsBoxed], ["has-name", opts.HasName], ["is-focused", opts.IsFocused], ["is-active", opts.IsActive], ["is-hovered", opts.IsHovered], ["is-empty", opts.IsEmpty]]));
-  return createElement("div", createObj(new List(classes, opts.Props), 1), ...children);
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options, parseOptions, "file"), function (props$$1, children$$1) {
+    return React.createElement("div", createObj(props$$1, 1), ...children$$1);
+  }, children);
 }
-export function cta(options$$2, children$$3) {
-  const opts$$1 = Common$0024$0024$0024genericParse(options$$2);
-  const classes$$1 = Common$0024002EHelpers$0024$0024$0024classes("file-cta", new List(opts$$1.CustomClass, opts$$1.Modifiers), new List());
-  return createElement("span", createObj(new List(classes$$1, opts$$1.Props), 1), ...children$$3);
+export function cta(options$$1, children$$4) {
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$1, Common$0024$0024$0024parseOptions, "file-cta"), function (props$$4, children$$5) {
+    return React.createElement("span", createObj(props$$4, 1), ...children$$5);
+  }, children$$4);
 }
-export function name(options$$3, children$$6) {
-  const opts$$2 = Common$0024$0024$0024genericParse(options$$3);
-  const classes$$2 = Common$0024002EHelpers$0024$0024$0024classes("file-name", new List(opts$$2.CustomClass, opts$$2.Modifiers), new List());
-  return createElement("span", createObj(new List(classes$$2, opts$$2.Props), 1), ...children$$6);
+export function name(options$$2, children$$8) {
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$2, Common$0024$0024$0024parseOptions, "file-name"), function (props$$7, children$$9) {
+    return React.createElement("span", createObj(props$$7, 1), ...children$$9);
+  }, children$$8);
 }
-export function icon(options$$4, children$$9) {
-  const opts$$3 = Common$0024$0024$0024genericParse(options$$4);
-  const classes$$3 = Common$0024002EHelpers$0024$0024$0024classes("file-icon", new List(opts$$3.CustomClass, opts$$3.Modifiers), new List());
-  return createElement("span", createObj(new List(classes$$3, opts$$3.Props), 1), ...children$$9);
+export function icon(options$$3, children$$12) {
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$3, Common$0024$0024$0024parseOptions, "file-icon"), function (props$$10, children$$13) {
+    return React.createElement("span", createObj(props$$10, 1), ...children$$13);
+  }, children$$12);
 }
-export function label(options$$5, children$$12) {
-  const opts$$4 = Common$0024$0024$0024genericParse(options$$5);
-  const classes$$4 = Common$0024002EHelpers$0024$0024$0024classes("file-label", new List(opts$$4.CustomClass, opts$$4.Modifiers), new List());
-  return createElement("label", createObj(new List(classes$$4, opts$$4.Props), 1), ...children$$12);
+export function label(options$$4, children$$16) {
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$4, Common$0024$0024$0024parseOptions, "file-label"), function (props$$13, children$$17) {
+    return React.createElement("label", createObj(props$$13, 1), ...children$$17);
+  }, children$$16);
 }
-export function input(options$$6) {
-  const opts$$5 = Common$0024$0024$0024genericParse(options$$6);
-  const classes$$5 = Common$0024002EHelpers$0024$0024$0024classes("file-input", new List(opts$$5.CustomClass, opts$$5.Modifiers), new List());
-  return createElement("input", createObj(new List(classes$$5, new List(new Props$0024002EHTMLAttr(117, "Type", "file"), opts$$5.Props)), 1), ...new List());
+export function input(options$$5) {
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z46A53D36(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$5, Common$0024$0024$0024parseOptions, "file-input", new List(new HTMLAttr(119, "Type", "file"), new List())), function (props$$16) {
+    return React.createElement("input", createObj(props$$16, 1), ...[]);
+  });
 }

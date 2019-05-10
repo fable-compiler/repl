@@ -1,8 +1,11 @@
-import { mapError, mapOk, Result } from "../fable-library.2.2.0-beta-010/Option.js";
-import { declare } from "../fable-library.2.2.0-beta-010/Types.js";
-import { type } from "../fable-library.2.2.0-beta-010/Reflection.js";
-import { iterate } from "../fable-library.2.2.0-beta-010/Seq.js";
-import { equals } from "../fable-library.2.2.0-beta-010/Util.js";
+import { mapError, mapOk, Result } from "../fable-library.2.3.7/Option.js";
+import { declare } from "../fable-library.2.3.7/Types.js";
+import { type } from "../fable-library.2.3.7/Reflection.js";
+import { iterate } from "../fable-library.2.3.7/Seq.js";
+import { equals } from "../fable-library.2.3.7/Util.js";
+export function reject(reason) {
+  return Promise.reject(reason);
+}
 export function result(a) {
   return a.then(function ($arg$$1) {
     return new Result(0, "Ok", $arg$$1);
@@ -42,9 +45,9 @@ export function PromiseBuilder$reflection() {
   return type("Promise.PromiseBuilder");
 }
 export function PromiseBuilder$$$$002Ector() {
-  return this != null ? PromiseBuilder.call(this) : new PromiseBuilder();
+  return this instanceof PromiseBuilder ? PromiseBuilder.call(this) : new PromiseBuilder();
 }
-export function PromiseBuilder$$For$$21A08CCD(x$$1, seq, body) {
+export function PromiseBuilder$$For$$1565554B(x$$1, seq, body) {
   let p = Promise.resolve(null);
   iterate(function (a$$11) {
     p = p.then(function () {
@@ -53,16 +56,16 @@ export function PromiseBuilder$$For$$21A08CCD(x$$1, seq, body) {
   }, seq);
   return p;
 }
-export function PromiseBuilder$$While$$Z48B70A4E(x$$3, guard, p$$1) {
+export function PromiseBuilder$$While$$2044D34(x$$3, guard, p$$1) {
   if (guard()) {
     return p$$1.then(function () {
-      return PromiseBuilder$$While$$Z48B70A4E(x$$3, guard, p$$1);
+      return PromiseBuilder$$While$$2044D34(x$$3, guard, p$$1);
     });
   } else {
     return Promise.resolve(null);
   }
 }
-export function PromiseBuilder$$TryFinally$$4BD3343B(x$$4, p$$2, compensation) {
+export function PromiseBuilder$$TryFinally$$7D49A2FD(x$$4, p$$2, compensation) {
   return p$$2.then(function (x$$5) {
     compensation();
     return x$$5;
@@ -71,7 +74,7 @@ export function PromiseBuilder$$TryFinally$$4BD3343B(x$$4, p$$2, compensation) {
     throw er;
   });
 }
-export function PromiseBuilder$$Delay$$Z243C0199(x$$7, generator) {
+export function PromiseBuilder$$Delay$$62FBFDE1(x$$7, generator) {
   return {
     then(f1, f2) {
       try {
@@ -103,7 +106,7 @@ export function PromiseBuilder$$Delay$$Z243C0199(x$$7, generator) {
 
   };
 }
-export function PromiseBuilder$$Run$$Z59A68933(x$$14, p$$3) {
+export function PromiseBuilder$$Run$$212F1D4B(x$$14, p$$3) {
   return new Promise(function (success, fail) {
     try {
       const p$$4 = Promise.resolve(p$$3);
@@ -113,8 +116,8 @@ export function PromiseBuilder$$Run$$Z59A68933(x$$14, p$$3) {
     }
   });
 }
-export function PromiseBuilder$$Using$$2619E89B(x$$16, resource, binder) {
-  return PromiseBuilder$$TryFinally$$4BD3343B(x$$16, binder(resource), function () {
+export function PromiseBuilder$$Using$$Z7FDC6BE3(x$$16, resource, binder) {
+  return PromiseBuilder$$TryFinally$$7D49A2FD(x$$16, binder(resource), function () {
     resource.Dispose();
   });
 }

@@ -5,8 +5,8 @@ module Elmish.Calculator
  You can find more info about Emish architecture and samples at https://elmish.github.io/
 *)
 
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 open Elmish
 open Elmish.React
 
@@ -105,7 +105,7 @@ let digitStyle =
     Style [
         Height 40
         Padding 15
-        TextAlign "center"
+        TextAlign TextAlignOptions.Center
         Margin 5
         VerticalAlign "middle"
         BackgroundColor "lightgreen"
@@ -122,7 +122,7 @@ let opButtonStyle =
     Style [
         Height 40
         Padding 15
-        TextAlign "center"
+        TextAlign TextAlignOptions.Center
         Margin 5
         VerticalAlign "middle"
         BackgroundColor "lightblue"

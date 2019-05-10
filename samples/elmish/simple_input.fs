@@ -6,8 +6,8 @@ You can find more info about Emish architecture and samples at https://elmish.gi
 *)
 
 open Fable.Core.JsInterop
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 open Elmish
 open Elmish.React
 

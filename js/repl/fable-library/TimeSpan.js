@@ -70,6 +70,8 @@ export function add(ts1, ts2) {
 export function subtract(ts1, ts2) {
     return ts1 - ts2;
 }
+export const op_Addition = add;
+export const op_Subtraction = subtract;
 export const compare = comparePrimitives;
 export const compareTo = comparePrimitives;
 export function duration(x) {

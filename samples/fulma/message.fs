@@ -1,7 +1,7 @@
 // More info about Fulma at https://mangelmaxime.github.io/Fulma/
 module Fulma.Message
 
-open Fable.Helpers.React
+open Fable.React
 open Fulma
 
 let loremText =

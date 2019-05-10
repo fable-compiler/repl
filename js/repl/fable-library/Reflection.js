@@ -1,4 +1,4 @@
-import { Record, Union } from "./Types.js";
+import { Record, Union, anonRecord as makeAnonRecord } from "./Types.js";
 import { compareArraysWith, equalArraysWith } from "./Util.js";
 export class CaseInfo {
     constructor(declaringType, tag, name, fields) {
@@ -48,6 +48,9 @@ export function type(fullname, generics) {
 }
 export function record(fullname, generics, constructor, fields) {
     return new TypeInfo(fullname, generics, constructor, fields);
+}
+export function anonRecord(...fields) {
+    return new TypeInfo("", null, null, () => fields);
 }
 export function union(fullname, generics, constructor, cases) {
     const t = new TypeInfo(fullname, generics, constructor, null, () => cases().map((x, i) => typeof x === "string" ? new CaseInfo(t, i, x) : new CaseInfo(t, i, x[0], x[1])));
@@ -209,7 +212,12 @@ export function makeRecord(t, values) {
     if (fields.length !== values.length) {
         throw new Error(`Expected an array of length ${fields.length} but got ${values.length}`);
     }
-    return new t.constructor(...values);
+    return t.constructor != null
+        ? new t.constructor(...values)
+        : makeAnonRecord(fields.reduce((obj, [key,], i) => {
+            obj[key] = values[i];
+            return obj;
+        }, {}));
 }
 export function makeTuple(values, t) {
     return values;

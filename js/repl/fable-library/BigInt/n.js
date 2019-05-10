@@ -2,7 +2,7 @@ import { List, declare, Record } from "../Types.js";
 import { record, array, int32 } from "../Reflection.js";
 import { op_LeftShift, op_BitwiseAnd, op_Addition, compare, op_Subtraction, op_Division, equals, toInt, op_Modulus, op_Multiply, fromInteger, fromBits } from "../Long.js";
 import { ofList, copy, initialize, map, fill } from "../Array.js";
-import { int32ToString } from "../Util.js";
+import { int32ToString, ignore } from "../Util.js";
 import { isNullOrEmpty, join } from "../String.js";
 export const BigNat = declare(function BigInt_BigNat(arg1, arg2) {
   this.bound = arg1 | 0;
@@ -925,6 +925,8 @@ export function BigNatModule$$$mul(p$$20, q$$17) {
   return BigNatModule$$$mulSchoolBook(p$$20, q$$17);
 }
 export function BigNatModule$$$scaleSubInPlace(x$$57, f, a$$5, n$$30) {
+  var x$$59;
+
   const invariant = function invariant(tupledArg) {};
 
   const xres = x$$57;
@@ -940,7 +942,7 @@ export function BigNatModule$$$scaleSubInPlace(x$$57, f, a$$5, n$$30) {
     }
 
     invariant([z$$7, j$$4, n$$30]);
-    let zLo = ~~toInt(op_BitwiseAnd(z$$7, BigNatModule$$$baseMaski64)) | 0;
+    let zLo = (x$$59 = z$$7, ~~toInt(op_BitwiseAnd(x$$59, BigNatModule$$$baseMaski64))) | 0;
     let zHi = op_Division(z$$7, BigNatModule$$$baseNi64);
 
     if (zLo <= patternInput$$2[0][j$$4 + n$$30]) {
@@ -959,7 +961,7 @@ export function BigNatModule$$$scaleSubInPlace(x$$57, f, a$$5, n$$30) {
     j$$4 = j$$4 + 1;
   }
 
-  BigNatModule$$$normN(xres);
+  ignore(BigNatModule$$$normN(xres));
 }
 export function BigNatModule$$$scaleSub(x$$61, f$$2, a$$7, n$$31) {
   const freshx = BigNatModule$$$add(x$$61, BigNatModule$$$zero);
@@ -967,6 +969,8 @@ export function BigNatModule$$$scaleSub(x$$61, f$$2, a$$7, n$$31) {
   return BigNatModule$$$normN(freshx);
 }
 export function BigNatModule$$$scaleAddInPlace(x$$62, f$$3, a$$8, n$$32) {
+  var x$$64;
+
   const invariant$$1 = function invariant$$1(tupledArg$$1) {};
 
   const xres$$1 = x$$62;
@@ -982,7 +986,7 @@ export function BigNatModule$$$scaleAddInPlace(x$$62, f$$3, a$$8, n$$32) {
     }
 
     invariant$$1([z$$8, j$$5, n$$32]);
-    let zLo$$1 = ~~toInt(op_BitwiseAnd(z$$8, BigNatModule$$$baseMaski64)) | 0;
+    let zLo$$1 = (x$$64 = z$$8, ~~toInt(op_BitwiseAnd(x$$64, BigNatModule$$$baseMaski64))) | 0;
     let zHi$$1 = op_Division(z$$8, BigNatModule$$$baseNi64);
 
     if (zLo$$1 < BigNatModule$$$baseN - patternInput$$4[0][j$$5 + n$$32]) {
@@ -1001,7 +1005,7 @@ export function BigNatModule$$$scaleAddInPlace(x$$62, f$$3, a$$8, n$$32) {
     j$$5 = j$$5 + 1;
   }
 
-  BigNatModule$$$normN(xres$$1);
+  ignore(BigNatModule$$$normN(xres$$1));
 }
 export function BigNatModule$$$scaleAdd(x$$66, f$$5, a$$10, n$$33) {
   const freshx$$1 = BigNatModule$$$add(x$$66, BigNatModule$$$zero);
@@ -1117,16 +1121,30 @@ export function BigNatModule$$$bitOr(a$$16, b$$11) {
 
   return BigNatModule$$$normN(r$$20);
 }
-export function BigNatModule$$$hcf(a$$17, b$$12) {
-  const hcfloop = function hcfloop(a$$18, b$$13) {
+export function BigNatModule$$$bitXor(a$$17, b$$12) {
+  const rbound$$8 = BigNatModule$$$maxInt(a$$17.bound, b$$12.bound) | 0;
+  const r$$21 = BigNatModule$$$createN(rbound$$8);
+
+  for (let i$$47 = 0; i$$47 <= a$$17.bound - 1; i$$47++) {
+    r$$21.digits[i$$47] = r$$21.digits[i$$47] ^ a$$17.digits[i$$47];
+  }
+
+  for (let i$$48 = 0; i$$48 <= b$$12.bound - 1; i$$48++) {
+    r$$21.digits[i$$48] = r$$21.digits[i$$48] ^ b$$12.digits[i$$48];
+  }
+
+  return BigNatModule$$$normN(r$$21);
+}
+export function BigNatModule$$$hcf(a$$18, b$$13) {
+  const hcfloop = function hcfloop(a$$19, b$$14) {
     hcfloop: while (true) {
-      if (BigNatModule$$$equal(BigNatModule$$$zero, a$$18)) {
-        return b$$13;
+      if (BigNatModule$$$equal(BigNatModule$$$zero, a$$19)) {
+        return b$$14;
       } else {
-        const patternInput$$8 = BigNatModule$$$divmod(b$$13, a$$18);
-        const $a$$18$$49 = a$$18;
-        a$$18 = patternInput$$8[1];
-        b$$13 = $a$$18$$49;
+        const patternInput$$8 = BigNatModule$$$divmod(b$$14, a$$19);
+        const $a$$19$$49 = a$$19;
+        a$$19 = patternInput$$8[1];
+        b$$14 = $a$$19$$49;
         continue hcfloop;
       }
 
@@ -1134,10 +1152,10 @@ export function BigNatModule$$$hcf(a$$17, b$$12) {
     }
   };
 
-  if (BigNatModule$$$lt(a$$17, b$$12)) {
-    return hcfloop(a$$17, b$$12);
+  if (BigNatModule$$$lt(a$$18, b$$13)) {
+    return hcfloop(a$$18, b$$13);
   } else {
-    return hcfloop(b$$12, a$$17);
+    return hcfloop(b$$13, a$$18);
   }
 }
 export const BigNatModule$$$two = BigNatModule$$$embed(2);
@@ -1204,17 +1222,17 @@ export function BigNatModule$$$pow(x$$71, n$$38) {
 export function BigNatModule$$$toFloat(n$$40) {
   const basef = BigNatModule$$$baseN;
 
-  const evalFloat = function evalFloat(acc$$4, k$$10, i$$47) {
+  const evalFloat = function evalFloat(acc$$4, k$$10, i$$49) {
     evalFloat: while (true) {
-      if (i$$47 === n$$40.bound) {
+      if (i$$49 === n$$40.bound) {
         return acc$$4;
       } else {
         const $acc$$4$$60 = acc$$4;
-        const $i$$47$$62 = i$$47;
+        const $i$$49$$62 = i$$49;
         const $k$$10$$61 = k$$10;
-        acc$$4 = $acc$$4$$60 + $k$$10$$61 * n$$40.digits[$i$$47$$62];
+        acc$$4 = $acc$$4$$60 + $k$$10$$61 * n$$40.digits[$i$$49$$62];
         k$$10 = $k$$10$$61 * basef;
-        i$$47 = $i$$47$$62 + 1;
+        i$$49 = $i$$49$$62 + 1;
         continue evalFloat;
       }
 
@@ -1364,19 +1382,19 @@ export function BigNatModule$$$ofString(str) {
 
   const ten = BigNatModule$$$embed(10);
 
-  const build = function build(acc$$5, i$$48) {
+  const build = function build(acc$$5, i$$50) {
     build: while (true) {
-      if (i$$48 === len) {
+      if (i$$50 === len) {
         return acc$$5;
       } else {
-        const c$$12 = str[i$$48];
+        const c$$12 = str[i$$50];
         const d$$7 = c$$12.charCodeAt(0) - "0".charCodeAt(0) | 0;
 
         if (0 <= d$$7 ? d$$7 <= 9 : false) {
           const $acc$$5$$66 = acc$$5;
-          const $i$$48$$67 = i$$48;
+          const $i$$50$$67 = i$$50;
           acc$$5 = BigNatModule$$$add(BigNatModule$$$mul(ten, $acc$$5$$66), BigNatModule$$$embed(d$$7));
-          i$$48 = $i$$48$$67 + 1;
+          i$$50 = $i$$50$$67 + 1;
           continue build;
         } else {
           throw new Error();
@@ -1400,12 +1418,12 @@ export function BigNatModule$$$getSmall(n$$49) {
   }
 }
 export function BigNatModule$$$factorial(n$$50) {
-  const productR = function productR(a$$19, b$$14) {
-    if (BigNatModule$$$equal(a$$19, b$$14)) {
-      return a$$19;
+  const productR = function productR(a$$20, b$$15) {
+    if (BigNatModule$$$equal(a$$20, b$$15)) {
+      return a$$20;
     } else {
-      const m$$3 = BigNatModule$$$div(BigNatModule$$$add(a$$19, b$$14), BigNatModule$$$ofInt32(2));
-      return BigNatModule$$$mul(productR(a$$19, m$$3), productR(BigNatModule$$$add(m$$3, BigNatModule$$$one), b$$14));
+      const m$$3 = BigNatModule$$$div(BigNatModule$$$add(a$$20, b$$15), BigNatModule$$$ofInt32(2));
+      return BigNatModule$$$mul(productR(a$$20, m$$3), productR(BigNatModule$$$add(m$$3, BigNatModule$$$one), b$$15));
     }
   };
 

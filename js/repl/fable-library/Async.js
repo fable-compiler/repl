@@ -1,4 +1,5 @@
 import { OperationCanceledError, Trampoline } from "./AsyncBuilder.js";
+import { CancellationToken } from "./AsyncBuilder.js";
 import { protectedCont } from "./AsyncBuilder.js";
 import { protectedBind } from "./AsyncBuilder.js";
 import { protectedReturn } from "./AsyncBuilder.js";
@@ -27,20 +28,17 @@ export function bind(ctx, part1, part2) {
     return protectedBind(part1, part2)(ctx);
 }
 export function createCancellationToken(arg) {
-    const token = { isCancelled: false };
+    const token = new CancellationToken(typeof arg === "boolean" ? arg : false);
     if (typeof arg === "number") {
-        setTimeout(() => { token.isCancelled = true; }, arg);
-    }
-    else if (typeof arg === "boolean") {
-        token.isCancelled = arg;
+        setTimeout(() => { token.cancel(); }, arg);
     }
     return token;
 }
 export function cancel(token) {
-    token.isCancelled = true;
+    token.cancel();
 }
 export function cancelAfter(token, ms) {
-    setTimeout(() => { token.isCancelled = true; }, ms);
+    setTimeout(() => { token.cancel(); }, ms);
 }
 export function isCancellationRequested(token) {
     return token != null && token.isCancelled;
@@ -58,7 +56,7 @@ export function awaitPromise(p) {
 export function cancellationToken() {
     return protectedCont((ctx) => ctx.onSuccess(ctx.cancelToken));
 }
-export const defaultCancellationToken = { isCancelled: false };
+export const defaultCancellationToken = new CancellationToken();
 export function catchAsync(work) {
     return protectedCont((ctx) => {
         work({
@@ -81,9 +79,15 @@ export function parallel(computations) {
 }
 export function sleep(millisecondsDueTime) {
     return protectedCont((ctx) => {
-        setTimeout(() => ctx.cancelToken.isCancelled
-            ? ctx.onCancel(new OperationCanceledError())
-            : ctx.onSuccess(void 0), millisecondsDueTime);
+        let tokenId;
+        const timeoutId = setTimeout(() => {
+            ctx.cancelToken.removeListener(tokenId);
+            ctx.onSuccess(void 0);
+        }, millisecondsDueTime);
+        tokenId = ctx.cancelToken.addListener(() => {
+            clearTimeout(timeoutId);
+            ctx.onCancel(new OperationCanceledError());
+        });
     });
 }
 export function start(computation, cancellationToken) {

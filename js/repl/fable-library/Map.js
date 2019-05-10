@@ -2,7 +2,7 @@ import { Record, List, declare, Union } from "./Types.js";
 import { type, record, bool, list, union, int32 } from "./Reflection.js";
 import { value as value$$3, some } from "./Option.js";
 import { iterate as iterate$$1, empty as empty$$1, toIterator, map as map$$1, unfold, getEnumerator, fold as fold$$1 } from "./Seq.js";
-import { compare, structuralHash, isDisposable } from "./Util.js";
+import { ignore, compare, structuralHash, isDisposable } from "./Util.js";
 import { join, toText, printf } from "./String.js";
 export const MapTree$00602 = declare(function Map_MapTree(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
@@ -1007,7 +1007,7 @@ export function MapTreeModule$002EmkIEnumerator$0027$00602$reflection($gen$$83, 
   return type("Map.MapTreeModule.mkIEnumerator'`2", [$gen$$83, $gen$$84]);
 }
 export function MapTreeModule$002EmkIEnumerator$0027$00602$$$$002Ector$$Z26BC498C(s$$6) {
-  return this != null ? MapTreeModule$002EmkIEnumerator$0027$00602.call(this, s$$6) : new MapTreeModule$002EmkIEnumerator$0027$00602(s$$6);
+  return this instanceof MapTreeModule$002EmkIEnumerator$0027$00602 ? MapTreeModule$002EmkIEnumerator$0027$00602.call(this, s$$6) : new MapTreeModule$002EmkIEnumerator$0027$00602(s$$6);
 }
 Object.defineProperty(MapTreeModule$002EmkIEnumerator$0027$00602.prototype, "Current", {
   "get": function () {
@@ -1050,7 +1050,7 @@ export function FSharpMap$reflection($gen$$85, $gen$$86) {
   return type("Map.FSharpMap", [$gen$$85, $gen$$86]);
 }
 export function FSharpMap$$$$002Ector$$58ADD115(comparer$$17, tree) {
-  return this != null ? FSharpMap.call(this, comparer$$17, tree) : new FSharpMap(comparer$$17, tree);
+  return this instanceof FSharpMap ? FSharpMap.call(this, comparer$$17, tree) : new FSharpMap(comparer$$17, tree);
 }
 export function FSharpMap$$get_Comparer(__$$4) {
   return __$$4.comparer;
@@ -1127,7 +1127,13 @@ export function FSharpMap$$ToList(__$$24) {
 FSharpMap.prototype.toString = function () {
   const this$ = this;
   return "map [" + join("; ", ...map$$1(function mapping(kv) {
-    return toText(printf("(%A, %A)"))(kv[0])(kv[1]);
+    var clo1;
+    return (clo1 = toText(printf("(%A, %A)")), function (arg10) {
+      const clo2 = clo1(arg10);
+      return function (arg20) {
+        return clo2(arg20);
+      };
+    })(kv[0])(kv[1]);
   }, this$)) + "]";
 };
 
@@ -1142,9 +1148,10 @@ FSharpMap.prototype.GetHashCode = function () {
   const e$$1 = MapTreeModule$$$mkIEnumerator(FSharpMap$$get_Tree(this$$$1));
 
   while (e$$1.MoveNext()) {
-    const activePatternResult3058 = e$$1.Current;
-    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3058[0]));
-    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3058[1]));
+    const patternInput$$5 = e$$1.Current;
+    const activePatternResult3092 = patternInput$$5;
+    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3092[0]));
+    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3092[1]));
   }
 
   return Math.abs(res$$3) | 0;
@@ -1265,13 +1272,16 @@ export function toSeq(m$$40) {
   return MapTreeModule$$$toSeq(FSharpMap$$get_Tree(m$$40));
 }
 export function findKey(f$$38, m$$41) {
-  const _arg1$$1 = MapTreeModule$$$tryPick(function f$$39(k$$39, v$$27) {
+  let _arg1$$1;
+
+  const m$$42 = FSharpMap$$get_Tree(m$$41);
+  _arg1$$1 = MapTreeModule$$$tryPick(function f$$39(k$$39, v$$27) {
     if (f$$38(k$$39, v$$27)) {
       return some(k$$39);
     } else {
       return null;
     }
-  }, FSharpMap$$get_Tree(m$$41));
+  }, m$$42);
 
   if (_arg1$$1 == null) {
     throw new Error("Key not found");
@@ -1281,13 +1291,14 @@ export function findKey(f$$38, m$$41) {
   }
 }
 export function tryFindKey(f$$40, m$$43) {
+  const m$$44 = FSharpMap$$get_Tree(m$$43);
   return MapTreeModule$$$tryPick(function f$$41(k$$41, v$$28) {
     if (f$$40(k$$41, v$$28)) {
       return some(k$$41);
     } else {
       return null;
     }
-  }, FSharpMap$$get_Tree(m$$43));
+  }, m$$44);
 }
 export function ofList(l$$22, comparer$$18) {
   return FSharpMap$$$$002Ector$$58ADD115(comparer$$18, MapTreeModule$$$ofList(comparer$$18, l$$22));
@@ -1343,9 +1354,10 @@ function createMutablePrivate(comparer$$22, tree$0027) {
     },
 
     keys() {
+      const source$$1 = MapTreeModule$$$toSeq(tree$$1);
       return map$$1(function mapping$$1(kv$$1) {
         return kv$$1[0];
-      }, MapTreeModule$$$toSeq(tree$$1));
+      }, source$$1);
     },
 
     set(k$$43, v$$29) {
@@ -1355,9 +1367,10 @@ function createMutablePrivate(comparer$$22, tree$0027) {
     },
 
     values() {
+      const source$$2 = MapTreeModule$$$toSeq(tree$$1);
       return map$$1(function mapping$$2(kv$$2) {
         return kv$$2[1];
-      }, MapTreeModule$$$toSeq(tree$$1));
+      }, source$$2);
     },
 
     [Symbol.iterator]() {
@@ -1382,7 +1395,7 @@ export function groupBy(projection, xs, comparer$$24) {
     if (dict.has(key)) {
       dict.get(key).push(v$$30);
     } else {
-      dict.set(key, Array.from([v$$30]));
+      ignore(dict.set(key, Array.from([v$$30])));
     }
   }, xs);
   return map$$1(function mapping$$3(kv$$3) {
@@ -1393,9 +1406,12 @@ export function countBy(projection$$1, xs$$1, comparer$$25) {
   const dict$$1 = createMutable(empty$$1(), comparer$$25);
   iterate$$1(function (value$$1) {
     const key$$1 = projection$$1(value$$1);
-    dict$$1.has(key$$1) ? dict$$1.set(key$$1, dict$$1.get(key$$1) + 1) : dict$$1.set(key$$1, 1);
+    ignore(dict$$1.has(key$$1) ? dict$$1.set(key$$1, dict$$1.get(key$$1) + 1) : dict$$1.set(key$$1, 1));
   }, xs$$1);
   return map$$1(function mapping$$4(kv$$4) {
     return [kv$$4[0], kv$$4[1]];
   }, dict$$1);
+}
+export function count(m$$47) {
+  return FSharpMap$$get_Count(m$$47);
 }
