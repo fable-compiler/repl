@@ -176,6 +176,7 @@ Target "CopyModules" (fun _ ->
         Rename (filename + ".txt") filename)
 
     // Fable Standalone
+    // TODO: Update version in Literals (Prelude.fs)
     CopyDir REPL_OUTPUT "node_modules/fable-standalone/dist" (fun _ -> true)
 )
 

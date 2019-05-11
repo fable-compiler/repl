@@ -2,8 +2,8 @@
 module Fulma.Dropdown
 
 open Fable.React
+open Fable.React.Props
 open Fulma
-open Fulma.FontAwesome
 
 let basic () =
     Dropdown.dropdown [ Dropdown.IsHoverable ]
@@ -11,7 +11,7 @@ let basic () =
             [ Button.button [ ]
                 [ span [ ]
                     [ str "Dropdown" ]
-                  Icon.faIcon [ Icon.Size IsSmall ] [ Fa.icon Fa.I.AngleDown ] ] ]
+                  Icon.icon [ Icon.Size IsSmall ] [ i [ Class "fas fa-angle-down" ] [] ] ] ]
           Dropdown.menu [ ]
             [ Dropdown.content [ ]
                 [ Dropdown.Item.a [ ] [ str "Item n°1" ]
