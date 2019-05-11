@@ -1,0 +1,86 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/alfonsogarciacaronunez/dev/repl/deploy/samples/Samples.fsproj": {}
+  },
+  "projects": {
+    "/Users/alfonsogarciacaronunez/dev/repl/deploy/samples/Samples.fsproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/alfonsogarciacaronunez/dev/repl/deploy/samples/Samples.fsproj",
+        "projectName": "Samples",
+        "projectPath": "/Users/alfonsogarciacaronunez/dev/repl/deploy/samples/Samples.fsproj",
+        "packagesPath": "/Users/alfonsogarciacaronunez/.nuget/packages/",
+        "outputPath": "/Users/alfonsogarciacaronunez/dev/repl/deploy/samples/obj/",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "/Users/alfonsogarciacaronunez/dev/repl/NuGet.Config",
+          "/Users/alfonsogarciacaronunez/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "noWarn": [
+            "NU1603",
+            "NU1604",
+            "NU1605",
+            "NU1608"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "dependencies": {
+            "FSharp.Core": {
+              "target": "Package",
+              "version": "[4.6.2, )"
+            },
+            "Fable.Browser.Blob": {
+              "target": "Package",
+              "version": "[1.0.0, )"
+            },
+            "Fable.Browser.Dom": {
+              "target": "Package",
+              "version": "[1.0.0, )"
+            },
+            "Fable.Browser.Event": {
+              "target": "Package",
+              "version": "[1.0.0, )"
+            },
+            "Fable.Browser.WebStorage": {
+              "target": "Package",
+              "version": "[1.0.0, )"
+            },
+            "Fable.Core": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461"
+          ],
+          "assetTargetFallback": true,
+          "warn": true
+        }
+      }
+    }
+  }
+}
