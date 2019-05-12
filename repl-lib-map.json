@@ -1,8 +1,8 @@
 {
-    "Thoth.Json.Decode": ["Thoth.Json.Decode", "Thoth.Json/Decode"],
-    "Thoth.Json.Encode": ["Thoth.Json.Encode", "Thoth.Json/Encode"],
-    "Thoth.Json.Extra": ["Thoth.Json.Extra", "Thoth.Json/Extra"],
-    "Thoth.Json": ["Thoth.Json", "Thoth.Json/Types"],
+    "Thoth.Json.Decode": ["Thoth.Json.Decode", "src/Decode"],
+    "Thoth.Json.Encode": ["Thoth.Json.Encode", "src/Encode"],
+    "Thoth.Json.Extra": ["Thoth.Json.Extra", "src/Extra"],
+    "Thoth.Json": ["Thoth.Json", "src/Types"],
 
     "PromiseImpl": ["PromiseImpl", "src/PromiseImpl"],
     "Promise": ["Promise", "src/Promise"],
