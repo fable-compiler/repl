@@ -2,8 +2,8 @@ module Thoth.RandomUser
 
 (**
 Small application showing how to use:
-- Thoth.Json
-- Fable.PowerPack (Promise, Fetch API)
+- Thoth.Json (https://mangelmaxime.github.io/Thoth/json/v3.html)
+- Promise and Fetch APIs
 *)
 
 open System
