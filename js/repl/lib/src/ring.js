@@ -1,9 +1,9 @@
-import { declare, Union } from "../fable-library.2.3.7/Types.js";
-import { type, union, int32, array } from "../fable-library.2.3.7/Reflection.js";
-import { max, comparePrimitives } from "../fable-library.2.3.7/Util.js";
-import { ofSeq, fill } from "../fable-library.2.3.7/Array.js";
-import { some } from "../fable-library.2.3.7/Option.js";
-import { append, delay, collect, rangeNumber, singleton, take, skip } from "../fable-library.2.3.7/Seq.js";
+import { declare, Union } from "../fable-library.2.3.10/Types.js";
+import { type, union, int32, array } from "../fable-library.2.3.10/Reflection.js";
+import { max, comparePrimitives } from "../fable-library.2.3.10/Util.js";
+import { ofSeq, fill } from "../fable-library.2.3.10/Array.js";
+import { some } from "../fable-library.2.3.10/Option.js";
+import { append, delay, collect, rangeNumber, singleton, take, skip } from "../fable-library.2.3.10/Seq.js";
 export const RingState$00601 = declare(function Elmish_RingState(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
@@ -49,9 +49,8 @@ export function RingBuffer$00601$$Push$$2B595(__$$1, item) {
     const items$$2 = matchValue$$2.fields[0];
     items$$2[wix$$2] = item;
     const wix$0027 = (wix$$2 + 1) % items$$2.length | 0;
-    const matchValue$$3 = wix$0027 === rix$$1;
 
-    if (matchValue$$3) {
+    if (wix$0027 === rix$$1) {
       const items$$4 = RingBuffer$00601$$doubleSize(__$$1, rix$$1, items$$2);
       __$$1.state = new RingState$00601(1, "ReadWritable", items$$4, wix$0027, 0);
     } else {

@@ -1,5 +1,5 @@
 import { defaultArg, value as value$$10, some } from "./Option.js";
-import { compare, ignore, getItemFromDict, addToDict, addToSet, tryGetValue, comparerFromEqualityComparer, max as max$$1, comparePrimitives } from "./Util.js";
+import { compare, getItemFromDict, addToDict, addToSet, tryGetValue, comparerFromEqualityComparer, max as max$$1, comparePrimitives } from "./Util.js";
 import { createMutable } from "./Map.js";
 import { iterateIndexed as iterateIndexed$$1, iterate as iterate$$1 } from "./Seq.js";
 import { createMutable as createMutable$$1 } from "./Set.js";
@@ -63,8 +63,8 @@ export function mapIndexed(f, source, cons$$1) {
 
     return target$$1;
   } else {
-    return source.map(function mapping(x, i$$3) {
-      return f(i$$3, x);
+    return source.map(function (delegateArg0, delegateArg1) {
+      return f(delegateArg1, delegateArg0);
     });
   }
 }
@@ -79,7 +79,7 @@ export function map(f$$1, source$$1, cons$$2) {
 
     return target$$2;
   } else {
-    return source$$1.map(function mapping$$1(x$$1) {
+    return source$$1.map(function (x$$1) {
       return f$$1(x$$1);
     });
   }
@@ -453,19 +453,15 @@ export function takeWhile(predicate$$8, array$$43, cons$$27) {
   }
 }
 export function addRangeInPlace(range, array$$45) {
-  const iter = range[Symbol.iterator]();
-  let cur = iter.next();
-
-  while (!cur.done) {
-    ignore(array$$45.push(cur.value));
-    cur = iter.next();
-  }
+  iterate$$1(function (x$$3) {
+    array$$45.push(x$$3), null;
+  }, range);
 }
 export function removeInPlace(item$$2, array$$47) {
   const i$$20 = array$$47.indexOf(item$$2);
 
   if (i$$20 > -1) {
-    ignore(array$$47.splice(i$$20, 1));
+    array$$47.splice(i$$20, 1), null;
     return true;
   } else {
     return false;
@@ -476,7 +472,7 @@ export function removeAllInPlace(predicate$$9, array$$50) {
     const i$$21 = array$$50.findIndex(predicate$$9);
 
     if (i$$21 > -1) {
-      ignore(array$$50.splice(i$$21, 1));
+      array$$50.splice(i$$21, 1), null;
       return countRemoveAll(count$$20) + 1 | 0;
     } else {
       return count$$20 | 0;
@@ -690,20 +686,20 @@ export function tryFindIndexBack(predicate$$23, array$$69) {
   return loop$$7(array$$69.length - 1);
 }
 export function choose(chooser$$2, array$$70, cons$$30) {
-  const f$$7 = function f$$7(x$$3) {
-    return chooser$$2(x$$3) != null;
+  const f$$7 = function f$$7(x$$4) {
+    return chooser$$2(x$$4) != null;
   };
 
-  const g = function g(x$$4) {
-    return value$$10(chooser$$2(x$$4));
+  const g = function g(x$$5) {
+    return value$$10(chooser$$2(x$$5));
   };
 
   const arr$$6 = array$$70.filter(f$$7);
   return map(g, arr$$6, cons$$30);
 }
 export function foldIndexed(folder$$2, state$$4, array$$72) {
-  return array$$72.reduce(function folder$$3(acc$$2, x$$5, i$$31) {
-    return folder$$2(i$$31, acc$$2, x$$5);
+  return array$$72.reduce(function (delegateArg0$$1, delegateArg1$$1, delegateArg2) {
+    return folder$$2(delegateArg2, delegateArg0$$1, delegateArg1$$1);
   }, state$$4);
 }
 export function fold(folder$$4, state$$6, array$$74) {
@@ -747,14 +743,14 @@ export function permute(f$$8, array$$81) {
   const size = array$$81.length | 0;
   const res$$8 = new array$$81.constructor(array$$81.length);
   const checkFlags = new Array(size);
-  iterateIndexed(function (i$$36, x$$7) {
+  iterateIndexed(function (i$$36, x$$8) {
     const j$$1 = f$$8(i$$36) | 0;
 
     if (j$$1 < 0 ? true : j$$1 >= size) {
       throw new Error("Not a valid permutation");
     }
 
-    res$$8[j$$1] = x$$7;
+    res$$8[j$$1] = x$$8;
     checkFlags[j$$1] = 1;
   }, array$$81);
   const isValid = forAll(function (y) {
@@ -781,13 +777,13 @@ export function setSlice(target$$5, lower, upper, source$$6) {
   }
 }
 export function sortInPlaceBy(projection$$3, xs, comparer) {
-  xs.sort(function (x$$9, y$$1) {
-    return comparer.Compare(projection$$3(x$$9), projection$$3(y$$1));
+  xs.sort(function (x$$10, y$$1) {
+    return comparer.Compare(projection$$3(x$$10), projection$$3(y$$1));
   });
 }
 export function sortInPlace(xs$$1, comparer$$1) {
-  xs$$1.sort(function (x$$10, y$$2) {
-    return comparer$$1.Compare(x$$10, y$$2);
+  xs$$1.sort(function (x$$11, y$$2) {
+    return comparer$$1.Compare(x$$11, y$$2);
   });
 }
 
@@ -803,29 +799,29 @@ function copyArray(array$$82) {
 
 export function sort(xs$$2, comparer$$2) {
   const xs$$3 = copyArray(xs$$2);
-  xs$$3.sort(function comparer$$3(x$$11, y$$3) {
-    return comparer$$2.Compare(x$$11, y$$3);
+  xs$$3.sort(function (x$$12, y$$3) {
+    return comparer$$2.Compare(x$$12, y$$3);
   });
   return xs$$3;
 }
 export function sortBy(projection$$4, xs$$4, comparer$$4) {
   const xs$$5 = copyArray(xs$$4);
-  xs$$5.sort(function comparer$$5(x$$12, y$$4) {
-    return comparer$$4.Compare(projection$$4(x$$12), projection$$4(y$$4));
+  xs$$5.sort(function (x$$13, y$$4) {
+    return comparer$$4.Compare(projection$$4(x$$13), projection$$4(y$$4));
   });
   return xs$$5;
 }
 export function sortDescending(xs$$6, comparer$$6) {
   const xs$$7 = copyArray(xs$$6);
-  xs$$7.sort(function comparer$$7(x$$13, y$$5) {
-    return comparer$$6.Compare(x$$13, y$$5) * -1;
+  xs$$7.sort(function (x$$14, y$$5) {
+    return comparer$$6.Compare(x$$14, y$$5) * -1;
   });
   return xs$$7;
 }
 export function sortByDescending(projection$$5, xs$$8, comparer$$8) {
   const xs$$9 = copyArray(xs$$8);
-  xs$$9.sort(function comparer$$9(x$$14, y$$6) {
-    return comparer$$8.Compare(projection$$5(x$$14), projection$$5(y$$6)) * -1;
+  xs$$9.sort(function (x$$15, y$$6) {
+    return comparer$$8.Compare(projection$$5(x$$15), projection$$5(y$$6)) * -1;
   });
   return xs$$9;
 }
@@ -842,9 +838,9 @@ export function unfold(generator, state$$8) {
       const matchValue$$10 = generator(state$$9);
 
       if (matchValue$$10 != null) {
-        const x$$15 = matchValue$$10[0];
+        const x$$16 = matchValue$$10[0];
         const s$0027$$2 = matchValue$$10[1];
-        ignore(res$$9.push(x$$15));
+        res$$9.push(x$$16), null;
         state$$9 = s$0027$$2;
         continue loop$$8;
       }
@@ -914,10 +910,10 @@ export function chunkBySize(chunkSize, array$$86) {
   } else {
     const result$$12 = [];
 
-    for (let x$$16 = 0; x$$16 <= ~~Math.ceil(array$$86.length / chunkSize) - 1; x$$16++) {
-      const start$$8 = x$$16 * chunkSize | 0;
+    for (let x$$17 = 0; x$$17 <= ~~Math.ceil(array$$86.length / chunkSize) - 1; x$$17++) {
+      const start$$8 = x$$17 * chunkSize | 0;
       const slice = array$$86.slice(start$$8, start$$8 + chunkSize);
-      ignore(result$$12.push(slice));
+      result$$12.push(slice), null;
     }
 
     return result$$12;
@@ -1007,13 +1003,13 @@ export function tryItem(index$$6, array$$98) {
   }
 }
 export function foldBackIndexed(folder$$6, array$$99, state$$10) {
-  return array$$99.reduceRight(function folder$$7(acc$$4, x$$17, i$$44) {
-    return folder$$6(i$$44, x$$17, acc$$4);
+  return array$$99.reduceRight(function (delegateArg0$$3, delegateArg1$$3, delegateArg2$$1) {
+    return folder$$6(delegateArg2$$1, delegateArg1$$3, delegateArg0$$3);
   }, state$$10);
 }
 export function foldBack(folder$$8, array$$101, state$$12) {
-  return array$$101.reduceRight(function folder$$9(acc$$5, x$$18) {
-    return folder$$8(x$$18, acc$$5);
+  return array$$101.reduceRight(function (delegateArg0$$4, delegateArg1$$4) {
+    return folder$$8(delegateArg1$$4, delegateArg0$$4);
   }, state$$12);
 }
 export function foldIndexed2(folder$$10, state$$14, array1$$8, array2$$8) {
@@ -1030,8 +1026,8 @@ export function foldIndexed2(folder$$10, state$$14, array1$$8, array2$$8) {
   return acc$$6;
 }
 export function fold2(folder$$11, state$$15, array1$$9, array2$$9) {
-  return foldIndexed2(function (_arg1, acc$$7, x$$19, y$$7) {
-    return folder$$11(acc$$7, x$$19, y$$7);
+  return foldIndexed2(function (_arg1, acc$$7, x$$20, y$$7) {
+    return folder$$11(acc$$7, x$$20, y$$7);
   }, state$$15, array1$$9, array2$$9);
 }
 export function foldBackIndexed2(folder$$12, array1$$10, array2$$10, state$$16) {
@@ -1050,8 +1046,8 @@ export function foldBackIndexed2(folder$$12, array1$$10, array2$$10, state$$16) 
   return acc$$8;
 }
 export function foldBack2(f$$9, array1$$11, array2$$11, state$$17) {
-  return foldBackIndexed2(function (_arg1$$1, x$$20, y$$8, acc$$9) {
-    return f$$9(x$$20, y$$8, acc$$9);
+  return foldBackIndexed2(function (_arg1$$1, x$$21, y$$8, acc$$9) {
+    return f$$9(x$$21, y$$8, acc$$9);
   }, array1$$11, array2$$11, state$$17);
 }
 export function reduce(reduction, array$$103) {
@@ -1069,8 +1065,8 @@ export function reduceBack(reduction$$2, array$$105) {
   return array$$105.reduceRight(reduction$$2);
 }
 export function forAll2(predicate$$27, array1$$12, array2$$12) {
-  return fold2(function (acc$$10, x$$21, y$$9) {
-    return acc$$10 ? predicate$$27(x$$21, y$$9) : false;
+  return fold2(function (acc$$10, x$$22, y$$9) {
+    return acc$$10 ? predicate$$27(x$$22, y$$9) : false;
   }, true, array1$$12, array2$$12);
 }
 export function existsOffset($arg$$178, $arg$$179, $arg$$180) {
@@ -1144,23 +1140,23 @@ export function sumBy(projection$$6, array$$110, adder$$1) {
   return acc$$12;
 }
 export function maxBy(projection$$7, xs$$12, comparer$$14) {
-  return reduce(function (x$$22, y$$10) {
-    return comparer$$14.Compare(projection$$7(y$$10), projection$$7(x$$22)) > 0 ? y$$10 : x$$22;
+  return reduce(function (x$$23, y$$10) {
+    return comparer$$14.Compare(projection$$7(y$$10), projection$$7(x$$23)) > 0 ? y$$10 : x$$23;
   }, xs$$12);
 }
 export function max(xs$$13, comparer$$15) {
-  return reduce(function (x$$23, y$$11) {
-    return comparer$$15.Compare(y$$11, x$$23) > 0 ? y$$11 : x$$23;
+  return reduce(function (x$$24, y$$11) {
+    return comparer$$15.Compare(y$$11, x$$24) > 0 ? y$$11 : x$$24;
   }, xs$$13);
 }
 export function minBy(projection$$8, xs$$14, comparer$$16) {
-  return reduce(function (x$$24, y$$12) {
-    return comparer$$16.Compare(projection$$8(y$$12), projection$$8(x$$24)) > 0 ? x$$24 : y$$12;
+  return reduce(function (x$$25, y$$12) {
+    return comparer$$16.Compare(projection$$8(y$$12), projection$$8(x$$25)) > 0 ? x$$25 : y$$12;
   }, xs$$14);
 }
 export function min(xs$$15, comparer$$17) {
-  return reduce(function (x$$25, y$$13) {
-    return comparer$$17.Compare(y$$13, x$$25) > 0 ? x$$25 : y$$13;
+  return reduce(function (x$$26, y$$13) {
+    return comparer$$17.Compare(y$$13, x$$26) > 0 ? x$$26 : y$$13;
   }, xs$$15);
 }
 export function average(array$$111, averager) {

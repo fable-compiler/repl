@@ -1,12 +1,12 @@
-import { declare, Record } from "../fable-library.2.3.7/Types.js";
-import { record, type, string, tuple, list, lambda, unit } from "../fable-library.2.3.7/Reflection.js";
+import { declare, Record } from "../fable-library.2.3.10/Types.js";
+import { record, type, string, tuple, list, lambda, unit } from "../fable-library.2.3.10/Reflection.js";
 import { Cmd$$$exec as Cmd$0024$0024$0024exec, Cmd$$$batch as Cmd$0024$0024$0024batch, Cmd$$$none as Cmd$0024$0024$0024none } from "./cmd.js";
-import { curry, partialApply, uncurry, ignore } from "../fable-library.2.3.7/Util.js";
 import { toConsole, onError as onError$$2 } from "./prelude.js";
-import { append, ofArray } from "../fable-library.2.3.7/List.js";
+import { curry, partialApply, uncurry } from "../fable-library.2.3.10/Util.js";
+import { append, ofArray } from "../fable-library.2.3.10/List.js";
 import { RingBuffer$00601$$Pop as RingBuffer$002400601$0024$0024Pop, RingBuffer$00601$$Push$$2B595 as RingBuffer$002400601$0024$0024Push$0024$00242B595, RingBuffer$00601$$$$002Ector$$Z524259A4 as RingBuffer$002400601$0024$0024$0024$0024002Ector$0024$0024Z524259A4 } from "./ring.js";
-import { value as value$$2, some } from "../fable-library.2.3.7/Option.js";
-import { toText, printf } from "../fable-library.2.3.7/String.js";
+import { value as value$$2, some } from "../fable-library.2.3.10/Option.js";
+import { toText, printf } from "../fable-library.2.3.10/String.js";
 export const Program$00604 = declare(function Elmish_Program(arg1, arg2, arg3, arg4, arg5, arg6, arg7) {
   this.init = arg1;
   this.update = arg2;
@@ -23,7 +23,7 @@ export function ProgramModule$$$mkProgram(init, update, view) {
   return new Program$00604(init, update, function (_arg1) {
     return Cmd$0024$0024$0024none();
   }, view, function setState(model, $arg$$1) {
-    ignore(view(model, $arg$$1));
+    view(model, $arg$$1), null;
   }, function (tupledArg) {
     onError$$2(tupledArg[0], tupledArg[1]);
   }, uncurry(2, function (x) {
@@ -38,7 +38,7 @@ export function ProgramModule$$$mkSimple(init$$1, update$$1, view$$1) {
   }, function (_arg1$$1) {
     return Cmd$0024$0024$0024none();
   }, view$$1, function setState$$1(model$$1, $arg$$4) {
-    ignore(view$$1(model$$1, $arg$$4));
+    view$$1(model$$1, $arg$$4), null;
   }, function (tupledArg$$1) {
     onError$$2(tupledArg$$1[0], tupledArg$$1[1]);
   }, uncurry(2, function (x$$1) {
@@ -93,11 +93,7 @@ export function ProgramModule$$$withSyncDispatch(syncDispatch, program$$8) {
   return new Program$00604(program$$8.init, program$$8.update, program$$8.subscribe, program$$8.view, program$$8.setState, program$$8.onError, syncDispatch);
 }
 export function ProgramModule$$$map(mapInit, mapUpdate, mapView, mapSetState, mapSubscribe, program$$9) {
-  const init$$3 = partialApply(1, mapInit, [program$$9.init]);
-  const update$$4 = partialApply(2, mapUpdate, [program$$9.update]);
-  const view$$2 = partialApply(2, mapView, [program$$9.view]);
-  const setState$$3 = partialApply(2, mapSetState, [program$$9.setState]);
-  return new Program$00604(init$$3, uncurry(2, update$$4), partialApply(1, mapSubscribe, [program$$9.subscribe]), uncurry(2, view$$2), uncurry(2, setState$$3), program$$9.onError, uncurry(2, function (x$$2) {
+  return new Program$00604(partialApply(1, mapInit, [program$$9.init]), uncurry(2, partialApply(2, mapUpdate, [program$$9.update])), partialApply(1, mapSubscribe, [program$$9.subscribe]), uncurry(2, partialApply(2, mapView, [program$$9.view])), uncurry(2, partialApply(2, mapSetState, [program$$9.setState])), program$$9.onError, uncurry(2, function (x$$2) {
     return x$$2;
   }));
 }
@@ -108,8 +104,6 @@ export function ProgramModule$$$runWith(arg$$1, program$$10) {
   let state$$2 = patternInput$$2[0];
 
   const dispatch = function dispatch(msg$$3) {
-    var clo1;
-
     if (reentered) {
       RingBuffer$002400601$0024$0024Push$0024$00242B595(rb, msg$$3);
     } else {
@@ -125,9 +119,7 @@ export function ProgramModule$$$runWith(arg$$1, program$$10) {
           Cmd$0024$0024$0024exec(syncDispatch$$1, patternInput$$3[1]);
           state$$2 = patternInput$$3[0];
         } catch (ex$$2) {
-          program$$10.onError([(clo1 = toText(printf("Unable to process the message: %A")), function (arg10) {
-            return clo1(arg10);
-          })(msg$$4), ex$$2]);
+          program$$10.onError([toText(printf("Unable to process the message: %A"))(msg$$4), ex$$2]);
         }
 
         nextMsg = RingBuffer$002400601$0024$0024Pop(rb);

@@ -1,8 +1,7 @@
-import { concat, map, iterate } from "../fable-library.2.3.7/List.js";
-import { List } from "../fable-library.2.3.7/Types.js";
-import { startImmediate, catchAsync } from "../fable-library.2.3.7/Async.js";
-import { singleton } from "../fable-library.2.3.7/AsyncBuilder.js";
-import { ignore } from "../fable-library.2.3.7/Util.js";
+import { concat, map, iterate } from "../fable-library.2.3.10/List.js";
+import { List } from "../fable-library.2.3.10/Types.js";
+import { startImmediate, catchAsync } from "../fable-library.2.3.10/Async.js";
+import { singleton } from "../fable-library.2.3.10/AsyncBuilder.js";
 export function Cmd$$$exec(dispatch, cmd) {
   iterate(function action(sub) {
     sub(dispatch);
@@ -143,36 +142,36 @@ export function Cmd$002EOfAsync$$$result(task$$6) {
 }
 export function Cmd$002EOfPromise$$$either(task$$7, arg$$6, ofSuccess$$4, ofError$$4) {
   const bind$$7 = function bind$$7(dispatch$$10) {
-    ignore(task$$7(arg$$6).then(function ($arg$$11) {
+    task$$7(arg$$6).then(function ($arg$$11) {
       return dispatch$$10(ofSuccess$$4($arg$$11));
     }).catch(function ($arg$$13) {
       return dispatch$$10(ofError$$4($arg$$13));
-    }));
+    }), null;
   };
 
   return new List(bind$$7, new List());
 }
 export function Cmd$002EOfPromise$$$perform(task$$8, arg$$7, ofSuccess$$5) {
   const bind$$8 = function bind$$8(dispatch$$11) {
-    ignore(task$$8(arg$$7).then(function ($arg$$14) {
+    task$$8(arg$$7).then(function ($arg$$14) {
       return dispatch$$11(ofSuccess$$5($arg$$14));
-    }));
+    }), null;
   };
 
   return new List(bind$$8, new List());
 }
 export function Cmd$002EOfPromise$$$attempt(task$$9, arg$$8, ofError$$5) {
   const bind$$9 = function bind$$9(dispatch$$12) {
-    ignore(task$$9(arg$$8).catch(function ($arg$$16) {
+    task$$9(arg$$8).catch(function ($arg$$16) {
       dispatch$$12(ofError$$5($arg$$16));
-    }));
+    }), null;
   };
 
   return new List(bind$$9, new List());
 }
 export function Cmd$002EOfPromise$$$result(task$$10) {
   const bind$$10 = function bind$$10(dispatch$$13) {
-    ignore(task$$10.then(dispatch$$13));
+    task$$10.then(dispatch$$13), null;
   };
 
   return new List(bind$$10, new List());

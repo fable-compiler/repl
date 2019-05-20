@@ -1,10 +1,10 @@
-import { record, list as list$$5, type, bool, string, union, getCaseTag, getCaseName } from "../fable-library.2.3.7/Reflection.js";
-import { Record, List, declare, Union } from "../fable-library.2.3.7/Types.js";
-import { createObj, int32ToString } from "../fable-library.2.3.7/Util.js";
-import { filter, append, fold } from "../fable-library.2.3.7/List.js";
-import { defaultArg } from "../fable-library.2.3.7/Option.js";
+import { record, list as list$$5, type, bool, string, union, getCaseTag, getCaseName } from "../fable-library.2.3.10/Reflection.js";
+import { Record, List, declare, Union } from "../fable-library.2.3.10/Types.js";
+import { createObj, int32ToString } from "../fable-library.2.3.10/Util.js";
+import { filter, append, fold } from "../fable-library.2.3.10/List.js";
+import { defaultArg } from "../fable-library.2.3.10/Option.js";
 import { HTMLAttr } from "../src/Fable.React.Props.js";
-import { join } from "../fable-library.2.3.7/String.js";
+import { join } from "../fable-library.2.3.10/String.js";
 export function Reflection$$$getCaseName(case$) {
   return getCaseName(case$);
 }
@@ -317,8 +317,6 @@ export function Modifier$002EIModifier$reflection() {
   return union("Fulma.Modifier.IModifier", [], Modifier$002EIModifier, () => [["BackgroundColor", [Color$002EIColor$reflection()]], ["TextColor", [Color$002EIColor$reflection()]], ["TextWeight", [TextWeight$002EOption$reflection()]], ["TextSize", [Screen$reflection(), TextSize$002EOption$reflection()]], ["TextSizeOnly", [Screen$reflection(), TextSize$002EOption$reflection()]], ["TextAlignment", [Screen$reflection(), TextAlignment$002EOption$reflection()]], ["TextAlignmentOnly", [Screen$reflection(), TextAlignment$002EOption$reflection()]], ["TextTransform", [TextTransform$002EOption$reflection()]], ["Display", [Screen$reflection(), Display$002EOption$reflection()]], ["DisplayOnly", [Screen$reflection(), Display$002EOption$reflection()]], "is-clearfix", "is-pulled-left", "is-pulled-right", "is-marginless", "is-paddingless", "is-overlay", "is-clipped", "is-radiusless", "is-shadowless", "is-unselectable", ["IsInvisible", [Screen$reflection(), bool]], ["IsHidden", [Screen$reflection(), bool]], ["IsInvisibleOnly", [Screen$reflection(), bool]], ["IsHiddenOnly", [Screen$reflection(), bool]], "IsSrOnly", "IsScreenReaderOnly"]);
 }
 export function Modifier$$$parseModifiers(options) {
-  var state;
-
   const parseOptions = function parseOptions(result, option) {
     var x$$6, x$$7;
 
@@ -459,9 +457,7 @@ export function Modifier$$$parseModifiers(options) {
     }
   };
 
-  return (state = new List(), function (list) {
-    return fold(parseOptions, state, list);
-  })(options);
+  return fold(parseOptions, new List(), options);
 }
 export const Common$002EGenericOption = declare(function Fulma_Common_GenericOption(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
@@ -480,10 +476,7 @@ export function Common$002EGenericOptions$$$get_Empty() {
   return new Common$002EGenericOptions(new List(), new List());
 }
 export function Common$002EGenericOptions$$$Parse$$9AE2F7C(options$$1, parser, baseClass, baseProps) {
-  var state$$1;
-  const result$$1 = (state$$1 = Common$002EGenericOptions$$$get_Empty(), function (list$$1) {
-    return fold(parser, state$$1, list$$1);
-  })(options$$1);
+  const result$$1 = fold(parser, Common$002EGenericOptions$$$get_Empty(), options$$1);
   let result$$2;
 
   if (baseClass == null) {

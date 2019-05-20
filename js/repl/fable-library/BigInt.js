@@ -172,11 +172,9 @@ function flipTwosComplement(currByte, lowBitFound) {
   } else if (matchValue$$1[0] === 0) {
     return [0, false];
   } else {
-    let firstBitIndex;
-    const list = ofSeq(rangeNumber(0, 1, 7));
-    firstBitIndex = find(function predicate(i$$2) {
+    const firstBitIndex = find(function predicate(i$$2) {
       return (currByte & 1 << i$$2) > 0;
-    }, list);
+    }, ofSeq(rangeNumber(0, 1, 7))) | 0;
     return [(currByte ^ 254 << firstBitIndex) & 255, true];
   }
 }

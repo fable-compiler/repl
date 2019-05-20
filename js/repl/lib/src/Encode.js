@@ -1,14 +1,14 @@
-import { mapIndexed, map as map$$1, fold, iterate } from "../fable-library.2.3.7/Seq.js";
-import { empty, tryFind, toList } from "../fable-library.2.3.7/Map.js";
-import { toString as toString$$1 } from "../fable-library.2.3.7/Date.js";
-import { toString as toString$$2 } from "../fable-library.2.3.7/TimeSpan.js";
-import { toString as toString$$3 } from "../fable-library.2.3.7/Long.js";
-import { comparePrimitives, Lazy, uncurry } from "../fable-library.2.3.7/Util.js";
-import { defaultArgWith, defaultArg } from "../fable-library.2.3.7/Option.js";
-import { type, getGenerics, getGenericTypeDefinition, getTupleFields, getTupleElements, isTuple, isGenericType, getElementType, isArray, fullName, getUnionCaseFields, getUnionFields, isUnion, getRecordField, name, getRecordElements, isRecord } from "../fable-library.2.3.7/Reflection.js";
-import { fill, map } from "../fable-library.2.3.7/Array.js";
-import { toText, printf } from "../fable-library.2.3.7/String.js";
-import { declare } from "../fable-library.2.3.7/Types.js";
+import { mapIndexed, map as map$$1, fold, iterate } from "../fable-library.2.3.10/Seq.js";
+import { empty, tryFind, toList } from "../fable-library.2.3.10/Map.js";
+import { toString as toString$$1 } from "../fable-library.2.3.10/Date.js";
+import { toString as toString$$2 } from "../fable-library.2.3.10/TimeSpan.js";
+import { toString as toString$$3 } from "../fable-library.2.3.10/Long.js";
+import { comparePrimitives, Lazy, mapCurriedArgs, uncurry } from "../fable-library.2.3.10/Util.js";
+import { defaultArgWith, defaultArg } from "../fable-library.2.3.10/Option.js";
+import { type, getGenerics, getGenericTypeDefinition, getTupleFields, getTupleElements, isTuple, isGenericType, getElementType, isArray, fullName, getUnionCaseFields, getUnionFields, isUnion, getRecordElements, getRecordField, name, isRecord } from "../fable-library.2.3.10/Reflection.js";
+import { fill, map } from "../fable-library.2.3.10/Array.js";
+import { toText, printf } from "../fable-library.2.3.10/String.js";
+import { declare } from "../fable-library.2.3.10/Types.js";
 import { Util$$$CachedEncoders as Util$0024$0024$0024CachedEncoders, Util$002ECache$00601$$GetOrAdd$$43981464 as Util$0024002ECache$002400601$0024$0024GetOrAdd$0024$002443981464 } from "./Types.js";
 export function string(value) {
   return value;
@@ -95,8 +95,7 @@ export function toString(space, value$$22) {
 }
 export function option(encoder) {
   return function ($arg$$1) {
-    const option$$2 = defaultArg($arg$$1, null, encoder);
-    return defaultArgWith(option$$2, function defThunk() {
+    return defaultArgWith(defaultArg($arg$$1, null, encoder), function defThunk() {
       return nil;
     });
   };
@@ -109,12 +108,8 @@ export function unboxEncoder(d$$1) {
 }
 
 function autoEncodeRecordsAndUnions(extra, isCamelCase, t) {
-  var clo1;
-
   if (isRecord(t, true)) {
-    let setters;
-    const array$$1 = getRecordElements(t, true);
-    setters = map(function mapping(fi) {
+    const setters = map(function mapping(fi) {
       const targetKey = isCamelCase ? name(fi).slice(null, 0 + 1).toLowerCase() + name(fi).slice(1, name(fi).length) : name(fi);
       const encode$$1 = autoEncoder(extra, isCamelCase, fi[1]);
       return function (source) {
@@ -128,16 +123,13 @@ function autoEncodeRecordsAndUnions(extra, isCamelCase, t) {
           return target;
         };
       };
-    }, array$$1, Array);
+    }, getRecordElements(t, true), Array);
     return function (source$$1) {
-      const state = {};
-      return fold(function ($arg$$6, $arg$$7) {
-        return function folder(target$$1) {
-          return function (set) {
-            return set(source$$1, target$$1);
-          };
-        }($arg$$6)(uncurry(2, $arg$$7));
-      }, state, setters);
+      return fold(uncurry(2, mapCurriedArgs(function folder(target$$1) {
+        return function (set) {
+          return set(source$$1, target$$1);
+        };
+      }, [0, [0, 2]])), {}, setters);
     };
   } else if (isUnion(t, true)) {
     return function (value$$24) {
@@ -163,9 +155,7 @@ function autoEncodeRecordsAndUnions(extra, isCamelCase, t) {
   } else {
     return function (message) {
       throw new Error(message);
-    }((clo1 = toText(printf("Cannot generate auto encoder for %s. Please pass an extra encoder.")), function (arg10) {
-      return clo1(arg10);
-    })(fullName(t)));
+    }(toText(printf("Cannot generate auto encoder for %s. Please pass an extra encoder."))(fullName(t)));
   }
 }
 
@@ -184,16 +174,13 @@ function autoEncoder(extra$$1, isCamelCase$$1, t$$1) {
       };
     } else if (isGenericType(t$$1)) {
       if (isTuple(t$$1)) {
-        let encoders;
-        const array$$2 = getTupleElements(t$$1);
-        encoders = map(function mapping$$1(t$$3) {
+        const encoders = map(function mapping$$1(t$$3) {
           return autoEncoder(extra$$1, isCamelCase$$1, t$$3);
-        }, array$$2, Array);
+        }, getTupleElements(t$$1), Array);
         return function (value$$28) {
-          var source$$4;
-          return seq((source$$4 = getTupleFields(value$$28), mapIndexed(function mapping$$2(i$$1, x) {
+          return seq(mapIndexed(function mapping$$2(i$$1, x) {
             return encoders[i$$1](x);
-          }, source$$4)));
+          }, getTupleFields(value$$28)));
         };
       } else {
         const fullname$$1 = fullName(getGenericTypeDefinition(t$$1));
@@ -206,12 +193,8 @@ function autoEncoder(extra$$1, isCamelCase$$1, t$$1) {
               return autoEncoder(extra$$1, isCamelCase$$1, t$$4);
             }(getGenerics(t$$1)[0])));
           });
-          return function d$$4(value$$29) {
-            if (value$$29 == null) {
-              return nil;
-            } else {
-              return encoder$$4.Value(value$$29);
-            }
+          return function (value$$29) {
+            return value$$29 == null ? nil : encoder$$4.Value(value$$29);
           };
         } else if (fullname$$1 === "Microsoft.FSharp.Collections.FSharpList`1[System.Object]" ? true : fullname$$1 === "Microsoft.FSharp.Collections.FSharpSet`1[System.Object]") {
           const encoder$$5 = function (t$$5) {
@@ -230,12 +213,11 @@ function autoEncoder(extra$$1, isCamelCase$$1, t$$1) {
 
           if (fullName(keyType) === "System.String" ? true : fullName(keyType) === "System.Guid") {
             return function (value$$31) {
-              const state$$1 = {};
               return fold(function folder$$1(target$$3, _arg1$$1) {
                 const activePatternResult705 = _arg1$$1;
                 target$$3[activePatternResult705[0]] = valueEncoder(activePatternResult705[1]);
                 return target$$3;
-              }, state$$1, value$$31);
+              }, {}, value$$31);
             };
           } else {
             const keyEncoder = function (t$$7) {
@@ -257,23 +239,23 @@ function autoEncoder(extra$$1, isCamelCase$$1, t$$1) {
         }
       }
     } else if (fullname === "System.Boolean") {
-      return function d$$5(value$$33) {
+      return function (value$$33) {
         return value$$33;
       };
     } else if (fullname === "System.String") {
-      return function d$$6(value$$35) {
+      return function (value$$35) {
         return value$$35;
       };
     } else if (fullname === "System.Int32") {
-      return function d$$7(value$$37) {
+      return function (value$$37) {
         return value$$37;
       };
     } else if (fullname === "System.UInt32") {
-      return function d$$8(value$$39) {
+      return function (value$$39) {
         return value$$39;
       };
     } else if (fullname === "System.Double") {
-      return function d$$9(value$$41) {
+      return function (value$$41) {
         return value$$41;
       };
     } else if (fullname === "System.DateTime") {
@@ -285,7 +267,7 @@ function autoEncoder(extra$$1, isCamelCase$$1, t$$1) {
     } else if (fullname === "System.Guid") {
       return guid;
     } else if (fullname === "System.Object") {
-      return function d$$14(x$$1) {
+      return function (x$$1) {
         return x$$1;
       };
     } else {

@@ -1,6 +1,6 @@
-import { List, declare, Union } from "../fable-library.2.3.7/Types.js";
-import { type, union, obj, int32, string } from "../fable-library.2.3.7/Reflection.js";
-import { int32ToString, createObj } from "../fable-library.2.3.7/Util.js";
+import { List, declare, Union } from "../fable-library.2.3.10/Types.js";
+import { type, union, obj, int32, string } from "../fable-library.2.3.10/Reflection.js";
+import { int32ToString, createObj } from "../fable-library.2.3.10/Util.js";
 import { result } from "./Promise.js";
 export const Types$002EHttpRequestHeaders = declare(function Fetch_Types_HttpRequestHeaders(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
@@ -26,8 +26,7 @@ function errorString(response) {
 }
 
 export function fetch$(url, init) {
-  const pr = fetch(url, createObj(init, 1));
-  return pr.then(function a(response$$1) {
+  return fetch(url, createObj(init, 1)).then(function a(response$$1) {
     if (response$$1.ok) {
       return response$$1;
     } else {

@@ -731,25 +731,25 @@ export function zip3(xs$$86, ys$$20, zs$$5) {
 }
 export function sort(xs$$87, comparer$$1) {
   var xs$$88;
-  return ofArray((xs$$88 = ofList(xs$$87, Array), (xs$$88.sort(function comparer$$2(x$$49, y$$17) {
+  return ofArray((xs$$88 = ofList(xs$$87, Array), (xs$$88.sort(function (x$$49, y$$17) {
     return comparer$$1.Compare(x$$49, y$$17);
   }), xs$$88)));
 }
 export function sortBy(projection, xs$$90, comparer$$3) {
   var xs$$91;
-  return ofArray((xs$$91 = ofList(xs$$90, Array), (xs$$91.sort(function comparer$$4(x$$50, y$$18) {
+  return ofArray((xs$$91 = ofList(xs$$90, Array), (xs$$91.sort(function (x$$50, y$$18) {
     return comparer$$3.Compare(projection(x$$50), projection(y$$18));
   }), xs$$91)));
 }
 export function sortDescending(xs$$93, comparer$$5) {
   var xs$$94;
-  return ofArray((xs$$94 = ofList(xs$$93, Array), (xs$$94.sort(function comparer$$6(x$$51, y$$19) {
+  return ofArray((xs$$94 = ofList(xs$$93, Array), (xs$$94.sort(function (x$$51, y$$19) {
     return comparer$$5.Compare(x$$51, y$$19) * -1;
   }), xs$$94)));
 }
 export function sortByDescending(projection$$1, xs$$96, comparer$$7) {
   var xs$$97;
-  return ofArray((xs$$97 = ofList(xs$$96, Array), (xs$$97.sort(function comparer$$8(x$$52, y$$20) {
+  return ofArray((xs$$97 = ofList(xs$$96, Array), (xs$$97.sort(function (x$$52, y$$20) {
     return comparer$$7.Compare(projection$$1(x$$52), projection$$1(y$$20)) * -1;
   }), xs$$97)));
 }
@@ -1092,9 +1092,7 @@ export function slice(lower, upper, xs$$128) {
     return new List();
   } else {
     let lastIndex = -1 | 0;
-    let res$$2;
-    const state$$13 = new List();
-    res$$2 = foldIndexed(function f$$56(i$$34, acc$$26, x$$67) {
+    const res$$2 = foldIndexed(function f$$56(i$$34, acc$$26, x$$67) {
       lastIndex = i$$34;
 
       if (lower$$1 <= i$$34 ? !hasUpper ? true : i$$34 <= upper : false) {
@@ -1102,7 +1100,7 @@ export function slice(lower, upper, xs$$128) {
       } else {
         return acc$$26;
       }
-    }, state$$13, xs$$128);
+    }, new List(), xs$$128);
 
     if (lower$$1 > lastIndex + 1 ? true : hasUpper ? upper > lastIndex : false) {
       outOfRange();

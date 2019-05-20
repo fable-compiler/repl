@@ -1,9 +1,9 @@
-import { declare, Union } from "../fable-library.2.3.7/Types.js";
-import { list, type, string, union } from "../fable-library.2.3.7/Reflection.js";
+import { declare, Union } from "../fable-library.2.3.10/Types.js";
+import { list, type, string, union } from "../fable-library.2.3.10/Reflection.js";
 import { Common$002EGenericOptions$$$Parse$$9AE2F7C as Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C, Common$002EGenericOptions$$ToReactElement$$Z6D3CD4B7 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7, Common$002EGenericOptions$$AddModifiers$$5BB435D5 as Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5, Common$002EGenericOptions$$AddProps$$416C4D0B as Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B, Common$002EGenericOptions$$AddClass$$Z721C83C5 as Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5, Screen$$$ToString$$2D2414B4 as Screen$0024$0024$0024ToString$0024$00242D2414B4, Common$002EGenericOptions$$AddCaseName$$1505 as Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Screen$reflection as Screen$0024reflection, Reflection$$$getCaseName as Reflection$0024$0024$0024getCaseName } from "../Fulma/Common.js";
-import { createObj, structuralHash } from "../fable-library.2.3.7/Util.js";
-import { contains } from "../fable-library.2.3.7/List.js";
-import { toText, printf } from "../fable-library.2.3.7/String.js";
+import { createObj, structuralHash } from "../fable-library.2.3.10/Util.js";
+import { contains } from "../fable-library.2.3.10/List.js";
+import { toText, printf } from "../fable-library.2.3.10/String.js";
 export const ISize = declare(function Fulma_Columns_ISize(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
@@ -21,7 +21,7 @@ export function Option$reflection() {
 }
 export function columns(options, children) {
   const parseOptions = function parseOptions(result, option) {
-    var x$$1, msg, clo1, x$$2, msg$$1, clo1$$1;
+    var x$$1, msg, x$$2, msg$$1;
 
     switch (option.tag) {
       case 1:
@@ -64,25 +64,9 @@ export function columns(options, children) {
 
             GetHashCode: structuralHash
           })) {
-            return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, "is-variable"), screen$$3.tag === 2 ? "is-" + ISize$$$ToString$$2283FB3F(size$$3) + Screen$0024$0024$0024ToString$0024$00242D2414B4(screen$$3) + "-only" : screen$$3.tag === 1 ? "is-" + ISize$$$ToString$$2283FB3F(size$$3) + Screen$0024$0024$0024ToString$0024$00242D2414B4(screen$$3) + "-only" : screen$$3.tag === 4 ? "is-" + ISize$$$ToString$$2283FB3F(size$$3) + Screen$0024$0024$0024ToString$0024$00242D2414B4(screen$$3) + "-only" : (x$$1 = screen$$3, (msg = (clo1 = toText(printf("Screen `%s` does not support `is-%s-%s-only`.")), function (arg10) {
-              const clo2 = clo1(arg10);
-              return function (arg20) {
-                const clo3 = clo2(arg20);
-                return function (arg30) {
-                  return clo3(arg30);
-                };
-              };
-            })(Screen$0024$0024$0024ToString$0024$00242D2414B4(x$$1))(ISize$$$ToString$$2283FB3F(size$$3))(Screen$0024$0024$0024ToString$0024$00242D2414B4(x$$1)), (console.warn(msg), ""))));
+            return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, "is-variable"), screen$$3.tag === 2 ? "is-" + ISize$$$ToString$$2283FB3F(size$$3) + Screen$0024$0024$0024ToString$0024$00242D2414B4(screen$$3) + "-only" : screen$$3.tag === 1 ? "is-" + ISize$$$ToString$$2283FB3F(size$$3) + Screen$0024$0024$0024ToString$0024$00242D2414B4(screen$$3) + "-only" : screen$$3.tag === 4 ? "is-" + ISize$$$ToString$$2283FB3F(size$$3) + Screen$0024$0024$0024ToString$0024$00242D2414B4(screen$$3) + "-only" : (x$$1 = screen$$3, (msg = toText(printf("Screen `%s` does not support `is-%s-%s-only`."))(Screen$0024$0024$0024ToString$0024$00242D2414B4(x$$1))(ISize$$$ToString$$2283FB3F(size$$3))(Screen$0024$0024$0024ToString$0024$00242D2414B4(x$$1)), (console.warn(msg), ""))));
           } else {
-            return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, screen$$3.tag === 2 ? "is-" + ISize$$$ToString$$2283FB3F(size$$3) + Screen$0024$0024$0024ToString$0024$00242D2414B4(screen$$3) + "-only" : screen$$3.tag === 1 ? "is-" + ISize$$$ToString$$2283FB3F(size$$3) + Screen$0024$0024$0024ToString$0024$00242D2414B4(screen$$3) + "-only" : screen$$3.tag === 4 ? "is-" + ISize$$$ToString$$2283FB3F(size$$3) + Screen$0024$0024$0024ToString$0024$00242D2414B4(screen$$3) + "-only" : (x$$2 = screen$$3, (msg$$1 = (clo1$$1 = toText(printf("Screen `%s` does not support `is-%s-%s-only`.")), function (arg10$$1) {
-              const clo2$$1 = clo1$$1(arg10$$1);
-              return function (arg20$$1) {
-                const clo3$$1 = clo2$$1(arg20$$1);
-                return function (arg30$$1) {
-                  return clo3$$1(arg30$$1);
-                };
-              };
-            })(Screen$0024$0024$0024ToString$0024$00242D2414B4(x$$2))(ISize$$$ToString$$2283FB3F(size$$3))(Screen$0024$0024$0024ToString$0024$00242D2414B4(x$$2)), (console.warn(msg$$1), ""))));
+            return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, screen$$3.tag === 2 ? "is-" + ISize$$$ToString$$2283FB3F(size$$3) + Screen$0024$0024$0024ToString$0024$00242D2414B4(screen$$3) + "-only" : screen$$3.tag === 1 ? "is-" + ISize$$$ToString$$2283FB3F(size$$3) + Screen$0024$0024$0024ToString$0024$00242D2414B4(screen$$3) + "-only" : screen$$3.tag === 4 ? "is-" + ISize$$$ToString$$2283FB3F(size$$3) + Screen$0024$0024$0024ToString$0024$00242D2414B4(screen$$3) + "-only" : (x$$2 = screen$$3, (msg$$1 = toText(printf("Screen `%s` does not support `is-%s-%s-only`."))(Screen$0024$0024$0024ToString$0024$00242D2414B4(x$$2))(ISize$$$ToString$$2283FB3F(size$$3))(Screen$0024$0024$0024ToString$0024$00242D2414B4(x$$2)), (console.warn(msg$$1), ""))));
           }
         }
 

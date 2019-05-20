@@ -1,4 +1,4 @@
-import { ignore, structuralHash, equals } from "./Util.js";
+import { structuralHash, equals } from "./Util.js";
 import { HashIdentity$$$Structural as HashIdentity$0024$0024$0024Structural, ComparisonIdentity$$$Structural as ComparisonIdentity$0024$0024$0024Structural } from "./FSharp.Collections.js";
 import { StringBuilder$$Append$$Z721C83C5 as StringBuilder$0024$0024Append$0024$0024Z721C83C5 } from "./System.Text.js";
 export const LanguagePrimitives$$$GenericEqualityComparer = {
@@ -50,7 +50,7 @@ export function ExtraTopLevelOperators$$$LazyPattern(input) {
 }
 export function PrintfModule$$$PrintFormatToStringBuilderThen(continuation, builder, format) {
   const append = function append(s) {
-    ignore(StringBuilder$0024$0024Append$0024$0024Z721C83C5(builder, s));
+    StringBuilder$0024$0024Append$0024$0024Z721C83C5(builder, s), null;
     return continuation();
   };
 
@@ -58,6 +58,6 @@ export function PrintfModule$$$PrintFormatToStringBuilderThen(continuation, buil
 }
 export function PrintfModule$$$PrintFormatToStringBuilder(builder$$1, format$$1) {
   return PrintfModule$$$PrintFormatToStringBuilderThen(function () {
-    ignore();
+    null, null;
   }, builder$$1, format$$1);
 }

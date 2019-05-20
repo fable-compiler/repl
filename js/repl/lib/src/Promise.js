@@ -1,8 +1,8 @@
-import { mapError, mapOk, Result } from "../fable-library.2.3.7/Option.js";
-import { declare } from "../fable-library.2.3.7/Types.js";
-import { type } from "../fable-library.2.3.7/Reflection.js";
-import { iterate } from "../fable-library.2.3.7/Seq.js";
-import { equals } from "../fable-library.2.3.7/Util.js";
+import { mapError, mapOk, Result } from "../fable-library.2.3.10/Option.js";
+import { declare } from "../fable-library.2.3.10/Types.js";
+import { type } from "../fable-library.2.3.10/Reflection.js";
+import { iterate } from "../fable-library.2.3.10/Seq.js";
+import { equals } from "../fable-library.2.3.10/Util.js";
 export function reject(reason) {
   return Promise.reject(reason);
 }

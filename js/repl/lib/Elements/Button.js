@@ -1,9 +1,9 @@
-import { List, declare, Union } from "../fable-library.2.3.7/Types.js";
+import { List, declare, Union } from "../fable-library.2.3.10/Types.js";
 import { Common$002EGenericOptions$$$Parse$$9AE2F7C as Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C, Common$002EGenericOptions$$ToReactElement$$Z6D3CD4B7 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7, Common$002EGenericOptions$$AddModifiers$$5BB435D5 as Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5, Common$002EGenericOptions$$AddProps$$416C4D0B as Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B, Common$002EGenericOptions$$AddProp$$7BFEDA81 as Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81, Common$002EGenericOptions$$AddCaseName$$1505 as Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505, Reflection$$$getCaseName as Reflection$0024$0024$0024getCaseName, Common$002EGenericOptions$$AddClass$$Z721C83C5 as Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5, Color$$$ofColor as Color$0024$0024$0024ofColor, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection, Color$002EIColor$reflection as Color$0024002EIColor$0024reflection } from "../Fulma/Common.js";
-import { union, string, lambda, unit, list as list$$3, type, bool } from "../fable-library.2.3.7/Reflection.js";
+import { union, string, lambda, unit, list as list$$3, type, bool } from "../fable-library.2.3.10/Reflection.js";
 import { DOMAttr, HTMLAttr } from "../src/Fable.React.Props.js";
-import { createObj } from "../fable-library.2.3.7/Util.js";
-import { map, exists } from "../fable-library.2.3.7/List.js";
+import { createObj } from "../fable-library.2.3.10/Util.js";
+import { map, exists } from "../fable-library.2.3.10/List.js";
 export const Option = declare(function Fulma_Button_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);

@@ -1,0 +1,11 @@
+/Users/alfonsogarciacaronunez/dev/repl/public/samples/obj/Debug/netstandard2.0/Samples.fsprojAssemblyReference.cache
+/Users/alfonsogarciacaronunez/dev/repl/public/samples/obj/Debug/netstandard2.0/Samples.AssemblyInfoInputs.cache
+/Users/alfonsogarciacaronunez/dev/repl/public/samples/obj/Debug/netstandard2.0/Samples.AssemblyInfo.fs
+/Users/alfonsogarciacaronunez/dev/repl/public/samples/bin/Debug/netstandard2.0/Samples.deps.json
+/Users/alfonsogarciacaronunez/dev/repl/public/samples/bin/Debug/netstandard2.0/Samples.dll
+/Users/alfonsogarciacaronunez/dev/repl/public/samples/bin/Debug/netstandard2.0/Samples.pdb
+/Users/alfonsogarciacaronunez/dev/repl/public/samples/bin/Debug/netstandard2.0/Fable.Repl.Lib.dll
+/Users/alfonsogarciacaronunez/dev/repl/public/samples/bin/Debug/netstandard2.0/Fable.Repl.Lib.pdb
+/Users/alfonsogarciacaronunez/dev/repl/public/samples/obj/Debug/netstandard2.0/Samples.fsproj.CopyComplete
+/Users/alfonsogarciacaronunez/dev/repl/public/samples/obj/Debug/netstandard2.0/Samples.dll
+/Users/alfonsogarciacaronunez/dev/repl/public/samples/obj/Debug/netstandard2.0/Samples.pdb

@@ -385,9 +385,6 @@ export function compare(x, y) {
     return 1;
   }
 }
-export function ignore(x) {
-  return;
-}
 export function min(comparer, x, y) {
   return comparer(x, y) < 0 ? x : y;
 }
@@ -532,52 +529,71 @@ export function clear(col) {
     col.clear();
   }
 }
+const CURRIED_KEY = "__CURRIED__";
 export function uncurry(arity, f) {
   // f may be a function option with None value
   if (f == null) {
     return null;
-  } // return (...args: any[]) => {
-  //   // In some cases there may be more arguments applied than necessary
-  //   // (e.g. index when mapping an array), discard them
-  //   args = args.slice(0, arity);
-  //   let res = f;
-  //   while (args.length > 0) {
-  //       const curArgs = args.splice(0, res.length);
-  //       res = res.apply(null, curArgs);
-  //   }
-  //   return res;
-  // };
+  } // The function is already uncurried
 
+
+  if (f.length > 1) {
+    //   if (CURRIED_KEY in f) { // This doesn't always work
+    return f;
+  }
+
+  let uncurriedFn;
 
   switch (arity) {
     case 2:
-      return (a1, a2) => f(a1)(a2);
+      uncurriedFn = (a1, a2) => f(a1)(a2);
+
+      break;
 
     case 3:
-      return (a1, a2, a3) => f(a1)(a2)(a3);
+      uncurriedFn = (a1, a2, a3) => f(a1)(a2)(a3);
+
+      break;
 
     case 4:
-      return (a1, a2, a3, a4) => f(a1)(a2)(a3)(a4);
+      uncurriedFn = (a1, a2, a3, a4) => f(a1)(a2)(a3)(a4);
+
+      break;
 
     case 5:
-      return (a1, a2, a3, a4, a5) => f(a1)(a2)(a3)(a4)(a5);
+      uncurriedFn = (a1, a2, a3, a4, a5) => f(a1)(a2)(a3)(a4)(a5);
+
+      break;
 
     case 6:
-      return (a1, a2, a3, a4, a5, a6) => f(a1)(a2)(a3)(a4)(a5)(a6);
+      uncurriedFn = (a1, a2, a3, a4, a5, a6) => f(a1)(a2)(a3)(a4)(a5)(a6);
+
+      break;
 
     case 7:
-      return (a1, a2, a3, a4, a5, a6, a7) => f(a1)(a2)(a3)(a4)(a5)(a6)(a7);
+      uncurriedFn = (a1, a2, a3, a4, a5, a6, a7) => f(a1)(a2)(a3)(a4)(a5)(a6)(a7);
+
+      break;
 
     case 8:
-      return (a1, a2, a3, a4, a5, a6, a7, a8) => f(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8);
+      uncurriedFn = (a1, a2, a3, a4, a5, a6, a7, a8) => f(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8);
+
+      break;
 
     default:
       throw new Error("Uncurrying to more than 8-arity is not supported: " + arity);
   }
+
+  uncurriedFn[CURRIED_KEY] = f;
+  return uncurriedFn;
 }
 export function curry(arity, f) {
   if (f == null) {
     return null;
+  }
+
+  if (CURRIED_KEY in f) {
+    return f[CURRIED_KEY];
   }
 
   switch (arity) {
@@ -609,6 +625,14 @@ export function curry(arity, f) {
 export function partialApply(arity, f, args) {
   if (f == null) {
     return null;
+  } else if (CURRIED_KEY in f) {
+    f = f[CURRIED_KEY];
+
+    for (var i = 0; i < args.length; i++) {
+      f = f(args[i]);
+    }
+
+    return f;
   } else {
     switch (arity) {
       case 1:
@@ -642,6 +666,38 @@ export function partialApply(arity, f, args) {
         throw new Error("Partially applying to more than 8-arity is not supported: " + arity);
     }
   }
+}
+export function mapCurriedArgs(fn, mappings) {
+  function mapArg(fn, arg, mappings, idx) {
+    const mapping = mappings[idx];
+
+    if (mapping !== 0) {
+      const expectedArity = mapping[0];
+      const actualArity = mapping[1];
+
+      if (expectedArity > 1) {
+        arg = curry(expectedArity, arg);
+      }
+
+      if (actualArity > 1) {
+        arg = uncurry(actualArity, arg);
+      }
+    }
+
+    const res = fn(arg);
+
+    if (idx + 1 === mappings.length) {
+      return res;
+    } else {
+      return function (arg) {
+        return mapArg(res, arg, mappings, idx + 1);
+      };
+    }
+  }
+
+  return function (arg) {
+    return mapArg(fn, arg, mappings, 0);
+  };
 }
 export function addToDict(dict, k, v) {
   if (dict.has(k)) {

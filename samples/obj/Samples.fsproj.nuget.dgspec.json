@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/alfonsogarciacaronunez/dev/repl/deploy/samples/Samples.fsproj": {}
+    "/Users/alfonsogarciacaronunez/dev/repl/public/samples/Samples.fsproj": {}
   },
   "projects": {
-    "/Users/alfonsogarciacaronunez/dev/repl/deploy/samples/Samples.fsproj": {
+    "/Users/alfonsogarciacaronunez/dev/repl/public/samples/Samples.fsproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/alfonsogarciacaronunez/dev/repl/deploy/samples/Samples.fsproj",
+        "projectUniqueName": "/Users/alfonsogarciacaronunez/dev/repl/public/samples/Samples.fsproj",
         "projectName": "Samples",
-        "projectPath": "/Users/alfonsogarciacaronunez/dev/repl/deploy/samples/Samples.fsproj",
+        "projectPath": "/Users/alfonsogarciacaronunez/dev/repl/public/samples/Samples.fsproj",
         "packagesPath": "/Users/alfonsogarciacaronunez/.nuget/packages/",
-        "outputPath": "/Users/alfonsogarciacaronunez/dev/repl/deploy/samples/obj/",
+        "outputPath": "/Users/alfonsogarciacaronunez/dev/repl/public/samples/obj/",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"

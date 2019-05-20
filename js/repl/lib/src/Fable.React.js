@@ -1,5 +1,5 @@
-import { declare, Record } from "../fable-library.2.3.7/Types.js";
-import { record, string } from "../fable-library.2.3.7/Reflection.js";
+import { declare, Record } from "../fable-library.2.3.10/Types.js";
+import { record, string } from "../fable-library.2.3.10/Reflection.js";
 const Fragment$$1 = React.Fragment,
       PureComponent = React.PureComponent,
       Component = React.Component;

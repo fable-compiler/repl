@@ -1,8 +1,8 @@
-import { createObj, equals, uncurry } from "../fable-library.2.3.7/Util.js";
-import { ofList } from "../fable-library.2.3.7/Array.js";
+import { createObj, equals, uncurry } from "../fable-library.2.3.10/Util.js";
+import { ofList } from "../fable-library.2.3.10/Array.js";
 import { HTMLAttr } from "./Fable.React.Props.js";
-import { isNullOrEmpty } from "../fable-library.2.3.7/String.js";
-import { fold, choose } from "../fable-library.2.3.7/Seq.js";
+import { isNullOrEmpty } from "../fable-library.2.3.10/String.js";
+import { fold, choose } from "../fable-library.2.3.10/Seq.js";
 export function ReactElementTypeModule$$$ofComponent() {
   throw new Error("Cannot create React components from types in Fable REPL");
 }
@@ -158,16 +158,15 @@ export function Helpers$$$createRef(initialValue) {
   return React.createRef(initialValue);
 }
 export function Helpers$$$classBaseList(baseClass, classes) {
-  var source$$1;
-  return new HTMLAttr(24, "ClassName", (source$$1 = choose(function chooser(tupledArg) {
+  return new HTMLAttr(24, "ClassName", fold(function folder(state, name$$4) {
+    return state + " " + name$$4;
+  }, baseClass, choose(function chooser(tupledArg) {
     if (tupledArg[1] ? !isNullOrEmpty(tupledArg[0]) : false) {
       return tupledArg[0];
     } else {
       return null;
     }
-  }, classes), fold(function folder(state, name$$4) {
-    return state + " " + name$$4;
-  }, baseClass, source$$1)));
+  }, classes)));
 }
 export function Helpers$$$classList(classes$$1) {
   return Helpers$$$classBaseList("", classes$$1);

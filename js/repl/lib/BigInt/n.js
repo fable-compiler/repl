@@ -1,9 +1,9 @@
-import { List, declare, Record } from "../fable-library.2.3.7/Types.js";
-import { record, array, int32 } from "../fable-library.2.3.7/Reflection.js";
-import { op_LeftShift, op_BitwiseAnd, op_Addition, compare, op_Subtraction, op_Division, equals, toInt, op_Modulus, op_Multiply, fromInteger, fromBits } from "../fable-library.2.3.7/Long.js";
-import { ofList, copy, initialize, map, fill } from "../fable-library.2.3.7/Array.js";
-import { int32ToString, ignore } from "../fable-library.2.3.7/Util.js";
-import { isNullOrEmpty, join } from "../fable-library.2.3.7/String.js";
+import { List, declare, Record } from "../fable-library.2.3.10/Types.js";
+import { record, array, int32 } from "../fable-library.2.3.10/Reflection.js";
+import { op_LeftShift, op_BitwiseAnd, op_Addition, compare, op_Subtraction, op_Division, equals, toInt, op_Modulus, op_Multiply, fromInteger, fromBits } from "../fable-library.2.3.10/Long.js";
+import { ofList, copy, initialize, map, fill } from "../fable-library.2.3.10/Array.js";
+import { int32ToString } from "../fable-library.2.3.10/Util.js";
+import { isNullOrEmpty, join } from "../fable-library.2.3.10/String.js";
 export const BigNat = declare(function BigInt_BigNat(arg1, arg2) {
   this.bound = arg1 | 0;
   this.digits = arg2;
@@ -925,8 +925,6 @@ export function BigNatModule$$$mul(p$$20, q$$17) {
   return BigNatModule$$$mulSchoolBook(p$$20, q$$17);
 }
 export function BigNatModule$$$scaleSubInPlace(x$$57, f, a$$5, n$$30) {
-  var x$$59;
-
   const invariant = function invariant(tupledArg) {};
 
   const xres = x$$57;
@@ -942,7 +940,7 @@ export function BigNatModule$$$scaleSubInPlace(x$$57, f, a$$5, n$$30) {
     }
 
     invariant([z$$7, j$$4, n$$30]);
-    let zLo = (x$$59 = z$$7, ~~toInt(op_BitwiseAnd(x$$59, BigNatModule$$$baseMaski64))) | 0;
+    let zLo = ~~toInt(op_BitwiseAnd(z$$7, BigNatModule$$$baseMaski64)) | 0;
     let zHi = op_Division(z$$7, BigNatModule$$$baseNi64);
 
     if (zLo <= patternInput$$2[0][j$$4 + n$$30]) {
@@ -961,7 +959,7 @@ export function BigNatModule$$$scaleSubInPlace(x$$57, f, a$$5, n$$30) {
     j$$4 = j$$4 + 1;
   }
 
-  ignore(BigNatModule$$$normN(xres));
+  BigNatModule$$$normN(xres), null;
 }
 export function BigNatModule$$$scaleSub(x$$61, f$$2, a$$7, n$$31) {
   const freshx = BigNatModule$$$add(x$$61, BigNatModule$$$zero);
@@ -969,8 +967,6 @@ export function BigNatModule$$$scaleSub(x$$61, f$$2, a$$7, n$$31) {
   return BigNatModule$$$normN(freshx);
 }
 export function BigNatModule$$$scaleAddInPlace(x$$62, f$$3, a$$8, n$$32) {
-  var x$$64;
-
   const invariant$$1 = function invariant$$1(tupledArg$$1) {};
 
   const xres$$1 = x$$62;
@@ -986,7 +982,7 @@ export function BigNatModule$$$scaleAddInPlace(x$$62, f$$3, a$$8, n$$32) {
     }
 
     invariant$$1([z$$8, j$$5, n$$32]);
-    let zLo$$1 = (x$$64 = z$$8, ~~toInt(op_BitwiseAnd(x$$64, BigNatModule$$$baseMaski64))) | 0;
+    let zLo$$1 = ~~toInt(op_BitwiseAnd(z$$8, BigNatModule$$$baseMaski64)) | 0;
     let zHi$$1 = op_Division(z$$8, BigNatModule$$$baseNi64);
 
     if (zLo$$1 < BigNatModule$$$baseN - patternInput$$4[0][j$$5 + n$$32]) {
@@ -1005,7 +1001,7 @@ export function BigNatModule$$$scaleAddInPlace(x$$62, f$$3, a$$8, n$$32) {
     j$$5 = j$$5 + 1;
   }
 
-  ignore(BigNatModule$$$normN(xres$$1));
+  BigNatModule$$$normN(xres$$1), null;
 }
 export function BigNatModule$$$scaleAdd(x$$66, f$$5, a$$10, n$$33) {
   const freshx$$1 = BigNatModule$$$add(x$$66, BigNatModule$$$zero);
