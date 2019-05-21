@@ -95,7 +95,9 @@ let private view (model: Model) dispatch =
 open Fable.Core.JsInterop
 
 let [<Global>] navigator: obj = jsNative
-navigator?serviceWorker?register("./service-worker.js")
+let [<Emit("$0 in $1")>] hasField (key: string) (o: obj): bool = jsNative
+if hasField "serviceWorker" navigator then
+    navigator?serviceWorker?register("./service-worker.js")
 #endif
 
 open Elmish.React
