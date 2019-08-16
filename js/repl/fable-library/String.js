@@ -474,3 +474,4 @@ export function trimEnd(str, ...chars) {
 export function filter(pred, x) {
     return x.split("").filter((c) => pred(c)).join("");
 }
+//# sourceMappingURL=String.js.map

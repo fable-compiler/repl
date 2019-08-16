@@ -766,3 +766,4 @@ P.valueOf = P.toJSON = function () {
 // Export
 export var Big = _Big_();
 export default Big;
+//# sourceMappingURL=big.js.map

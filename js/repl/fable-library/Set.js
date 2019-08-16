@@ -67,11 +67,10 @@ export function SetTreeModule$$$height(t) {
 }
 export const SetTreeModule$$$tolerance = 2;
 export function SetTreeModule$$$mk(l$$2, k, r$$2) {
-  const matchValue = [l$$2, r$$2];
   var $target$$5;
 
-  if (matchValue[0].tag === 0) {
-    if (matchValue[1].tag === 0) {
+  if (l$$2.tag === 0) {
+    if (r$$2.tag === 0) {
       $target$$5 = 0;
     } else {
       $target$$5 = 1;
@@ -184,44 +183,43 @@ export function SetTreeModule$$$add(comparer, k$$2, t$$1) {
   }
 }
 export function SetTreeModule$$$balance(comparer$$1, t1$$1, k$$3, t2$$1) {
-  const matchValue$$1 = [t1$$1, t2$$1];
   var $target$$6, t2$$2, t1$$2, k1, t2$$3, k2$$2, t1$$3, h1, h2, k1$$1, k2$$3, t11, t12, t21, t22;
 
-  if (matchValue$$1[0].tag === 2) {
-    if (matchValue$$1[1].tag === 0) {
+  if (t1$$1.tag === 2) {
+    if (t2$$1.tag === 0) {
       $target$$6 = 1;
-      t1$$2 = matchValue$$1[0];
-    } else if (matchValue$$1[1].tag === 2) {
+      t1$$2 = t1$$1;
+    } else if (t2$$1.tag === 2) {
       $target$$6 = 2;
-      k1 = matchValue$$1[0].fields[0];
-      t2$$3 = matchValue$$1[1];
+      k1 = t1$$1.fields[0];
+      t2$$3 = t2$$1;
     } else {
       $target$$6 = 2;
-      k1 = matchValue$$1[0].fields[0];
-      t2$$3 = matchValue$$1[1];
+      k1 = t1$$1.fields[0];
+      t2$$3 = t2$$1;
     }
-  } else if (matchValue$$1[0].tag === 1) {
-    if (matchValue$$1[1].tag === 2) {
+  } else if (t1$$1.tag === 1) {
+    if (t2$$1.tag === 2) {
       $target$$6 = 3;
-      k2$$2 = matchValue$$1[1].fields[0];
-      t1$$3 = matchValue$$1[0];
-    } else if (matchValue$$1[1].tag === 1) {
+      k2$$2 = t2$$1.fields[0];
+      t1$$3 = t1$$1;
+    } else if (t2$$1.tag === 1) {
       $target$$6 = 4;
-      h1 = matchValue$$1[0].fields[3];
-      h2 = matchValue$$1[1].fields[3];
-      k1$$1 = matchValue$$1[0].fields[0];
-      k2$$3 = matchValue$$1[1].fields[0];
-      t11 = matchValue$$1[0].fields[1];
-      t12 = matchValue$$1[0].fields[2];
-      t21 = matchValue$$1[1].fields[1];
-      t22 = matchValue$$1[1].fields[2];
+      h1 = t1$$1.fields[3];
+      h2 = t2$$1.fields[3];
+      k1$$1 = t1$$1.fields[0];
+      k2$$3 = t2$$1.fields[0];
+      t11 = t1$$1.fields[1];
+      t12 = t1$$1.fields[2];
+      t21 = t2$$1.fields[1];
+      t22 = t2$$1.fields[2];
     } else {
       $target$$6 = 1;
-      t1$$2 = matchValue$$1[0];
+      t1$$2 = t1$$1;
     }
   } else {
     $target$$6 = 0;
-    t2$$2 = matchValue$$1[1];
+    t2$$2 = t2$$1;
   }
 
   switch ($target$$6) {
@@ -287,12 +285,18 @@ export function SetTreeModule$$$split(comparer$$2, pivot, t$$2) {
 
         if (c$$2 < 0) {
           const patternInput = SetTreeModule$$$split(comparer$$2, pivot, t11$$1);
-          return [patternInput[0], patternInput[1], SetTreeModule$$$balance(comparer$$2, patternInput[2], k1$$2, t12$$1)];
+          const t11Lo = patternInput[0];
+          const t11Hi = patternInput[2];
+          const havePivot = patternInput[1];
+          return [t11Lo, havePivot, SetTreeModule$$$balance(comparer$$2, t11Hi, k1$$2, t12$$1)];
         } else if (c$$2 === 0) {
           return [t11$$1, true, t12$$1];
         } else {
           const patternInput$$1 = SetTreeModule$$$split(comparer$$2, pivot, t12$$1);
-          return [SetTreeModule$$$balance(comparer$$2, t11$$1, k1$$2, patternInput$$1[0]), patternInput$$1[1], patternInput$$1[2]];
+          const t12Lo = patternInput$$1[0];
+          const t12Hi = patternInput$$1[2];
+          const havePivot$$1 = patternInput$$1[1];
+          return [SetTreeModule$$$balance(comparer$$2, t11$$1, k1$$2, t12Lo), havePivot$$1, t12Hi];
         }
       }
   }
@@ -315,7 +319,9 @@ export function SetTreeModule$$$spliceOutSuccessor(t$$3) {
           return [k2$$5, r$$4];
         } else {
           const patternInput$$2 = SetTreeModule$$$spliceOutSuccessor(l$$4);
-          return [patternInput$$2[0], SetTreeModule$$$mk(patternInput$$2[1], k2$$5, r$$4)];
+          const l$0027 = patternInput$$2[1];
+          const k3 = patternInput$$2[0];
+          return [k3, SetTreeModule$$$mk(l$0027, k2$$5, r$$4)];
         }
       }
 
@@ -349,15 +355,15 @@ export function SetTreeModule$$$remove(comparer$$3, k$$4, t$$4) {
         if (c$$5 < 0) {
           return SetTreeModule$$$rebalance(SetTreeModule$$$remove(comparer$$3, k$$4, l$$5), k2$$7, r$$5);
         } else if (c$$5 === 0) {
-          const matchValue$$2 = [l$$5, r$$5];
-
-          if (matchValue$$2[0].tag === 0) {
+          if (l$$5.tag === 0) {
             return r$$5;
-          } else if (matchValue$$2[1].tag === 0) {
+          } else if (r$$5.tag === 0) {
             return l$$5;
           } else {
             const patternInput$$3 = SetTreeModule$$$spliceOutSuccessor(r$$5);
-            return SetTreeModule$$$mk(l$$5, patternInput$$3[0], patternInput$$3[1]);
+            const sk = patternInput$$3[0];
+            const r$0027 = patternInput$$3[1];
+            return SetTreeModule$$$mk(l$$5, sk, r$0027);
           }
         } else {
           return SetTreeModule$$$rebalance(l$$5, k2$$7, SetTreeModule$$$remove(comparer$$3, k$$4, r$$5));
@@ -690,42 +696,41 @@ export function SetTreeModule$$$diff(comparer$$10, a$$2, b$$2) {
   return SetTreeModule$$$diffAux(comparer$$10, b$$2, a$$2);
 }
 export function SetTreeModule$$$union(comparer$$11, t1$$4, t2$$4) {
-  const matchValue$$3 = [t1$$4, t2$$4];
   var $target$$32, h1$$1, h2$$1, k1$$4, k2$$16, t11$$2, t12$$2, t21$$1, t22$$1, t$$7, t$$8, k1$$5, t2$$5, k2$$17, t1$$5;
 
-  if (matchValue$$3[0].tag === 0) {
+  if (t1$$4.tag === 0) {
     $target$$32 = 1;
-    t$$7 = matchValue$$3[1];
-  } else if (matchValue$$3[0].tag === 2) {
-    if (matchValue$$3[1].tag === 0) {
+    t$$7 = t2$$4;
+  } else if (t1$$4.tag === 2) {
+    if (t2$$4.tag === 0) {
       $target$$32 = 2;
-      t$$8 = matchValue$$3[0];
-    } else if (matchValue$$3[1].tag === 2) {
+      t$$8 = t1$$4;
+    } else if (t2$$4.tag === 2) {
       $target$$32 = 3;
-      k1$$5 = matchValue$$3[0].fields[0];
-      t2$$5 = matchValue$$3[1];
+      k1$$5 = t1$$4.fields[0];
+      t2$$5 = t2$$4;
     } else {
       $target$$32 = 3;
-      k1$$5 = matchValue$$3[0].fields[0];
-      t2$$5 = matchValue$$3[1];
+      k1$$5 = t1$$4.fields[0];
+      t2$$5 = t2$$4;
     }
-  } else if (matchValue$$3[1].tag === 0) {
+  } else if (t2$$4.tag === 0) {
     $target$$32 = 2;
-    t$$8 = matchValue$$3[0];
-  } else if (matchValue$$3[1].tag === 2) {
+    t$$8 = t1$$4;
+  } else if (t2$$4.tag === 2) {
     $target$$32 = 4;
-    k2$$17 = matchValue$$3[1].fields[0];
-    t1$$5 = matchValue$$3[0];
+    k2$$17 = t2$$4.fields[0];
+    t1$$5 = t1$$4;
   } else {
     $target$$32 = 0;
-    h1$$1 = matchValue$$3[0].fields[3];
-    h2$$1 = matchValue$$3[1].fields[3];
-    k1$$4 = matchValue$$3[0].fields[0];
-    k2$$16 = matchValue$$3[1].fields[0];
-    t11$$2 = matchValue$$3[0].fields[1];
-    t12$$2 = matchValue$$3[0].fields[2];
-    t21$$1 = matchValue$$3[1].fields[1];
-    t22$$1 = matchValue$$3[1].fields[2];
+    h1$$1 = t1$$4.fields[3];
+    h2$$1 = t2$$4.fields[3];
+    k1$$4 = t1$$4.fields[0];
+    k2$$16 = t2$$4.fields[0];
+    t11$$2 = t1$$4.fields[1];
+    t12$$2 = t1$$4.fields[2];
+    t21$$1 = t2$$4.fields[1];
+    t22$$1 = t2$$4.fields[2];
   }
 
   switch ($target$$32) {
@@ -733,10 +738,14 @@ export function SetTreeModule$$$union(comparer$$11, t1$$4, t2$$4) {
       {
         if (h1$$1 > h2$$1) {
           const patternInput$$4 = SetTreeModule$$$split(comparer$$11, k1$$4, t2$$4);
-          return SetTreeModule$$$balance(comparer$$11, SetTreeModule$$$union(comparer$$11, t11$$2, patternInput$$4[0]), k1$$4, SetTreeModule$$$union(comparer$$11, t12$$2, patternInput$$4[2]));
+          const lo = patternInput$$4[0];
+          const hi = patternInput$$4[2];
+          return SetTreeModule$$$balance(comparer$$11, SetTreeModule$$$union(comparer$$11, t11$$2, lo), k1$$4, SetTreeModule$$$union(comparer$$11, t12$$2, hi));
         } else {
           const patternInput$$5 = SetTreeModule$$$split(comparer$$11, k2$$16, t1$$4);
-          return SetTreeModule$$$balance(comparer$$11, SetTreeModule$$$union(comparer$$11, t21$$1, patternInput$$5[0]), k2$$16, SetTreeModule$$$union(comparer$$11, t22$$1, patternInput$$5[2]));
+          const lo$$1 = patternInput$$5[0];
+          const hi$$1 = patternInput$$5[2];
+          return SetTreeModule$$$balance(comparer$$11, SetTreeModule$$$union(comparer$$11, t21$$1, lo$$1), k2$$16, SetTreeModule$$$union(comparer$$11, t22$$1, hi$$1));
         }
       }
 
@@ -1005,12 +1014,15 @@ export function SetTreeModule$$$collapseLHS(stack) {
       if (stack.head.tag === 2) {
         return stack;
       } else if (stack.head.tag === 1) {
-        const $stack$$49 = stack;
-        stack = new List($stack$$49.head.fields[1], new List(SetTreeModule$$$SetOne($stack$$49.head.fields[0]), new List($stack$$49.head.fields[2], $stack$$49.tail)));
+        const k$$29 = stack.head.fields[0];
+        const l$$19 = stack.head.fields[1];
+        const r$$19 = stack.head.fields[2];
+        const rest$$1 = stack.tail;
+        stack = new List(l$$19, new List(SetTreeModule$$$SetOne(k$$29), new List(r$$19, rest$$1)));
         continue SetTreeModule$$$collapseLHS;
       } else {
-        const $stack$$50 = stack;
-        stack = $stack$$50.tail;
+        const rest = stack.tail;
+        stack = rest;
         continue SetTreeModule$$$collapseLHS;
       }
     } else {
@@ -1036,7 +1048,8 @@ export function SetTreeModule$$$current(i) {
     if (matchValue$$6.tail == null) {
       return SetTreeModule$$$alreadyFinished();
     } else if (matchValue$$6.head.tag === 2) {
-      return matchValue$$6.head.fields[0];
+      const k$$30 = matchValue$$6.head.fields[0];
+      return k$$30;
     } else {
       throw new Error("Please report error: Set iterator, unexpected stack for current");
     }
@@ -1051,7 +1064,8 @@ export function SetTreeModule$$$moveNext(i$$1) {
     if (matchValue$$7.tail == null) {
       return false;
     } else if (matchValue$$7.head.tag === 2) {
-      i$$1.stack = SetTreeModule$$$collapseLHS(matchValue$$7.tail);
+      const rest$$2 = matchValue$$7.tail;
+      i$$1.stack = SetTreeModule$$$collapseLHS(rest$$2);
       return !(i$$1.stack.tail == null);
     } else {
       throw new Error("Please report error: Set iterator, unexpected stack for moveNext");
@@ -1066,8 +1080,8 @@ export const SetTreeModule$002EmkIEnumerator$00601 = declare(function Set_SetTre
   $this$$1.s = s$$14;
   $this$$1.i = SetTreeModule$$$mkIterator($this$$1.s);
 });
-export function SetTreeModule$002EmkIEnumerator$00601$reflection($gen$$51) {
-  return type("Set.SetTreeModule.mkIEnumerator`1", [$gen$$51]);
+export function SetTreeModule$002EmkIEnumerator$00601$reflection($gen$$49) {
+  return type("Set.SetTreeModule.mkIEnumerator`1", [$gen$$49]);
 }
 export function SetTreeModule$002EmkIEnumerator$00601$$$$002Ector$$Z5B395D56(s$$14) {
   return this instanceof SetTreeModule$002EmkIEnumerator$00601 ? SetTreeModule$002EmkIEnumerator$00601.call(this, s$$14) : new SetTreeModule$002EmkIEnumerator$00601(s$$14);
@@ -1106,113 +1120,112 @@ export function SetTreeModule$$$toSeq(s$$16) {
 }
 export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
   SetTreeModule$$$compareStacks: while (true) {
-    const matchValue$$8 = [l1, l2];
-    var $target$$52, t1$$6, t2$$6, n1k, n2k, t1$$7, t2$$7, n1k$$1, n2k$$1, n2r, t1$$8, t2$$8, emp, n1k$$2, n1r, n2k$$2, t1$$9, t2$$9, n1k$$3, n1r$$1, n2k$$3, n2r$$1, t1$$10, t2$$10, n1k$$4, t1$$11, n1k$$5, n1l, n1r$$2, t1$$12, n2k$$4, t2$$11, n2k$$5, n2l, n2r$$2, t2$$12;
+    var $target$$50, t1$$6, t2$$6, n1k, n2k, t1$$7, t2$$7, n1k$$1, n2k$$1, n2r, t1$$8, t2$$8, emp, n1k$$2, n1r, n2k$$2, t1$$9, t2$$9, n1k$$3, n1r$$1, n2k$$3, n2r$$1, t1$$10, t2$$10, n1k$$4, t1$$11, n1k$$5, n1l, n1r$$2, t1$$12, n2k$$4, t2$$11, n2k$$5, n2l, n2r$$2, t2$$12;
 
-    if (matchValue$$8[0].tail != null) {
-      if (matchValue$$8[1].tail != null) {
-        if (matchValue$$8[1].head.tag === 2) {
-          if (matchValue$$8[0].head.tag === 2) {
-            $target$$52 = 4;
-            n1k = matchValue$$8[0].head.fields[0];
-            n2k = matchValue$$8[1].head.fields[0];
-            t1$$7 = matchValue$$8[0].tail;
-            t2$$7 = matchValue$$8[1].tail;
-          } else if (matchValue$$8[0].head.tag === 1) {
-            if (matchValue$$8[0].head.fields[1].tag === 0) {
-              $target$$52 = 6;
-              emp = matchValue$$8[0].head.fields[1];
-              n1k$$2 = matchValue$$8[0].head.fields[0];
-              n1r = matchValue$$8[0].head.fields[2];
-              n2k$$2 = matchValue$$8[1].head.fields[0];
-              t1$$9 = matchValue$$8[0].tail;
-              t2$$9 = matchValue$$8[1].tail;
+    if (l1.tail != null) {
+      if (l2.tail != null) {
+        if (l2.head.tag === 2) {
+          if (l1.head.tag === 2) {
+            $target$$50 = 4;
+            n1k = l1.head.fields[0];
+            n2k = l2.head.fields[0];
+            t1$$7 = l1.tail;
+            t2$$7 = l2.tail;
+          } else if (l1.head.tag === 1) {
+            if (l1.head.fields[1].tag === 0) {
+              $target$$50 = 6;
+              emp = l1.head.fields[1];
+              n1k$$2 = l1.head.fields[0];
+              n1r = l1.head.fields[2];
+              n2k$$2 = l2.head.fields[0];
+              t1$$9 = l1.tail;
+              t2$$9 = l2.tail;
             } else {
-              $target$$52 = 9;
-              n1k$$5 = matchValue$$8[0].head.fields[0];
-              n1l = matchValue$$8[0].head.fields[1];
-              n1r$$2 = matchValue$$8[0].head.fields[2];
-              t1$$12 = matchValue$$8[0].tail;
+              $target$$50 = 9;
+              n1k$$5 = l1.head.fields[0];
+              n1l = l1.head.fields[1];
+              n1r$$2 = l1.head.fields[2];
+              t1$$12 = l1.tail;
             }
           } else {
-            $target$$52 = 10;
-            n2k$$4 = matchValue$$8[1].head.fields[0];
-            t2$$11 = matchValue$$8[1].tail;
+            $target$$50 = 10;
+            n2k$$4 = l2.head.fields[0];
+            t2$$11 = l2.tail;
           }
-        } else if (matchValue$$8[1].head.tag === 1) {
-          if (matchValue$$8[1].head.fields[1].tag === 0) {
-            if (matchValue$$8[0].head.tag === 2) {
-              $target$$52 = 5;
-              n1k$$1 = matchValue$$8[0].head.fields[0];
-              n2k$$1 = matchValue$$8[1].head.fields[0];
-              n2r = matchValue$$8[1].head.fields[2];
-              t1$$8 = matchValue$$8[0].tail;
-              t2$$8 = matchValue$$8[1].tail;
-            } else if (matchValue$$8[0].head.tag === 1) {
-              if (matchValue$$8[0].head.fields[1].tag === 0) {
-                $target$$52 = 7;
-                n1k$$3 = matchValue$$8[0].head.fields[0];
-                n1r$$1 = matchValue$$8[0].head.fields[2];
-                n2k$$3 = matchValue$$8[1].head.fields[0];
-                n2r$$1 = matchValue$$8[1].head.fields[2];
-                t1$$10 = matchValue$$8[0].tail;
-                t2$$10 = matchValue$$8[1].tail;
+        } else if (l2.head.tag === 1) {
+          if (l2.head.fields[1].tag === 0) {
+            if (l1.head.tag === 2) {
+              $target$$50 = 5;
+              n1k$$1 = l1.head.fields[0];
+              n2k$$1 = l2.head.fields[0];
+              n2r = l2.head.fields[2];
+              t1$$8 = l1.tail;
+              t2$$8 = l2.tail;
+            } else if (l1.head.tag === 1) {
+              if (l1.head.fields[1].tag === 0) {
+                $target$$50 = 7;
+                n1k$$3 = l1.head.fields[0];
+                n1r$$1 = l1.head.fields[2];
+                n2k$$3 = l2.head.fields[0];
+                n2r$$1 = l2.head.fields[2];
+                t1$$10 = l1.tail;
+                t2$$10 = l2.tail;
               } else {
-                $target$$52 = 9;
-                n1k$$5 = matchValue$$8[0].head.fields[0];
-                n1l = matchValue$$8[0].head.fields[1];
-                n1r$$2 = matchValue$$8[0].head.fields[2];
-                t1$$12 = matchValue$$8[0].tail;
+                $target$$50 = 9;
+                n1k$$5 = l1.head.fields[0];
+                n1l = l1.head.fields[1];
+                n1r$$2 = l1.head.fields[2];
+                t1$$12 = l1.tail;
               }
             } else {
-              $target$$52 = 11;
-              n2k$$5 = matchValue$$8[1].head.fields[0];
-              n2l = matchValue$$8[1].head.fields[1];
-              n2r$$2 = matchValue$$8[1].head.fields[2];
-              t2$$12 = matchValue$$8[1].tail;
+              $target$$50 = 11;
+              n2k$$5 = l2.head.fields[0];
+              n2l = l2.head.fields[1];
+              n2r$$2 = l2.head.fields[2];
+              t2$$12 = l2.tail;
             }
-          } else if (matchValue$$8[0].head.tag === 2) {
-            $target$$52 = 8;
-            n1k$$4 = matchValue$$8[0].head.fields[0];
-            t1$$11 = matchValue$$8[0].tail;
-          } else if (matchValue$$8[0].head.tag === 1) {
-            $target$$52 = 9;
-            n1k$$5 = matchValue$$8[0].head.fields[0];
-            n1l = matchValue$$8[0].head.fields[1];
-            n1r$$2 = matchValue$$8[0].head.fields[2];
-            t1$$12 = matchValue$$8[0].tail;
+          } else if (l1.head.tag === 2) {
+            $target$$50 = 8;
+            n1k$$4 = l1.head.fields[0];
+            t1$$11 = l1.tail;
+          } else if (l1.head.tag === 1) {
+            $target$$50 = 9;
+            n1k$$5 = l1.head.fields[0];
+            n1l = l1.head.fields[1];
+            n1r$$2 = l1.head.fields[2];
+            t1$$12 = l1.tail;
           } else {
-            $target$$52 = 11;
-            n2k$$5 = matchValue$$8[1].head.fields[0];
-            n2l = matchValue$$8[1].head.fields[1];
-            n2r$$2 = matchValue$$8[1].head.fields[2];
-            t2$$12 = matchValue$$8[1].tail;
+            $target$$50 = 11;
+            n2k$$5 = l2.head.fields[0];
+            n2l = l2.head.fields[1];
+            n2r$$2 = l2.head.fields[2];
+            t2$$12 = l2.tail;
           }
-        } else if (matchValue$$8[0].head.tag === 2) {
-          $target$$52 = 8;
-          n1k$$4 = matchValue$$8[0].head.fields[0];
-          t1$$11 = matchValue$$8[0].tail;
-        } else if (matchValue$$8[0].head.tag === 1) {
-          $target$$52 = 9;
-          n1k$$5 = matchValue$$8[0].head.fields[0];
-          n1l = matchValue$$8[0].head.fields[1];
-          n1r$$2 = matchValue$$8[0].head.fields[2];
-          t1$$12 = matchValue$$8[0].tail;
+        } else if (l1.head.tag === 2) {
+          $target$$50 = 8;
+          n1k$$4 = l1.head.fields[0];
+          t1$$11 = l1.tail;
+        } else if (l1.head.tag === 1) {
+          $target$$50 = 9;
+          n1k$$5 = l1.head.fields[0];
+          n1l = l1.head.fields[1];
+          n1r$$2 = l1.head.fields[2];
+          t1$$12 = l1.tail;
         } else {
-          $target$$52 = 3;
-          t1$$6 = matchValue$$8[0].tail;
-          t2$$6 = matchValue$$8[1].tail;
+          $target$$50 = 3;
+          t1$$6 = l1.tail;
+          t2$$6 = l2.tail;
         }
       } else {
-        $target$$52 = 2;
+        $target$$50 = 2;
       }
-    } else if (matchValue$$8[1].tail != null) {
-      $target$$52 = 1;
+    } else if (l2.tail != null) {
+      $target$$50 = 1;
     } else {
-      $target$$52 = 0;
+      $target$$50 = 0;
     }
 
-    switch ($target$$52) {
+    switch ($target$$50) {
       case 0:
         {
           return 0;
@@ -1230,8 +1243,8 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
 
       case 3:
         {
-          const $comparer$$17$$53 = comparer$$17;
-          comparer$$17 = $comparer$$17$$53;
+          const $comparer$$17$$51 = comparer$$17;
+          comparer$$17 = $comparer$$17$$51;
           l1 = t1$$6;
           l2 = t2$$6;
           continue SetTreeModule$$$compareStacks;
@@ -1244,8 +1257,8 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
           if (c$$7 !== 0) {
             return c$$7 | 0;
           } else {
-            const $comparer$$17$$54 = comparer$$17;
-            comparer$$17 = $comparer$$17$$54;
+            const $comparer$$17$$52 = comparer$$17;
+            comparer$$17 = $comparer$$17$$52;
             l1 = t1$$7;
             l2 = t2$$7;
             continue SetTreeModule$$$compareStacks;
@@ -1259,8 +1272,8 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
           if (c$$8 !== 0) {
             return c$$8 | 0;
           } else {
-            const $comparer$$17$$55 = comparer$$17;
-            comparer$$17 = $comparer$$17$$55;
+            const $comparer$$17$$53 = comparer$$17;
+            comparer$$17 = $comparer$$17$$53;
             l1 = new List(new SetTree$00601(0, "SetEmpty"), t1$$8);
             l2 = new List(n2r, t2$$8);
             continue SetTreeModule$$$compareStacks;
@@ -1274,8 +1287,8 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
           if (c$$9 !== 0) {
             return c$$9 | 0;
           } else {
-            const $comparer$$17$$56 = comparer$$17;
-            comparer$$17 = $comparer$$17$$56;
+            const $comparer$$17$$54 = comparer$$17;
+            comparer$$17 = $comparer$$17$$54;
             l1 = new List(n1r, t1$$9);
             l2 = new List(emp, t2$$9);
             continue SetTreeModule$$$compareStacks;
@@ -1289,8 +1302,8 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
           if (c$$10 !== 0) {
             return c$$10 | 0;
           } else {
-            const $comparer$$17$$57 = comparer$$17;
-            comparer$$17 = $comparer$$17$$57;
+            const $comparer$$17$$55 = comparer$$17;
+            comparer$$17 = $comparer$$17$$55;
             l1 = new List(n1r$$1, t1$$10);
             l2 = new List(n2r$$1, t2$$10);
             continue SetTreeModule$$$compareStacks;
@@ -1299,40 +1312,40 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
 
       case 8:
         {
-          const $comparer$$17$$58 = comparer$$17;
-          const $l2$$59 = l2;
-          comparer$$17 = $comparer$$17$$58;
+          const $comparer$$17$$56 = comparer$$17;
+          const $l2$$57 = l2;
+          comparer$$17 = $comparer$$17$$56;
           l1 = new List(new SetTree$00601(0, "SetEmpty"), new List(SetTreeModule$$$SetOne(n1k$$4), t1$$11));
-          l2 = $l2$$59;
+          l2 = $l2$$57;
           continue SetTreeModule$$$compareStacks;
         }
 
       case 9:
         {
-          const $comparer$$17$$60 = comparer$$17;
-          const $l2$$61 = l2;
-          comparer$$17 = $comparer$$17$$60;
+          const $comparer$$17$$58 = comparer$$17;
+          const $l2$$59 = l2;
+          comparer$$17 = $comparer$$17$$58;
           l1 = new List(n1l, new List(SetTreeModule$$$SetNode(n1k$$5, new SetTree$00601(0, "SetEmpty"), n1r$$2, 0), t1$$12));
-          l2 = $l2$$61;
+          l2 = $l2$$59;
           continue SetTreeModule$$$compareStacks;
         }
 
       case 10:
         {
-          const $comparer$$17$$62 = comparer$$17;
-          const $l1$$63 = l1;
-          comparer$$17 = $comparer$$17$$62;
-          l1 = $l1$$63;
+          const $comparer$$17$$60 = comparer$$17;
+          const $l1$$61 = l1;
+          comparer$$17 = $comparer$$17$$60;
+          l1 = $l1$$61;
           l2 = new List(new SetTree$00601(0, "SetEmpty"), new List(SetTreeModule$$$SetOne(n2k$$4), t2$$11));
           continue SetTreeModule$$$compareStacks;
         }
 
       case 11:
         {
-          const $comparer$$17$$64 = comparer$$17;
-          const $l1$$65 = l1;
-          comparer$$17 = $comparer$$17$$64;
-          l1 = $l1$$65;
+          const $comparer$$17$$62 = comparer$$17;
+          const $l1$$63 = l1;
+          comparer$$17 = $comparer$$17$$62;
+          l1 = $l1$$63;
           l2 = new List(n2l, new List(SetTreeModule$$$SetNode(n2k$$5, new SetTree$00601(0, "SetEmpty"), n2r$$2, 0), t2$$12));
           continue SetTreeModule$$$compareStacks;
         }
@@ -1342,15 +1355,13 @@ export function SetTreeModule$$$compareStacks(comparer$$17, l1, l2) {
   }
 }
 export function SetTreeModule$$$compare(comparer$$18, s1, s2) {
-  const matchValue$$9 = [s1, s2];
-
-  if (matchValue$$9[0].tag === 0) {
-    if (matchValue$$9[1].tag === 0) {
+  if (s1.tag === 0) {
+    if (s2.tag === 0) {
       return 0;
     } else {
       return -1 | 0;
     }
-  } else if (matchValue$$9[1].tag === 0) {
+  } else if (s2.tag === 0) {
     return 1;
   } else {
     return SetTreeModule$$$compareStacks(comparer$$18, new List(s1, new List()), new List(s2, new List())) | 0;
@@ -1378,9 +1389,9 @@ export function SetTreeModule$$$loop(m$$8, acc$$10) {
           const r$$20 = m$$8.fields[2];
           const l$$20 = m$$8.fields[1];
           const k$$31 = m$$8.fields[0];
-          const $acc$$10$$66 = acc$$10;
+          const $acc$$10$$64 = acc$$10;
           m$$8 = l$$20;
-          acc$$10 = new List(k$$31, SetTreeModule$$$loop(r$$20, $acc$$10$$66));
+          acc$$10 = new List(k$$31, SetTreeModule$$$loop(r$$20, $acc$$10$$64));
           continue SetTreeModule$$$loop;
         }
     }
@@ -1401,12 +1412,12 @@ export function SetTreeModule$$$copyToArray(s$$19, arr, i$$2) {
 export function SetTreeModule$$$mkFromEnumerator(comparer$$19, acc$$11, e) {
   SetTreeModule$$$mkFromEnumerator: while (true) {
     if (e.MoveNext()) {
-      const $acc$$11$$68 = acc$$11;
-      const $comparer$$19$$67 = comparer$$19;
-      const $e$$69 = e;
-      comparer$$19 = $comparer$$19$$67;
-      acc$$11 = SetTreeModule$$$add($comparer$$19$$67, $e$$69.Current, $acc$$11$$68);
-      e = $e$$69;
+      const $acc$$11$$66 = acc$$11;
+      const $comparer$$19$$65 = comparer$$19;
+      const $e$$67 = e;
+      comparer$$19 = $comparer$$19$$65;
+      acc$$11 = SetTreeModule$$$add($comparer$$19$$65, $e$$67.Current, $acc$$11$$66);
+      e = $e$$67;
       continue SetTreeModule$$$mkFromEnumerator;
     } else {
       return acc$$11;
@@ -1440,8 +1451,8 @@ export const FSharpSet = declare(function Set_Set(comparer$$22, tree) {
   $this$$2.comparer = comparer$$22;
   $this$$2.tree = tree;
 });
-export function FSharpSet$reflection($gen$$70) {
-  return type("Set.FSharpSet", [$gen$$70]);
+export function FSharpSet$reflection($gen$$68) {
+  return type("Set.FSharpSet", [$gen$$68]);
 }
 export function FSharpSet$$$$002Ector$$2528C5CB(comparer$$22, tree) {
   return this instanceof FSharpSet ? FSharpSet.call(this, comparer$$22, tree) : new FSharpSet(comparer$$22, tree);
@@ -1480,7 +1491,9 @@ export function FSharpSet$$Partition$$Z1D55A0D7(s$$27, f$$11) {
     return [s$$27, s$$27];
   } else {
     const patternInput$$6 = SetTreeModule$$$partition(FSharpSet$$get_Comparer(s$$27), f$$11, FSharpSet$$get_Tree(s$$27));
-    return [FSharpSet$$$$002Ector$$2528C5CB(FSharpSet$$get_Comparer(s$$27), patternInput$$6[0]), FSharpSet$$$$002Ector$$2528C5CB(FSharpSet$$get_Comparer(s$$27), patternInput$$6[1])];
+    const t2$$13 = patternInput$$6[1];
+    const t1$$13 = patternInput$$6[0];
+    return [FSharpSet$$$$002Ector$$2528C5CB(FSharpSet$$get_Comparer(s$$27), t1$$13), FSharpSet$$$$002Ector$$2528C5CB(FSharpSet$$get_Comparer(s$$27), t2$$13)];
   }
 }
 export function FSharpSet$$Filter$$Z1D55A0D7(s$$28, f$$12) {
@@ -1561,7 +1574,10 @@ export function FSharpSet$$IsProperSupersetOf$$6A20B1FF(x$$20, y$$3) {
 
 FSharpSet.prototype.toString = function () {
   const this$ = this;
-  return "set [" + join("; ", ...map$$1(String, this$)) + "]";
+  return "set [" + join("; ", ...map$$1(function (x$$21) {
+    let copyOfStruct = x$$21;
+    return String(copyOfStruct);
+  }, this$)) + "]";
 };
 
 FSharpSet.prototype.GetHashCode = function () {

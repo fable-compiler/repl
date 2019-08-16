@@ -148,3 +148,4 @@ const _UTF16 = new UTF16LE();
 const _UTF8 = new UTF8();
 export function get_Unicode() { return _UTF16; }
 export function get_UTF8() { return _UTF8; }
+//# sourceMappingURL=Encoding.js.map

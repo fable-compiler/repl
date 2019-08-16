@@ -1,22 +1,22 @@
-import { toText, printf, validateGuid, join } from "../fable-library.2.3.10/String.js";
-import { mapCurriedArgs, compare, curry, comparePrimitives, uncurry, int32ToString, partialApply } from "../fable-library.2.3.10/Util.js";
-import { mapOk, defaultArg, some, Result } from "../fable-library.2.3.10/Option.js";
+import { toText, printf, validateGuid, join } from "../fable-library.2.3.18/String.js";
+import { mapCurriedArgs, compare, curry, comparePrimitives, uncurry, int32ToString, partialApply } from "../fable-library.2.3.18/Util.js";
+import { mapOk, defaultArg, some, Result } from "../fable-library.2.3.18/Option.js";
 import { Util$$$CachedDecoders as Util$0024$0024$0024CachedDecoders, Util$002ECache$00601$$GetOrAdd$$43981464 as Util$0024002ECache$002400601$0024$0024GetOrAdd$0024$002443981464, ErrorReason } from "./Types.js";
-import { tryParse } from "../fable-library.2.3.10/Int32.js";
-import { toNumber, fromBits, tryParse as tryParse$$1, fromInteger } from "../fable-library.2.3.10/Long.js";
-import { parse, fromInt32 } from "../fable-library.2.3.10/BigInt.js";
-import { tryParse as tryParse$$2 } from "../fable-library.2.3.10/Decimal.js";
-import Decimal from "../fable-library.2.3.10/Decimal.js";
-import { toUniversalTime, tryParse as tryParse$$3 } from "../fable-library.2.3.10/Date.js";
-import { tryParse as tryParse$$4 } from "../fable-library.2.3.10/DateOffset.js";
-import { tryParse as tryParse$$5 } from "../fable-library.2.3.10/TimeSpan.js";
-import { declare, List } from "../fable-library.2.3.10/Types.js";
-import { ofArray, map as map$$1, length, ofSeq, append, reverse, fold, tryLast } from "../fable-library.2.3.10/List.js";
-import { ofList as ofList$$1, map as map$$2, tryFind, foldBack2, foldBack, fill, fold as fold$$1 } from "../fable-library.2.3.10/Array.js";
-import { fold as fold$$2 } from "../fable-library.2.3.10/Seq.js";
-import { empty, tryFind as tryFind$$1, ofSeq as ofSeq$$1, ofList } from "../fable-library.2.3.10/Map.js";
-import { getGenerics, getGenericTypeDefinition, makeTuple, getTupleElements, isTuple, isGenericType, getElementType, isArray, isUnion, makeRecord, getRecordElements, isRecord, fullName, getUnionCaseFields, makeUnion as makeUnion$$1, getUnionCases, name as name$$6, type } from "../fable-library.2.3.10/Reflection.js";
-import { ofSeq as ofSeq$$2 } from "../fable-library.2.3.10/Set.js";
+import { tryParse } from "../fable-library.2.3.18/Int32.js";
+import { toNumber, fromBits, tryParse as tryParse$$1, fromInteger } from "../fable-library.2.3.18/Long.js";
+import { parse, fromInt32 } from "../fable-library.2.3.18/BigInt.js";
+import { tryParse as tryParse$$2 } from "../fable-library.2.3.18/Decimal.js";
+import Decimal from "../fable-library.2.3.18/Decimal.js";
+import { toUniversalTime, tryParse as tryParse$$3, minValue } from "../fable-library.2.3.18/Date.js";
+import { tryParse as tryParse$$4, minValue as minValue$$1 } from "../fable-library.2.3.18/DateOffset.js";
+import { tryParse as tryParse$$5 } from "../fable-library.2.3.18/TimeSpan.js";
+import { declare, List } from "../fable-library.2.3.18/Types.js";
+import { ofArray, map as map$$1, length, ofSeq, append, reverse, fold, tryLast } from "../fable-library.2.3.18/List.js";
+import { ofList as ofList$$1, map as map$$2, tryFind, foldBack2, foldBack, fill, fold as fold$$1 } from "../fable-library.2.3.18/Array.js";
+import { fold as fold$$2 } from "../fable-library.2.3.18/Seq.js";
+import { empty, tryFind as tryFind$$1, ofSeq as ofSeq$$1, ofList } from "../fable-library.2.3.18/Map.js";
+import { getGenerics, getGenericTypeDefinition, makeTuple, getTupleElements, isTuple, isGenericType, getElementType, isArray, isUnion, makeRecord, getRecordElements, isRecord, fullName, getUnionCaseFields, makeUnion as makeUnion$$1, getUnionCases, name as name$$6, type } from "../fable-library.2.3.18/Reflection.js";
+import { ofSeq as ofSeq$$2 } from "../fable-library.2.3.18/Set.js";
 export function Helpers$$$getField(fieldName, o) {
   return o[fieldName];
 }
@@ -338,7 +338,7 @@ export function decimal(path$$13, value$$25) {
 }
 export function datetime(path$$14, value$$27) {
   if (typeof value$$27 === "string") {
-    const matchValue$$11 = tryParse$$3(value$$27, null);
+    const matchValue$$11 = tryParse$$3(value$$27, minValue());
 
     if (matchValue$$11[0]) {
       return new Result(0, "Ok", toUniversalTime(matchValue$$11[1]));
@@ -351,7 +351,7 @@ export function datetime(path$$14, value$$27) {
 }
 export function datetimeOffset(path$$15, value$$28) {
   if (typeof value$$28 === "string") {
-    const matchValue$$12 = tryParse$$4(value$$28, null);
+    const matchValue$$12 = tryParse$$4(value$$28, minValue$$1());
 
     if (matchValue$$12[0]) {
       return new Result(0, "Ok", matchValue$$12[1]);
@@ -364,7 +364,7 @@ export function datetimeOffset(path$$15, value$$28) {
 }
 export function timespan(path$$16, value$$29) {
   if (typeof value$$29 === "string") {
-    const matchValue$$13 = tryParse$$5(value$$29, null);
+    const matchValue$$13 = tryParse$$5(value$$29, 0);
 
     if (matchValue$$13[0]) {
       return new Result(0, "Ok", matchValue$$13[1]);
@@ -422,7 +422,10 @@ function badPathError(fieldNames, currentPath, value$$32) {
 }
 
 export function optionalAt(fieldNames$$1, decoder$$9, firstPath, firstValue) {
-  const _arg1 = fold(function folder(tupledArg, field$$1) {
+  let _arg1;
+
+  const list$$1 = fieldNames$$1;
+  _arg1 = fold(function folder(tupledArg, field$$1) {
     if (tupledArg[2] == null) {
       if (tupledArg[1] == null) {
         const res$$1 = badPathError(fieldNames$$1, tupledArg[0], firstValue);
@@ -437,7 +440,7 @@ export function optionalAt(fieldNames$$1, decoder$$9, firstPath, firstValue) {
     } else {
       return [tupledArg[0], tupledArg[1], tupledArg[2]];
     }
-  }, [firstPath, firstValue, null], fieldNames$$1);
+  }, [firstPath, firstValue, null], list$$1);
 
   if (_arg1[2] == null) {
     if (Helpers$$$isUndefined(_arg1[1])) {
@@ -464,7 +467,10 @@ export function field(fieldName$$5, decoder$$10, path$$19, value$$34) {
   }
 }
 export function at(fieldNames$$2, decoder$$11, firstPath$$1, firstValue$$1) {
-  const _arg1$$1 = fold(function folder$$1(tupledArg$$1, field$$2) {
+  let _arg1$$1;
+
+  const list$$2 = fieldNames$$2;
+  _arg1$$1 = fold(function folder$$1(tupledArg$$1, field$$2) {
     if (tupledArg$$1[2] == null) {
       if (tupledArg$$1[1] == null) {
         const res$$5 = badPathError(fieldNames$$2, tupledArg$$1[0], firstValue$$1);
@@ -485,7 +491,7 @@ export function at(fieldNames$$2, decoder$$11, firstPath$$1, firstValue$$1) {
     } else {
       return [tupledArg$$1[0], tupledArg$$1[1], tupledArg$$1[2]];
     }
-  }, [firstPath$$1, firstValue$$1, null], fieldNames$$2);
+  }, [firstPath$$1, firstValue$$1, null], list$$2);
 
   if (_arg1$$1[2] == null) {
     return decoder$$11(_arg1$$1[0], _arg1$$1[1]);
@@ -666,119 +672,189 @@ export function map2(ctor$$1, d1$$1, d2, path$$30, value$$49) {
   const matchValue$$21 = [d1$$1(path$$30, value$$49), d2(path$$30, value$$49)];
 
   if (matchValue$$21[0].tag === 1) {
-    return new Result(1, "Error", matchValue$$21[0].fields[0]);
+    const er$$5 = matchValue$$21[0].fields[0];
+    return new Result(1, "Error", er$$5);
   } else if (matchValue$$21[1].tag === 1) {
-    return new Result(1, "Error", matchValue$$21[1].fields[0]);
+    const er$$6 = matchValue$$21[1].fields[0];
+    return new Result(1, "Error", er$$6);
   } else {
-    return new Result(0, "Ok", ctor$$1(matchValue$$21[0].fields[0], matchValue$$21[1].fields[0]));
+    const v1$$1 = matchValue$$21[0].fields[0];
+    const v2 = matchValue$$21[1].fields[0];
+    return new Result(0, "Ok", ctor$$1(v1$$1, v2));
   }
 }
 export function map3(ctor$$2, d1$$2, d2$$1, d3, path$$31, value$$50) {
   const matchValue$$22 = [d1$$2(path$$31, value$$50), d2$$1(path$$31, value$$50), d3(path$$31, value$$50)];
 
   if (matchValue$$22[0].tag === 1) {
-    return new Result(1, "Error", matchValue$$22[0].fields[0]);
+    const er$$7 = matchValue$$22[0].fields[0];
+    return new Result(1, "Error", er$$7);
   } else if (matchValue$$22[1].tag === 1) {
-    return new Result(1, "Error", matchValue$$22[1].fields[0]);
+    const er$$8 = matchValue$$22[1].fields[0];
+    return new Result(1, "Error", er$$8);
   } else if (matchValue$$22[2].tag === 1) {
-    return new Result(1, "Error", matchValue$$22[2].fields[0]);
+    const er$$9 = matchValue$$22[2].fields[0];
+    return new Result(1, "Error", er$$9);
   } else {
-    return new Result(0, "Ok", ctor$$2(matchValue$$22[0].fields[0], matchValue$$22[1].fields[0], matchValue$$22[2].fields[0]));
+    const v1$$2 = matchValue$$22[0].fields[0];
+    const v2$$1 = matchValue$$22[1].fields[0];
+    const v3 = matchValue$$22[2].fields[0];
+    return new Result(0, "Ok", ctor$$2(v1$$2, v2$$1, v3));
   }
 }
 export function map4(ctor$$3, d1$$3, d2$$2, d3$$1, d4, path$$32, value$$51) {
   const matchValue$$23 = [d1$$3(path$$32, value$$51), d2$$2(path$$32, value$$51), d3$$1(path$$32, value$$51), d4(path$$32, value$$51)];
 
   if (matchValue$$23[0].tag === 1) {
-    return new Result(1, "Error", matchValue$$23[0].fields[0]);
+    const er$$10 = matchValue$$23[0].fields[0];
+    return new Result(1, "Error", er$$10);
   } else if (matchValue$$23[1].tag === 1) {
-    return new Result(1, "Error", matchValue$$23[1].fields[0]);
+    const er$$11 = matchValue$$23[1].fields[0];
+    return new Result(1, "Error", er$$11);
   } else if (matchValue$$23[2].tag === 1) {
-    return new Result(1, "Error", matchValue$$23[2].fields[0]);
+    const er$$12 = matchValue$$23[2].fields[0];
+    return new Result(1, "Error", er$$12);
   } else if (matchValue$$23[3].tag === 1) {
-    return new Result(1, "Error", matchValue$$23[3].fields[0]);
+    const er$$13 = matchValue$$23[3].fields[0];
+    return new Result(1, "Error", er$$13);
   } else {
-    return new Result(0, "Ok", ctor$$3(matchValue$$23[0].fields[0], matchValue$$23[1].fields[0], matchValue$$23[2].fields[0], matchValue$$23[3].fields[0]));
+    const v1$$3 = matchValue$$23[0].fields[0];
+    const v2$$2 = matchValue$$23[1].fields[0];
+    const v3$$1 = matchValue$$23[2].fields[0];
+    const v4 = matchValue$$23[3].fields[0];
+    return new Result(0, "Ok", ctor$$3(v1$$3, v2$$2, v3$$1, v4));
   }
 }
 export function map5(ctor$$4, d1$$4, d2$$3, d3$$2, d4$$1, d5, path$$33, value$$52) {
   const matchValue$$24 = [d1$$4(path$$33, value$$52), d2$$3(path$$33, value$$52), d3$$2(path$$33, value$$52), d4$$1(path$$33, value$$52), d5(path$$33, value$$52)];
 
   if (matchValue$$24[0].tag === 1) {
-    return new Result(1, "Error", matchValue$$24[0].fields[0]);
+    const er$$14 = matchValue$$24[0].fields[0];
+    return new Result(1, "Error", er$$14);
   } else if (matchValue$$24[1].tag === 1) {
-    return new Result(1, "Error", matchValue$$24[1].fields[0]);
+    const er$$15 = matchValue$$24[1].fields[0];
+    return new Result(1, "Error", er$$15);
   } else if (matchValue$$24[2].tag === 1) {
-    return new Result(1, "Error", matchValue$$24[2].fields[0]);
+    const er$$16 = matchValue$$24[2].fields[0];
+    return new Result(1, "Error", er$$16);
   } else if (matchValue$$24[3].tag === 1) {
-    return new Result(1, "Error", matchValue$$24[3].fields[0]);
+    const er$$17 = matchValue$$24[3].fields[0];
+    return new Result(1, "Error", er$$17);
   } else if (matchValue$$24[4].tag === 1) {
-    return new Result(1, "Error", matchValue$$24[4].fields[0]);
+    const er$$18 = matchValue$$24[4].fields[0];
+    return new Result(1, "Error", er$$18);
   } else {
-    return new Result(0, "Ok", ctor$$4(matchValue$$24[0].fields[0], matchValue$$24[1].fields[0], matchValue$$24[2].fields[0], matchValue$$24[3].fields[0], matchValue$$24[4].fields[0]));
+    const v1$$4 = matchValue$$24[0].fields[0];
+    const v2$$3 = matchValue$$24[1].fields[0];
+    const v3$$2 = matchValue$$24[2].fields[0];
+    const v4$$1 = matchValue$$24[3].fields[0];
+    const v5 = matchValue$$24[4].fields[0];
+    return new Result(0, "Ok", ctor$$4(v1$$4, v2$$3, v3$$2, v4$$1, v5));
   }
 }
 export function map6(ctor$$5, d1$$5, d2$$4, d3$$3, d4$$2, d5$$1, d6, path$$34, value$$53) {
   const matchValue$$25 = [d1$$5(path$$34, value$$53), d2$$4(path$$34, value$$53), d3$$3(path$$34, value$$53), d4$$2(path$$34, value$$53), d5$$1(path$$34, value$$53), d6(path$$34, value$$53)];
 
   if (matchValue$$25[0].tag === 1) {
-    return new Result(1, "Error", matchValue$$25[0].fields[0]);
+    const er$$19 = matchValue$$25[0].fields[0];
+    return new Result(1, "Error", er$$19);
   } else if (matchValue$$25[1].tag === 1) {
-    return new Result(1, "Error", matchValue$$25[1].fields[0]);
+    const er$$20 = matchValue$$25[1].fields[0];
+    return new Result(1, "Error", er$$20);
   } else if (matchValue$$25[2].tag === 1) {
-    return new Result(1, "Error", matchValue$$25[2].fields[0]);
+    const er$$21 = matchValue$$25[2].fields[0];
+    return new Result(1, "Error", er$$21);
   } else if (matchValue$$25[3].tag === 1) {
-    return new Result(1, "Error", matchValue$$25[3].fields[0]);
+    const er$$22 = matchValue$$25[3].fields[0];
+    return new Result(1, "Error", er$$22);
   } else if (matchValue$$25[4].tag === 1) {
-    return new Result(1, "Error", matchValue$$25[4].fields[0]);
+    const er$$23 = matchValue$$25[4].fields[0];
+    return new Result(1, "Error", er$$23);
   } else if (matchValue$$25[5].tag === 1) {
-    return new Result(1, "Error", matchValue$$25[5].fields[0]);
+    const er$$24 = matchValue$$25[5].fields[0];
+    return new Result(1, "Error", er$$24);
   } else {
-    return new Result(0, "Ok", ctor$$5(matchValue$$25[0].fields[0], matchValue$$25[1].fields[0], matchValue$$25[2].fields[0], matchValue$$25[3].fields[0], matchValue$$25[4].fields[0], matchValue$$25[5].fields[0]));
+    const v1$$5 = matchValue$$25[0].fields[0];
+    const v2$$4 = matchValue$$25[1].fields[0];
+    const v3$$3 = matchValue$$25[2].fields[0];
+    const v4$$2 = matchValue$$25[3].fields[0];
+    const v5$$1 = matchValue$$25[4].fields[0];
+    const v6 = matchValue$$25[5].fields[0];
+    return new Result(0, "Ok", ctor$$5(v1$$5, v2$$4, v3$$3, v4$$2, v5$$1, v6));
   }
 }
 export function map7(ctor$$6, d1$$6, d2$$5, d3$$4, d4$$3, d5$$2, d6$$1, d7, path$$35, value$$54) {
   const matchValue$$26 = [d1$$6(path$$35, value$$54), d2$$5(path$$35, value$$54), d3$$4(path$$35, value$$54), d4$$3(path$$35, value$$54), d5$$2(path$$35, value$$54), d6$$1(path$$35, value$$54), d7(path$$35, value$$54)];
 
   if (matchValue$$26[0].tag === 1) {
-    return new Result(1, "Error", matchValue$$26[0].fields[0]);
+    const er$$25 = matchValue$$26[0].fields[0];
+    return new Result(1, "Error", er$$25);
   } else if (matchValue$$26[1].tag === 1) {
-    return new Result(1, "Error", matchValue$$26[1].fields[0]);
+    const er$$26 = matchValue$$26[1].fields[0];
+    return new Result(1, "Error", er$$26);
   } else if (matchValue$$26[2].tag === 1) {
-    return new Result(1, "Error", matchValue$$26[2].fields[0]);
+    const er$$27 = matchValue$$26[2].fields[0];
+    return new Result(1, "Error", er$$27);
   } else if (matchValue$$26[3].tag === 1) {
-    return new Result(1, "Error", matchValue$$26[3].fields[0]);
+    const er$$28 = matchValue$$26[3].fields[0];
+    return new Result(1, "Error", er$$28);
   } else if (matchValue$$26[4].tag === 1) {
-    return new Result(1, "Error", matchValue$$26[4].fields[0]);
+    const er$$29 = matchValue$$26[4].fields[0];
+    return new Result(1, "Error", er$$29);
   } else if (matchValue$$26[5].tag === 1) {
-    return new Result(1, "Error", matchValue$$26[5].fields[0]);
+    const er$$30 = matchValue$$26[5].fields[0];
+    return new Result(1, "Error", er$$30);
   } else if (matchValue$$26[6].tag === 1) {
-    return new Result(1, "Error", matchValue$$26[6].fields[0]);
+    const er$$31 = matchValue$$26[6].fields[0];
+    return new Result(1, "Error", er$$31);
   } else {
-    return new Result(0, "Ok", ctor$$6(matchValue$$26[0].fields[0], matchValue$$26[1].fields[0], matchValue$$26[2].fields[0], matchValue$$26[3].fields[0], matchValue$$26[4].fields[0], matchValue$$26[5].fields[0], matchValue$$26[6].fields[0]));
+    const v1$$6 = matchValue$$26[0].fields[0];
+    const v2$$5 = matchValue$$26[1].fields[0];
+    const v3$$4 = matchValue$$26[2].fields[0];
+    const v4$$3 = matchValue$$26[3].fields[0];
+    const v5$$2 = matchValue$$26[4].fields[0];
+    const v6$$1 = matchValue$$26[5].fields[0];
+    const v7 = matchValue$$26[6].fields[0];
+    return new Result(0, "Ok", ctor$$6(v1$$6, v2$$5, v3$$4, v4$$3, v5$$2, v6$$1, v7));
   }
 }
 export function map8(ctor$$7, d1$$7, d2$$6, d3$$5, d4$$4, d5$$3, d6$$2, d7$$1, d8, path$$36, value$$55) {
   const matchValue$$27 = [d1$$7(path$$36, value$$55), d2$$6(path$$36, value$$55), d3$$5(path$$36, value$$55), d4$$4(path$$36, value$$55), d5$$3(path$$36, value$$55), d6$$2(path$$36, value$$55), d7$$1(path$$36, value$$55), d8(path$$36, value$$55)];
 
   if (matchValue$$27[0].tag === 1) {
-    return new Result(1, "Error", matchValue$$27[0].fields[0]);
+    const er$$32 = matchValue$$27[0].fields[0];
+    return new Result(1, "Error", er$$32);
   } else if (matchValue$$27[1].tag === 1) {
-    return new Result(1, "Error", matchValue$$27[1].fields[0]);
+    const er$$33 = matchValue$$27[1].fields[0];
+    return new Result(1, "Error", er$$33);
   } else if (matchValue$$27[2].tag === 1) {
-    return new Result(1, "Error", matchValue$$27[2].fields[0]);
+    const er$$34 = matchValue$$27[2].fields[0];
+    return new Result(1, "Error", er$$34);
   } else if (matchValue$$27[3].tag === 1) {
-    return new Result(1, "Error", matchValue$$27[3].fields[0]);
+    const er$$35 = matchValue$$27[3].fields[0];
+    return new Result(1, "Error", er$$35);
   } else if (matchValue$$27[4].tag === 1) {
-    return new Result(1, "Error", matchValue$$27[4].fields[0]);
+    const er$$36 = matchValue$$27[4].fields[0];
+    return new Result(1, "Error", er$$36);
   } else if (matchValue$$27[5].tag === 1) {
-    return new Result(1, "Error", matchValue$$27[5].fields[0]);
+    const er$$37 = matchValue$$27[5].fields[0];
+    return new Result(1, "Error", er$$37);
   } else if (matchValue$$27[6].tag === 1) {
-    return new Result(1, "Error", matchValue$$27[6].fields[0]);
+    const er$$38 = matchValue$$27[6].fields[0];
+    return new Result(1, "Error", er$$38);
   } else if (matchValue$$27[7].tag === 1) {
-    return new Result(1, "Error", matchValue$$27[7].fields[0]);
+    const er$$39 = matchValue$$27[7].fields[0];
+    return new Result(1, "Error", er$$39);
   } else {
-    return new Result(0, "Ok", ctor$$7(matchValue$$27[0].fields[0], matchValue$$27[1].fields[0], matchValue$$27[2].fields[0], matchValue$$27[3].fields[0], matchValue$$27[4].fields[0], matchValue$$27[5].fields[0], matchValue$$27[6].fields[0], matchValue$$27[7].fields[0]));
+    const v1$$7 = matchValue$$27[0].fields[0];
+    const v2$$6 = matchValue$$27[1].fields[0];
+    const v3$$5 = matchValue$$27[2].fields[0];
+    const v4$$4 = matchValue$$27[3].fields[0];
+    const v5$$3 = matchValue$$27[4].fields[0];
+    const v6$$2 = matchValue$$27[5].fields[0];
+    const v7$$1 = matchValue$$27[6].fields[0];
+    const v8 = matchValue$$27[7].fields[0];
+    return new Result(0, "Ok", ctor$$7(v1$$7, v2$$6, v3$$5, v4$$4, v5$$3, v6$$2, v7$$1, v8));
   }
 }
 export function dict(decoder$$18) {
@@ -960,226 +1036,408 @@ export function object(builder, path$$43, v$$7) {
   }
 }
 export function tuple2(decoder1, decoder2) {
+  const decoder$$34 = function decoder$$34(path$$45, value$$61) {
+    return index(0, decoder1, path$$45, value$$61);
+  };
+
   return function (path$$48) {
     return function (value$$64) {
-      return andThen(function cb$$2(v1$$8, path$$47, value$$63) {
-        return andThen(uncurry(3, function cb$$1(v2$$7) {
-          const output$$2 = [v1$$8, v2$$7];
-          return function (arg10$0040) {
-            return function (arg20$0040) {
-              return succeed(output$$2, arg10$0040, arg20$0040);
-            };
-          };
-        }), function (path$$46, value$$62) {
+      return andThen(uncurry(3, function cb$$2(v1$$8) {
+        const decoder$$33 = function decoder$$33(path$$46, value$$62) {
           return index(1, decoder2, path$$46, value$$62);
-        }, path$$47, value$$63);
-      }, function (path$$45, value$$61) {
-        return index(0, decoder1, path$$45, value$$61);
-      }, path$$48, value$$64);
+        };
+
+        return function (path$$47) {
+          return function (value$$63) {
+            return andThen(uncurry(3, function cb$$1(v2$$7) {
+              const output$$2 = [v1$$8, v2$$7];
+              return function (arg10$0040) {
+                return function (arg20$0040) {
+                  return succeed(output$$2, arg10$0040, arg20$0040);
+                };
+              };
+            }), decoder$$33, path$$47, value$$63);
+          };
+        };
+      }), decoder$$34, path$$48, value$$64);
     };
   };
 }
 export function tuple3(decoder1$$1, decoder2$$1, decoder3) {
+  const decoder$$40 = function decoder$$40(path$$49, value$$65) {
+    return index(0, decoder1$$1, path$$49, value$$65);
+  };
+
   return function (path$$54) {
     return function (value$$70) {
-      return andThen(function cb$$5(v1$$9, path$$53, value$$69) {
-        return andThen(function cb$$4(v2$$8, path$$52, value$$68) {
-          return andThen(uncurry(3, function cb$$3(v3$$6) {
-            const output$$3 = [v1$$9, v2$$8, v3$$6];
-            return function (arg10$0040$$1) {
-              return function (arg20$0040$$1) {
-                return succeed(output$$3, arg10$0040$$1, arg20$0040$$1);
-              };
-            };
-          }), function (path$$51, value$$67) {
-            return index(2, decoder3, path$$51, value$$67);
-          }, path$$52, value$$68);
-        }, function (path$$50, value$$66) {
+      return andThen(uncurry(3, function cb$$5(v1$$9) {
+        const decoder$$39 = function decoder$$39(path$$50, value$$66) {
           return index(1, decoder2$$1, path$$50, value$$66);
-        }, path$$53, value$$69);
-      }, function (path$$49, value$$65) {
-        return index(0, decoder1$$1, path$$49, value$$65);
-      }, path$$54, value$$70);
+        };
+
+        return function (path$$53) {
+          return function (value$$69) {
+            return andThen(uncurry(3, function cb$$4(v2$$8) {
+              const decoder$$38 = function decoder$$38(path$$51, value$$67) {
+                return index(2, decoder3, path$$51, value$$67);
+              };
+
+              return function (path$$52) {
+                return function (value$$68) {
+                  return andThen(uncurry(3, function cb$$3(v3$$6) {
+                    const output$$3 = [v1$$9, v2$$8, v3$$6];
+                    return function (arg10$0040$$1) {
+                      return function (arg20$0040$$1) {
+                        return succeed(output$$3, arg10$0040$$1, arg20$0040$$1);
+                      };
+                    };
+                  }), decoder$$38, path$$52, value$$68);
+                };
+              };
+            }), decoder$$39, path$$53, value$$69);
+          };
+        };
+      }), decoder$$40, path$$54, value$$70);
     };
   };
 }
 export function tuple4(decoder1$$2, decoder2$$2, decoder3$$1, decoder4) {
+  const decoder$$48 = function decoder$$48(path$$55, value$$71) {
+    return index(0, decoder1$$2, path$$55, value$$71);
+  };
+
   return function (path$$62) {
     return function (value$$78) {
-      return andThen(function cb$$9(v1$$10, path$$61, value$$77) {
-        return andThen(function cb$$8(v2$$9, path$$60, value$$76) {
-          return andThen(function cb$$7(v3$$7, path$$59, value$$75) {
-            return andThen(uncurry(3, function cb$$6(v4$$5) {
-              const output$$4 = [v1$$10, v2$$9, v3$$7, v4$$5];
-              return function (arg10$0040$$2) {
-                return function (arg20$0040$$2) {
-                  return succeed(output$$4, arg10$0040$$2, arg20$0040$$2);
+      return andThen(uncurry(3, function cb$$9(v1$$10) {
+        const decoder$$47 = function decoder$$47(path$$56, value$$72) {
+          return index(1, decoder2$$2, path$$56, value$$72);
+        };
+
+        return function (path$$61) {
+          return function (value$$77) {
+            return andThen(uncurry(3, function cb$$8(v2$$9) {
+              const decoder$$46 = function decoder$$46(path$$57, value$$73) {
+                return index(2, decoder3$$1, path$$57, value$$73);
+              };
+
+              return function (path$$60) {
+                return function (value$$76) {
+                  return andThen(uncurry(3, function cb$$7(v3$$7) {
+                    const decoder$$45 = function decoder$$45(path$$58, value$$74) {
+                      return index(3, decoder4, path$$58, value$$74);
+                    };
+
+                    return function (path$$59) {
+                      return function (value$$75) {
+                        return andThen(uncurry(3, function cb$$6(v4$$5) {
+                          const output$$4 = [v1$$10, v2$$9, v3$$7, v4$$5];
+                          return function (arg10$0040$$2) {
+                            return function (arg20$0040$$2) {
+                              return succeed(output$$4, arg10$0040$$2, arg20$0040$$2);
+                            };
+                          };
+                        }), decoder$$45, path$$59, value$$75);
+                      };
+                    };
+                  }), decoder$$46, path$$60, value$$76);
                 };
               };
-            }), function (path$$58, value$$74) {
-              return index(3, decoder4, path$$58, value$$74);
-            }, path$$59, value$$75);
-          }, function (path$$57, value$$73) {
-            return index(2, decoder3$$1, path$$57, value$$73);
-          }, path$$60, value$$76);
-        }, function (path$$56, value$$72) {
-          return index(1, decoder2$$2, path$$56, value$$72);
-        }, path$$61, value$$77);
-      }, function (path$$55, value$$71) {
-        return index(0, decoder1$$2, path$$55, value$$71);
-      }, path$$62, value$$78);
+            }), decoder$$47, path$$61, value$$77);
+          };
+        };
+      }), decoder$$48, path$$62, value$$78);
     };
   };
 }
 export function tuple5(decoder1$$3, decoder2$$3, decoder3$$2, decoder4$$1, decoder5) {
+  const decoder$$58 = function decoder$$58(path$$63, value$$79) {
+    return index(0, decoder1$$3, path$$63, value$$79);
+  };
+
   return function (path$$72) {
     return function (value$$88) {
-      return andThen(function cb$$14(v1$$11, path$$71, value$$87) {
-        return andThen(function cb$$13(v2$$10, path$$70, value$$86) {
-          return andThen(function cb$$12(v3$$8, path$$69, value$$85) {
-            return andThen(function cb$$11(v4$$6, path$$68, value$$84) {
-              return andThen(uncurry(3, function cb$$10(v5$$4) {
-                const output$$5 = [v1$$11, v2$$10, v3$$8, v4$$6, v5$$4];
-                return function (arg10$0040$$3) {
-                  return function (arg20$0040$$3) {
-                    return succeed(output$$5, arg10$0040$$3, arg20$0040$$3);
-                  };
-                };
-              }), function (path$$67, value$$83) {
-                return index(4, decoder5, path$$67, value$$83);
-              }, path$$68, value$$84);
-            }, function (path$$66, value$$82) {
-              return index(3, decoder4$$1, path$$66, value$$82);
-            }, path$$69, value$$85);
-          }, function (path$$65, value$$81) {
-            return index(2, decoder3$$2, path$$65, value$$81);
-          }, path$$70, value$$86);
-        }, function (path$$64, value$$80) {
+      return andThen(uncurry(3, function cb$$14(v1$$11) {
+        const decoder$$57 = function decoder$$57(path$$64, value$$80) {
           return index(1, decoder2$$3, path$$64, value$$80);
-        }, path$$71, value$$87);
-      }, function (path$$63, value$$79) {
-        return index(0, decoder1$$3, path$$63, value$$79);
-      }, path$$72, value$$88);
+        };
+
+        return function (path$$71) {
+          return function (value$$87) {
+            return andThen(uncurry(3, function cb$$13(v2$$10) {
+              const decoder$$56 = function decoder$$56(path$$65, value$$81) {
+                return index(2, decoder3$$2, path$$65, value$$81);
+              };
+
+              return function (path$$70) {
+                return function (value$$86) {
+                  return andThen(uncurry(3, function cb$$12(v3$$8) {
+                    const decoder$$55 = function decoder$$55(path$$66, value$$82) {
+                      return index(3, decoder4$$1, path$$66, value$$82);
+                    };
+
+                    return function (path$$69) {
+                      return function (value$$85) {
+                        return andThen(uncurry(3, function cb$$11(v4$$6) {
+                          const decoder$$54 = function decoder$$54(path$$67, value$$83) {
+                            return index(4, decoder5, path$$67, value$$83);
+                          };
+
+                          return function (path$$68) {
+                            return function (value$$84) {
+                              return andThen(uncurry(3, function cb$$10(v5$$4) {
+                                const output$$5 = [v1$$11, v2$$10, v3$$8, v4$$6, v5$$4];
+                                return function (arg10$0040$$3) {
+                                  return function (arg20$0040$$3) {
+                                    return succeed(output$$5, arg10$0040$$3, arg20$0040$$3);
+                                  };
+                                };
+                              }), decoder$$54, path$$68, value$$84);
+                            };
+                          };
+                        }), decoder$$55, path$$69, value$$85);
+                      };
+                    };
+                  }), decoder$$56, path$$70, value$$86);
+                };
+              };
+            }), decoder$$57, path$$71, value$$87);
+          };
+        };
+      }), decoder$$58, path$$72, value$$88);
     };
   };
 }
 export function tuple6(decoder1$$4, decoder2$$4, decoder3$$3, decoder4$$2, decoder5$$1, decoder6) {
+  const decoder$$70 = function decoder$$70(path$$73, value$$89) {
+    return index(0, decoder1$$4, path$$73, value$$89);
+  };
+
   return function (path$$84) {
     return function (value$$100) {
-      return andThen(function cb$$20(v1$$12, path$$83, value$$99) {
-        return andThen(function cb$$19(v2$$11, path$$82, value$$98) {
-          return andThen(function cb$$18(v3$$9, path$$81, value$$97) {
-            return andThen(function cb$$17(v4$$7, path$$80, value$$96) {
-              return andThen(function cb$$16(v5$$5, path$$79, value$$95) {
-                return andThen(uncurry(3, function cb$$15(v6$$3) {
-                  const output$$6 = [v1$$12, v2$$11, v3$$9, v4$$7, v5$$5, v6$$3];
-                  return function (arg10$0040$$4) {
-                    return function (arg20$0040$$4) {
-                      return succeed(output$$6, arg10$0040$$4, arg20$0040$$4);
-                    };
-                  };
-                }), function (path$$78, value$$94) {
-                  return index(5, decoder6, path$$78, value$$94);
-                }, path$$79, value$$95);
-              }, function (path$$77, value$$93) {
-                return index(4, decoder5$$1, path$$77, value$$93);
-              }, path$$80, value$$96);
-            }, function (path$$76, value$$92) {
-              return index(3, decoder4$$2, path$$76, value$$92);
-            }, path$$81, value$$97);
-          }, function (path$$75, value$$91) {
-            return index(2, decoder3$$3, path$$75, value$$91);
-          }, path$$82, value$$98);
-        }, function (path$$74, value$$90) {
+      return andThen(uncurry(3, function cb$$20(v1$$12) {
+        const decoder$$69 = function decoder$$69(path$$74, value$$90) {
           return index(1, decoder2$$4, path$$74, value$$90);
-        }, path$$83, value$$99);
-      }, function (path$$73, value$$89) {
-        return index(0, decoder1$$4, path$$73, value$$89);
-      }, path$$84, value$$100);
+        };
+
+        return function (path$$83) {
+          return function (value$$99) {
+            return andThen(uncurry(3, function cb$$19(v2$$11) {
+              const decoder$$68 = function decoder$$68(path$$75, value$$91) {
+                return index(2, decoder3$$3, path$$75, value$$91);
+              };
+
+              return function (path$$82) {
+                return function (value$$98) {
+                  return andThen(uncurry(3, function cb$$18(v3$$9) {
+                    const decoder$$67 = function decoder$$67(path$$76, value$$92) {
+                      return index(3, decoder4$$2, path$$76, value$$92);
+                    };
+
+                    return function (path$$81) {
+                      return function (value$$97) {
+                        return andThen(uncurry(3, function cb$$17(v4$$7) {
+                          const decoder$$66 = function decoder$$66(path$$77, value$$93) {
+                            return index(4, decoder5$$1, path$$77, value$$93);
+                          };
+
+                          return function (path$$80) {
+                            return function (value$$96) {
+                              return andThen(uncurry(3, function cb$$16(v5$$5) {
+                                const decoder$$65 = function decoder$$65(path$$78, value$$94) {
+                                  return index(5, decoder6, path$$78, value$$94);
+                                };
+
+                                return function (path$$79) {
+                                  return function (value$$95) {
+                                    return andThen(uncurry(3, function cb$$15(v6$$3) {
+                                      const output$$6 = [v1$$12, v2$$11, v3$$9, v4$$7, v5$$5, v6$$3];
+                                      return function (arg10$0040$$4) {
+                                        return function (arg20$0040$$4) {
+                                          return succeed(output$$6, arg10$0040$$4, arg20$0040$$4);
+                                        };
+                                      };
+                                    }), decoder$$65, path$$79, value$$95);
+                                  };
+                                };
+                              }), decoder$$66, path$$80, value$$96);
+                            };
+                          };
+                        }), decoder$$67, path$$81, value$$97);
+                      };
+                    };
+                  }), decoder$$68, path$$82, value$$98);
+                };
+              };
+            }), decoder$$69, path$$83, value$$99);
+          };
+        };
+      }), decoder$$70, path$$84, value$$100);
     };
   };
 }
 export function tuple7(decoder1$$5, decoder2$$5, decoder3$$4, decoder4$$3, decoder5$$2, decoder6$$1, decoder7) {
+  const decoder$$84 = function decoder$$84(path$$85, value$$101) {
+    return index(0, decoder1$$5, path$$85, value$$101);
+  };
+
   return function (path$$98) {
     return function (value$$114) {
-      return andThen(function cb$$27(v1$$13, path$$97, value$$113) {
-        return andThen(function cb$$26(v2$$12, path$$96, value$$112) {
-          return andThen(function cb$$25(v3$$10, path$$95, value$$111) {
-            return andThen(function cb$$24(v4$$8, path$$94, value$$110) {
-              return andThen(function cb$$23(v5$$6, path$$93, value$$109) {
-                return andThen(function cb$$22(v6$$4, path$$92, value$$108) {
-                  return andThen(uncurry(3, function cb$$21(v7$$2) {
-                    const output$$7 = [v1$$13, v2$$12, v3$$10, v4$$8, v5$$6, v6$$4, v7$$2];
-                    return function (arg10$0040$$5) {
-                      return function (arg20$0040$$5) {
-                        return succeed(output$$7, arg10$0040$$5, arg20$0040$$5);
+      return andThen(uncurry(3, function cb$$27(v1$$13) {
+        const decoder$$83 = function decoder$$83(path$$86, value$$102) {
+          return index(1, decoder2$$5, path$$86, value$$102);
+        };
+
+        return function (path$$97) {
+          return function (value$$113) {
+            return andThen(uncurry(3, function cb$$26(v2$$12) {
+              const decoder$$82 = function decoder$$82(path$$87, value$$103) {
+                return index(2, decoder3$$4, path$$87, value$$103);
+              };
+
+              return function (path$$96) {
+                return function (value$$112) {
+                  return andThen(uncurry(3, function cb$$25(v3$$10) {
+                    const decoder$$81 = function decoder$$81(path$$88, value$$104) {
+                      return index(3, decoder4$$3, path$$88, value$$104);
+                    };
+
+                    return function (path$$95) {
+                      return function (value$$111) {
+                        return andThen(uncurry(3, function cb$$24(v4$$8) {
+                          const decoder$$80 = function decoder$$80(path$$89, value$$105) {
+                            return index(4, decoder5$$2, path$$89, value$$105);
+                          };
+
+                          return function (path$$94) {
+                            return function (value$$110) {
+                              return andThen(uncurry(3, function cb$$23(v5$$6) {
+                                const decoder$$79 = function decoder$$79(path$$90, value$$106) {
+                                  return index(5, decoder6$$1, path$$90, value$$106);
+                                };
+
+                                return function (path$$93) {
+                                  return function (value$$109) {
+                                    return andThen(uncurry(3, function cb$$22(v6$$4) {
+                                      const decoder$$78 = function decoder$$78(path$$91, value$$107) {
+                                        return index(6, decoder7, path$$91, value$$107);
+                                      };
+
+                                      return function (path$$92) {
+                                        return function (value$$108) {
+                                          return andThen(uncurry(3, function cb$$21(v7$$2) {
+                                            const output$$7 = [v1$$13, v2$$12, v3$$10, v4$$8, v5$$6, v6$$4, v7$$2];
+                                            return function (arg10$0040$$5) {
+                                              return function (arg20$0040$$5) {
+                                                return succeed(output$$7, arg10$0040$$5, arg20$0040$$5);
+                                              };
+                                            };
+                                          }), decoder$$78, path$$92, value$$108);
+                                        };
+                                      };
+                                    }), decoder$$79, path$$93, value$$109);
+                                  };
+                                };
+                              }), decoder$$80, path$$94, value$$110);
+                            };
+                          };
+                        }), decoder$$81, path$$95, value$$111);
                       };
                     };
-                  }), function (path$$91, value$$107) {
-                    return index(6, decoder7, path$$91, value$$107);
-                  }, path$$92, value$$108);
-                }, function (path$$90, value$$106) {
-                  return index(5, decoder6$$1, path$$90, value$$106);
-                }, path$$93, value$$109);
-              }, function (path$$89, value$$105) {
-                return index(4, decoder5$$2, path$$89, value$$105);
-              }, path$$94, value$$110);
-            }, function (path$$88, value$$104) {
-              return index(3, decoder4$$3, path$$88, value$$104);
-            }, path$$95, value$$111);
-          }, function (path$$87, value$$103) {
-            return index(2, decoder3$$4, path$$87, value$$103);
-          }, path$$96, value$$112);
-        }, function (path$$86, value$$102) {
-          return index(1, decoder2$$5, path$$86, value$$102);
-        }, path$$97, value$$113);
-      }, function (path$$85, value$$101) {
-        return index(0, decoder1$$5, path$$85, value$$101);
-      }, path$$98, value$$114);
+                  }), decoder$$82, path$$96, value$$112);
+                };
+              };
+            }), decoder$$83, path$$97, value$$113);
+          };
+        };
+      }), decoder$$84, path$$98, value$$114);
     };
   };
 }
 export function tuple8(decoder1$$6, decoder2$$6, decoder3$$5, decoder4$$4, decoder5$$3, decoder6$$2, decoder7$$1, decoder8) {
+  const decoder$$100 = function decoder$$100(path$$99, value$$115) {
+    return index(0, decoder1$$6, path$$99, value$$115);
+  };
+
   return function (path$$114) {
     return function (value$$130) {
-      return andThen(function cb$$35(v1$$14, path$$113, value$$129) {
-        return andThen(function cb$$34(v2$$13, path$$112, value$$128) {
-          return andThen(function cb$$33(v3$$11, path$$111, value$$127) {
-            return andThen(function cb$$32(v4$$9, path$$110, value$$126) {
-              return andThen(function cb$$31(v5$$7, path$$109, value$$125) {
-                return andThen(function cb$$30(v6$$5, path$$108, value$$124) {
-                  return andThen(function cb$$29(v7$$3, path$$107, value$$123) {
-                    return andThen(uncurry(3, function cb$$28(v8$$1) {
-                      const output$$8 = [v1$$14, v2$$13, v3$$11, v4$$9, v5$$7, v6$$5, v7$$3, v8$$1];
-                      return function (arg10$0040$$6) {
-                        return function (arg20$0040$$6) {
-                          return succeed(output$$8, arg10$0040$$6, arg20$0040$$6);
-                        };
-                      };
-                    }), function (path$$106, value$$122) {
-                      return index(7, decoder8, path$$106, value$$122);
-                    }, path$$107, value$$123);
-                  }, function (path$$105, value$$121) {
-                    return index(6, decoder7$$1, path$$105, value$$121);
-                  }, path$$108, value$$124);
-                }, function (path$$104, value$$120) {
-                  return index(5, decoder6$$2, path$$104, value$$120);
-                }, path$$109, value$$125);
-              }, function (path$$103, value$$119) {
-                return index(4, decoder5$$3, path$$103, value$$119);
-              }, path$$110, value$$126);
-            }, function (path$$102, value$$118) {
-              return index(3, decoder4$$4, path$$102, value$$118);
-            }, path$$111, value$$127);
-          }, function (path$$101, value$$117) {
-            return index(2, decoder3$$5, path$$101, value$$117);
-          }, path$$112, value$$128);
-        }, function (path$$100, value$$116) {
+      return andThen(uncurry(3, function cb$$35(v1$$14) {
+        const decoder$$99 = function decoder$$99(path$$100, value$$116) {
           return index(1, decoder2$$6, path$$100, value$$116);
-        }, path$$113, value$$129);
-      }, function (path$$99, value$$115) {
-        return index(0, decoder1$$6, path$$99, value$$115);
-      }, path$$114, value$$130);
+        };
+
+        return function (path$$113) {
+          return function (value$$129) {
+            return andThen(uncurry(3, function cb$$34(v2$$13) {
+              const decoder$$98 = function decoder$$98(path$$101, value$$117) {
+                return index(2, decoder3$$5, path$$101, value$$117);
+              };
+
+              return function (path$$112) {
+                return function (value$$128) {
+                  return andThen(uncurry(3, function cb$$33(v3$$11) {
+                    const decoder$$97 = function decoder$$97(path$$102, value$$118) {
+                      return index(3, decoder4$$4, path$$102, value$$118);
+                    };
+
+                    return function (path$$111) {
+                      return function (value$$127) {
+                        return andThen(uncurry(3, function cb$$32(v4$$9) {
+                          const decoder$$96 = function decoder$$96(path$$103, value$$119) {
+                            return index(4, decoder5$$3, path$$103, value$$119);
+                          };
+
+                          return function (path$$110) {
+                            return function (value$$126) {
+                              return andThen(uncurry(3, function cb$$31(v5$$7) {
+                                const decoder$$95 = function decoder$$95(path$$104, value$$120) {
+                                  return index(5, decoder6$$2, path$$104, value$$120);
+                                };
+
+                                return function (path$$109) {
+                                  return function (value$$125) {
+                                    return andThen(uncurry(3, function cb$$30(v6$$5) {
+                                      const decoder$$94 = function decoder$$94(path$$105, value$$121) {
+                                        return index(6, decoder7$$1, path$$105, value$$121);
+                                      };
+
+                                      return function (path$$108) {
+                                        return function (value$$124) {
+                                          return andThen(uncurry(3, function cb$$29(v7$$3) {
+                                            const decoder$$93 = function decoder$$93(path$$106, value$$122) {
+                                              return index(7, decoder8, path$$106, value$$122);
+                                            };
+
+                                            return function (path$$107) {
+                                              return function (value$$123) {
+                                                return andThen(uncurry(3, function cb$$28(v8$$1) {
+                                                  const output$$8 = [v1$$14, v2$$13, v3$$11, v4$$9, v5$$7, v6$$5, v7$$3, v8$$1];
+                                                  return function (arg10$0040$$6) {
+                                                    return function (arg20$0040$$6) {
+                                                      return succeed(output$$8, arg10$0040$$6, arg20$0040$$6);
+                                                    };
+                                                  };
+                                                }), decoder$$93, path$$107, value$$123);
+                                              };
+                                            };
+                                          }), decoder$$94, path$$108, value$$124);
+                                        };
+                                      };
+                                    }), decoder$$95, path$$109, value$$125);
+                                  };
+                                };
+                              }), decoder$$96, path$$110, value$$126);
+                            };
+                          };
+                        }), decoder$$97, path$$111, value$$127);
+                      };
+                    };
+                  }), decoder$$98, path$$112, value$$128);
+                };
+              };
+            }), decoder$$99, path$$113, value$$129);
+          };
+        };
+      }), decoder$$100, path$$114, value$$130);
     };
   };
 }
@@ -1330,11 +1588,11 @@ function autoDecodeRecordsAndUnions(extra$$1, isCamelCase$$1, isOptional, t$$1) 
       };
     };
   } else if (isOptional) {
-    return function (path$$121) {
-      return function (value$$136) {
-        return new Result(1, "Error", [path$$121, new ErrorReason(2, "BadType", "an extra coder for " + fullName(t$$1), value$$136)]);
-      };
+    const d$$2 = function d$$2(path$$121, value$$136) {
+      return new Result(1, "Error", [path$$121, new ErrorReason(2, "BadType", "an extra coder for " + fullName(t$$1), value$$136)]);
     };
+
+    return curry(2, d$$2);
   } else {
     return function (message) {
       throw new Error(message);
@@ -1449,59 +1707,32 @@ function autoDecoder(extra$$2, isCamelCase$$2, isOptional$$1, t$$2) {
         }
       }
     } else if (fullname === "System.Boolean") {
-      return function (path$$131) {
-        return function (value$$148) {
-          return bool(path$$131, value$$148);
-        };
-      };
+      const d$$9 = bool;
+      return curry(2, d$$9);
     } else if (fullname === "System.String") {
-      return function (path$$132) {
-        return function (value$$149) {
-          return string(path$$132, value$$149);
-        };
-      };
+      const d$$10 = string;
+      return curry(2, d$$10);
     } else if (fullname === "System.Int32") {
-      return function (path$$133) {
-        return function (value$$150) {
-          return int$(path$$133, value$$150);
-        };
-      };
+      const d$$11 = int$;
+      return curry(2, d$$11);
     } else if (fullname === "System.UInt32") {
-      return function (path$$134) {
-        return function (value$$151) {
-          return uint32(path$$134, value$$151);
-        };
-      };
+      const d$$12 = uint32;
+      return curry(2, d$$12);
     } else if (fullname === "System.Double") {
-      return function (path$$135) {
-        return function (value$$152) {
-          return float$(path$$135, value$$152);
-        };
-      };
+      const d$$13 = float$;
+      return curry(2, d$$13);
     } else if (fullname === "System.DateTime") {
-      return function (path$$136) {
-        return function (value$$153) {
-          return datetime(path$$136, value$$153);
-        };
-      };
+      const d$$14 = datetime;
+      return curry(2, d$$14);
     } else if (fullname === "System.DateTimeOffset") {
-      return function (path$$137) {
-        return function (value$$154) {
-          return datetimeOffset(path$$137, value$$154);
-        };
-      };
+      const d$$15 = datetimeOffset;
+      return curry(2, d$$15);
     } else if (fullname === "System.TimeSpan") {
-      return function (path$$138) {
-        return function (value$$155) {
-          return timespan(path$$138, value$$155);
-        };
-      };
+      const d$$16 = timespan;
+      return curry(2, d$$16);
     } else if (fullname === "System.Guid") {
-      return function (path$$139) {
-        return function (value$$156) {
-          return guid(path$$139, value$$156);
-        };
-      };
+      const d$$17 = guid;
+      return curry(2, d$$17);
     } else if (fullname === "System.Object") {
       return function (_arg1$$6) {
         return function (v$$11) {

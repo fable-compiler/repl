@@ -113,3 +113,4 @@ export function startWithContinuations(computation, continuation, exceptionConti
 export function startAsPromise(computation, cancellationToken) {
     return new Promise((resolve, reject) => startWithContinuations(computation, resolve, reject, reject, cancellationToken ? cancellationToken : defaultCancellationToken));
 }
+//# sourceMappingURL=Async.js.map

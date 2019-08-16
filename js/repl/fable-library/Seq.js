@@ -1,4 +1,5 @@
-import { makeRangeStepFunction } from "./Long.js";
+import { makeRangeStepFunction as makeLongRangeStepFunction } from "./Long.js";
+import { makeRangeStepFunction as makeDecimalRangeStepFunction } from "./Decimal.js";
 import { some, value } from "./Option.js";
 import { compare, equals } from "./Util.js";
 export class Enumerator {
@@ -47,6 +48,25 @@ function __failIfNone(res) {
 }
 export function ofArray(xs) {
     return delay(() => unfold((i) => i < xs.length ? [xs[i], i + 1] : null, 0));
+}
+export function allPairs(xs, ys) {
+    let firstEl = true;
+    const ysCache = [];
+    return collect((x) => {
+        if (firstEl) {
+            firstEl = false;
+            return map((y) => {
+                ysCache.push(y);
+                return [x, y];
+            }, ys);
+        }
+        else {
+            return ysCache.map(y => [x, y]);
+            // return map(function (i) {
+            //     return [x, ysCache[i]];
+            // }, rangeNumber(0, 1, ysCache.length - 1));
+        }
+    }, xs);
 }
 export function append(xs, ys) {
     return delay(() => {
@@ -470,7 +490,11 @@ export function rangeChar(first, last) {
     return delay(() => unfold((x) => x <= last ? [x, String.fromCharCode(x.charCodeAt(0) + 1)] : null, first));
 }
 export function rangeLong(first, step, last, unsigned) {
-    const stepFn = makeRangeStepFunction(step, last, unsigned);
+    const stepFn = makeLongRangeStepFunction(step, last, unsigned);
+    return delay(() => unfold(stepFn, first));
+}
+export function rangeDecimal(first, step, last) {
+    const stepFn = makeDecimalRangeStepFunction(step, last);
     return delay(() => unfold(stepFn, first));
 }
 export function rangeNumber(first, step, last) {
@@ -727,3 +751,4 @@ export function windowed(windowSize, source) {
         },
     };
 }
+//# sourceMappingURL=Seq.js.map

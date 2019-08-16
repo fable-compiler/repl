@@ -30,8 +30,14 @@ export function getGenerics(t) {
     return t.generics != null ? t.generics : [];
 }
 export function equals(t1, t2) {
-    return t1.fullname === t2.fullname
-        && equalArraysWith(getGenerics(t1), getGenerics(t2), equals);
+    if (t1.fullname === "") { // Anonymous records
+        return t2.fullname === ""
+            && equalArraysWith(getRecordElements(t1), getRecordElements(t2), ([k1, v1], [k2, v2]) => k1 === k2 && equals(v1, v2));
+    }
+    else {
+        return t1.fullname === t2.fullname
+            && equalArraysWith(getGenerics(t1), getGenerics(t2), equals);
+    }
 }
 // System.Type is not comparable in .NET, but let's implement this
 // in case users want to create a dictionary with types as keys
@@ -240,3 +246,4 @@ export function getCaseFields(x) {
     assertUnion(x);
     return x.fields;
 }
+//# sourceMappingURL=Reflection.js.map

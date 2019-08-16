@@ -175,3 +175,4 @@ export class AsyncBuilder {
     }
 }
 export const singleton = new AsyncBuilder();
+//# sourceMappingURL=AsyncBuilder.js.map

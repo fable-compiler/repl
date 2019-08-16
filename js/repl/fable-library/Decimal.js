@@ -15,7 +15,7 @@ export function abs(x) {
     return x.abs();
 }
 export function round(x, digits = 0) {
-    return x.round(digits, x.cmp(0) >= 0 ? 1 /* ROUND_HALF_UP */ : 2 /* ROUND_HALF_EVEN */);
+    return x.round(digits, 2 /* ROUND_HALF_EVEN */);
 }
 export function truncate(x) {
     return x.round(0, 0 /* ROUND_DOWN */);
@@ -162,3 +162,21 @@ export function getBits(d) {
     const signExp = ((scale & 0x7F) << 16) | (d.s < 0 ? 0x80000000 : 0);
     return [low, mid, high, signExp];
 }
+export function makeRangeStepFunction(step, last) {
+    const stepComparedWithZero = step.cmp(get_Zero);
+    if (stepComparedWithZero === 0) {
+        throw new Error("The step of a range cannot be zero");
+    }
+    const stepGreaterThanZero = stepComparedWithZero > 0;
+    return (x) => {
+        const comparedWithLast = x.cmp(last);
+        if ((stepGreaterThanZero && comparedWithLast <= 0)
+            || (!stepGreaterThanZero && comparedWithLast >= 0)) {
+            return [x, op_Addition(x, step)];
+        }
+        else {
+            return null;
+        }
+    };
+}
+//# sourceMappingURL=Decimal.js.map

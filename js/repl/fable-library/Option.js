@@ -57,6 +57,9 @@ export function defaultArgWith(arg, defThunk) {
 export function filter(predicate, arg) {
     return arg != null ? (!predicate(value(arg)) ? null : arg) : arg;
 }
+export function map(predicate, ...args) {
+    return args.every(x => x != null) ? predicate.apply(null, args) : null;
+}
 // CHOICE
 export const Choice = declare(function Choice(tag, name, field) {
     Union.call(this, tag, name, field);
@@ -92,3 +95,4 @@ export function mapError(f, result) {
 export function bindOk(f, result) {
     return result.tag === 0 ? f(result.fields[0]) : result;
 }
+//# sourceMappingURL=Option.js.map

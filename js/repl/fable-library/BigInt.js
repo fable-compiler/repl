@@ -1,7 +1,7 @@
 import { BigInteger$$$op_Inequality$$56F059C0 as BigInteger$0024$0024$0024op_Inequality$0024$002456F059C0, BigInteger$$$op_Equality$$56F059C0 as BigInteger$0024$0024$0024op_Equality$0024$002456F059C0, BigInteger$$$op_GreaterThanOrEqual$$56F059C0 as BigInteger$0024$0024$0024op_GreaterThanOrEqual$0024$002456F059C0, BigInteger$$$op_GreaterThan$$56F059C0 as BigInteger$0024$0024$0024op_GreaterThan$0024$002456F059C0, BigInteger$$$op_LessThanOrEqual$$56F059C0 as BigInteger$0024$0024$0024op_LessThanOrEqual$0024$002456F059C0, BigInteger$$$op_LessThan$$56F059C0 as BigInteger$0024$0024$0024op_LessThan$0024$002456F059C0, BigInteger$$$op_ExclusiveOr$$56F059C0 as BigInteger$0024$0024$0024op_ExclusiveOr$0024$002456F059C0, BigInteger$$$op_BitwiseOr$$56F059C0 as BigInteger$0024$0024$0024op_BitwiseOr$0024$002456F059C0, BigInteger$$$op_BitwiseAnd$$56F059C0 as BigInteger$0024$0024$0024op_BitwiseAnd$0024$002456F059C0, BigInteger$$$op_LeftShift$$62E082A2 as BigInteger$0024$0024$0024op_LeftShift$0024$002462E082A2, BigInteger$$$op_RightShift$$62E082A2 as BigInteger$0024$0024$0024op_RightShift$0024$002462E082A2, BigInteger$$$op_UnaryPlus$$Z665282C2 as BigInteger$0024$0024$0024op_UnaryPlus$0024$0024Z665282C2, BigInteger$$$op_UnaryNegation$$Z665282C2 as BigInteger$0024$0024$0024op_UnaryNegation$0024$0024Z665282C2, BigInteger$$$op_Modulus$$56F059C0 as BigInteger$0024$0024$0024op_Modulus$0024$002456F059C0, BigInteger$$$op_Division$$56F059C0 as BigInteger$0024$0024$0024op_Division$0024$002456F059C0, BigInteger$$$op_Multiply$$56F059C0 as BigInteger$0024$0024$0024op_Multiply$0024$002456F059C0, BigInteger$$$op_Subtraction$$56F059C0 as BigInteger$0024$0024$0024op_Subtraction$0024$002456F059C0, BigInteger$$$op_Addition$$56F059C0 as BigInteger$0024$0024$0024op_Addition$0024$002456F059C0, BigInteger$$get_IsOne as BigInteger$0024$0024get_IsOne, BigInteger$$get_IsZero as BigInteger$0024$0024get_IsZero, BigInteger$$get_Sign as BigInteger$0024$0024get_Sign, BigInteger$$get_ToDecimal as BigInteger$0024$0024get_ToDecimal, BigInteger$$get_ToDouble as BigInteger$0024$0024get_ToDouble, BigInteger$$get_ToSingle as BigInteger$0024$0024get_ToSingle, BigInteger$$get_ToUInt64 as BigInteger$0024$0024get_ToUInt64, BigInteger$$get_ToInt64 as BigInteger$0024$0024get_ToInt64, BigInteger$$get_ToUInt32 as BigInteger$0024$0024get_ToUInt32, BigInteger$$get_ToInt32 as BigInteger$0024$0024get_ToInt32, BigInteger$$get_ToUInt16 as BigInteger$0024$0024get_ToUInt16, BigInteger$$get_ToInt16 as BigInteger$0024$0024get_ToInt16, BigInteger$$get_ToByte as BigInteger$0024$0024get_ToByte, BigInteger$$get_ToSByte as BigInteger$0024$0024get_ToSByte, BigInteger$$$$002Ector$$Z524259A4 as BigInteger$0024$0024$0024$0024002Ector$0024$0024Z524259A4, BigInteger$$$$002Ector$$Z524259C1 as BigInteger$0024$0024$0024$0024002Ector$0024$0024Z524259C1, BigInteger$$$get_Two as BigInteger$0024$0024$0024get_Two, BigInteger$$$get_One as BigInteger$0024$0024$0024get_One, BigInteger$$$Abs$$Z665282C2 as BigInteger$0024$0024$0024Abs$0024$0024Z665282C2, BigInteger$$$Pow$$62E082A2 as BigInteger$0024$0024$0024Pow$0024$002462E082A2, BigInteger$$$GreatestCommonDivisor$$56F059C0 as BigInteger$0024$0024$0024GreatestCommonDivisor$0024$002456F059C0, BigInteger$$$DivRem$$56F059C0 as BigInteger$0024$0024$0024DivRem$0024$002456F059C0, BigInteger$$$Parse$$Z721C83C5 as BigInteger$0024$0024$0024Parse$0024$0024Z721C83C5, BigInteger$$$get_Zero as BigInteger$0024$0024$0024get_Zero, BigInteger } from "./BigInt/z.js";
 import { fromInteger } from "./Long.js";
 import { min, comparePrimitives, equals as equals$$1, structuralHash } from "./Util.js";
-import { rangeNumber } from "./Seq.js";
+import { delay, unfold, rangeNumber } from "./Seq.js";
 import { fold, head, skipWhile, find, ofSeq } from "./List.js";
 import { List } from "./Types.js";
 import { fill, reverse, ofList } from "./Array.js";
@@ -165,11 +165,9 @@ export function op_Inequality(arg00$$22, arg01$$18) {
 }
 
 function flipTwosComplement(currByte, lowBitFound) {
-  const matchValue$$1 = [currByte, lowBitFound];
-
-  if (matchValue$$1[1]) {
+  if (lowBitFound) {
     return [(currByte ^ 255) & 255, true];
-  } else if (matchValue$$1[0] === 0) {
+  } else if (currByte === 0) {
     return [0, false];
   } else {
     const firstBitIndex = find(function predicate(i$$2) {
@@ -214,14 +212,22 @@ export function toByteArray(value$$1) {
             continue loop;
           } else {
             const patternInput = flipTwosComplement(currValue & 0xFF, lowBitFound$$1);
-            const patternInput$$1 = flipTwosComplement(currValue >>> 8 & 0xFF, patternInput[1]);
-            const patternInput$$2 = flipTwosComplement(currValue >>> 16 & 0xFF, patternInput$$1[1]);
-            const patternInput$$3 = flipTwosComplement(currValue >>> 24 & 0xFF, patternInput$$2[1]);
+            const lowBitFound$$2 = patternInput[1];
+            const b0$$1 = patternInput[0];
+            const patternInput$$1 = flipTwosComplement(currValue >>> 8 & 0xFF, lowBitFound$$2);
+            const lowBitFound$$3 = patternInput$$1[1];
+            const b1$$1 = patternInput$$1[0];
+            const patternInput$$2 = flipTwosComplement(currValue >>> 16 & 0xFF, lowBitFound$$3);
+            const lowBitFound$$4 = patternInput$$2[1];
+            const b2$$1 = patternInput$$2[0];
+            const patternInput$$3 = flipTwosComplement(currValue >>> 24 & 0xFF, lowBitFound$$4);
+            const lowBitFound$$5 = patternInput$$3[1];
+            const b3$$1 = patternInput$$3[0];
             const $accumBytes$$5 = accumBytes;
             const $consumeValue$$6 = consumeValue;
-            accumBytes = new List(patternInput$$3[0], new List(patternInput$$2[0], new List(patternInput$$1[0], new List(patternInput[0], $accumBytes$$5))));
+            accumBytes = new List(b3$$1, new List(b2$$1, new List(b1$$1, new List(b0$$1, $accumBytes$$5))));
             consumeValue = BigInteger$0024$0024$0024op_RightShift$0024$002462E082A2($consumeValue$$6, 32);
-            lowBitFound$$1 = patternInput$$3[1];
+            lowBitFound$$1 = lowBitFound$$5;
             continue loop;
           }
         }
@@ -277,17 +283,25 @@ export function fromByteArray(bytes) {
           } else {
             fill(buffer, bytesToProcess, 4 - bytesToProcess, 255);
             const patternInput$$4 = flipTwosComplement(buffer[0], lowBitFound$$6);
-            const patternInput$$5 = flipTwosComplement(buffer[1], patternInput$$4[1]);
-            const patternInput$$6 = flipTwosComplement(buffer[2], patternInput$$5[1]);
-            const patternInput$$7 = flipTwosComplement(buffer[3], patternInput$$6[1]);
-            const value$$16 = (((patternInput$$4[0] | patternInput$$5[0] << 8 >>> 0) >>> 0 | patternInput$$6[0] << 16 >>> 0) >>> 0 | patternInput$$7[0] << 24 >>> 0) >>> 0;
+            const lowBitFound$$7 = patternInput$$4[1];
+            const b0$$2 = patternInput$$4[0];
+            const patternInput$$5 = flipTwosComplement(buffer[1], lowBitFound$$7);
+            const lowBitFound$$8 = patternInput$$5[1];
+            const b1$$2 = patternInput$$5[0];
+            const patternInput$$6 = flipTwosComplement(buffer[2], lowBitFound$$8);
+            const lowBitFound$$9 = patternInput$$6[1];
+            const b2$$2 = patternInput$$6[0];
+            const patternInput$$7 = flipTwosComplement(buffer[3], lowBitFound$$9);
+            const lowBitFound$$10 = patternInput$$7[1];
+            const b3$$2 = patternInput$$7[0];
+            const value$$16 = (((b0$$2 | b1$$2 << 8 >>> 0) >>> 0 | b2$$2 << 16 >>> 0) >>> 0 | b3$$2 << 24 >>> 0) >>> 0;
             const $accumUInt32$$10 = accumUInt32;
             const $bytesRemaining$$12 = bytesRemaining;
             const $currIndex$$11 = currIndex;
             accumUInt32 = new List(value$$16, $accumUInt32$$10);
             currIndex = $currIndex$$11 + bytesToProcess;
             bytesRemaining = $bytesRemaining$$12 - bytesToProcess;
-            lowBitFound$$6 = patternInput$$7[1];
+            lowBitFound$$6 = lowBitFound$$10;
             continue loop$$1;
           }
         }
@@ -298,4 +312,23 @@ export function fromByteArray(bytes) {
 
     return loop$$1(new List(), 0, bytes.length, false);
   }
+}
+export function makeRangeStepFunction(step, last) {
+  const stepComparedWithZero = step.CompareTo(zero) | 0;
+
+  if (stepComparedWithZero === 0) {
+    throw new Error("The step of a range cannot be zero");
+  }
+
+  const stepGreaterThanZero = stepComparedWithZero > 0;
+  return function (x$$20) {
+    const comparedWithLast = x$$20.CompareTo(last) | 0;
+    return ((stepGreaterThanZero ? comparedWithLast <= 0 : false) ? true : !stepGreaterThanZero ? comparedWithLast >= 0 : false) ? [x$$20, BigInteger$0024$0024$0024op_Addition$0024$002456F059C0(x$$20, step)] : null;
+  };
+}
+export function range(first, step$$1, last$$1) {
+  const stepFn = makeRangeStepFunction(step$$1, last$$1);
+  return delay(function () {
+    return unfold(stepFn, first);
+  });
 }

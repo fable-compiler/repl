@@ -279,6 +279,9 @@ export function toUniversalTime(date) {
 export function toLocalTime(date) {
     return date.kind === 2 /* Local */ ? date : DateTime(date.getTime(), 2 /* Local */);
 }
+export function specifyKind(d, kind) {
+    return create(year(d), month(d), day(d), hour(d), minute(d), second(d), millisecond(d), kind);
+}
 export function timeOfDay(d) {
     return hour(d) * 3600000
         + minute(d) * 60000
@@ -401,3 +404,4 @@ export function isDaylightSavingTime(x) {
 function isDST(janOffset, julOffset, tOffset) {
     return Math.min(janOffset, julOffset) === tOffset;
 }
+//# sourceMappingURL=Date.js.map

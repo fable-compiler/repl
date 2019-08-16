@@ -1,6 +1,6 @@
-import { declare, Union } from "../fable-library.2.3.10/Types.js";
-import { type, union, list, obj, string } from "../fable-library.2.3.10/Reflection.js";
-import { addToDict, tryGetValue } from "../fable-library.2.3.10/Util.js";
+import { declare, Union } from "../fable-library.2.3.18/Types.js";
+import { type, union, list, obj, string } from "../fable-library.2.3.18/Reflection.js";
+import { addToDict, tryGetValue } from "../fable-library.2.3.18/Util.js";
 export const ErrorReason = declare(function Thoth_Json_ErrorReason(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);

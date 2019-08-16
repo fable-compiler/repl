@@ -90,3 +90,4 @@ export function start(body, cancellationToken) {
     startInstance(mbox);
     return mbox;
 }
+//# sourceMappingURL=MailboxProcessor.js.map

@@ -1,7 +1,7 @@
-import { List, declare, Union } from "../fable-library.2.3.10/Types.js";
-import { union, list, type, string } from "../fable-library.2.3.10/Reflection.js";
+import { List, declare, Union } from "../fable-library.2.3.18/Types.js";
+import { union, list, type, string } from "../fable-library.2.3.18/Reflection.js";
 import { Common$002EGenericOptions$$ToReactElement$$Z46A53D36 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z46A53D36, Common$002EGenericOptions$$AddProp$$7BFEDA81 as Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81, Common$002EGenericOptions$$AddModifiers$$5BB435D5 as Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5, Common$002EGenericOptions$$AddClass$$Z721C83C5 as Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5, Common$002EGenericOptions$$AddProps$$416C4D0B as Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B, Common$002EGenericOptions$$$Parse$$9AE2F7C as Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C, Common$$$parseOptions as Common$0024$0024$0024parseOptions, Common$002EGenericOptions$$ToReactElement$$Z6D3CD4B7 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection } from "../Fulma/Common.js";
-import { createObj } from "../fable-library.2.3.10/Util.js";
+import { createObj } from "../fable-library.2.3.18/Util.js";
 import { HTMLAttr } from "../src/Fable.React.Props.js";
 export const Input$002EOption = declare(function Fulma_Radio_Input_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);

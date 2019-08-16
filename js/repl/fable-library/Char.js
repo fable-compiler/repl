@@ -160,3 +160,4 @@ export function parse(input) {
         throw Error("String must be exactly one character long.");
     }
 }
+//# sourceMappingURL=Char.js.map

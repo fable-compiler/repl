@@ -21,3 +21,4 @@ export function parse(str) {
 export function isInfinity(x) {
     return x === Number.POSITIVE_INFINITY || x === Number.NEGATIVE_INFINITY;
 }
+//# sourceMappingURL=Double.js.map

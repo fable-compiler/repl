@@ -114,3 +114,4 @@ export function op_UnaryNegation_Int16(x) {
 export function op_UnaryNegation_Int32(x) {
     return x === -2147483648 ? x : -x;
 }
+//# sourceMappingURL=Int32.js.map

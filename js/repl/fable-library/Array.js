@@ -63,9 +63,11 @@ export function mapIndexed(f, source, cons$$1) {
 
     return target$$1;
   } else {
-    return source.map(function (delegateArg0, delegateArg1) {
-      return f(delegateArg1, delegateArg0);
-    });
+    const mapping = function mapping(x, i$$3) {
+      return f(i$$3, x);
+    };
+
+    return source.map(mapping);
   }
 }
 export function map(f$$1, source$$1, cons$$2) {
@@ -79,9 +81,11 @@ export function map(f$$1, source$$1, cons$$2) {
 
     return target$$2;
   } else {
-    return source$$1.map(function (x$$1) {
+    const mapping$$1 = function mapping$$1(x$$1) {
       return f$$1(x$$1);
-    });
+    };
+
+    return source$$1.map(mapping$$1);
   }
 }
 export function mapIndexed2(f$$2, source1, source2, cons$$3) {
@@ -148,8 +152,10 @@ export function mapFold(mapping$$2, state, array$$9, cons$$7) {
 
     for (let i$$9 = 0; i$$9 <= array$$9.length - 1; i$$9++) {
       const patternInput = mapping$$2(acc, array$$9[i$$9]);
-      res[i$$9] = patternInput[0];
-      acc = patternInput[1];
+      const s$0027 = patternInput[1];
+      const h$0027 = patternInput[0];
+      res[i$$9] = h$0027;
+      acc = s$0027;
     }
 
     return [res, acc];
@@ -167,8 +173,10 @@ export function mapFoldBack(mapping$$3, array$$10, state$$1, cons$$8) {
 
     for (let i$$10 = array$$10.length - 1; i$$10 >= 0; i$$10--) {
       const patternInput$$1 = mapping$$3(array$$10[i$$10], acc$$1);
-      res$$1[i$$10] = patternInput$$1[0];
-      acc$$1 = patternInput$$1[1];
+      const s$0027$$1 = patternInput$$1[1];
+      const h$0027$$1 = patternInput$$1[0];
+      res$$1[i$$10] = h$0027$$1;
+      acc$$1 = s$0027$$1;
     }
 
     return [res$$1, acc$$1];
@@ -245,7 +253,8 @@ export function countBy(projection, array$$15, eq) {
     const matchValue$$3 = tryGetValue(dict, key, 0);
 
     if (matchValue$$3[0]) {
-      dict.set(key, matchValue$$3[1] + 1);
+      const prev = matchValue$$3[1] | 0;
+      dict.set(key, prev + 1);
     } else {
       dict.set(key, 1);
     }
@@ -312,7 +321,8 @@ export function groupBy(projection$$2, array$$25, cons$$11, eq$$5) {
     const matchValue$$4 = tryGetValue(dict$$1, key$$1, null);
 
     if (matchValue$$4[0]) {
-      dict$$1.set(key$$1, new List(v, matchValue$$4[1]));
+      const prev$$1 = matchValue$$4[1];
+      dict$$1.set(key$$1, new List(v, prev$$1));
     } else {
       addToDict(dict$$1, key$$1, new List(v, new List()));
       keys.push(key$$1);
@@ -698,12 +708,15 @@ export function choose(chooser$$2, array$$70, cons$$30) {
   return map(g, arr$$6, cons$$30);
 }
 export function foldIndexed(folder$$2, state$$4, array$$72) {
-  return array$$72.reduce(function (delegateArg0$$1, delegateArg1$$1, delegateArg2) {
-    return folder$$2(delegateArg2, delegateArg0$$1, delegateArg1$$1);
-  }, state$$4);
+  const folder$$3 = function folder$$3(acc$$2, x$$6, i$$31) {
+    return folder$$2(i$$31, acc$$2, x$$6);
+  };
+
+  return array$$72.reduce(folder$$3, state$$4);
 }
 export function fold(folder$$4, state$$6, array$$74) {
-  return array$$74.reduce(folder$$4, state$$6);
+  const folder$$5 = folder$$4;
+  return array$$74.reduce(folder$$5, state$$6);
 }
 export function iterate(action$$1, array$$76) {
   for (let i$$32 = 0; i$$32 <= array$$76.length - 1; i$$32++) {
@@ -798,31 +811,39 @@ function copyArray(array$$82) {
 }
 
 export function sort(xs$$2, comparer$$2) {
-  const xs$$3 = copyArray(xs$$2);
-  xs$$3.sort(function (x$$12, y$$3) {
+  const comparer$$3 = function comparer$$3(x$$12, y$$3) {
     return comparer$$2.Compare(x$$12, y$$3);
-  });
+  };
+
+  const xs$$3 = copyArray(xs$$2);
+  xs$$3.sort(comparer$$3);
   return xs$$3;
 }
 export function sortBy(projection$$4, xs$$4, comparer$$4) {
-  const xs$$5 = copyArray(xs$$4);
-  xs$$5.sort(function (x$$13, y$$4) {
+  const comparer$$5 = function comparer$$5(x$$13, y$$4) {
     return comparer$$4.Compare(projection$$4(x$$13), projection$$4(y$$4));
-  });
+  };
+
+  const xs$$5 = copyArray(xs$$4);
+  xs$$5.sort(comparer$$5);
   return xs$$5;
 }
 export function sortDescending(xs$$6, comparer$$6) {
-  const xs$$7 = copyArray(xs$$6);
-  xs$$7.sort(function (x$$14, y$$5) {
+  const comparer$$7 = function comparer$$7(x$$14, y$$5) {
     return comparer$$6.Compare(x$$14, y$$5) * -1;
-  });
+  };
+
+  const xs$$7 = copyArray(xs$$6);
+  xs$$7.sort(comparer$$7);
   return xs$$7;
 }
 export function sortByDescending(projection$$5, xs$$8, comparer$$8) {
-  const xs$$9 = copyArray(xs$$8);
-  xs$$9.sort(function (x$$15, y$$6) {
+  const comparer$$9 = function comparer$$9(x$$15, y$$6) {
     return comparer$$8.Compare(projection$$5(x$$15), projection$$5(y$$6)) * -1;
-  });
+  };
+
+  const xs$$9 = copyArray(xs$$8);
+  xs$$9.sort(comparer$$9);
   return xs$$9;
 }
 export function sortWith(comparer$$10, xs$$10) {
@@ -857,8 +878,10 @@ export function unzip(array$$84) {
   const res1$$1 = new Array(len$$11);
   const res2$$1 = new Array(len$$11);
   iterateIndexed(function (i$$39, tupledArg) {
-    res1$$1[i$$39] = tupledArg[0];
-    res2$$1[i$$39] = tupledArg[1];
+    const item1 = tupledArg[0];
+    const item2 = tupledArg[1];
+    res1$$1[i$$39] = item1;
+    res2$$1[i$$39] = item2;
   }, array$$84);
   return [res1$$1, res2$$1];
 }
@@ -868,9 +891,12 @@ export function unzip3(array$$85) {
   const res2$$2 = new Array(len$$14);
   const res3 = new Array(len$$14);
   iterateIndexed(function (i$$40, tupledArg$$1) {
-    res1$$2[i$$40] = tupledArg$$1[0];
-    res2$$2[i$$40] = tupledArg$$1[1];
-    res3[i$$40] = tupledArg$$1[2];
+    const item1$$1 = tupledArg$$1[0];
+    const item2$$1 = tupledArg$$1[1];
+    const item3 = tupledArg$$1[2];
+    res1$$2[i$$40] = item1$$1;
+    res2$$2[i$$40] = item2$$1;
+    res3[i$$40] = item3;
   }, array$$85);
   return [res1$$2, res2$$2, res3];
 }
@@ -1003,14 +1029,18 @@ export function tryItem(index$$6, array$$98) {
   }
 }
 export function foldBackIndexed(folder$$6, array$$99, state$$10) {
-  return array$$99.reduceRight(function (delegateArg0$$3, delegateArg1$$3, delegateArg2$$1) {
-    return folder$$6(delegateArg2$$1, delegateArg1$$3, delegateArg0$$3);
-  }, state$$10);
+  const folder$$7 = function folder$$7(acc$$4, x$$18, i$$44) {
+    return folder$$6(i$$44, x$$18, acc$$4);
+  };
+
+  return array$$99.reduceRight(folder$$7, state$$10);
 }
 export function foldBack(folder$$8, array$$101, state$$12) {
-  return array$$101.reduceRight(function (delegateArg0$$4, delegateArg1$$4) {
-    return folder$$8(delegateArg1$$4, delegateArg0$$4);
-  }, state$$12);
+  const folder$$9 = function folder$$9(acc$$5, x$$19) {
+    return folder$$8(x$$19, acc$$5);
+  };
+
+  return array$$101.reduceRight(folder$$9, state$$12);
 }
 export function foldIndexed2(folder$$10, state$$14, array1$$8, array2$$8) {
   let acc$$6 = state$$14;

@@ -1,12 +1,12 @@
-import { declare, Record } from "../fable-library.2.3.10/Types.js";
-import { record, type, string, tuple, list, lambda, unit } from "../fable-library.2.3.10/Reflection.js";
+import { declare, Record } from "../fable-library.2.3.18/Types.js";
+import { record, type, string, tuple, list, lambda, unit } from "../fable-library.2.3.18/Reflection.js";
 import { Cmd$$$exec as Cmd$0024$0024$0024exec, Cmd$$$batch as Cmd$0024$0024$0024batch, Cmd$$$none as Cmd$0024$0024$0024none } from "./cmd.js";
 import { toConsole, onError as onError$$2 } from "./prelude.js";
-import { curry, partialApply, uncurry } from "../fable-library.2.3.10/Util.js";
-import { append, ofArray } from "../fable-library.2.3.10/List.js";
+import { curry, partialApply, uncurry } from "../fable-library.2.3.18/Util.js";
+import { append, ofArray } from "../fable-library.2.3.18/List.js";
 import { RingBuffer$00601$$Pop as RingBuffer$002400601$0024$0024Pop, RingBuffer$00601$$Push$$2B595 as RingBuffer$002400601$0024$0024Push$0024$00242B595, RingBuffer$00601$$$$002Ector$$Z524259A4 as RingBuffer$002400601$0024$0024$0024$0024002Ector$0024$0024Z524259A4 } from "./ring.js";
-import { value as value$$2, some } from "../fable-library.2.3.10/Option.js";
-import { toText, printf } from "../fable-library.2.3.10/String.js";
+import { value as value$$2, some } from "../fable-library.2.3.18/Option.js";
+import { toText, printf } from "../fable-library.2.3.18/String.js";
 export const Program$00604 = declare(function Elmish_Program(arg1, arg2, arg3, arg4, arg5, arg6, arg7) {
   this.init = arg1;
   this.update = arg2;

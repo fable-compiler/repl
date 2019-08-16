@@ -167,10 +167,12 @@ export function BigNatModule$002EFFT$$$computeFftPolynomialProduct(degu, u$$4, d
   const deguv = degu + degv | 0;
   const bound = deguv + 1 | 0;
   const patternInput = BigNatModule$002EFFT$$$leastBounding2Power(bound);
-  const w$$4 = BigNatModule$002EFFT$002EFp$$$m2PowNthRoot(patternInput[1]);
-  const u$$5 = BigNatModule$002EFFT$$$padTo(patternInput[0], u$$4);
-  const v$$2 = BigNatModule$002EFFT$$$padTo(patternInput[0], v$$1);
-  const n$$9 = patternInput[0] | 0;
+  const k$$1 = patternInput[1] | 0;
+  const bigK$$1 = patternInput[0] | 0;
+  const w$$4 = BigNatModule$002EFFT$002EFp$$$m2PowNthRoot(k$$1);
+  const u$$5 = BigNatModule$002EFFT$$$padTo(bigK$$1, u$$4);
+  const v$$2 = BigNatModule$002EFFT$$$padTo(bigK$$1, v$$1);
+  const n$$9 = bigK$$1 | 0;
   const uT$$2 = BigNatModule$002EFFT$$$computFftInPlace(n$$9, w$$4, u$$5);
   const vT$$1 = BigNatModule$002EFFT$$$computFftInPlace(n$$9, w$$4, v$$2);
   const rT$$1 = initialize(n$$9, function (i$$4) {
@@ -869,9 +871,11 @@ export function BigNatModule$$$decodePoly(enc$$3, poly$$2) {
         const i$$43 = i$$41 + 1 | 0;
         const d$$4 = d$$3 + enc$$3.bigL | 0;
         const patternInput$$1 = d$$4 >= BigNatModule$$$baseBits ? [j$$2 + 1, d$$4 - BigNatModule$$$baseBits] : [j$$2, d$$4];
+        const j$$3 = patternInput$$1[0] | 0;
+        const d$$5 = patternInput$$1[1] | 0;
         i$$41 = i$$43;
-        j$$2 = patternInput$$1[0];
-        d$$3 = patternInput$$1[1];
+        j$$2 = j$$3;
+        d$$3 = d$$5;
         continue evaluate;
       }
 
@@ -928,14 +932,16 @@ export function BigNatModule$$$scaleSubInPlace(x$$57, f, a$$5, n$$30) {
   const invariant = function invariant(tupledArg) {};
 
   const xres = x$$57;
-  const patternInput$$2 = [x$$57.digits, BigNatModule$$$degree(x$$57)];
-  const patternInput$$3 = [a$$5.digits, BigNatModule$$$degree(a$$5)];
+  const xd = BigNatModule$$$degree(x$$57) | 0;
+  const x$$58 = x$$57.digits;
+  const ad = BigNatModule$$$degree(a$$5) | 0;
+  const a$$6 = a$$5.digits;
   const f$$1 = fromInteger(f, false, 2);
   let j$$4 = 0;
-  let z$$7 = op_Multiply(f$$1, fromInteger(patternInput$$3[0][0], false, 2));
+  let z$$7 = op_Multiply(f$$1, fromInteger(a$$6[0], false, 2));
 
-  while (compare(z$$7, fromBits(0, 0, false)) > 0 ? true : j$$4 < patternInput$$3[1]) {
-    if (j$$4 > patternInput$$2[1]) {
+  while (compare(z$$7, fromBits(0, 0, false)) > 0 ? true : j$$4 < ad) {
+    if (j$$4 > xd) {
       throw new Error("scaleSubInPlace: pre-condition did not apply, result would be -ve");
     }
 
@@ -943,15 +949,15 @@ export function BigNatModule$$$scaleSubInPlace(x$$57, f, a$$5, n$$30) {
     let zLo = ~~toInt(op_BitwiseAnd(z$$7, BigNatModule$$$baseMaski64)) | 0;
     let zHi = op_Division(z$$7, BigNatModule$$$baseNi64);
 
-    if (zLo <= patternInput$$2[0][j$$4 + n$$30]) {
-      patternInput$$2[0][j$$4 + n$$30] = patternInput$$2[0][j$$4 + n$$30] - zLo;
+    if (zLo <= x$$58[j$$4 + n$$30]) {
+      x$$58[j$$4 + n$$30] = x$$58[j$$4 + n$$30] - zLo;
     } else {
-      patternInput$$2[0][j$$4 + n$$30] = patternInput$$2[0][j$$4 + n$$30] + (BigNatModule$$$baseN - zLo);
+      x$$58[j$$4 + n$$30] = x$$58[j$$4 + n$$30] + (BigNatModule$$$baseN - zLo);
       zHi = op_Addition(zHi, fromBits(1, 0, false));
     }
 
-    if (j$$4 < patternInput$$3[1]) {
-      z$$7 = op_Addition(zHi, op_Multiply(f$$1, fromInteger(patternInput$$3[0][j$$4 + 1], false, 2)));
+    if (j$$4 < ad) {
+      z$$7 = op_Addition(zHi, op_Multiply(f$$1, fromInteger(a$$6[j$$4 + 1], false, 2)));
     } else {
       z$$7 = zHi;
     }
@@ -970,14 +976,16 @@ export function BigNatModule$$$scaleAddInPlace(x$$62, f$$3, a$$8, n$$32) {
   const invariant$$1 = function invariant$$1(tupledArg$$1) {};
 
   const xres$$1 = x$$62;
-  const patternInput$$4 = [x$$62.digits, BigNatModule$$$degree(x$$62)];
-  const patternInput$$5 = [a$$8.digits, BigNatModule$$$degree(a$$8)];
+  const xd$$1 = BigNatModule$$$degree(x$$62) | 0;
+  const x$$63 = x$$62.digits;
+  const ad$$1 = BigNatModule$$$degree(a$$8) | 0;
+  const a$$9 = a$$8.digits;
   const f$$4 = fromInteger(f$$3, false, 2);
   let j$$5 = 0;
-  let z$$8 = op_Multiply(f$$4, fromInteger(patternInput$$5[0][0], false, 2));
+  let z$$8 = op_Multiply(f$$4, fromInteger(a$$9[0], false, 2));
 
-  while (compare(z$$8, fromBits(0, 0, false)) > 0 ? true : j$$5 < patternInput$$5[1]) {
-    if (j$$5 > patternInput$$4[1]) {
+  while (compare(z$$8, fromBits(0, 0, false)) > 0 ? true : j$$5 < ad$$1) {
+    if (j$$5 > xd$$1) {
       throw new Error("scaleSubInPlace: pre-condition did not apply, result would be -ve");
     }
 
@@ -985,15 +993,15 @@ export function BigNatModule$$$scaleAddInPlace(x$$62, f$$3, a$$8, n$$32) {
     let zLo$$1 = ~~toInt(op_BitwiseAnd(z$$8, BigNatModule$$$baseMaski64)) | 0;
     let zHi$$1 = op_Division(z$$8, BigNatModule$$$baseNi64);
 
-    if (zLo$$1 < BigNatModule$$$baseN - patternInput$$4[0][j$$5 + n$$32]) {
-      patternInput$$4[0][j$$5 + n$$32] = patternInput$$4[0][j$$5 + n$$32] + zLo$$1;
+    if (zLo$$1 < BigNatModule$$$baseN - x$$63[j$$5 + n$$32]) {
+      x$$63[j$$5 + n$$32] = x$$63[j$$5 + n$$32] + zLo$$1;
     } else {
-      patternInput$$4[0][j$$5 + n$$32] = zLo$$1 - (BigNatModule$$$baseN - patternInput$$4[0][j$$5 + n$$32]);
+      x$$63[j$$5 + n$$32] = zLo$$1 - (BigNatModule$$$baseN - x$$63[j$$5 + n$$32]);
       zHi$$1 = op_Addition(zHi$$1, fromBits(1, 0, false));
     }
 
-    if (j$$5 < patternInput$$5[1]) {
-      z$$8 = op_Addition(zHi$$1, op_Multiply(f$$4, fromInteger(patternInput$$5[0][j$$5 + 1], false, 2)));
+    if (j$$5 < ad$$1) {
+      z$$8 = op_Addition(zHi$$1, op_Multiply(f$$4, fromInteger(a$$9[j$$5 + 1], false, 2)));
     } else {
       z$$8 = zHi$$1;
     }
@@ -1010,24 +1018,27 @@ export function BigNatModule$$$scaleAdd(x$$66, f$$5, a$$10, n$$33) {
 }
 export function BigNatModule$$$removeFactor(x$$67, a$$11, n$$34) {
   const patternInput$$6 = [BigNatModule$$$degree(a$$11), BigNatModule$$$degree(x$$67)];
+  const degx = patternInput$$6[1] | 0;
+  const dega = patternInput$$6[0] | 0;
 
-  if (patternInput$$6[1] < patternInput$$6[0] + n$$34) {
+  if (degx < dega + n$$34) {
     return 0;
   } else {
-    const patternInput$$7 = [a$$11.digits, x$$67.digits];
+    const xa = x$$67.digits;
+    const aa = a$$11.digits;
     let f$$6;
 
-    if (patternInput$$6[0] === 0) {
-      if (patternInput$$6[1] === n$$34) {
-        f$$6 = ~~(patternInput$$7[1][n$$34] / patternInput$$7[0][0]);
+    if (dega === 0) {
+      if (degx === n$$34) {
+        f$$6 = ~~(xa[n$$34] / aa[0]);
       } else {
-        const f64 = op_Division(op_Addition(op_Multiply(fromInteger(patternInput$$7[1][patternInput$$6[1]], false, 2), BigNatModule$$$baseNi64), fromInteger(patternInput$$7[1][patternInput$$6[1] - 1], false, 2)), fromInteger(patternInput$$7[0][0], false, 2));
+        const f64 = op_Division(op_Addition(op_Multiply(fromInteger(xa[degx], false, 2), BigNatModule$$$baseNi64), fromInteger(xa[degx - 1], false, 2)), fromInteger(aa[0], false, 2));
         f$$6 = ~~toInt(f64);
       }
-    } else if (patternInput$$6[1] === patternInput$$6[0] + n$$34) {
-      f$$6 = ~~(patternInput$$7[1][patternInput$$6[1]] / (patternInput$$7[0][patternInput$$6[0]] + 1));
+    } else if (degx === dega + n$$34) {
+      f$$6 = ~~(xa[degx] / (aa[dega] + 1));
     } else {
-      const f64$$1 = op_Division(op_Addition(op_Multiply(fromInteger(patternInput$$7[1][patternInput$$6[1]], false, 2), BigNatModule$$$baseNi64), fromInteger(patternInput$$7[1][patternInput$$6[1] - 1], false, 2)), op_Addition(fromInteger(patternInput$$7[0][patternInput$$6[0]], false, 2), fromBits(1, 0, false)));
+      const f64$$1 = op_Division(op_Addition(op_Multiply(fromInteger(xa[degx], false, 2), BigNatModule$$$baseNi64), fromInteger(xa[degx - 1], false, 2)), op_Addition(fromInteger(aa[dega], false, 2), fromBits(1, 0, false)));
       f$$6 = ~~toInt(f64$$1);
     }
 
@@ -1137,9 +1148,9 @@ export function BigNatModule$$$hcf(a$$18, b$$13) {
       if (BigNatModule$$$equal(BigNatModule$$$zero, a$$19)) {
         return b$$14;
       } else {
-        const patternInput$$8 = BigNatModule$$$divmod(b$$14, a$$19);
+        const r$$22 = BigNatModule$$$divmod(b$$14, a$$19)[1];
         const $a$$19$$49 = a$$19;
-        a$$19 = patternInput$$8[1];
+        a$$19 = r$$22;
         b$$14 = $a$$19$$49;
         continue hcfloop;
       }
@@ -1191,20 +1202,22 @@ export function BigNatModule$$$pow(x$$71, n$$38) {
         return acc$$3;
       } else {
         const patternInput$$9 = BigNatModule$$$divmod(n$$39, BigNatModule$$$two);
+        const nmod2 = patternInput$$9[1];
+        const ndiv2 = patternInput$$9[0];
 
-        if (BigNatModule$$$isZero(patternInput$$9[1])) {
+        if (BigNatModule$$$isZero(nmod2)) {
           const $acc$$3$$56 = acc$$3;
           const $x$$72$$57 = x$$72;
           acc$$3 = $acc$$3$$56;
           x$$72 = BigNatModule$$$mul($x$$72$$57, $x$$72$$57);
-          n$$39 = patternInput$$9[0];
+          n$$39 = ndiv2;
           continue power$$1;
         } else {
           const $acc$$3$$58 = acc$$3;
           const $x$$72$$59 = x$$72;
           acc$$3 = BigNatModule$$$mul($x$$72$$59, $acc$$3$$58);
           x$$72 = BigNatModule$$$mul($x$$72$$59, $x$$72$$59);
-          n$$39 = patternInput$$9[0];
+          n$$39 = ndiv2;
           continue power$$1;
         }
       }
@@ -1261,12 +1274,14 @@ export function BigNatModule$$$toUInt32(n$$43) {
     case 2:
       {
         const patternInput$$10 = [n$$43.digits[0], n$$43.digits[1]];
+        const xB = patternInput$$10[1] | 0;
+        const xA = patternInput$$10[0] | 0;
 
-        if (patternInput$$10[1] > BigNatModule$$$baseMask32B) {
+        if (xB > BigNatModule$$$baseMask32B) {
           throw new Error();
         }
 
-        return ((patternInput$$10[0] & BigNatModule$$$baseMask32A) >>> 0) + ((patternInput$$10[1] & BigNatModule$$$baseMask32B) >>> 0 << BigNatModule$$$baseShift32B >>> 0);
+        return ((xA & BigNatModule$$$baseMask32A) >>> 0) + ((xB & BigNatModule$$$baseMask32B) >>> 0 << BigNatModule$$$baseShift32B >>> 0);
       }
 
     default:
@@ -1292,18 +1307,23 @@ export function BigNatModule$$$toUInt64(n$$44) {
     case 2:
       {
         const patternInput$$11 = [n$$44.digits[0], n$$44.digits[1]];
-        return op_Addition(fromInteger(patternInput$$11[0] & BigNatModule$$$baseMask64A, true, 2), op_LeftShift(fromInteger(patternInput$$11[1] & BigNatModule$$$baseMask64B, true, 2), BigNatModule$$$baseShift64B));
+        const xB$$1 = patternInput$$11[1] | 0;
+        const xA$$1 = patternInput$$11[0] | 0;
+        return op_Addition(fromInteger(xA$$1 & BigNatModule$$$baseMask64A, true, 2), op_LeftShift(fromInteger(xB$$1 & BigNatModule$$$baseMask64B, true, 2), BigNatModule$$$baseShift64B));
       }
 
     case 3:
       {
         const patternInput$$12 = [n$$44.digits[0], n$$44.digits[1], n$$44.digits[2]];
+        const xC = patternInput$$12[2] | 0;
+        const xB$$2 = patternInput$$12[1] | 0;
+        const xA$$2 = patternInput$$12[0] | 0;
 
-        if (patternInput$$12[2] > BigNatModule$$$baseMask64C) {
+        if (xC > BigNatModule$$$baseMask64C) {
           throw new Error();
         }
 
-        return op_Addition(op_Addition(fromInteger(patternInput$$12[0] & BigNatModule$$$baseMask64A, true, 2), op_LeftShift(fromInteger(patternInput$$12[1] & BigNatModule$$$baseMask64B, true, 2), BigNatModule$$$baseShift64B)), op_LeftShift(fromInteger(patternInput$$12[2] & BigNatModule$$$baseMask64C, true, 2), BigNatModule$$$baseShift64C));
+        return op_Addition(op_Addition(fromInteger(xA$$2 & BigNatModule$$$baseMask64A, true, 2), op_LeftShift(fromInteger(xB$$2 & BigNatModule$$$baseMask64B, true, 2), BigNatModule$$$baseShift64B)), op_LeftShift(fromInteger(xC & BigNatModule$$$baseMask64C, true, 2), BigNatModule$$$baseShift64C));
       }
 
     default:
@@ -1340,13 +1360,15 @@ export function BigNatModule$$$toString(n$$45) {
       const ten2k$$1 = _arg1$$3.head[1];
       const prior$$1 = _arg1$$3.tail;
       const patternInput$$13 = BigNatModule$$$divmod(n$$46, ten2k$$1);
+      const nL = patternInput$$13[1];
+      const nH = patternInput$$13[0];
 
-      if (isLeading ? BigNatModule$$$isZero(patternInput$$13[0]) : false) {
-        const digits$$1 = collect(isLeading, digits, patternInput$$13[1], prior$$1);
+      if (isLeading ? BigNatModule$$$isZero(nH) : false) {
+        const digits$$1 = collect(isLeading, digits, nL, prior$$1);
         return digits$$1;
       } else {
-        const digits$$2 = collect(false, digits, patternInput$$13[1], prior$$1);
-        const digits$$3 = collect(isLeading, digits$$2, patternInput$$13[0], prior$$1);
+        const digits$$2 = collect(false, digits, nL, prior$$1);
+        const digits$$3 = collect(isLeading, digits$$2, nH, prior$$1);
         return digits$$3;
       }
     } else {

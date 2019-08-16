@@ -60,3 +60,4 @@ export default class Timer {
         this.Enabled = false;
     }
 }
+//# sourceMappingURL=Timer.js.map

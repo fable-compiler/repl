@@ -28,3 +28,4 @@ module.exports = {
 function resolve(p) {
     return path.join(__dirname, p);
 }
+//# sourceMappingURL=splitter.config.js.map

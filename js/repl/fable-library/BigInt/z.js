@@ -614,6 +614,8 @@ export function BigInteger$$$DivRem$$56F059C0(x$$15, y$$7) {
     return [BigInteger$$$get_Zero(), BigInteger$$$get_Zero()];
   } else {
     const patternInput = BigNatModule$0024$0024$0024divmod(BigInteger$$get_V(x$$15), BigInteger$$get_V(y$$7));
+    const r = patternInput[1];
+    const d = patternInput[0];
     const matchValue$$7 = [BigInteger$$get_SignInt(x$$15), BigInteger$$get_SignInt(y$$7)];
     var $target$$7;
 
@@ -640,22 +642,22 @@ export function BigInteger$$$DivRem$$56F059C0(x$$15, y$$7) {
     switch ($target$$7) {
       case 0:
         {
-          return [BigInteger$$$posn$$Z67CCE57D(patternInput[0]), BigInteger$$$posn$$Z67CCE57D(patternInput[1])];
+          return [BigInteger$$$posn$$Z67CCE57D(d), BigInteger$$$posn$$Z67CCE57D(r)];
         }
 
       case 1:
         {
-          return [BigInteger$$$posn$$Z67CCE57D(patternInput[0]), BigInteger$$$negn$$Z67CCE57D(patternInput[1])];
+          return [BigInteger$$$posn$$Z67CCE57D(d), BigInteger$$$negn$$Z67CCE57D(r)];
         }
 
       case 2:
         {
-          return [BigInteger$$$negn$$Z67CCE57D(patternInput[0]), BigInteger$$$posn$$Z67CCE57D(patternInput[1])];
+          return [BigInteger$$$negn$$Z67CCE57D(d), BigInteger$$$posn$$Z67CCE57D(r)];
         }
 
       case 3:
         {
-          return [BigInteger$$$negn$$Z67CCE57D(patternInput[0]), BigInteger$$$negn$$Z67CCE57D(patternInput[1])];
+          return [BigInteger$$$negn$$Z67CCE57D(d), BigInteger$$$negn$$Z67CCE57D(r)];
         }
 
       case 4:

@@ -1,8 +1,8 @@
-import { createObj, equals, uncurry } from "../fable-library.2.3.10/Util.js";
-import { ofList } from "../fable-library.2.3.10/Array.js";
+import { createObj, equals, uncurry } from "../fable-library.2.3.18/Util.js";
+import { ofList } from "../fable-library.2.3.18/Array.js";
 import { HTMLAttr } from "./Fable.React.Props.js";
-import { isNullOrEmpty } from "../fable-library.2.3.10/String.js";
-import { fold, choose } from "../fable-library.2.3.10/Seq.js";
+import { isNullOrEmpty } from "../fable-library.2.3.18/String.js";
+import { fold, choose } from "../fable-library.2.3.18/Seq.js";
 export function ReactElementTypeModule$$$ofComponent() {
   throw new Error("Cannot create React components from types in Fable REPL");
 }

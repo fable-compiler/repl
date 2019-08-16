@@ -89,3 +89,4 @@ export default class Uri {
         return this.parseUrl().hash;
     }
 }
+//# sourceMappingURL=Uri.js.map

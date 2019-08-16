@@ -154,3 +154,4 @@ export function split(splitter, sourceEvent) {
         choose((v) => tryValueIfChoice2(splitter(v)), sourceEvent),
     ];
 }
+//# sourceMappingURL=Event.js.map

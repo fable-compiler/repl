@@ -1,10 +1,10 @@
-import { record, list as list$$5, type, bool, string, union, getCaseTag, getCaseName } from "../fable-library.2.3.10/Reflection.js";
-import { Record, List, declare, Union } from "../fable-library.2.3.10/Types.js";
-import { createObj, int32ToString } from "../fable-library.2.3.10/Util.js";
-import { filter, append, fold } from "../fable-library.2.3.10/List.js";
-import { defaultArg } from "../fable-library.2.3.10/Option.js";
+import { record, list as list$$5, type, bool, string, union, getCaseTag, getCaseName } from "../fable-library.2.3.18/Reflection.js";
+import { Record, List, declare, Union } from "../fable-library.2.3.18/Types.js";
+import { createObj, int32ToString } from "../fable-library.2.3.18/Util.js";
+import { filter, append, fold } from "../fable-library.2.3.18/List.js";
+import { defaultArg } from "../fable-library.2.3.18/Option.js";
 import { HTMLAttr } from "../src/Fable.React.Props.js";
-import { join } from "../fable-library.2.3.10/String.js";
+import { join } from "../fable-library.2.3.18/String.js";
 export function Reflection$$$getCaseName(case$) {
   return getCaseName(case$);
 }

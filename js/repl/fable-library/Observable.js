@@ -107,3 +107,4 @@ export function split(splitter, source) {
 export function subscribe(callback, source) {
     return source.Subscribe(new Observer(callback));
 }
+//# sourceMappingURL=Observable.js.map

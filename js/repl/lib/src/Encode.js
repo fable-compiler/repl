@@ -1,14 +1,14 @@
-import { mapIndexed, map as map$$1, fold, iterate } from "../fable-library.2.3.10/Seq.js";
-import { empty, tryFind, toList } from "../fable-library.2.3.10/Map.js";
-import { toString as toString$$1 } from "../fable-library.2.3.10/Date.js";
-import { toString as toString$$2 } from "../fable-library.2.3.10/TimeSpan.js";
-import { toString as toString$$3 } from "../fable-library.2.3.10/Long.js";
-import { comparePrimitives, Lazy, mapCurriedArgs, uncurry } from "../fable-library.2.3.10/Util.js";
-import { defaultArgWith, defaultArg } from "../fable-library.2.3.10/Option.js";
-import { type, getGenerics, getGenericTypeDefinition, getTupleFields, getTupleElements, isTuple, isGenericType, getElementType, isArray, fullName, getUnionCaseFields, getUnionFields, isUnion, getRecordElements, getRecordField, name, isRecord } from "../fable-library.2.3.10/Reflection.js";
-import { fill, map } from "../fable-library.2.3.10/Array.js";
-import { toText, printf } from "../fable-library.2.3.10/String.js";
-import { declare } from "../fable-library.2.3.10/Types.js";
+import { mapIndexed, map as map$$1, fold, iterate } from "../fable-library.2.3.18/Seq.js";
+import { empty, tryFind, toList } from "../fable-library.2.3.18/Map.js";
+import { toString as toString$$1 } from "../fable-library.2.3.18/Date.js";
+import { toString as toString$$2 } from "../fable-library.2.3.18/TimeSpan.js";
+import { toString as toString$$3 } from "../fable-library.2.3.18/Long.js";
+import { comparePrimitives, Lazy, mapCurriedArgs, uncurry } from "../fable-library.2.3.18/Util.js";
+import { defaultArgWith, defaultArg } from "../fable-library.2.3.18/Option.js";
+import { type, getGenerics, getGenericTypeDefinition, getTupleFields, getTupleElements, isTuple, isGenericType, getElementType, isArray, fullName, getUnionCaseFields, getUnionFields, isUnion, getRecordElements, getRecordField, name, isRecord } from "../fable-library.2.3.18/Reflection.js";
+import { fill, map } from "../fable-library.2.3.18/Array.js";
+import { toText, printf } from "../fable-library.2.3.18/String.js";
+import { declare } from "../fable-library.2.3.18/Types.js";
 import { Util$$$CachedEncoders as Util$0024$0024$0024CachedEncoders, Util$002ECache$00601$$GetOrAdd$$43981464 as Util$0024002ECache$002400601$0024$0024GetOrAdd$0024$002443981464 } from "./Types.js";
 export function string(value) {
   return value;
@@ -193,9 +193,16 @@ function autoEncoder(extra$$1, isCamelCase$$1, t$$1) {
               return autoEncoder(extra$$1, isCamelCase$$1, t$$4);
             }(getGenerics(t$$1)[0])));
           });
-          return function (value$$29) {
-            return value$$29 == null ? nil : encoder$$4.Value(value$$29);
+
+          const d$$4 = function d$$4(value$$29) {
+            if (value$$29 == null) {
+              return nil;
+            } else {
+              return encoder$$4.Value(value$$29);
+            }
           };
+
+          return d$$4;
         } else if (fullname$$1 === "Microsoft.FSharp.Collections.FSharpList`1[System.Object]" ? true : fullname$$1 === "Microsoft.FSharp.Collections.FSharpSet`1[System.Object]") {
           const encoder$$5 = function (t$$5) {
             return autoEncoder(extra$$1, isCamelCase$$1, t$$5);
@@ -239,37 +246,53 @@ function autoEncoder(extra$$1, isCamelCase$$1, t$$1) {
         }
       }
     } else if (fullname === "System.Boolean") {
-      return function (value$$33) {
+      const d$$5 = function d$$5(value$$33) {
         return value$$33;
       };
+
+      return d$$5;
     } else if (fullname === "System.String") {
-      return function (value$$35) {
+      const d$$6 = function d$$6(value$$35) {
         return value$$35;
       };
+
+      return d$$6;
     } else if (fullname === "System.Int32") {
-      return function (value$$37) {
+      const d$$7 = function d$$7(value$$37) {
         return value$$37;
       };
+
+      return d$$7;
     } else if (fullname === "System.UInt32") {
-      return function (value$$39) {
+      const d$$8 = function d$$8(value$$39) {
         return value$$39;
       };
+
+      return d$$8;
     } else if (fullname === "System.Double") {
-      return function (value$$41) {
+      const d$$9 = function d$$9(value$$41) {
         return value$$41;
       };
+
+      return d$$9;
     } else if (fullname === "System.DateTime") {
-      return datetime;
+      const d$$10 = datetime;
+      return d$$10;
     } else if (fullname === "System.DateTimeOffset") {
-      return datetimeOffset;
+      const d$$11 = datetimeOffset;
+      return d$$11;
     } else if (fullname === "System.TimeSpan") {
-      return timespan;
+      const d$$12 = timespan;
+      return d$$12;
     } else if (fullname === "System.Guid") {
-      return guid;
+      const d$$13 = guid;
+      return d$$13;
     } else if (fullname === "System.Object") {
-      return function (x$$1) {
+      const d$$14 = function d$$14(x$$1) {
         return x$$1;
       };
+
+      return d$$14;
     } else {
       return autoEncodeRecordsAndUnions(extra$$1, isCamelCase$$1, t$$1);
     }

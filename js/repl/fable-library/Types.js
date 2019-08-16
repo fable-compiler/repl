@@ -251,3 +251,4 @@ export const MatchFailureException = declare(function MatchFailureException(arg1
     this.message = "The match cases were incomplete";
 }, FSharpException);
 export const Attribute = declare(function Attribute() { });
+//# sourceMappingURL=Types.js.map

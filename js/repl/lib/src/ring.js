@@ -1,9 +1,9 @@
-import { declare, Union } from "../fable-library.2.3.10/Types.js";
-import { type, union, int32, array } from "../fable-library.2.3.10/Reflection.js";
-import { max, comparePrimitives } from "../fable-library.2.3.10/Util.js";
-import { ofSeq, fill } from "../fable-library.2.3.10/Array.js";
-import { some } from "../fable-library.2.3.10/Option.js";
-import { append, delay, collect, rangeNumber, singleton, take, skip } from "../fable-library.2.3.10/Seq.js";
+import { declare, Union } from "../fable-library.2.3.18/Types.js";
+import { type, union, int32, array } from "../fable-library.2.3.18/Reflection.js";
+import { max, comparePrimitives } from "../fable-library.2.3.18/Util.js";
+import { ofSeq, fill } from "../fable-library.2.3.18/Array.js";
+import { some } from "../fable-library.2.3.18/Option.js";
+import { append, delay, collect, rangeNumber, singleton, take, skip } from "../fable-library.2.3.18/Seq.js";
 export const RingState$00601 = declare(function Elmish_RingState(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);

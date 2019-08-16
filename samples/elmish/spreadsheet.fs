@@ -218,6 +218,14 @@ type State =
     Cols : char list
     Cells : Map<Position, string> }
 
+type Movement =
+    | MoveTo of Position
+    | Invalid
+
+type Direction = Up | Down | Left | Right
+
+let KeyDirection : Map<float,Direction> = Map.ofList [ (37.0, Left); (38.0, Up); (39.0, Right); (40.0, Down) ]
+
 // ----------------------------------------------------------------------------
 // EVENT HANDLING
 // ----------------------------------------------------------------------------
@@ -228,19 +236,50 @@ let update msg state =
       { state with Active = Some pos }, Cmd.none
 
   | UpdateValue(pos, value) ->
-      let newCells = Map.add pos value state.Cells
+      let newCells =
+          if value = ""
+              then Map.remove pos state.Cells
+              else Map.add pos value state.Cells
       { state with Cells = newCells }, Cmd.none
 
 // ----------------------------------------------------------------------------
 // RENDERING
 // ----------------------------------------------------------------------------
 
-let renderEditor (trigger:Event -> unit) pos value =
+let getDirection (ke: Browser.Types.KeyboardEvent) : Option<Direction> =
+    Map.tryFind ke.keyCode KeyDirection
+
+let getPosition ((col, row): Position) (direction: Direction) : Position =
+    match direction with
+        | Up -> (col, row - 1)
+        | Down -> (col, row + 1)
+        | Left -> (char((int col) - 1), row)
+        | Right -> (char((int col) + 1), row)
+
+let getMovement (state: State) (direction: Direction) : Movement =
+    match state.Active with
+        | None -> Invalid
+        | (Some position) ->
+            let (col, row) = getPosition position direction
+            if List.contains col state.Cols && List.contains row state.Rows
+                then MoveTo (col, row)
+                else Invalid
+
+let getKeyPressEvent state trigger = fun ke ->
+    match getDirection ke with
+        | None -> ()
+        | Some direction ->
+            match getMovement state direction with
+                | Invalid -> ()
+                | MoveTo position -> trigger(StartEdit(position))
+
+let renderEditor (trigger:Event -> unit) pos state vale =
   td [ Class "selected"] [
     input [
       AutoFocus true
-      OnInput (fun e -> trigger(UpdateValue(pos, e.target?value)))
-      Value value ]
+      OnKeyDown (getKeyPressEvent state trigger)
+      OnInput (fun e -> trigger (UpdateValue (pos, e.target ? value )))
+      Value vale ]
   ]
 
 let renderView trigger pos (value:option<_>) =
@@ -252,7 +291,7 @@ let renderView trigger pos (value:option<_>) =
 let renderCell trigger pos state =
   let value = Map.tryFind pos state.Cells
   if state.Active = Some pos then
-    renderEditor trigger pos (Option.defaultValue "" value)
+    renderEditor trigger pos state (Option.defaultValue "" value)
   else
     let value =
       match value with
