@@ -4,6 +4,7 @@ public/metadata
 deploy/
 temp/
 .idea
+.ionide
 
 # Logs
 logs
