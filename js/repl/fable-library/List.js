@@ -1,7 +1,7 @@
 import { defaultArg, value as value$$1, some } from "./Option.js";
-import { FSharpRef, List } from "./Types.js";
-import { iterate as iterate$$1, collect as collect$$1, scanBack as scanBack$$1, scan as scan$$1, foldBack2 as foldBack2$$1, fold2 as fold2$$1, fold as fold$$1, map as map$$1 } from "./Seq.js";
-import { partialApply, getItemFromDict, addToDict, tryGetValue, addToSet, comparerFromEqualityComparer, count, uncurry } from "./Util.js";
+import { List } from "./Types.js";
+import { collect as collect$$1, scanBack as scanBack$$1, scan as scan$$1, foldBack2 as foldBack2$$1, fold2 as fold2$$1, fold as fold$$1, map as map$$1 } from "./Seq.js";
+import { partialApply, getItemFromDict, addToDict, tryGetValue, addToSet, count, uncurry } from "./Util.js";
 import { ofList } from "./Array.js";
 import { permute as permute$$1, findIndexBack as findIndexBack$$1, tryFindIndexBack as tryFindIndexBack$$1 } from "./Array.js";
 import { createMutable } from "./Set.js";
@@ -601,7 +601,7 @@ export function except(itemsToExclude, array$$2, eq$$1) {
   if (isEmpty(array$$2)) {
     return array$$2;
   } else {
-    const cached = createMutable(itemsToExclude, comparerFromEqualityComparer(eq$$1));
+    const cached = createMutable(itemsToExclude, eq$$1);
     return filter(function f$$45(arg00) {
       return addToSet(arg00, cached);
     }, array$$2);
@@ -1143,7 +1143,7 @@ export function slice(lower, upper, xs$$128) {
   }
 }
 export function distinctBy(projection$$4, xs$$130, eq$$2) {
-  const hashSet = createMutable([], comparerFromEqualityComparer(eq$$2));
+  const hashSet = createMutable([], eq$$2);
   return filter(function f$$57($arg$$1) {
     return addToSet(projection$$4($arg$$1), hashSet);
   }, xs$$130);
@@ -1169,9 +1169,9 @@ export function exactlyOne(xs$$133) {
   }
 }
 export function groupBy(projection$$5, xs$$135, eq$$4) {
-  const dict = createMutable$$1([], comparerFromEqualityComparer(eq$$4));
-  const keys = [];
-  iterate$$1(function (v$$2) {
+  const dict = createMutable$$1([], eq$$4);
+  let keys = new List();
+  iterate(function f$$58(v$$2) {
     const key = projection$$5(v$$2);
     const matchValue$$16 = tryGetValue(dict, key, null);
 
@@ -1180,45 +1180,49 @@ export function groupBy(projection$$5, xs$$135, eq$$4) {
       dict.set(key, new List(v$$2, prev));
     } else {
       addToDict(dict, key, new List(v$$2, new List()));
-      keys.push(key);
+      keys = new List(key, keys);
     }
   }, xs$$135);
-  return ofSeq(map$$1(function mapping(key$$1) {
-    return [key$$1, reverse(getItemFromDict(dict, key$$1))];
-  }, keys));
-}
-export function countBy(projection$$6, xs$$137, eq$$5) {
-  const dict$$1 = createMutable$$1([], comparerFromEqualityComparer(eq$$5));
-  iterate(function (v$$3) {
-    const key$$2 = projection$$6(v$$3);
-    const matchValue$$17 = tryGetValue(dict$$1, key$$2, null);
-
-    if (matchValue$$17[0]) {
-      const prev$$1 = matchValue$$17[1];
-      prev$$1.contents = prev$$1.contents + 1;
-    } else {
-      dict$$1.set(key$$2, new FSharpRef(1));
-    }
-  }, xs$$137);
   let result$$1 = new List();
-  iterate$$1(function (group) {
-    result$$1 = new List([group[0], group[1].contents], result$$1);
-  }, dict$$1);
+  iterate(function f$$59(key$$1) {
+    result$$1 = new List([key$$1, reverse(getItemFromDict(dict, key$$1))], result$$1);
+  }, keys);
   return result$$1;
 }
-export function where(predicate$$2, xs$$138) {
-  return filter(predicate$$2, xs$$138);
+export function countBy(projection$$6, xs$$138, eq$$5) {
+  const dict$$1 = createMutable$$1([], eq$$5);
+  let keys$$1 = new List();
+  iterate(function f$$60(v$$3) {
+    const key$$2 = projection$$6(v$$3);
+    const matchValue$$17 = tryGetValue(dict$$1, key$$2, 0);
+
+    if (matchValue$$17[0]) {
+      const prev$$1 = matchValue$$17[1] | 0;
+      dict$$1.set(key$$2, prev$$1 + 1);
+    } else {
+      dict$$1.set(key$$2, 1);
+      keys$$1 = new List(key$$2, keys$$1);
+    }
+  }, xs$$138);
+  let result$$2 = new List();
+  iterate(function f$$61(key$$3) {
+    result$$2 = new List([key$$3, getItemFromDict(dict$$1, key$$3)], result$$2);
+  }, keys$$1);
+  return result$$2;
 }
-export function pairwise(xs$$139) {
-  const inner = function inner(xs$$140, acc$$27, x1$$1) {
+export function where(predicate$$2, xs$$141) {
+  return filter(predicate$$2, xs$$141);
+}
+export function pairwise(xs$$142) {
+  const inner = function inner(xs$$143, acc$$27, x1$$1) {
     inner: while (true) {
-      if (xs$$140.tail != null) {
-        const xs$$141 = xs$$140.tail;
-        const x2$$1 = xs$$140.head;
+      if (xs$$143.tail != null) {
+        const xs$$144 = xs$$143.tail;
+        const x2$$1 = xs$$143.head;
         let copyOfStruct = acc$$27;
         copyOfStruct.push([x1$$1, x2$$1]);
         const $acc$$27$$196 = acc$$27;
-        xs$$140 = xs$$141;
+        xs$$143 = xs$$144;
         acc$$27 = $acc$$27$$196;
         x1$$1 = x2$$1;
         continue inner;
@@ -1230,14 +1234,14 @@ export function pairwise(xs$$139) {
     }
   };
 
-  var $target$$197, x1$$2, x2$$2, xs$$142;
+  var $target$$197, x1$$2, x2$$2, xs$$145;
 
-  if (xs$$139.tail != null) {
-    if (xs$$139.tail.tail != null) {
+  if (xs$$142.tail != null) {
+    if (xs$$142.tail.tail != null) {
       $target$$197 = 1;
-      x1$$2 = xs$$139.head;
-      x2$$2 = xs$$139.tail.head;
-      xs$$142 = xs$$139.tail.tail;
+      x1$$2 = xs$$142.head;
+      x2$$2 = xs$$142.tail.head;
+      xs$$145 = xs$$142.tail.tail;
     } else {
       $target$$197 = 0;
     }
@@ -1263,19 +1267,19 @@ export function pairwise(xs$$139) {
               return clo2(arg20);
             };
           };
-        }(xs$$142)(acc$$28)(x2$$2);
+        }(xs$$145)(acc$$28)(x2$$2);
       }
   }
 }
-export function windowed(windowSize, source$$1) {
+export function windowed(windowSize, source) {
   if (windowSize <= 0) {
     throw new Error("windowSize must be positive");
   }
 
   let res$$3 = new List();
 
-  for (let i$$35 = length(source$$1); i$$35 >= windowSize; i$$35--) {
-    res$$3 = new List(slice(i$$35 - windowSize, i$$35 - 1, source$$1), res$$3);
+  for (let i$$35 = length(source); i$$35 >= windowSize; i$$35--) {
+    res$$3 = new List(slice(i$$35 - windowSize, i$$35 - 1, source), res$$3);
   }
 
   return res$$3;

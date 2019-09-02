@@ -67,7 +67,7 @@ function getRadix(prefix, style) {
 }
 export function isValid(str, style, radix) {
     const integerRegex = /^\s*([\+\-])?(0[xXoObB])?([0-9a-fA-F]+)\s*$/;
-    const res = integerRegex.exec(str.replace("_", ""));
+    const res = integerRegex.exec(str.replace(/_/g, ""));
     if (res != null) {
         const [_all, sign, prefix, digits] = res;
         radix = radix || getRadix(prefix, style);

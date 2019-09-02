@@ -1,9 +1,10 @@
 import { Record, List, declare, Union } from "./Types.js";
 import { type, record, bool, list, union, int32 } from "./Reflection.js";
-import { value as value$$3, some } from "./Option.js";
-import { iterate as iterate$$1, empty as empty$$1, toIterator, map as map$$1, unfold, getEnumerator, fold as fold$$1 } from "./Seq.js";
+import { value as value$$4, some } from "./Option.js";
+import { empty as empty$$1, iterate as iterate$$1, toIterator, map as map$$2, unfold, getEnumerator, fold as fold$$1 } from "./Seq.js";
 import { compare, structuralHash, isDisposable } from "./Util.js";
 import { join, toText, printf } from "./String.js";
+import { MutableMap$00602$$Add$$5BDDA1 as MutableMap$002400602$0024$0024Add$0024$00245BDDA1, MutableMap$00602$$$$002Ector$$Z79760D57 as MutableMap$002400602$0024$0024$0024$0024002Ector$0024$0024Z79760D57 } from "./MutableMap.js";
 export const MapTree$00602 = declare(function Map_MapTree(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
@@ -1089,7 +1090,7 @@ export function FSharpMap$$TryGetValue$$5BDDA1(__$$9, k$$30, defValue) {
   if (matchValue$$6 == null) {
     return [false, defValue];
   } else {
-    const v$$25 = value$$3(matchValue$$6);
+    const v$$25 = value$$4(matchValue$$6);
     return [true, v$$25];
   }
 }
@@ -1144,7 +1145,7 @@ export function FSharpMap$$ToList(__$$24) {
 
 FSharpMap.prototype.toString = function () {
   const this$ = this;
-  return "map [" + join("; ", ...map$$1(function mapping(kv) {
+  return "map [" + join("; ", ...map$$2(function mapping(kv) {
     return toText(printf("(%A, %A)"))(kv[0])(kv[1]);
   }, this$)) + "]";
 };
@@ -1160,9 +1161,9 @@ FSharpMap.prototype.GetHashCode = function () {
   const e$$1 = MapTreeModule$$$mkIEnumerator(FSharpMap$$get_Tree(this$$$1));
 
   while (e$$1.MoveNext()) {
-    const activePatternResult3104 = e$$1.Current;
-    const y$$4 = activePatternResult3104[1];
-    const x$$17 = activePatternResult3104[0];
+    const activePatternResult3536 = e$$1.Current;
+    const y$$4 = activePatternResult3536[1];
+    const x$$17 = activePatternResult3536[0];
     res$$3 = combineHash(res$$3, structuralHash(x$$17));
     res$$3 = combineHash(res$$3, structuralHash(y$$4));
   }
@@ -1255,7 +1256,7 @@ FSharpMap.prototype.has = function (k$$35) {
 
 FSharpMap.prototype.keys = function () {
   const this$$$7 = this;
-  return map$$1(function mapping$$1(kv$$1) {
+  return map$$2(function mapping$$1(kv$$1) {
     return kv$$1[0];
   }, MapTreeModule$$$toSeq(FSharpMap$$get_Tree(this$$$7)));
 };
@@ -1266,7 +1267,7 @@ FSharpMap.prototype.set = function (k$$36, v$$26) {
 
 FSharpMap.prototype.values = function () {
   const this$$$8 = this;
-  return map$$1(function mapping$$2(kv$$2) {
+  return map$$2(function mapping$$2(kv$$2) {
     return kv$$2[1];
   }, MapTreeModule$$$toSeq(FSharpMap$$get_Tree(this$$$8)));
 };
@@ -1299,7 +1300,7 @@ export function pick(f$$29, m$$31) {
   const matchValue$$8 = tryPick(f$$29, m$$31);
 
   if (matchValue$$8 != null) {
-    const res$$5 = value$$3(matchValue$$8);
+    const res$$5 = value$$4(matchValue$$8);
     return res$$5;
   } else {
     throw new Error("key not found");
@@ -1344,7 +1345,7 @@ export function findKey(f$$38, m$$41) {
   if (_arg1$$2 == null) {
     throw new Error("Key not found");
   } else {
-    const k$$43 = value$$3(_arg1$$2);
+    const k$$43 = value$$4(_arg1$$2);
     return k$$43;
   }
 }
@@ -1411,7 +1412,7 @@ function createMutablePrivate(comparer$$22, tree$0027) {
     },
 
     keys() {
-      return map$$1(function mapping$$3(kv$$3) {
+      return map$$2(function mapping$$3(kv$$3) {
         return kv$$3[0];
       }, MapTreeModule$$$toSeq(tree$$1));
     },
@@ -1423,7 +1424,7 @@ function createMutablePrivate(comparer$$22, tree$0027) {
     },
 
     values() {
-      return map$$1(function mapping$$4(kv$$4) {
+      return map$$2(function mapping$$4(kv$$4) {
         return kv$$4[1];
       }, MapTreeModule$$$toSeq(tree$$1));
     },
@@ -1440,30 +1441,36 @@ function createMutablePrivate(comparer$$22, tree$0027) {
 }
 
 export function createMutable(source$$5, comparer$$23) {
-  return createMutablePrivate(comparer$$23, MapTreeModule$$$ofSeq(comparer$$23, source$$5));
+  const map$$1 = MutableMap$002400602$0024$0024$0024$0024002Ector$0024$0024Z79760D57(comparer$$23);
+  iterate$$1(function (forLoopVar) {
+    const value = forLoopVar[1];
+    const key = forLoopVar[0];
+    MutableMap$002400602$0024$0024Add$0024$00245BDDA1(map$$1, key, value);
+  }, source$$5);
+  return map$$1;
 }
 export function groupBy(projection, xs, comparer$$24) {
   const dict = createMutable(empty$$1(), comparer$$24);
   iterate$$1(function (v$$31) {
-    const key = projection(v$$31);
+    const key$$1 = projection(v$$31);
 
-    if (dict.has(key)) {
-      dict.get(key).push(v$$31);
+    if (dict.has(key$$1)) {
+      dict.get(key$$1).push(v$$31);
     } else {
-      dict.set(key, Array.from([v$$31])), null;
+      dict.set(key$$1, [v$$31]), null;
     }
   }, xs);
-  return map$$1(function mapping$$5(kv$$5) {
+  return map$$2(function mapping$$5(kv$$5) {
     return [kv$$5[0], kv$$5[1]];
   }, dict);
 }
 export function countBy(projection$$1, xs$$1, comparer$$25) {
   const dict$$1 = createMutable(empty$$1(), comparer$$25);
-  iterate$$1(function (value$$1) {
-    const key$$1 = projection$$1(value$$1);
-    dict$$1.has(key$$1) ? dict$$1.set(key$$1, dict$$1.get(key$$1) + 1) : dict$$1.set(key$$1, 1), null;
+  iterate$$1(function (value$$2) {
+    const key$$2 = projection$$1(value$$2);
+    dict$$1.has(key$$2) ? dict$$1.set(key$$2, dict$$1.get(key$$2) + 1) : dict$$1.set(key$$2, 1), null;
   }, xs$$1);
-  return map$$1(function mapping$$6(kv$$6) {
+  return map$$2(function mapping$$6(kv$$6) {
     return [kv$$6[0], kv$$6[1]];
   }, dict$$1);
 }

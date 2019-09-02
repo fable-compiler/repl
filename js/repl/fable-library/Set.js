@@ -1,9 +1,10 @@
 import { List, Record, declare, Union } from "./Types.js";
 import { type, record, bool, list, union as union$$1, int32 } from "./Reflection.js";
-import { value as value$$2, some, Choice } from "./Option.js";
-import { iterate as iterate$$1, empty as empty$$1, fold as fold$$1, toIterator, map as map$$1, reduce, getEnumerator, unfold } from "./Seq.js";
+import { value as value$$3, some, Choice } from "./Option.js";
+import { empty as empty$$1, iterate as iterate$$1, fold as fold$$1, toIterator, map as map$$1, reduce, getEnumerator, unfold } from "./Seq.js";
 import { structuralHash, isDisposable } from "./Util.js";
 import { join } from "./String.js";
+import { MutableSet$00601$$Add$$2B595 as MutableSet$002400601$0024$0024Add$0024$00242B595, MutableSet$00601$$$$002Ector$$Z79760D57 as MutableSet$002400601$0024$0024$0024$0024002Ector$0024$0024Z79760D57 } from "./MutableSet.js";
 export const SetTree$00601 = declare(function Set_SetTree(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
@@ -987,7 +988,7 @@ export function SetTreeModule$$$minimumElement(s$$11) {
   if (matchValue$$4 == null) {
     throw new Error("Set contains no elements");
   } else {
-    const k$$27 = value$$2(matchValue$$4);
+    const k$$27 = value$$3(matchValue$$4);
     return k$$27;
   }
 }
@@ -997,7 +998,7 @@ export function SetTreeModule$$$maximumElement(s$$12) {
   if (matchValue$$5 == null) {
     throw new Error("Set contains no elements");
   } else {
-    const k$$28 = value$$2(matchValue$$5);
+    const k$$28 = value$$3(matchValue$$5);
     return k$$28;
   }
 }
@@ -1773,7 +1774,11 @@ function createMutablePrivate(comparer$$31, tree$0027) {
 }
 
 export function createMutable(source, comparer$$32) {
-  return createMutablePrivate(comparer$$32, SetTreeModule$$$ofSeq(comparer$$32, source));
+  const set = MutableSet$002400601$0024$0024$0024$0024002Ector$0024$0024Z79760D57(comparer$$32);
+  iterate$$1(function (item) {
+    MutableSet$002400601$0024$0024Add$0024$00242B595(set, item), null;
+  }, source);
+  return set;
 }
 export function distinct(xs, comparer$$33) {
   return createMutable(xs, comparer$$33);

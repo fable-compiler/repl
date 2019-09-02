@@ -165,6 +165,9 @@ export function delay(f) {
 export function empty() {
     return unfold(() => void 0);
 }
+export function enumerateFromFunctions(factory, moveNext, current) {
+    return delay(() => unfold((e) => moveNext(e) ? [current(e), e] : null, factory()));
+}
 export function enumerateWhile(cond, xs) {
     return concat(unfold(() => cond() ? [xs, true] : null));
 }

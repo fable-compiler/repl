@@ -6,7 +6,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "0be94a07755ba9b88f2ebcac0f23a3da.woff"
   },
   {
-    "url": "1.90d816e5def7f2664ee6.js"
+    "url": "1.ff8f292b9aff1da6cb49.js"
   },
   {
     "url": "137778879005023b427be30df1f57d83.ttf"
@@ -15,16 +15,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "1a77fe6d9f399212fcfcfde790ce66b2.ttf"
   },
   {
-    "url": "2.90d816e5def7f2664ee6.js"
+    "url": "2.ff8f292b9aff1da6cb49.js"
   },
   {
-    "url": "3.90d816e5def7f2664ee6.js"
+    "url": "3.ff8f292b9aff1da6cb49.js"
   },
   {
     "url": "38975343b586296e9b73e6b56cc3ec5d.svg"
   },
   {
-    "url": "4.90d816e5def7f2664ee6.js"
+    "url": "4.ff8f292b9aff1da6cb49.js"
   },
   {
     "revision": "025016f5d2aad368f996640b84a166ef",
@@ -34,7 +34,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "4cfc570109e603356ee7586978c46852.eot"
   },
   {
-    "url": "5.90d816e5def7f2664ee6.js"
+    "url": "5.ff8f292b9aff1da6cb49.js"
   },
   {
     "url": "5c4876bef50a7df9d8ac48af75ecf11c.woff2"
@@ -43,13 +43,13 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "5c6aa3e267f5554fd7cf15557b7e44aa.eot"
   },
   {
-    "url": "6.90d816e5def7f2664ee6.js"
+    "url": "6.ff8f292b9aff1da6cb49.js"
   },
   {
     "url": "64b3e814a66c2719b15abf8f7998bd73.woff2"
   },
   {
-    "url": "7.90d816e5def7f2664ee6.js"
+    "url": "7.ff8f292b9aff1da6cb49.js"
   },
   {
     "url": "7726a281c1d436eb038f78c6e9048c96.svg"
@@ -64,7 +64,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "7c8fa37007189c6e9a50125e5ca64cff.eot"
   },
   {
-    "url": "8.90d816e5def7f2664ee6.js"
+    "url": "8.ff8f292b9aff1da6cb49.js"
   },
   {
     "url": "8027cf95961ca238debdd2352284e532.woff"
@@ -102,7 +102,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "af2692f72b79d5935fe511236e05dbc8.woff"
   },
   {
-    "url": "app.90d816e5def7f2664ee6.js"
+    "url": "app.ff8f292b9aff1da6cb49.js"
   },
   {
     "url": "b7d071b9c3c197bff4af902070622423.ttf"
@@ -260,15 +260,15 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "img/pacman/Powerup31.wav"
   },
   {
-    "revision": "188218e014d9e5eb4fda3bcac6abf7f7",
+    "revision": "8d6f32d49b5dff133fcf350a9a59bdd6",
     "url": "index.html"
   },
   {
-    "revision": "a34a42a3f5a403ee5845a3a9e4184ac2",
+    "revision": "afefde02adba3866ae0a36f700a2c9a1",
     "url": "js/repl/bundle.min.js"
   },
   {
-    "revision": "b5a51d73b62b6eadf7a67ac0f31df7bc",
+    "revision": "1b02899c2651d9d7b278f90004827f59",
     "url": "js/repl/fable-library/Array.js"
   },
   {
@@ -328,7 +328,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/repl/fable-library/Event.js"
   },
   {
-    "revision": "d0a0a4a6df15c9aed1c768be6430098c",
+    "revision": "70b3977540de5d7347d4eaab2c5e848a",
     "url": "js/repl/fable-library/FSharp.Collections.js"
   },
   {
@@ -340,15 +340,15 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/repl/fable-library/Global.js"
   },
   {
-    "revision": "dd03573c0d7c7589a40c5766183892a2",
+    "revision": "7abf053c88469f2352567b6734c18942",
     "url": "js/repl/fable-library/Int32.js"
   },
   {
-    "revision": "2d8961af1de29ff49ed7f64fb050ed90",
+    "revision": "4564a7a83f9b53d2ecab2e83e3e7c8e6",
     "url": "js/repl/fable-library/List.js"
   },
   {
-    "revision": "155463c435bda8e183b82aca1ec5a022",
+    "revision": "1193a0035f37c3d30cba189b631e3ab4",
     "url": "js/repl/fable-library/Long.js"
   },
   {
@@ -356,8 +356,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/repl/fable-library/MailboxProcessor.js"
   },
   {
-    "revision": "76384b76087249f98d3c390f064038bc",
+    "revision": "454702af710a5983a2286e55ffd2b768",
     "url": "js/repl/fable-library/Map.js"
+  },
+  {
+    "revision": "0fb2003cc560180324c08d5012b24562",
+    "url": "js/repl/fable-library/MutableMap.js"
+  },
+  {
+    "revision": "41b8e3ee06ea652c5e718471b2b28376",
+    "url": "js/repl/fable-library/MutableSet.js"
   },
   {
     "revision": "9beba76e0e11ef6a0daec5644964d369",
@@ -376,16 +384,20 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/repl/fable-library/RegExp.js"
   },
   {
-    "revision": "db34585d981a3077dba31e8939e34126",
+    "revision": "84738e9de30aa44c74edf24c5c8cfe4a",
     "url": "js/repl/fable-library/Seq.js"
   },
   {
-    "revision": "fe30e297dba38f49e8eb7cc06031745c",
+    "revision": "24c58da8af804c495221e62bb2f260c4",
     "url": "js/repl/fable-library/Set.js"
   },
   {
     "revision": "ea3757febcc82c835e05dec608cd7b67",
     "url": "js/repl/fable-library/String.js"
+  },
+  {
+    "revision": "f87a75c24dec36e2ec520d90e710a092",
+    "url": "js/repl/fable-library/System.Collections.Generic.js"
   },
   {
     "revision": "d8170ac0dabaf2ba8e660f3ddd0e8686",
@@ -756,7 +768,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/repl/lib/src/ring.js"
   },
   {
-    "revision": "b5781b624dffc6da1de5dc1acb1e52a4",
+    "revision": "914593d757aaaf2245f160f26959f7cd",
     "url": "js/repl/worker.min.js"
   },
   {
@@ -774,306 +786,6 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "f808b8e8ab51b0d9525795db3768cd86",
     "url": "libs/react.production.min.js"
-  },
-  {
-    "revision": "9a0157b44c602cc34ac61877edd88efc",
-    "url": "libs/vs/base/worker/workerMain.js"
-  },
-  {
-    "revision": "d4ae4dd170819dab238c5a0f036c7d55",
-    "url": "libs/vs/basic-languages/apex/apex.js"
-  },
-  {
-    "revision": "1b0ef3f0d8a1550ec712f4f194e2dde7",
-    "url": "libs/vs/basic-languages/azcli/azcli.js"
-  },
-  {
-    "revision": "9d67e6c2d835e22114a2d0b0244fad33",
-    "url": "libs/vs/basic-languages/bat/bat.js"
-  },
-  {
-    "revision": "903e94b2a216897a606f501d8ba88f5f",
-    "url": "libs/vs/basic-languages/clojure/clojure.js"
-  },
-  {
-    "revision": "ed86fc71235ddf59f7b4639cd03698d8",
-    "url": "libs/vs/basic-languages/coffee/coffee.js"
-  },
-  {
-    "revision": "4f3f52705302388a968135215335788b",
-    "url": "libs/vs/basic-languages/cpp/cpp.js"
-  },
-  {
-    "revision": "6d526d93876358d08a52724c810ea82f",
-    "url": "libs/vs/basic-languages/csharp/csharp.js"
-  },
-  {
-    "revision": "8c814d1a76eb817384a4e0bc6eda2faa",
-    "url": "libs/vs/basic-languages/csp/csp.js"
-  },
-  {
-    "revision": "9b5d23ed6d29119a21daa9c71bc48ec5",
-    "url": "libs/vs/basic-languages/css/css.js"
-  },
-  {
-    "revision": "ae15175aca76373b7f81c11dfc13a039",
-    "url": "libs/vs/basic-languages/dockerfile/dockerfile.js"
-  },
-  {
-    "revision": "899ae6cc48de88c7917a5fe069256312",
-    "url": "libs/vs/basic-languages/fsharp/fsharp.js"
-  },
-  {
-    "revision": "c9012ae5433b35996ec6c8c2fed0da7c",
-    "url": "libs/vs/basic-languages/go/go.js"
-  },
-  {
-    "revision": "d5c5d2ca0fc25699da1ee13ca3c468a1",
-    "url": "libs/vs/basic-languages/graphql/graphql.js"
-  },
-  {
-    "revision": "3b4ba3a2e65541908348ffdfd8efe132",
-    "url": "libs/vs/basic-languages/handlebars/handlebars.js"
-  },
-  {
-    "revision": "cae751f9b5c18b15f620a1925a461342",
-    "url": "libs/vs/basic-languages/html/html.js"
-  },
-  {
-    "revision": "d156643596a762a3f9576d13dc342356",
-    "url": "libs/vs/basic-languages/ini/ini.js"
-  },
-  {
-    "revision": "d1eb1915ff79768955c8bacbfabd9909",
-    "url": "libs/vs/basic-languages/java/java.js"
-  },
-  {
-    "revision": "b58352d8172f174cd46dca78e6db4dd1",
-    "url": "libs/vs/basic-languages/javascript/javascript.js"
-  },
-  {
-    "revision": "9c90a4892e392b11e72b999cb300f8d3",
-    "url": "libs/vs/basic-languages/kotlin/kotlin.js"
-  },
-  {
-    "revision": "a30947971f531c845f233c66776af125",
-    "url": "libs/vs/basic-languages/less/less.js"
-  },
-  {
-    "revision": "c8b58ebd7c85658b4b71f0c793bfb594",
-    "url": "libs/vs/basic-languages/lua/lua.js"
-  },
-  {
-    "revision": "7c5bc2ff810881de1aa9c003673040d2",
-    "url": "libs/vs/basic-languages/markdown/markdown.js"
-  },
-  {
-    "revision": "d5bc491c509de686762d39a32cc0b2e7",
-    "url": "libs/vs/basic-languages/msdax/msdax.js"
-  },
-  {
-    "revision": "3e784e1f86d193eb0d5c8cbef580b030",
-    "url": "libs/vs/basic-languages/mysql/mysql.js"
-  },
-  {
-    "revision": "1fec7dcf769694ac512c4b1784290c66",
-    "url": "libs/vs/basic-languages/objective-c/objective-c.js"
-  },
-  {
-    "revision": "94b07d68352abd257357af3ab1e6fb56",
-    "url": "libs/vs/basic-languages/pascal/pascal.js"
-  },
-  {
-    "revision": "268f13363cdbda7d8574661a64fa6ac9",
-    "url": "libs/vs/basic-languages/perl/perl.js"
-  },
-  {
-    "revision": "b118c9499911a45895897f97c75087c0",
-    "url": "libs/vs/basic-languages/pgsql/pgsql.js"
-  },
-  {
-    "revision": "b5da4f5c3f24393ad6620066d6e812e1",
-    "url": "libs/vs/basic-languages/php/php.js"
-  },
-  {
-    "revision": "20abb5508652ad8274b089175dbcd887",
-    "url": "libs/vs/basic-languages/postiats/postiats.js"
-  },
-  {
-    "revision": "d79918edc8dcefe4e35290ce640bd6ad",
-    "url": "libs/vs/basic-languages/powerquery/powerquery.js"
-  },
-  {
-    "revision": "d8ffc04a2be5c9d2f21beaed96171c90",
-    "url": "libs/vs/basic-languages/powershell/powershell.js"
-  },
-  {
-    "revision": "a30d087e722a9998a0073fd01b9fe975",
-    "url": "libs/vs/basic-languages/pug/pug.js"
-  },
-  {
-    "revision": "5acdbdf2174ab020447bcbc37fc89d02",
-    "url": "libs/vs/basic-languages/python/python.js"
-  },
-  {
-    "revision": "079ab6ecaf7875f004bea8640519b7f4",
-    "url": "libs/vs/basic-languages/r/r.js"
-  },
-  {
-    "revision": "7730201e560a78ae67e9da5828ced46f",
-    "url": "libs/vs/basic-languages/razor/razor.js"
-  },
-  {
-    "revision": "26463cbbca0fd6f57c48e4cd429c4b47",
-    "url": "libs/vs/basic-languages/redis/redis.js"
-  },
-  {
-    "revision": "13e3c26a7e852fe915cc5f2dbb460903",
-    "url": "libs/vs/basic-languages/redshift/redshift.js"
-  },
-  {
-    "revision": "3457027c1c04ad0f09c0bb369209cf1c",
-    "url": "libs/vs/basic-languages/ruby/ruby.js"
-  },
-  {
-    "revision": "13de2a3a0a1bd6d4d29590b2aeb53d42",
-    "url": "libs/vs/basic-languages/rust/rust.js"
-  },
-  {
-    "revision": "902b8f07cd29f93052b581e005d50e4d",
-    "url": "libs/vs/basic-languages/sb/sb.js"
-  },
-  {
-    "revision": "3e818b9f5fc92aa14020778f7e13bbe8",
-    "url": "libs/vs/basic-languages/scheme/scheme.js"
-  },
-  {
-    "revision": "709c082e48f833a23785582626451642",
-    "url": "libs/vs/basic-languages/scss/scss.js"
-  },
-  {
-    "revision": "c765862e882d4f28bf8cef26c1b85151",
-    "url": "libs/vs/basic-languages/shell/shell.js"
-  },
-  {
-    "revision": "ed089ae7aff4992c86a5f4549242c12a",
-    "url": "libs/vs/basic-languages/solidity/solidity.js"
-  },
-  {
-    "revision": "016478230f2739332420aaa1eb92ce0b",
-    "url": "libs/vs/basic-languages/sql/sql.js"
-  },
-  {
-    "revision": "7af06b2d724e67fa905c8f106b0230b5",
-    "url": "libs/vs/basic-languages/st/st.js"
-  },
-  {
-    "revision": "ac12a14cbad5a19e6bfa4d965f238acb",
-    "url": "libs/vs/basic-languages/swift/swift.js"
-  },
-  {
-    "revision": "7543619470022a505d8ab898f6e10713",
-    "url": "libs/vs/basic-languages/tcl/tcl.js"
-  },
-  {
-    "revision": "b47f441e1dd9910d956324bb30c32a43",
-    "url": "libs/vs/basic-languages/typescript/typescript.js"
-  },
-  {
-    "revision": "ee7309de4c9ee3a72bdd18218dd49765",
-    "url": "libs/vs/basic-languages/vb/vb.js"
-  },
-  {
-    "revision": "9dfe430e0f35d0cc9bf599e81f4434dd",
-    "url": "libs/vs/basic-languages/xml/xml.js"
-  },
-  {
-    "revision": "02e29fb87d99b6928454245d6422b385",
-    "url": "libs/vs/basic-languages/yaml/yaml.js"
-  },
-  {
-    "revision": "7e77ec492e36ba20e0924c3f3ccb678e",
-    "url": "libs/vs/editor/editor.main.css"
-  },
-  {
-    "revision": "e5038e066395f2d435e5577e77e162c2",
-    "url": "libs/vs/editor/editor.main.js"
-  },
-  {
-    "revision": "60792280d21c2dd1d22e75002978d865",
-    "url": "libs/vs/editor/editor.main.nls.de.js"
-  },
-  {
-    "revision": "b56676a3dddaeecd27e3447ef58e940c",
-    "url": "libs/vs/editor/editor.main.nls.es.js"
-  },
-  {
-    "revision": "bece0abde47a19f1ca253e82c0ff6d86",
-    "url": "libs/vs/editor/editor.main.nls.fr.js"
-  },
-  {
-    "revision": "394a8fbb132d753ef0d6fefcc6c8baf6",
-    "url": "libs/vs/editor/editor.main.nls.it.js"
-  },
-  {
-    "revision": "45e08402dab030c14c7b0ced8627ff37",
-    "url": "libs/vs/editor/editor.main.nls.ja.js"
-  },
-  {
-    "revision": "ca1b6386706a2e58749ef6314f99c0c8",
-    "url": "libs/vs/editor/editor.main.nls.js"
-  },
-  {
-    "revision": "22265c71d523e69a628159950c6634b7",
-    "url": "libs/vs/editor/editor.main.nls.ko.js"
-  },
-  {
-    "revision": "afd944d9d3c9294c4d654c55c947e057",
-    "url": "libs/vs/editor/editor.main.nls.ru.js"
-  },
-  {
-    "revision": "5fb9c18b6951041afe04516bc1e17430",
-    "url": "libs/vs/editor/editor.main.nls.zh-cn.js"
-  },
-  {
-    "revision": "e2e91de11cd2ffe042136ef6128b01a6",
-    "url": "libs/vs/editor/editor.main.nls.zh-tw.js"
-  },
-  {
-    "revision": "b2e50992f2d4389bd849c2202ac5d3e4",
-    "url": "libs/vs/language/css/cssMode.js"
-  },
-  {
-    "revision": "0c03514daddb8dcf33cad6f661611781",
-    "url": "libs/vs/language/css/cssWorker.js"
-  },
-  {
-    "revision": "a3408a206004fed950459f7e96bc9937",
-    "url": "libs/vs/language/html/htmlMode.js"
-  },
-  {
-    "revision": "a0c965d539dd08447f72c7136f3c4c53",
-    "url": "libs/vs/language/html/htmlWorker.js"
-  },
-  {
-    "revision": "999a98dd759aecb375e24756cef5dfd0",
-    "url": "libs/vs/language/json/jsonMode.js"
-  },
-  {
-    "revision": "1d6259bf3e15d639c86231fb5252bbd7",
-    "url": "libs/vs/language/json/jsonWorker.js"
-  },
-  {
-    "revision": "95424c114d1470e8d128186075cc7541",
-    "url": "libs/vs/language/typescript/tsMode.js"
-  },
-  {
-    "revision": "ce17cef8297dd479040c02c243d3a254",
-    "url": "libs/vs/language/typescript/tsWorker.js"
-  },
-  {
-    "revision": "ba02631b823d53c1a5adfbe01e0f1b2b",
-    "url": "libs/vs/loader.js"
   },
   {
     "revision": "8e49b728413079dfd9ee45d0c58d54e4",
@@ -1628,7 +1340,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "samples/visual/recharts.html"
   },
   {
-    "revision": "306b97dec903ea47ce73",
+    "revision": "10bbeaf06959982bd649",
     "url": "style.css"
   },
   {

@@ -1,12 +1,12 @@
 import { compare, identityHash, equals, structuralHash } from "./Util.js";
 export function HashIdentity$$$FromFunctions(hash, eq) {
   return {
-    GetHashCode(x) {
-      return hash(x);
+    Equals(x, y) {
+      return eq(x, y);
     },
 
-    Equals(x$$1, y) {
-      return eq(x$$1, y);
+    GetHashCode(x$$1) {
+      return hash(x$$1);
     }
 
   };
