@@ -1,4 +1,4 @@
-import { combineHashCodes, compare, compareArrays, equals, equalArrays, identityHash, structuralHash, numberHash } from "./Util.js";
+import { combineHashCodes, compare, compareArrays, equalArrays, equals, identityHash, numberHash, structuralHash } from "./Util.js";
 function sameType(x, y) {
     return y != null && Object.getPrototypeOf(x).constructor === Object.getPrototypeOf(y).constructor;
 }
@@ -28,9 +28,10 @@ export function declare(cons, superClass) {
     return cons;
 }
 export function SystemObject() {
+    return;
 }
 SystemObject.prototype.toString = function () {
-    return "{" + Object.keys(this).map(k => k + " = " + String(this[k])).join(";\n ") + "}";
+    return "{" + Object.keys(this).map((k) => k + " = " + String(this[k])).join(";\n ") + "}";
 };
 SystemObject.prototype.GetHashCode = function () {
     return identityHash(this);
@@ -65,7 +66,7 @@ export function List(head, tail) {
     this.tail = tail;
 }
 List.prototype.toString = function () {
-    return "[" + Array.from(this).map(x => String(x)).join("; ") + "]";
+    return "[" + Array.from(this).map((x) => String(x)).join("; ") + "]";
 };
 List.prototype.toJSON = function () {
     return Array.from(this);
@@ -104,7 +105,7 @@ Union.prototype.toString = function () {
         return this.name + " " + String(this.fields[0]);
     }
     else {
-        return this.name + " (" + this.fields.map(x => String(x)).join(",") + ")";
+        return this.name + " (" + this.fields.map((x) => String(x)).join(",") + ")";
     }
 };
 Union.prototype.toJSON = function () {
@@ -113,7 +114,7 @@ Union.prototype.toJSON = function () {
         : [this.name].concat(this.fields);
 };
 Union.prototype.GetHashCode = function () {
-    let hashes = this.fields.map(x => structuralHash(x));
+    const hashes = this.fields.map((x) => structuralHash(x));
     hashes.splice(0, 0, numberHash(this.tag));
     return combineHashCodes(hashes);
 };
@@ -181,15 +182,16 @@ function recordCompare(self, other, getFieldNames) {
     }
 }
 export function Record() {
+    return;
 }
 Record.prototype.toString = function () {
-    return "{" + Object.keys(this).map(k => k + " = " + String(this[k])).join(";\n ") + "}";
+    return "{" + Object.keys(this).map((k) => k + " = " + String(this[k])).join(";\n ") + "}";
 };
 Record.prototype.toJSON = function () {
     return recordToJson(this);
 };
 Record.prototype.GetHashCode = function () {
-    const hashes = Object.keys(this).map(k => structuralHash(this[k]));
+    const hashes = Object.keys(this).map((k) => structuralHash(this[k]));
     return combineHashCodes(hashes);
 };
 Record.prototype.Equals = function (other) {
@@ -213,7 +215,7 @@ export function isException(x) {
     return x instanceof Error || x instanceof Exception;
 }
 function getFSharpExceptionFieldNames(self) {
-    return Object.keys(self).filter(k => k !== "message" && k !== "stack");
+    return Object.keys(self).filter((k) => k !== "message" && k !== "stack");
 }
 export const FSharpException = declare(function FSharpException() {
     Exception.call(this);
@@ -228,14 +230,14 @@ FSharpException.prototype.toString = function () {
         return this.message + " " + String(this[fieldNames[0]]);
     }
     else {
-        return this.message + " (" + fieldNames.map(k => String(this[k])).join(",") + ")";
+        return this.message + " (" + fieldNames.map((k) => String(this[k])).join(",") + ")";
     }
 };
 FSharpException.prototype.toJSON = function () {
     return recordToJson(this, getFSharpExceptionFieldNames);
 };
 FSharpException.prototype.GetHashCode = function () {
-    const hashes = getFSharpExceptionFieldNames(this).map(k => structuralHash(this[k]));
+    const hashes = getFSharpExceptionFieldNames(this).map((k) => structuralHash(this[k]));
     return combineHashCodes(hashes);
 };
 FSharpException.prototype.Equals = function (other) {
@@ -250,5 +252,5 @@ export const MatchFailureException = declare(function MatchFailureException(arg1
     this.arg3 = arg3 | 0;
     this.message = "The match cases were incomplete";
 }, FSharpException);
-export const Attribute = declare(function Attribute() { });
+export const Attribute = declare(function Attribute() { return; });
 //# sourceMappingURL=Types.js.map

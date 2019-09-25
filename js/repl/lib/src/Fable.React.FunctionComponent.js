@@ -1,6 +1,6 @@
-import { declare } from "../fable-library.2.3.18/Types.js";
-import { type } from "../fable-library.2.3.18/Reflection.js";
-import { curry } from "../fable-library.2.3.18/Util.js";
+import { declare } from "../fable-library.2.4.2/Types.js";
+import { type } from "../fable-library.2.4.2/Reflection.js";
+import { curry } from "../fable-library.2.4.2/Util.js";
 import { ReactElementTypeModule$$$memoWith as ReactElementTypeModule$0024$0024$0024memoWith } from "./Fable.React.Helpers.js";
 export const FunctionComponent = declare(function Fable_React_FunctionComponent() {});
 export function FunctionComponent$reflection() {
@@ -29,6 +29,7 @@ export function FunctionComponent$$$Of$$2F363EB5(render, displayName, memoizeWit
   }
 
   return function (props) {
-    return React.createElement(elemType, props, ...[]);
+    const children = [];
+    return React.createElement(elemType, props, ...children);
   };
 }

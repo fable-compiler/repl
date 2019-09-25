@@ -27,7 +27,7 @@ export function getBytesInt32(value) {
     view.setInt32(0, value, littleEndian);
     return bytes;
 }
-export function getBytesInt64(value /* Long */) {
+export function getBytesInt64(value) {
     const bytes = new Uint8Array(8);
     const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
     view.setInt32(littleEndian ? 0 : 4, getLowBits(value), littleEndian);
@@ -46,7 +46,7 @@ export function getBytesUInt32(value) {
     view.setUint32(0, value, littleEndian);
     return bytes;
 }
-export function getBytesUInt64(value /* Long */) {
+export function getBytesUInt64(value) {
     const bytes = new Uint8Array(8);
     const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
     view.setUint32(littleEndian ? 0 : 4, getLowBitsUnsigned(value), littleEndian);
@@ -65,7 +65,7 @@ export function getBytesDouble(value) {
     view.setFloat64(0, value, littleEndian);
     return bytes;
 }
-export function int64BitsToDouble(value /* Long */) {
+export function int64BitsToDouble(value) {
     const buffer = new ArrayBuffer(8);
     const view = new DataView(buffer);
     view.setInt32(littleEndian ? 0 : 4, getLowBits(value), littleEndian);

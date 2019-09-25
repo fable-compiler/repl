@@ -47,8 +47,10 @@ export function fromInt64(i) {
   return BigInteger$0024$0024$0024$0024002Ector$0024$0024Z524259C1(i);
 }
 export function fromInt32(i$$1) {
+  var value;
+
   if (i$$1 > 2147483647) {
-    return BigInteger$0024$0024$0024$0024002Ector$0024$0024Z524259C1(fromInteger(i$$1, false, 6));
+    return BigInteger$0024$0024$0024$0024002Ector$0024$0024Z524259C1((value = i$$1, (fromInteger(value, false, 6))));
   } else {
     return BigInteger$0024$0024$0024$0024002Ector$0024$0024Z524259A4(i$$1);
   }
@@ -170,9 +172,11 @@ function flipTwosComplement(currByte, lowBitFound) {
   } else if (currByte === 0) {
     return [0, false];
   } else {
-    const firstBitIndex = find(function predicate(i$$2) {
+    let firstBitIndex;
+    const list = ofSeq(rangeNumber(0, 1, 7));
+    firstBitIndex = find(function predicate(i$$2) {
       return (currByte & 1 << i$$2) > 0;
-    }, ofSeq(rangeNumber(0, 1, 7))) | 0;
+    }, list);
     return [(currByte ^ 254 << firstBitIndex) & 255, true];
   }
 }
@@ -183,51 +187,66 @@ export function toByteArray(value$$1) {
   } else {
     const isPositive = value$$1.CompareTo(zero) > 0;
     const value$$2 = isPositive ? value$$1 : BigInteger$0024$0024$0024op_Multiply$0024$002456F059C0(BigInteger$0024$0024$0024$0024002Ector$0024$0024Z524259A4(-1), value$$1);
-    const mask32 = fromInt64(fromInteger(4294967295, false, 6));
+    let mask32;
+    let i$$3;
+    i$$3 = fromInteger(4294967295, false, 6);
+    mask32 = fromInt64(i$$3);
 
-    const loop = function loop(accumBytes, consumeValue, lowBitFound$$1) {
+    const loop = function loop($accumBytes$$74, $consumeValue$$75, $lowBitFound$$1$$76) {
+      var value$$9, value$$10, value$$11;
+
       loop: while (true) {
+        const accumBytes = $accumBytes$$74,
+              consumeValue = $consumeValue$$75,
+              lowBitFound$$1 = $lowBitFound$$1$$76;
+
         if (consumeValue.CompareTo(zero) <= 0) {
-          const accumBytes$$1 = isPositive ? skipWhile(function predicate$$1(b) {
-            return b === 0;
-          }, accumBytes) : skipWhile(function predicate$$2(b$$1) {
-            return b$$1 === 255;
-          }, accumBytes);
-          const isHighBitOne = (head(accumBytes$$1) & 128) !== 0;
-          const accumBytes$$2 = (isPositive ? isHighBitOne : false) ? new List(0, accumBytes$$1) : (!isPositive ? !isHighBitOne : false) ? new List(255, accumBytes$$1) : accumBytes$$1;
-          return reverse(ofList(accumBytes$$2, Uint8Array), Uint8Array);
-        } else {
-          const currValue = toUInt32(BigInteger$0024$0024$0024op_BitwiseAnd$0024$002456F059C0(consumeValue, mask32));
+          let accumBytes$$1;
 
           if (isPositive) {
-            const b0 = currValue & 0xFF;
-            const b1 = currValue >>> 8 & 0xFF;
-            const b2 = currValue >>> 16 & 0xFF;
-            const b3 = currValue >>> 24 & 0xFF;
-            const $accumBytes$$3 = accumBytes;
-            const $consumeValue$$4 = consumeValue;
-            accumBytes = new List(b3, new List(b2, new List(b1, new List(b0, $accumBytes$$3))));
-            consumeValue = BigInteger$0024$0024$0024op_RightShift$0024$002462E082A2($consumeValue$$4, 32);
-            lowBitFound$$1 = false;
+            accumBytes$$1 = skipWhile(function predicate$$1(b) {
+              return b === 0;
+            }, accumBytes);
+          } else {
+            accumBytes$$1 = skipWhile(function predicate$$2(b$$1) {
+              return b$$1 === 255;
+            }, accumBytes);
+          }
+
+          const isHighBitOne = (head(accumBytes$$1) & 128) !== 0;
+          const accumBytes$$2 = (isPositive ? isHighBitOne : false) ? new List(0, accumBytes$$1) : (!isPositive ? !isHighBitOne : false) ? new List(255, accumBytes$$1) : accumBytes$$1;
+          let array;
+          array = ofList(accumBytes$$2, Uint8Array);
+          return reverse(array, Uint8Array);
+        } else {
+          let currValue;
+          const x$$19 = BigInteger$0024$0024$0024op_BitwiseAnd$0024$002456F059C0(consumeValue, mask32);
+          currValue = toUInt32(x$$19);
+
+          if (isPositive) {
+            let b0;
+            b0 = currValue & 0xFF;
+            let b1;
+            const value$$5 = currValue >>> 8;
+            b1 = value$$5 & 0xFF;
+            let b2;
+            const value$$6 = currValue >>> 16;
+            b2 = value$$6 & 0xFF;
+            let b3;
+            const value$$7 = currValue >>> 24;
+            b3 = value$$7 & 0xFF;
+            $accumBytes$$74 = new List(b3, new List(b2, new List(b1, new List(b0, accumBytes))));
+            $consumeValue$$75 = BigInteger$0024$0024$0024op_RightShift$0024$002462E082A2(consumeValue, 32);
+            $lowBitFound$$1$$76 = false;
             continue loop;
           } else {
-            const patternInput = flipTwosComplement(currValue & 0xFF, lowBitFound$$1);
-            const lowBitFound$$2 = patternInput[1];
-            const b0$$1 = patternInput[0];
-            const patternInput$$1 = flipTwosComplement(currValue >>> 8 & 0xFF, lowBitFound$$2);
-            const lowBitFound$$3 = patternInput$$1[1];
-            const b1$$1 = patternInput$$1[0];
-            const patternInput$$2 = flipTwosComplement(currValue >>> 16 & 0xFF, lowBitFound$$3);
-            const lowBitFound$$4 = patternInput$$2[1];
-            const b2$$1 = patternInput$$2[0];
-            const patternInput$$3 = flipTwosComplement(currValue >>> 24 & 0xFF, lowBitFound$$4);
-            const lowBitFound$$5 = patternInput$$3[1];
-            const b3$$1 = patternInput$$3[0];
-            const $accumBytes$$5 = accumBytes;
-            const $consumeValue$$6 = consumeValue;
-            accumBytes = new List(b3$$1, new List(b2$$1, new List(b1$$1, new List(b0$$1, $accumBytes$$5))));
-            consumeValue = BigInteger$0024$0024$0024op_RightShift$0024$002462E082A2($consumeValue$$6, 32);
-            lowBitFound$$1 = lowBitFound$$5;
+            const patternInput = flipTwosComplement((currValue & 0xFF), lowBitFound$$1);
+            const patternInput$$1 = flipTwosComplement((value$$9 = currValue >>> 8, (value$$9 & 0xFF)), patternInput[1]);
+            const patternInput$$2 = flipTwosComplement((value$$10 = currValue >>> 16, (value$$10 & 0xFF)), patternInput$$1[1]);
+            const patternInput$$3 = flipTwosComplement((value$$11 = currValue >>> 24, (value$$11 & 0xFF)), patternInput$$2[1]);
+            $accumBytes$$74 = new List(patternInput$$3[0], new List(patternInput$$2[0], new List(patternInput$$1[0], new List(patternInput[0], accumBytes))));
+            $consumeValue$$75 = BigInteger$0024$0024$0024op_RightShift$0024$002462E082A2(consumeValue, 32);
+            $lowBitFound$$1$$76 = patternInput$$3[1];
             continue loop;
           }
         }
@@ -250,11 +269,18 @@ export function fromByteArray(bytes) {
     const isPositive$$1 = (bytes[bytes.length - 1] & 128) === 0;
     const buffer = fill(new Uint8Array(4), 0, 4, 0);
 
-    const loop$$1 = function loop$$1(accumUInt32, currIndex, bytesRemaining, lowBitFound$$6) {
+    const loop$$1 = function loop$$1($accumUInt32$$80, $currIndex$$81, $bytesRemaining$$82, $lowBitFound$$6$$83) {
       loop$$1: while (true) {
+        const accumUInt32 = $accumUInt32$$80,
+              currIndex = $currIndex$$81,
+              bytesRemaining = $bytesRemaining$$82,
+              lowBitFound$$6 = $lowBitFound$$6$$83;
+
         if (bytesRemaining === 0) {
-          const value$$14 = fold(function folder(acc, value$$12) {
-            return BigInteger$0024$0024$0024op_Addition$0024$002456F059C0(BigInteger$0024$0024$0024op_LeftShift$0024$002462E082A2(acc, 32), fromInt64(fromInteger(value$$12, false, 6)));
+          let value$$14;
+          value$$14 = fold(function folder(acc, value$$12) {
+            var i$$4;
+            return BigInteger$0024$0024$0024op_Addition$0024$002456F059C0(BigInteger$0024$0024$0024op_LeftShift$0024$002462E082A2(acc, 32), (i$$4 = (fromInteger(value$$12, false, 6)), (fromInt64(i$$4))));
           }, zero, accumUInt32);
 
           if (isPositive$$1) {
@@ -272,36 +298,22 @@ export function fromByteArray(bytes) {
           if (isPositive$$1) {
             fill(buffer, bytesToProcess, 4 - bytesToProcess, 0);
             const value$$15 = (((buffer[0] | buffer[1] << 8 >>> 0) >>> 0 | buffer[2] << 16 >>> 0) >>> 0 | buffer[3] << 24 >>> 0) >>> 0;
-            const $accumUInt32$$7 = accumUInt32;
-            const $bytesRemaining$$9 = bytesRemaining;
-            const $currIndex$$8 = currIndex;
-            accumUInt32 = new List(value$$15, $accumUInt32$$7);
-            currIndex = $currIndex$$8 + bytesToProcess;
-            bytesRemaining = $bytesRemaining$$9 - bytesToProcess;
-            lowBitFound$$6 = false;
+            $accumUInt32$$80 = new List(value$$15, accumUInt32);
+            $currIndex$$81 = currIndex + bytesToProcess;
+            $bytesRemaining$$82 = bytesRemaining - bytesToProcess;
+            $lowBitFound$$6$$83 = false;
             continue loop$$1;
           } else {
             fill(buffer, bytesToProcess, 4 - bytesToProcess, 255);
             const patternInput$$4 = flipTwosComplement(buffer[0], lowBitFound$$6);
-            const lowBitFound$$7 = patternInput$$4[1];
-            const b0$$2 = patternInput$$4[0];
-            const patternInput$$5 = flipTwosComplement(buffer[1], lowBitFound$$7);
-            const lowBitFound$$8 = patternInput$$5[1];
-            const b1$$2 = patternInput$$5[0];
-            const patternInput$$6 = flipTwosComplement(buffer[2], lowBitFound$$8);
-            const lowBitFound$$9 = patternInput$$6[1];
-            const b2$$2 = patternInput$$6[0];
-            const patternInput$$7 = flipTwosComplement(buffer[3], lowBitFound$$9);
-            const lowBitFound$$10 = patternInput$$7[1];
-            const b3$$2 = patternInput$$7[0];
-            const value$$16 = (((b0$$2 | b1$$2 << 8 >>> 0) >>> 0 | b2$$2 << 16 >>> 0) >>> 0 | b3$$2 << 24 >>> 0) >>> 0;
-            const $accumUInt32$$10 = accumUInt32;
-            const $bytesRemaining$$12 = bytesRemaining;
-            const $currIndex$$11 = currIndex;
-            accumUInt32 = new List(value$$16, $accumUInt32$$10);
-            currIndex = $currIndex$$11 + bytesToProcess;
-            bytesRemaining = $bytesRemaining$$12 - bytesToProcess;
-            lowBitFound$$6 = lowBitFound$$10;
+            const patternInput$$5 = flipTwosComplement(buffer[1], patternInput$$4[1]);
+            const patternInput$$6 = flipTwosComplement(buffer[2], patternInput$$5[1]);
+            const patternInput$$7 = flipTwosComplement(buffer[3], patternInput$$6[1]);
+            const value$$16 = (((patternInput$$4[0] | patternInput$$5[0] << 8 >>> 0) >>> 0 | patternInput$$6[0] << 16 >>> 0) >>> 0 | patternInput$$7[0] << 24 >>> 0) >>> 0;
+            $accumUInt32$$80 = new List(value$$16, accumUInt32);
+            $currIndex$$81 = currIndex + bytesToProcess;
+            $bytesRemaining$$82 = bytesRemaining - bytesToProcess;
+            $lowBitFound$$6$$83 = patternInput$$7[1];
             continue loop$$1;
           }
         }

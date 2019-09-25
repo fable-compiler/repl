@@ -1,13 +1,5 @@
 import { declare, Union } from "./Types.js";
-import { compare, equals, structuralHash } from "./Util.js"; // Options are erased in runtime by Fable, but we have
-// the `Some` type below to wrap values that would evaluate
-// to null in runtime. These two rules must be followed:
-// 1- None is always null in runtime, a non-strict null check
-//    (`x == null`) is enough to check the case of an option.
-// 2- To get the value of an option the `getValue` helper
-//    below must **always** be used.
-// export type Option<T> = T | Some<T>;
-// Using a class here for better compatibility with TS files importing Some
+import { compare, equals, structuralHash } from "./Util.js"; // Using a class here for better compatibility with TS files importing Some
 
 export class Some {
   constructor(value) {
@@ -28,15 +20,24 @@ export class Some {
   }
 
   Equals(other) {
-    return other == null ? false : equals(this.value, other instanceof Some ? other.value : other);
+    if (other == null) {
+      return false;
+    } else {
+      return equals(this.value, other instanceof Some ? other.value : other);
+    }
   }
 
   CompareTo(other) {
-    return other == null ? 1 : compare(this.value, other instanceof Some ? other.value : other);
+    if (other == null) {
+      return 1;
+    } else {
+      return compare(this.value, other instanceof Some ? other.value : other);
+    }
   }
 
 }
 export function some(x) {
+  x = x === undefined ? null : x;
   return x == null || x instanceof Some ? new Some(x) : x;
 }
 export function value(x, acceptNull) {

@@ -1,6 +1,6 @@
-import { Union, declare, Record } from "../fable-library.2.3.18/Types.js";
-import { union, lambda, unit, bool, obj, type, string, record, float64 } from "../fable-library.2.3.18/Reflection.js";
-import { createObj } from "../fable-library.2.3.18/Util.js";
+import { Union, declare, Record } from "../fable-library.2.4.2/Types.js";
+import { union, lambda, unit, bool, obj, type, string, record, float64 } from "../fable-library.2.4.2/Reflection.js";
+import { createObj } from "../fable-library.2.4.2/Util.js";
 export const Props$002EPoint2 = declare(function Fable_Recharts_Props_Point2(arg1, arg2) {
   this.x = arg1;
   this.y = arg2;
@@ -161,128 +161,212 @@ export function ReplInternalHelpers$$$ofImport(importMember, _importPath, props,
   return React.createElement(Recharts[importMember], props, ...children);
 }
 export function lineChart(props$$1, children$$1) {
-  return React.createElement(Recharts.LineChart, createObj(props$$1, 1), ...children$$1);
+  const props$$2 = createObj(props$$1, 1);
+  const children$$2 = children$$1;
+  return React.createElement(Recharts.LineChart, props$$2, ...children$$2);
 }
 export function barChart(props$$3, children$$3) {
-  return React.createElement(Recharts.BarChart, createObj(props$$3, 1), ...children$$3);
+  const props$$4 = createObj(props$$3, 1);
+  const children$$4 = children$$3;
+  return React.createElement(Recharts.BarChart, props$$4, ...children$$4);
 }
 export function areaChart(props$$5, children$$5) {
-  return React.createElement(Recharts.AreaChart, createObj(props$$5, 1), ...children$$5);
+  const props$$6 = createObj(props$$5, 1);
+  const children$$6 = children$$5;
+  return React.createElement(Recharts.AreaChart, props$$6, ...children$$6);
 }
 export function composedChart(props$$7, children$$7) {
-  return React.createElement(Recharts.ComposedChart, createObj(props$$7, 1), ...children$$7);
+  const props$$8 = createObj(props$$7, 1);
+  const children$$8 = children$$7;
+  return React.createElement(Recharts.ComposedChart, props$$8, ...children$$8);
 }
 export function pieChart(props$$9, children$$9) {
-  return React.createElement(Recharts.PieChart, createObj(props$$9, 1), ...children$$9);
+  const props$$10 = createObj(props$$9, 1);
+  const children$$10 = children$$9;
+  return React.createElement(Recharts.PieChart, props$$10, ...children$$10);
 }
 export function radarChart(props$$11, children$$11) {
-  return React.createElement(Recharts.RadarChart, createObj(props$$11, 1), ...children$$11);
+  const props$$12 = createObj(props$$11, 1);
+  const children$$12 = children$$11;
+  return React.createElement(Recharts.RadarChart, props$$12, ...children$$12);
 }
 export function radialBarChart(props$$13, children$$13) {
-  return React.createElement(Recharts.RadialBarChart, createObj(props$$13, 1), ...children$$13);
+  const props$$14 = createObj(props$$13, 1);
+  const children$$14 = children$$13;
+  return React.createElement(Recharts.RadialBarChart, props$$14, ...children$$14);
 }
 export function scatterChart(props$$15, children$$15) {
-  return React.createElement(Recharts.ScatterChart, createObj(props$$15, 1), ...children$$15);
+  const props$$16 = createObj(props$$15, 1);
+  const children$$16 = children$$15;
+  return React.createElement(Recharts.ScatterChart, props$$16, ...children$$16);
 }
 export function treemap(props$$17, children$$17) {
-  return React.createElement(Recharts.Treemap, createObj(props$$17, 1), ...children$$17);
+  const props$$18 = createObj(props$$17, 1);
+  const children$$18 = children$$17;
+  return React.createElement(Recharts.Treemap, props$$18, ...children$$18);
 }
 export function responsiveContainer(props$$19, children$$19) {
-  return React.createElement(Recharts.ResponsiveContainer, createObj(props$$19, 1), ...children$$19);
+  const props$$20 = createObj(props$$19, 1);
+  const children$$20 = children$$19;
+  return React.createElement(Recharts.ResponsiveContainer, props$$20, ...children$$20);
 }
 export function legend(props$$21, children$$21) {
-  return React.createElement(Recharts.Legend, createObj(props$$21, 1), ...children$$21);
+  const props$$22 = createObj(props$$21, 1);
+  const children$$22 = children$$21;
+  return React.createElement(Recharts.Legend, props$$22, ...children$$22);
 }
 export function tooltip(props$$23, children$$23) {
-  return React.createElement(Recharts.Tooltip, createObj(props$$23, 1), ...children$$23);
+  const props$$24 = createObj(props$$23, 1);
+  const children$$24 = children$$23;
+  return React.createElement(Recharts.Tooltip, props$$24, ...children$$24);
 }
 export function cell(props$$25, children$$25) {
-  return React.createElement(Recharts.Cell, createObj(props$$25, 1), ...children$$25);
+  const props$$26 = createObj(props$$25, 1);
+  const children$$26 = children$$25;
+  return React.createElement(Recharts.Cell, props$$26, ...children$$26);
 }
 export function text(props$$27, children$$27) {
-  return React.createElement(Recharts.Text, createObj(props$$27, 1), ...children$$27);
+  const props$$28 = createObj(props$$27, 1);
+  const children$$28 = children$$27;
+  return React.createElement(Recharts.Text, props$$28, ...children$$28);
 }
 export function label(props$$29, children$$29) {
-  return React.createElement(Recharts.Label, createObj(props$$29, 1), ...children$$29);
+  const props$$30 = createObj(props$$29, 1);
+  const children$$30 = children$$29;
+  return React.createElement(Recharts.Label, props$$30, ...children$$30);
 }
 export function labelList(props$$31, children$$31) {
-  return React.createElement(Recharts.LabelList, createObj(props$$31, 1), ...children$$31);
+  const props$$32 = createObj(props$$31, 1);
+  const children$$32 = children$$31;
+  return React.createElement(Recharts.LabelList, props$$32, ...children$$32);
 }
 export function area(props$$33, children$$33) {
-  return React.createElement(Recharts.Area, createObj(props$$33, 1), ...children$$33);
+  const props$$34 = createObj(props$$33, 1);
+  const children$$34 = children$$33;
+  return React.createElement(Recharts.Area, props$$34, ...children$$34);
 }
 export function bar(props$$35, children$$35) {
-  return React.createElement(Recharts.Bar, createObj(props$$35, 1), ...children$$35);
+  const props$$36 = createObj(props$$35, 1);
+  const children$$36 = children$$35;
+  return React.createElement(Recharts.Bar, props$$36, ...children$$36);
 }
 export function line(props$$37, children$$37) {
-  return React.createElement(Recharts.Line, createObj(props$$37, 1), ...children$$37);
+  const props$$38 = createObj(props$$37, 1);
+  const children$$38 = children$$37;
+  return React.createElement(Recharts.Line, props$$38, ...children$$38);
 }
 export function scatter(props$$39, children$$39) {
-  return React.createElement(Recharts.Scatter, createObj(props$$39, 1), ...children$$39);
+  const props$$40 = createObj(props$$39, 1);
+  const children$$40 = children$$39;
+  return React.createElement(Recharts.Scatter, props$$40, ...children$$40);
 }
 export function xaxis(props$$41, children$$41) {
-  return React.createElement(Recharts.XAxis, createObj(props$$41, 1), ...children$$41);
+  const props$$42 = createObj(props$$41, 1);
+  const children$$42 = children$$41;
+  return React.createElement(Recharts.XAxis, props$$42, ...children$$42);
 }
 export function yaxis(props$$43, children$$43) {
-  return React.createElement(Recharts.YAxis, createObj(props$$43, 1), ...children$$43);
+  const props$$44 = createObj(props$$43, 1);
+  const children$$44 = children$$43;
+  return React.createElement(Recharts.YAxis, props$$44, ...children$$44);
 }
 export function zaxis(props$$45, children$$45) {
-  return React.createElement(Recharts.ZAxis, createObj(props$$45, 1), ...children$$45);
+  const props$$46 = createObj(props$$45, 1);
+  const children$$46 = children$$45;
+  return React.createElement(Recharts.ZAxis, props$$46, ...children$$46);
 }
 export function brush(props$$47, children$$47) {
-  return React.createElement(Recharts.Brush, createObj(props$$47, 1), ...children$$47);
+  const props$$48 = createObj(props$$47, 1);
+  const children$$48 = children$$47;
+  return React.createElement(Recharts.Brush, props$$48, ...children$$48);
 }
 export function cartesianAxis(props$$49, children$$49) {
-  return React.createElement(Recharts.CartesianAxis, createObj(props$$49, 1), ...children$$49);
+  const props$$50 = createObj(props$$49, 1);
+  const children$$50 = children$$49;
+  return React.createElement(Recharts.CartesianAxis, props$$50, ...children$$50);
 }
 export function cartesianGrid(props$$51, children$$51) {
-  return React.createElement(Recharts.CartesianGrid, createObj(props$$51, 1), ...children$$51);
+  const props$$52 = createObj(props$$51, 1);
+  const children$$52 = children$$51;
+  return React.createElement(Recharts.CartesianGrid, props$$52, ...children$$52);
 }
 export function referenceLine(props$$53, children$$53) {
-  return React.createElement(Recharts.ReferenceLine, createObj(props$$53, 1), ...children$$53);
+  const props$$54 = createObj(props$$53, 1);
+  const children$$54 = children$$53;
+  return React.createElement(Recharts.ReferenceLine, props$$54, ...children$$54);
 }
 export function referenceDot(props$$55, children$$55) {
-  return React.createElement(Recharts.ReferenceDot, createObj(props$$55, 1), ...children$$55);
+  const props$$56 = createObj(props$$55, 1);
+  const children$$56 = children$$55;
+  return React.createElement(Recharts.ReferenceDot, props$$56, ...children$$56);
 }
 export function referenceArea(props$$57, children$$57) {
-  return React.createElement(Recharts.ReferenceArea, createObj(props$$57, 1), ...children$$57);
+  const props$$58 = createObj(props$$57, 1);
+  const children$$58 = children$$57;
+  return React.createElement(Recharts.ReferenceArea, props$$58, ...children$$58);
 }
 export function errorBar(props$$59, children$$59) {
-  return React.createElement(Recharts.ErrorBar, createObj(props$$59, 1), ...children$$59);
+  const props$$60 = createObj(props$$59, 1);
+  const children$$60 = children$$59;
+  return React.createElement(Recharts.ErrorBar, props$$60, ...children$$60);
 }
 export function pie(props$$61, children$$61) {
-  return React.createElement(Recharts.Pie, createObj(props$$61, 1), ...children$$61);
+  const props$$62 = createObj(props$$61, 1);
+  const children$$62 = children$$61;
+  return React.createElement(Recharts.Pie, props$$62, ...children$$62);
 }
 export function radar(props$$63, children$$63) {
-  return React.createElement(Recharts.Radar, createObj(props$$63, 1), ...children$$63);
+  const props$$64 = createObj(props$$63, 1);
+  const children$$64 = children$$63;
+  return React.createElement(Recharts.Radar, props$$64, ...children$$64);
 }
 export function radialBar(props$$65, children$$65) {
-  return React.createElement(Recharts.RadialBar, createObj(props$$65, 1), ...children$$65);
+  const props$$66 = createObj(props$$65, 1);
+  const children$$66 = children$$65;
+  return React.createElement(Recharts.RadialBar, props$$66, ...children$$66);
 }
 export function polarAngleAxis(props$$67, children$$67) {
-  return React.createElement(Recharts.PolarAngleAxis, createObj(props$$67, 1), ...children$$67);
+  const props$$68 = createObj(props$$67, 1);
+  const children$$68 = children$$67;
+  return React.createElement(Recharts.PolarAngleAxis, props$$68, ...children$$68);
 }
 export function polarGrid(props$$69, children$$69) {
-  return React.createElement(Recharts.PolarGrid, createObj(props$$69, 1), ...children$$69);
+  const props$$70 = createObj(props$$69, 1);
+  const children$$70 = children$$69;
+  return React.createElement(Recharts.PolarGrid, props$$70, ...children$$70);
 }
 export function polarRadiusAxis(props$$71, children$$71) {
-  return React.createElement(Recharts.PolarRadiusAxis, createObj(props$$71, 1), ...children$$71);
+  const props$$72 = createObj(props$$71, 1);
+  const children$$72 = children$$71;
+  return React.createElement(Recharts.PolarRadiusAxis, props$$72, ...children$$72);
 }
 export function cross(props$$73) {
-  return React.createElement(Recharts.Cross, createObj(props$$73, 1), ...[]);
+  const props$$74 = createObj(props$$73, 1);
+  const children$$73 = [];
+  return React.createElement(Recharts.Cross, props$$74, ...children$$73);
 }
 export function curve(props$$75) {
-  return React.createElement(Recharts.Curve, createObj(props$$75, 1), ...[]);
+  const props$$76 = createObj(props$$75, 1);
+  const children$$74 = [];
+  return React.createElement(Recharts.Curve, props$$76, ...children$$74);
 }
 export function dot(props$$77) {
-  return React.createElement(Recharts.Dot, createObj(props$$77, 1), ...[]);
+  const props$$78 = createObj(props$$77, 1);
+  const children$$75 = [];
+  return React.createElement(Recharts.Dot, props$$78, ...children$$75);
 }
 export function polygon(props$$79) {
-  return React.createElement(Recharts.Polygon, createObj(props$$79, 1), ...[]);
+  const props$$80 = createObj(props$$79, 1);
+  const children$$76 = [];
+  return React.createElement(Recharts.Polygon, props$$80, ...children$$76);
 }
 export function rectangle(props$$81) {
-  return React.createElement(Recharts.Rectangle, createObj(props$$81, 1), ...[]);
+  const props$$82 = createObj(props$$81, 1);
+  const children$$77 = [];
+  return React.createElement(Recharts.Rectangle, props$$82, ...children$$77);
 }
 export function sector(props$$83) {
-  return React.createElement(Recharts.Sector, createObj(props$$83, 1), ...[]);
+  const props$$84 = createObj(props$$83, 1);
+  const children$$78 = [];
+  return React.createElement(Recharts.Sector, props$$84, ...children$$78);
 }

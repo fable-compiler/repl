@@ -520,7 +520,17 @@ export function escapeUriString(s) {
 // or Dictionaries so we need a runtime check (see #1120)
 
 export function count(col) {
-  return isArray(col) ? col.length : col.size;
+  if (isArray(col)) {
+    return col.length;
+  } else {
+    let count = 0;
+
+    for (const _ of col) {
+      count++;
+    }
+
+    return count;
+  }
 }
 export function clear(col) {
   if (isArray(col)) {
@@ -628,7 +638,7 @@ export function partialApply(arity, f, args) {
   } else if (CURRIED_KEY in f) {
     f = f[CURRIED_KEY];
 
-    for (var i = 0; i < args.length; i++) {
+    for (let i = 0; i < args.length; i++) {
       f = f(args[i]);
     }
 
@@ -689,15 +699,11 @@ export function mapCurriedArgs(fn, mappings) {
     if (idx + 1 === mappings.length) {
       return res;
     } else {
-      return function (arg) {
-        return mapArg(res, arg, mappings, idx + 1);
-      };
+      return arg => mapArg(res, arg, mappings, idx + 1);
     }
   }
 
-  return function (arg) {
-    return mapArg(fn, arg, mappings, 0);
-  };
+  return arg => mapArg(fn, arg, mappings, 0);
 }
 export function addToDict(dict, k, v) {
   if (dict.has(k)) {

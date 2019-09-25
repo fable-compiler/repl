@@ -1,7 +1,7 @@
-import { declare, Union } from "../fable-library.2.3.18/Types.js";
-import { Common$002EGenericOptions$$$Parse$$9AE2F7C as Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C, Common$002EGenericOptions$$ToReactElement$$Z6D3CD4B7 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7, Common$002EGenericOptions$$AddModifiers$$5BB435D5 as Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5, Common$002EGenericOptions$$AddProps$$416C4D0B as Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B, Common$002EGenericOptions$$AddCaseName$$1505 as Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505, Color$$$ofColor as Color$0024$0024$0024ofColor, Common$002EGenericOptions$$AddClass$$Z721C83C5 as Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5, Reflection$$$getCaseName as Reflection$0024$0024$0024getCaseName, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Color$002EIColor$reflection as Color$0024002EIColor$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection } from "../Fulma/Common.js";
-import { union, string, list, type, bool } from "../fable-library.2.3.18/Reflection.js";
-import { createObj } from "../fable-library.2.3.18/Util.js";
+import { declare, Union } from "../fable-library.2.4.2/Types.js";
+import { Common$002EGenericOptions$$$Parse$$9AE2F7C as Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C, Common$002EGenericOptions$$AddModifiers$$5BB435D5 as Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5, Common$002EGenericOptions$$AddProps$$416C4D0B as Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B, Common$002EGenericOptions$$AddCaseName$$1505 as Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505, Color$$$ofColor as Color$0024$0024$0024ofColor, Common$002EGenericOptions$$AddClass$$Z721C83C5 as Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5, Reflection$$$getCaseName as Reflection$0024$0024$0024getCaseName, Common$002EGenericOptions$$ToReactElement$$Z6D3CD4B7 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Color$002EIColor$reflection as Color$0024002EIColor$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection } from "../Fulma/Common.js";
+import { union, string, list, type, bool } from "../fable-library.2.4.2/Reflection.js";
+import { createObj } from "../fable-library.2.4.2/Util.js";
 export const Option = declare(function Fulma_Select_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
@@ -9,67 +9,67 @@ export function Option$reflection() {
   return union("Fulma.Select.Option", [], Option, () => [["Size", [Size$0024002EISize$0024reflection()]], "is-fullwidth", "is-inline", ["is-loading", [bool]], ["is-focused", [bool]], ["is-active", [bool]], ["Disabled", [bool]], ["Color", [Color$0024002EIColor$0024reflection()]], "is-rounded", ["Props", [list(type("Fable.React.Props.IHTMLProp"))]], ["CustomClass", [string]], ["Modifiers", [list(Modifier$0024002EIModifier$0024reflection())]]]);
 }
 export function select(options, children) {
-  const parseOptions = function parseOptions(result, option) {
-    var $target$$1, state;
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options, function parseOptions(result, option) {
+    var $target$$5, state;
 
     switch (option.tag) {
       case 7:
-        $target$$1 = 1;
+        $target$$5 = 1;
         break;
 
       case 1:
       case 2:
       case 8:
-        $target$$1 = 2;
+        $target$$5 = 2;
         break;
 
       case 3:
-        $target$$1 = 3;
+        $target$$5 = 3;
         state = option.fields[0];
         break;
 
       case 4:
-        $target$$1 = 3;
+        $target$$5 = 3;
         state = option.fields[0];
         break;
 
       case 5:
-        $target$$1 = 3;
+        $target$$5 = 3;
         state = option.fields[0];
         break;
 
       case 6:
-        $target$$1 = 3;
+        $target$$5 = 3;
         state = option.fields[0];
         break;
 
       case 9:
-        $target$$1 = 4;
+        $target$$5 = 4;
         break;
 
       case 10:
-        $target$$1 = 5;
+        $target$$5 = 5;
         break;
 
       case 11:
-        $target$$1 = 6;
+        $target$$5 = 6;
         break;
 
       default:
-        $target$$1 = 0;
+        $target$$5 = 0;
     }
 
-    switch ($target$$1) {
+    switch ($target$$5) {
       case 0:
         {
-          const size = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, Reflection$0024$0024$0024getCaseName(size));
+          const arg00 = Reflection$0024$0024$0024getCaseName(option.fields[0]);
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, arg00);
         }
 
       case 1:
         {
-          const color = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, Color$0024$0024$0024ofColor(color));
+          const arg00$$1 = Color$0024$0024$0024ofColor(option.fields[0]);
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, arg00$$1);
         }
 
       case 2:
@@ -88,25 +88,22 @@ export function select(options, children) {
 
       case 4:
         {
-          const props = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B(result, props);
+          return Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B(result, option.fields[0]);
         }
 
       case 5:
         {
-          const customClass = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, customClass);
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, option.fields[0]);
         }
 
       case 6:
         {
-          const modifiers = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5(result, modifiers);
+          return Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5(result, option.fields[0]);
         }
     }
-  };
-
-  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options, parseOptions, "select"), function (props$$1, children$$1) {
-    return React.createElement("div", createObj(props$$1, 1), ...children$$1);
+  }, "select"), function (props$$1, children$$1) {
+    const props$$2 = props$$1;
+    const children$$2 = children$$1;
+    return React.createElement("div", createObj(props$$2, 1), ...children$$2);
   }, children);
 }

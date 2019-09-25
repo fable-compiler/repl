@@ -1,4 +1,4 @@
-import { combineHashCodes, compare, compareArrays, equals, equalArrays, identityHash, structuralHash, numberHash } from "./Util.js";
+import { combineHashCodes, compare, compareArrays, equalArrays, equals, identityHash, numberHash, structuralHash } from "./Util.js";
 
 function sameType(x, y) {
   return y != null && Object.getPrototypeOf(x).constructor === Object.getPrototypeOf(y).constructor;
@@ -29,7 +29,9 @@ export function declare(cons, superClass) {
   inherits(cons, superClass || SystemObject);
   return cons;
 }
-export function SystemObject() {}
+export function SystemObject() {
+  return;
+}
 
 SystemObject.prototype.toString = function () {
   return "{" + Object.keys(this).map(k => k + " = " + String(this[k])).join(";\n ") + "}";
@@ -133,7 +135,7 @@ Union.prototype.toJSON = function () {
 };
 
 Union.prototype.GetHashCode = function () {
-  let hashes = this.fields.map(x => structuralHash(x));
+  const hashes = this.fields.map(x => structuralHash(x));
   hashes.splice(0, 0, numberHash(this.tag));
   return combineHashCodes(hashes);
 };
@@ -203,7 +205,9 @@ function recordCompare(self, other, getFieldNames) {
   }
 }
 
-export function Record() {}
+export function Record() {
+  return;
+}
 
 Record.prototype.toString = function () {
   return "{" + Object.keys(this).map(k => k + " = " + String(this[k])).join(";\n ") + "}";
@@ -285,4 +289,6 @@ export const MatchFailureException = declare(function MatchFailureException(arg1
   this.arg3 = arg3 | 0;
   this.message = "The match cases were incomplete";
 }, FSharpException);
-export const Attribute = declare(function Attribute() {});
+export const Attribute = declare(function Attribute() {
+  return;
+});

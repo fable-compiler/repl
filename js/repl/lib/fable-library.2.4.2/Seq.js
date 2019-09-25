@@ -1,5 +1,5 @@
-import { makeRangeStepFunction as makeLongRangeStepFunction } from "./Long.js";
 import { makeRangeStepFunction as makeDecimalRangeStepFunction } from "./Decimal.js";
+import { makeRangeStepFunction as makeLongRangeStepFunction } from "./Long.js";
 import { some, value } from "./Option.js";
 import { compare, equals } from "./Util.js";
 export class Enumerator {
@@ -185,6 +185,9 @@ export function delay(f) {
 }
 export function empty() {
   return unfold(() => void 0);
+}
+export function enumerateFromFunctions(factory, moveNext, current) {
+  return delay(() => unfold(e => moveNext(e) ? [current(e), e] : null, factory()));
 }
 export function enumerateWhile(cond, xs) {
   return concat(unfold(() => cond() ? [xs, true] : null));

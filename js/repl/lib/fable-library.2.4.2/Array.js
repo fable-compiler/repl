@@ -323,7 +323,7 @@ export function groupBy(projection$$2, array$$26, cons$$11, eq$$5) {
 
   const result$$6 = map(function (key$$3) {
     var array$$28;
-    return [key$$3, (array$$28 = cons$$11.from(getItemFromDict(dict$$1, key$$3)), (array$$28.reverse()))];
+    return [key$$3, (array$$28 = cons$$11.from(getItemFromDict(dict$$1, key$$3)), array$$28.reverse())];
   }, keys$$1, Array);
   return result$$6;
 }
@@ -513,7 +513,7 @@ export function partition(f$$6, source$$4, cons$$29) {
     }
   }
 
-  return [(truncate(iTrue, res1)), (truncate(iFalse, res2))];
+  return [truncate(iTrue, res1), truncate(iFalse, res2)];
 }
 export function find(predicate$$11, array$$57) {
   const matchValue$$5 = array$$57.find(predicate$$11);

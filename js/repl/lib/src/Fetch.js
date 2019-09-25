@@ -1,6 +1,6 @@
-import { List, declare, Union } from "../fable-library.2.3.18/Types.js";
-import { type, union, obj, int32, string } from "../fable-library.2.3.18/Reflection.js";
-import { int32ToString, createObj } from "../fable-library.2.3.18/Util.js";
+import { List, declare, Union } from "../fable-library.2.4.2/Types.js";
+import { type, union, obj, int32, string } from "../fable-library.2.4.2/Reflection.js";
+import { int32ToString, createObj } from "../fable-library.2.4.2/Util.js";
 import { result } from "./Promise.js";
 export const Types$002EHttpRequestHeaders = declare(function Fetch_Types_HttpRequestHeaders(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
@@ -26,17 +26,21 @@ function errorString(response) {
 }
 
 export function fetch$(url, init) {
-  return fetch(url, createObj(init, 1)).then(function a(response$$1) {
+  const pr = fetch(url, createObj(init, 1));
+  return pr.then(function a(response$$1) {
     if (response$$1.ok) {
       return response$$1;
     } else {
-      throw new Error(errorString(response$$1));
+      const message = errorString(response$$1);
+      throw new Error(message);
     }
   });
 }
 export function tryFetch(url$$1, init$$1) {
-  return result(fetch$(url$$1, init$$1));
+  const a$$1 = fetch$(url$$1, init$$1);
+  return result(a$$1);
 }
 export function tryOptionsRequest(url$$2) {
-  return result(fetch$(url$$2, new List(new Types$002ERequestProperties(0, "Method", "OPTIONS"), new List())));
+  const a$$2 = fetch$(url$$2, new List(new Types$002ERequestProperties(0, "Method", "OPTIONS"), new List()));
+  return result(a$$2);
 }

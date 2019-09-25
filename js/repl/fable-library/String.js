@@ -259,15 +259,23 @@ export function isNullOrEmpty(str) {
 export function isNullOrWhiteSpace(str) {
     return typeof str !== "string" || /^\s*$/.test(str);
 }
-export function join(delimiter, ...xs) {
-    return xs.map((x) => String(x)).join(delimiter);
+export function concat(...xs) {
+    return xs.map((x) => String(x)).join("");
+}
+export function join(delimiter, xs) {
+    if (Array.isArray(xs)) {
+        return xs.join(delimiter);
+    }
+    else {
+        return Array.from(xs).join(delimiter);
+    }
 }
 export function joinWithIndices(delimiter, xs, startIndex, count) {
     const endIndexPlusOne = startIndex + count;
     if (endIndexPlusOne > xs.length) {
         throw new Error("Index and count must refer to a location within the buffer.");
     }
-    return join(delimiter, ...xs.slice(startIndex, endIndexPlusOne));
+    return xs.slice(startIndex, endIndexPlusOne).join(delimiter);
 }
 /** Validates UUID as specified in RFC4122 (versions 1-5). Trims braces. */
 export function validateGuid(str, doNotThrow) {

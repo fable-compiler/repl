@@ -1,8 +1,8 @@
-import { createObj, equals, uncurry } from "../fable-library.2.3.18/Util.js";
-import { ofList } from "../fable-library.2.3.18/Array.js";
+import { createObj, equals, uncurry } from "../fable-library.2.4.2/Util.js";
+import { ofList } from "../fable-library.2.4.2/Array.js";
+import { isNullOrEmpty } from "../fable-library.2.4.2/String.js";
+import { fold, choose } from "../fable-library.2.4.2/Seq.js";
 import { HTMLAttr } from "./Fable.React.Props.js";
-import { isNullOrEmpty } from "../fable-library.2.3.18/String.js";
-import { fold, choose } from "../fable-library.2.3.18/Seq.js";
 export function ReactElementTypeModule$$$ofComponent() {
   throw new Error("Cannot create React components from types in Fable REPL");
 }
@@ -25,17 +25,19 @@ export function Helpers$$$createElement(comp$$1, props$$1, ...children$$1) {
   return React.createElement(comp$$1, props$$1, ...children$$1);
 }
 export function Helpers$$$ofType(props$$2, children$$2) {
-  return React.createElement((() => {
-    throw new Error("Cannot create React components from types in Fable REPL");
-  })(), props$$2, ...children$$2);
+  let comp$$2;
+  throw new Error("Cannot create React components from types in Fable REPL");
+  return React.createElement(comp$$2, props$$2, ...children$$2);
 }
 export function Helpers$$$com(props$$4, children$$4) {
-  return React.createElement((() => {
-    throw new Error("Cannot create React components from types in Fable REPL");
-  })(), props$$4, ...children$$4);
+  let comp$$3;
+  throw new Error("Cannot create React components from types in Fable REPL");
+  return React.createElement(comp$$3, props$$4, ...children$$4);
 }
 export function Helpers$$$ofFunction(f$$1, props$$7, children$$7) {
-  return React.createElement(f$$1, props$$7, ...children$$7);
+  let comp$$4;
+  comp$$4 = f$$1;
+  return React.createElement(comp$$4, props$$7, ...children$$7);
 }
 export function Helpers$$$ofImport(importMember, importPath, props$$9, children$$9) {
   throw new Error("Cannot import React components in Fable REPL");
@@ -86,14 +88,16 @@ export function Helpers$$$memoBuilder(name$$1, render$$2) {
   render$$2.displayName = name$$1;
   const memoType = ReactElementTypeModule$$$memo(render$$2);
   return function (props$$10) {
-    return React.createElement(memoType, props$$10, ...[]);
+    const children$$10 = [];
+    return React.createElement(memoType, props$$10, ...children$$10);
   };
 }
 export function Helpers$$$memoBuilderWith(name$$2, areEqual$$1, render$$3) {
   render$$3.displayName = name$$2;
   const memoType$$1 = ReactElementTypeModule$$$memoWith(areEqual$$1, render$$3);
   return function (props$$12) {
-    return React.createElement(memoType$$1, props$$12, ...[]);
+    const children$$11 = [];
+    return React.createElement(memoType$$1, props$$12, ...children$$11);
   };
 }
 export function Helpers$$$from(com, props$$14, children$$12) {
@@ -158,15 +162,19 @@ export function Helpers$$$createRef(initialValue) {
   return React.createRef(initialValue);
 }
 export function Helpers$$$classBaseList(baseClass, classes) {
-  return new HTMLAttr(24, "ClassName", fold(function folder(state, name$$4) {
-    return state + " " + name$$4;
-  }, baseClass, choose(function chooser(tupledArg) {
+  let arg0;
+  let source$$1;
+  source$$1 = choose(function chooser(tupledArg) {
     if (tupledArg[1] ? !isNullOrEmpty(tupledArg[0]) : false) {
       return tupledArg[0];
     } else {
       return null;
     }
-  }, classes)));
+  }, classes);
+  arg0 = fold(function folder(state, name$$4) {
+    return state + " " + name$$4;
+  }, baseClass, source$$1);
+  return new HTMLAttr(24, "ClassName", arg0);
 }
 export function Helpers$$$classList(classes$$1) {
   return Helpers$$$classBaseList("", classes$$1);

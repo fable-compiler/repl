@@ -1,9 +1,9 @@
-import { List, declare, Union } from "../fable-library.2.3.18/Types.js";
-import { Common$002EGenericOptions$$$Parse$$9AE2F7C as Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C, Common$002EGenericOptions$$ToReactElement$$Z6D3CD4B7 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7, Common$002EGenericOptions$$AddModifiers$$5BB435D5 as Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5, Common$002EGenericOptions$$AddProps$$416C4D0B as Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B, Common$002EGenericOptions$$AddProp$$7BFEDA81 as Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81, Common$002EGenericOptions$$AddCaseName$$1505 as Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505, Reflection$$$getCaseName as Reflection$0024$0024$0024getCaseName, Common$002EGenericOptions$$AddClass$$Z721C83C5 as Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5, Color$$$ofColor as Color$0024$0024$0024ofColor, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection, Color$002EIColor$reflection as Color$0024002EIColor$0024reflection } from "../Fulma/Common.js";
-import { union, string, lambda, unit, list as list$$3, type, bool } from "../fable-library.2.3.18/Reflection.js";
+import { List, declare, Union } from "../fable-library.2.4.2/Types.js";
+import { Common$002EGenericOptions$$$Parse$$9AE2F7C as Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C, Common$002EGenericOptions$$AddModifiers$$5BB435D5 as Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5, Common$002EGenericOptions$$AddProps$$416C4D0B as Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B, Common$002EGenericOptions$$AddProp$$7BFEDA81 as Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81, Common$002EGenericOptions$$AddCaseName$$1505 as Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505, Reflection$$$getCaseName as Reflection$0024$0024$0024getCaseName, Common$002EGenericOptions$$AddClass$$Z721C83C5 as Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5, Color$$$ofColor as Color$0024$0024$0024ofColor, Common$002EGenericOptions$$ToReactElement$$Z6D3CD4B7 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection, Color$002EIColor$reflection as Color$0024002EIColor$0024reflection } from "../Fulma/Common.js";
+import { union, string, lambda, unit, list as list$$3, type, bool } from "../fable-library.2.4.2/Reflection.js";
 import { DOMAttr, HTMLAttr } from "../src/Fable.React.Props.js";
-import { createObj } from "../fable-library.2.3.18/Util.js";
-import { map, exists } from "../fable-library.2.3.18/List.js";
+import { createObj } from "../fable-library.2.4.2/Util.js";
+import { map, exists } from "../fable-library.2.4.2/List.js";
 export const Option = declare(function Fulma_Button_Option(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
@@ -11,12 +11,12 @@ export function Option$reflection() {
   return union("Fulma.Button.Option", [], Option, () => [["Color", [Color$0024002EIColor$0024reflection()]], ["Size", [Size$0024002EISize$0024reflection()]], "is-fullwidth", "is-link", "is-outlined", "is-inverted", "is-text", "is-rounded", "is-expanded", ["is-hovered", [bool]], ["is-focused", [bool]], ["is-active", [bool]], ["is-loading", [bool]], ["is-static", [bool]], ["Disabled", [bool]], ["Props", [list$$3(type("Fable.React.Props.IHTMLProp"))]], ["OnClick", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["CustomClass", [string]], ["Modifiers", [list$$3(Modifier$0024002EIModifier$0024reflection())]]]);
 }
 export function btnView(element, options, children) {
-  const parseOptions = function parseOptions(result, option) {
-    var $target$$4, state;
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options, function parseOptions(result, option) {
+    var $target$$6, state;
 
     switch (option.tag) {
       case 1:
-        $target$$4 = 1;
+        $target$$6 = 1;
         break;
 
       case 3:
@@ -26,69 +26,69 @@ export function btnView(element, options, children) {
       case 6:
       case 7:
       case 8:
-        $target$$4 = 2;
+        $target$$6 = 2;
         break;
 
       case 9:
-        $target$$4 = 3;
+        $target$$6 = 3;
         state = option.fields[0];
         break;
 
       case 10:
-        $target$$4 = 3;
+        $target$$6 = 3;
         state = option.fields[0];
         break;
 
       case 11:
-        $target$$4 = 3;
+        $target$$6 = 3;
         state = option.fields[0];
         break;
 
       case 12:
-        $target$$4 = 3;
+        $target$$6 = 3;
         state = option.fields[0];
         break;
 
       case 13:
-        $target$$4 = 3;
+        $target$$6 = 3;
         state = option.fields[0];
         break;
 
       case 14:
-        $target$$4 = 4;
+        $target$$6 = 4;
         break;
 
       case 16:
-        $target$$4 = 5;
+        $target$$6 = 5;
         break;
 
       case 15:
-        $target$$4 = 6;
+        $target$$6 = 6;
         break;
 
       case 17:
-        $target$$4 = 7;
+        $target$$6 = 7;
         break;
 
       case 18:
-        $target$$4 = 8;
+        $target$$6 = 8;
         break;
 
       default:
-        $target$$4 = 0;
+        $target$$6 = 0;
     }
 
-    switch ($target$$4) {
+    switch ($target$$6) {
       case 0:
         {
-          const color = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, Color$0024$0024$0024ofColor(color));
+          const arg00 = Color$0024$0024$0024ofColor(option.fields[0]);
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, arg00);
         }
 
       case 1:
         {
-          const size = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, Reflection$0024$0024$0024getCaseName(size));
+          const arg00$$1 = Reflection$0024$0024$0024getCaseName(option.fields[0]);
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, arg00$$1);
         }
 
       case 2:
@@ -107,55 +107,57 @@ export function btnView(element, options, children) {
 
       case 4:
         {
-          const isDisabled = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, new HTMLAttr(39, "Disabled", isDisabled));
+          const arg00$$2 = new HTMLAttr(39, "Disabled", option.fields[0]);
+          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, arg00$$2);
         }
 
       case 5:
         {
-          const cb = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, new DOMAttr(40, "OnClick", cb));
+          const arg00$$3 = new DOMAttr(40, "OnClick", option.fields[0]);
+          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, arg00$$3);
         }
 
       case 6:
         {
-          const props = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B(result, props);
+          return Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B(result, option.fields[0]);
         }
 
       case 7:
         {
-          const customClass = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, customClass);
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, option.fields[0]);
         }
 
       case 8:
         {
-          const modifiers = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5(result, modifiers);
+          return Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5(result, option.fields[0]);
         }
     }
-  };
-
-  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options, parseOptions, "button"), element, children);
+  }, "button"), element, children);
 }
 export function button(options$$1, children$$1) {
   return btnView(function (props$$1, children$$2) {
-    return React.createElement("button", createObj(props$$1, 1), ...children$$2);
+    const props$$2 = props$$1;
+    const children$$3 = children$$2;
+    return React.createElement("button", createObj(props$$2, 1), ...children$$3);
   }, options$$1, children$$1);
 }
 export function span(options$$2, children$$5) {
   return btnView(function (props$$4, children$$6) {
-    return React.createElement("span", createObj(props$$4, 1), ...children$$6);
+    const props$$5 = props$$4;
+    const children$$7 = children$$6;
+    return React.createElement("span", createObj(props$$5, 1), ...children$$7);
   }, options$$2, children$$5);
 }
 export function a(options$$3, children$$9) {
   return btnView(function (props$$7, children$$10) {
-    return React.createElement("a", createObj(props$$7, 1), ...children$$10);
+    const props$$8 = props$$7;
+    const children$$11 = children$$10;
+    return React.createElement("a", createObj(props$$8, 1), ...children$$11);
   }, options$$3, children$$9);
 }
 export function Input$$$btnInput(typ, options$$4) {
-  const hasProps = exists(function predicate(opts) {
+  let hasProps;
+  hasProps = exists(function predicate(opts) {
     if (opts.tag === 15) {
       return true;
     } else {
@@ -164,21 +166,22 @@ export function Input$$$btnInput(typ, options$$4) {
   }, options$$4);
 
   if (hasProps) {
-    const newOptions = map(function mapping(opts$$1) {
+    let newOptions;
+    newOptions = map(function mapping(opts$$1) {
       if (opts$$1.tag === 15) {
-        const props$$10 = opts$$1.fields[0];
-        return new Option(15, "Props", new List(new HTMLAttr(119, "Type", typ), props$$10));
+        return new Option(15, "Props", new List(new HTMLAttr(119, "Type", typ), opts$$1.fields[0]));
       } else {
-        const forward = opts$$1;
-        return forward;
+        return opts$$1;
       }
     }, options$$4);
     return btnView(function (options$$5, _arg1) {
-      return React.createElement("input", createObj(options$$5, 1), ...[]);
+      const props$$11 = options$$5;
+      return React.createElement("input", createObj(props$$11, 1), ...[]);
     }, newOptions, new List());
   } else {
     return btnView(function (options$$6, _arg2) {
-      return React.createElement("input", createObj(options$$6, 1), ...[]);
+      const props$$13 = options$$6;
+      return React.createElement("input", createObj(props$$13, 1), ...[]);
     }, new List(new Option(15, "Props", new List(new HTMLAttr(119, "Type", typ), new List())), options$$4), new List());
   }
 }
@@ -195,7 +198,7 @@ export function List$002EOption$reflection() {
   return union("Fulma.Button.List.Option", [], List$002EOption, () => ["has-addons", "is-centered", "is-right", ["Props", [list$$3(type("Fable.React.Props.IHTMLProp"))]], ["CustomClass", [string]], ["Modifiers", [list$$3(Modifier$0024002EIModifier$0024reflection())]]]);
 }
 export function list(options$$9, children$$13) {
-  const parseOptions$$1 = function parseOptions$$1(result$$1, option$$1) {
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$9, function parseOptions$$1(result$$1, option$$1) {
     switch (option$$1.tag) {
       case 1:
       case 2:
@@ -205,20 +208,17 @@ export function list(options$$9, children$$13) {
 
       case 3:
         {
-          const props$$15 = option$$1.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B(result$$1, props$$15);
+          return Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B(result$$1, option$$1.fields[0]);
         }
 
       case 4:
         {
-          const customClass$$1 = option$$1.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result$$1, customClass$$1);
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result$$1, option$$1.fields[0]);
         }
 
       case 5:
         {
-          const modifiers$$1 = option$$1.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5(result$$1, modifiers$$1);
+          return Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5(result$$1, option$$1.fields[0]);
         }
 
       default:
@@ -226,9 +226,9 @@ export function list(options$$9, children$$13) {
           return Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505(result$$1, option$$1);
         }
     }
-  };
-
-  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$9, parseOptions$$1, "buttons"), function (props$$16, children$$14) {
-    return React.createElement("div", createObj(props$$16, 1), ...children$$14);
+  }, "buttons"), function (props$$16, children$$14) {
+    const props$$17 = props$$16;
+    const children$$15 = children$$14;
+    return React.createElement("div", createObj(props$$17, 1), ...children$$15);
   }, children$$13);
 }

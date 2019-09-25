@@ -41,7 +41,7 @@ function dateToISOStringWithOffset(dateWithOffset, offset) {
 
 function dateToStringWithCustomFormat(date, format, utc) {
   return format.replace(/(\w)\1*/g, match => {
-    let rep = match;
+    let rep = Number.NaN;
 
     switch (match.substring(0, 1)) {
       case "y":
@@ -79,11 +79,11 @@ function dateToStringWithCustomFormat(date, format, utc) {
         break;
     }
 
-    if (rep !== match && rep < 10 && match.length > 1) {
-      rep = "0" + rep;
+    if (Number.isNaN(rep)) {
+      return match;
+    } else {
+      return rep < 10 && match.length > 1 ? "0" + rep : "" + rep;
     }
-
-    return rep;
   });
 }
 
@@ -280,7 +280,7 @@ export function parse(str, detectUTC = false) {
 export function tryParse(v) {
   try {
     // if value is null or whitespace, parsing fails
-    if (v === null || v.trim() === "") {
+    if (v == null || v.trim() === "") {
       return [false, minValue()];
     }
 

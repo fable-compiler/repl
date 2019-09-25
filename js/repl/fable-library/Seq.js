@@ -1,5 +1,5 @@
-import { makeRangeStepFunction as makeLongRangeStepFunction } from "./Long.js";
 import { makeRangeStepFunction as makeDecimalRangeStepFunction } from "./Decimal.js";
+import { makeRangeStepFunction as makeLongRangeStepFunction } from "./Long.js";
 import { some, value } from "./Option.js";
 import { compare, equals } from "./Util.js";
 export class Enumerator {
@@ -61,7 +61,7 @@ export function allPairs(xs, ys) {
             }, ys);
         }
         else {
-            return ysCache.map(y => [x, y]);
+            return ysCache.map((y) => [x, y]);
             // return map(function (i) {
             //     return [x, ysCache[i]];
             // }, rangeNumber(0, 1, ysCache.length - 1));

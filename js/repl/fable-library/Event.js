@@ -1,5 +1,5 @@
 import { Observer, protect } from "./Observable.js";
-import { tryValueIfChoice1, tryValueIfChoice2, value } from "./Option.js";
+import { some, tryValueIfChoice1, tryValueIfChoice2, value } from "./Option.js";
 import { iterate as seqIterate } from "./Seq.js";
 export default class Event {
     constructor(_subscriber, delegates) {
@@ -72,7 +72,7 @@ export function choose(chooser, sourceEvent) {
     } }, observer.OnError), observer.OnError, observer.OnCompleted)), source.delegates);
 }
 export function filter(predicate, sourceEvent) {
-    return choose((x) => predicate(x) ? x : null, sourceEvent);
+    return choose((x) => predicate(x) ? some(x) : null, sourceEvent);
 }
 export function map(mapping, sourceEvent) {
     const source = sourceEvent;

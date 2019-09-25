@@ -49,12 +49,11 @@ export function ExtraTopLevelOperators$$$LazyPattern(input) {
   return input.Value;
 }
 export function PrintfModule$$$PrintFormatToStringBuilderThen(continuation, builder, format) {
-  const append = function append(s) {
-    StringBuilder$0024$0024Append$0024$0024Z721C83C5(builder, s), null;
+  return format.cont(function append(s) {
+    const value = StringBuilder$0024$0024Append$0024$0024Z721C83C5(builder, s);
+    value, null;
     return continuation();
-  };
-
-  return format.cont(append);
+  });
 }
 export function PrintfModule$$$PrintFormatToStringBuilder(builder$$1, format$$1) {
   return PrintfModule$$$PrintFormatToStringBuilderThen(function () {

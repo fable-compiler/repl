@@ -28,12 +28,16 @@ export function StringBuilder$$Append$$Z721C83C5(x, s) {
   x.buf.push(s);
   return x;
 }
-export function StringBuilder$$AppendFormat$$433E080(x$$1, fmt, o) {
-  x$$1.buf.push(format(fmt, o));
+export function StringBuilder$$Append$$244C7CD6(x$$1, c) {
+  x$$1.buf.push(c);
   return x$$1;
+}
+export function StringBuilder$$AppendFormat$$433E080(x$$2, fmt, o) {
+  x$$2.buf.push(format(fmt, o));
+  return x$$2;
 }
 
 StringBuilder.prototype.toString = function () {
   const __ = this;
-  return join("", ...__.buf);
+  return join("", __.buf);
 };

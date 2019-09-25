@@ -106,7 +106,10 @@ class UTF16LE {
         if (index != null) {
             bytes = bytes.subarray(index, index + count);
         }
-        if (typeof Buffer !== "undefined") {
+        if (typeof TextDecoder !== "undefined") {
+            return new TextDecoder("utf-16le").decode(bytes);
+        }
+        else if (typeof Buffer !== "undefined") {
             return Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength).toString("utf16le");
         }
         else {

@@ -1,8 +1,8 @@
-import { List, declare, Union } from "../fable-library.2.3.18/Types.js";
-import { list, lambda, unit, type, bool, string, union } from "../fable-library.2.3.18/Reflection.js";
-import { Common$002EGenericOptions$$$Parse$$9AE2F7C as Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C, Common$002EGenericOptions$$ToReactElement$$Z46A53D36 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z46A53D36, Common$002EGenericOptions$$AddModifiers$$5BB435D5 as Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5, Common$002EGenericOptions$$AddProps$$416C4D0B as Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B, Common$002EGenericOptions$$AddProp$$7BFEDA81 as Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81, Color$$$ofColor as Color$0024$0024$0024ofColor, Common$002EGenericOptions$$AddClass$$Z721C83C5 as Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5, Reflection$$$getCaseName as Reflection$0024$0024$0024getCaseName, Common$002EGenericOptions$$AddCaseName$$1505 as Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Color$002EIColor$reflection as Color$0024002EIColor$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection } from "../Fulma/Common.js";
+import { List, declare, Union } from "../fable-library.2.4.2/Types.js";
+import { list, lambda, unit, type, bool, string, union } from "../fable-library.2.4.2/Reflection.js";
+import { Common$002EGenericOptions$$$Parse$$9AE2F7C as Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C, Common$002EGenericOptions$$AddModifiers$$5BB435D5 as Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5, Common$002EGenericOptions$$AddProps$$416C4D0B as Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B, Common$002EGenericOptions$$AddProp$$7BFEDA81 as Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81, Color$$$ofColor as Color$0024$0024$0024ofColor, Common$002EGenericOptions$$AddClass$$Z721C83C5 as Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5, Reflection$$$getCaseName as Reflection$0024$0024$0024getCaseName, Common$002EGenericOptions$$AddCaseName$$1505 as Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505, Common$002EGenericOptions$$ToReactElement$$Z46A53D36 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z46A53D36, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Color$002EIColor$reflection as Color$0024002EIColor$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection } from "../Fulma/Common.js";
+import { equals, createObj } from "../fable-library.2.4.2/Util.js";
 import { DOMAttr, Prop, HTMLAttr } from "../src/Fable.React.Props.js";
-import { createObj, equals } from "../fable-library.2.3.18/Util.js";
 export const IInputType = declare(function Fulma_Input_IInputType(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
@@ -86,9 +86,7 @@ function ofType(typ) {
 }
 
 export function input(options) {
-  const parseOptions = function parseOptions(result, option) {
-    var arg0;
-
+  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z46A53D36(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options, function parseOptions(result, option) {
     switch (option.tag) {
       case 7:
         {
@@ -97,119 +95,116 @@ export function input(options) {
 
       case 0:
         {
-          const size = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, Reflection$0024$0024$0024getCaseName(size));
+          const arg00 = Reflection$0024$0024$0024getCaseName(option.fields[0]);
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, arg00);
         }
 
       case 2:
         {
-          const color$$1 = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, Color$0024$0024$0024ofColor(color$$1));
+          const arg00$$1 = Color$0024$0024$0024ofColor(option.fields[0]);
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, arg00$$1);
         }
 
       case 1:
         {
-          const type$0027 = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, new HTMLAttr(119, "Type", ofType(type$0027)));
+          const arg00$$2 = new HTMLAttr(119, "Type", ofType(option.fields[0]));
+          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, arg00$$2);
         }
 
       case 3:
         {
-          const id = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, new HTMLAttr(59, "Id", id));
+          const arg00$$3 = new HTMLAttr(59, "Id", option.fields[0]);
+          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, arg00$$3);
         }
 
       case 4:
         {
-          const disabled = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, new HTMLAttr(39, "Disabled", disabled));
+          const arg00$$4 = new HTMLAttr(39, "Disabled", option.fields[0]);
+          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, arg00$$4);
         }
 
       case 5:
         {
-          const state$$1 = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, new HTMLAttr(92, "ReadOnly", state$$1));
+          const arg00$$5 = new HTMLAttr(92, "ReadOnly", option.fields[0]);
+          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, arg00$$5);
         }
 
       case 8:
         {
-          const value = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, new HTMLAttr(121, "Value", value));
+          const arg00$$6 = new HTMLAttr(121, "Value", option.fields[0]);
+          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, arg00$$6);
         }
 
       case 10:
         {
-          const defaultValue = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, new HTMLAttr(1, "DefaultValue", defaultValue));
+          const arg00$$7 = new HTMLAttr(1, "DefaultValue", option.fields[0]);
+          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, arg00$$7);
         }
 
       case 11:
         {
-          const valueOrDefault = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, (arg0 = function arg0(e) {
-            if (!(e == null) ? !equals(e.value, valueOrDefault) : false) {
-              e.value = valueOrDefault;
+          let arg00$$8;
+          arg00$$8 = new Prop(1, "Ref", function (e) {
+            var value$$2;
+
+            if ((value$$2 = (e == null), (!value$$2)) ? !equals(e.value, option.fields[0]) : false) {
+              e.value = option.fields[0];
             }
-          }, new Prop(1, "Ref", arg0)));
+          });
+          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, arg00$$8);
         }
 
       case 12:
         {
-          const placeholder = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, new HTMLAttr(88, "Placeholder", placeholder));
+          const arg00$$9 = new HTMLAttr(88, "Placeholder", option.fields[0]);
+          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, arg00$$9);
         }
 
       case 13:
         {
-          const cb = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, new DOMAttr(9, "OnChange", cb));
+          const arg00$$10 = new DOMAttr(9, "OnChange", option.fields[0]);
+          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, arg00$$10);
         }
 
       case 14:
         {
-          const ref = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, new Prop(1, "Ref", ref));
+          const arg00$$11 = new Prop(1, "Ref", option.fields[0]);
+          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, arg00$$11);
         }
 
       case 15:
         {
-          const props = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B(result, props);
+          return Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B(result, option.fields[0]);
         }
 
       case 16:
         {
-          const customClass = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, customClass);
+          return Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5(result, option.fields[0]);
         }
 
       case 17:
         {
-          const modifiers = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5(result, modifiers);
+          return Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5(result, option.fields[0]);
         }
 
       case 9:
         {
-          const k = option.fields[0];
-          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, new Prop(0, "Key", k));
+          const arg00$$12 = new Prop(0, "Key", option.fields[0]);
+          return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, arg00$$12);
         }
 
       default:
         {
-          const state = option.fields[0];
-
-          if (state) {
+          if (option.fields[0]) {
             return Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505(result, option);
           } else {
             return result;
           }
         }
     }
-  };
-
-  return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z46A53D36(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options, parseOptions, "input"), function (props$$1) {
-    return React.createElement("input", createObj(props$$1, 1), ...[]);
+  }, "input"), function (props$$1) {
+    const props$$2 = props$$1;
+    return React.createElement("input", createObj(props$$2, 1), ...[]);
   });
 }
 export function text(options$$1) {

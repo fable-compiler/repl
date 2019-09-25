@@ -1,18 +1,21 @@
 import { Record, List, declare, Union } from "./Types.js";
 import { type, record, bool, list, union, int32 } from "./Reflection.js";
-import { value as value$$4, some } from "./Option.js";
-import { empty as empty$$1, iterate as iterate$$1, toIterator, map as map$$2, unfold, getEnumerator, fold as fold$$1 } from "./Seq.js";
+import { value as value$$3, some } from "./Option.js";
+import { iterate as iterate$$1, empty as empty$$1, toIterator, map as map$$2, unfold, getEnumerator, fold as fold$$1 } from "./Seq.js";
 import { compare, structuralHash, isDisposable } from "./Util.js";
 import { join, toText, printf } from "./String.js";
-import { MutableMap$00602$$Add$$5BDDA1 as MutableMap$002400602$0024$0024Add$0024$00245BDDA1, MutableMap$00602$$$$002Ector$$Z79760D57 as MutableMap$002400602$0024$0024$0024$0024002Ector$0024$0024Z79760D57 } from "./MutableMap.js";
+import { MutableMap$00602$$$$002Ector$$6623D9B3 as MutableMap$002400602$0024$0024$0024$0024002Ector$0024$00246623D9B3 } from "./MutableMap.js";
 export const MapTree$00602 = declare(function Map_MapTree(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
 export function MapTree$00602$reflection($gen$$3, $gen$$4) {
   return union("Map.MapTree`2", [$gen$$3, $gen$$4], MapTree$00602, () => ["MapEmpty", ["MapOne", [$gen$$3, $gen$$4]], ["MapNode", [$gen$$3, $gen$$4, MapTree$00602$reflection($gen$$3, $gen$$4), MapTree$00602$reflection($gen$$3, $gen$$4), int32]]]);
 }
-export function MapTreeModule$$$sizeAux(acc, m) {
+export function MapTreeModule$$$sizeAux($acc$$5, $m$$6) {
   MapTreeModule$$$sizeAux: while (true) {
+    const acc = $acc$$5,
+          m = $m$$6;
+
     switch (m.tag) {
       case 1:
         {
@@ -21,11 +24,8 @@ export function MapTreeModule$$$sizeAux(acc, m) {
 
       case 2:
         {
-          const r = m.fields[3];
-          const l = m.fields[2];
-          const $acc$$5 = acc;
-          acc = MapTreeModule$$$sizeAux($acc$$5 + 1, l);
-          m = r;
+          $acc$$5 = MapTreeModule$$$sizeAux(acc + 1, m.fields[2]);
+          $m$$6 = m.fields[3];
           continue MapTreeModule$$$sizeAux;
         }
 
@@ -53,8 +53,7 @@ export function MapTreeModule$$$height(_arg1) {
 
     case 2:
       {
-        const h = _arg1.fields[4] | 0;
-        return h | 0;
+        return _arg1.fields[4] | 0;
       }
 
     default:
@@ -71,19 +70,19 @@ export function MapTreeModule$$$isEmpty(m$$1) {
   }
 }
 export function MapTreeModule$$$mk(l$$1, k, v, r$$1) {
-  var $target$$6;
+  var $target$$14;
 
   if (l$$1.tag === 0) {
     if (r$$1.tag === 0) {
-      $target$$6 = 0;
+      $target$$14 = 0;
     } else {
-      $target$$6 = 1;
+      $target$$14 = 1;
     }
   } else {
-    $target$$6 = 1;
+    $target$$14 = 1;
   }
 
-  switch ($target$$6) {
+  switch ($target$$14) {
     case 0:
       {
         return new MapTree$00602(1, "MapOne", k, v);
@@ -104,46 +103,28 @@ export function MapTreeModule$$$rebalance(t1, k$$1, v$$1, t2) {
 
   if (t2h > t1h + 2) {
     if (t2.tag === 2) {
-      const t2v = t2.fields[1];
-      const t2r = t2.fields[3];
-      const t2l = t2.fields[2];
-      const t2k = t2.fields[0];
-
-      if (MapTreeModule$$$height(t2l) > t1h + 1) {
-        if (t2l.tag === 2) {
-          const t2lv = t2l.fields[1];
-          const t2lr = t2l.fields[3];
-          const t2ll = t2l.fields[2];
-          const t2lk = t2l.fields[0];
-          return MapTreeModule$$$mk(MapTreeModule$$$mk(t1, k$$1, v$$1, t2ll), t2lk, t2lv, MapTreeModule$$$mk(t2lr, t2k, t2v, t2r));
+      if (MapTreeModule$$$height(t2.fields[2]) > t1h + 1) {
+        if (t2.fields[2].tag === 2) {
+          return MapTreeModule$$$mk(MapTreeModule$$$mk(t1, k$$1, v$$1, t2.fields[2].fields[2]), t2.fields[2].fields[0], t2.fields[2].fields[1], MapTreeModule$$$mk(t2.fields[2].fields[3], t2.fields[0], t2.fields[1], t2.fields[3]));
         } else {
           throw new Error("rebalance");
         }
       } else {
-        return MapTreeModule$$$mk(MapTreeModule$$$mk(t1, k$$1, v$$1, t2l), t2k, t2v, t2r);
+        return MapTreeModule$$$mk(MapTreeModule$$$mk(t1, k$$1, v$$1, t2.fields[2]), t2.fields[0], t2.fields[1], t2.fields[3]);
       }
     } else {
       throw new Error("rebalance");
     }
   } else if (t1h > t2h + 2) {
     if (t1.tag === 2) {
-      const t1v = t1.fields[1];
-      const t1r = t1.fields[3];
-      const t1l = t1.fields[2];
-      const t1k = t1.fields[0];
-
-      if (MapTreeModule$$$height(t1r) > t2h + 1) {
-        if (t1r.tag === 2) {
-          const t1rv = t1r.fields[1];
-          const t1rr = t1r.fields[3];
-          const t1rl = t1r.fields[2];
-          const t1rk = t1r.fields[0];
-          return MapTreeModule$$$mk(MapTreeModule$$$mk(t1l, t1k, t1v, t1rl), t1rk, t1rv, MapTreeModule$$$mk(t1rr, k$$1, v$$1, t2));
+      if (MapTreeModule$$$height(t1.fields[3]) > t2h + 1) {
+        if (t1.fields[3].tag === 2) {
+          return MapTreeModule$$$mk(MapTreeModule$$$mk(t1.fields[2], t1.fields[0], t1.fields[1], t1.fields[3].fields[2]), t1.fields[3].fields[0], t1.fields[3].fields[1], MapTreeModule$$$mk(t1.fields[3].fields[3], k$$1, v$$1, t2));
         } else {
           throw new Error("re  balance");
         }
       } else {
-        return MapTreeModule$$$mk(t1l, t1k, t1v, MapTreeModule$$$mk(t1r, k$$1, v$$1, t2));
+        return MapTreeModule$$$mk(t1.fields[2], t1.fields[0], t1.fields[1], MapTreeModule$$$mk(t1.fields[3], k$$1, v$$1, t2));
       }
     } else {
       throw new Error("rebalance");
@@ -156,8 +137,7 @@ export function MapTreeModule$$$add(comparer, k$$2, v$$2, m$$3) {
   switch (m$$3.tag) {
     case 1:
       {
-        const k2 = m$$3.fields[0];
-        const c = comparer.Compare(k$$2, k2) | 0;
+        const c = comparer.Compare(k$$2, m$$3.fields[0]) | 0;
 
         if (c < 0) {
           return new MapTree$00602(2, "MapNode", k$$2, v$$2, new MapTree$00602(0, "MapEmpty"), m$$3, 2);
@@ -170,19 +150,14 @@ export function MapTreeModule$$$add(comparer, k$$2, v$$2, m$$3) {
 
     case 2:
       {
-        const v2 = m$$3.fields[1];
-        const r$$2 = m$$3.fields[3];
-        const l$$2 = m$$3.fields[2];
-        const k2$$1 = m$$3.fields[0];
-        const h$$1 = m$$3.fields[4] | 0;
-        const c$$1 = comparer.Compare(k$$2, k2$$1) | 0;
+        const c$$1 = comparer.Compare(k$$2, m$$3.fields[0]) | 0;
 
         if (c$$1 < 0) {
-          return MapTreeModule$$$rebalance(MapTreeModule$$$add(comparer, k$$2, v$$2, l$$2), k2$$1, v2, r$$2);
+          return MapTreeModule$$$rebalance(MapTreeModule$$$add(comparer, k$$2, v$$2, m$$3.fields[2]), m$$3.fields[0], m$$3.fields[1], m$$3.fields[3]);
         } else if (c$$1 === 0) {
-          return new MapTree$00602(2, "MapNode", k$$2, v$$2, l$$2, r$$2, h$$1);
+          return new MapTree$00602(2, "MapNode", k$$2, v$$2, m$$3.fields[2], m$$3.fields[3], m$$3.fields[4]);
         } else {
-          return MapTreeModule$$$rebalance(l$$2, k2$$1, v2, MapTreeModule$$$add(comparer, k$$2, v$$2, r$$2));
+          return MapTreeModule$$$rebalance(m$$3.fields[2], m$$3.fields[0], m$$3.fields[1], MapTreeModule$$$add(comparer, k$$2, v$$2, m$$3.fields[3]));
         }
       }
 
@@ -192,17 +167,19 @@ export function MapTreeModule$$$add(comparer, k$$2, v$$2, m$$3) {
       }
   }
 }
-export function MapTreeModule$$$find(comparer$$1, k$$3, m$$4) {
+export function MapTreeModule$$$find($comparer$$1$$23, $k$$3$$24, $m$$4$$25) {
   MapTreeModule$$$find: while (true) {
+    const comparer$$1 = $comparer$$1$$23,
+          k$$3 = $k$$3$$24,
+          m$$4 = $m$$4$$25;
+
     switch (m$$4.tag) {
       case 1:
         {
-          const v2$$1 = m$$4.fields[1];
-          const k2$$2 = m$$4.fields[0];
-          const c$$2 = comparer$$1.Compare(k$$3, k2$$2) | 0;
+          const c$$2 = comparer$$1.Compare(k$$3, m$$4.fields[0]) | 0;
 
           if (c$$2 === 0) {
-            return v2$$1;
+            return m$$4.fields[1];
           } else {
             throw new Error("key not found");
           }
@@ -210,27 +187,19 @@ export function MapTreeModule$$$find(comparer$$1, k$$3, m$$4) {
 
       case 2:
         {
-          const v2$$2 = m$$4.fields[1];
-          const r$$3 = m$$4.fields[3];
-          const l$$3 = m$$4.fields[2];
-          const k2$$3 = m$$4.fields[0];
-          const c$$3 = comparer$$1.Compare(k$$3, k2$$3) | 0;
+          const c$$3 = comparer$$1.Compare(k$$3, m$$4.fields[0]) | 0;
 
           if (c$$3 < 0) {
-            const $comparer$$1$$7 = comparer$$1;
-            const $k$$3$$8 = k$$3;
-            comparer$$1 = $comparer$$1$$7;
-            k$$3 = $k$$3$$8;
-            m$$4 = l$$3;
+            $comparer$$1$$23 = comparer$$1;
+            $k$$3$$24 = k$$3;
+            $m$$4$$25 = m$$4.fields[2];
             continue MapTreeModule$$$find;
           } else if (c$$3 === 0) {
-            return v2$$2;
+            return m$$4.fields[1];
           } else {
-            const $comparer$$1$$9 = comparer$$1;
-            const $k$$3$$10 = k$$3;
-            comparer$$1 = $comparer$$1$$9;
-            k$$3 = $k$$3$$10;
-            m$$4 = r$$3;
+            $comparer$$1$$23 = comparer$$1;
+            $k$$3$$24 = k$$3;
+            $m$$4$$25 = m$$4.fields[3];
             continue MapTreeModule$$$find;
           }
         }
@@ -244,17 +213,19 @@ export function MapTreeModule$$$find(comparer$$1, k$$3, m$$4) {
     break;
   }
 }
-export function MapTreeModule$$$tryFind(comparer$$2, k$$4, m$$5) {
+export function MapTreeModule$$$tryFind($comparer$$2$$26, $k$$4$$27, $m$$5$$28) {
   MapTreeModule$$$tryFind: while (true) {
+    const comparer$$2 = $comparer$$2$$26,
+          k$$4 = $k$$4$$27,
+          m$$5 = $m$$5$$28;
+
     switch (m$$5.tag) {
       case 1:
         {
-          const v2$$3 = m$$5.fields[1];
-          const k2$$4 = m$$5.fields[0];
-          const c$$4 = comparer$$2.Compare(k$$4, k2$$4) | 0;
+          const c$$4 = comparer$$2.Compare(k$$4, m$$5.fields[0]) | 0;
 
           if (c$$4 === 0) {
-            return some(v2$$3);
+            return some(m$$5.fields[1]);
           } else {
             return null;
           }
@@ -262,27 +233,19 @@ export function MapTreeModule$$$tryFind(comparer$$2, k$$4, m$$5) {
 
       case 2:
         {
-          const v2$$4 = m$$5.fields[1];
-          const r$$4 = m$$5.fields[3];
-          const l$$4 = m$$5.fields[2];
-          const k2$$5 = m$$5.fields[0];
-          const c$$5 = comparer$$2.Compare(k$$4, k2$$5) | 0;
+          const c$$5 = comparer$$2.Compare(k$$4, m$$5.fields[0]) | 0;
 
           if (c$$5 < 0) {
-            const $comparer$$2$$11 = comparer$$2;
-            const $k$$4$$12 = k$$4;
-            comparer$$2 = $comparer$$2$$11;
-            k$$4 = $k$$4$$12;
-            m$$5 = l$$4;
+            $comparer$$2$$26 = comparer$$2;
+            $k$$4$$27 = k$$4;
+            $m$$5$$28 = m$$5.fields[2];
             continue MapTreeModule$$$tryFind;
           } else if (c$$5 === 0) {
-            return some(v2$$4);
+            return some(m$$5.fields[1]);
           } else {
-            const $comparer$$2$$13 = comparer$$2;
-            const $k$$4$$14 = k$$4;
-            comparer$$2 = $comparer$$2$$13;
-            k$$4 = $k$$4$$14;
-            m$$5 = r$$4;
+            $comparer$$2$$26 = comparer$$2;
+            $k$$4$$27 = k$$4;
+            $m$$5$$28 = m$$5.fields[3];
             continue MapTreeModule$$$tryFind;
           }
         }
@@ -303,42 +266,35 @@ export function MapTreeModule$$$partition1(comparer$$3, f, k$$5, v$$3, acc1, acc
     return [acc1, MapTreeModule$$$add(comparer$$3, k$$5, v$$3, acc2)];
   }
 }
-export function MapTreeModule$$$partitionAux($arg$$21, $arg$$22, $arg$$23, $arg$$24, $arg$$25) {
+export function MapTreeModule$$$partitionAux($comparer$$4$$35, $f$$1$$36, $s$$37, $acc_0$$38, $acc_1$$39) {
   MapTreeModule$$$partitionAux: while (true) {
-    const comparer$$4 = $arg$$21,
-          f$$1 = $arg$$22,
-          s = $arg$$23,
-          acc_0 = $arg$$24,
-          acc_1 = $arg$$25;
-    const acc$$1 = [acc_0, acc_1];
+    const comparer$$4 = $comparer$$4$$35,
+          f$$1 = $f$$1$$36,
+          s = $s$$37,
+          acc_0 = $acc_0$$38,
+          acc_1 = $acc_1$$39;
 
     switch (s.tag) {
       case 1:
         {
-          const v$$4 = s.fields[1];
-          const k$$6 = s.fields[0];
-          return MapTreeModule$$$partition1(comparer$$4, f$$1, k$$6, v$$4, acc$$1[0], acc$$1[1]);
+          return MapTreeModule$$$partition1(comparer$$4, f$$1, s.fields[0], s.fields[1], acc_0, acc_1);
         }
 
       case 2:
         {
-          const v$$5 = s.fields[1];
-          const r$$5 = s.fields[3];
-          const l$$5 = s.fields[2];
-          const k$$7 = s.fields[0];
-          const acc$$2 = MapTreeModule$$$partitionAux(comparer$$4, f$$1, r$$5, acc$$1[0], acc$$1[1]);
-          const acc$$3 = MapTreeModule$$$partition1(comparer$$4, f$$1, k$$7, v$$5, acc$$2[0], acc$$2[1]);
-          $arg$$21 = comparer$$4;
-          $arg$$22 = f$$1;
-          $arg$$23 = l$$5;
-          $arg$$24 = acc$$3[0];
-          $arg$$25 = acc$$3[1];
+          const acc$$2 = MapTreeModule$$$partitionAux(comparer$$4, f$$1, s.fields[3], acc_0, acc_1);
+          const acc$$3 = MapTreeModule$$$partition1(comparer$$4, f$$1, s.fields[0], s.fields[1], acc$$2[0], acc$$2[1]);
+          $comparer$$4$$35 = comparer$$4;
+          $f$$1$$36 = f$$1;
+          $s$$37 = s.fields[2];
+          $acc_0$$38 = acc$$3[0];
+          $acc_1$$39 = acc$$3[1];
           continue MapTreeModule$$$partitionAux;
         }
 
       default:
         {
-          return acc$$1;
+          return [acc_0, acc_1];
         }
     }
 
@@ -355,33 +311,27 @@ export function MapTreeModule$$$filter1(comparer$$6, f$$3, k$$8, v$$6, acc$$4) {
     return acc$$4;
   }
 }
-export function MapTreeModule$$$filterAux($arg$$34, $arg$$35, $arg$$36, $arg$$37) {
+export function MapTreeModule$$$filterAux($comparer$$7$$48, $f$$4$$49, $s$$2$$50, $acc$$5$$51) {
   MapTreeModule$$$filterAux: while (true) {
-    const comparer$$7 = $arg$$34,
-          f$$4 = $arg$$35,
-          s$$2 = $arg$$36,
-          acc$$5 = $arg$$37;
+    const comparer$$7 = $comparer$$7$$48,
+          f$$4 = $f$$4$$49,
+          s$$2 = $s$$2$$50,
+          acc$$5 = $acc$$5$$51;
 
     switch (s$$2.tag) {
       case 1:
         {
-          const v$$7 = s$$2.fields[1];
-          const k$$9 = s$$2.fields[0];
-          return MapTreeModule$$$filter1(comparer$$7, f$$4, k$$9, v$$7, acc$$5);
+          return MapTreeModule$$$filter1(comparer$$7, f$$4, s$$2.fields[0], s$$2.fields[1], acc$$5);
         }
 
       case 2:
         {
-          const v$$8 = s$$2.fields[1];
-          const r$$6 = s$$2.fields[3];
-          const l$$6 = s$$2.fields[2];
-          const k$$10 = s$$2.fields[0];
-          const acc$$6 = MapTreeModule$$$filterAux(comparer$$7, f$$4, l$$6, acc$$5);
-          const acc$$7 = MapTreeModule$$$filter1(comparer$$7, f$$4, k$$10, v$$8, acc$$6);
-          $arg$$34 = comparer$$7;
-          $arg$$35 = f$$4;
-          $arg$$36 = r$$6;
-          $arg$$37 = acc$$7;
+          const acc$$6 = MapTreeModule$$$filterAux(comparer$$7, f$$4, s$$2.fields[2], acc$$5);
+          const acc$$7 = MapTreeModule$$$filter1(comparer$$7, f$$4, s$$2.fields[0], s$$2.fields[1], acc$$6);
+          $comparer$$7$$48 = comparer$$7;
+          $f$$4$$49 = f$$4;
+          $s$$2$$50 = s$$2.fields[3];
+          $acc$$5$$51 = acc$$7;
           continue MapTreeModule$$$filterAux;
         }
 
@@ -401,26 +351,16 @@ export function MapTreeModule$$$spliceOutSuccessor(m$$6) {
   switch (m$$6.tag) {
     case 1:
       {
-        const v2$$5 = m$$6.fields[1];
-        const k2$$6 = m$$6.fields[0];
-        return [k2$$6, v2$$5, new MapTree$00602(0, "MapEmpty")];
+        return [m$$6.fields[0], m$$6.fields[1], new MapTree$00602(0, "MapEmpty")];
       }
 
     case 2:
       {
-        const v2$$6 = m$$6.fields[1];
-        const r$$7 = m$$6.fields[3];
-        const l$$7 = m$$6.fields[2];
-        const k2$$7 = m$$6.fields[0];
-
-        if (l$$7.tag === 0) {
-          return [k2$$7, v2$$6, r$$7];
+        if (m$$6.fields[2].tag === 0) {
+          return [m$$6.fields[0], m$$6.fields[1], m$$6.fields[3]];
         } else {
-          const patternInput = MapTreeModule$$$spliceOutSuccessor(l$$7);
-          const v3 = patternInput[1];
-          const l$0027 = patternInput[2];
-          const k3 = patternInput[0];
-          return [k3, v3, MapTreeModule$$$mk(l$0027, k2$$7, v2$$6, r$$7)];
+          const patternInput = MapTreeModule$$$spliceOutSuccessor(m$$6.fields[2]);
+          return [patternInput[0], patternInput[1], MapTreeModule$$$mk(patternInput[2], m$$6.fields[0], m$$6.fields[1], m$$6.fields[3])];
         }
       }
 
@@ -434,8 +374,7 @@ export function MapTreeModule$$$remove(comparer$$9, k$$11, m$$7) {
   switch (m$$7.tag) {
     case 1:
       {
-        const k2$$8 = m$$7.fields[0];
-        const c$$6 = comparer$$9.Compare(k$$11, k2$$8) | 0;
+        const c$$6 = comparer$$9.Compare(k$$11, m$$7.fields[0]) | 0;
 
         if (c$$6 === 0) {
           return new MapTree$00602(0, "MapEmpty");
@@ -446,28 +385,21 @@ export function MapTreeModule$$$remove(comparer$$9, k$$11, m$$7) {
 
     case 2:
       {
-        const v2$$7 = m$$7.fields[1];
-        const r$$8 = m$$7.fields[3];
-        const l$$8 = m$$7.fields[2];
-        const k2$$9 = m$$7.fields[0];
-        const c$$7 = comparer$$9.Compare(k$$11, k2$$9) | 0;
+        const c$$7 = comparer$$9.Compare(k$$11, m$$7.fields[0]) | 0;
 
         if (c$$7 < 0) {
-          return MapTreeModule$$$rebalance(MapTreeModule$$$remove(comparer$$9, k$$11, l$$8), k2$$9, v2$$7, r$$8);
+          return MapTreeModule$$$rebalance(MapTreeModule$$$remove(comparer$$9, k$$11, m$$7.fields[2]), m$$7.fields[0], m$$7.fields[1], m$$7.fields[3]);
         } else if (c$$7 === 0) {
-          if (l$$8.tag === 0) {
-            return r$$8;
-          } else if (r$$8.tag === 0) {
-            return l$$8;
+          if (m$$7.fields[2].tag === 0) {
+            return m$$7.fields[3];
+          } else if (m$$7.fields[3].tag === 0) {
+            return m$$7.fields[2];
           } else {
-            const patternInput$$1 = MapTreeModule$$$spliceOutSuccessor(r$$8);
-            const sv = patternInput$$1[1];
-            const sk = patternInput$$1[0];
-            const r$0027 = patternInput$$1[2];
-            return MapTreeModule$$$mk(l$$8, sk, sv, r$0027);
+            const patternInput$$1 = MapTreeModule$$$spliceOutSuccessor(m$$7.fields[3]);
+            return MapTreeModule$$$mk(m$$7.fields[2], patternInput$$1[0], patternInput$$1[1], patternInput$$1[2]);
           }
         } else {
-          return MapTreeModule$$$rebalance(l$$8, k2$$9, v2$$7, MapTreeModule$$$remove(comparer$$9, k$$11, r$$8));
+          return MapTreeModule$$$rebalance(m$$7.fields[2], m$$7.fields[0], m$$7.fields[1], MapTreeModule$$$remove(comparer$$9, k$$11, m$$7.fields[3]));
         }
       }
 
@@ -477,37 +409,33 @@ export function MapTreeModule$$$remove(comparer$$9, k$$11, m$$7) {
       }
   }
 }
-export function MapTreeModule$$$mem(comparer$$10, k$$12, m$$8) {
+export function MapTreeModule$$$mem($comparer$$10$$59, $k$$12$$60, $m$$8$$61) {
   MapTreeModule$$$mem: while (true) {
+    const comparer$$10 = $comparer$$10$$59,
+          k$$12 = $k$$12$$60,
+          m$$8 = $m$$8$$61;
+
     switch (m$$8.tag) {
       case 1:
         {
-          const k2$$10 = m$$8.fields[0];
-          return comparer$$10.Compare(k$$12, k2$$10) === 0;
+          return comparer$$10.Compare(k$$12, m$$8.fields[0]) === 0;
         }
 
       case 2:
         {
-          const r$$9 = m$$8.fields[3];
-          const l$$9 = m$$8.fields[2];
-          const k2$$11 = m$$8.fields[0];
-          const c$$8 = comparer$$10.Compare(k$$12, k2$$11) | 0;
+          const c$$8 = comparer$$10.Compare(k$$12, m$$8.fields[0]) | 0;
 
           if (c$$8 < 0) {
-            const $comparer$$10$$41 = comparer$$10;
-            const $k$$12$$42 = k$$12;
-            comparer$$10 = $comparer$$10$$41;
-            k$$12 = $k$$12$$42;
-            m$$8 = l$$9;
+            $comparer$$10$$59 = comparer$$10;
+            $k$$12$$60 = k$$12;
+            $m$$8$$61 = m$$8.fields[2];
             continue MapTreeModule$$$mem;
           } else if (c$$8 === 0) {
             return true;
           } else {
-            const $comparer$$10$$43 = comparer$$10;
-            const $k$$12$$44 = k$$12;
-            comparer$$10 = $comparer$$10$$43;
-            k$$12 = $k$$12$$44;
-            m$$8 = r$$9;
+            $comparer$$10$$59 = comparer$$10;
+            $k$$12$$60 = k$$12;
+            $m$$8$$61 = m$$8.fields[3];
             continue MapTreeModule$$$mem;
           }
         }
@@ -521,30 +449,24 @@ export function MapTreeModule$$$mem(comparer$$10, k$$12, m$$8) {
     break;
   }
 }
-export function MapTreeModule$$$iter($arg$$45, $arg$$46) {
+export function MapTreeModule$$$iter($f$$6$$62, $m$$9$$63) {
   MapTreeModule$$$iter: while (true) {
-    const f$$6 = $arg$$45,
-          m$$9 = $arg$$46;
+    const f$$6 = $f$$6$$62,
+          m$$9 = $m$$9$$63;
 
     switch (m$$9.tag) {
       case 1:
         {
-          const v2$$8 = m$$9.fields[1];
-          const k2$$12 = m$$9.fields[0];
-          f$$6(k2$$12, v2$$8);
+          f$$6(m$$9.fields[0], m$$9.fields[1]);
           break;
         }
 
       case 2:
         {
-          const v2$$9 = m$$9.fields[1];
-          const r$$10 = m$$9.fields[3];
-          const l$$10 = m$$9.fields[2];
-          const k2$$13 = m$$9.fields[0];
-          MapTreeModule$$$iter(f$$6, l$$10);
-          f$$6(k2$$13, v2$$9);
-          $arg$$45 = f$$6;
-          $arg$$46 = r$$10;
+          MapTreeModule$$$iter(f$$6, m$$9.fields[2]);
+          f$$6(m$$9.fields[0], m$$9.fields[1]);
+          $f$$6$$62 = f$$6;
+          $m$$9$$63 = m$$9.fields[3];
           continue MapTreeModule$$$iter;
           break;
         }
@@ -556,41 +478,33 @@ export function MapTreeModule$$$iter($arg$$45, $arg$$46) {
     break;
   }
 }
-export function MapTreeModule$$$tryPick($arg$$47, $arg$$48) {
+export function MapTreeModule$$$tryPick($f$$7$$64, $m$$10$$65) {
   MapTreeModule$$$tryPick: while (true) {
-    const f$$7 = $arg$$47,
-          m$$10 = $arg$$48;
+    const f$$7 = $f$$7$$64,
+          m$$10 = $m$$10$$65;
 
     switch (m$$10.tag) {
       case 1:
         {
-          const v2$$10 = m$$10.fields[1];
-          const k2$$14 = m$$10.fields[0];
-          return f$$7(k2$$14, v2$$10);
+          return f$$7(m$$10.fields[0], m$$10.fields[1]);
         }
 
       case 2:
         {
-          const v2$$11 = m$$10.fields[1];
-          const r$$11 = m$$10.fields[3];
-          const l$$11 = m$$10.fields[2];
-          const k2$$15 = m$$10.fields[0];
-          const matchValue$$2 = MapTreeModule$$$tryPick(f$$7, l$$11);
+          const matchValue$$2 = MapTreeModule$$$tryPick(f$$7, m$$10.fields[2]);
 
           if (matchValue$$2 == null) {
-            const matchValue$$3 = f$$7(k2$$15, v2$$11);
+            const matchValue$$3 = f$$7(m$$10.fields[0], m$$10.fields[1]);
 
             if (matchValue$$3 == null) {
-              $arg$$47 = f$$7;
-              $arg$$48 = r$$11;
+              $f$$7$$64 = f$$7;
+              $m$$10$$65 = m$$10.fields[3];
               continue MapTreeModule$$$tryPick;
             } else {
-              const res$$1 = matchValue$$3;
-              return res$$1;
+              return matchValue$$3;
             }
           } else {
-            const res = matchValue$$2;
-            return res;
+            return matchValue$$2;
           }
         }
 
@@ -603,31 +517,24 @@ export function MapTreeModule$$$tryPick($arg$$47, $arg$$48) {
     break;
   }
 }
-export function MapTreeModule$$$exists($arg$$49, $arg$$50) {
+export function MapTreeModule$$$exists($f$$8$$66, $m$$11$$67) {
   MapTreeModule$$$exists: while (true) {
-    const f$$8 = $arg$$49,
-          m$$11 = $arg$$50;
+    const f$$8 = $f$$8$$66,
+          m$$11 = $m$$11$$67;
 
     switch (m$$11.tag) {
       case 1:
         {
-          const v2$$12 = m$$11.fields[1];
-          const k2$$16 = m$$11.fields[0];
-          return f$$8(k2$$16, v2$$12);
+          return f$$8(m$$11.fields[0], m$$11.fields[1]);
         }
 
       case 2:
         {
-          const v2$$13 = m$$11.fields[1];
-          const r$$12 = m$$11.fields[3];
-          const l$$12 = m$$11.fields[2];
-          const k2$$17 = m$$11.fields[0];
-
-          if (MapTreeModule$$$exists(f$$8, l$$12) ? true : f$$8(k2$$17, v2$$13)) {
+          if (MapTreeModule$$$exists(f$$8, m$$11.fields[2]) ? true : f$$8(m$$11.fields[0], m$$11.fields[1])) {
             return true;
           } else {
-            $arg$$49 = f$$8;
-            $arg$$50 = r$$12;
+            $f$$8$$66 = f$$8;
+            $m$$11$$67 = m$$11.fields[3];
             continue MapTreeModule$$$exists;
           }
         }
@@ -641,29 +548,22 @@ export function MapTreeModule$$$exists($arg$$49, $arg$$50) {
     break;
   }
 }
-export function MapTreeModule$$$forall($arg$$51, $arg$$52) {
+export function MapTreeModule$$$forall($f$$9$$68, $m$$12$$69) {
   MapTreeModule$$$forall: while (true) {
-    const f$$9 = $arg$$51,
-          m$$12 = $arg$$52;
+    const f$$9 = $f$$9$$68,
+          m$$12 = $m$$12$$69;
 
     switch (m$$12.tag) {
       case 1:
         {
-          const v2$$14 = m$$12.fields[1];
-          const k2$$18 = m$$12.fields[0];
-          return f$$9(k2$$18, v2$$14);
+          return f$$9(m$$12.fields[0], m$$12.fields[1]);
         }
 
       case 2:
         {
-          const v2$$15 = m$$12.fields[1];
-          const r$$13 = m$$12.fields[3];
-          const l$$13 = m$$12.fields[2];
-          const k2$$19 = m$$12.fields[0];
-
-          if (MapTreeModule$$$forall(f$$9, l$$13) ? f$$9(k2$$19, v2$$15) : false) {
-            $arg$$51 = f$$9;
-            $arg$$52 = r$$13;
+          if (MapTreeModule$$$forall(f$$9, m$$12.fields[2]) ? f$$9(m$$12.fields[0], m$$12.fields[1]) : false) {
+            $f$$9$$68 = f$$9;
+            $m$$12$$69 = m$$12.fields[3];
             continue MapTreeModule$$$forall;
           } else {
             return false;
@@ -683,22 +583,15 @@ export function MapTreeModule$$$map(f$$10, m$$13) {
   switch (m$$13.tag) {
     case 1:
       {
-        const v$$9 = m$$13.fields[1];
-        const k$$13 = m$$13.fields[0];
-        return new MapTree$00602(1, "MapOne", k$$13, f$$10(v$$9));
+        return new MapTree$00602(1, "MapOne", m$$13.fields[0], f$$10(m$$13.fields[1]));
       }
 
     case 2:
       {
-        const v$$10 = m$$13.fields[1];
-        const r$$14 = m$$13.fields[3];
-        const l$$14 = m$$13.fields[2];
-        const k$$14 = m$$13.fields[0];
-        const h$$2 = m$$13.fields[4] | 0;
-        const l2 = MapTreeModule$$$map(f$$10, l$$14);
-        const v2$$16 = f$$10(v$$10);
-        const r2 = MapTreeModule$$$map(f$$10, r$$14);
-        return new MapTree$00602(2, "MapNode", k$$14, v2$$16, l2, r2, h$$2);
+        const l2 = MapTreeModule$$$map(f$$10, m$$13.fields[2]);
+        const v2$$16 = f$$10(m$$13.fields[1]);
+        const r2 = MapTreeModule$$$map(f$$10, m$$13.fields[3]);
+        return new MapTree$00602(2, "MapNode", m$$13.fields[0], v2$$16, l2, r2, m$$13.fields[4]);
       }
 
     default:
@@ -711,22 +604,15 @@ export function MapTreeModule$$$mapi(f$$11, m$$14) {
   switch (m$$14.tag) {
     case 1:
       {
-        const v$$11 = m$$14.fields[1];
-        const k$$15 = m$$14.fields[0];
-        return new MapTree$00602(1, "MapOne", k$$15, f$$11(k$$15, v$$11));
+        return new MapTree$00602(1, "MapOne", m$$14.fields[0], f$$11(m$$14.fields[0], m$$14.fields[1]));
       }
 
     case 2:
       {
-        const v$$12 = m$$14.fields[1];
-        const r$$15 = m$$14.fields[3];
-        const l$$15 = m$$14.fields[2];
-        const k$$16 = m$$14.fields[0];
-        const h$$3 = m$$14.fields[4] | 0;
-        const l2$$1 = MapTreeModule$$$mapi(f$$11, l$$15);
-        const v2$$17 = f$$11(k$$16, v$$12);
-        const r2$$1 = MapTreeModule$$$mapi(f$$11, r$$15);
-        return new MapTree$00602(2, "MapNode", k$$16, v2$$17, l2$$1, r2$$1, h$$3);
+        const l2$$1 = MapTreeModule$$$mapi(f$$11, m$$14.fields[2]);
+        const v2$$17 = f$$11(m$$14.fields[0], m$$14.fields[1]);
+        const r2$$1 = MapTreeModule$$$mapi(f$$11, m$$14.fields[3]);
+        return new MapTree$00602(2, "MapNode", m$$14.fields[0], v2$$17, l2$$1, r2$$1, m$$14.fields[4]);
       }
 
     default:
@@ -735,31 +621,25 @@ export function MapTreeModule$$$mapi(f$$11, m$$14) {
       }
   }
 }
-export function MapTreeModule$$$foldBack($arg$$57, $arg$$58, $arg$$59) {
+export function MapTreeModule$$$foldBack($f$$12$$74, $m$$15$$75, $x$$1$$76) {
   MapTreeModule$$$foldBack: while (true) {
-    const f$$12 = $arg$$57,
-          m$$15 = $arg$$58,
-          x$$1 = $arg$$59;
+    const f$$12 = $f$$12$$74,
+          m$$15 = $m$$15$$75,
+          x$$1 = $x$$1$$76;
 
     switch (m$$15.tag) {
       case 1:
         {
-          const v$$13 = m$$15.fields[1];
-          const k$$17 = m$$15.fields[0];
-          return f$$12(k$$17, v$$13, x$$1);
+          return f$$12(m$$15.fields[0], m$$15.fields[1], x$$1);
         }
 
       case 2:
         {
-          const v$$14 = m$$15.fields[1];
-          const r$$16 = m$$15.fields[3];
-          const l$$16 = m$$15.fields[2];
-          const k$$18 = m$$15.fields[0];
-          const x$$2 = MapTreeModule$$$foldBack(f$$12, r$$16, x$$1);
-          const x$$3 = f$$12(k$$18, v$$14, x$$2);
-          $arg$$57 = f$$12;
-          $arg$$58 = l$$16;
-          $arg$$59 = x$$3;
+          const x$$2 = MapTreeModule$$$foldBack(f$$12, m$$15.fields[3], x$$1);
+          const x$$3 = f$$12(m$$15.fields[0], m$$15.fields[1], x$$2);
+          $f$$12$$74 = f$$12;
+          $m$$15$$75 = m$$15.fields[2];
+          $x$$1$$76 = x$$3;
           continue MapTreeModule$$$foldBack;
         }
 
@@ -772,31 +652,25 @@ export function MapTreeModule$$$foldBack($arg$$57, $arg$$58, $arg$$59) {
     break;
   }
 }
-export function MapTreeModule$$$fold($arg$$60, $arg$$61, $arg$$62) {
+export function MapTreeModule$$$fold($f$$13$$77, $x$$4$$78, $m$$16$$79) {
   MapTreeModule$$$fold: while (true) {
-    const f$$13 = $arg$$60,
-          x$$4 = $arg$$61,
-          m$$16 = $arg$$62;
+    const f$$13 = $f$$13$$77,
+          x$$4 = $x$$4$$78,
+          m$$16 = $m$$16$$79;
 
     switch (m$$16.tag) {
       case 1:
         {
-          const v$$15 = m$$16.fields[1];
-          const k$$19 = m$$16.fields[0];
-          return f$$13(x$$4, k$$19, v$$15);
+          return f$$13(x$$4, m$$16.fields[0], m$$16.fields[1]);
         }
 
       case 2:
         {
-          const v$$16 = m$$16.fields[1];
-          const r$$17 = m$$16.fields[3];
-          const l$$17 = m$$16.fields[2];
-          const k$$20 = m$$16.fields[0];
-          const x$$5 = MapTreeModule$$$fold(f$$13, x$$4, l$$17);
-          const x$$6 = f$$13(x$$5, k$$20, v$$16);
-          $arg$$60 = f$$13;
-          $arg$$61 = x$$6;
-          $arg$$62 = r$$17;
+          const x$$5 = MapTreeModule$$$fold(f$$13, x$$4, m$$16.fields[2]);
+          const x$$6 = f$$13(x$$5, m$$16.fields[0], m$$16.fields[1]);
+          $f$$13$$77 = f$$13;
+          $x$$4$$78 = x$$6;
+          $m$$16$$79 = m$$16.fields[3];
           continue MapTreeModule$$$fold;
         }
 
@@ -813,25 +687,19 @@ export function MapTreeModule$$$foldFromTo(comparer$$11, lo, hi, f$$14, m$$17, x
   switch (m$$17.tag) {
     case 1:
       {
-        const v$$17 = m$$17.fields[1];
-        const k$$21 = m$$17.fields[0];
-        const cLoKey = comparer$$11.Compare(lo, k$$21) | 0;
-        const cKeyHi = comparer$$11.Compare(k$$21, hi) | 0;
-        const x$$8 = (cLoKey <= 0 ? cKeyHi <= 0 : false) ? f$$14(k$$21, v$$17, x$$7) : x$$7;
+        const cLoKey = comparer$$11.Compare(lo, m$$17.fields[0]) | 0;
+        const cKeyHi = comparer$$11.Compare(m$$17.fields[0], hi) | 0;
+        const x$$8 = (cLoKey <= 0 ? cKeyHi <= 0 : false) ? f$$14(m$$17.fields[0], m$$17.fields[1], x$$7) : x$$7;
         return x$$8;
       }
 
     case 2:
       {
-        const v$$18 = m$$17.fields[1];
-        const r$$18 = m$$17.fields[3];
-        const l$$18 = m$$17.fields[2];
-        const k$$22 = m$$17.fields[0];
-        const cLoKey$$1 = comparer$$11.Compare(lo, k$$22) | 0;
-        const cKeyHi$$1 = comparer$$11.Compare(k$$22, hi) | 0;
-        const x$$9 = cLoKey$$1 < 0 ? MapTreeModule$$$foldFromTo(comparer$$11, lo, hi, f$$14, l$$18, x$$7) : x$$7;
-        const x$$10 = (cLoKey$$1 <= 0 ? cKeyHi$$1 <= 0 : false) ? f$$14(k$$22, v$$18, x$$9) : x$$9;
-        const x$$11 = cKeyHi$$1 < 0 ? MapTreeModule$$$foldFromTo(comparer$$11, lo, hi, f$$14, r$$18, x$$10) : x$$10;
+        const cLoKey$$1 = comparer$$11.Compare(lo, m$$17.fields[0]) | 0;
+        const cKeyHi$$1 = comparer$$11.Compare(m$$17.fields[0], hi) | 0;
+        const x$$9 = cLoKey$$1 < 0 ? MapTreeModule$$$foldFromTo(comparer$$11, lo, hi, f$$14, m$$17.fields[2], x$$7) : x$$7;
+        const x$$10 = (cLoKey$$1 <= 0 ? cKeyHi$$1 <= 0 : false) ? f$$14(m$$17.fields[0], m$$17.fields[1], x$$9) : x$$9;
+        const x$$11 = cKeyHi$$1 < 0 ? MapTreeModule$$$foldFromTo(comparer$$11, lo, hi, f$$14, m$$17.fields[3], x$$10) : x$$10;
         return x$$11;
       }
 
@@ -848,25 +716,21 @@ export function MapTreeModule$$$foldSection(comparer$$12, lo$$1, hi$$1, f$$15, m
     return MapTreeModule$$$foldFromTo(comparer$$12, lo$$1, hi$$1, f$$15, m$$18, x$$12);
   }
 }
-export function MapTreeModule$$$loop(m$$19, acc$$8) {
+export function MapTreeModule$$$loop($m$$19$$92, $acc$$8$$93) {
   MapTreeModule$$$loop: while (true) {
+    const m$$19 = $m$$19$$92,
+          acc$$8 = $acc$$8$$93;
+
     switch (m$$19.tag) {
       case 1:
         {
-          const v$$19 = m$$19.fields[1];
-          const k$$23 = m$$19.fields[0];
-          return new List([k$$23, v$$19], acc$$8);
+          return new List([m$$19.fields[0], m$$19.fields[1]], acc$$8);
         }
 
       case 2:
         {
-          const v$$20 = m$$19.fields[1];
-          const r$$19 = m$$19.fields[3];
-          const l$$19 = m$$19.fields[2];
-          const k$$24 = m$$19.fields[0];
-          const $acc$$8$$75 = acc$$8;
-          m$$19 = l$$19;
-          acc$$8 = new List([k$$24, v$$20], MapTreeModule$$$loop(r$$19, $acc$$8$$75));
+          $m$$19$$92 = m$$19.fields[2];
+          $acc$$8$$93 = new List([m$$19.fields[0], m$$19.fields[1]], MapTreeModule$$$loop(m$$19.fields[3], acc$$8));
           continue MapTreeModule$$$loop;
         }
 
@@ -884,23 +748,20 @@ export function MapTreeModule$$$toList(m$$20) {
 }
 export function MapTreeModule$$$ofList(comparer$$13, l$$20) {
   return fold$$1(function (acc$$9, tupledArg) {
-    const k$$25 = tupledArg[0];
-    const v$$21 = tupledArg[1];
-    return MapTreeModule$$$add(comparer$$13, k$$25, v$$21, acc$$9);
+    return MapTreeModule$$$add(comparer$$13, tupledArg[0], tupledArg[1], acc$$9);
   }, MapTreeModule$$$empty(), l$$20);
 }
-export function MapTreeModule$$$mkFromEnumerator(comparer$$14, acc$$10, e) {
+export function MapTreeModule$$$mkFromEnumerator($comparer$$14$$97, $acc$$10$$98, $e$$99) {
   MapTreeModule$$$mkFromEnumerator: while (true) {
+    const comparer$$14 = $comparer$$14$$97,
+          acc$$10 = $acc$$10$$98,
+          e = $e$$99;
+
     if (e.MoveNext()) {
       const patternInput$$2 = e.Current;
-      const y = patternInput$$2[1];
-      const x$$13 = patternInput$$2[0];
-      const $acc$$10$$77 = acc$$10;
-      const $comparer$$14$$76 = comparer$$14;
-      const $e$$78 = e;
-      comparer$$14 = $comparer$$14$$76;
-      acc$$10 = MapTreeModule$$$add($comparer$$14$$76, x$$13, y, $acc$$10$$77);
-      e = $e$$78;
+      $comparer$$14$$97 = comparer$$14;
+      $acc$$10$$98 = MapTreeModule$$$add(comparer$$14, patternInput$$2[0], patternInput$$2[1], acc$$10);
+      $e$$99 = e;
       continue MapTreeModule$$$mkFromEnumerator;
     } else {
       return acc$$10;
@@ -914,9 +775,7 @@ export function MapTreeModule$$$ofArray(comparer$$15, arr) {
 
   for (let i = 0; i <= arr.length - 1; i++) {
     const patternInput$$3 = arr[i];
-    const y$$1 = patternInput$$3[1];
-    const x$$14 = patternInput$$3[0];
-    res$$2 = MapTreeModule$$$add(comparer$$15, x$$14, y$$1, res$$2);
+    res$$2 = MapTreeModule$$$add(comparer$$15, patternInput$$3[0], patternInput$$3[1], res$$2);
   }
 
   return res$$2;
@@ -943,25 +802,21 @@ export const MapTreeModule$002EMapIterator$00602 = declare(function Map_MapTreeM
   this.stack = arg1;
   this.started = arg2;
 }, Record);
-export function MapTreeModule$002EMapIterator$00602$reflection($gen$$79, $gen$$80) {
-  return record("Map.MapTreeModule.MapIterator`2", [$gen$$79, $gen$$80], MapTreeModule$002EMapIterator$00602, () => [["stack", list(MapTree$00602$reflection($gen$$79, $gen$$80))], ["started", bool]]);
+export function MapTreeModule$002EMapIterator$00602$reflection($gen$$109, $gen$$110) {
+  return record("Map.MapTreeModule.MapIterator`2", [$gen$$109, $gen$$110], MapTreeModule$002EMapIterator$00602, () => [["stack", list(MapTree$00602$reflection($gen$$109, $gen$$110))], ["started", bool]]);
 }
-export function MapTreeModule$$$collapseLHS(stack) {
+export function MapTreeModule$$$collapseLHS($stack$$111) {
   MapTreeModule$$$collapseLHS: while (true) {
+    const stack = $stack$$111;
+
     if (stack.tail != null) {
       if (stack.head.tag === 1) {
         return stack;
       } else if (stack.head.tag === 2) {
-        const k$$26 = stack.head.fields[0];
-        const l$$21 = stack.head.fields[2];
-        const r$$20 = stack.head.fields[3];
-        const rest$$1 = stack.tail;
-        const v$$22 = stack.head.fields[1];
-        stack = new List(l$$21, new List(new MapTree$00602(1, "MapOne", k$$26, v$$22), new List(r$$20, rest$$1)));
+        $stack$$111 = new List(stack.head.fields[2], new List(new MapTree$00602(1, "MapOne", stack.head.fields[0], stack.head.fields[1]), new List(stack.head.fields[3], stack.tail)));
         continue MapTreeModule$$$collapseLHS;
       } else {
-        const rest = stack.tail;
-        stack = rest;
+        $stack$$111 = stack.tail;
         continue MapTreeModule$$$collapseLHS;
       }
     } else {
@@ -987,9 +842,7 @@ export function MapTreeModule$$$current(i$$2) {
     if (matchValue$$4.tail == null) {
       return MapTreeModule$$$alreadyFinished();
     } else if (matchValue$$4.head.tag === 1) {
-      const k$$27 = matchValue$$4.head.fields[0];
-      const v$$23 = matchValue$$4.head.fields[1];
-      return [k$$27, v$$23];
+      return [matchValue$$4.head.fields[0], matchValue$$4.head.fields[1]];
     } else {
       throw new Error("Please report error: Map iterator, unexpected stack for current");
     }
@@ -1004,8 +857,7 @@ export function MapTreeModule$$$moveNext(i$$3) {
     if (matchValue$$5.tail == null) {
       return false;
     } else if (matchValue$$5.head.tag === 1) {
-      const rest$$2 = matchValue$$5.tail;
-      i$$3.stack = MapTreeModule$$$collapseLHS(rest$$2);
+      i$$3.stack = MapTreeModule$$$collapseLHS(matchValue$$5.tail);
       return !(i$$3.stack.tail == null);
     } else {
       throw new Error("Please report error: Map iterator, unexpected stack for moveNext");
@@ -1020,8 +872,8 @@ export const MapTreeModule$002EmkIEnumerator$0027$00602 = declare(function Map_M
   $this$$1.s = s$$6;
   $this$$1.i = MapTreeModule$$$mkIterator($this$$1.s);
 });
-export function MapTreeModule$002EmkIEnumerator$0027$00602$reflection($gen$$81, $gen$$82) {
-  return type("Map.MapTreeModule.mkIEnumerator'`2", [$gen$$81, $gen$$82]);
+export function MapTreeModule$002EmkIEnumerator$0027$00602$reflection($gen$$115, $gen$$116) {
+  return type("Map.MapTreeModule.mkIEnumerator'`2", [$gen$$115, $gen$$116]);
 }
 export function MapTreeModule$002EmkIEnumerator$0027$00602$$$$002Ector$$Z26BC498C(s$$6) {
   return this instanceof MapTreeModule$002EmkIEnumerator$0027$00602 ? MapTreeModule$002EmkIEnumerator$0027$00602.call(this, s$$6) : new MapTreeModule$002EmkIEnumerator$0027$00602(s$$6);
@@ -1063,8 +915,8 @@ export const FSharpMap = declare(function Map_Map(comparer$$17, tree) {
   $this$$2.comparer = comparer$$17;
   $this$$2.tree = tree;
 });
-export function FSharpMap$reflection($gen$$83, $gen$$84) {
-  return type("Map.FSharpMap", [$gen$$83, $gen$$84]);
+export function FSharpMap$reflection($gen$$120, $gen$$121) {
+  return type("Map.FSharpMap", [$gen$$120, $gen$$121]);
 }
 export function FSharpMap$$$$002Ector$$58ADD115(comparer$$17, tree) {
   return this instanceof FSharpMap ? FSharpMap.call(this, comparer$$17, tree) : new FSharpMap(comparer$$17, tree);
@@ -1090,7 +942,7 @@ export function FSharpMap$$TryGetValue$$5BDDA1(__$$9, k$$30, defValue) {
   if (matchValue$$6 == null) {
     return [false, defValue];
   } else {
-    const v$$25 = value$$4(matchValue$$6);
+    const v$$25 = value$$3(matchValue$$6);
     return [true, v$$25];
   }
 }
@@ -1123,9 +975,7 @@ export function FSharpMap$$Map$$Z6F6B671C(__$$18, f$$25) {
 }
 export function FSharpMap$$Partition$$Z395DDC35(__$$19, f$$26) {
   const patternInput$$4 = MapTreeModule$$$partition(__$$19.comparer, f$$26, __$$19.tree);
-  const r2$$2 = patternInput$$4[1];
-  const r1 = patternInput$$4[0];
-  return [FSharpMap$$$$002Ector$$58ADD115(__$$19.comparer, r1), FSharpMap$$$$002Ector$$58ADD115(__$$19.comparer, r2$$2)];
+  return [FSharpMap$$$$002Ector$$58ADD115(__$$19.comparer, patternInput$$4[0]), FSharpMap$$$$002Ector$$58ADD115(__$$19.comparer, patternInput$$4[1])];
 }
 export function FSharpMap$$get_Count(__$$20) {
   return MapTreeModule$$$size(__$$20.tree);
@@ -1144,10 +994,13 @@ export function FSharpMap$$ToList(__$$24) {
 }
 
 FSharpMap.prototype.toString = function () {
+  var strings;
   const this$ = this;
-  return "map [" + join("; ", ...map$$2(function mapping(kv) {
-    return toText(printf("(%A, %A)"))(kv[0])(kv[1]);
-  }, this$)) + "]";
+  return "map [" + (strings = (map$$2(function mapping(kv) {
+    const clo1 = toText(printf("(%A, %A)"));
+    const clo2 = clo1(kv[0]);
+    return clo2(kv[1]);
+  }, this$)), (join("; ", strings))) + "]";
 };
 
 FSharpMap.prototype.GetHashCode = function () {
@@ -1161,11 +1014,10 @@ FSharpMap.prototype.GetHashCode = function () {
   const e$$1 = MapTreeModule$$$mkIEnumerator(FSharpMap$$get_Tree(this$$$1));
 
   while (e$$1.MoveNext()) {
-    const activePatternResult3536 = e$$1.Current;
-    const y$$4 = activePatternResult3536[1];
-    const x$$17 = activePatternResult3536[0];
-    res$$3 = combineHash(res$$3, structuralHash(x$$17));
-    res$$3 = combineHash(res$$3, structuralHash(y$$4));
+    const patternInput$$5 = e$$1.Current;
+    const activePatternResult3676 = patternInput$$5;
+    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3676[0]));
+    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3676[1]));
   }
 
   return Math.abs(res$$3) | 0;
@@ -1183,13 +1035,12 @@ FSharpMap.prototype[Symbol.iterator] = function () {
 
 FSharpMap.prototype.CompareTo = function (obj) {
   const m$$22 = this;
-  const m2 = obj;
   let res$$4 = 0;
   let finished = false;
   const e1 = MapTreeModule$$$mkIEnumerator(FSharpMap$$get_Tree(m$$22));
 
   try {
-    const e2 = MapTreeModule$$$mkIEnumerator(FSharpMap$$get_Tree(m2));
+    const e2 = MapTreeModule$$$mkIEnumerator(FSharpMap$$get_Tree(obj));
 
     try {
       while (!finished ? res$$4 === 0 : false) {
@@ -1256,9 +1107,10 @@ FSharpMap.prototype.has = function (k$$35) {
 
 FSharpMap.prototype.keys = function () {
   const this$$$7 = this;
+  const source$$1 = MapTreeModule$$$toSeq(FSharpMap$$get_Tree(this$$$7));
   return map$$2(function mapping$$1(kv$$1) {
     return kv$$1[0];
-  }, MapTreeModule$$$toSeq(FSharpMap$$get_Tree(this$$$7)));
+  }, source$$1);
 };
 
 FSharpMap.prototype.set = function (k$$36, v$$26) {
@@ -1267,9 +1119,10 @@ FSharpMap.prototype.set = function (k$$36, v$$26) {
 
 FSharpMap.prototype.values = function () {
   const this$$$8 = this;
+  const source$$2 = MapTreeModule$$$toSeq(FSharpMap$$get_Tree(this$$$8));
   return map$$2(function mapping$$2(kv$$2) {
     return kv$$2[1];
-  }, MapTreeModule$$$toSeq(FSharpMap$$get_Tree(this$$$8)));
+  }, source$$2);
 };
 
 export function isEmpty(m$$23) {
@@ -1300,7 +1153,7 @@ export function pick(f$$29, m$$31) {
   const matchValue$$8 = tryPick(f$$29, m$$31);
 
   if (matchValue$$8 != null) {
-    const res$$5 = value$$4(matchValue$$8);
+    const res$$5 = value$$3(matchValue$$8);
     return res$$5;
   } else {
     throw new Error("key not found");
@@ -1334,29 +1187,33 @@ export function toSeq(m$$40) {
   return MapTreeModule$$$toSeq(FSharpMap$$get_Tree(m$$40));
 }
 export function findKey(f$$38, m$$41) {
-  const _arg1$$2 = MapTreeModule$$$tryPick(function f$$39(k$$42, v$$28) {
+  let _arg1$$2;
+
+  const m$$42 = FSharpMap$$get_Tree(m$$41);
+  _arg1$$2 = MapTreeModule$$$tryPick(function f$$39(k$$42, v$$28) {
     if (f$$38(k$$42, v$$28)) {
       return some(k$$42);
     } else {
       return null;
     }
-  }, FSharpMap$$get_Tree(m$$41));
+  }, m$$42);
 
   if (_arg1$$2 == null) {
     throw new Error("Key not found");
   } else {
-    const k$$43 = value$$4(_arg1$$2);
+    const k$$43 = value$$3(_arg1$$2);
     return k$$43;
   }
 }
 export function tryFindKey(f$$40, m$$43) {
+  const m$$44 = FSharpMap$$get_Tree(m$$43);
   return MapTreeModule$$$tryPick(function f$$41(k$$44, v$$29) {
     if (f$$40(k$$44, v$$29)) {
       return some(k$$44);
     } else {
       return null;
     }
-  }, FSharpMap$$get_Tree(m$$43));
+  }, m$$44);
 }
 export function ofList(l$$22, comparer$$18) {
   return FSharpMap$$$$002Ector$$58ADD115(comparer$$18, MapTreeModule$$$ofList(comparer$$18, l$$22));
@@ -1371,7 +1228,9 @@ export function toList(m$$45) {
   return FSharpMap$$ToList(m$$45);
 }
 export function toArray(m$$46) {
-  const res$$6 = new Array(FSharpMap$$get_Count(m$$46));
+  let res$$6;
+  const len = FSharpMap$$get_Count(m$$46) | 0;
+  res$$6 = new Array(len);
   MapTreeModule$$$copyToArray(FSharpMap$$get_Tree(m$$46), res$$6, 0);
   return res$$6;
 }
@@ -1412,9 +1271,10 @@ function createMutablePrivate(comparer$$22, tree$0027) {
     },
 
     keys() {
+      const source$$3 = MapTreeModule$$$toSeq(tree$$1);
       return map$$2(function mapping$$3(kv$$3) {
         return kv$$3[0];
-      }, MapTreeModule$$$toSeq(tree$$1));
+      }, source$$3);
     },
 
     set(k$$46, v$$30) {
@@ -1424,9 +1284,10 @@ function createMutablePrivate(comparer$$22, tree$0027) {
     },
 
     values() {
+      const source$$4 = MapTreeModule$$$toSeq(tree$$1);
       return map$$2(function mapping$$4(kv$$4) {
         return kv$$4[1];
-      }, MapTreeModule$$$toSeq(tree$$1));
+      }, source$$4);
     },
 
     [Symbol.iterator]() {
@@ -1441,23 +1302,19 @@ function createMutablePrivate(comparer$$22, tree$0027) {
 }
 
 export function createMutable(source$$5, comparer$$23) {
-  const map$$1 = MutableMap$002400602$0024$0024$0024$0024002Ector$0024$0024Z79760D57(comparer$$23);
-  iterate$$1(function (forLoopVar) {
-    const value = forLoopVar[1];
-    const key = forLoopVar[0];
-    MutableMap$002400602$0024$0024Add$0024$00245BDDA1(map$$1, key, value);
-  }, source$$5);
+  const map$$1 = MutableMap$002400602$0024$0024$0024$0024002Ector$0024$00246623D9B3(source$$5, comparer$$23);
   return map$$1;
 }
 export function groupBy(projection, xs, comparer$$24) {
   const dict = createMutable(empty$$1(), comparer$$24);
   iterate$$1(function (v$$31) {
-    const key$$1 = projection(v$$31);
+    const key = projection(v$$31);
 
-    if (dict.has(key$$1)) {
-      dict.get(key$$1).push(v$$31);
+    if (dict.has(key)) {
+      dict.get(key).push(v$$31);
     } else {
-      dict.set(key$$1, [v$$31]), null;
+      const value = dict.set(key, [v$$31]);
+      value, null;
     }
   }, xs);
   return map$$2(function mapping$$5(kv$$5) {
@@ -1466,9 +1323,10 @@ export function groupBy(projection, xs, comparer$$24) {
 }
 export function countBy(projection$$1, xs$$1, comparer$$25) {
   const dict$$1 = createMutable(empty$$1(), comparer$$25);
-  iterate$$1(function (value$$2) {
-    const key$$2 = projection$$1(value$$2);
-    dict$$1.has(key$$2) ? dict$$1.set(key$$2, dict$$1.get(key$$2) + 1) : dict$$1.set(key$$2, 1), null;
+  iterate$$1(function (value$$1) {
+    const key$$1 = projection$$1(value$$1);
+    const value$$2 = dict$$1.has(key$$1) ? dict$$1.set(key$$1, dict$$1.get(key$$1) + 1) : dict$$1.set(key$$1, 1);
+    value$$2, null;
   }, xs$$1);
   return map$$2(function mapping$$6(kv$$6) {
     return [kv$$6[0], kv$$6[1]];

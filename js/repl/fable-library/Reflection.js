@@ -1,4 +1,4 @@
-import { Record, Union, anonRecord as makeAnonRecord } from "./Types.js";
+import { anonRecord as makeAnonRecord, Record, Union } from "./Types.js";
 import { compareArraysWith, equalArraysWith } from "./Util.js";
 export class CaseInfo {
     constructor(declaringType, tag, name, fields) {
@@ -220,7 +220,7 @@ export function makeRecord(t, values) {
     }
     return t.constructor != null
         ? new t.constructor(...values)
-        : makeAnonRecord(fields.reduce((obj, [key,], i) => {
+        : makeAnonRecord(fields.reduce((obj, [key, _t], i) => {
             obj[key] = values[i];
             return obj;
         }, {}));

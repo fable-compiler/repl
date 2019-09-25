@@ -1,7 +1,7 @@
-import { concat, map, iterate } from "../fable-library.2.3.18/List.js";
-import { List } from "../fable-library.2.3.18/Types.js";
-import { startImmediate, catchAsync } from "../fable-library.2.3.18/Async.js";
-import { singleton } from "../fable-library.2.3.18/AsyncBuilder.js";
+import { concat, map, iterate } from "../fable-library.2.4.2/List.js";
+import { List } from "../fable-library.2.4.2/Types.js";
+import { startImmediate, catchAsync } from "../fable-library.2.4.2/Async.js";
+import { singleton } from "../fable-library.2.4.2/AsyncBuilder.js";
 export function Cmd$$$exec(dispatch, cmd) {
   iterate(function action(sub) {
     sub(dispatch);
@@ -26,35 +26,31 @@ export function Cmd$$$ofSub(sub$$1) {
   return new List(sub$$1, new List());
 }
 export function Cmd$002EOfFunc$$$either(task, arg, ofSuccess, ofError) {
-  const bind = function bind(dispatch$$2) {
+  return new List(function bind(dispatch$$2) {
     try {
-      return dispatch$$2(ofSuccess(task(arg)));
+      const $arg$$3 = task(arg);
+      return dispatch$$2(ofSuccess($arg$$3));
     } catch (x) {
       return dispatch$$2(ofError(x));
     }
-  };
-
-  return new List(bind, new List());
+  }, new List());
 }
 export function Cmd$002EOfFunc$$$perform(task$$1, arg$$1, ofSuccess$$1) {
-  const bind$$1 = function bind$$1(dispatch$$3) {
+  return new List(function bind$$1(dispatch$$3) {
     try {
-      dispatch$$3(ofSuccess$$1(task$$1(arg$$1)));
+      const $arg$$5 = task$$1(arg$$1);
+      dispatch$$3(ofSuccess$$1($arg$$5));
     } catch (x$$1) {}
-  };
-
-  return new List(bind$$1, new List());
+  }, new List());
 }
 export function Cmd$002EOfFunc$$$attempt(task$$2, arg$$2, ofError$$1) {
-  const bind$$2 = function bind$$2(dispatch$$4) {
+  return new List(function bind$$2(dispatch$$4) {
     try {
       task$$2(arg$$2);
     } catch (x$$2) {
       dispatch$$4(ofError$$1(x$$2));
     }
-  };
-
-  return new List(bind$$2, new List());
+  }, new List());
 }
 export function Cmd$002EOfFunc$$$result(msg) {
   return new List(function (dispatch$$5) {
@@ -62,119 +58,99 @@ export function Cmd$002EOfFunc$$$result(msg) {
   }, new List());
 }
 export function Cmd$002EOfAsync$$$either(task$$3, arg$$3, ofSuccess$$2, ofError$$2) {
-  const bind$$3 = function bind$$3(dispatch$$6) {
-    return singleton.Delay(function () {
-      return singleton.Bind(catchAsync(task$$3(arg$$3)), function (_arg1) {
-        var x$$4, x$$3;
-        const r = _arg1;
-        dispatch$$6(r.tag === 1 ? (x$$4 = r.fields[0], ofError$$2(x$$4)) : (x$$3 = r.fields[0], ofSuccess$$2(x$$3)));
+  return new List(function ($arg$$7) {
+    let arg00$$1;
+    arg00$$1 = singleton.Delay(function () {
+      var arg00;
+      return singleton.Bind((arg00 = task$$3(arg$$3), (catchAsync(arg00))), function (_arg1) {
+        $arg$$7(_arg1.tag === 1 ? ofError$$2(_arg1.fields[0]) : ofSuccess$$2(_arg1.fields[0]));
         return singleton.Zero();
       });
     });
-  };
-
-  return new List(function ($arg$$7) {
-    startImmediate(bind$$3($arg$$7));
+    startImmediate(arg00$$1);
   }, new List());
 }
 export function Cmd$002EOfAsync$$$perform(task$$4, arg$$4, ofSuccess$$3) {
-  const bind$$4 = function bind$$4(dispatch$$7) {
-    return singleton.Delay(function () {
-      return singleton.Bind(catchAsync(task$$4(arg$$4)), function (_arg1$$1) {
-        const r$$1 = _arg1$$1;
-
-        if (r$$1.tag === 0) {
-          const x$$5 = r$$1.fields[0];
-          dispatch$$7(ofSuccess$$3(x$$5));
+  return new List(function ($arg$$8) {
+    let arg00$$3;
+    arg00$$3 = singleton.Delay(function () {
+      var arg00$$2;
+      return singleton.Bind((arg00$$2 = task$$4(arg$$4), (catchAsync(arg00$$2))), function (_arg1$$1) {
+        if (_arg1$$1.tag === 0) {
+          $arg$$8(ofSuccess$$3(_arg1$$1.fields[0]));
           return singleton.Zero();
         } else {
           return singleton.Zero();
         }
       });
     });
-  };
-
-  return new List(function ($arg$$8) {
-    startImmediate(bind$$4($arg$$8));
+    startImmediate(arg00$$3);
   }, new List());
 }
 export function Cmd$002EOfAsync$$$attempt(task$$5, arg$$5, ofError$$3) {
-  const bind$$5 = function bind$$5(dispatch$$8) {
-    return singleton.Delay(function () {
-      return singleton.Bind(catchAsync(task$$5(arg$$5)), function (_arg1$$2) {
-        const r$$2 = _arg1$$2;
-
-        if (r$$2.tag === 1) {
-          const x$$6 = r$$2.fields[0];
-          dispatch$$8(ofError$$3(x$$6));
+  return new List(function ($arg$$9) {
+    let arg00$$5;
+    arg00$$5 = singleton.Delay(function () {
+      var arg00$$4;
+      return singleton.Bind((arg00$$4 = task$$5(arg$$5), (catchAsync(arg00$$4))), function (_arg1$$2) {
+        if (_arg1$$2.tag === 1) {
+          $arg$$9(ofError$$3(_arg1$$2.fields[0]));
           return singleton.Zero();
         } else {
           return singleton.Zero();
         }
       });
     });
-  };
-
-  return new List(function ($arg$$9) {
-    startImmediate(bind$$5($arg$$9));
+    startImmediate(arg00$$5);
   }, new List());
 }
 export function Cmd$002EOfAsync$$$result(task$$6) {
-  const bind$$6 = function bind$$6(dispatch$$9) {
-    return singleton.Delay(function () {
-      return singleton.Bind(catchAsync(task$$6), function (_arg1$$3) {
-        const r$$3 = _arg1$$3;
-
-        if (r$$3.tag === 0) {
-          const x$$7 = r$$3.fields[0];
-          dispatch$$9(x$$7);
+  return new List(function ($arg$$10) {
+    let arg00$$7;
+    arg00$$7 = singleton.Delay(function () {
+      return singleton.Bind((catchAsync(task$$6)), function (_arg1$$3) {
+        if (_arg1$$3.tag === 0) {
+          $arg$$10(_arg1$$3.fields[0]);
           return singleton.Zero();
         } else {
           return singleton.Zero();
         }
       });
     });
-  };
-
-  return new List(function ($arg$$10) {
-    startImmediate(bind$$6($arg$$10));
+    startImmediate(arg00$$7);
   }, new List());
 }
 export function Cmd$002EOfPromise$$$either(task$$7, arg$$6, ofSuccess$$4, ofError$$4) {
-  const bind$$7 = function bind$$7(dispatch$$10) {
-    task$$7(arg$$6).then(function ($arg$$11) {
+  return new List(function bind$$7(dispatch$$10) {
+    const value$$1 = task$$7(arg$$6).then(function ($arg$$11) {
       return dispatch$$10(ofSuccess$$4($arg$$11));
     }).catch(function ($arg$$13) {
-      return dispatch$$10(ofError$$4($arg$$13));
-    }), null;
-  };
-
-  return new List(bind$$7, new List());
+      return dispatch$$10((ofError$$4(($arg$$13))));
+    });
+    value$$1, null;
+  }, new List());
 }
 export function Cmd$002EOfPromise$$$perform(task$$8, arg$$7, ofSuccess$$5) {
-  const bind$$8 = function bind$$8(dispatch$$11) {
-    task$$8(arg$$7).then(function ($arg$$14) {
+  return new List(function bind$$8(dispatch$$11) {
+    const value$$2 = task$$8(arg$$7).then(function ($arg$$14) {
       return dispatch$$11(ofSuccess$$5($arg$$14));
-    }), null;
-  };
-
-  return new List(bind$$8, new List());
+    });
+    value$$2, null;
+  }, new List());
 }
 export function Cmd$002EOfPromise$$$attempt(task$$9, arg$$8, ofError$$5) {
-  const bind$$9 = function bind$$9(dispatch$$12) {
-    task$$9(arg$$8).catch(function ($arg$$16) {
-      dispatch$$12(ofError$$5($arg$$16));
-    }), null;
-  };
-
-  return new List(bind$$9, new List());
+  return new List(function bind$$9(dispatch$$12) {
+    const value$$4 = task$$9(arg$$8).catch(function ($arg$$16) {
+      dispatch$$12((ofError$$5(($arg$$16))));
+    });
+    value$$4, null;
+  }, new List());
 }
 export function Cmd$002EOfPromise$$$result(task$$10) {
-  const bind$$10 = function bind$$10(dispatch$$13) {
-    task$$10.then(dispatch$$13), null;
-  };
-
-  return new List(bind$$10, new List());
+  return new List(function bind$$10(dispatch$$13) {
+    const value$$5 = task$$10.then(dispatch$$13);
+    value$$5, null;
+  }, new List());
 }
 export function Cmd$$$ofPromise(task$$11, arg$$9, ofSuccess$$6, ofError$$6) {
   return Cmd$002EOfPromise$$$either(task$$11, arg$$9, ofSuccess$$6, ofError$$6);

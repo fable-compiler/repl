@@ -6,7 +6,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "0be94a07755ba9b88f2ebcac0f23a3da.woff"
   },
   {
-    "url": "1.ff8f292b9aff1da6cb49.js"
+    "url": "1.0017bcd0c28fe88fdcb1.js"
   },
   {
     "url": "137778879005023b427be30df1f57d83.ttf"
@@ -15,16 +15,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "1a77fe6d9f399212fcfcfde790ce66b2.ttf"
   },
   {
-    "url": "2.ff8f292b9aff1da6cb49.js"
+    "url": "2.0017bcd0c28fe88fdcb1.js"
   },
   {
-    "url": "3.ff8f292b9aff1da6cb49.js"
+    "url": "3.0017bcd0c28fe88fdcb1.js"
   },
   {
     "url": "38975343b586296e9b73e6b56cc3ec5d.svg"
   },
   {
-    "url": "4.ff8f292b9aff1da6cb49.js"
+    "url": "4.0017bcd0c28fe88fdcb1.js"
   },
   {
     "revision": "025016f5d2aad368f996640b84a166ef",
@@ -34,7 +34,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "4cfc570109e603356ee7586978c46852.eot"
   },
   {
-    "url": "5.ff8f292b9aff1da6cb49.js"
+    "url": "5.0017bcd0c28fe88fdcb1.js"
   },
   {
     "url": "5c4876bef50a7df9d8ac48af75ecf11c.woff2"
@@ -43,13 +43,13 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "5c6aa3e267f5554fd7cf15557b7e44aa.eot"
   },
   {
-    "url": "6.ff8f292b9aff1da6cb49.js"
+    "url": "6.0017bcd0c28fe88fdcb1.js"
   },
   {
     "url": "64b3e814a66c2719b15abf8f7998bd73.woff2"
   },
   {
-    "url": "7.ff8f292b9aff1da6cb49.js"
+    "url": "7.0017bcd0c28fe88fdcb1.js"
   },
   {
     "url": "7726a281c1d436eb038f78c6e9048c96.svg"
@@ -64,7 +64,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "7c8fa37007189c6e9a50125e5ca64cff.eot"
   },
   {
-    "url": "8.ff8f292b9aff1da6cb49.js"
+    "url": "8.0017bcd0c28fe88fdcb1.js"
   },
   {
     "url": "8027cf95961ca238debdd2352284e532.woff"
@@ -102,7 +102,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "af2692f72b79d5935fe511236e05dbc8.woff"
   },
   {
-    "url": "app.ff8f292b9aff1da6cb49.js"
+    "url": "app.0017bcd0c28fe88fdcb1.js"
   },
   {
     "url": "b7d071b9c3c197bff4af902070622423.ttf"
@@ -260,15 +260,15 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "img/pacman/Powerup31.wav"
   },
   {
-    "revision": "8d6f32d49b5dff133fcf350a9a59bdd6",
+    "revision": "c574ac6af476e61e45f83b81f434078b",
     "url": "index.html"
   },
   {
-    "revision": "afefde02adba3866ae0a36f700a2c9a1",
+    "revision": "0bdd545c0b035f039bf51c9b78a9f1ad",
     "url": "js/repl/bundle.min.js"
   },
   {
-    "revision": "1b02899c2651d9d7b278f90004827f59",
+    "revision": "ff78b7e3d59a52d507e725cbe7f9b847",
     "url": "js/repl/fable-library/Array.js"
   },
   {
@@ -276,23 +276,23 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/repl/fable-library/Async.js"
   },
   {
-    "revision": "73d4db94a541e2b6eeca7aa25098d59e",
+    "revision": "fd778dc8d248a732e5fa1776fd4abfe9",
     "url": "js/repl/fable-library/AsyncBuilder.js"
   },
   {
-    "revision": "01262d2d204e1b2cc5389e46f7283ebb",
+    "revision": "1a23b735b6313ca86a476e0fe63ac0ea",
     "url": "js/repl/fable-library/BigInt.js"
   },
   {
-    "revision": "3b154bb7643f9396bc1badf8af8ec2dc",
+    "revision": "27dee5b929de6c06ca50a4797a47ab37",
     "url": "js/repl/fable-library/BigInt/n.js"
   },
   {
-    "revision": "0c6103df2808ded47c645cd8a33530ca",
+    "revision": "89e0c8e514e3c9869a4dc73459ac0e31",
     "url": "js/repl/fable-library/BigInt/z.js"
   },
   {
-    "revision": "2cf994d61adeba0fd49795c231067803",
+    "revision": "4fc0ff9b1fa5a24a96c0daa8fb368e43",
     "url": "js/repl/fable-library/BitConverter.js"
   },
   {
@@ -300,7 +300,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/repl/fable-library/Char.js"
   },
   {
-    "revision": "1ac4b704d18b0fbb7b45d0d6e5e05a00",
+    "revision": "2d22830ab3a5d2f8b02f5dd3d351011c",
     "url": "js/repl/fable-library/Date.js"
   },
   {
@@ -312,19 +312,15 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/repl/fable-library/Decimal.js"
   },
   {
-    "revision": "90a657a658d39ca42397059fc195a2fc",
-    "url": "js/repl/fable-library/DictTypes.js"
-  },
-  {
     "revision": "fdaa0f3ab256c8aca509a52cdd16df73",
     "url": "js/repl/fable-library/Double.js"
   },
   {
-    "revision": "bb649aed716181ab8fc9fc3352ff9e03",
+    "revision": "01ff243570fb92584a541246c2898320",
     "url": "js/repl/fable-library/Encoding.js"
   },
   {
-    "revision": "c23782b6284843c270293e6de20dd4d2",
+    "revision": "dd2d6142f8a76d6d1c6911af916a5143",
     "url": "js/repl/fable-library/Event.js"
   },
   {
@@ -332,7 +328,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/repl/fable-library/FSharp.Collections.js"
   },
   {
-    "revision": "4bcaa354ce3f8e97359064ace348de65",
+    "revision": "7dffc98df67f339fbf99839f1947a671",
     "url": "js/repl/fable-library/FSharp.Core.js"
   },
   {
@@ -344,11 +340,11 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/repl/fable-library/Int32.js"
   },
   {
-    "revision": "4564a7a83f9b53d2ecab2e83e3e7c8e6",
+    "revision": "a05a6934acfb45190e7b537e0afe84d5",
     "url": "js/repl/fable-library/List.js"
   },
   {
-    "revision": "1193a0035f37c3d30cba189b631e3ab4",
+    "revision": "f990aa93240200b046ff2cba88e57951",
     "url": "js/repl/fable-library/Long.js"
   },
   {
@@ -356,15 +352,15 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/repl/fable-library/MailboxProcessor.js"
   },
   {
-    "revision": "454702af710a5983a2286e55ffd2b768",
+    "revision": "6956e476f92966153466f7075c1a1453",
     "url": "js/repl/fable-library/Map.js"
   },
   {
-    "revision": "0fb2003cc560180324c08d5012b24562",
+    "revision": "b60f68f871cb7a28140fbf125d596c10",
     "url": "js/repl/fable-library/MutableMap.js"
   },
   {
-    "revision": "41b8e3ee06ea652c5e718471b2b28376",
+    "revision": "688e65e6e47361dc7687e430430e2060",
     "url": "js/repl/fable-library/MutableSet.js"
   },
   {
@@ -372,11 +368,11 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/repl/fable-library/Observable.js"
   },
   {
-    "revision": "7ed25987529899a93192745c5e1c3728",
+    "revision": "73644f9d1fb24b4e7640e613826b4230",
     "url": "js/repl/fable-library/Option.js"
   },
   {
-    "revision": "b861ac27cb1385f6b5fdd5ff570c4aab",
+    "revision": "fa01f2283a5b29cc45e9bf95a01e7d2d",
     "url": "js/repl/fable-library/Reflection.js"
   },
   {
@@ -384,15 +380,15 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/repl/fable-library/RegExp.js"
   },
   {
-    "revision": "84738e9de30aa44c74edf24c5c8cfe4a",
+    "revision": "6489ce999b8635c1ce53e8c19bd60785",
     "url": "js/repl/fable-library/Seq.js"
   },
   {
-    "revision": "24c58da8af804c495221e62bb2f260c4",
+    "revision": "d79e7ed7470b8a19a5aa300f2db118cb",
     "url": "js/repl/fable-library/Set.js"
   },
   {
-    "revision": "ea3757febcc82c835e05dec608cd7b67",
+    "revision": "0daa2d5928a736fab5343050e628f55e",
     "url": "js/repl/fable-library/String.js"
   },
   {
@@ -400,11 +396,11 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/repl/fable-library/System.Collections.Generic.js"
   },
   {
-    "revision": "d8170ac0dabaf2ba8e660f3ddd0e8686",
+    "revision": "8f4328ff3c58e1886692a25e8b950b58",
     "url": "js/repl/fable-library/System.Text.js"
   },
   {
-    "revision": "5e487d00428ccbe6f88a75688abf4184",
+    "revision": "6e1fbc7c5491b3ac7b2a23f9d542b1d3",
     "url": "js/repl/fable-library/TimeSpan.js"
   },
   {
@@ -412,7 +408,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/repl/fable-library/Timer.js"
   },
   {
-    "revision": "65b792b107acf868c430dfae0bb7bf7f",
+    "revision": "70aa5e77ef5aa455e7460bbf0788c7f2",
     "url": "js/repl/fable-library/Types.js"
   },
   {
@@ -424,7 +420,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/repl/fable-library/Uri.js"
   },
   {
-    "revision": "ab07b7db56402e77db0c2ee796147135",
+    "revision": "59f944d538bb8b38ac07aa30bb91c0b1",
     "url": "js/repl/fable-library/Util.js"
   },
   {
@@ -432,283 +428,299 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/repl/fable-library/lib/big.js"
   },
   {
+    "revision": "d18adede7bfe9d2e4f85ebc503433b1b",
+    "url": "js/repl/fable-library/lib/long.js"
+  },
+  {
     "revision": "97ac9b0c10472e822381b5d3957c711a",
     "url": "js/repl/fable-library/splitter.config.js"
   },
   {
-    "revision": "33c4e1e2e717965793cf31032bef5064",
+    "revision": "223820c080d15d69fd6d3466906b470b",
     "url": "js/repl/lib/BigInt/n.js"
   },
   {
-    "revision": "45c5a627f2e72ba91cbf86035b3738d8",
+    "revision": "66c311ee666924f3978088c42e9dcea4",
     "url": "js/repl/lib/BigInt/z.js"
   },
   {
-    "revision": "5d757fbfcde238430caf24f88724f806",
+    "revision": "10fa90d961b798f8f48ccda41c3fcadc",
     "url": "js/repl/lib/Components/Breadcrumb.js"
   },
   {
-    "revision": "9f7dd3e927971be9107d744dc4b80cdf",
+    "revision": "bb91a90eb4f3b9702af31be9dbb43567",
     "url": "js/repl/lib/Components/Card.js"
   },
   {
-    "revision": "a0c9d1bc6f0a144444ac9d9a4ec3bc20",
+    "revision": "01031b8af0bc1d73c763072d2d9972f3",
     "url": "js/repl/lib/Components/Dropdown.js"
   },
   {
-    "revision": "b80b33ca685f8d2c07edaf78eb8a77bb",
+    "revision": "81f671c1f3192dbe34d7bafcb0e997c7",
     "url": "js/repl/lib/Components/Media.js"
   },
   {
-    "revision": "fc16a35677ce2e0c640f08861554f2a7",
+    "revision": "d23617886510d2ab707dd25a0c2de607",
     "url": "js/repl/lib/Components/Menu.js"
   },
   {
-    "revision": "96681916c4a0a8bd7659d14420248aa2",
+    "revision": "fa15ff43d8f1facfdc6c215ed5fe631e",
     "url": "js/repl/lib/Components/Message.js"
   },
   {
-    "revision": "0cb589287abc8c41e051271d8fa3c3c5",
+    "revision": "d74d47bebaa569e6704a08a255fed706",
     "url": "js/repl/lib/Components/Modal.js"
   },
   {
-    "revision": "25430b2c6a406268d163a569f39b1c87",
+    "revision": "75e02f72c085bb1f9a3e78dfee5c6824",
     "url": "js/repl/lib/Components/Navbar.js"
   },
   {
-    "revision": "aa4a0c345eae945d7436694aa533264d",
+    "revision": "ca4f33c469f7fd63da98f739d179f23c",
     "url": "js/repl/lib/Components/Pagination.js"
   },
   {
-    "revision": "4378b5613302d32e78caf8eca097e286",
+    "revision": "8774f8e7ed9c958aafd453e04dd4d0e5",
     "url": "js/repl/lib/Components/Panel.js"
   },
   {
-    "revision": "b34f12569a92d80f0e51e78786a98911",
+    "revision": "c9b6965c4b397280e1306ae0c54d9a2e",
     "url": "js/repl/lib/Components/Tabs.js"
   },
   {
-    "revision": "51ff1ba09772a22eeeed1a4b6d88e0cd",
+    "revision": "7ec0a4996bfb5a5d3448ed841d6e87e9",
     "url": "js/repl/lib/Elements/Box.js"
   },
   {
-    "revision": "512394411603bac3d522547ca38eae35",
+    "revision": "412a62396917ca931e106ab5a5a90d15",
     "url": "js/repl/lib/Elements/Button.js"
   },
   {
-    "revision": "e7247e33c4bdd2ee2c94eff0e745c21e",
+    "revision": "098e78a7d3b73eda2cc6b694973f198f",
     "url": "js/repl/lib/Elements/Content.js"
   },
   {
-    "revision": "06fc15f9de05830fd67f89c914b46f66",
+    "revision": "4f0693d9b00bae83ff9156e64699c30b",
     "url": "js/repl/lib/Elements/Delete.js"
   },
   {
-    "revision": "e53b1fe48ff022bd9141047af7ad1e12",
+    "revision": "49d941b0ce167286dfacb22225240e26",
     "url": "js/repl/lib/Elements/Heading.js"
   },
   {
-    "revision": "cafeb7f5125eb09db92a3ee817c16035",
+    "revision": "583a7aac06aa133cb49f5cb60fb9b904",
     "url": "js/repl/lib/Elements/Icon.js"
   },
   {
-    "revision": "94c478fadc459acf01fd5a4fa2e8727a",
+    "revision": "4a4f2539e23f3473498afe9201a5753a",
     "url": "js/repl/lib/Elements/Image.js"
   },
   {
-    "revision": "db7d11e88ce91a85e084538df44d8be6",
+    "revision": "922af1d2a849236b639bf042bf56f1bd",
     "url": "js/repl/lib/Elements/Notification.js"
   },
   {
-    "revision": "538cbfa4285a4441d3cd698c76178f4e",
+    "revision": "cb25f0128536c492b474cdcd5b4556b0",
     "url": "js/repl/lib/Elements/Progress.js"
   },
   {
-    "revision": "26afff5032e33d81e5f3b66dbf4f0bd6",
+    "revision": "c8ff1097ca1dba66cd11bbb16bedb24e",
     "url": "js/repl/lib/Elements/Table.js"
   },
   {
-    "revision": "3fb9678fc7f6aec9803f859ebc54fd0e",
+    "revision": "f8390ad71df438bf4a02402699f8edf7",
     "url": "js/repl/lib/Elements/Tag.js"
   },
   {
-    "revision": "df1c3c8fe256fd24247db4d5bbbb0e4a",
+    "revision": "3fc8367692b29696a007c12e38150cc1",
     "url": "js/repl/lib/Elmish.React.js"
   },
   {
-    "revision": "ac43360a8f7b570519b5a1a280fdc4d4",
+    "revision": "927ee00f3404712a564a9b1d45a2b5e8",
     "url": "js/repl/lib/Form/Checkbox.js"
   },
   {
-    "revision": "a5f86eab892c28933f3eb2c0a92ca498",
+    "revision": "141262c6d718ce37464fa4be158c767d",
     "url": "js/repl/lib/Form/Control.js"
   },
   {
-    "revision": "2729ca81f4486e92480fff8156c46b83",
+    "revision": "dd242f488ed63d96fb9c2a0930ac2f5a",
     "url": "js/repl/lib/Form/Field.js"
   },
   {
-    "revision": "9cac78f968879df1d5d80a906128bc6f",
+    "revision": "12f973ae98756591101f05888bfaafa3",
     "url": "js/repl/lib/Form/File.js"
   },
   {
-    "revision": "da617c4d43d8baac6fe817286885c818",
+    "revision": "98f1d12bfc411c98fbba81b1505b7e0e",
     "url": "js/repl/lib/Form/Help.js"
   },
   {
-    "revision": "eeeff22b7ce80c1d8c999ba55bbcf9ec",
+    "revision": "19d594488227aaaeedb24da9b7bd4aea",
     "url": "js/repl/lib/Form/Input.js"
   },
   {
-    "revision": "8407c35b72978dbf9f1435c03a5db7b2",
+    "revision": "2162343b9b7b390b3e333666f4eeaf13",
     "url": "js/repl/lib/Form/Label.js"
   },
   {
-    "revision": "3fa6e91ccacbf3c4ae160d7dd3f1bd7c",
+    "revision": "6386f5ca80db02d18c8d027655f33216",
     "url": "js/repl/lib/Form/Radio.js"
   },
   {
-    "revision": "f1433e590e49b28df931da0a9f9a72ca",
+    "revision": "071aa831d8fa6036f661217dcc87e92d",
     "url": "js/repl/lib/Form/Select.js"
   },
   {
-    "revision": "e7e528765b7240791b89505104f32ffa",
+    "revision": "47af2347101f627a89c394706d815e3d",
     "url": "js/repl/lib/Form/Textarea.js"
   },
   {
-    "revision": "df9f5fa79e9a8a453277df3c2f010dcf",
+    "revision": "fff0d1f76ebdb5a99913e6c2ee731468",
     "url": "js/repl/lib/Fulma/Common.js"
   },
   {
-    "revision": "f00571f3db68ff38702828121b91e9df",
+    "revision": "dd4d12275bb60327ddb0734cd97ca250",
     "url": "js/repl/lib/Layouts/Column.js"
   },
   {
-    "revision": "70a1665e36f8dbb2e692e4e4c3aef329",
+    "revision": "6ea0cd2b7508c3537d91be3c32aedeb6",
     "url": "js/repl/lib/Layouts/Columns.js"
   },
   {
-    "revision": "8b85a86095cdc96d80ce779c50d0fb25",
+    "revision": "315ec28dabec8c4fe747ad075fccd87c",
     "url": "js/repl/lib/Layouts/Container.js"
   },
   {
-    "revision": "21f38dbf325a5badec5899f286d49d01",
+    "revision": "41491f903c014d3bec88bf530db98c59",
     "url": "js/repl/lib/Layouts/Footer.js"
   },
   {
-    "revision": "e18240cb81925e806b86d7d789cf1f3e",
+    "revision": "deb22644e5b524f38969e94b5d18ff9c",
     "url": "js/repl/lib/Layouts/Hero.js"
   },
   {
-    "revision": "e22aa2d9eef4b174b66893e81bd0d909",
+    "revision": "f8d9df42cd2dbb5b7f4ec4b9856284a6",
     "url": "js/repl/lib/Layouts/Level.js"
   },
   {
-    "revision": "09f569d73028e24b6fae7c12d8c63843",
+    "revision": "13cbe968ce0cd9bb603ef826469f7f47",
     "url": "js/repl/lib/Layouts/Section.js"
   },
   {
-    "revision": "fb365625865cbc71399edbc391818fcc",
+    "revision": "ec60a56d61ea809a4304118f9d17b82e",
     "url": "js/repl/lib/Layouts/Tile.js"
   },
   {
-    "revision": "719413e1b12ca6709a8c2ca8def09561",
-    "url": "js/repl/lib/fable-library.2.3.18/Array.js"
+    "revision": "329f965021a1d2ab4159724e9ec2f293",
+    "url": "js/repl/lib/fable-library.2.4.2/Array.js"
   },
   {
     "revision": "e08be18b7cde8da8b0b057eb532ce992",
-    "url": "js/repl/lib/fable-library.2.3.18/Async.js"
+    "url": "js/repl/lib/fable-library.2.4.2/Async.js"
   },
   {
-    "revision": "61a4efa6e4c652812ca74643bdb0405d",
-    "url": "js/repl/lib/fable-library.2.3.18/AsyncBuilder.js"
+    "revision": "ab1e8d5ce0171a906760e142aee17121",
+    "url": "js/repl/lib/fable-library.2.4.2/AsyncBuilder.js"
   },
   {
-    "revision": "66805a08d1152f943f09e8df59139e8f",
-    "url": "js/repl/lib/fable-library.2.3.18/BigInt.js"
+    "revision": "20d56c974e1567aea8d76d73244203e7",
+    "url": "js/repl/lib/fable-library.2.4.2/BigInt.js"
   },
   {
-    "revision": "fb021d14746b9ef64e57cdd958886462",
-    "url": "js/repl/lib/fable-library.2.3.18/Date.js"
+    "revision": "839fe2250a3824ab1604fcd39d50f655",
+    "url": "js/repl/lib/fable-library.2.4.2/Date.js"
   },
   {
     "revision": "0b383ec9d692354e509ad65c1b839c8e",
-    "url": "js/repl/lib/fable-library.2.3.18/DateOffset.js"
+    "url": "js/repl/lib/fable-library.2.4.2/DateOffset.js"
   },
   {
     "revision": "886611d5957131ae074517a7b283bb39",
-    "url": "js/repl/lib/fable-library.2.3.18/Decimal.js"
+    "url": "js/repl/lib/fable-library.2.4.2/Decimal.js"
   },
   {
-    "revision": "efb0c9c8fab3f4e232dff668304cd3f0",
-    "url": "js/repl/lib/fable-library.2.3.18/Int32.js"
+    "revision": "2ef5a63067d21d9533292d656c1cccf3",
+    "url": "js/repl/lib/fable-library.2.4.2/Int32.js"
   },
   {
-    "revision": "346e710e9ea07dc1e85eb13e187aaf0f",
-    "url": "js/repl/lib/fable-library.2.3.18/List.js"
+    "revision": "8ac91a57e732534b0944bba564dc6e11",
+    "url": "js/repl/lib/fable-library.2.4.2/List.js"
   },
   {
-    "revision": "a25e7e2d10f69ee1a2fc3aea5d24e2cf",
-    "url": "js/repl/lib/fable-library.2.3.18/Long.js"
+    "revision": "fee082c1680470943c3b4d4af8ba1b07",
+    "url": "js/repl/lib/fable-library.2.4.2/Long.js"
   },
   {
-    "revision": "acbb6d2f3f99b61de7e5ee072347d25b",
-    "url": "js/repl/lib/fable-library.2.3.18/Map.js"
+    "revision": "6346832a60a1d5a47559c5d314431a9a",
+    "url": "js/repl/lib/fable-library.2.4.2/Map.js"
   },
   {
-    "revision": "ddafbd01b8aa1f043152a5fcb16d1224",
-    "url": "js/repl/lib/fable-library.2.3.18/Option.js"
+    "revision": "a9e8f74d4319f7cf890012be25a195af",
+    "url": "js/repl/lib/fable-library.2.4.2/MutableMap.js"
   },
   {
-    "revision": "9e63a8150b8d1a220f015392240cc270",
-    "url": "js/repl/lib/fable-library.2.3.18/Reflection.js"
+    "revision": "05996b2e152eb5014967faba73f4abdc",
+    "url": "js/repl/lib/fable-library.2.4.2/MutableSet.js"
   },
   {
-    "revision": "d17997e4d21257c9f95bb2fae3f2b7cf",
-    "url": "js/repl/lib/fable-library.2.3.18/RegExp.js"
+    "revision": "f46af09b4242de01529e9383ef34bf53",
+    "url": "js/repl/lib/fable-library.2.4.2/Option.js"
   },
   {
-    "revision": "6baff231614ce22ecca58f8f51ce34b8",
-    "url": "js/repl/lib/fable-library.2.3.18/Seq.js"
+    "revision": "2ca32a67df6b96b786ba86010ac179c8",
+    "url": "js/repl/lib/fable-library.2.4.2/Reflection.js"
   },
   {
-    "revision": "34d5805aac3caf938d6a3e21087df6d9",
-    "url": "js/repl/lib/fable-library.2.3.18/Set.js"
+    "revision": "4af9cdd98235d088040d21f625340cac",
+    "url": "js/repl/lib/fable-library.2.4.2/RegExp.js"
   },
   {
-    "revision": "936654a032a9e38925102d9bc0d32d99",
-    "url": "js/repl/lib/fable-library.2.3.18/String.js"
+    "revision": "324434c7d7cbd1e2fb774bc97e336c00",
+    "url": "js/repl/lib/fable-library.2.4.2/Seq.js"
   },
   {
-    "revision": "062e1c0778093fb18bf6526be6c3b545",
-    "url": "js/repl/lib/fable-library.2.3.18/TimeSpan.js"
+    "revision": "0ad14374a49e56eacadbef6514c081b6",
+    "url": "js/repl/lib/fable-library.2.4.2/Set.js"
   },
   {
-    "revision": "d241a4d30b85295f0974751146a0c7f7",
-    "url": "js/repl/lib/fable-library.2.3.18/Types.js"
+    "revision": "07168a01440ad78e67fb2fcbd2969b36",
+    "url": "js/repl/lib/fable-library.2.4.2/String.js"
   },
   {
-    "revision": "f7ddd4f587f297236f97654151962f67",
-    "url": "js/repl/lib/fable-library.2.3.18/Util.js"
+    "revision": "f90df0a53a94135c6f3741118fe2dcd6",
+    "url": "js/repl/lib/fable-library.2.4.2/TimeSpan.js"
   },
   {
-    "revision": "4abb182d31a860927f99a7b1d38e479b",
+    "revision": "bdf5079805b4da4fc54b9973a3594a79",
+    "url": "js/repl/lib/fable-library.2.4.2/Types.js"
+  },
+  {
+    "revision": "7404080aec0f8f974b8d411cd986e8c7",
+    "url": "js/repl/lib/fable-library.2.4.2/Util.js"
+  },
+  {
+    "revision": "82dd0a49b97f575e52b09c6159aa5be8",
     "url": "js/repl/lib/lib/big.js"
   },
   {
-    "revision": "91782d1e7567127ad545529abf281283",
+    "revision": "12a32351ae64c2713624150b1bf4c266",
+    "url": "js/repl/lib/lib/long.js"
+  },
+  {
+    "revision": "e9e188f6a868f50b2bca4745f5a1a9a9",
     "url": "js/repl/lib/src/Decode.js"
   },
   {
-    "revision": "6f27dbdd66052f2b667cdc39abe0834f",
+    "revision": "fa4a756159dbe9d5eec12ebf42ce864b",
     "url": "js/repl/lib/src/Encode.js"
   },
   {
-    "revision": "aee22dee2d35ea81f4f3361d9c4095e9",
+    "revision": "d2ea030f0d63b66bd6e9b65396dc823c",
     "url": "js/repl/lib/src/Fable.React.FunctionComponent.js"
   },
   {
-    "revision": "fe545e84c359cb63e4bbc426840b0254",
+    "revision": "84547173bd07ebe34ef793925a06c659",
     "url": "js/repl/lib/src/Fable.React.Helpers.js"
   },
   {
@@ -716,15 +728,15 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/repl/lib/src/Fable.React.Hooks.js"
   },
   {
-    "revision": "3abcc725282396088b030a2173dbf205",
+    "revision": "fa84d9bcadf46c4fda6d6728ecdd93de",
     "url": "js/repl/lib/src/Fable.React.Props.js"
   },
   {
-    "revision": "c6cee9c88b7da206ac112fdbc8c513a3",
+    "revision": "ff9b2c621083071d5f0421bff114d3a3",
     "url": "js/repl/lib/src/Fable.React.Standard.js"
   },
   {
-    "revision": "c9b9387119a2abdaa88b592ed096dcc1",
+    "revision": "5d497229b82b7b83fd42782e65e63bb7",
     "url": "js/repl/lib/src/Fable.React.js"
   },
   {
@@ -732,15 +744,15 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/repl/lib/src/Fable.ReactDom.js"
   },
   {
-    "revision": "03cbbf0704c0c1a9f27567e8d92e1b7c",
+    "revision": "b08d479568e7c23dc030b8713d00d5f2",
     "url": "js/repl/lib/src/Fable.Recharts.js"
   },
   {
-    "revision": "ba829afe730b83acac4cd9ea66c0d3bd",
+    "revision": "0ebd336aea977075c95663b9170a2282",
     "url": "js/repl/lib/src/Fetch.js"
   },
   {
-    "revision": "58d46cb6490295488bf6756071b7a74f",
+    "revision": "cb72ef0e1b51b4787db22561acd9fd70",
     "url": "js/repl/lib/src/Promise.js"
   },
   {
@@ -748,11 +760,11 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/repl/lib/src/PromiseImpl.js"
   },
   {
-    "revision": "9acdd221a6a8349a5e832ab00defc089",
+    "revision": "56e431f8a2b565e3267ec902825a79d5",
     "url": "js/repl/lib/src/Types.js"
   },
   {
-    "revision": "77f02ab95a51b504266b7951168b5444",
+    "revision": "fe6d751e577c703e795cdc9c75ff3add",
     "url": "js/repl/lib/src/cmd.js"
   },
   {
@@ -760,15 +772,15 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/repl/lib/src/prelude.js"
   },
   {
-    "revision": "857329a2fa7349e64e6555f41e41146c",
+    "revision": "a0468c9871ea4ed1d05492fa0dfde338",
     "url": "js/repl/lib/src/program.js"
   },
   {
-    "revision": "e32cde6ce61dd733f35f6dabfd42242c",
+    "revision": "daed635d369f1ee13948923f1b06aa83",
     "url": "js/repl/lib/src/ring.js"
   },
   {
-    "revision": "914593d757aaaf2245f160f26959f7cd",
+    "revision": "47bf0416ad5772a826c38d3d1cb5c935",
     "url": "js/repl/worker.min.js"
   },
   {
@@ -1340,7 +1352,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "samples/visual/recharts.html"
   },
   {
-    "revision": "10bbeaf06959982bd649",
+    "revision": "255d982f072aaa16c52f",
     "url": "style.css"
   },
   {

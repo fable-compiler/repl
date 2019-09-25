@@ -1,9 +1,9 @@
-import { declare, Union } from "../fable-library.2.3.18/Types.js";
-import { type, union, int32, array } from "../fable-library.2.3.18/Reflection.js";
-import { max, comparePrimitives } from "../fable-library.2.3.18/Util.js";
-import { ofSeq, fill } from "../fable-library.2.3.18/Array.js";
-import { some } from "../fable-library.2.3.18/Option.js";
-import { append, delay, collect, rangeNumber, singleton, take, skip } from "../fable-library.2.3.18/Seq.js";
+import { declare, Union } from "../fable-library.2.4.2/Types.js";
+import { type, union, int32, array } from "../fable-library.2.4.2/Reflection.js";
+import { max, comparePrimitives } from "../fable-library.2.4.2/Util.js";
+import { ofSeq, fill } from "../fable-library.2.4.2/Array.js";
+import { some } from "../fable-library.2.4.2/Option.js";
+import { append, delay, collect, rangeNumber, singleton, take, skip } from "../fable-library.2.4.2/Seq.js";
 export const RingState$00601 = declare(function Elmish_RingState(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
@@ -24,18 +24,16 @@ export function RingBuffer$00601$$Pop(__) {
   const matchValue = __.state;
 
   if (matchValue.tag === 1) {
-    const wix = matchValue.fields[1] | 0;
-    const rix = matchValue.fields[2] | 0;
-    const items = matchValue.fields[0];
-    const rix$0027 = (rix + 1) % items.length | 0;
+    const rix$0027 = (matchValue.fields[2] + 1) % matchValue.fields[0].length | 0;
+    const matchValue$$1 = rix$0027 === matchValue.fields[1];
 
-    if (rix$0027 === wix) {
-      __.state = new RingState$00601(0, "Writable", items, wix);
+    if (matchValue$$1) {
+      __.state = new RingState$00601(0, "Writable", matchValue.fields[0], matchValue.fields[1]);
     } else {
-      __.state = new RingState$00601(1, "ReadWritable", items, wix, rix$0027);
+      __.state = new RingState$00601(1, "ReadWritable", matchValue.fields[0], matchValue.fields[1], rix$0027);
     }
 
-    return some(items[rix]);
+    return some(matchValue.fields[0][matchValue.fields[2]]);
   } else {
     return null;
   }
@@ -44,35 +42,33 @@ export function RingBuffer$00601$$Push$$2B595(__$$1, item) {
   const matchValue$$2 = __$$1.state;
 
   if (matchValue$$2.tag === 1) {
-    const wix$$2 = matchValue$$2.fields[1] | 0;
-    const rix$$1 = matchValue$$2.fields[2] | 0;
-    const items$$2 = matchValue$$2.fields[0];
-    items$$2[wix$$2] = item;
-    const wix$0027 = (wix$$2 + 1) % items$$2.length | 0;
+    matchValue$$2.fields[0][matchValue$$2.fields[1]] = item;
+    const wix$0027 = (matchValue$$2.fields[1] + 1) % matchValue$$2.fields[0].length | 0;
+    const matchValue$$3 = wix$0027 === matchValue$$2.fields[2];
 
-    if (wix$0027 === rix$$1) {
-      const items$$4 = RingBuffer$00601$$doubleSize(__$$1, rix$$1, items$$2);
+    if (matchValue$$3) {
+      let items$$4;
+      items$$4 = RingBuffer$00601$$doubleSize(__$$1, matchValue$$2.fields[2], matchValue$$2.fields[0]);
       __$$1.state = new RingState$00601(1, "ReadWritable", items$$4, wix$0027, 0);
     } else {
-      __$$1.state = new RingState$00601(1, "ReadWritable", items$$2, wix$0027, rix$$1);
+      __$$1.state = new RingState$00601(1, "ReadWritable", matchValue$$2.fields[0], wix$0027, matchValue$$2.fields[2]);
     }
   } else {
-    const ix = matchValue$$2.fields[1] | 0;
-    const items$$1 = matchValue$$2.fields[0];
-    items$$1[ix] = item;
-    const wix$$1 = (ix + 1) % items$$1.length | 0;
-    __$$1.state = new RingState$00601(1, "ReadWritable", items$$1, wix$$1, ix);
+    matchValue$$2.fields[0][matchValue$$2.fields[1]] = item;
+    const wix$$1 = (matchValue$$2.fields[1] + 1) % matchValue$$2.fields[0].length | 0;
+    __$$1.state = new RingState$00601(1, "ReadWritable", matchValue$$2.fields[0], wix$$1, matchValue$$2.fields[1]);
   }
 }
 
 function RingBuffer$00601$$doubleSize(this$, ix$$1, items$$5) {
-  return ofSeq(delay(function () {
-    return append(skip(ix$$1, items$$5), delay(function () {
-      return append(take(ix$$1, items$$5), delay(function () {
+  const source$$2 = delay(function () {
+    return append((skip(ix$$1, items$$5)), delay(function () {
+      return append((take(ix$$1, items$$5)), delay(function () {
         return collect(function (matchValue$$4) {
           return singleton(null);
         }, rangeNumber(0, 1, items$$5.length));
       }));
     }));
-  }), Array);
+  });
+  return ofSeq(source$$2, Array);
 }
