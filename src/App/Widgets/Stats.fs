@@ -16,7 +16,7 @@ let private row (label : string) (value : float)=
             [ Text.span [ Modifiers [ Modifier.TextColor IsSuccess
                                       Modifier.TextAlignment (Screen.All, TextAlignment.Right) ]
                           Props [ Style [ Display DisplayOptions.Block ] ] ]
-                [ str value?toLocaleString$() ] ] ]
+                [ str (sprintf "%.2f" value) ] ] ]
 
 let view (model : Model) =
     Content.content [ ]
