@@ -7,7 +7,7 @@ open System.IO
 open System.Text.RegularExpressions
 
 let CWD = __SOURCE_DIRECTORY__
-let NCAVE_FCS_REPO = Path.Combine(CWD, "../FSharp.Compiler.Service_fable")
+let NCAVE_FCS_REPO = Path.Combine(CWD, "../fsharp_fable")
 
 let LIBS_OUTPUT = Path.Combine(CWD, "public/libs")
 let REPL_OUTPUT = Path.Combine(CWD, "public/js/repl")
@@ -116,18 +116,23 @@ Target "BuildLibBinary" (fun _ ->
 Target "BuildFcsExport" (fun _ ->
     ensureRepoSetup
         { FolderPath = NCAVE_FCS_REPO
-          GithubLink = "git@github.com:ncave/FSharp.Compiler.Service.git"
+          GithubLink = "git@github.com:ncave/fsharp.git"
           GithubBranch = "export" }
 
     sprintf "Export.Metadata --envvar FCS_EXPORT_PROJECT \"%s\"" METADATA_EXPORT_DIR
     |> runScript NCAVE_FCS_REPO "fcs\\build"
 )
 
-// TODO: Generate metadata for Fable.Repl.Lib as before?
-// See metadata-extra in CopyModules
-Target "GenerateMetadata" (fun _ ->
+let copyMetadata fromDir =
     CleanDir METADATA_OUTPUT
-    CopyDir METADATA_OUTPUT METADATA_SOURCE (fun _ -> true)
+    CopyDir METADATA_OUTPUT fromDir (fun _ -> true)
+    // CopyDir METADATA_OUTPUT "public/metadata-extra" (fun _ -> true)
+    // Change extension to .txt so Github pages compress the files when being served
+    !! (METADATA_OUTPUT </> "*.dll") |> Seq.iter(fun filename ->
+        Rename (filename + ".txt") filename)
+
+Target "GenerateMetadata" (fun _ ->
+    copyMetadata METADATA_SOURCE
 )
 
 Target "InstallDotNetCore" (fun _ ->
@@ -140,7 +145,6 @@ Target "InstallDotNetCore" (fun _ ->
 Target "Clean" (fun _ ->
     !! "public/js"
     ++ LIBS_OUTPUT
-    ++ METADATA_OUTPUT
     ++ "deploy"
   |> CleanDirs
 )
@@ -165,14 +169,8 @@ Target "CopyModules" (fun _ ->
     CopyFile cssOutput "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
     CopyDir (LIBS_OUTPUT </> "webfonts") "node_modules/@fortawesome/fontawesome-free/webfonts" (fun _ -> true)
 
-    // Metadata
-    CopyDir METADATA_OUTPUT "node_modules/fable-metadata/lib" (fun _ -> true)
-    // CopyDir METADATA_OUTPUT "public/metadata-extra" (fun _ -> true)
-    // Change extension to .txt so Github pages compress the files when being served
-    !! (METADATA_OUTPUT </> "*.dll") |> Seq.iter(fun filename ->
-        Rename (filename + ".txt") filename)
+    copyMetadata "node_modules/fable-metadata/lib"
 
-    // Fable Standalone
     // TODO: Update version in Literals (Prelude.fs)
     CopyDir REPL_OUTPUT "node_modules/fable-standalone/dist" (fun _ -> true)
 )

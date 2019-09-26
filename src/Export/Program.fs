@@ -1,7 +1,7 @@
 open System.IO
 open System.Collections.Generic
-open Microsoft.FSharp.Compiler
-open Microsoft.FSharp.Compiler.SourceCodeServices
+open FSharp.Compiler
+open FSharp.Compiler.SourceCodeServices
 
 let readRefs (folder : string) (projectFile: string) =
     let runProcess (workingDir: string) (exePath: string) (args: string) =
@@ -81,7 +81,8 @@ let main argv =
     printfn "Exporting metadata..."
     let file = "/temp/test.fsx"
     let input = "let a = 42"
+    let sourceText = FSharp.Compiler.Text.SourceText.ofString input
     // parse script just to export metadata
-    let parseRes, typedRes = parseAndCheckScript(file, input)
+    let parseRes, typedRes = parseAndCheckScript(file, sourceText)
     printfn "Exporting is done."
     0

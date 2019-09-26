@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <DisableImplicitFSharpCoreReference>true</DisableImplicitFSharpCoreReference>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,11 +11,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="../../../fsharp_fable/fcs/FSharp.Compiler.Service/FSharp.Compiler.Service.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="../Lib/bin/Debug/netstandard2.0/Fable.Repl.Lib.dll" />
-    <ProjectReference Include="../../../FSharp.Compiler.Service_fable/fcs/FSharp.Compiler.Service/FSharp.Compiler.Service.fsproj" />
-    <PackageReference Include="FSharp.Core" Version="4.*" PrivateAssets="All" />
-    <PackageReference Include="Dotnet.ProjInfo.Matthid" Version="*" />
-    <PackageReference Include="Fable.Core" Version="2.0.0-beta-001" />
-    <PackageReference Include="Fable.Import.Browser" Version="1.3.0" />
+    <PackageReference Include="FSharp.Core" Version="4.7.0" />
+    <PackageReference Include="Dotnet.ProjInfo" Version="*" />
+    <PackageReference Include="Fable.Core" Version="3.1.1" />
+    <PackageReference Include="Fable.Browser.Dom" Version="1.1.0" />
   </ItemGroup>
 </Project>
