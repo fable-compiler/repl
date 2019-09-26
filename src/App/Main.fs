@@ -80,6 +80,7 @@ type Msg =
     | SetFSharpEditor of IEditor
     | LoadSuccess
     | LoadFail
+    | ParseEditorCode
     | Reset
     | UrlHashChange
     | GistLoaded of string*string*string
@@ -198,10 +199,6 @@ let private loadGist =
             let! css = css |> Option.map recover |> Option.defaultValue (Promise.lift "")
             return (code, html, css) }
 
-let private parseEditorCode (worker: ObservableWorker<_>) (model: Monaco.Editor.IModel) =
-    let content = model.getValue (Monaco.Editor.EndOfLinePreference.TextDefined, true)
-    ParseCode content |> worker.Post
-
 let private showGlobalErrorToast msg =
     Toast.message msg
     |> Toast.title "Failed to compile"
@@ -214,14 +211,12 @@ let private showGlobalErrorToast msg =
 let update msg (model : Model) =
     match msg with
     | LoadSuccess ->
-        // Parse code every X seconds.
-        let md = model.FSharpEditor.getModel()
-        let obs =
-            createObservable(fun trigger ->
-                model.FSharpEditor.getModel().onDidChangeContent(fun _ -> trigger md) |> ignore)
-        debounce 1000 obs
-        |> Observable.add (parseEditorCode model.Worker)
-        obs.Trigger md
+        let activateParsing dispatch =
+            let obs = createObservable(fun trigger ->
+                model.FSharpEditor.getModel().onDidChangeContent(fun _ -> trigger()) |> ignore)
+            debounce 1000 obs
+            |> Observable.add (fun () -> dispatch ParseEditorCode)
+            obs.Trigger() // Trigger a first parse
 
         let browserAdviceCommand =
             if not ReactDeviceDetect.exports.isChrome
@@ -237,12 +232,18 @@ let update msg (model : Model) =
             else
                 Cmd.none
 
-        { model with State = Idle }, Cmd.batch [ Cmd.ofMsg (StartCompile None)
+        { model with State = Idle }, Cmd.batch [ [ activateParsing ]
+                                                 Cmd.ofMsg (StartCompile None)
                                                  browserAdviceCommand ]
 
     | LoadFail ->
         let msg = "Assemblies couldn't be loaded. Some firewalls prevent download of binary files, please check."
         { model with State = Idle }, showGlobalErrorToast msg
+
+    | ParseEditorCode ->
+        let content = model.FSharpEditor.getModel().getValue (Monaco.Editor.EndOfLinePreference.TextDefined, true)
+        ParseCode(content, model.Sidebar.Options.ToOtherFSharpOptions) |> model.Worker.Post
+        model, Cmd.none
 
     | SetFSharpEditor ed -> { model with FSharpEditor = ed }, Cmd.none
 
@@ -298,7 +299,8 @@ let update msg (model : Model) =
                 match code with
                 | Some code -> code
                 | None -> model.FSharpCode
-            CompileCode(code, model.Sidebar.Options.Optimize) |> model.Worker.Post
+            let opts = model.Sidebar.Options
+            CompileCode(code, opts.ToOtherFSharpOptions) |> model.Worker.Post
             { model with State = Compiling }, Cmd.none
 
     | EndCompile result ->
@@ -471,12 +473,13 @@ let workerCmd (worker : ObservableWorker<_>)=
     [ handler ]
 
 let init () =
-    let worker = ObservableWorker(Worker(), WorkerAnswer.Decoder, "MAIN APP")
-    CreateChecker(Literals.METADATA_DIR, Literals.EXTRA_REFS,
-                  Some ".txt", Some Literals.REPL_LIB_MAP_JSON_URL)
-    |> worker.Post
     let saved = loadState(Literals.STORAGE_KEY)
     let sidebarModel, sidebarCmd = Sidebar.init ()
+    let worker = ObservableWorker(Worker(), WorkerAnswer.Decoder, "MAIN APP")
+    CreateChecker(Literals.METADATA_DIR, Literals.EXTRA_REFS,
+                  Some ".txt", Some Literals.REPL_LIB_MAP_JSON_URL,
+                  sidebarModel.Options.ToOtherFSharpOptions)
+    |> worker.Post
     let cmd = Cmd.batch [
                 Cmd.ups MouseUp
                 Cmd.move MouseMove

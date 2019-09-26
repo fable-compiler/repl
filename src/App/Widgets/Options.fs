@@ -16,13 +16,20 @@ let private LOCAL_STORAGE_REPL_SETTING = "fable_repl_settings"
 
 type Model =
     { Optimize : bool
+      DefineDebug : bool
+      PreviewLanguage : bool
       FontSize : float
       FontFamily : string
       GistToken : string option
       GistTokenField : string }
-
+    member this.ToOtherFSharpOptions =
+        [| if this.DefineDebug then yield "--define:DEBUG"
+           if this.PreviewLanguage then yield "--langversion:preview"
+           yield "--optimize" + (if this.Optimize then "+" else "-") |]
     static member Default =
         { Optimize = false
+          DefineDebug = true
+          PreviewLanguage = true
           FontSize = 14.
           FontFamily = MONACO_DEFAULT_FONT_FAMILY
           GistToken = None
@@ -34,6 +41,8 @@ type Model =
                         // TODO: Optimize is disable to prevent problems with inline functions in REPL Lib
                         //  get.Optional.Field "optimize" Decode.bool
                         //     |> Option.defaultValue false
+              DefineDebug = get.Optional.Field "defineDebug" Decode.bool |> Option.defaultValue true
+              PreviewLanguage = get.Optional.Field "previewLanguage" Decode.bool |> Option.defaultValue true
               FontSize = get.Optional.Field "fontSize" Decode.float
                             |> Option.defaultValue 14.
               FontFamily = get.Optional.Field "fontFamily" Decode.string
@@ -45,6 +54,8 @@ type Model =
     static member Encoder (model : Model) =
         Encode.object
             [ yield "optimize", Encode.bool model.Optimize
+              yield "defineDebug", Encode.bool model.DefineDebug
+              yield "previewLanguage", Encode.bool model.PreviewLanguage
               yield "fontSize", Encode.float model.FontSize
               yield "fontFamily", Encode.string model.FontFamily
               match model.GistToken with
@@ -53,6 +64,8 @@ type Model =
 
 type Msg =
     | ToggleOptimize
+    | ToggleDefineDebug
+    | TogglePreviewLanguage
     | ChangeFontSize of float
     | ChangeFontFamily of string
     | ChangeGistToken of string
@@ -85,6 +98,12 @@ let update msg model =
     match msg with
     | ToggleOptimize ->
         { model with Optimize = not model.Optimize }
+
+    | ToggleDefineDebug ->
+        { model with DefineDebug = not model.DefineDebug }
+
+    | TogglePreviewLanguage ->
+        { model with PreviewLanguage = not model.PreviewLanguage }
 
     | ChangeFontSize newSize ->
         { model with FontSize = newSize }
@@ -141,21 +160,24 @@ let inline private fontFamilySetting (fontFamily : string) dispatch =
                     [ fontFamilyOption "Fira Code" "Fira Code"
                       fontFamilyOption "Monaco default" MONACO_DEFAULT_FONT_FAMILY ] ] ] ]
 
-let inline private optimizeSetting (isActive : bool) dispatch =
-    let label =
-        if isActive then
-            "Active"
-        else
-            "Disabled"
-
+let private switchOption label isActive dispatch msg =
     Field.div [ ]
-        [ Label.label [ ]
-            [ str "Optimize (experimental)" ]
-          Control.div [ ]
-            [ Switch.switch [ Switch.Color IsSuccess
+        [ Control.div [ ]
+            [ Switch.switch [ Switch.Id label
+                              Switch.Color IsSuccess
                               Switch.Checked isActive
-                              Switch.OnChange (fun _ -> dispatch ToggleOptimize) ]
+                              Switch.OnChange (fun _ -> dispatch msg) ]
                 [ str label ] ] ]
+
+
+let inline private optimizeSetting (model: Model) dispatch =
+    switchOption "Optimize (experimental)" model.Optimize dispatch ToggleOptimize
+
+let private defineDebugSetting (model: Model) dispatch =
+    switchOption "Define DEBUG" model.DefineDebug dispatch ToggleDefineDebug
+
+let private previewLanguageSetting (model: Model) dispatch =
+    switchOption "Preview F# features" model.PreviewLanguage dispatch TogglePreviewLanguage
 
 let inline private gistTokenSetting (token : string option) (tokenField : string) dispatch =
     match token with
@@ -187,9 +209,11 @@ let inline private gistTokenSetting (token : string option) (tokenField : string
 
 let view (model: Model) dispatch =
     div [ ]
-        [ fontFamilySetting model.FontFamily dispatch
+        [ defineDebugSetting model dispatch
+          previewLanguageSetting model dispatch
+          fontFamilySetting model.FontFamily dispatch
           fontSizeSetting model.FontSize dispatch
-          gistTokenSetting model.GistToken model.GistTokenField dispatch
-          // TODO: Optimize is disable to prevent problems with inline functions in REPL Lib
-        //   optimizeSetting model.Optimize dispatch
+          gistTokenSetting model.GistToken model.GistTokenField dispatch          
+        // TODO: Optimize is disable to prevent problems with inline functions in REPL Lib
+        //   optimizeSetting model dispatch
         ]
