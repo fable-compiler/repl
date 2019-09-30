@@ -1,12 +1,16 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
+    "revision": "44fc97731a7d151e3abcecbb75e3e402",
+    "url": ".DS_Store"
+  },
+  {
     "url": "06b79b8f8677e6333512a61ec7caa63f.eot"
   },
   {
     "url": "0be94a07755ba9b88f2ebcac0f23a3da.woff"
   },
   {
-    "url": "1.0017bcd0c28fe88fdcb1.js"
+    "url": "1.a68f3d6289f5c06b1ed8.js"
   },
   {
     "url": "137778879005023b427be30df1f57d83.ttf"
@@ -15,16 +19,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "1a77fe6d9f399212fcfcfde790ce66b2.ttf"
   },
   {
-    "url": "2.0017bcd0c28fe88fdcb1.js"
+    "url": "2.a68f3d6289f5c06b1ed8.js"
   },
   {
-    "url": "3.0017bcd0c28fe88fdcb1.js"
+    "url": "3.a68f3d6289f5c06b1ed8.js"
   },
   {
     "url": "38975343b586296e9b73e6b56cc3ec5d.svg"
   },
   {
-    "url": "4.0017bcd0c28fe88fdcb1.js"
+    "url": "4.a68f3d6289f5c06b1ed8.js"
   },
   {
     "revision": "025016f5d2aad368f996640b84a166ef",
@@ -34,7 +38,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "4cfc570109e603356ee7586978c46852.eot"
   },
   {
-    "url": "5.0017bcd0c28fe88fdcb1.js"
+    "url": "5.a68f3d6289f5c06b1ed8.js"
   },
   {
     "url": "5c4876bef50a7df9d8ac48af75ecf11c.woff2"
@@ -43,13 +47,13 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "5c6aa3e267f5554fd7cf15557b7e44aa.eot"
   },
   {
-    "url": "6.0017bcd0c28fe88fdcb1.js"
+    "url": "6.a68f3d6289f5c06b1ed8.js"
   },
   {
     "url": "64b3e814a66c2719b15abf8f7998bd73.woff2"
   },
   {
-    "url": "7.0017bcd0c28fe88fdcb1.js"
+    "url": "7.a68f3d6289f5c06b1ed8.js"
   },
   {
     "url": "7726a281c1d436eb038f78c6e9048c96.svg"
@@ -64,7 +68,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "7c8fa37007189c6e9a50125e5ca64cff.eot"
   },
   {
-    "url": "8.0017bcd0c28fe88fdcb1.js"
+    "url": "8.a68f3d6289f5c06b1ed8.js"
   },
   {
     "url": "8027cf95961ca238debdd2352284e532.woff"
@@ -102,7 +106,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "af2692f72b79d5935fe511236e05dbc8.woff"
   },
   {
-    "url": "app.0017bcd0c28fe88fdcb1.js"
+    "url": "app.a68f3d6289f5c06b1ed8.js"
   },
   {
     "url": "b7d071b9c3c197bff4af902070622423.ttf"
@@ -260,11 +264,11 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "img/pacman/Powerup31.wav"
   },
   {
-    "revision": "c574ac6af476e61e45f83b81f434078b",
+    "revision": "d551b060b4612e4fd7efd607fcb36e1f",
     "url": "index.html"
   },
   {
-    "revision": "0bdd545c0b035f039bf51c9b78a9f1ad",
+    "revision": "317d3d3013966962c6810cf795e12308",
     "url": "js/repl/bundle.min.js"
   },
   {
@@ -780,7 +784,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/repl/lib/src/ring.js"
   },
   {
-    "revision": "47bf0416ad5772a826c38d3d1cb5c935",
+    "revision": "c4dc0dfd26a747109bdef0cb51cdd963",
     "url": "js/repl/worker.min.js"
   },
   {
@@ -876,11 +880,11 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "metadata/Browser.WebStorage.dll.txt"
   },
   {
-    "revision": "fa0d80ebdcbf33d6b1a0c9698849a488",
+    "revision": "b48cfd3b6c00436b4d651254e6386f9f",
     "url": "metadata/FSharp.Core.dll.txt"
   },
   {
-    "revision": "b6dc7edff1e4830c85b6fa6e473ebfcf",
+    "revision": "664c09e22434cacc8f1075919e7ea869",
     "url": "metadata/Fable.Core.dll.txt"
   },
   {
@@ -888,119 +892,127 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "metadata/Fable.Repl.Lib.dll.txt"
   },
   {
-    "revision": "0f738cb76546e03618353cccce683965",
+    "revision": "41731129da7278c7d061c31b249d499b",
     "url": "metadata/System.Collections.Concurrent.dll.txt"
   },
   {
-    "revision": "1a7ec49bdf94f53e0cc3cb8a6d9b00dd",
+    "revision": "86bc94fe37b02d185da6598236d9b967",
     "url": "metadata/System.Collections.dll.txt"
   },
   {
-    "revision": "ccdef668b9c33c634b6a5d592a7a9186",
+    "revision": "e289225a62d84e41c7ffd9283c502799",
     "url": "metadata/System.ComponentModel.Primitives.dll.txt"
   },
   {
-    "revision": "a552fb12dec8cefd0c131f552b9353f8",
+    "revision": "b08cea037c6ed05c87827698b8092656",
     "url": "metadata/System.ComponentModel.TypeConverter.dll.txt"
   },
   {
-    "revision": "e81ddb305e0482a0a264d60e9f71a7fe",
+    "revision": "e1fc98b0ac0d39be719a2bfdcc2dbf81",
     "url": "metadata/System.ComponentModel.dll.txt"
   },
   {
-    "revision": "e8f231a7bb7c8c554c0a7e6f79daa57b",
+    "revision": "58bd73a75ac6f38ba66aa61c48a6a10c",
     "url": "metadata/System.Console.dll.txt"
   },
   {
-    "revision": "23a78c3ff9b88ffc8a5c69f282522bcc",
+    "revision": "613890c7e1904e7d97dc54b3bfcde09c",
     "url": "metadata/System.Core.dll.txt"
   },
   {
-    "revision": "1edc3527f364e313cb9a787d82f498cf",
+    "revision": "db6a226a2ca3ba812d7700e5c426606e",
     "url": "metadata/System.Diagnostics.Debug.dll.txt"
   },
   {
-    "revision": "479419b88ea522c665387fc848519dbe",
+    "revision": "b9c819e9a0801d372caf7a37c1ff65a7",
     "url": "metadata/System.Diagnostics.Tracing.dll.txt"
   },
   {
-    "revision": "663a501e7bfd0064d83019a4d4370ce2",
+    "revision": "fe108243d344a255335c43b088ec8665",
     "url": "metadata/System.Globalization.dll.txt"
   },
   {
-    "revision": "13cbaa825baf2825802d70e1e1a384df",
+    "revision": "e06cd2c4c35d26c98361fde68350da0b",
     "url": "metadata/System.IO.dll.txt"
   },
   {
-    "revision": "9fda3b34ff78462b5e6a5852521efd74",
+    "revision": "69943d7d4bcc5b9aa93b497d15be94d6",
+    "url": "metadata/System.Net.Requests.dll.txt"
+  },
+  {
+    "revision": "eb00bf3aafbc7f24d969e0b21a54d5cd",
+    "url": "metadata/System.Net.WebClient.dll.txt"
+  },
+  {
+    "revision": "e5d71eb417ae7d505cab8254ff9b4d7d",
     "url": "metadata/System.Numerics.dll.txt"
   },
   {
-    "revision": "b18bcf41f262ad478cd9e6ef9bc39f93",
+    "revision": "c9e78d5e84df61e24c94543f55eb565f",
     "url": "metadata/System.Reflection.Extensions.dll.txt"
   },
   {
-    "revision": "9de15f89ad65672bd62edbe02345bd6b",
+    "revision": "e87155288b37ee6705f2e837229a5471",
     "url": "metadata/System.Reflection.Metadata.dll.txt"
   },
   {
-    "revision": "5bbd1e41c37beb1a98047319ca9817c4",
+    "revision": "1c2e47a8c2932eece909a24333c57628",
     "url": "metadata/System.Reflection.Primitives.dll.txt"
   },
   {
-    "revision": "cb4554649703ca77beb89ee8a9b24f5b",
+    "revision": "bb789ae77f4e762377c3b011af25e214",
     "url": "metadata/System.Reflection.TypeExtensions.dll.txt"
   },
   {
-    "revision": "2cb1990d1b36a91275c09dea7e3b403d",
+    "revision": "0afddc4482a7a89734b23cb77abcdb06",
     "url": "metadata/System.Reflection.dll.txt"
   },
   {
-    "revision": "97b2a80636b973f838030f95b0a4b060",
+    "revision": "2e1bc7f6824a42583ad4e0832ab6e716",
     "url": "metadata/System.Runtime.Extensions.dll.txt"
   },
   {
-    "revision": "ad50ad840e558d9bb4624a82d0f00652",
+    "revision": "3724b22e8fd5125518830c2ba15339fa",
     "url": "metadata/System.Runtime.Numerics.dll.txt"
   },
   {
-    "revision": "ffca931e7da4fa83fd113e4d5e2c0adc",
+    "revision": "df92e877a8c4a37def64072a8834fe0e",
     "url": "metadata/System.Runtime.dll.txt"
   },
   {
-    "revision": "4e6974ceae4bcd48b16761876d5816fe",
+    "revision": "07b2a5e7735bb7310b273aabccdbc6b0",
     "url": "metadata/System.Text.Encoding.Extensions.dll.txt"
   },
   {
-    "revision": "ed42970554e4d6dc0c7b36faec73e74b",
+    "revision": "1e39d689fa09386a3abd7da05346333b",
     "url": "metadata/System.Text.Encoding.dll.txt"
   },
   {
-    "revision": "38c6fb28a2f3941bf82bb898f17a9502",
+    "revision": "fb1037e9eb0606306a70fb5a2d6c6189",
     "url": "metadata/System.Text.RegularExpressions.dll.txt"
   },
   {
-    "revision": "52ab286a18fef102444eaf0b9fb30031",
+    "revision": "4f33a2d8bd954f337afe522830568f29",
     "url": "metadata/System.Threading.Tasks.dll.txt"
   },
   {
-    "revision": "42b7429d1422ff0c5cb5aa730a055f7f",
+    "revision": "49ddb6537bbc039e04af530a854bfd73",
     "url": "metadata/System.Threading.dll.txt"
   },
   {
-    "revision": "1013895e6038412225ee1715a70f80ed",
+    "revision": "23307a8703c8d4256e94e70ca58004ad",
     "url": "metadata/System.ValueTuple.dll.txt"
   },
   {
-    "revision": "2c52ae00f828b782e05eaa05a8e77988",
+    "revision": "619917ac710a22a6ee3106e569591639",
     "url": "metadata/System.dll.txt"
   },
   {
-    "revision": "3491e0514903e42bf133b249ad463125",
+    "revision": "05228ecefe7ba0c48d1970244d436c3e",
     "url": "metadata/mscorlib.dll.txt"
   },
   {
-    "revision": "203a2e4b5df0b4ae970b68ea01d74f83",
+    "revision": "ad0e5e116e095ec8fc8add95341421a3",
     "url": "metadata/netstandard.dll.txt"
   },
   {
@@ -1352,7 +1364,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "samples/visual/recharts.html"
   },
   {
-    "revision": "255d982f072aaa16c52f",
+    "revision": "33375d39cab0c9c0a290",
     "url": "style.css"
   },
   {
