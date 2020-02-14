@@ -2,6 +2,7 @@
 @import '~bulma/bulma';
 @import './monaco-editor-hover-content.sass';
 @import '~bulma-switch/dist/css/bulma-switch.sass';
+@import '~bulma-tooltip/dist/css/bulma-tooltip.sass'; 
 @import './menu-group';
 @import './toast.scss';
 @import './scrollable-panel.scss';
@@ -71,6 +72,10 @@ div.is-loading {
                 justify-content: space-evenly;
             }
 
+            .widgets-list {
+                overflow-y: auto;
+            }
+
             .widgets-list .action-button {
                 height: $icon-dimensions-large;
                 justify-content: center;
@@ -87,6 +92,7 @@ div.is-loading {
             padding-top: .5rem;
             padding-bottom: .5rem;
             box-shadow: -1px 0px 1px 0px #f2f2f2;
+            z-index: 10; // Make sure to display the shadow in expanded/collapsed 
 
             img {
                 width: 32px;
@@ -109,7 +115,6 @@ div.is-loading {
         }
 
         .widgets-list {
-            overflow-y: auto;
             flex: 1 1 0%;
             max-height: calc(100vh - #{$navbar-height} - $icon-dimensions-large);
         }
@@ -229,5 +234,30 @@ div.is-loading {
     }
     .suggest-widget {
         z-index: 12000;
+    }
+}
+
+.modal  {
+    .reset-confirmation-modal {
+        display: flex;
+        justify-content: center;
+
+        .reset-confirmation-modal-content {
+            background-color: $card-header-background-color;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            border-radius: $radius;
+
+            .reset-confirmation-modal-content-text {
+                color: $warning;
+                text-align: center;
+            }
+            
+            .reset-confirmation-modal-content-foot {
+                margin-top: 1rem;
+            }
+        }
+        
     }
 }

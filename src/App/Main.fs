@@ -7,6 +7,7 @@ open Browser.Types
 open Browser
 open Fetch.Types
 open Fulma
+open Fulma.Extensions.Wikiki
 open Elmish
 open Thoth.Elmish
 open Prelude
@@ -261,7 +262,7 @@ let update msg (model : Model) =
                      CssCode = saved.css
                      CodeES2015 = ""
                      IFrameUrl = ""
-                     Logs = [] }, Router.modifyUrl Router.Home
+                     Logs = [] }, Router.newUrl Router.Home
 
     | GistLoaded (code, html, css) ->
         { model with FSharpCode = code; HtmlCode = html; CssCode = css }, Cmd.ofMsg (StartCompile (Some code))
@@ -391,8 +392,10 @@ let update msg (model : Model) =
                              CssCode = cssCode }, cmd
             | Sidebar.Share ->
                 model, Cmd.OfFunc.either updateQuery (model.FSharpCode, model.HtmlCode, model.CssCode) ShareableUrlReady UpdateQueryFailed
+
             | Sidebar.Reset ->
                 model, Router.newUrl Router.Reset
+
             | Sidebar.ShareToGist ->
                 model,
                     match subModel.Options.GistToken with
@@ -400,6 +403,13 @@ let update msg (model : Model) =
                         Cmd.OfPromise.either postToGist (token, model.FSharpCode, model.HtmlCode, model.CssCode) GistUrlReady ShareGistError
                     | None ->
                         Cmd.ofMsg NoToken
+            | Sidebar.StartCompile ->
+                model
+                , Cmd.ofMsg (StartCompile None)
+
+            | Sidebar.RefreshIframe ->
+                model
+                , Cmd.ofMsg RefreshIframe
 
         { newModel with Sidebar = subModel }, Cmd.batch [ Cmd.map SidebarMsg cmd
                                                           extraCmd ]
@@ -790,48 +800,6 @@ let private outputArea model dispatch =
           Style [ Width (numberToPercent (1. - model.PanelSplitRatio)) ] ]
         content
 
-let private actionArea (state : State) dispatch =
-    let compileIcon =
-        if state = State.Compiling then
-            [ Fa.i [ Fa.Solid.Spinner; Fa.Spin ] [] ]
-        else
-            [ Fa.i [ Fa.Solid.Play ] [] ]
-
-    let expanded =
-        div [ Class "actions-area" ]
-            [ div [ Class "action-button" ]
-                [ Button.button [ Button.IsOutlined
-                                  Button.Disabled (state = Loading)
-                                  Button.OnClick (fun _ -> dispatch (StartCompile None)) ]
-                    [ Icon.icon [ Icon.Size IsSmall ]
-                        compileIcon
-                      span [ ]
-                        [ str "Compile" ] ] ]
-              div [ Class "action-button" ]
-                [ Button.button [ Button.IsOutlined
-                                  Button.Disabled (state = Loading)
-                                  Button.OnClick (fun _ -> dispatch RefreshIframe) ]
-                    [ Icon.icon [ Icon.Size IsSmall ]
-                        [ Fa.i [ Fa.Solid.SyncAlt ] [] ]
-                      span [ ]
-                        [ str "Refresh" ] ] ] ]
-
-    let collapsed =
-        div [ Class "actions-area" ]
-            [ div [ Class "action-button" ]
-                [ Button.button [ Button.IsOutlined
-                                  Button.Disabled (state = Loading)
-                                  Button.OnClick (fun _ -> dispatch (StartCompile None)) ]
-                    [ Icon.icon [ Icon.Size IsLarge ] compileIcon ] ]
-              div [ Class "action-button" ]
-                [ Button.button [ Button.IsOutlined
-                                  Button.Disabled (state = Loading)
-                                  Button.OnClick (fun _ -> dispatch RefreshIframe) ]
-                    [ Icon.icon [ Icon.Size IsLarge ]
-                        [ Fa.i [ Fa.Solid.SyncAlt ] [] ] ] ] ]
-
-    (expanded, collapsed)
-
 let view (model: Model) dispatch =
     Elmish.React.Common.lazyView2
         (fun model dispatch ->
@@ -841,7 +809,7 @@ let view (model: Model) dispatch =
                 | NoTarget -> false
             div [ classList [ "is-unselectable", isDragging ] ]
                 [ div [ Class "page-content" ]
-                    [ Sidebar.view model.Sidebar (actionArea model.State dispatch) (SidebarMsg >> dispatch)
+                    [ Sidebar.view (model.State = State.Compiling) model.Sidebar (SidebarMsg >> dispatch)
                       div [ Class "main-content" ]
                         [ editorArea model dispatch
                           div [ Class "horizontal-resize"

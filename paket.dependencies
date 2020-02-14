@@ -10,6 +10,7 @@ nuget Fulma.Extensions.Wikiki.Switch
 nuget Fable.Elmish
 nuget Fable.Elmish.React
 nuget Fable.Elmish.HMR
+nuget Fulma.Extensions.Wikiki.Tooltip
 nuget Thoth.Json
 nuget Thoth.Elmish.Toast
 nuget Fable.Fetch

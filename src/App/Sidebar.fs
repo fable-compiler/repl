@@ -22,6 +22,8 @@ type ExternalMsg =
     | LoadSample of fsharp : string * html : string * css : string
     | NoOp
     | Reset
+    | StartCompile
+    | RefreshIframe
     | Share
     | ShareToGist
 
@@ -59,8 +61,10 @@ let update msg model =
 
         let externalMsg =
             match externalMsg with
-            | Widgets.General.NoOp -> NoOp
-            | Widgets.General.Reset -> Reset
+            | Widgets.General.ExternalMessage.NoOp -> NoOp
+            | Widgets.General.ExternalMessage.Reset -> Reset
+            | Widgets.General.ExternalMessage.StartCompile -> StartCompile
+            | Widgets.General.ExternalMessage.RefreshIframe -> RefreshIframe
             | Widgets.General.ExternalMessage.Share -> Share
             | Widgets.General.ExternalMessage.ShareToGist -> ShareToGist
 
@@ -160,21 +164,31 @@ let private expandButton dispatch =
                 [ Icon.icon [ ]
                     [ Fa.i [ Fa.Solid.AngleDoubleRight; Fa.Size Fa.FaLarge ] [] ] ] ] ]
 
-let view (model: Model) (actionAreaExpanded, actionAreaCollapsed) dispatch =
+let view (isCompiling : bool) (model: Model) dispatch =
     let widgets =
-        [ "General", Fa.Solid.Th, Widgets.General.view model.Options.GistToken model.General (GeneralMsg >> dispatch), None
-          "Samples", Fa.Solid.Book, Widgets.Samples.view model.Samples (SamplesMsg >> dispatch), Some "500px"
-          "Options", Fa.Solid.Cog, Widgets.Options.view model.Options (OptionsMsg >> dispatch), None
-          "Statistics", Fa.Regular.Clock, Widgets.Stats.view model.Statistics, None
-          "About", Fa.Solid.Info, Widgets.About.view, None ]
+        [ 
+            if model.IsExpanded then
+                "General", Fa.Solid.Th, Widgets.General.viewExpanded isCompiling model.Options.GistToken model.General (GeneralMsg >> dispatch), None           
+            "Samples", Fa.Solid.Book, Widgets.Samples.view model.Samples (SamplesMsg >> dispatch), Some "500px"
+            "Options", Fa.Solid.Cog, Widgets.Options.view model.Options (OptionsMsg >> dispatch), None
+            "Statistics", Fa.Regular.Clock, Widgets.Stats.view model.Statistics, None
+            "About", Fa.Solid.Info, Widgets.About.view, None 
+        ]
         |> List.map (renderWidgets model dispatch)
 
     if model.IsExpanded then
-        sidebarContainer dispatch (actionAreaExpanded::widgets)
+        sidebarContainer dispatch widgets
     else
+        let generalCollapsedView =
+            Widgets.General.viewCollapsed isCompiling model.Options.GistToken model.General (GeneralMsg >> dispatch)
+
         div [ Class "sidebar is-collapsed" ]
-            [ div [ Class "brand" ]
-                [ img [ Src "img/fable-ionide.png" ] ]
-              div [ Class "widgets-list" ]
-                (actionAreaCollapsed::widgets)
-              expandButton dispatch ]
+            [ 
+                Widgets.General.viewModalResetConfirmation model.General (GeneralMsg >> dispatch)
+                div [ Class "brand" ]
+                    [ img [ Src "img/fable-ionide.png" ] ]
+                div [ Class "widgets-list" ]
+                    (generalCollapsedView::widgets)
+                expandButton dispatch 
+            ] 
+        
