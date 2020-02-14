@@ -1,5 +1,5 @@
-import { defaultArg, value as value$$12, some } from "./Option.js";
-import { compare, addToDict, addToSet, getItemFromDict, tryGetValue, max as max$$1, comparePrimitives } from "./Util.js";
+import { defaultArg, value as value$$13, some } from "./Option.js";
+import { min as min$$1, compare, addToDict, addToSet, getItemFromDict, tryGetValue, max as max$$1, comparePrimitives } from "./Util.js";
 import { createMutable } from "./Map.js";
 import { createMutable as createMutable$$1 } from "./Set.js";
 import { List } from "./Types.js";
@@ -274,16 +274,16 @@ export function where(predicate$$3, array$$20) {
   return array$$20.filter(predicate$$3);
 }
 export function contains(value$$4, array$$22, eq$$3) {
-  const loop = function loop($i$$12$$75) {
+  const loop = function loop($i$$12$$79) {
     loop: while (true) {
-      const i$$12 = $i$$12$$75;
+      const i$$12 = $i$$12$$79;
 
       if (i$$12 >= array$$22.length) {
         return false;
       } else if (eq$$3.Equals(value$$4, array$$22[i$$12])) {
         return true;
       } else {
-        $i$$12$$75 = i$$12 + 1;
+        $i$$12$$79 = i$$12 + 1;
         continue loop;
       }
 
@@ -521,7 +521,7 @@ export function find(predicate$$11, array$$57) {
   if (matchValue$$5 == null) {
     return indexNotFound();
   } else {
-    const res$$4 = value$$12(matchValue$$5);
+    const res$$4 = value$$13(matchValue$$5);
     return res$$4;
   }
 }
@@ -547,9 +547,9 @@ export function tryFindIndex(predicate$$17, array$$63) {
   }
 }
 export function pick(chooser, array$$65) {
-  const loop$$1 = function loop$$1($i$$22$$143) {
+  const loop$$1 = function loop$$1($i$$22$$147) {
     loop$$1: while (true) {
-      const i$$22 = $i$$22$$143;
+      const i$$22 = $i$$22$$147;
 
       if (i$$22 >= array$$65.length) {
         return indexNotFound();
@@ -557,10 +557,10 @@ export function pick(chooser, array$$65) {
         const matchValue$$8 = chooser(array$$65[i$$22]);
 
         if (matchValue$$8 != null) {
-          const res$$5 = value$$12(matchValue$$8);
+          const res$$5 = value$$13(matchValue$$8);
           return res$$5;
         } else {
-          $i$$22$$143 = i$$22 + 1;
+          $i$$22$$147 = i$$22 + 1;
           continue loop$$1;
         }
       }
@@ -572,9 +572,9 @@ export function pick(chooser, array$$65) {
   return loop$$1(0);
 }
 export function tryPick(chooser$$1, array$$66) {
-  const loop$$2 = function loop$$2($i$$23$$146) {
+  const loop$$2 = function loop$$2($i$$23$$150) {
     loop$$2: while (true) {
-      const i$$23 = $i$$23$$146;
+      const i$$23 = $i$$23$$150;
 
       if (i$$23 >= array$$66.length) {
         return null;
@@ -582,7 +582,7 @@ export function tryPick(chooser$$1, array$$66) {
         const matchValue$$9 = chooser$$1(array$$66[i$$23]);
 
         if (matchValue$$9 == null) {
-          $i$$23$$146 = i$$23 + 1;
+          $i$$23$$150 = i$$23 + 1;
           continue loop$$2;
         } else {
           return matchValue$$9;
@@ -596,16 +596,16 @@ export function tryPick(chooser$$1, array$$66) {
   return loop$$2(0);
 }
 export function findBack(predicate$$19, array$$67) {
-  const loop$$3 = function loop$$3($i$$24$$149) {
+  const loop$$3 = function loop$$3($i$$24$$153) {
     loop$$3: while (true) {
-      const i$$24 = $i$$24$$149;
+      const i$$24 = $i$$24$$153;
 
       if (i$$24 < 0) {
         return indexNotFound();
       } else if (predicate$$19(array$$67[i$$24])) {
         return array$$67[i$$24];
       } else {
-        $i$$24$$149 = i$$24 - 1;
+        $i$$24$$153 = i$$24 - 1;
         continue loop$$3;
       }
 
@@ -616,16 +616,16 @@ export function findBack(predicate$$19, array$$67) {
   return loop$$3(array$$67.length - 1);
 }
 export function tryFindBack(predicate$$20, array$$68) {
-  const loop$$4 = function loop$$4($i$$25$$152) {
+  const loop$$4 = function loop$$4($i$$25$$156) {
     loop$$4: while (true) {
-      const i$$25 = $i$$25$$152;
+      const i$$25 = $i$$25$$156;
 
       if (i$$25 < 0) {
         return null;
       } else if (predicate$$20(array$$68[i$$25])) {
         return some(array$$68[i$$25]);
       } else {
-        $i$$25$$152 = i$$25 - 1;
+        $i$$25$$156 = i$$25 - 1;
         continue loop$$4;
       }
 
@@ -636,16 +636,16 @@ export function tryFindBack(predicate$$20, array$$68) {
   return loop$$4(array$$68.length - 1);
 }
 export function findLastIndex(predicate$$21, array$$69) {
-  const loop$$5 = function loop$$5($i$$26$$155) {
+  const loop$$5 = function loop$$5($i$$26$$159) {
     loop$$5: while (true) {
-      const i$$26 = $i$$26$$155;
+      const i$$26 = $i$$26$$159;
 
       if (i$$26 < 0) {
         return -1 | 0;
       } else if (predicate$$21(array$$69[i$$26])) {
         return i$$26 | 0;
       } else {
-        $i$$26$$155 = i$$26 - 1;
+        $i$$26$$159 = i$$26 - 1;
         continue loop$$5;
       }
 
@@ -656,16 +656,16 @@ export function findLastIndex(predicate$$21, array$$69) {
   return loop$$5(array$$69.length - 1) | 0;
 }
 export function findIndexBack(predicate$$22, array$$70) {
-  const loop$$6 = function loop$$6($i$$27$$158) {
+  const loop$$6 = function loop$$6($i$$27$$162) {
     loop$$6: while (true) {
-      const i$$27 = $i$$27$$158;
+      const i$$27 = $i$$27$$162;
 
       if (i$$27 < 0) {
         return indexNotFound() | 0;
       } else if (predicate$$22(array$$70[i$$27])) {
         return i$$27 | 0;
       } else {
-        $i$$27$$158 = i$$27 - 1;
+        $i$$27$$162 = i$$27 - 1;
         continue loop$$6;
       }
 
@@ -676,16 +676,16 @@ export function findIndexBack(predicate$$22, array$$70) {
   return loop$$6(array$$70.length - 1) | 0;
 }
 export function tryFindIndexBack(predicate$$23, array$$71) {
-  const loop$$7 = function loop$$7($i$$28$$161) {
+  const loop$$7 = function loop$$7($i$$28$$165) {
     loop$$7: while (true) {
-      const i$$28 = $i$$28$$161;
+      const i$$28 = $i$$28$$165;
 
       if (i$$28 < 0) {
         return null;
       } else if (predicate$$23(array$$71[i$$28])) {
         return i$$28;
       } else {
-        $i$$28$$161 = i$$28 - 1;
+        $i$$28$$165 = i$$28 - 1;
         continue loop$$7;
       }
 
@@ -702,7 +702,7 @@ export function choose(chooser$$2, array$$72, cons$$30) {
   });
   return map(function g(x$$5) {
     const option$$1 = chooser$$2(x$$5);
-    return value$$12(option$$1);
+    return value$$13(option$$1);
   }, arr$$6, cons$$30);
 }
 export function foldIndexed(folder$$2, state$$4, array$$74) {
@@ -845,9 +845,9 @@ export function sortWith(comparer$$10, xs$$10) {
 export function unfold(generator, state$$8) {
   const res$$8 = [];
 
-  const loop$$8 = function loop$$8($state$$9$$220) {
+  const loop$$8 = function loop$$8($state$$9$$224) {
     loop$$8: while (true) {
-      const state$$9 = $state$$9$$220;
+      const state$$9 = $state$$9$$224;
       const matchValue$$10 = generator(state$$9);
 
       if (matchValue$$10 != null) {
@@ -855,7 +855,7 @@ export function unfold(generator, state$$8) {
         const s$0027$$2 = matchValue$$10[1];
         const value$$10 = res$$8.push(x$$16);
         value$$10, null;
-        $state$$9$$220 = s$0027$$2;
+        $state$$9$$224 = s$0027$$2;
         continue loop$$8;
       }
 
@@ -1088,20 +1088,20 @@ export function forAll2(predicate$$27, array1$$12, array2$$12) {
     return acc$$10 ? predicate$$27(x$$22, y$$9) : false;
   }, true, array1$$12, array2$$12);
 }
-export function existsOffset($predicate$$28$$275, $array$$109$$276, $index$$7$$277) {
+export function existsOffset($predicate$$28$$279, $array$$109$$280, $index$$7$$281) {
   existsOffset: while (true) {
-    const predicate$$28 = $predicate$$28$$275,
-          array$$109 = $array$$109$$276,
-          index$$7 = $index$$7$$277;
+    const predicate$$28 = $predicate$$28$$279,
+          array$$109 = $array$$109$$280,
+          index$$7 = $index$$7$$281;
 
     if (index$$7 === array$$109.length) {
       return false;
     } else if (predicate$$28(array$$109[index$$7])) {
       return true;
     } else {
-      $predicate$$28$$275 = predicate$$28;
-      $array$$109$$276 = array$$109;
-      $index$$7$$277 = index$$7 + 1;
+      $predicate$$28$$279 = predicate$$28;
+      $array$$109$$280 = array$$109;
+      $index$$7$$281 = index$$7 + 1;
       continue existsOffset;
     }
 
@@ -1111,22 +1111,22 @@ export function existsOffset($predicate$$28$$275, $array$$109$$276, $index$$7$$2
 export function exists(predicate$$29, array$$110) {
   return existsOffset(predicate$$29, array$$110, 0);
 }
-export function existsOffset2($predicate$$30$$280, $array1$$13$$281, $array2$$13$$282, $index$$8$$283) {
+export function existsOffset2($predicate$$30$$284, $array1$$13$$285, $array2$$13$$286, $index$$8$$287) {
   existsOffset2: while (true) {
-    const predicate$$30 = $predicate$$30$$280,
-          array1$$13 = $array1$$13$$281,
-          array2$$13 = $array2$$13$$282,
-          index$$8 = $index$$8$$283;
+    const predicate$$30 = $predicate$$30$$284,
+          array1$$13 = $array1$$13$$285,
+          array2$$13 = $array2$$13$$286,
+          index$$8 = $index$$8$$287;
 
     if (index$$8 === array1$$13.length) {
       return false;
     } else if (predicate$$30(array1$$13[index$$8], array2$$13[index$$8])) {
       return true;
     } else {
-      $predicate$$30$$280 = predicate$$30;
-      $array1$$13$$281 = array1$$13;
-      $array2$$13$$282 = array2$$13;
-      $index$$8$$283 = index$$8 + 1;
+      $predicate$$30$$284 = predicate$$30;
+      $array1$$13$$285 = array1$$13;
+      $array2$$13$$286 = array2$$13;
+      $index$$8$$287 = index$$8 + 1;
       continue existsOffset2;
     }
 
@@ -1234,4 +1234,28 @@ export function windowed(windowSize, source$$10) {
   }
 
   return res$$9;
+}
+export function splitInto(chunks, array$$115) {
+  if (chunks < 1) {
+    throw new Error("The input must be positive.\\nParameter name: chunks");
+  }
+
+  if (array$$115.length === 0) {
+    return [[]];
+  } else {
+    const result$$15 = [];
+    const chunks$$1 = min$$1(comparePrimitives, chunks, array$$115.length) | 0;
+    const minChunkSize = ~~(array$$115.length / chunks$$1) | 0;
+    const chunksWithExtraItem = array$$115.length % chunks$$1 | 0;
+
+    for (let i$$51 = 0; i$$51 <= chunks$$1 - 1; i$$51++) {
+      const chunkSize$$1 = (i$$51 < chunksWithExtraItem ? minChunkSize + 1 : minChunkSize) | 0;
+      const start$$11 = i$$51 * minChunkSize + min$$1(comparePrimitives, chunksWithExtraItem, i$$51) | 0;
+      const slice$$1 = array$$115.slice(start$$11, start$$11 + chunkSize$$1);
+      const value$$12 = result$$15.push(slice$$1);
+      value$$12, null;
+    }
+
+    return result$$15;
+  }
 }

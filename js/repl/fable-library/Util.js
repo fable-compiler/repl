@@ -379,11 +379,25 @@ export function createAtom(value) {
 const CaseRules = {
     None: 0,
     LowerFirst: 1,
+    SnakeCase: 2,
+    SnakeCaseAllCaps: 3,
+    KebabCase: 4,
 };
+function dashify(str, separator) {
+    return str.replace(/[a-z]?[A-Z]/g, (m) => m.length === 1
+        ? m.toLowerCase()
+        : m.charAt(0) + separator + m.charAt(1).toLowerCase());
+}
 function changeCase(str, caseRule) {
     switch (caseRule) {
         case CaseRules.LowerFirst:
             return str.charAt(0).toLowerCase() + str.slice(1);
+        case CaseRules.SnakeCase:
+            return dashify(str, "_");
+        case CaseRules.SnakeCaseAllCaps:
+            return dashify(str, "_").toUpperCase();
+        case CaseRules.KebabCase:
+            return dashify(str, "-");
         case CaseRules.None:
         default:
             return str;
@@ -511,7 +525,7 @@ export function uncurry(arity, f) {
     }
     // The function is already uncurried
     if (f.length > 1) {
-        //   if (CURRIED_KEY in f) { // This doesn't always work
+        // if (CURRIED_KEY in f) { // This doesn't always work
         return f;
     }
     let uncurriedFn;

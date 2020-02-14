@@ -16,7 +16,7 @@ function decodeVByteToIntegerArray(buffer) {
     }
     return ret;
 }
-function getCategory() {
+function getCategoryFunc() {
     // unpack Unicode ranges and categories (delta encoded, vbyte encoded, utf8 encoded)
     const unicodeBuffer = Encoding.get_UTF8().getBytes(packedUnicode);
     const unicodeDeltas = decodeVByteToIntegerArray(unicodeBuffer);
@@ -29,8 +29,7 @@ function getCategory() {
         categories[i / 2] = unicodeDeltas[i + 1];
     }
     // binary search in unicode ranges
-    return (s, index) => {
-        const cp = s.charCodeAt(index || 0);
+    return (cp) => {
         let hi = codepoints.length;
         let lo = 0;
         while (hi - lo > 1) {
@@ -86,7 +85,11 @@ const isWhiteSpaceMask = 0
     | 1 << 11 /* SpaceSeparator */
     | 1 << 12 /* LineSeparator */
     | 1 << 13 /* ParagraphSeparator */;
-export const getUnicodeCategory = getCategory();
+export const unicodeCategoryFunc = getCategoryFunc();
+export function getUnicodeCategory(s, index) {
+    const cp = s.charCodeAt(index || 0);
+    return unicodeCategoryFunc(cp);
+}
 export function isControl(s, index) {
     const test = 1 << getUnicodeCategory(s, index);
     return (test & isControlMask) !== 0;

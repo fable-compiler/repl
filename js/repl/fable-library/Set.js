@@ -1394,7 +1394,7 @@ export function FSharpSet$$Filter$$Z1D55A0D7(s$$28, f$$12) {
     return FSharpSet$$$$002Ector$$2528C5CB(FSharpSet$$get_Comparer(s$$28), SetTreeModule$$$filter(FSharpSet$$get_Comparer(s$$28), f$$12, FSharpSet$$get_Tree(s$$28)));
   }
 }
-export function FSharpSet$$Map$$38806891(s$$29, f$$13, comparer$$23) {
+export function FSharpSet$$Map$$7597B8F7(s$$29, f$$13, comparer$$23) {
   return FSharpSet$$$$002Ector$$2528C5CB(comparer$$23, SetTreeModule$$$fold(function (acc$$13, k$$33) {
     return SetTreeModule$$$add(comparer$$23, f$$13(k$$33), acc$$13);
   }, new SetTree$00601(0, "SetEmpty"), FSharpSet$$get_Tree(s$$29)));
@@ -1571,7 +1571,7 @@ export function foldBack(f$$22, s$$43, z$$3) {
   return SetTreeModule$$$foldBack(f$$22, FSharpSet$$get_Tree(s$$43), z$$3);
 }
 export function map(f$$23, s$$44, comparer$$27) {
-  return FSharpSet$$Map$$38806891(s$$44, f$$23, comparer$$27);
+  return FSharpSet$$Map$$7597B8F7(s$$44, f$$23, comparer$$27);
 }
 export function count(s$$45) {
   return FSharpSet$$get_Count(s$$45);

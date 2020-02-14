@@ -182,9 +182,10 @@ export function parseRaw(str) {
             let timeInSeconds = 0;
             if (m[2] != null) {
                 const timeParts = m[2].split(":");
-                timeInSeconds = parseInt(timeParts[0], 10) * 3600 +
-                    parseInt(timeParts[1] || "0", 10) * 60 +
-                    parseFloat(timeParts[2] || "0");
+                timeInSeconds =
+                    parseInt(timeParts[0], 10) * 3600 +
+                        parseInt(timeParts[1] || "0", 10) * 60 +
+                        parseFloat(timeParts[2] || "0");
                 if (m[3] != null && m[3].toUpperCase() === "PM") {
                     timeInSeconds += 720;
                 }
@@ -327,22 +328,32 @@ export function dayOfYear(d) {
     return _day;
 }
 export function add(d, ts) {
-    return DateTime(d.getTime() + ts, d.kind);
+    const newDate = DateTime(d.getTime() + ts, d.kind);
+    if (d.kind === 2 /* Local */) {
+        const oldTzOffset = d.getTimezoneOffset();
+        const newTzOffset = newDate.getTimezoneOffset();
+        return oldTzOffset !== newTzOffset
+            ? DateTime(newDate.getTime() + (newTzOffset - oldTzOffset) * 60000, d.kind)
+            : newDate;
+    }
+    else {
+        return newDate;
+    }
 }
 export function addDays(d, v) {
-    return DateTime(d.getTime() + v * 86400000, d.kind);
+    return add(d, v * 86400000);
 }
 export function addHours(d, v) {
-    return DateTime(d.getTime() + v * 3600000, d.kind);
+    return add(d, v * 3600000);
 }
 export function addMinutes(d, v) {
-    return DateTime(d.getTime() + v * 60000, d.kind);
+    return add(d, v * 60000);
 }
 export function addSeconds(d, v) {
-    return DateTime(d.getTime() + v * 1000, d.kind);
+    return add(d, v * 1000);
 }
 export function addMilliseconds(d, v) {
-    return DateTime(d.getTime() + v, d.kind);
+    return add(d, v);
 }
 export function addYears(d, v) {
     const newMonth = month(d);
@@ -371,9 +382,7 @@ export function addMonths(d, v) {
     return create(newYear, newMonth, newDay, hour(d), minute(d), second(d), millisecond(d), d.kind);
 }
 export function subtract(d, that) {
-    return typeof that === "number"
-        ? DateTime(d.getTime() - that, d.kind)
-        : d.getTime() - that.getTime();
+    return typeof that === "number" ? add(d, -that) : d.getTime() - that.getTime();
 }
 export function toLongDateString(d) {
     return d.toDateString();

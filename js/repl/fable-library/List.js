@@ -3,7 +3,7 @@ import { List } from "./Types.js";
 import { collect as collect$$1, scanBack as scanBack$$1, scan as scan$$1, foldBack2 as foldBack2$$1, fold2 as fold2$$1, fold as fold$$1, map as map$$1 } from "./Seq.js";
 import { partialApply, getItemFromDict, addToDict, tryGetValue, addToSet, count } from "./Util.js";
 import { ofList } from "./Array.js";
-import { permute as permute$$1, findIndexBack as findIndexBack$$1, tryFindIndexBack as tryFindIndexBack$$1 } from "./Array.js";
+import { splitInto as splitInto$$1, chunkBySize as chunkBySize$$1, permute as permute$$1, findIndexBack as findIndexBack$$1, tryFindIndexBack as tryFindIndexBack$$1 } from "./Array.js";
 import { createMutable } from "./Set.js";
 import { createMutable as createMutable$$1 } from "./Map.js";
 export function head(_arg1) {
@@ -821,17 +821,28 @@ export function permute(f$$55, xs$$109) {
   xs$$110 = permute$$1(f$$55, array$$3);
   return ofArray(xs$$110);
 }
-export function skip(i$$16, xs$$111) {
-  const skipInner = function skipInner($i$$17$$237, $xs$$112$$238) {
+export function chunkBySize(chunkSize, xs$$111) {
+  let xs$$114;
+  let xs$$112;
+  let array$$4;
+  array$$4 = ofList(xs$$111, Array);
+  xs$$112 = chunkBySize$$1(chunkSize, array$$4);
+  xs$$114 = ofArray(xs$$112);
+  return map(function f$$56(xs$$113) {
+    return ofArray(xs$$113);
+  }, xs$$114);
+}
+export function skip(i$$16, xs$$115) {
+  const skipInner = function skipInner($i$$17$$240, $xs$$116$$241) {
     skipInner: while (true) {
-      const i$$17 = $i$$17$$237,
-            xs$$112 = $xs$$112$$238;
+      const i$$17 = $i$$17$$240,
+            xs$$116 = $xs$$116$$241;
 
       if (i$$17 === 0) {
-        return xs$$112;
-      } else if (xs$$112.tail != null) {
-        $i$$17$$237 = i$$17 - 1;
-        $xs$$112$$238 = xs$$112.tail;
+        return xs$$116;
+      } else if (xs$$116.tail != null) {
+        $i$$17$$240 = i$$17 - 1;
+        $xs$$116$$241 = xs$$116.tail;
         continue skipInner;
       } else {
         throw new Error("The input sequence has an insufficient number of elements.");
@@ -844,186 +855,126 @@ export function skip(i$$16, xs$$111) {
   if (i$$16 < 0) {
     throw new Error("The input must be non-negative.");
   } else {
-    var $target$$239, i$$20, xs$$115;
+    var $target$$242, i$$20, xs$$119;
 
     if (i$$16 === 0) {
-      $target$$239 = 0;
+      $target$$242 = 0;
     } else if (i$$16 === 1) {
-      if (xs$$111.tail != null) {
-        $target$$239 = 1;
-      } else {
-        $target$$239 = 2;
-        i$$20 = i$$16;
-        xs$$115 = xs$$111;
-      }
-    } else {
-      $target$$239 = 2;
-      i$$20 = i$$16;
-      xs$$115 = xs$$111;
-    }
-
-    switch ($target$$239) {
-      case 0:
-        {
-          return xs$$111;
-        }
-
-      case 1:
-        {
-          return xs$$111.tail;
-        }
-
-      case 2:
-        {
-          return skipInner(i$$20, xs$$115);
-        }
-    }
-  }
-}
-export function skipWhile($predicate$$240, $xs$$116$$241) {
-  skipWhile: while (true) {
-    const predicate = $predicate$$240,
-          xs$$116 = $xs$$116$$241;
-    var $target$$242, h$$4, t$$4;
-
-    if (xs$$116.tail != null) {
-      if (predicate(xs$$116.head)) {
-        $target$$242 = 0;
-        h$$4 = xs$$116.head;
-        t$$4 = xs$$116.tail;
-      } else {
+      if (xs$$115.tail != null) {
         $target$$242 = 1;
+      } else {
+        $target$$242 = 2;
+        i$$20 = i$$16;
+        xs$$119 = xs$$115;
       }
     } else {
-      $target$$242 = 1;
+      $target$$242 = 2;
+      i$$20 = i$$16;
+      xs$$119 = xs$$115;
     }
 
     switch ($target$$242) {
       case 0:
         {
-          $predicate$$240 = predicate;
-          $xs$$116$$241 = t$$4;
+          return xs$$115;
+        }
+
+      case 1:
+        {
+          return xs$$115.tail;
+        }
+
+      case 2:
+        {
+          return skipInner(i$$20, xs$$119);
+        }
+    }
+  }
+}
+export function skipWhile($predicate$$243, $xs$$120$$244) {
+  skipWhile: while (true) {
+    const predicate = $predicate$$243,
+          xs$$120 = $xs$$120$$244;
+    var $target$$245, h$$4, t$$4;
+
+    if (xs$$120.tail != null) {
+      if (predicate(xs$$120.head)) {
+        $target$$245 = 0;
+        h$$4 = xs$$120.head;
+        t$$4 = xs$$120.tail;
+      } else {
+        $target$$245 = 1;
+      }
+    } else {
+      $target$$245 = 1;
+    }
+
+    switch ($target$$245) {
+      case 0:
+        {
+          $predicate$$243 = predicate;
+          $xs$$120$$244 = t$$4;
           continue skipWhile;
         }
 
       case 1:
         {
-          return xs$$116;
+          return xs$$120;
         }
     }
 
     break;
   }
 }
-export function takeSplitAux($error$$243, $i$$21$$244, $acc$$25$$245, $xs$$117$$246) {
+export function takeSplitAux($error$$246, $i$$21$$247, $acc$$25$$248, $xs$$121$$249) {
   takeSplitAux: while (true) {
-    const error = $error$$243,
-          i$$21 = $i$$21$$244,
-          acc$$25 = $acc$$25$$245,
-          xs$$117 = $xs$$117$$246;
+    const error = $error$$246,
+          i$$21 = $i$$21$$247,
+          acc$$25 = $acc$$25$$248,
+          xs$$121 = $xs$$121$$249;
 
     if (i$$21 === 0) {
-      return [reverse(acc$$25), xs$$117];
-    } else if (xs$$117.tail != null) {
-      $error$$243 = error;
-      $i$$21$$244 = i$$21 - 1;
-      $acc$$25$$245 = new List(xs$$117.head, acc$$25);
-      $xs$$117$$246 = xs$$117.tail;
+      return [reverse(acc$$25), xs$$121];
+    } else if (xs$$121.tail != null) {
+      $error$$246 = error;
+      $i$$21$$247 = i$$21 - 1;
+      $acc$$25$$248 = new List(xs$$121.head, acc$$25);
+      $xs$$121$$249 = xs$$121.tail;
       continue takeSplitAux;
     } else {
       if (error) {
         throw new Error("The input sequence has an insufficient number of elements.");
       } else {
-        return [reverse(acc$$25), xs$$117];
+        return [reverse(acc$$25), xs$$121];
       }
     }
 
     break;
   }
 }
-export function take(i$$22, xs$$119) {
+export function take(i$$22, xs$$123) {
   if (i$$22 < 0) {
     throw new Error("The input must be non-negative.");
   } else {
-    var $target$$249, i$$25, xs$$120;
+    var $target$$252, i$$25, xs$$124;
 
     if (i$$22 === 0) {
-      $target$$249 = 0;
+      $target$$252 = 0;
     } else if (i$$22 === 1) {
-      if (xs$$119.tail != null) {
-        $target$$249 = 1;
-      } else {
-        $target$$249 = 2;
-        i$$25 = i$$22;
-        xs$$120 = xs$$119;
-      }
-    } else {
-      $target$$249 = 2;
-      i$$25 = i$$22;
-      xs$$120 = xs$$119;
-    }
-
-    switch ($target$$249) {
-      case 0:
-        {
-          return new List();
-        }
-
-      case 1:
-        {
-          return new List(xs$$119.head, new List());
-        }
-
-      case 2:
-        {
-          const tuple = takeSplitAux(true, i$$25, new List(), xs$$120);
-          return tuple[0];
-        }
-    }
-  }
-}
-export function takeWhile(predicate$$1, xs$$121) {
-  if (xs$$121.tail != null) {
-    if (xs$$121.tail.tail == null) {
-      if (predicate$$1(xs$$121.head)) {
-        return xs$$121;
-      } else {
-        return xs$$121.tail;
-      }
-    } else {
-      if (!predicate$$1(xs$$121.head)) {
-        return new List();
-      } else {
-        return new List(xs$$121.head, takeWhile(predicate$$1, xs$$121.tail));
-      }
-    }
-  } else {
-    return xs$$121;
-  }
-}
-export function truncate(i$$26, xs$$123) {
-  if (i$$26 < 0) {
-    throw new Error("The input must be non-negative.");
-  } else {
-    var $target$$254, i$$29, xs$$124;
-
-    if (i$$26 === 0) {
-      $target$$254 = 0;
-    } else if (i$$26 === 1) {
       if (xs$$123.tail != null) {
-        $target$$254 = 1;
+        $target$$252 = 1;
       } else {
-        $target$$254 = 2;
-        i$$29 = i$$26;
+        $target$$252 = 2;
+        i$$25 = i$$22;
         xs$$124 = xs$$123;
       }
     } else {
-      $target$$254 = 2;
-      i$$29 = i$$26;
+      $target$$252 = 2;
+      i$$25 = i$$22;
       xs$$124 = xs$$123;
     }
 
-    switch ($target$$254) {
+    switch ($target$$252) {
       case 0:
         {
           return new List();
@@ -1036,48 +987,108 @@ export function truncate(i$$26, xs$$123) {
 
       case 2:
         {
-          const tuple$$1 = takeSplitAux(false, i$$29, new List(), xs$$124);
-          return tuple$$1[0];
+          const tuple = takeSplitAux(true, i$$25, new List(), xs$$124);
+          return tuple[0];
         }
     }
   }
 }
-export function splitAt(i$$30, xs$$125) {
-  if (i$$30 < 0) {
+export function takeWhile(predicate$$1, xs$$125) {
+  if (xs$$125.tail != null) {
+    if (xs$$125.tail.tail == null) {
+      if (predicate$$1(xs$$125.head)) {
+        return xs$$125;
+      } else {
+        return xs$$125.tail;
+      }
+    } else {
+      if (!predicate$$1(xs$$125.head)) {
+        return new List();
+      } else {
+        return new List(xs$$125.head, takeWhile(predicate$$1, xs$$125.tail));
+      }
+    }
+  } else {
+    return xs$$125;
+  }
+}
+export function truncate(i$$26, xs$$127) {
+  if (i$$26 < 0) {
     throw new Error("The input must be non-negative.");
   } else {
-    var $target$$257, i$$33, xs$$127;
+    var $target$$257, i$$29, xs$$128;
 
-    if (i$$30 === 0) {
+    if (i$$26 === 0) {
       $target$$257 = 0;
-    } else if (i$$30 === 1) {
-      if (xs$$125.tail != null) {
+    } else if (i$$26 === 1) {
+      if (xs$$127.tail != null) {
         $target$$257 = 1;
       } else {
         $target$$257 = 2;
-        i$$33 = i$$30;
-        xs$$127 = xs$$125;
+        i$$29 = i$$26;
+        xs$$128 = xs$$127;
       }
     } else {
       $target$$257 = 2;
-      i$$33 = i$$30;
-      xs$$127 = xs$$125;
+      i$$29 = i$$26;
+      xs$$128 = xs$$127;
     }
 
     switch ($target$$257) {
       case 0:
         {
-          return [new List(), xs$$125];
+          return new List();
         }
 
       case 1:
         {
-          return [new List(xs$$125.head, new List()), xs$$125.tail];
+          return new List(xs$$127.head, new List());
         }
 
       case 2:
         {
-          return takeSplitAux(true, i$$33, new List(), xs$$127);
+          const tuple$$1 = takeSplitAux(false, i$$29, new List(), xs$$128);
+          return tuple$$1[0];
+        }
+    }
+  }
+}
+export function splitAt(i$$30, xs$$129) {
+  if (i$$30 < 0) {
+    throw new Error("The input must be non-negative.");
+  } else {
+    var $target$$260, i$$33, xs$$131;
+
+    if (i$$30 === 0) {
+      $target$$260 = 0;
+    } else if (i$$30 === 1) {
+      if (xs$$129.tail != null) {
+        $target$$260 = 1;
+      } else {
+        $target$$260 = 2;
+        i$$33 = i$$30;
+        xs$$131 = xs$$129;
+      }
+    } else {
+      $target$$260 = 2;
+      i$$33 = i$$30;
+      xs$$131 = xs$$129;
+    }
+
+    switch ($target$$260) {
+      case 0:
+        {
+          return [new List(), xs$$129];
+        }
+
+      case 1:
+        {
+          return [new List(xs$$129.head, new List()), xs$$129.tail];
+        }
+
+      case 2:
+        {
+          return takeSplitAux(true, i$$33, new List(), xs$$131);
         }
     }
   }
@@ -1085,7 +1096,7 @@ export function splitAt(i$$30, xs$$125) {
 export function outOfRange() {
   throw new Error("Index out of range");
 }
-export function slice(lower, upper, xs$$128) {
+export function slice(lower, upper, xs$$132) {
   const lower$$1 = defaultArg(lower, 0) | 0;
   const hasUpper = upper != null;
 
@@ -1097,7 +1108,7 @@ export function slice(lower, upper, xs$$128) {
     let lastIndex = -1 | 0;
     let res$$2;
     const state$$13 = new List();
-    res$$2 = foldIndexed(function f$$56(i$$34, acc$$26, x$$67) {
+    res$$2 = foldIndexed(function f$$57(i$$34, acc$$26, x$$67) {
       lastIndex = i$$34;
 
       if (lower$$1 <= i$$34 ? !hasUpper ? true : i$$34 <= upper : false) {
@@ -1105,7 +1116,7 @@ export function slice(lower, upper, xs$$128) {
       } else {
         return acc$$26;
       }
-    }, state$$13, xs$$128);
+    }, state$$13, xs$$132);
 
     if (lower$$1 > lastIndex + 1 ? true : hasUpper ? upper > lastIndex : false) {
       outOfRange();
@@ -1114,33 +1125,33 @@ export function slice(lower, upper, xs$$128) {
     return reverse(res$$2);
   }
 }
-export function distinctBy(projection$$4, xs$$130, eq$$2) {
+export function distinctBy(projection$$4, xs$$134, eq$$2) {
   const hashSet = createMutable([], eq$$2);
-  return filter(function f$$57($arg$$1) {
+  return filter(function f$$58($arg$$1) {
     const arg00$$1 = projection$$4($arg$$1);
     return addToSet(arg00$$1, hashSet);
-  }, xs$$130);
+  }, xs$$134);
 }
-export function distinct(xs$$132, eq$$3) {
+export function distinct(xs$$136, eq$$3) {
   return distinctBy(function (x$$68) {
     return x$$68;
-  }, xs$$132, eq$$3);
+  }, xs$$136, eq$$3);
 }
-export function exactlyOne(xs$$133) {
-  if (xs$$133.tail != null) {
-    if (xs$$133.tail.tail != null) {
+export function exactlyOne(xs$$137) {
+  if (xs$$137.tail != null) {
+    if (xs$$137.tail.tail != null) {
       throw new Error("Input list too long\\nParameter name: list");
     } else {
-      return xs$$133.head;
+      return xs$$137.head;
     }
   } else {
     throw new Error("The input sequence was empty\\nParameter name: list");
   }
 }
-export function groupBy(projection$$5, xs$$135, eq$$4) {
+export function groupBy(projection$$5, xs$$139, eq$$4) {
   const dict = createMutable$$1([], eq$$4);
   let keys = new List();
-  iterate(function f$$58(v$$2) {
+  iterate(function f$$59(v$$2) {
     const key = projection$$5(v$$2);
     const matchValue$$16 = tryGetValue(dict, key, null);
 
@@ -1150,18 +1161,18 @@ export function groupBy(projection$$5, xs$$135, eq$$4) {
       addToDict(dict, key, new List(v$$2, new List()));
       keys = new List(key, keys);
     }
-  }, xs$$135);
+  }, xs$$139);
   let result$$1 = new List();
-  const xs$$137 = keys;
-  iterate(function f$$59(key$$1) {
+  const xs$$141 = keys;
+  iterate(function f$$60(key$$1) {
     result$$1 = new List([key$$1, reverse(getItemFromDict(dict, key$$1))], result$$1);
-  }, xs$$137);
+  }, xs$$141);
   return result$$1;
 }
-export function countBy(projection$$6, xs$$138, eq$$5) {
+export function countBy(projection$$6, xs$$142, eq$$5) {
   const dict$$1 = createMutable$$1([], eq$$5);
   let keys$$1 = new List();
-  iterate(function f$$60(v$$3) {
+  iterate(function f$$61(v$$3) {
     const key$$2 = projection$$6(v$$3);
     const matchValue$$17 = tryGetValue(dict$$1, key$$2, 0);
 
@@ -1171,30 +1182,30 @@ export function countBy(projection$$6, xs$$138, eq$$5) {
       dict$$1.set(key$$2, 1);
       keys$$1 = new List(key$$2, keys$$1);
     }
-  }, xs$$138);
+  }, xs$$142);
   let result$$2 = new List();
-  const xs$$140 = keys$$1;
-  iterate(function f$$61(key$$3) {
+  const xs$$144 = keys$$1;
+  iterate(function f$$62(key$$3) {
     result$$2 = new List([key$$3, getItemFromDict(dict$$1, key$$3)], result$$2);
-  }, xs$$140);
+  }, xs$$144);
   return result$$2;
 }
-export function where(predicate$$2, xs$$141) {
-  return filter(predicate$$2, xs$$141);
+export function where(predicate$$2, xs$$145) {
+  return filter(predicate$$2, xs$$145);
 }
-export function pairwise(xs$$142) {
-  const inner = function inner($xs$$143$$284, $acc$$27$$285, $x1$$1$$286) {
+export function pairwise(xs$$146) {
+  const inner = function inner($xs$$147$$287, $acc$$27$$288, $x1$$1$$289) {
     inner: while (true) {
-      const xs$$143 = $xs$$143$$284,
-            acc$$27 = $acc$$27$$285,
-            x1$$1 = $x1$$1$$286;
+      const xs$$147 = $xs$$147$$287,
+            acc$$27 = $acc$$27$$288,
+            x1$$1 = $x1$$1$$289;
 
-      if (xs$$143.tail != null) {
+      if (xs$$147.tail != null) {
         let copyOfStruct = acc$$27;
-        copyOfStruct.push([x1$$1, xs$$143.head]);
-        $xs$$143$$284 = xs$$143.tail;
-        $acc$$27$$285 = acc$$27;
-        $x1$$1$$286 = xs$$143.head;
+        copyOfStruct.push([x1$$1, xs$$147.head]);
+        $xs$$147$$287 = xs$$147.tail;
+        $acc$$27$$288 = acc$$27;
+        $x1$$1$$289 = xs$$147.head;
         continue inner;
       } else {
         return ofArray(acc$$27);
@@ -1204,22 +1215,22 @@ export function pairwise(xs$$142) {
     }
   };
 
-  var $target$$287, x1$$2, x2$$2, xs$$145;
+  var $target$$290, x1$$2, x2$$2, xs$$149;
 
-  if (xs$$142.tail != null) {
-    if (xs$$142.tail.tail != null) {
-      $target$$287 = 1;
-      x1$$2 = xs$$142.head;
-      x2$$2 = xs$$142.tail.head;
-      xs$$145 = xs$$142.tail.tail;
+  if (xs$$146.tail != null) {
+    if (xs$$146.tail.tail != null) {
+      $target$$290 = 1;
+      x1$$2 = xs$$146.head;
+      x2$$2 = xs$$146.tail.head;
+      xs$$149 = xs$$146.tail.tail;
     } else {
-      $target$$287 = 0;
+      $target$$290 = 0;
     }
   } else {
-    $target$$287 = 0;
+    $target$$290 = 0;
   }
 
-  switch ($target$$287) {
+  switch ($target$$290) {
     case 0:
       {
         return new List();
@@ -1229,7 +1240,7 @@ export function pairwise(xs$$142) {
       {
         const acc$$28 = [];
         acc$$28.push([x1$$2, x2$$2]);
-        const clo1 = partialApply(2, inner, [xs$$145]);
+        const clo1 = partialApply(2, inner, [xs$$149]);
         const clo2 = clo1(acc$$28);
         return clo2(x2$$2);
       }
@@ -1247,4 +1258,15 @@ export function windowed(windowSize, source) {
   }
 
   return res$$3;
+}
+export function splitInto(chunks, source$$1) {
+  let xs$$152;
+  let xs$$150;
+  let array$$5;
+  array$$5 = ofList(source$$1, Array);
+  xs$$150 = splitInto$$1(chunks, array$$5);
+  xs$$152 = ofArray(xs$$150);
+  return map(function f$$63(xs$$151) {
+    return ofArray(xs$$151);
+  }, xs$$152);
 }

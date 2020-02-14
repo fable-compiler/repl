@@ -56,8 +56,22 @@ export function defaultArgWith(arg, defThunk) {
 export function filter(predicate, arg) {
     return arg != null ? (!predicate(value(arg)) ? null : arg) : arg;
 }
-export function map(predicate, ...args) {
+export function map(f, arg) {
+    return arg == null ? arg : some(f(value(arg)));
+}
+export function mapMultiple(predicate, ...args) {
     return args.every((x) => x != null) ? predicate.apply(null, args) : null;
+}
+export function bind(f, arg) {
+    return arg == null ? arg : f(value(arg));
+}
+export function tryOp(op, arg) {
+    try {
+        return some(op(arg));
+    }
+    catch (_a) {
+        return null;
+    }
 }
 // CHOICE
 export const Choice = declare(function Choice(tag, name, field) {

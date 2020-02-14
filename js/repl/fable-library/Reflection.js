@@ -9,12 +9,13 @@ export class CaseInfo {
     }
 }
 export class TypeInfo {
-    constructor(fullname, generics, constructor, fields, cases) {
+    constructor(fullname, generics, constructor, fields, cases, enumCases) {
         this.fullname = fullname;
         this.generics = generics;
         this.constructor = constructor;
         this.fields = fields;
         this.cases = cases;
+        this.enumCases = enumCases;
     }
     toString() {
         return fullName(this);
@@ -80,6 +81,9 @@ export function list(generic) {
 export function array(generic) {
     return new TypeInfo(generic.fullname + "[]", [generic]);
 }
+export function enumType(fullname, underlyingType, enumCases) {
+    return new TypeInfo(fullname, [underlyingType], null, null, null, enumCases);
+}
 export const obj = new TypeInfo("System.Object");
 export const unit = new TypeInfo("Microsoft.FSharp.Core.Unit");
 export const char = new TypeInfo("System.Char");
@@ -128,12 +132,86 @@ export function getElementType(t) {
 export function isGenericType(t) {
     return t.generics != null && t.generics.length > 0;
 }
+export function isEnum(t) {
+    return t.enumCases != null && t.enumCases.length > 0;
+}
 /**
  * This doesn't replace types for fields (records) or cases (unions)
  * but it should be enough for type comparison purposes
  */
 export function getGenericTypeDefinition(t) {
     return t.generics == null ? t : new TypeInfo(t.fullname, t.generics.map(() => obj));
+}
+export function getEnumUnderlyingType(t) {
+    return t.generics[0];
+}
+export function getEnumValues(t) {
+    if (isEnum(t)) {
+        return t.enumCases.map((kv) => kv[1]);
+    }
+    else {
+        throw new Error(`${t.fullname} is not an enum type`);
+    }
+}
+export function getEnumNames(t) {
+    if (isEnum(t)) {
+        return t.enumCases.map((kv) => kv[0]);
+    }
+    else {
+        throw new Error(`${t.fullname} is not an enum type`);
+    }
+}
+function getEnumCase(t, v) {
+    if (t.enumCases != null) {
+        if (typeof v === "string") {
+            for (const kv of t.enumCases) {
+                if (kv[0] === v) {
+                    return kv;
+                }
+            }
+            throw new Error(`'${v}' was not found in ${t.fullname}`);
+        }
+        else {
+            for (const kv of t.enumCases) {
+                if (kv[1] === v) {
+                    return kv;
+                }
+            }
+            // .NET returns the number even if it doesn't match any of the cases
+            return [null, v];
+        }
+    }
+    else {
+        throw new Error(`${t.fullname} is not an enum type`);
+    }
+}
+export function parseEnum(t, str) {
+    // TODO: better int parsing here, parseInt ceils floats: "4.8" -> 4
+    const value = parseInt(str, 10);
+    return getEnumCase(t, isNaN(value) ? str : value)[1];
+}
+export function tryParseEnum(t, str) {
+    try {
+        const v = parseEnum(t, str);
+        return [true, v];
+    }
+    catch (_a) {
+        // supress error
+    }
+    return [false, null];
+}
+export function getEnumName(t, v) {
+    return getEnumCase(t, v)[0];
+}
+export function isEnumDefined(t, v) {
+    try {
+        const kv = getEnumCase(t, v);
+        return kv[0] != null;
+    }
+    catch (_a) {
+        // supress error
+    }
+    return false;
 }
 // FSharpType
 export function getUnionCases(t) {

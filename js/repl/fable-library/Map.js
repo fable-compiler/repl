@@ -1015,9 +1015,9 @@ FSharpMap.prototype.GetHashCode = function () {
 
   while (e$$1.MoveNext()) {
     const patternInput$$5 = e$$1.Current;
-    const activePatternResult3676 = patternInput$$5;
-    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3676[0]));
-    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3676[1]));
+    const activePatternResult3692 = patternInput$$5;
+    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3692[0]));
+    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3692[1]));
   }
 
   return Math.abs(res$$3) | 0;
