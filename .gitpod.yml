@@ -5,9 +5,6 @@ ports:
   - port: 8080
 
 tasks:
-  - before: >
-      mkdir ~/.ssh &&
-      echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
   - init: ./fake.sh build -t BuildLib
 
 github:
