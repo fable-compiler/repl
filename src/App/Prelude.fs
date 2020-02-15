@@ -9,18 +9,20 @@ module Literals =
     let [<Literal>] VERSION = "2.4.13" // TODO: Update automatically
     let [<Literal>] STORAGE_KEY = "fable-repl"
     let [<Literal>] MAX_LOGS_LENGTH = 200
-    let [<Literal>] HOST =
+    // let [<Literal>] HOST =
+    let HOST =
 #if DEBUG
-        "http://localhost:8080"
+        // "http://localhost:8080"
+        Browser.Dom.window.location.href
 #else
         "https://fable.io/repl"
 #endif
-    let [<Literal>] SAMPLES_JSON_URL = HOST + "/samples/samples.json"
-    let [<Literal>] REPL_LIB_MAP_JSON_URL = HOST + "/repl-lib-map.json"
-    let [<Literal>] WORKER_BUNDLE_URL = HOST + "/js/repl/worker.min.js"
-    let [<Literal>] FABLE_LIBRARY_DIR = HOST + "/js/repl/fable-library"
-    let [<Literal>] FABLE_REPL_LIB_DIR = HOST + "/js/repl/lib"
-    let [<Literal>] METADATA_DIR = HOST + "/metadata"
+    let (*[<Literal>]*) SAMPLES_JSON_URL = HOST + "/samples/samples.json"
+    let (*[<Literal>]*) REPL_LIB_MAP_JSON_URL = HOST + "/repl-lib-map.json"
+    let (*[<Literal>]*) WORKER_BUNDLE_URL = HOST + "/js/repl/worker.min.js"
+    let (*[<Literal>]*) FABLE_LIBRARY_DIR = HOST + "/js/repl/fable-library"
+    let (*[<Literal>]*) FABLE_REPL_LIB_DIR = HOST + "/js/repl/lib"
+    let (*[<Literal>]*) METADATA_DIR = HOST + "/metadata"
 
     let EXTRA_REFS =
         [|"Browser.Blob"

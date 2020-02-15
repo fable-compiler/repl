@@ -36,6 +36,7 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 var MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
+const execSync = require('child_process').execSync;
 
 // The HtmlWebpackPlugin allows us to use a template for the index.html page
 // and automatically injects <script> or <link> tags for generated bundles.
@@ -97,6 +98,17 @@ var commonPlugins = [
     })
 ];
 
+var isGitPod = process.env.GITPOD_INSTANCE_ID !== undefined;
+
+function getDevServerUrl() {
+    if (isGitPod) {
+        const url = execSync('gp url 8080');
+        return url.toString().trim();
+    } else {
+        return `http://localhost:${CONFIG.devServerPort}`;
+    }
+}
+
 module.exports = {
     entry: isProduction ? {
         app: [CONFIG.fsharpEntry, CONFIG.cssEntry]
@@ -131,12 +143,15 @@ module.exports = {
             new webpack.HotModuleReplacementPlugin(),
         ]),
     devServer: {
+        public: getDevServerUrl(),
         publicPath: "/",
         contentBase: CONFIG.assetsDir,
         port: CONFIG.devServerPort,
         proxy: CONFIG.devServerProxy,
         hot: true,
-        inline: true
+        inline: true,
+        host: '0.0.0.0',
+        allowedHosts: ['localhost', '.gitpod.io']
     },
     module: {
         rules: [
