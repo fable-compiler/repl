@@ -1,5 +1,7 @@
 # Fable REPL
 
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://github.com/fable-compiler/repl)
+
 ## Building locally
 
 To develop the REPL locally, run the `WatchApp` FAKE target and then open `localhost:8080` in your browser.
