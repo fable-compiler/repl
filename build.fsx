@@ -1,10 +1,24 @@
-// fixup bad codepage for SharpZipLib
-#r @"packages/build/FAKE/tools/ICSharpCode.SharpZipLib.dll"
-do ICSharpCode.SharpZipLib.Zip.ZipConstants.DefaultCodePage <- 437
+#r "paket: groupref netcorebuild //"
+#load ".fake/build.fsx/intellisense.fsx"
+#if !FAKE
+#r "Facades/netstandard"
+#r "netstandard"
+#endif
+
+#nowarn "52"
 
 open System
 open System.IO
 open System.Text.RegularExpressions
+
+open Fake.Core
+open Fake.IO
+open Fake.IO.Globbing.Operators
+open Fake.IO.FileSystemOperators
+open Fake.DotNet
+open Fake.Tools
+open Fake.JavaScript
+open BlackFox.Fake
 
 let CWD = __SOURCE_DIRECTORY__
 let NCAVE_FCS_REPO = Path.Combine(CWD, "../fsharp_fable")
@@ -16,179 +30,81 @@ let METADATA_SOURCE = Path.Combine(NCAVE_FCS_REPO, "temp/metadata2")
 
 let METADATA_EXPORT_DIR = Path.Combine(CWD, "src/Export")
 
-// include Fake libs
-#r "./packages/build/FAKE/tools/FakeLib.dll"
-#r "System.IO.Compression.FileSystem"
-#load "paket-files/build/fsharp/FAKE/modules/Octokit/Octokit.fsx"
-#load "paket-files/build/fable-compiler/fake-helpers/Fable.FakeHelpers.fs"
+module Util =
 
-open Fake
-open Fake.Git
-open Fake.NpmHelper
-open Fable.FakeHelpers
+    let visitFile (visitor: string -> string) (fileName : string) =
+        File.ReadAllLines(fileName)
+        |> Array.map (visitor)
+        |> fun lines -> File.WriteAllLines(fileName, lines)
 
-let mutable dotnetExePath = "dotnet"
-
-let runDotnet dir =
-    DotNetCli.RunCommand (fun p -> { p with ToolPath = dotnetExePath
-                                            WorkingDir = dir
-                                            TimeOut =  TimeSpan.FromHours 12. } )
-                                            // Extra timeout allow us to run watch mode
-                                            // Otherwise, the process is stopped every 30 minutes by default
-
-let runScript workingDir (fileName: string) args =
-    printfn "CWD: %s" workingDir
-    let fileName, args =
-        if EnvironmentHelper.isUnix then
-            let fileName = fileName.Replace("\\","/")
-            "bash", (fileName + ".sh " + args)
-        else
-            "cmd", ("/C " + fileName + " " + args)
-    let ok =
-        execProcess (fun info ->
-            info.FileName <- fileName
-            info.WorkingDirectory <- workingDir
-            info.Arguments <- args) TimeSpan.MaxValue
-    if not ok then failwith (sprintf "'%s> %s %s' task failed" workingDir fileName args)
-
-let runNpm dir command =
-    Npm (fun p ->
-            { p with
-                WorkingDirectory = dir
-                Command = Custom command
-            })
-
-let rec waitUserResponse _ =
-    let userInput = Console.ReadLine()
-    match userInput.ToUpper() with
-    | "Y" -> true
-    | "N" -> false
-    | _ ->
-        printfn "Invalid response"
-        waitUserResponse ()
-
-type RepoSetupInfo =
-    { FolderPath : string
-      GithubLink : string
-      GithubBranch : string }
-
-let ensureRepoSetup (info : RepoSetupInfo) =
-    let folderName = Path.GetFileName(info.FolderPath)
-    // Use getBuildParamOrDefault to force Y on CI server
-    // See: http://fake.build/apidocs/fake-environmenthelper.html
-    // and: https://stackoverflow.com/questions/26267601/can-i-pass-a-parameter-to-a-f-fake-build-script
-    if not (Directory.Exists(info.FolderPath)) then
-        let rootDir = Path.GetDirectoryName(info.FolderPath)
-        printfn "Can't find %s at: %s" folderName rootDir
-        let setupMode = getBuildParamOrDefault "setup" "ask"
-
-        if setupMode = "ask" then
-            printfn "Do you want me to setup it for you ? (Y/N)"
-            let autoSetup = waitUserResponse ()
-            if autoSetup then
-                printfn "Installing %s for you" folderName
-                Repository.clone rootDir info.GithubLink folderName
-                runSimpleGitCommand info.FolderPath ("checkout " + info.GithubBranch) |> ignore
+    let replaceLines (replacer: string -> Match -> string option) (reg: Regex) (fileName: string) =
+        fileName |> visitFile (fun line ->
+            let m = reg.Match(line)
+            if not m.Success
+            then line
             else
-                failwithf "You need to setup the %s project at %s yourself." folderName rootDir
-        else
-            printfn "You started with auto setup mode. Installing %s for you..." folderName
-            Repository.clone rootDir info.GithubLink folderName
-            runSimpleGitCommand info.FolderPath ("checkout " + info.GithubBranch) |> ignore
-    else
-        printfn "Directory %s found" folderName
-        // Ensure this is the correct branch
-        runSimpleGitCommand info.FolderPath ("checkout " + info.GithubBranch) |> ignore
+                match replacer line m with
+                | None -> line
+                | Some newLine -> newLine)
 
 // TODO: Get version from fable-web-worker package
 let updateVersion () =
     let version = File.ReadAllText(REPL_OUTPUT </> "version.txt")
     let reg = Regex(@"\bVERSION\s*=\s*""(.*?)""")
     let mainFile = CWD </> "src/App/Shared.fs"
-    (reg, mainFile) ||> replaceLines (fun line m ->
+    (reg, mainFile) ||> Util.replaceLines (fun line m ->
         let replacement = sprintf "VERSION = \"%s\"" version
         reg.Replace(line, replacement) |> Some)
 
-Target "BuildLibBinary" (fun _ ->
-    runDotnet (CWD </> "src/Lib") "build"
-)
-
-Target "BuildFcsExport" (fun _ ->
-    ensureRepoSetup
-        { FolderPath = NCAVE_FCS_REPO
-          GithubLink = "git@github.com:ncave/fsharp.git"
-          GithubBranch = "export" }
-
-    sprintf "Export.Metadata --envvar FCS_EXPORT_PROJECT \"%s\"" METADATA_EXPORT_DIR
-    |> runScript NCAVE_FCS_REPO "fcs\\build"
-)
-
-let copyMetadata fromDir =
-    CleanDir METADATA_OUTPUT
-    CopyDir METADATA_OUTPUT fromDir (fun _ -> true)
-    // CopyDir METADATA_OUTPUT "public/metadata-extra" (fun _ -> true)
-    // Change extension to .txt so Github pages compress the files when being served
-    !! (METADATA_OUTPUT </> "*.dll") |> Seq.iter(fun filename ->
-        Rename (filename + ".txt") filename)
-
-Target "GenerateMetadata" (fun _ ->
-    copyMetadata METADATA_SOURCE
-)
-
-Target "InstallDotNetCore" (fun _ ->
-    let dotnetcliVersion =
-        Path.Combine(__SOURCE_DIRECTORY__, "global.json")
-        |> findLineAndGetGroupValue "\"version\": \"(.*?)\"" 1
-    dotnetExePath <- DotNetCli.InstallDotNetSDK dotnetcliVersion
-)
-
-Target "Clean" (fun _ ->
+let clean = BuildTask.create "Clean" [ ] {
     !! "public/js"
     ++ LIBS_OUTPUT
     ++ "deploy"
-  |> CleanDirs
-)
+  |> Shell.cleanDirs
+}
 
-Target "Restore" (fun _ ->
-    runDotnet CWD "restore Fable.REPL.sln"
-)
+let restore = BuildTask.create "Restore" [ clean ] {
+    DotNet.restore
+        (DotNet.Options.withWorkingDirectory CWD)
+        "Fable.REPL.sln"
+}
 
-Target "NpmInstall" (fun _ ->
-    Npm (fun p ->
-            { p with
-                Command = Install Standard
-            })
-)
+let npmInstall = BuildTask.create "NpmInstall" [ restore ] {
+    Npm.install id
+}
 
-Target "CopyModules" (fun _ ->
+let copyModules = BuildTask.create "CopyModules" [ npmInstall ] {
     let cssOutput = LIBS_OUTPUT </> "css"
-    CreateDir cssOutput
-    CopyFile LIBS_OUTPUT "node_modules/react/umd/react.production.min.js"
-    CopyFile LIBS_OUTPUT "node_modules/react-dom/umd/react-dom.production.min.js"
-    CopyFile cssOutput "node_modules/bulma/css/bulma.min.css"
-    CopyFile cssOutput "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
-    CopyDir (LIBS_OUTPUT </> "webfonts") "node_modules/@fortawesome/fontawesome-free/webfonts" (fun _ -> true)
+    Directory.create cssOutput
+    Shell.copyFile LIBS_OUTPUT "node_modules/react/umd/react.production.min.js"
+    Shell.copyFile LIBS_OUTPUT "node_modules/react-dom/umd/react-dom.production.min.js"
+    Shell.copyFile cssOutput "node_modules/bulma/css/bulma.min.css"
+    Shell.copyFile cssOutput "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
+    Shell.copyDir (LIBS_OUTPUT </> "webfonts") "node_modules/@fortawesome/fontawesome-free/webfonts" (fun _ -> true)
 
-    copyMetadata "node_modules/fable-metadata/lib"
+    Shell.cleanDir METADATA_OUTPUT
+    Shell.copyDir METADATA_OUTPUT "node_modules/fable-metadata/lib" (fun _ -> true)
+    // CopyDir METADATA_OUTPUT "public/metadata-extra" (fun _ -> true)
+    // Change extension to .txt so Github pages compress the files when being served
+    !! (METADATA_OUTPUT </> "*.dll")
+    |> Seq.iter(fun filename ->
+        Shell.rename (filename + ".txt") filename
+    )
 
     // TODO: Update version in Literals (Prelude.fs)
-    CopyDir REPL_OUTPUT "node_modules/fable-standalone/dist" (fun _ -> true)
-)
+    Shell.copyDir REPL_OUTPUT "node_modules/fable-standalone/dist" (fun _ -> true)
+}
 
-Target "WatchApp" (fun _ ->
-    runNpm CWD "start"
-)
+// TODO re-add generate metadata for REPL lib using git submobules
+// let buildLibBinary = BuildTask.create "BuildLibBinary" [ copyModules ] {
+//     DotNet.build
+//         (DotNet.Options.withWorkingDirectory (CWD </> "src/Lib"))
+//         "Fable.Repl.Lib.fsproj"
+// }
 
-Target "BuildApp" (fun _ ->
-    runNpm CWD "run build"
-)
 
-Target "PublishGithubPages" (fun _->
-    runNpm CWD "run deploy"
-)
-
-Target "BuildLib" (fun _ ->
-    runNpm CWD "run build-lib"
+let buildLib = BuildTask.create "BuildLib" [ copyModules ] {
+    Npm.run "build-lib" id
 
     // Ensure that all imports end with .js
     let outDir = REPL_OUTPUT </> "lib"
@@ -200,41 +116,40 @@ Target "BuildLib" (fun _ ->
                 if m.Value.EndsWith(".js") then m.Value else m.Value + ".js" ))
             |> Seq.toArray
         File.WriteAllLines(file, newLines)
-)
+}
+
+let buildApp = BuildTask.create "BuildApp" [ buildLib ] {
+    Npm.run "build" id
+}
+
+let watchApp = BuildTask.create "WatchApp" [ buildLib ] {
+    Npm.run "start" id
+}
+
+let publishGithubPages = BuildTask.create "PublishGithubPages" [ buildApp ] {
+    Npm.run "deploy" id
+}
 
 // Test samples build correctly
-Target "BuildSamples" (fun _ ->
+let buildSamples = BuildTask.create "BuildSamples" [] {
     // fable-splitter will adjust the fable-core path
     let fableCoreDir = "force:${outDir}../fable-core"
     let libProj = "public/samples/Samples.fsproj"
     let outDir = "temp"
     let splitterArgs = sprintf "%s -o %s --allFiles" libProj outDir
-    sprintf "run -p ../fable/src/dotnet/Fable.Compiler fable-splitter --fable-core %s --args \"%s\""
-        fableCoreDir splitterArgs
-    |> runDotnet CWD
-)
+    let args =
+        sprintf "-p ../fable/src/dotnet/Fable.Compiler fable-splitter --fable-core %s --args \"%s\"" fableCoreDir splitterArgs
 
-Target "All" DoNothing
+    let res =
+        DotNet.exec
+            (DotNet.Options.withWorkingDirectory CWD)
+            "run"
+            args
 
-// Build order
-"Clean"
-    ==> "InstallDotNetCore"
-    ==> "Restore"
-    ==> "NpmInstall"
-    ==> "CopyModules"
-    ==> "BuildLib"
-    ==> "BuildApp"
-    ==> "All"
+    if not res.OK then
+        Trace.traceErrorfn "Error when building the samples:\n%A" res.Errors
+}
 
-"BuildLibBinary"
-    ==> "BuildFcsExport"
-    ==> "GenerateMetadata"
+let _all = BuildTask.createEmpty "All" [ buildApp ]
 
-"BuildApp"
-    ==> "PublishGithubPages"
-
-"BuildLib"
-    ==> "WatchApp"
-
-// start build
-RunTargetOrDefault "All"
+BuildTask.runOrList ()
