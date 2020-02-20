@@ -110,7 +110,7 @@ let private renderExpandedWidgets (states : Set<string>) dispatch (title, icon, 
                 match maxHeight with
                 | Some maxHeight ->
                     [ Props [ Style [ MaxHeight maxHeight
-                                      OverflowY "auto" ] ] ]
+                                      OverflowY OverflowOptions.Auto ] ] ]
                 | None -> [ ]
             baseView Fa.Solid.AngleUp (Some (Card.content props [ widget ]))
 
@@ -120,7 +120,7 @@ let renderCollapsedWidgets dispatch (title, icon, widget, maxHeight) =
         match maxHeight with
         | Some maxHeight ->
             [ Props [ Style [ MaxHeight maxHeight
-                              OverflowY "auto" ] ] ]
+                              OverflowY OverflowOptions.Auto ] ] ]
         | None -> [ ]
 
     div [ Class "item" ]

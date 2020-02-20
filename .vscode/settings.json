@@ -9,7 +9,7 @@
         "**/obj": true,
         "**/.fake": true,
         "**/packages": true,
-        "**/node_modules": true,
+        "**/node_modules": false,
         "**/bower_components": true
     },
     "files.trimTrailingWhitespace": true,

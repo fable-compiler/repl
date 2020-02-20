@@ -91,8 +91,33 @@ let copyModules = BuildTask.create "CopyModules" [ npmInstall ] {
         Shell.rename (filename + ".txt") filename
     )
 
-    // TODO: Update version in Literals (Prelude.fs)
     Shell.copyDir REPL_OUTPUT "node_modules/fable-standalone/dist" (fun _ -> true)
+
+    // Automatically update the version in Prelude.fs
+    let preludeFile = CWD </> "src/App/Prelude.fs"
+    let reg = Regex(@"let \[<Literal>\] VERSION = ""(.*)""")
+    let fableCompilerPackageJson = CWD </> "node_modules/fable-compiler/package.json"
+    let currentVersionRegex = Regex(@"^\s*""version"":\s*""(.*)""")
+    let currentVersion =
+        fableCompilerPackageJson
+        |> File.ReadLines 
+        |> Seq.find (fun line ->
+            currentVersionRegex.IsMatch(line)
+        )
+        |> fun line ->
+            currentVersionRegex.Match(line).Groups.[1].Value
+
+    let newLines =
+        preludeFile
+        |> File.ReadLines 
+        |> Seq.map (fun line ->
+            reg.Replace(line, fun m ->
+                m.Groups.[0].Value.Replace(m.Groups.[1].Value, currentVersion)
+            )
+        )
+        |> Seq.toArray
+
+    File.WriteAllLines(preludeFile, newLines)
 }
 
 // TODO re-add generate metadata for REPL lib using git submobules
@@ -108,12 +133,26 @@ let buildLib = BuildTask.create "BuildLib" [ copyModules ] {
 
     // Ensure that all imports end with .js
     let outDir = REPL_OUTPUT </> "lib"
-    let reg = Regex(@"^import.+?""[^""]+")
+    let regAllImports = Regex(@"^import.+?""[^""]+")
+    let reqFableLibrary = Regex(@"((../)fable-library[^/]*)")
     for file in Directory.EnumerateFiles(CWD </> outDir, "*.js", SearchOption.AllDirectories) do
         let newLines =
             File.ReadLines file
-            |> Seq.map (fun line -> reg.Replace(line, fun m ->
-                if m.Value.EndsWith(".js") then m.Value else m.Value + ".js" ))
+            |> Seq.map (fun line -> 
+                regAllImports.Replace(line, fun m ->
+                    // Patch the fable-library import from the "repl libs" 
+                    // to make sure they use the same `fable-library` module as the code 
+                    // compiled from the REPL
+                    // This is needed in order to make reflection work
+                    // See https://github.com/fable-compiler/repl/issues/97#issuecomment-588498482
+                    let adaptedLine =
+                        reqFableLibrary.Replace(m.Value, fun m ->
+                            m.Value.Replace(m.Groups.[1].Value, "../../fable-library")
+                        )
+
+                    if adaptedLine.EndsWith(".js") then adaptedLine else adaptedLine + ".js" 
+                )
+            )
             |> Seq.toArray
         File.WriteAllLines(file, newLines)
 }
