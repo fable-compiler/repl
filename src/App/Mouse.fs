@@ -38,7 +38,6 @@ module Cmd =
     let iframeMessage (args : IframeMessageArgs<'Msg>) =
         let handler dispatch =
             window.addEventListener("message", fun ev ->
-                console.log(ev?data)
                 let iframeMessageDecoder =
                     Decode.field "type" Decode.string
                     |> Decode.option
@@ -74,5 +73,6 @@ module Cmd =
                         #if DEBUG
                         console.warn error
                         #endif
+                        ()
             )
         [ handler ]
