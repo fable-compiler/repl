@@ -24,7 +24,8 @@
                         "type": "menu-item",
                         "label": "Calculator",
                         "fsharpCode": "elmish/calculator.fs",
-                        "htmlCode": "elmish/calculator.html"
+                        "htmlCode": "elmish/calculator.html",
+                        "cssCode": "elmish/calculator.css"
                     },
                     {
                         "type": "menu-item",
