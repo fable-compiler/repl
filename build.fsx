@@ -156,6 +156,26 @@ let copyModules = BuildTask.create "CopyModules" [ npmInstall ] {
 //         "Fable.Repl.Lib.fsproj"
 // }
 
+let updatePreludeREPLVersion = BuildTask.create "UpdateREPLVersion" [ ] {
+    let newVersion = Changelog.getLastVersion()
+
+    let reg = Regex(@"let \[<Literal>\] REPL_VERSION = ""(.*)""")
+    let newLines =
+        PRELUDE_FILE
+        |> File.ReadLines 
+        |> Seq.map (fun line ->
+            reg.Replace(line, fun m ->
+                let previousVersion = m.Groups.[1].Value
+                if previousVersion = newVersion then
+                    failwith "You need to update the version in the CHANGELOG.md before publishing a new version of the REPL"
+                else
+                    m.Groups.[0].Value.Replace(m.Groups.[1].Value, newVersion)
+            )
+        )
+        |> Seq.toArray
+
+    File.WriteAllLines(PRELUDE_FILE, newLines)    
+}
 
 let buildLib = BuildTask.create "BuildLib" [ copyModules ] {
     Npm.run "build-lib" id
@@ -186,7 +206,7 @@ let buildLib = BuildTask.create "BuildLib" [ copyModules ] {
         File.WriteAllLines(file, newLines)
 }
 
-let buildApp = BuildTask.create "BuildApp" [ buildLib ] {
+let buildApp = BuildTask.create "BuildApp" [ updatePreludeREPLVersion.IfNeeded; buildLib ] {
     Npm.run "build" id
 }
 
@@ -194,38 +214,21 @@ let watchApp = BuildTask.create "WatchApp" [ buildLib ] {
     Npm.run "start" id
 }
 
-let _release = BuildTask.create "Release" [ buildApp ] {
+let _release = BuildTask.create "Release" [ updatePreludeREPLVersion; buildApp ] {
     let token =
         match Environment.environVarOrDefault "GITHUB_TOKEN" "" with
         | s when not (String.IsNullOrWhiteSpace s) -> s
         | _ -> failwith "The Github token must be set in a GITHUB_TOKEN environmental variable"
 
-    let newVersion = Changelog.getLastVersion()
-
-    let reg = Regex(@"let \[<Literal>\] REPL_VERSION = ""(.*)""")
-    let newLines =
-        PRELUDE_FILE
-        |> File.ReadLines 
-        |> Seq.map (fun line ->
-            reg.Replace(line, fun m ->
-                let previousVersion = m.Groups.[1].Value
-                if previousVersion = newVersion then
-                    failwith "You need to update the version in the CHANGELOG.md before publishing a new version of the REPL"
-                else
-                    m.Groups.[0].Value.Replace(m.Groups.[1].Value, newVersion)
-            )
-        )
-        |> Seq.toArray
-
-    File.WriteAllLines(PRELUDE_FILE, newLines)    
+    let version = Changelog.getLastVersion()
 
     Git.Staging.stageAll CWD
-    let commitMsg = sprintf "Release version %s" newVersion
+    let commitMsg = sprintf "Release version %s" version
     Git.Commit.exec CWD commitMsg
     Git.Branches.push CWD
 
     GitHub.createClientWithToken token
-    |> GitHub.draftNewRelease "fable-compiler" "repl" newVersion (Changelog.isPreRelease newVersion) (Changelog.getNotes newVersion)
+    |> GitHub.draftNewRelease "fable-compiler" "repl" version (Changelog.isPreRelease version) (Changelog.getNotes version)
     // |> GitHub.uploadFile nupkg
     |> GitHub.publishDraft
     |> Async.RunSynchronously
