@@ -4,10 +4,31 @@
 export function extend(target, ...sources) {
     for (const source of sources) {
         for (const key of Object.keys(source)) {
-            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+            const descr = Object.getOwnPropertyDescriptor(source, key);
+            if (descr) {
+                Object.defineProperty(target, key, descr);
+            }
         }
     }
     return target;
+}
+export function isIterable(x) {
+    return x != null && typeof x === "object" && Symbol.iterator in x;
+}
+export function isArrayLike(x) {
+    return x != null && (Array.isArray(x) || ArrayBuffer.isView(x));
+}
+export function isComparer(x) {
+    return x != null && typeof x.Compare === "function";
+}
+export function isComparable(x) {
+    return x != null && typeof x.CompareTo === "function";
+}
+export function isEquatable(x) {
+    return x != null && typeof x.Equals === "function";
+}
+export function isHashable(x) {
+    return x != null && typeof x.GetHashCode === "function";
 }
 export function isDisposable(x) {
     return x != null && typeof x.Dispose === "function";
@@ -19,7 +40,7 @@ export class Comparer {
 }
 export function comparerFromEqualityComparer(comparer) {
     // Sometimes IEqualityComparer also implements IComparer
-    if (typeof comparer.Compare === "function") {
+    if (isComparer(comparer)) {
         return new Comparer(comparer.Compare);
     }
     else {
@@ -179,15 +200,14 @@ export function structuralHash(x) {
         case "string":
             return stringHash(x);
         default: {
-            if (typeof x.GetHashCode === "function") {
+            if (isHashable(x)) {
                 return x.GetHashCode();
             }
-            else if (isArray(x)) {
-                const ar = x;
-                const len = ar.length;
+            else if (isArrayLike(x)) {
+                const len = x.length;
                 const hashes = new Array(len);
                 for (let i = 0; i < len; i++) {
-                    hashes[i] = structuralHash(ar[i]);
+                    hashes[i] = structuralHash(x[i]);
                 }
                 return combineHashCodes(hashes);
             }
@@ -196,12 +216,6 @@ export function structuralHash(x) {
             }
         }
     }
-}
-export function isArray(x) {
-    return Array.isArray(x) || ArrayBuffer.isView(x);
-}
-export function isIterable(x) {
-    return x != null && typeof x === "object" && Symbol.iterator in x;
 }
 export function equalArraysWith(x, y, eq) {
     if (x == null) {
@@ -253,11 +267,11 @@ export function equals(x, y) {
     else if (typeof x !== "object") {
         return false;
     }
-    else if (typeof x.Equals === "function") {
+    else if (isEquatable(x)) {
         return x.Equals(y);
     }
-    else if (isArray(x)) {
-        return isArray(y) && equalArrays(x, y);
+    else if (isArrayLike(x)) {
+        return isArrayLike(y) && equalArrays(x, y);
     }
     else if (x instanceof Date) {
         return (y instanceof Date) && compareDates(x, y) === 0;
@@ -345,14 +359,14 @@ export function compare(x, y) {
     else if (typeof x !== "object") {
         return x < y ? -1 : 1;
     }
-    else if (typeof x.CompareTo === "function") {
+    else if (isComparable(x)) {
         return x.CompareTo(y);
     }
-    else if (isArray(x)) {
-        return isArray(y) && compareArrays(x, y);
+    else if (isArrayLike(x) && isArrayLike(y)) {
+        return compareArrays(x, y);
     }
-    else if (x instanceof Date) {
-        return (y instanceof Date) && compareDates(x, y);
+    else if (x instanceof Date && y instanceof Date) {
+        return compareDates(x, y);
     }
     else {
         return 1;
@@ -498,7 +512,7 @@ export function escapeUriString(s) {
 // ICollection.Clear and Count members can be called on Arrays
 // or Dictionaries so we need a runtime check (see #1120)
 export function count(col) {
-    if (isArray(col)) {
+    if (isArrayLike(col)) {
         return col.length;
     }
     else {
@@ -510,7 +524,7 @@ export function count(col) {
     }
 }
 export function clear(col) {
-    if (isArray(col)) {
+    if (isArrayLike(col)) {
         col.splice(0);
     }
     else {
@@ -559,7 +573,7 @@ export function uncurry(arity, f) {
 }
 export function curry(arity, f) {
     if (f == null) {
-        return null;
+        return undefined;
     }
     if (CURRIED_KEY in f) {
         return f[CURRIED_KEY];

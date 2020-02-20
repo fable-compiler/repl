@@ -85,74 +85,97 @@ const isWhiteSpaceMask = 0
     | 1 << 11 /* SpaceSeparator */
     | 1 << 12 /* LineSeparator */
     | 1 << 13 /* ParagraphSeparator */;
-export const unicodeCategoryFunc = getCategoryFunc();
-export function getUnicodeCategory(s, index) {
-    const cp = s.charCodeAt(index || 0);
+const unicodeCategoryFunc = getCategoryFunc();
+function charCodeAt(s, index) {
+    if (index >= 0 && index < s.length) {
+        return s.charCodeAt(index);
+    }
+    else {
+        throw Error("Index out of range.");
+    }
+}
+export const getUnicodeCategory = (s) => getUnicodeCategory2(s, 0);
+export const isControl = (s) => isControl2(s, 0);
+export const isDigit = (s) => isDigit2(s, 0);
+export const isLetter = (s) => isLetter2(s, 0);
+export const isLetterOrDigit = (s) => isLetterOrDigit2(s, 0);
+export const isUpper = (s) => isUpper2(s, 0);
+export const isLower = (s) => isLower2(s, 0);
+export const isNumber = (s) => isNumber2(s, 0);
+export const isPunctuation = (s) => isPunctuation2(s, 0);
+export const isSeparator = (s) => isSeparator2(s, 0);
+export const isSymbol = (s) => isSymbol2(s, 0);
+export const isWhiteSpace = (s) => isWhiteSpace2(s, 0);
+export const isHighSurrogate = (s) => isHighSurrogate2(s, 0);
+export const isLowSurrogate = (s) => isLowSurrogate2(s, 0);
+export const isSurrogate = (s) => isSurrogate2(s, 0);
+export function getUnicodeCategory2(s, index) {
+    const cp = charCodeAt(s, index);
     return unicodeCategoryFunc(cp);
 }
-export function isControl(s, index) {
-    const test = 1 << getUnicodeCategory(s, index);
+export function isControl2(s, index) {
+    const test = 1 << getUnicodeCategory2(s, index);
     return (test & isControlMask) !== 0;
 }
-export function isDigit(s, index) {
-    const test = 1 << getUnicodeCategory(s, index);
+export function isDigit2(s, index) {
+    const test = 1 << getUnicodeCategory2(s, index);
     return (test & isDigitMask) !== 0;
 }
-export function isLetter(s, index) {
-    const test = 1 << getUnicodeCategory(s, index);
+export function isLetter2(s, index) {
+    const test = 1 << getUnicodeCategory2(s, index);
     return (test & isLetterMask) !== 0;
 }
-export function isLetterOrDigit(s, index) {
-    const test = 1 << getUnicodeCategory(s, index);
+export function isLetterOrDigit2(s, index) {
+    const test = 1 << getUnicodeCategory2(s, index);
     return (test & isLetterOrDigitMask) !== 0;
 }
-export function isUpper(s, index) {
-    const test = 1 << getUnicodeCategory(s, index);
+export function isUpper2(s, index) {
+    const test = 1 << getUnicodeCategory2(s, index);
     return (test & isUpperMask) !== 0;
 }
-export function isLower(s, index) {
-    const test = 1 << getUnicodeCategory(s, index);
+export function isLower2(s, index) {
+    const test = 1 << getUnicodeCategory2(s, index);
     return (test & isLowerMask) !== 0;
 }
-export function isNumber(s, index) {
-    const test = 1 << getUnicodeCategory(s, index);
+export function isNumber2(s, index) {
+    const test = 1 << getUnicodeCategory2(s, index);
     return (test & isNumberMask) !== 0;
 }
-export function isPunctuation(s, index) {
-    const test = 1 << getUnicodeCategory(s, index);
+export function isPunctuation2(s, index) {
+    const test = 1 << getUnicodeCategory2(s, index);
     return (test & isPunctuationMask) !== 0;
 }
-export function isSeparator(s, index) {
-    const test = 1 << getUnicodeCategory(s, index);
+export function isSeparator2(s, index) {
+    const test = 1 << getUnicodeCategory2(s, index);
     return (test & isSeparatorMask) !== 0;
 }
-export function isSymbol(s, index) {
-    const test = 1 << getUnicodeCategory(s, index);
+export function isSymbol2(s, index) {
+    const test = 1 << getUnicodeCategory2(s, index);
     return (test & isSymbolMask) !== 0;
 }
-export function isWhiteSpace(s, index) {
-    const test = 1 << getUnicodeCategory(s, index);
+export function isWhiteSpace2(s, index) {
+    const test = 1 << getUnicodeCategory2(s, index);
     if ((test & isWhiteSpaceMask) !== 0) {
         return true;
     }
-    const cp = s.charCodeAt(index || 0);
+    const cp = charCodeAt(s, index);
     return (0x09 <= cp && cp <= 0x0D) || cp === 0x85 || cp === 0xA0;
 }
-export function isHighSurrogate(s, index) {
-    const cp = s.charCodeAt(index || 0);
+export function isHighSurrogate2(s, index) {
+    const cp = charCodeAt(s, index);
     return (0xD800 <= cp && cp <= 0xDBFF);
 }
-export function isLowSurrogate(s, index) {
-    const cp = s.charCodeAt(index || 0);
+export function isLowSurrogate2(s, index) {
+    const cp = charCodeAt(s, index);
     return (0xDC00 <= cp && cp <= 0xDFFF);
 }
-export function isSurrogate(s, index) {
-    const cp = s.charCodeAt(index || 0);
+export function isSurrogate2(s, index) {
+    const cp = charCodeAt(s, index);
     return (0xD800 <= cp && cp <= 0xDFFF);
 }
 export function isSurrogatePair(s, index) {
     return typeof index === "number"
-        ? isHighSurrogate(s, index) && isLowSurrogate(s, index + 1)
+        ? isHighSurrogate2(s, index) && isLowSurrogate2(s, index + 1)
         : isHighSurrogate(s) && isLowSurrogate(index);
 }
 export function parse(input) {

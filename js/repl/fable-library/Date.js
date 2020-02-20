@@ -86,9 +86,10 @@ function dateToStringWithCustomFormat(date, format, utc) {
     });
 }
 function dateToStringWithOffset(date, format) {
-    const d = new Date(date.getTime() + date.offset);
+    var _a, _b, _c;
+    const d = new Date(date.getTime() + (_a = date.offset, (_a !== null && _a !== void 0 ? _a : 0)));
     if (typeof format !== "string") {
-        return d.toISOString().replace(/\.\d+/, "").replace(/[A-Z]|\.\d+/g, " ") + dateOffsetToString(date.offset);
+        return d.toISOString().replace(/\.\d+/, "").replace(/[A-Z]|\.\d+/g, " ") + dateOffsetToString((_b = date.offset, (_b !== null && _b !== void 0 ? _b : 0)));
     }
     else if (format.length === 1) {
         switch (format) {
@@ -97,7 +98,7 @@ function dateToStringWithOffset(date, format) {
             case "T":
             case "t": return dateToHalfUTCString(d, "second");
             case "O":
-            case "o": return dateToISOStringWithOffset(d, date.offset);
+            case "o": return dateToISOStringWithOffset(d, (_c = date.offset, (_c !== null && _c !== void 0 ? _c : 0)));
             default: throw new Error("Unrecognized Date print format");
         }
     }
@@ -152,11 +153,12 @@ export function fromTicks(ticks, kind) {
     return date;
 }
 export function fromDateTimeOffset(date, kind) {
+    var _a;
     switch (kind) {
         case 1 /* UTC */: return DateTime(date.getTime(), 1 /* UTC */);
         case 2 /* Local */: return DateTime(date.getTime(), 2 /* Local */);
         default:
-            const d = DateTime(date.getTime() + date.offset, kind);
+            const d = DateTime(date.getTime() + (_a = date.offset, (_a !== null && _a !== void 0 ? _a : 0)), kind);
             return DateTime(d.getTime() - dateOffset(d), kind);
     }
 }
@@ -178,7 +180,7 @@ export function parseRaw(str) {
         // tslint:disable-next-line:max-line-length
         const m = /^\s*(\d+[^\w\s:]\d+[^\w\s:]\d+)?\s*(\d+:\d+(?::\d+(?:\.\d+)?)?)?\s*([AaPp][Mm])?\s*([+-]\d+(?::\d+)?)?\s*$/.exec(str);
         if (m != null) {
-            let baseDate = null;
+            let baseDate;
             let timeInSeconds = 0;
             if (m[2] != null) {
                 const timeParts = m[2].split(":");

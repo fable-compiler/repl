@@ -128,7 +128,7 @@ export function merge(event1, event2) {
 export function pairwise(sourceEvent) {
     const source = sourceEvent;
     return new Event((observer) => {
-        let last = null;
+        let last;
         return source.Subscribe(new Observer((next) => {
             if (last != null) {
                 observer.OnNext([last, next]);

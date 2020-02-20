@@ -1,22 +1,22 @@
-import { toText, printf, validateGuid, join } from "../fable-library.2.4.2/String.js";
-import { mapCurriedArgs, compare, curry, comparePrimitives, uncurry, int32ToString, partialApply } from "../fable-library.2.4.2/Util.js";
-import { mapOk, defaultArg, some, Result } from "../fable-library.2.4.2/Option.js";
+import { toText, printf, validateGuid, join } from "../../fable-library/String.js";
+import { mapCurriedArgs, compare, curry, comparePrimitives, uncurry, int32ToString, partialApply } from "../../fable-library/Util.js";
+import { mapOk, defaultArg, some, Result } from "../../fable-library/Option.js";
 import { Util$$$CachedDecoders as Util$0024$0024$0024CachedDecoders, Util$002ECache$00601$$GetOrAdd$$43981464 as Util$0024002ECache$002400601$0024$0024GetOrAdd$0024$002443981464, ErrorReason } from "./Types.js";
-import { tryParse } from "../fable-library.2.4.2/Int32.js";
-import { toNumber, fromBits, tryParse as tryParse$$1, fromInteger } from "../fable-library.2.4.2/Long.js";
-import { parse, fromInt32 } from "../fable-library.2.4.2/BigInt.js";
-import { tryParse as tryParse$$2 } from "../fable-library.2.4.2/Decimal.js";
-import Decimal from "../fable-library.2.4.2/Decimal.js";
-import { toUniversalTime, tryParse as tryParse$$3, minValue } from "../fable-library.2.4.2/Date.js";
-import { tryParse as tryParse$$4, minValue as minValue$$1 } from "../fable-library.2.4.2/DateOffset.js";
-import { tryParse as tryParse$$5 } from "../fable-library.2.4.2/TimeSpan.js";
-import { declare, List } from "../fable-library.2.4.2/Types.js";
-import { ofArray, map as map$$1, length, ofSeq, append, reverse, fold, tryLast } from "../fable-library.2.4.2/List.js";
-import { ofList as ofList$$1, map as map$$2, tryFind, foldBack2, foldBack, fill, fold as fold$$1 } from "../fable-library.2.4.2/Array.js";
-import { fold as fold$$2 } from "../fable-library.2.4.2/Seq.js";
-import { empty, tryFind as tryFind$$1, ofSeq as ofSeq$$1, ofList } from "../fable-library.2.4.2/Map.js";
-import { getGenerics, getGenericTypeDefinition, makeTuple, getTupleElements, isTuple, isGenericType, getElementType, isArray, isUnion, makeRecord, getRecordElements, isRecord, fullName, getUnionCaseFields, makeUnion as makeUnion$$1, name as name$$6, getUnionCases, type } from "../fable-library.2.4.2/Reflection.js";
-import { ofSeq as ofSeq$$2 } from "../fable-library.2.4.2/Set.js";
+import { tryParse } from "../../fable-library/Int32.js";
+import { toNumber, fromBits, tryParse as tryParse$$1, fromInteger } from "../../fable-library/Long.js";
+import { parse, fromInt32 } from "../../fable-library/BigInt.js";
+import { tryParse as tryParse$$2 } from "../../fable-library/Decimal.js";
+import Decimal from "../../fable-library/Decimal.js";
+import { toUniversalTime, tryParse as tryParse$$3, minValue } from "../../fable-library/Date.js";
+import { tryParse as tryParse$$4, minValue as minValue$$1 } from "../../fable-library/DateOffset.js";
+import { tryParse as tryParse$$5 } from "../../fable-library/TimeSpan.js";
+import { declare, List } from "../../fable-library/Types.js";
+import { ofArray, map as map$$1, length, ofSeq, append, reverse, fold, tryLast } from "../../fable-library/List.js";
+import { ofList as ofList$$1, map as map$$2, tryFind, foldBack2, foldBack, addInPlace, fill, fold as fold$$1 } from "../../fable-library/Array.js";
+import { fold as fold$$2 } from "../../fable-library/Seq.js";
+import { empty, tryFind as tryFind$$1, ofSeq as ofSeq$$1, ofList } from "../../fable-library/Map.js";
+import { getGenerics, getGenericTypeDefinition, makeTuple, getTupleElements, isTuple, isGenericType, getElementType, isArray, isUnion, makeRecord, getRecordElements, isRecord, fullName, getUnionCaseFields, makeUnion as makeUnion$$1, name as name$$6, getUnionCases, type } from "../../fable-library/Reflection.js";
+import { ofSeq as ofSeq$$2 } from "../../fable-library/Set.js";
 export function Helpers$$$getField(fieldName, o) {
   return o[fieldName];
 }
@@ -775,7 +775,7 @@ function unwrapWith(errors$$1, path$$39, decoder$$20, value$$58) {
   matchValue$$28 = clo1$$2(value$$58);
 
   if (matchValue$$28.tag === 1) {
-    errors$$1.push(matchValue$$28.fields[0]);
+    addInPlace(matchValue$$28.fields[0], errors$$1);
     return null;
   } else {
     return matchValue$$28.fields[0];
@@ -851,7 +851,7 @@ export const Getters$00601 = declare(function Thoth_Json_Decode_Getters(path$$40
               if (v$$6 == null) {
                 return null;
               } else {
-                $this$$3.errors.push(matchValue$$29.fields[0]);
+                addInPlace(matchValue$$29.fields[0], $this$$3.errors);
                 return null;
               }
             }
@@ -863,7 +863,7 @@ export const Getters$00601 = declare(function Thoth_Json_Decode_Getters(path$$40
 
           case 2:
             {
-              $this$$3.errors.push(matchValue$$29.fields[0]);
+              addInPlace(matchValue$$29.fields[0], $this$$3.errors);
               return null;
             }
         }

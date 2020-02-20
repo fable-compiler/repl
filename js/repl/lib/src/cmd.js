@@ -1,7 +1,7 @@
-import { concat, map, iterate } from "../fable-library.2.4.2/List.js";
-import { List } from "../fable-library.2.4.2/Types.js";
-import { startImmediate, catchAsync } from "../fable-library.2.4.2/Async.js";
-import { singleton } from "../fable-library.2.4.2/AsyncBuilder.js";
+import { concat, map, iterate } from "../../fable-library/List.js";
+import { List } from "../../fable-library/Types.js";
+import { startImmediate, catchAsync } from "../../fable-library/Async.js";
+import { singleton } from "../../fable-library/AsyncBuilder.js";
 export function Cmd$$$exec(dispatch, cmd) {
   iterate(function action(sub) {
     sub(dispatch);
@@ -127,7 +127,7 @@ export function Cmd$002EOfPromise$$$either(task$$7, arg$$6, ofSuccess$$4, ofErro
     }).catch(function ($arg$$13) {
       return dispatch$$10((ofError$$4(($arg$$13))));
     });
-    value$$1, null;
+    void value$$1;
   }, new List());
 }
 export function Cmd$002EOfPromise$$$perform(task$$8, arg$$7, ofSuccess$$5) {
@@ -135,7 +135,7 @@ export function Cmd$002EOfPromise$$$perform(task$$8, arg$$7, ofSuccess$$5) {
     const value$$2 = task$$8(arg$$7).then(function ($arg$$14) {
       return dispatch$$11(ofSuccess$$5($arg$$14));
     });
-    value$$2, null;
+    void value$$2;
   }, new List());
 }
 export function Cmd$002EOfPromise$$$attempt(task$$9, arg$$8, ofError$$5) {
@@ -143,13 +143,13 @@ export function Cmd$002EOfPromise$$$attempt(task$$9, arg$$8, ofError$$5) {
     const value$$4 = task$$9(arg$$8).catch(function ($arg$$16) {
       dispatch$$12((ofError$$5(($arg$$16))));
     });
-    value$$4, null;
+    void value$$4;
   }, new List());
 }
 export function Cmd$002EOfPromise$$$result(task$$10) {
   return new List(function bind$$10(dispatch$$13) {
     const value$$5 = task$$10.then(dispatch$$13);
-    value$$5, null;
+    void value$$5;
   }, new List());
 }
 export function Cmd$$$ofPromise(task$$11, arg$$9, ofSuccess$$6, ofError$$6) {

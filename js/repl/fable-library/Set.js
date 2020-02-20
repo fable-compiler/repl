@@ -1720,14 +1720,14 @@ export function intersectWith(s1$$5, s2$$5, comparer$$35) {
   iterate$$1(function (x$$40) {
     if (!FSharpSet$$Contains$$2B595(s2$$6, x$$40)) {
       const value = s1$$5.delete(x$$40);
-      value, null;
+      void value;
     }
   }, s1$$5);
 }
 export function exceptWith(s1$$6, s2$$7) {
   iterate$$1(function (x$$41) {
     const value$$1 = s1$$6.delete(x$$41);
-    value$$1, null;
+    void value$$1;
   }, s2$$7);
 }
 export function isSubsetOf(s1$$7, s2$$8, comparer$$36) {

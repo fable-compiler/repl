@@ -47,7 +47,7 @@ function __failIfNone(res) {
     return value(res);
 }
 export function ofArray(xs) {
-    return delay(() => unfold((i) => i < xs.length ? [xs[i], i + 1] : null, 0));
+    return delay(() => unfold((i) => i != null && i < xs.length ? [xs[i], i + 1] : null, 0));
 }
 export function allPairs(xs, ys) {
     let firstEl = true;
@@ -74,10 +74,11 @@ export function append(xs, ys) {
         const i = xs[Symbol.iterator]();
         let iters = [i, null];
         return unfold(() => {
+            var _a, _b;
             let cur;
             if (!firstDone) {
-                cur = iters[0].next();
-                if (!cur.done) {
+                cur = (_a = iters[0]) === null || _a === void 0 ? void 0 : _a.next();
+                if (cur != null && !cur.done) {
                     return [cur.value, iters];
                 }
                 else {
@@ -85,8 +86,8 @@ export function append(xs, ys) {
                     iters = [null, ys[Symbol.iterator]()];
                 }
             }
-            cur = iters[1].next();
-            return !cur.done ? [cur.value, iters] : null;
+            cur = (_b = iters[1]) === null || _b === void 0 ? void 0 : _b.next();
+            return cur != null && !cur.done ? [cur.value, iters] : null;
         }, iters);
     });
 }
@@ -163,13 +164,13 @@ export function delay(f) {
     };
 }
 export function empty() {
-    return unfold(() => void 0);
+    return unfold(() => null, undefined);
 }
 export function enumerateFromFunctions(factory, moveNext, current) {
     return delay(() => unfold((e) => moveNext(e) ? [current(e), e] : null, factory()));
 }
 export function enumerateWhile(cond, xs) {
-    return concat(unfold(() => cond() ? [xs, true] : null));
+    return concat(unfold(() => cond() ? [xs, true] : null, undefined));
 }
 export function enumerateThenFinally(xs, finalFn) {
     return delay(() => {
@@ -178,7 +179,7 @@ export function enumerateThenFinally(xs, finalFn) {
             iter = xs[Symbol.iterator]();
         }
         catch (err) {
-            return void 0;
+            return empty();
         }
         finally {
             finalFn();
@@ -189,7 +190,7 @@ export function enumerateThenFinally(xs, finalFn) {
                 return !cur.done ? [cur.value, it] : null;
             }
             catch (err) {
-                return void 0;
+                return null;
             }
             finally {
                 finalFn();
@@ -366,16 +367,16 @@ export function item(i, xs) {
     return __failIfNone(tryItem(i, xs));
 }
 export function iterate(f, xs) {
-    fold((_, x) => f(x), null, xs);
+    fold((_, x) => (f(x), null), null, xs);
 }
 export function iterate2(f, xs, ys) {
-    fold2((_, x, y) => f(x, y), null, xs, ys);
+    fold2((_, x, y) => (f(x, y), null), null, xs, ys);
 }
 export function iterateIndexed(f, xs) {
-    fold((_, x, i) => f(i, x), null, xs);
+    fold((_, x, i) => (f((i !== null && i !== void 0 ? i : 0), x), null), null, xs);
 }
 export function iterateIndexed2(f, xs, ys) {
-    fold2((_, x, y, i) => f(i, x, y), null, xs, ys);
+    fold2((_, x, y, i) => (f((i !== null && i !== void 0 ? i : 0), x, y), null), null, xs, ys);
 }
 export function isEmpty(xs) {
     const i = xs[Symbol.iterator]();
@@ -390,7 +391,7 @@ export function last(xs) {
 export function length(xs) {
     return Array.isArray(xs) || ArrayBuffer.isView(xs)
         ? xs.length
-        : fold((acc, x) => acc + 1, 0, xs);
+        : fold((acc, _x) => acc + 1, 0, xs);
 }
 export function map(f, xs) {
     return delay(() => unfold((iter) => {
@@ -418,7 +419,7 @@ export function map2(f, xs, ys) {
             const cur1 = iter1.next();
             const cur2 = iter2.next();
             return !cur1.done && !cur2.done ? [f(cur1.value, cur2.value), null] : null;
-        });
+        }, undefined);
     });
 }
 export function mapIndexed2(f, xs, ys) {
@@ -430,7 +431,7 @@ export function mapIndexed2(f, xs, ys) {
             const cur1 = iter1.next();
             const cur2 = iter2.next();
             return !cur1.done && !cur2.done ? [f(i++, cur1.value, cur2.value), null] : null;
-        });
+        }, undefined);
     });
 }
 export function map3(f, xs, ys, zs) {
@@ -443,7 +444,7 @@ export function map3(f, xs, ys, zs) {
             const cur2 = iter2.next();
             const cur3 = iter3.next();
             return !cur1.done && !cur2.done && !cur3.done ? [f(cur1.value, cur2.value, cur3.value), null] : null;
-        });
+        }, undefined);
     });
 }
 export function mapFold(f, acc, xs, transform) {
@@ -487,7 +488,8 @@ export function minBy(f, xs, comparer) {
     return reduce((acc, x) => compareFn(f(acc), f(x)) === -1 ? acc : x, xs);
 }
 export function pairwise(xs) {
-    return skip(2, scan((last, next) => [last[1], next], [0, 0], xs));
+    const res = Array.from(scan((last, next) => [last[1], next], [0, 0], xs));
+    return res.length < 2 ? [] : skip(2, res);
 }
 export function rangeChar(first, last) {
     return delay(() => unfold((x) => x <= last ? [x, String.fromCharCode(x.charCodeAt(0) + 1)] : null, first));
@@ -558,7 +560,7 @@ export function scan(f, seed, xs) {
                 acc = f(acc, cur.value);
                 return [acc, acc];
             }
-            return void 0;
+            return null;
         }, null);
     });
 }
@@ -620,7 +622,7 @@ export function take(n, xs, truncate = false) {
                     throw new Error("Seq has not enough elements");
                 }
             }
-            return void 0;
+            return null;
         }, 0);
     });
 }
@@ -630,12 +632,12 @@ export function truncate(n, xs) {
 export function takeWhile(f, xs) {
     return delay(() => {
         const iter = xs[Symbol.iterator]();
-        return unfold((i) => {
+        return unfold(() => {
             const cur = iter.next();
             if (!cur.done && f(cur.value)) {
                 return [cur.value, null];
             }
-            return void 0;
+            return null;
         }, 0);
     });
 }
@@ -710,16 +712,20 @@ export function unfold(f, fst) {
             // Capture a copy of the first value in the closure
             // so the sequence is restarted every time, see #1230
             let acc = fst;
-            return {
+            const iter = {
                 next: () => {
                     const res = f(acc);
                     if (res != null) {
-                        acc = res[1];
-                        return { done: false, value: res[0] };
+                        const v = value(res);
+                        if (v != null) {
+                            acc = v[1];
+                            return { done: false, value: v[0] };
+                        }
                     }
-                    return { done: true };
+                    return { done: true, value: undefined };
                 },
             };
+            return iter;
         },
     };
 }
@@ -737,12 +743,12 @@ export function windowed(windowSize, source) {
         [Symbol.iterator]: () => {
             let window = [];
             const iter = source[Symbol.iterator]();
-            return {
+            const iter2 = {
                 next: () => {
                     let cur;
                     while (window.length < windowSize) {
                         if ((cur = iter.next()).done) {
-                            return { done: true };
+                            return { done: true, value: undefined };
                         }
                         window.push(cur.value);
                     }
@@ -751,6 +757,36 @@ export function windowed(windowSize, source) {
                     return { done: false, value };
                 },
             };
+            return iter2;
+        },
+    };
+}
+export function transpose(source) {
+    return {
+        [Symbol.iterator]: () => {
+            const iters = Array.from(source, (x) => x[Symbol.iterator]());
+            const iter = {
+                next: () => {
+                    if (iters.length === 0) {
+                        return { done: true, value: undefined }; // empty sequence
+                    }
+                    const results = Array.from(iters, (iter) => iter.next());
+                    if (results[0].done) {
+                        if (!results.every((x) => x.done)) {
+                            throw new Error("Sequences have different lengths");
+                        }
+                        return { done: true, value: undefined };
+                    }
+                    else {
+                        if (!results.every((x) => !x.done)) {
+                            throw new Error("Sequences have different lengths");
+                        }
+                        const values = results.map((x) => x.value);
+                        return { done: false, value: values };
+                    }
+                },
+            };
+            return iter;
         },
     };
 }

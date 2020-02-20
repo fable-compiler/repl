@@ -1,8 +1,8 @@
 import { defaultArg, value as value$$1, some } from "./Option.js";
 import { List } from "./Types.js";
-import { collect as collect$$1, scanBack as scanBack$$1, scan as scan$$1, foldBack2 as foldBack2$$1, fold2 as fold2$$1, fold as fold$$1, map as map$$1 } from "./Seq.js";
+import { transpose as transpose$$1, collect as collect$$1, scanBack as scanBack$$1, scan as scan$$1, foldBack2 as foldBack2$$1, fold2 as fold2$$1, fold as fold$$1, map as map$$1 } from "./Seq.js";
 import { partialApply, getItemFromDict, addToDict, tryGetValue, addToSet, count } from "./Util.js";
-import { ofList } from "./Array.js";
+import { addInPlace, ofList } from "./Array.js";
 import { splitInto as splitInto$$1, chunkBySize as chunkBySize$$1, permute as permute$$1, findIndexBack as findIndexBack$$1, tryFindIndexBack as tryFindIndexBack$$1 } from "./Array.js";
 import { createMutable } from "./Set.js";
 import { createMutable as createMutable$$1 } from "./Map.js";
@@ -1202,7 +1202,7 @@ export function pairwise(xs$$146) {
 
       if (xs$$147.tail != null) {
         let copyOfStruct = acc$$27;
-        copyOfStruct.push([x1$$1, xs$$147.head]);
+        addInPlace([x1$$1, xs$$147.head], copyOfStruct);
         $xs$$147$$287 = xs$$147.tail;
         $acc$$27$$288 = acc$$27;
         $x1$$1$$289 = xs$$147.head;
@@ -1239,7 +1239,7 @@ export function pairwise(xs$$146) {
     case 1:
       {
         const acc$$28 = [];
-        acc$$28.push([x1$$2, x2$$2]);
+        addInPlace([x1$$2, x2$$2], acc$$28);
         const clo1 = partialApply(2, inner, [xs$$149]);
         const clo2 = clo1(acc$$28);
         return clo2(x2$$2);
@@ -1269,4 +1269,11 @@ export function splitInto(chunks, source$$1) {
   return map(function f$$63(xs$$151) {
     return ofArray(xs$$151);
   }, xs$$152);
+}
+export function transpose(lists$$1) {
+  let xs$$154;
+  let source$$3;
+  source$$3 = transpose$$1(lists$$1);
+  xs$$154 = map$$1(ofSeq, source$$3);
+  return ofSeq(xs$$154);
 }

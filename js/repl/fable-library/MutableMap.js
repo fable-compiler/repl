@@ -2,13 +2,14 @@ import { declare, FSharpRef } from "./Types.js";
 import { iterateIndexed, toIterator, getEnumerator, delay, collect, map, sumBy, iterate } from "./Seq.js";
 import { type } from "./Reflection.js";
 import { equals, getItemFromDict, tryGetValue } from "./Util.js";
+import { addInPlace } from "./Array.js";
 import { toText, printf } from "./String.js";
 export const MutableMap$00602 = declare(function Fable_Collections_MutableMap(pairs, comparer) {
   const $this$$1 = this;
   const this$ = new FSharpRef(null);
   $this$$1.comparer = comparer;
   this$.contents = $this$$1;
-  $this$$1["entries@23"] = new Map([]);
+  $this$$1.hashMap = new Map([]);
   $this$$1["init@20-1"] = 1;
   iterate(function (pair) {
     MutableMap$00602$$Add$$5BDDA1(this$.contents, pair[0], pair[1]);
@@ -23,7 +24,7 @@ export function MutableMap$00602$$$$002Ector$$6623D9B3(pairs, comparer) {
 
 function MutableMap$00602$$TryFindIndex$$2B595(this$$$1, k) {
   const h = this$$$1.comparer.GetHashCode(k) | 0;
-  const matchValue = tryGetValue(this$$$1["entries@23"], h, null);
+  const matchValue = tryGetValue(this$$$1.hashMap, h, null);
 
   if (matchValue[0]) {
     return [true, h, matchValue[1].findIndex(function (pair$$1) {
@@ -51,7 +52,7 @@ export function MutableMap$00602$$TryFind$$2B595(this$$$2, k$$1) {
   switch ($target$$10) {
     case 0:
       {
-        return getItemFromDict(this$$$2["entries@23"], matchValue$$1[1])[matchValue$$1[2]];
+        return getItemFromDict(this$$$2.hashMap, matchValue$$1[1])[matchValue$$1[2]];
       }
 
     case 1:
@@ -64,10 +65,10 @@ export function MutableMap$00602$$get_Comparer(this$$$3) {
   return this$$$3.comparer;
 }
 export function MutableMap$00602$$Clear(this$$$4) {
-  this$$$4["entries@23"].clear();
+  this$$$4.hashMap.clear();
 }
 export function MutableMap$00602$$get_Count(this$$$5) {
-  const source = this$$$5["entries@23"].values();
+  const source = this$$$5.hashMap.values();
   return sumBy(function projection(pairs$$2) {
     return pairs$$2.length;
   }, source, {
@@ -108,17 +109,17 @@ export function MutableMap$00602$$set_Item$$5BDDA1(this$$$7, k$$3, v) {
   switch ($target$$20) {
     case 0:
       {
-        getItemFromDict(this$$$7["entries@23"], matchValue$$3[1])[matchValue$$3[2]] = [k$$3, v];
+        getItemFromDict(this$$$7.hashMap, matchValue$$3[1])[matchValue$$3[2]] = [k$$3, v];
         break;
       }
 
     case 1:
       {
         if (matchValue$$3[0]) {
-          const value = getItemFromDict(this$$$7["entries@23"], matchValue$$3[1]).push([k$$3, v]);
-          null, null;
+          const value = addInPlace([k$$3, v], getItemFromDict(this$$$7.hashMap, matchValue$$3[1]));
+          void null;
         } else {
-          this$$$7["entries@23"].set(matchValue$$3[1], [[k$$3, v]]);
+          this$$$7.hashMap.set(matchValue$$3[1], [[k$$3, v]]);
         }
 
         break;
@@ -152,10 +153,10 @@ export function MutableMap$00602$$Add$$5BDDA1(this$$$8, k$$4, v$$1) {
     case 1:
       {
         if (matchValue$$4[0]) {
-          const value$$1 = getItemFromDict(this$$$8["entries@23"], matchValue$$4[1]).push([k$$4, v$$1]);
-          null, null;
+          const value$$1 = addInPlace([k$$4, v$$1], getItemFromDict(this$$$8.hashMap, matchValue$$4[1]));
+          void null;
         } else {
-          this$$$8["entries@23"].set(matchValue$$4[1], [[k$$4, v$$1]]);
+          this$$$8.hashMap.set(matchValue$$4[1], [[k$$4, v$$1]]);
         }
 
         break;
@@ -205,7 +206,7 @@ export function MutableMap$00602$$Remove$$2B595(this$$$10, k$$6) {
   switch ($target$$30) {
     case 0:
       {
-        getItemFromDict(this$$$10["entries@23"], matchValue$$6[1]).splice(matchValue$$6[2], 1);
+        getItemFromDict(this$$$10.hashMap, matchValue$$6[1]).splice(matchValue$$6[2], 1);
         return true;
       }
 
@@ -224,7 +225,7 @@ MutableMap$00602.prototype[Symbol.iterator] = function () {
       return map(function (pair$$3) {
         return pair$$3;
       }, pairs$$3);
-    }, this$$$11["entries@23"].values());
+    }, this$$$11.hashMap.values());
   }), getEnumerator(elems)));
 };
 
@@ -295,7 +296,7 @@ MutableMap$00602.prototype.Remove = function (item$$2) {
 
     if (equals(pair$$4[1], item$$2[1])) {
       const value$$2 = MutableMap$00602$$Remove$$2B595(this$$$18, item$$2[0]);
-      value$$2, null;
+      void value$$2;
     }
 
     return true;

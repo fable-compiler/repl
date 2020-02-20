@@ -503,9 +503,9 @@ export function getCharAtIndex(input, index) {
     return input[index];
 }
 export function split(str, splitters, count, removeEmpty) {
-    count = typeof count === "number" ? count : null;
-    removeEmpty = typeof removeEmpty === "number" ? removeEmpty : null;
-    if (count < 0) {
+    count = typeof count === "number" ? count : undefined;
+    removeEmpty = typeof removeEmpty === "number" ? removeEmpty : undefined;
+    if (count && count < 0) {
         throw new Error("Count cannot be less than zero");
     }
     if (count === 0) {
@@ -561,5 +561,11 @@ export function trimEnd(str, ...chars) {
 }
 export function filter(pred, x) {
     return x.split("").filter((c) => pred(c)).join("");
+}
+export function substring(str, startIndex, length) {
+    if ((startIndex + (length || 0) > str.length)) {
+        throw new Error("Invalid startIndex and/or length");
+    }
+    return length != null ? str.substr(startIndex, length) : str.substr(startIndex);
 }
 //# sourceMappingURL=String.js.map

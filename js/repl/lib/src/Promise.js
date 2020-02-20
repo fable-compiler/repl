@@ -1,8 +1,8 @@
-import { mapError, mapOk, Result } from "../fable-library.2.4.2/Option.js";
-import { declare } from "../fable-library.2.4.2/Types.js";
-import { type } from "../fable-library.2.4.2/Reflection.js";
-import { iterate } from "../fable-library.2.4.2/Seq.js";
-import { equals } from "../fable-library.2.4.2/Util.js";
+import { mapError, mapOk, Result } from "../../fable-library/Option.js";
+import { declare } from "../../fable-library/Types.js";
+import { type } from "../../fable-library/Reflection.js";
+import { iterate } from "../../fable-library/Seq.js";
+import { equals } from "../../fable-library/Util.js";
 export function reject(reason) {
   return Promise.reject(reason);
 }
@@ -127,7 +127,7 @@ export function PromiseBuilder$$Run$$212F1D4B(x$$14, p$$3) {
     }
   });
 }
-export function PromiseBuilder$$Using$$Z7FDC6BE3(x$$16, resource, binder) {
+export function PromiseBuilder$$Using$$74F7E79D(x$$16, resource, binder) {
   return PromiseBuilder$$TryFinally$$7D49A2FD(x$$16, binder(resource), function () {
     let copyOfStruct = resource;
     copyOfStruct.Dispose();

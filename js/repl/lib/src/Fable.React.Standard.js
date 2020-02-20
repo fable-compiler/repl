@@ -1,4 +1,4 @@
-import { createObj } from "../fable-library.2.4.2/Util.js";
+import { createObj } from "../../fable-library/Util.js";
 export function a(props, children) {
   return React.createElement("a", createObj(props, 1), ...children);
 }

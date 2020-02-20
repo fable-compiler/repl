@@ -14,7 +14,7 @@ export default class Uri {
                 let isRelativeUrl = false;
                 try {
                     const url = new URL(value);
-                    isRelativeUrl = false;
+                    isRelativeUrl = false && url;
                 }
                 catch (e) {
                     isRelativeUrl = true;

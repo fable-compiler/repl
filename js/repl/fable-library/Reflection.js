@@ -57,10 +57,10 @@ export function record(fullname, generics, constructor, fields) {
     return new TypeInfo(fullname, generics, constructor, fields);
 }
 export function anonRecord(...fields) {
-    return new TypeInfo("", null, null, () => fields);
+    return new TypeInfo("", undefined, undefined, () => fields);
 }
 export function union(fullname, generics, constructor, cases) {
-    const t = new TypeInfo(fullname, generics, constructor, null, () => cases().map((x, i) => typeof x === "string" ? new CaseInfo(t, i, x) : new CaseInfo(t, i, x[0], x[1])));
+    const t = new TypeInfo(fullname, generics, constructor, undefined, () => cases().map((x, i) => typeof x === "string" ? new CaseInfo(t, i, x) : new CaseInfo(t, i, x[0], x[1])));
     return t;
 }
 export function tuple(...generics) {
@@ -82,7 +82,7 @@ export function array(generic) {
     return new TypeInfo(generic.fullname + "[]", [generic]);
 }
 export function enumType(fullname, underlyingType, enumCases) {
-    return new TypeInfo(fullname, [underlyingType], null, null, null, enumCases);
+    return new TypeInfo(fullname, [underlyingType], undefined, undefined, undefined, enumCases);
 }
 export const obj = new TypeInfo("System.Object");
 export const unit = new TypeInfo("Microsoft.FSharp.Core.Unit");
@@ -127,7 +127,8 @@ export function isArray(t) {
     return t.fullname.endsWith("[]");
 }
 export function getElementType(t) {
-    return isArray(t) ? t.generics[0] : null;
+    var _a;
+    return isArray(t) ? (_a = t.generics) === null || _a === void 0 ? void 0 : _a[0] : undefined;
 }
 export function isGenericType(t) {
     return t.generics != null && t.generics.length > 0;
@@ -143,10 +144,11 @@ export function getGenericTypeDefinition(t) {
     return t.generics == null ? t : new TypeInfo(t.fullname, t.generics.map(() => obj));
 }
 export function getEnumUnderlyingType(t) {
-    return t.generics[0];
+    var _a;
+    return (_a = t.generics) === null || _a === void 0 ? void 0 : _a[0];
 }
 export function getEnumValues(t) {
-    if (isEnum(t)) {
+    if (isEnum(t) && t.enumCases != null) {
         return t.enumCases.map((kv) => kv[1]);
     }
     else {
@@ -154,7 +156,7 @@ export function getEnumValues(t) {
     }
 }
 export function getEnumNames(t) {
-    if (isEnum(t)) {
+    if (isEnum(t) && t.enumCases != null) {
         return t.enumCases.map((kv) => kv[0]);
     }
     else {
@@ -178,7 +180,7 @@ function getEnumCase(t, v) {
                 }
             }
             // .NET returns the number even if it doesn't match any of the cases
-            return [null, v];
+            return ["", v];
         }
     }
     else {
@@ -198,7 +200,7 @@ export function tryParseEnum(t, str) {
     catch (_a) {
         // supress error
     }
-    return [false, null];
+    return [false, NaN];
 }
 export function getEnumName(t, v) {
     return getEnumCase(t, v)[0];
@@ -206,7 +208,7 @@ export function getEnumName(t, v) {
 export function isEnumDefined(t, v) {
     try {
         const kv = getEnumCase(t, v);
-        return kv[0] != null;
+        return kv[0] != null && kv[0] !== "";
     }
     catch (_a) {
         // supress error
@@ -231,7 +233,7 @@ export function getRecordElements(t) {
     }
 }
 export function getTupleElements(t) {
-    if (isTuple(t)) {
+    if (isTuple(t) && t.generics != null) {
         return t.generics;
     }
     else {
@@ -239,7 +241,7 @@ export function getTupleElements(t) {
     }
 }
 export function getFunctionElements(t) {
-    if (isFunction(t)) {
+    if (isFunction(t) && t.generics != null) {
         const gen = t.generics;
         return [gen[0], gen[1]];
     }
@@ -289,7 +291,9 @@ export function makeUnion(uci, values) {
     if (values.length !== expectedLength) {
         throw new Error(`Expected an array of length ${expectedLength} but got ${values.length}`);
     }
-    return new uci.declaringType.constructor(uci.tag, uci.name, ...values);
+    return uci.declaringType.constructor != null
+        ? new uci.declaringType.constructor(uci.tag, uci.name, ...values)
+        : {};
 }
 export function makeRecord(t, values) {
     const fields = getRecordElements(t);
@@ -303,7 +307,7 @@ export function makeRecord(t, values) {
             return obj;
         }, {}));
 }
-export function makeTuple(values, t) {
+export function makeTuple(values, _t) {
     return values;
 }
 // Fable.Core.Reflection

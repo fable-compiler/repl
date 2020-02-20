@@ -3,16 +3,17 @@ import { iterateIndexed, toIterator, getEnumerator, delay, collect, map, sumBy, 
 import { type } from "./Reflection.js";
 import { getItemFromDict, tryGetValue } from "./Util.js";
 import { some } from "./Option.js";
+import { addInPlace } from "./Array.js";
 export const MutableSet$00601 = declare(function Fable_Collections_MutableSet(items, comparer) {
   const $this$$1 = this;
   const this$ = new FSharpRef(null);
   $this$$1.comparer = comparer;
   this$.contents = $this$$1;
-  $this$$1["entries@24"] = new Map([]);
+  $this$$1.hashMap = new Map([]);
   $this$$1["init@21-2"] = 1;
   iterate(function (item) {
     const value = MutableSet$00601$$Add$$2B595(this$.contents, item);
-    value, null;
+    void value;
   }, items);
 });
 export function MutableSet$00601$reflection($gen$$4) {
@@ -24,7 +25,7 @@ export function MutableSet$00601$$$$002Ector$$Z6150332D(items, comparer) {
 
 function MutableSet$00601$$TryFindIndex$$2B595(this$$$1, k) {
   const h = this$$$1.comparer.GetHashCode(k) | 0;
-  const matchValue = tryGetValue(this$$$1["entries@24"], h, null);
+  const matchValue = tryGetValue(this$$$1.hashMap, h, null);
 
   if (matchValue[0]) {
     return [true, h, matchValue[1].findIndex(function (v) {
@@ -52,7 +53,7 @@ function MutableSet$00601$$TryFind$$2B595(this$$$2, k$$1) {
   switch ($target$$9) {
     case 0:
       {
-        return some(getItemFromDict(this$$$2["entries@24"], matchValue$$1[1])[matchValue$$1[2]]);
+        return some(getItemFromDict(this$$$2.hashMap, matchValue$$1[1])[matchValue$$1[2]]);
       }
 
     case 1:
@@ -66,10 +67,10 @@ export function MutableSet$00601$$get_Comparer(this$$$3) {
   return this$$$3.comparer;
 }
 export function MutableSet$00601$$Clear(this$$$4) {
-  this$$$4["entries@24"].clear();
+  this$$$4.hashMap.clear();
 }
 export function MutableSet$00601$$get_Count(this$$$5) {
-  const source = this$$$5["entries@24"].values();
+  const source = this$$$5.hashMap.values();
   return sumBy(function projection(pairs) {
     return pairs.length;
   }, source, {
@@ -106,11 +107,11 @@ export function MutableSet$00601$$Add$$2B595(this$$$6, k$$2) {
     case 1:
       {
         if (matchValue$$2[0]) {
-          const value$$1 = getItemFromDict(this$$$6["entries@24"], matchValue$$2[1]).push(k$$2);
-          null, null;
+          const value$$1 = addInPlace(k$$2, getItemFromDict(this$$$6.hashMap, matchValue$$2[1]));
+          void null;
           return true;
         } else {
-          this$$$6["entries@24"].set(matchValue$$2[1], [k$$2]);
+          this$$$6.hashMap.set(matchValue$$2[1], [k$$2]);
           return true;
         }
       }
@@ -159,7 +160,7 @@ export function MutableSet$00601$$Remove$$2B595(this$$$8, k$$4) {
   switch ($target$$22) {
     case 0:
       {
-        getItemFromDict(this$$$8["entries@24"], matchValue$$4[1]).splice(matchValue$$4[2], 1);
+        getItemFromDict(this$$$8.hashMap, matchValue$$4[1]).splice(matchValue$$4[2], 1);
         return true;
       }
 
@@ -178,14 +179,14 @@ MutableSet$00601.prototype[Symbol.iterator] = function () {
       return map(function (value$$2) {
         return value$$2;
       }, values$$1);
-    }, this$$$9["entries@24"].values());
+    }, this$$$9.hashMap.values());
   }), getEnumerator(elems)));
 };
 
 MutableSet$00601.prototype.Add = function (item$$1) {
   const this$$$10 = this;
   const value$$3 = MutableSet$00601$$Add$$2B595(this$$$10, item$$1);
-  value$$3, null;
+  void value$$3;
 };
 
 MutableSet$00601.prototype.Clear = function () {
@@ -232,7 +233,7 @@ Object.defineProperty(MutableSet$00601.prototype, "size", {
 MutableSet$00601.prototype.add = function (k$$5) {
   const this$$$18 = this;
   const value$$4 = MutableSet$00601$$Add$$2B595(this$$$18, k$$5);
-  value$$4, null;
+  void value$$4;
   return this$$$18;
 };
 

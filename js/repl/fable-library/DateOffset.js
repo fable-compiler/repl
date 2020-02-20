@@ -118,42 +118,53 @@ export function toLocalTime(date) {
     return DateTimeOffset(date.getTime(), date.getTimezoneOffset() * -60000);
 }
 export function timeOfDay(d) {
-    const d2 = new Date(d.getTime() + d.offset);
+    var _a;
+    const d2 = new Date(d.getTime() + (_a = d.offset, (_a !== null && _a !== void 0 ? _a : 0)));
     return d2.getUTCHours() * 3600000
         + d2.getUTCMinutes() * 60000
         + d2.getUTCSeconds() * 1000
         + d2.getUTCMilliseconds();
 }
 export function date(d) {
-    const d2 = new Date(d.getTime() + d.offset);
+    var _a;
+    const d2 = new Date(d.getTime() + (_a = d.offset, (_a !== null && _a !== void 0 ? _a : 0)));
     return createDate(d2.getUTCFullYear(), d2.getUTCMonth() + 1, d2.getUTCDate(), 0, 0, 0, 0);
 }
 export function day(d) {
-    return new Date(d.getTime() + d.offset).getUTCDate();
+    var _a;
+    return new Date(d.getTime() + (_a = d.offset, (_a !== null && _a !== void 0 ? _a : 0))).getUTCDate();
 }
 export function hour(d) {
-    return new Date(d.getTime() + d.offset).getUTCHours();
+    var _a;
+    return new Date(d.getTime() + (_a = d.offset, (_a !== null && _a !== void 0 ? _a : 0))).getUTCHours();
 }
 export function millisecond(d) {
-    return new Date(d.getTime() + d.offset).getUTCMilliseconds();
+    var _a;
+    return new Date(d.getTime() + (_a = d.offset, (_a !== null && _a !== void 0 ? _a : 0))).getUTCMilliseconds();
 }
 export function minute(d) {
-    return new Date(d.getTime() + d.offset).getUTCMinutes();
+    var _a;
+    return new Date(d.getTime() + (_a = d.offset, (_a !== null && _a !== void 0 ? _a : 0))).getUTCMinutes();
 }
 export function month(d) {
-    return new Date(d.getTime() + d.offset).getUTCMonth() + 1;
+    var _a;
+    return new Date(d.getTime() + (_a = d.offset, (_a !== null && _a !== void 0 ? _a : 0))).getUTCMonth() + 1;
 }
 export function second(d) {
-    return new Date(d.getTime() + d.offset).getUTCSeconds();
+    var _a;
+    return new Date(d.getTime() + (_a = d.offset, (_a !== null && _a !== void 0 ? _a : 0))).getUTCSeconds();
 }
 export function year(d) {
-    return new Date(d.getTime() + d.offset).getUTCFullYear();
+    var _a;
+    return new Date(d.getTime() + (_a = d.offset, (_a !== null && _a !== void 0 ? _a : 0))).getUTCFullYear();
 }
 export function dayOfWeek(d) {
-    return new Date(d.getTime() + d.offset).getUTCDay();
+    var _a;
+    return new Date(d.getTime() + (_a = d.offset, (_a !== null && _a !== void 0 ? _a : 0))).getUTCDay();
 }
 export function dayOfYear(d) {
-    const d2 = new Date(d.getTime() + d.offset);
+    var _a;
+    const d2 = new Date(d.getTime() + (_a = d.offset, (_a !== null && _a !== void 0 ? _a : 0)));
     const _year = d2.getUTCFullYear();
     const _month = d2.getUTCMonth() + 1;
     let _day = d2.getUTCDate();
@@ -163,32 +174,40 @@ export function dayOfYear(d) {
     return _day;
 }
 export function add(d, ts) {
-    return DateTimeOffset(d.getTime() + ts, d.offset);
+    var _a;
+    return DateTimeOffset(d.getTime() + ts, (_a = d.offset, (_a !== null && _a !== void 0 ? _a : 0)));
 }
 export function addDays(d, v) {
-    return DateTimeOffset(d.getTime() + v * 86400000, d.offset);
+    var _a;
+    return DateTimeOffset(d.getTime() + v * 86400000, (_a = d.offset, (_a !== null && _a !== void 0 ? _a : 0)));
 }
 export function addHours(d, v) {
-    return DateTimeOffset(d.getTime() + v * 3600000, d.offset);
+    var _a;
+    return DateTimeOffset(d.getTime() + v * 3600000, (_a = d.offset, (_a !== null && _a !== void 0 ? _a : 0)));
 }
 export function addMinutes(d, v) {
-    return DateTimeOffset(d.getTime() + v * 60000, d.offset);
+    var _a;
+    return DateTimeOffset(d.getTime() + v * 60000, (_a = d.offset, (_a !== null && _a !== void 0 ? _a : 0)));
 }
 export function addSeconds(d, v) {
-    return DateTimeOffset(d.getTime() + v * 1000, d.offset);
+    var _a;
+    return DateTimeOffset(d.getTime() + v * 1000, (_a = d.offset, (_a !== null && _a !== void 0 ? _a : 0)));
 }
 export function addMilliseconds(d, v) {
-    return DateTimeOffset(d.getTime() + v, d.offset);
+    var _a;
+    return DateTimeOffset(d.getTime() + v, (_a = d.offset, (_a !== null && _a !== void 0 ? _a : 0)));
 }
 export function addYears(d, v) {
+    var _a;
     const newMonth = d.getUTCMonth() + 1;
     const newYear = d.getUTCFullYear() + v;
     const _daysInMonth = daysInMonth(newYear, newMonth);
     const newDay = Math.min(_daysInMonth, d.getUTCDate());
-    return create(newYear, newMonth, newDay, d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds(), d.offset);
+    return create(newYear, newMonth, newDay, d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds(), (_a = d.offset, (_a !== null && _a !== void 0 ? _a : 0)));
 }
 export function addMonths(d, v) {
-    const d2 = new Date(d.getTime() + d.offset);
+    var _a, _b;
+    const d2 = new Date(d.getTime() + (_a = d.offset, (_a !== null && _a !== void 0 ? _a : 0)));
     let newMonth = d2.getUTCMonth() + 1 + v;
     let newMonth_ = 0;
     let yearOffset = 0;
@@ -205,11 +224,12 @@ export function addMonths(d, v) {
     const newYear = d2.getUTCFullYear() + yearOffset;
     const _daysInMonth = daysInMonth(newYear, newMonth);
     const newDay = Math.min(_daysInMonth, d2.getUTCDate());
-    return create(newYear, newMonth, newDay, d2.getUTCHours(), d2.getUTCMinutes(), d2.getUTCSeconds(), d2.getUTCMilliseconds(), d.offset);
+    return create(newYear, newMonth, newDay, d2.getUTCHours(), d2.getUTCMinutes(), d2.getUTCSeconds(), d2.getUTCMilliseconds(), (_b = d.offset, (_b !== null && _b !== void 0 ? _b : 0)));
 }
 export function subtract(d, that) {
+    var _a;
     return typeof that === "number"
-        ? DateTimeOffset(d.getTime() - that, d.offset)
+        ? DateTimeOffset(d.getTime() - that, (_a = d.offset, (_a !== null && _a !== void 0 ? _a : 0)))
         : d.getTime() - that.getTime();
 }
 export function equals(d1, d2) {

@@ -1,9 +1,9 @@
-import { record, list as list$$5, type, bool, string, union, getCaseTag, getCaseName } from "../fable-library.2.4.2/Reflection.js";
-import { Record, List, declare, Union } from "../fable-library.2.4.2/Types.js";
-import { createObj, int32ToString } from "../fable-library.2.4.2/Util.js";
-import { filter, append, fold } from "../fable-library.2.4.2/List.js";
-import { defaultArg } from "../fable-library.2.4.2/Option.js";
-import { join } from "../fable-library.2.4.2/String.js";
+import { record, list as list$$5, type, bool, string, union, getCaseTag, getCaseName } from "../../fable-library/Reflection.js";
+import { Record, List, declare, Union } from "../../fable-library/Types.js";
+import { createObj, int32ToString } from "../../fable-library/Util.js";
+import { defaultArg, some } from "../../fable-library/Option.js";
+import { filter, append, fold } from "../../fable-library/List.js";
+import { join } from "../../fable-library/String.js";
 import { HTMLAttr } from "../src/Fable.React.Props.js";
 export function Reflection$$$getCaseName(case$) {
   return getCaseName(case$);
@@ -110,7 +110,7 @@ export function TextSize$$$only(screen$$2, size$$2) {
 
     default:
       {
-        console.warn("Screen `%s` does not support `is-size-xxx-only`." + String(screen$$2));
+        console.warn(some("Screen `%s` does not support `is-size-xxx-only`." + String(screen$$2)));
         return "";
       }
   }
@@ -138,7 +138,7 @@ export function TextAlignment$$$only(screen$$4, alignment$$1) {
 
     default:
       {
-        console.warn("Screen `%s` does not support `is-size-xxx-only`." + String(screen$$4));
+        console.warn(some("Screen `%s` does not support `is-size-xxx-only`." + String(screen$$4)));
         return "";
       }
   }
@@ -188,7 +188,7 @@ export function Display$$$toDisplayOnlyClass(screen$$7, display$$2) {
 
     default:
       {
-        console.warn("Screen `%s` does not support display only." + String(screen$$7));
+        console.warn(some("Screen `%s` does not support display only." + String(screen$$7)));
         return "";
       }
   }
@@ -282,7 +282,7 @@ export function Modifier$$$ofInvisibleOnly(screen$$11) {
 
     default:
       {
-        console.warn("Screen `%s` does not support `is-invisible-xxx-only`." + String(screen$$11));
+        console.warn(some("Screen `%s` does not support `is-invisible-xxx-only`." + String(screen$$11)));
         return "";
       }
   }
@@ -298,7 +298,7 @@ export function Modifier$$$ofHiddenOnly(screen$$12) {
 
     default:
       {
-        console.warn("Screen `%s` does not support `is-hidden-xxx-only`." + String(screen$$12));
+        console.warn(some("Screen `%s` does not support `is-hidden-xxx-only`." + String(screen$$12)));
         return "";
       }
   }
@@ -330,7 +330,7 @@ export function Modifier$$$parseModifiers(options) {
 
       case 4:
         {
-          return new List(option.fields[0].tag === 2 ? "is-size-" + TextSize$002EOption$$$ToString$$Z2E0B9453(option.fields[1]) + Screen$$$ToString$$2D2414B4(option.fields[0]) + "-only" : option.fields[0].tag === 1 ? "is-size-" + TextSize$002EOption$$$ToString$$Z2E0B9453(option.fields[1]) + Screen$$$ToString$$2D2414B4(option.fields[0]) + "-only" : option.fields[0].tag === 4 ? "is-size-" + TextSize$002EOption$$$ToString$$Z2E0B9453(option.fields[1]) + Screen$$$ToString$$2D2414B4(option.fields[0]) + "-only" : (console.warn("Screen `%s` does not support `is-size-xxx-only`." + String(option.fields[0])), ""), result);
+          return new List(option.fields[0].tag === 2 ? "is-size-" + TextSize$002EOption$$$ToString$$Z2E0B9453(option.fields[1]) + Screen$$$ToString$$2D2414B4(option.fields[0]) + "-only" : option.fields[0].tag === 1 ? "is-size-" + TextSize$002EOption$$$ToString$$Z2E0B9453(option.fields[1]) + Screen$$$ToString$$2D2414B4(option.fields[0]) + "-only" : option.fields[0].tag === 4 ? "is-size-" + TextSize$002EOption$$$ToString$$Z2E0B9453(option.fields[1]) + Screen$$$ToString$$2D2414B4(option.fields[0]) + "-only" : (console.warn(some("Screen `%s` does not support `is-size-xxx-only`." + String(option.fields[0]))), ""), result);
         }
 
       case 5:
@@ -340,7 +340,7 @@ export function Modifier$$$parseModifiers(options) {
 
       case 6:
         {
-          return new List(option.fields[0].tag === 2 ? Reflection$$$getCaseName(option.fields[1]) + Screen$$$ToString$$2D2414B4(option.fields[0]) + "-only" : option.fields[0].tag === 1 ? Reflection$$$getCaseName(option.fields[1]) + Screen$$$ToString$$2D2414B4(option.fields[0]) + "-only" : option.fields[0].tag === 4 ? Reflection$$$getCaseName(option.fields[1]) + Screen$$$ToString$$2D2414B4(option.fields[0]) + "-only" : (console.warn("Screen `%s` does not support `is-size-xxx-only`." + String(option.fields[0])), ""), result);
+          return new List(option.fields[0].tag === 2 ? Reflection$$$getCaseName(option.fields[1]) + Screen$$$ToString$$2D2414B4(option.fields[0]) + "-only" : option.fields[0].tag === 1 ? Reflection$$$getCaseName(option.fields[1]) + Screen$$$ToString$$2D2414B4(option.fields[0]) + "-only" : option.fields[0].tag === 4 ? Reflection$$$getCaseName(option.fields[1]) + Screen$$$ToString$$2D2414B4(option.fields[0]) + "-only" : (console.warn(some("Screen `%s` does not support `is-size-xxx-only`." + String(option.fields[0]))), ""), result);
         }
 
       case 7:

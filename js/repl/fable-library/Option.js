@@ -47,23 +47,26 @@ export function value(x, acceptNull) {
         return x instanceof Some ? x.value : x;
     }
 }
-export function defaultArg(arg, defaultValue, f) {
-    return arg == null ? defaultValue : (f != null ? f(value(arg)) : value(arg));
+export function defaultArg(opt, defaultValue, f) {
+    return (opt != null) ? (f != null ? f(value(opt)) : value(opt)) : defaultValue;
 }
-export function defaultArgWith(arg, defThunk) {
-    return arg == null ? defThunk() : value(arg);
+export function defaultArgWith(opt, defThunk) {
+    return (opt != null) ? value(opt) : defThunk();
 }
-export function filter(predicate, arg) {
-    return arg != null ? (!predicate(value(arg)) ? null : arg) : arg;
+export function filter(predicate, opt) {
+    return (opt != null) ? (predicate(value(opt)) ? opt : null) : opt;
 }
-export function map(f, arg) {
-    return arg == null ? arg : some(f(value(arg)));
+export function map(mapping, opt) {
+    return (opt != null) ? some(mapping(value(opt))) : null;
 }
-export function mapMultiple(predicate, ...args) {
-    return args.every((x) => x != null) ? predicate.apply(null, args) : null;
+export function map2(mapping, opt1, opt2) {
+    return (opt1 != null && opt2 != null) ? mapping(value(opt1), value(opt2)) : null;
 }
-export function bind(f, arg) {
-    return arg == null ? arg : f(value(arg));
+export function map3(mapping, opt1, opt2, opt3) {
+    return (opt1 != null && opt2 != null && opt3 != null) ? mapping(value(opt1), value(opt2), value(opt3)) : null;
+}
+export function bind(binder, opt) {
+    return opt != null ? binder(value(opt)) : null;
 }
 export function tryOp(op, arg) {
     try {
@@ -73,7 +76,6 @@ export function tryOp(op, arg) {
         return null;
     }
 }
-// CHOICE
 export const Choice = declare(function Choice(tag, name, field) {
     Union.call(this, tag, name, field);
 }, Union);
@@ -89,7 +91,6 @@ export function tryValueIfChoice1(x) {
 export function tryValueIfChoice2(x) {
     return x.tag === 1 ? some(x.fields[0]) : null;
 }
-// RESULT
 export const Result = declare(function Result(tag, name, field) {
     Union.call(this, tag, name, field);
 }, Union);

@@ -1,3 +1,4 @@
+import { addInPlace } from "./Array.js";
 import { declare } from "./Types.js";
 import { type } from "./Reflection.js";
 import { join, format } from "./String.js";
@@ -6,7 +7,7 @@ export const StringBuilder = declare(function System_Text_StringBuilder(value, c
   $this$$1.buf = [];
 
   if (!(value == null)) {
-    $this$$1.buf.push(value);
+    addInPlace(value, $this$$1.buf);
   }
 });
 export function StringBuilder$reflection() {
@@ -25,16 +26,25 @@ export function StringBuilder$$$$002Ector() {
   return StringBuilder$$$$002Ector$$Z18115A39.call(this, null, 16);
 }
 export function StringBuilder$$Append$$Z721C83C5(x, s) {
-  x.buf.push(s);
+  addInPlace(s, x.buf);
   return x;
 }
 export function StringBuilder$$Append$$244C7CD6(x$$1, c) {
-  x$$1.buf.push(c);
+  addInPlace(c, x$$1.buf);
   return x$$1;
 }
 export function StringBuilder$$AppendFormat$$433E080(x$$2, fmt, o) {
-  x$$2.buf.push(format(fmt, o));
+  addInPlace(format(fmt, o), x$$2.buf);
   return x$$2;
+}
+export function StringBuilder$$AppendLine(x$$3) {
+  addInPlace("\n", x$$3.buf);
+  return x$$3;
+}
+export function StringBuilder$$AppendLine$$Z721C83C5(x$$4, s$$1) {
+  addInPlace(s$$1, x$$4.buf);
+  addInPlace("\n", x$$4.buf);
+  return x$$4;
 }
 
 StringBuilder.prototype.toString = function () {

@@ -2,7 +2,7 @@ import { tryValueIfChoice1, tryValueIfChoice2, value } from "./Option.js";
 export class Observer {
     constructor(onNext, onError, onCompleted) {
         this.OnNext = onNext;
-        this.OnError = onError || ((e) => { return; });
+        this.OnError = onError || ((_e) => { return; });
         this.OnCompleted = onCompleted || (() => { return; });
     }
 }
@@ -82,7 +82,7 @@ export function merge(source1, source2) {
 }
 export function pairwise(source) {
     return new Observable((observer) => {
-        let last = null;
+        let last;
         return source.Subscribe(new Observer((next) => {
             if (last != null) {
                 observer.OnNext([last, next]);

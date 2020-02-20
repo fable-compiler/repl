@@ -92,7 +92,7 @@ export function fromInteger(value, unsigned, kind) {
     }
     return Long.fromBits(x, xh >> 31, unsigned);
 }
-export function parse(str, style, unsigned, bitsize, radix) {
+export function parse(str, style, unsigned, _bitsize, radix) {
     const res = isValid(str, style, radix);
     if (res != null) {
         const lessOrEqual = (x, y) => {

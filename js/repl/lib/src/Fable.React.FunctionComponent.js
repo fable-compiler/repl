@@ -1,6 +1,6 @@
-import { declare } from "../fable-library.2.4.2/Types.js";
-import { type } from "../fable-library.2.4.2/Reflection.js";
-import { curry } from "../fable-library.2.4.2/Util.js";
+import { declare } from "../../fable-library/Types.js";
+import { type } from "../../fable-library/Reflection.js";
+import { curry } from "../../fable-library/Util.js";
 import { ReactElementTypeModule$$$memoWith as ReactElementTypeModule$0024$0024$0024memoWith } from "./Fable.React.Helpers.js";
 export const FunctionComponent = declare(function Fable_React_FunctionComponent() {});
 export function FunctionComponent$reflection() {

@@ -1,12 +1,12 @@
-import { declare, Record } from "../fable-library.2.4.2/Types.js";
-import { record, type, string, tuple, list, lambda, unit } from "../fable-library.2.4.2/Reflection.js";
+import { declare, Record } from "../../fable-library/Types.js";
+import { record, type, string, tuple, list, lambda, unit } from "../../fable-library/Reflection.js";
 import { Cmd$$$exec as Cmd$0024$0024$0024exec, Cmd$$$batch as Cmd$0024$0024$0024batch, Cmd$$$none as Cmd$0024$0024$0024none } from "./cmd.js";
 import { toConsole, onError as onError$$2 } from "./prelude.js";
-import { curry, partialApply, uncurry } from "../fable-library.2.4.2/Util.js";
-import { append, ofArray } from "../fable-library.2.4.2/List.js";
+import { curry, partialApply, uncurry } from "../../fable-library/Util.js";
+import { append, ofArray } from "../../fable-library/List.js";
 import { RingBuffer$00601$$Pop as RingBuffer$002400601$0024$0024Pop, RingBuffer$00601$$Push$$2B595 as RingBuffer$002400601$0024$0024Push$0024$00242B595, RingBuffer$00601$$$$002Ector$$Z524259A4 as RingBuffer$002400601$0024$0024$0024$0024002Ector$0024$0024Z524259A4 } from "./ring.js";
-import { value as value$$2, some } from "../fable-library.2.4.2/Option.js";
-import { toText, printf } from "../fable-library.2.4.2/String.js";
+import { value as value$$2, some } from "../../fable-library/Option.js";
+import { toText, printf } from "../../fable-library/String.js";
 export const Program$00604 = declare(function Elmish_Program(arg1, arg2, arg3, arg4, arg5, arg6, arg7) {
   this.init = arg1;
   this.update = arg2;
@@ -24,7 +24,7 @@ export function ProgramModule$$$mkProgram(init, update, view) {
     return Cmd$0024$0024$0024none();
   }, view, function setState(model, $arg$$1) {
     const value = view(model, $arg$$1);
-    value, null;
+    void value;
   }, function (tupledArg) {
     onError$$2(tupledArg[0], tupledArg[1]);
   }, uncurry(2, function (x) {
@@ -42,7 +42,7 @@ export function ProgramModule$$$mkSimple(init$$1, update$$1, view$$1) {
     return Cmd$0024$0024$0024none();
   }, view$$1, function setState$$1(model$$1, $arg$$4) {
     const value$$1 = view$$1(model$$1, $arg$$4);
-    value$$1, null;
+    void value$$1;
   }, function (tupledArg$$1) {
     onError$$2(tupledArg$$1[0], tupledArg$$1[1]);
   }, uncurry(2, function (x$$1) {

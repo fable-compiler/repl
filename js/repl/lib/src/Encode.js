@@ -1,14 +1,14 @@
-import { mapIndexed, map as map$$1, fold, iterate } from "../fable-library.2.4.2/Seq.js";
-import { empty, tryFind, toList } from "../fable-library.2.4.2/Map.js";
-import { toString as toString$$1 } from "../fable-library.2.4.2/Date.js";
-import { toString as toString$$2 } from "../fable-library.2.4.2/TimeSpan.js";
-import { toString as toString$$3 } from "../fable-library.2.4.2/Long.js";
-import { comparePrimitives, Lazy, mapCurriedArgs, uncurry } from "../fable-library.2.4.2/Util.js";
-import { defaultArgWith, defaultArg } from "../fable-library.2.4.2/Option.js";
-import { type, getGenerics, getGenericTypeDefinition, getTupleFields, getTupleElements, isTuple, isGenericType, getElementType, isArray, fullName, getUnionCaseFields, getUnionFields, isUnion, getRecordField, name, getRecordElements, isRecord } from "../fable-library.2.4.2/Reflection.js";
-import { fill, map } from "../fable-library.2.4.2/Array.js";
-import { toText, printf } from "../fable-library.2.4.2/String.js";
-import { declare } from "../fable-library.2.4.2/Types.js";
+import { mapIndexed, map as map$$2, fold, iterate } from "../../fable-library/Seq.js";
+import { empty, tryFind, toList } from "../../fable-library/Map.js";
+import { toString as toString$$1 } from "../../fable-library/Date.js";
+import { toString as toString$$2 } from "../../fable-library/TimeSpan.js";
+import { toString as toString$$3 } from "../../fable-library/Long.js";
+import { comparePrimitives, Lazy, mapCurriedArgs, uncurry } from "../../fable-library/Util.js";
+import { defaultArg, defaultArgWith, map, some } from "../../fable-library/Option.js";
+import { type, getGenerics, getGenericTypeDefinition, getTupleFields, getTupleElements, isTuple, isGenericType, getElementType, isArray, fullName, getUnionCaseFields, getUnionFields, isUnion, getRecordField, name, getRecordElements, isRecord } from "../../fable-library/Reflection.js";
+import { fill, map as map$$1 } from "../../fable-library/Array.js";
+import { toText, printf } from "../../fable-library/String.js";
+import { declare } from "../../fable-library/Types.js";
 import { Util$$$CachedEncoders as Util$0024$0024$0024CachedEncoders, Util$002ECache$00601$$GetOrAdd$$43981464 as Util$0024002ECache$002400601$0024$0024GetOrAdd$0024$002443981464 } from "./Types.js";
 export function string(value) {
   return value;
@@ -97,12 +97,12 @@ export function datetime(value$$19) {
   return value$$20;
 }
 export function toString(space, value$$22) {
-  return JSON.stringify(value$$22, uncurry(2, null), space);
+  return JSON.stringify(value$$22, uncurry(2, null), some(space));
 }
 export function option(encoder) {
   return function ($arg$$1) {
     let option$$2;
-    option$$2 = defaultArg($arg$$1, null, encoder);
+    option$$2 = map(encoder, $arg$$1);
     return defaultArgWith(option$$2, function defThunk() {
       return nil;
     });
@@ -119,7 +119,7 @@ function autoEncodeRecordsAndUnions(extra, isCamelCase, t) {
   if (isRecord(t, true)) {
     let setters;
     const array$$1 = getRecordElements(t, true);
-    setters = map(function mapping(fi) {
+    setters = map$$1(function mapping(fi) {
       const targetKey = isCamelCase ? name(fi).slice(null, 0 + 1).toLowerCase() + name(fi).slice(1, name(fi).length) : name(fi);
       const encode$$1 = autoEncoder(extra, isCamelCase, fi[1]);
       return function (source) {
@@ -184,14 +184,14 @@ function autoEncoder(extra$$1, isCamelCase$$1, t$$1) {
       encoder$$2 = autoEncoder(extra$$1, isCamelCase$$1, t$$2);
       return function (value$$27) {
         let values$$7;
-        values$$7 = map$$1(encoder$$2, value$$27);
+        values$$7 = map$$2(encoder$$2, value$$27);
         return seq(values$$7);
       };
     } else if (isGenericType(t$$1)) {
       if (isTuple(t$$1)) {
         let encoders;
         const array$$2 = getTupleElements(t$$1);
-        encoders = map(function mapping$$1(t$$3) {
+        encoders = map$$1(function mapping$$1(t$$3) {
           return autoEncoder(extra$$1, isCamelCase$$1, t$$3);
         }, array$$2, Array);
         return function (value$$28) {
@@ -227,7 +227,7 @@ function autoEncoder(extra$$1, isCamelCase$$1, t$$1) {
           encoder$$5 = autoEncoder(extra$$1, isCamelCase$$1, t$$5);
           return function (value$$30) {
             let values$$9;
-            values$$9 = map$$1(encoder$$5, value$$30);
+            values$$9 = map$$2(encoder$$5, value$$30);
             return seq(values$$9);
           };
         } else if (fullname$$1 === "Microsoft.FSharp.Collections.FSharpMap`2[System.Object,System.Object]") {
@@ -255,7 +255,7 @@ function autoEncoder(extra$$1, isCamelCase$$1, t$$1) {
 
             return function (value$$32) {
               let values$$11;
-              values$$11 = map$$1(function mapping$$3(_arg2) {
+              values$$11 = map$$2(function mapping$$3(_arg2) {
                 const activePatternResult709 = _arg2;
                 const values$$10 = [keyEncoder(activePatternResult709[0]), valueEncoder(activePatternResult709[1])];
                 return values$$10;

@@ -8,7 +8,7 @@ import { map } from "./Seq.js";
 // Implemented just for type references
 export default class Async {
 }
-function emptyContinuation(x) {
+function emptyContinuation(_x) {
     // NOP
 }
 // MakeAsync: body:(AsyncActivation<'T> -> AsyncReturn) -> Async<'T>
@@ -72,7 +72,7 @@ export function fromContinuations(f) {
     return protectedCont((ctx) => f([ctx.onSuccess, ctx.onError, ctx.onCancel]));
 }
 export function ignore(computation) {
-    return protectedBind(computation, (x) => protectedReturn(void 0));
+    return protectedBind(computation, (_x) => protectedReturn(void 0));
 }
 export function parallel(computations) {
     return awaitPromise(Promise.all(map((w) => startAsPromise(w), computations)));
@@ -99,7 +99,7 @@ export function startImmediate(computation, cancellationToken) {
 export function startWithContinuations(computation, continuation, exceptionContinuation, cancellationContinuation, cancelToken) {
     if (typeof continuation !== "function") {
         cancelToken = continuation;
-        continuation = null;
+        continuation = undefined;
     }
     const trampoline = new Trampoline();
     computation({

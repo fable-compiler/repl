@@ -1,6 +1,6 @@
-import { List, declare, Union } from "../fable-library.2.4.2/Types.js";
-import { type, union, obj, int32, string } from "../fable-library.2.4.2/Reflection.js";
-import { int32ToString, createObj } from "../fable-library.2.4.2/Util.js";
+import { List, declare, Union } from "../../fable-library/Types.js";
+import { type, union, obj, int32, string } from "../../fable-library/Reflection.js";
+import { int32ToString, createObj } from "../../fable-library/Util.js";
 import { result } from "./Promise.js";
 export const Types$002EHttpRequestHeaders = declare(function Fetch_Types_HttpRequestHeaders(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);

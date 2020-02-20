@@ -5,6 +5,7 @@ import { iterate as iterate$$1, empty as empty$$1, toIterator, map as map$$2, un
 import { compare, structuralHash, isDisposable } from "./Util.js";
 import { join, toText, printf } from "./String.js";
 import { MutableMap$00602$$$$002Ector$$6623D9B3 as MutableMap$002400602$0024$0024$0024$0024002Ector$0024$00246623D9B3 } from "./MutableMap.js";
+import { addInPlace } from "./Array.js";
 export const MapTree$00602 = declare(function Map_MapTree(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
@@ -1015,9 +1016,9 @@ FSharpMap.prototype.GetHashCode = function () {
 
   while (e$$1.MoveNext()) {
     const patternInput$$5 = e$$1.Current;
-    const activePatternResult3692 = patternInput$$5;
-    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3692[0]));
-    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3692[1]));
+    const activePatternResult3703 = patternInput$$5;
+    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3703[0]));
+    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3703[1]));
   }
 
   return Math.abs(res$$3) | 0;
@@ -1311,10 +1312,10 @@ export function groupBy(projection, xs, comparer$$24) {
     const key = projection(v$$31);
 
     if (dict.has(key)) {
-      dict.get(key).push(v$$31);
+      addInPlace(v$$31, dict.get(key));
     } else {
       const value = dict.set(key, [v$$31]);
-      value, null;
+      void value;
     }
   }, xs);
   return map$$2(function mapping$$5(kv$$5) {
@@ -1326,7 +1327,7 @@ export function countBy(projection$$1, xs$$1, comparer$$25) {
   iterate$$1(function (value$$1) {
     const key$$1 = projection$$1(value$$1);
     const value$$2 = dict$$1.has(key$$1) ? dict$$1.set(key$$1, dict$$1.get(key$$1) + 1) : dict$$1.set(key$$1, 1);
-    value$$2, null;
+    void value$$2;
   }, xs$$1);
   return map$$2(function mapping$$6(kv$$6) {
     return [kv$$6[0], kv$$6[1]];

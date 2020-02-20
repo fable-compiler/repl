@@ -1,3 +1,4 @@
+// export type decimal = Decimal;
 export var NumberStyles;
 (function (NumberStyles) {
     // None = 0x00000000,
@@ -23,7 +24,7 @@ export var NumberStyles;
     //       AllowParentheses | AllowDecimalPoint | AllowThousands | AllowCurrencySymbol | AllowExponent,
 })(NumberStyles || (NumberStyles = {}));
 function validResponse(regexMatch, radix) {
-    const [_all, sign, prefix, digits] = regexMatch;
+    const [/*all*/ , sign, prefix, digits] = regexMatch;
     return {
         sign: sign || "",
         prefix: prefix || "",
@@ -69,7 +70,7 @@ export function isValid(str, style, radix) {
     const integerRegex = /^\s*([\+\-])?(0[xXoObB])?([0-9a-fA-F]+)\s*$/;
     const res = integerRegex.exec(str.replace(/_/g, ""));
     if (res != null) {
-        const [_all, sign, prefix, digits] = res;
+        const [/*all*/ , /*sign*/ , prefix, digits] = res;
         radix = radix || getRadix(prefix, style);
         const invalidDigits = getInvalidDigits(radix);
         if (!invalidDigits.test(digits)) {

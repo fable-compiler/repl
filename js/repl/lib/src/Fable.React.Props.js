@@ -1,6 +1,6 @@
-import { Record, declare, Union } from "../fable-library.2.4.2/Types.js";
-import { array, float64, int32, bool, obj, record, option, lambda, unit, type, union, string } from "../fable-library.2.4.2/Reflection.js";
-import { createObj } from "../fable-library.2.4.2/Util.js";
+import { Record, declare, Union } from "../../fable-library/Types.js";
+import { array, float64, int32, bool, obj, record, option, lambda, unit, type, union, string } from "../../fable-library/Reflection.js";
+import { createObj } from "../../fable-library/Util.js";
 export const FragmentProp = declare(function Fable_React_Props_FragmentProp(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);

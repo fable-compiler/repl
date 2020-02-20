@@ -1,3 +1,4 @@
+// tslint:disable: space-before-function-paren
 import { combineHashCodes, compare, compareArrays, equalArrays, equals, identityHash, numberHash, structuralHash } from "./Util.js";
 function sameType(x, y) {
     return y != null && Object.getPrototypeOf(x).constructor === Object.getPrototypeOf(y).constructor;
@@ -206,11 +207,10 @@ export function anonRecord(o) {
 export const FSharpRef = declare(function FSharpRef(contents) {
     this.contents = contents;
 }, Record);
-// EXCEPTIONS
-export const Exception = declare(function Exception(msg) {
+export const Exception = declare(function Exception(message) {
     this.stack = Error().stack;
-    this.message = msg;
-});
+    this.message = message;
+}, SystemObject);
 export function isException(x) {
     return x instanceof Error || x instanceof Exception;
 }
@@ -252,5 +252,5 @@ export const MatchFailureException = declare(function MatchFailureException(arg1
     this.arg3 = arg3 | 0;
     this.message = "The match cases were incomplete";
 }, FSharpException);
-export const Attribute = declare(function Attribute() { return; });
+export const Attribute = declare(function Attribute() { return; }, SystemObject);
 //# sourceMappingURL=Types.js.map

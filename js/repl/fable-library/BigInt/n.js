@@ -992,7 +992,7 @@ export function BigNatModule$$$scaleSubInPlace(x$$57, f, a$$5, n$$30) {
     j$$4 = j$$4 + 1;
   }
 
-  BigNatModule$$$normN(x$$57), null;
+  void BigNatModule$$$normN(x$$57);
 }
 export function BigNatModule$$$scaleSub(x$$61, f$$2, a$$7, n$$31) {
   const freshx = BigNatModule$$$add(x$$61, BigNatModule$$$zero);
@@ -1038,7 +1038,7 @@ export function BigNatModule$$$scaleAddInPlace(x$$62, f$$3, a$$8, n$$32) {
     j$$5 = j$$5 + 1;
   }
 
-  BigNatModule$$$normN(x$$62), null;
+  void BigNatModule$$$normN(x$$62);
 }
 export function BigNatModule$$$scaleAdd(x$$66, f$$5, a$$10, n$$33) {
   const freshx$$1 = BigNatModule$$$add(x$$66, BigNatModule$$$zero);

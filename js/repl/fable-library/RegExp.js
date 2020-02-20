@@ -15,10 +15,10 @@ export function create(pattern, options) {
 }
 // From http://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
 export function escape(str) {
-    return str.replace(/[\-\[\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 }
 export function unescape(str) {
-    return str.replace(/\\([\-\[\/\{\}\(\)\*\+\?\.\\\^\$\|])/g, "$1");
+    return str.replace(/\\([\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|])/g, "$1");
 }
 export function isMatch(str, pattern, options = 0) {
     let reg;
@@ -59,7 +59,7 @@ export function options(reg) {
 export function replace(reg, input, replacement, limit, offset = 0) {
     function replacer() {
         let res = arguments[0];
-        if (limit !== 0) {
+        if (limit) {
             limit--;
             const match = [];
             const len = arguments.length;
@@ -74,7 +74,7 @@ export function replace(reg, input, replacement, limit, offset = 0) {
     }
     if (typeof reg === "string") {
         const tmp = reg;
-        reg = create(input, limit);
+        reg = create(input, (limit !== null && limit !== void 0 ? limit : 0));
         input = tmp;
         limit = undefined;
     }
@@ -84,7 +84,7 @@ export function replace(reg, input, replacement, limit, offset = 0) {
     }
     else {
         // $0 doesn't work with JS regex, see #1155
-        replacement = replacement.replace(/\$0/g, (s) => "$&");
+        replacement = replacement.replace(/\$0/g, (_s) => "$&");
         if (limit != null) {
             let m;
             const sub1 = input.substring(offset);
@@ -101,7 +101,7 @@ export function replace(reg, input, replacement, limit, offset = 0) {
 export function split(reg, input, limit, offset = 0) {
     if (typeof reg === "string") {
         const tmp = reg;
-        reg = create(input, limit);
+        reg = create(input, (limit !== null && limit !== void 0 ? limit : 0));
         input = tmp;
         limit = undefined;
     }

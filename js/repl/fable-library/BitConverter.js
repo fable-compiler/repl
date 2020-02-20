@@ -81,58 +81,69 @@ export function doubleToInt64Bits(value) {
     return fromBits(lowBits, highBits, false);
 }
 export function toBoolean(bytes, offset) {
-    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    const array = ArrayBuffer.isView(bytes) ? bytes : Uint8Array.from(bytes);
+    const view = new DataView(array.buffer, array.byteOffset, array.byteLength);
     return view.getUint8(offset) === 1 ? true : false;
 }
 export function toChar(bytes, offset) {
-    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    const array = ArrayBuffer.isView(bytes) ? bytes : Uint8Array.from(bytes);
+    const view = new DataView(array.buffer, array.byteOffset, array.byteLength);
     const code = view.getUint16(offset, littleEndian);
     return String.fromCharCode(code);
 }
 export function toInt16(bytes, offset) {
-    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    const array = ArrayBuffer.isView(bytes) ? bytes : Uint8Array.from(bytes);
+    const view = new DataView(array.buffer, array.byteOffset, array.byteLength);
     return view.getInt16(offset, littleEndian);
 }
 export function toInt32(bytes, offset) {
-    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    const array = ArrayBuffer.isView(bytes) ? bytes : Uint8Array.from(bytes);
+    const view = new DataView(array.buffer, array.byteOffset, array.byteLength);
     return view.getInt32(offset, littleEndian);
 }
 export function toInt64(bytes, offset) {
-    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    const array = ArrayBuffer.isView(bytes) ? bytes : Uint8Array.from(bytes);
+    const view = new DataView(array.buffer, array.byteOffset, array.byteLength);
     const lowBits = view.getInt32(offset + (littleEndian ? 0 : 4), littleEndian);
     const highBits = view.getInt32(offset + (littleEndian ? 4 : 0), littleEndian);
     return fromBits(lowBits, highBits, false);
 }
 export function toUInt16(bytes, offset) {
-    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    const array = ArrayBuffer.isView(bytes) ? bytes : Uint8Array.from(bytes);
+    const view = new DataView(array.buffer, array.byteOffset, array.byteLength);
     return view.getUint16(offset, littleEndian);
 }
 export function toUInt32(bytes, offset) {
-    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    const array = ArrayBuffer.isView(bytes) ? bytes : Uint8Array.from(bytes);
+    const view = new DataView(array.buffer, array.byteOffset, array.byteLength);
     return view.getUint32(offset, littleEndian);
 }
 export function toUInt64(bytes, offset) {
-    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    const array = ArrayBuffer.isView(bytes) ? bytes : Uint8Array.from(bytes);
+    const view = new DataView(array.buffer, array.byteOffset, array.byteLength);
     const lowBits = view.getUint32(offset + (littleEndian ? 0 : 4), littleEndian);
     const highBits = view.getUint32(offset + (littleEndian ? 4 : 0), littleEndian);
     return fromBits(lowBits, highBits, true);
 }
 export function toSingle(bytes, offset) {
-    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    const array = ArrayBuffer.isView(bytes) ? bytes : Uint8Array.from(bytes);
+    const view = new DataView(array.buffer, array.byteOffset, array.byteLength);
     return view.getFloat32(offset, littleEndian);
 }
 export function toDouble(bytes, offset) {
-    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    const array = ArrayBuffer.isView(bytes) ? bytes : Uint8Array.from(bytes);
+    const view = new DataView(array.buffer, array.byteOffset, array.byteLength);
     return view.getFloat64(offset, littleEndian);
 }
 export function toString(bytes, offset, count) {
-    let ar = bytes;
-    if (typeof offset !== "undefined" && typeof count !== "undefined") {
-        ar = bytes.subarray(offset, offset + count);
+    const array = ArrayBuffer.isView(bytes) ? bytes : Uint8Array.from(bytes);
+    let buffer = Buffer.from(array.buffer, array.byteOffset, array.byteLength);
+    if (offset != null && count != null) {
+        buffer = buffer.subarray(offset, offset + count);
     }
-    else if (typeof offset !== "undefined") {
-        ar = bytes.subarray(offset);
+    else if (offset != null) {
+        buffer = buffer.subarray(offset);
     }
-    return Array.from(ar).map((b) => ("0" + b.toString(16)).slice(-2)).join("-");
+    return Array.from(buffer).map((b) => ("0" + b.toString(16)).slice(-2)).join("-");
 }
 //# sourceMappingURL=BitConverter.js.map

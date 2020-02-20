@@ -1,7 +1,11 @@
 import Event from "./Event.js";
 export default class Timer {
     constructor(interval) {
-        this.Interval = interval > 0 ? interval : 100;
+        this._enabled = false;
+        this._isDisposed = false;
+        this._intervalId = 0;
+        this._timeoutId = 0;
+        this.Interval = interval && interval > 0 ? interval : 100;
         this.AutoReset = true;
         this._elapsed = new Event();
     }
