@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 1.0.3 - 2020-02-20
+
+* Fix #79: Use CSS to style the calculator example
+
 ## 1.0.2 - 2020-02-20
 
 * Fix #75: Remove logs from iframeMessage when in production mode
