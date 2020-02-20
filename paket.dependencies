@@ -42,3 +42,5 @@ group netcorebuild
     nuget Fake.IO.FileSystem
     nuget Fake.JavaScript.Npm
     nuget BlackFox.Fake.BuildTask
+    nuget Fake.Api.GitHub
+    nuget Fake.Tools.Git

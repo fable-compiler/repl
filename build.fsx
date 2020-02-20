@@ -17,6 +17,7 @@ open Fake.IO.Globbing.Operators
 open Fake.IO.FileSystemOperators
 open Fake.DotNet
 open Fake.Tools
+open Fake.Api
 open Fake.JavaScript
 open BlackFox.Fake
 
@@ -29,6 +30,8 @@ let METADATA_OUTPUT = Path.Combine(CWD, "public/metadata")
 let METADATA_SOURCE = Path.Combine(NCAVE_FCS_REPO, "temp/metadata2")
 
 let METADATA_EXPORT_DIR = Path.Combine(CWD, "src/Export")
+let CHANGELOG_FILE = Path.Combine(CWD, "CHANGELOG.md")
+let PRELUDE_FILE = CWD </> "src/App/Prelude.fs"
 
 module Util =
 
@@ -47,14 +50,41 @@ module Util =
                 | None -> line
                 | Some newLine -> newLine)
 
-// TODO: Get version from fable-web-worker package
-let updateVersion () =
-    let version = File.ReadAllText(REPL_OUTPUT </> "version.txt")
-    let reg = Regex(@"\bVERSION\s*=\s*""(.*?)""")
-    let mainFile = CWD </> "src/App/Shared.fs"
-    (reg, mainFile) ||> Util.replaceLines (fun line m ->
-        let replacement = sprintf "VERSION = \"%s\"" version
-        reg.Replace(line, replacement) |> Some)
+module Changelog =
+
+    let versionRegex = Regex("^## ?\\[?v?([\\w\\d.-]+\\.[\\w\\d.-]+[a-zA-Z0-9])\\]?", RegexOptions.IgnoreCase)
+
+    let getLastVersion () =
+        File.ReadLines(CHANGELOG_FILE)
+            |> Seq.tryPick (fun line ->
+                let m = versionRegex.Match(line)
+                if m.Success then Some m else None)
+            |> function
+                | None -> failwith "Couldn't find version in changelog file"
+                | Some m ->
+                    m.Groups.[1].Value
+
+    let isPreRelease (version : string) =
+        let regex = Regex(".*(alpha|beta|rc).*", RegexOptions.IgnoreCase)
+        regex.IsMatch(version)
+
+    let getNotes (version : string) =
+        File.ReadLines(CHANGELOG_FILE)
+        |> Seq.skipWhile(fun line ->
+            let m = versionRegex.Match(line)
+
+            if m.Success then
+                (m.Groups.[1].Value <> version)
+            else
+                true
+        )
+        // Remove the version line
+        |> Seq.skip 1
+        // Take all until the next version line
+        |> Seq.takeWhile (fun line ->
+            let m = versionRegex.Match(line)
+            not m.Success
+        )
 
 let clean = BuildTask.create "Clean" [ ] {
     !! "public/js"
@@ -94,8 +124,7 @@ let copyModules = BuildTask.create "CopyModules" [ npmInstall ] {
     Shell.copyDir REPL_OUTPUT "node_modules/fable-standalone/dist" (fun _ -> true)
 
     // Automatically update the version in Prelude.fs
-    let preludeFile = CWD </> "src/App/Prelude.fs"
-    let reg = Regex(@"let \[<Literal>\] VERSION = ""(.*)""")
+    let reg = Regex(@"let \[<Literal>\] FABLE_VERSION = ""(.*)""")
     let fableCompilerPackageJson = CWD </> "node_modules/fable-compiler/package.json"
     let currentVersionRegex = Regex(@"^\s*""version"":\s*""(.*)""")
     let currentVersion =
@@ -108,7 +137,7 @@ let copyModules = BuildTask.create "CopyModules" [ npmInstall ] {
             currentVersionRegex.Match(line).Groups.[1].Value
 
     let newLines =
-        preludeFile
+        PRELUDE_FILE
         |> File.ReadLines 
         |> Seq.map (fun line ->
             reg.Replace(line, fun m ->
@@ -117,7 +146,7 @@ let copyModules = BuildTask.create "CopyModules" [ npmInstall ] {
         )
         |> Seq.toArray
 
-    File.WriteAllLines(preludeFile, newLines)
+    File.WriteAllLines(PRELUDE_FILE, newLines)
 }
 
 // TODO re-add generate metadata for REPL lib using git submobules
@@ -165,8 +194,44 @@ let watchApp = BuildTask.create "WatchApp" [ buildLib ] {
     Npm.run "start" id
 }
 
-let publishGithubPages = BuildTask.create "PublishGithubPages" [ buildApp ] {
+let _release = BuildTask.create "Release" [ buildApp ] {
+    let token =
+        match Environment.environVarOrDefault "GITHUB_TOKEN" "" with
+        | s when not (String.IsNullOrWhiteSpace s) -> s
+        | _ -> failwith "The Github token must be set in a GITHUB_TOKEN environmental variable"
+
+    let newVersion = Changelog.getLastVersion()
+
+    let reg = Regex(@"let \[<Literal>\] REPL_VERSION = ""(.*)""")
+    let newLines =
+        PRELUDE_FILE
+        |> File.ReadLines 
+        |> Seq.map (fun line ->
+            reg.Replace(line, fun m ->
+                let previousVersion = m.Groups.[1].Value
+                if previousVersion = newVersion then
+                    failwith "You need to update the version in the CHANGELOG.md before publishing a new version of the REPL"
+                else
+                    m.Groups.[0].Value.Replace(m.Groups.[1].Value, newVersion)
+            )
+        )
+        |> Seq.toArray
+
+    File.WriteAllLines(PRELUDE_FILE, newLines)    
+
+    Git.Staging.stageAll CWD
+    let commitMsg = sprintf "Release version %s" newVersion
+    Git.Commit.exec CWD commitMsg
+    Git.Branches.push CWD
+
+    GitHub.createClientWithToken token
+    |> GitHub.draftNewRelease "fable-compiler" "repl" newVersion (Changelog.isPreRelease newVersion) (Changelog.getNotes newVersion)
+    // |> GitHub.uploadFile nupkg
+    |> GitHub.publishDraft
+    |> Async.RunSynchronously
+
     Npm.run "deploy" id
+
 }
 
 // Test samples build correctly
