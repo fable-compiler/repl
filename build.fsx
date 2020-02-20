@@ -231,7 +231,6 @@ let _release = BuildTask.create "Release" [ buildApp ] {
     |> Async.RunSynchronously
 
     Npm.run "deploy" id
-
 }
 
 // Test samples build correctly

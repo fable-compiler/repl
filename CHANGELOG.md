@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-## 1.0.0 - 2020-01-13
+## 1.0.0 - 2020-02-20
 
-### Changed
+### Fixed
 
+* Fix #86: Make a distinction between REPL and Fable version in the info panel
+* Init the changelog
