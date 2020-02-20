@@ -5,7 +5,7 @@ ports:
   - port: 8080
 
 tasks:
-  - before: dotnet restore
+  - before: dotnet tool restore && dotnet restore
   - init: ./fake.sh build -t BuildLib
 
 github:

@@ -101,46 +101,6 @@ let update (PushInput input) (InputStack xs)  =
     | _ -> InputStack xs
 
 // View
-let digitStyle =
-    Style [
-        Height 40
-        Padding 15
-        TextAlign TextAlignOptions.Center
-        Margin 5
-        VerticalAlign "middle"
-        BackgroundColor "lightgreen"
-        Width 55
-        FontSize 24.0
-        LineHeight 40.0
-        FontSize "24px"
-        LineHeight "40px"
-        Cursor "pointer"
-        BoxShadow "0 0 3px black"
-    ]
-
-let opButtonStyle =
-    Style [
-        Height 40
-        Padding 15
-        TextAlign TextAlignOptions.Center
-        Margin 5
-        VerticalAlign "middle"
-        BackgroundColor "lightblue"
-        Width "55px"
-        FontSize "24px"
-        LineHeight "40px"
-        Cursor "pointer"
-        BoxShadow "0 0 3px black"
-    ]
-
-let calcStyle =
-    Style [
-      Width "407px"
-      Border "2px black solid"
-      BorderRadius "15px"
-      Padding "10px"
-    ]
-
 let inputToString = function
     | Plus -> "+"
     | Minus -> "-"
@@ -158,13 +118,13 @@ let modelToString (InputStack xs) =
 let digitBtn n dispatch =
     let message = PushInput (Const n)
     div
-      [ digitStyle; OnClick (fun _ -> dispatch message) ]
+      [ Class "calculator-button is-digit"; OnClick (fun _ -> dispatch message) ]
       [ str (string n) ]
 
 let operationBtn input dispatch =
     let message = PushInput input
     div
-        [ opButtonStyle; OnClick (fun _ -> dispatch message) ]
+        [ Class "calculator-button is-op"; OnClick (fun _ -> dispatch message) ]
         [ str (inputToString input) ]
 
 let tableRow xs = tr [] [ for x in xs -> td [] [x] ]
@@ -173,7 +133,7 @@ let view model dispatch =
     let digit n = digitBtn n dispatch
     let opBtn op = operationBtn op dispatch
     div
-      [ calcStyle ]
+      [ Class "calculator" ]
       [ h2
           [ Style [ Height 40; MarginLeft 20 ] ]
           [ str (modelToString model) ]
