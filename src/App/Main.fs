@@ -6,8 +6,6 @@ open Fable.FontAwesome
 open Browser.Types
 open Browser
 open Fetch.Types
-open Fulma
-open Fulma.Extensions.Wikiki
 open Elmish
 open Thoth.Elmish
 open Prelude
@@ -16,8 +14,6 @@ open Mouse
 open Thoth.Json
 open Fable.WebWorker
 
-open Fable.React
-open Fable.React.Props
 open Feliz
 open Feliz.Bulma
 
@@ -574,24 +570,45 @@ let private fsharpEditorOptions (fontSize : float) (fontFamily : string) =
     )
 
 let private editorTabs (activeTab : CodeTab) dispatch =
-    Tabs.tabs [ Tabs.IsCentered
-                Tabs.Size Size.IsMedium
-                Tabs.IsToggle ]
-        [ Tabs.tab [ Tabs.Tab.IsActive (activeTab = CodeTab.FSharp)
-                     Tabs.Tab.Props [
-                        OnClick (fun _ -> SetCodeTab CodeTab.FSharp |> dispatch)
-                     ] ]
-            [ a [ ] [ str "F#" ] ]
-          Tabs.tab [ Tabs.Tab.IsActive (activeTab = CodeTab.Html)
-                     Tabs.Tab.Props [
-                         OnClick (fun _ -> SetCodeTab CodeTab.Html |> dispatch)
-                     ] ]
-            [ a [ ] [ str "HTML" ] ]
-          Tabs.tab [ Tabs.Tab.IsActive (activeTab = CodeTab.Css)
-                     Tabs.Tab.Props [
-                         OnClick (fun _ -> SetCodeTab CodeTab.Css |> dispatch)
-                     ] ]
-            [ a [ ] [ str "CSS" ] ] ]
+    Bulma.tabs [
+        prop.className "is-centered is-medium is-toggle"
+        prop.children [
+            Html.ul [
+                Html.li [
+                    if (activeTab = CodeTab.FSharp) then
+                        prop.className "is-active"
+                    prop.onClick (fun _ -> SetCodeTab CodeTab.FSharp |> dispatch)
+                    prop.children [
+                        Html.a [
+                            prop.text "F#"
+                        ]
+                    ]
+                ]
+
+                Html.li [
+                    if (activeTab = CodeTab.Html) then
+                        prop.className "is-active"
+                    prop.onClick (fun _ -> SetCodeTab CodeTab.Html |> dispatch)
+                    prop.children [
+                        Html.a [
+                            prop.text "HTML"
+                        ]
+                    ]
+                ]
+
+                Html.li [
+                    if (activeTab = CodeTab.Css) then
+                        prop.className "is-active"
+                    prop.onClick (fun _ -> SetCodeTab CodeTab.Css |> dispatch)
+                    prop.children [
+                        Html.a [
+                            prop.text "CSS"
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    ]
 
 let private problemsPanel (isExpanded : bool) (errors : Monaco.Editor.IMarkerData[]) (currentTab : CodeTab) dispatch =
     let bodyDisplay =
@@ -608,56 +625,106 @@ let private problemsPanel (isExpanded : bool) (errors : Monaco.Editor.IMarkerDat
 
     let title =
         if errors.Length = 0 then
-            span [ ]
-                [ str "Problems" ]
+            Html.span [ 
+                prop.text "Problems" 
+            ]
         else
-            span [ ]
-                [ str "Problems: "
-                  Text.span [ Props [ Style [ MarginLeft ".5rem" ] ] ]
-                    [ str (string errors.Length ) ] ]
+            Html.span [ 
+                prop.children [
+                    Html.text  "Problems: "
+                    Html.span [
+                        prop.style [
+                            style.marginLeft (length.em 0.5)
+                        ]
+                        prop.text (string errors.Length)
+                    ]
+                ]
+           ]
 
-    div [ Class "scrollable-panel is-problem" ]
-        [ div [ Class "scrollable-panel-header"
-                OnClick (fun _ -> dispatch ToggleProblemsPanel) ]
-            [ div [ Class "scrollable-panel-header-icon" ]
-                [ Icon.icon [ ]
-                    [ Fa.i [ headerIcon; Fa.Size Fa.FaLarge ] [] ] ]
-              div [ Class "scrollable-panel-header-title" ]
-                [ title ]
-              div [ Class "scrollable-panel-header-icon" ]
-                [ Icon.icon [ ]
-                    [ Fa.i [ headerIcon; Fa.Size Fa.FaLarge ] [] ] ] ]
+    Html.div [
+        prop.className "scrollable-panel is-problem"
+        prop.children [
+            Html.div [
+                prop.className "scrollable-panel-header"
+                prop.onClick (fun _ -> dispatch ToggleProblemsPanel)
+                prop.children [
+                    Html.div [
+                        prop.className "scrollable-panel-header-icon"
+                        prop.children [
+                            Bulma.icon [
+                                Fa.i [ headerIcon; Fa.Size Fa.FaLarge ] [ ]
+                            ]
+                        ]
+                    ]
 
-          div [ Class ("scrollable-panel-body " + bodyDisplay) ]
-            [ for error in errors do
-                match error.severity with
-                | Monaco.MarkerSeverity.Error
-                | Monaco.MarkerSeverity.Warning ->
-                    let (icon, colorClass) =
+                    Html.div [
+                        prop.className "scrollable-panel-header-title"
+                        prop.children [ title ]
+                    ]
+
+                    Html.div [ 
+                        prop.className "scrollable-panel-header-icon"
+                        prop.children [ 
+                            Bulma.icon [ 
+                                Fa.i [ headerIcon; Fa.Size Fa.FaLarge ] [ ] 
+                            ] 
+                        ]
+                    ]
+                ]
+            ]
+
+            Html.div [
+                prop.className ("scrollable-panel-body " + bodyDisplay)
+                prop.children [
+                    for error in errors do
                         match error.severity with
-                        | Monaco.MarkerSeverity.Error -> Fa.Solid.TimesCircle, ofColor IsDanger
-                        | Monaco.MarkerSeverity.Warning -> Fa.Solid.ExclamationTriangle, ofColor IsWarning
-                        | _ -> failwith "Should not happen", ofColor NoColor
+                        | Monaco.MarkerSeverity.Error
+                        | Monaco.MarkerSeverity.Warning ->
+                            let (faIcon, colorProperty, colorClass) =
+                                match error.severity with
+                                | Monaco.MarkerSeverity.Error -> Fa.Solid.TimesCircle, color.isDanger, "is-danger"
+                                | Monaco.MarkerSeverity.Warning -> Fa.Solid.ExclamationTriangle, color.isWarning, "is-warning"
+                                | _ -> failwith "Should not happen", color.isDanger, ""
 
-                    yield div [ Class ("scrollable-panel-body-row " + colorClass)
-                                // Data("tooltip-content", error.message)
-                                OnClick (fun _ ->
+                            Html.div [
+                                prop.className ("scrollable-panel-body-row " + colorClass)
+                                prop.onClick (fun _ ->
                                     if currentTab <> CodeTab.FSharp then
                                         SetCodeTab CodeTab.FSharp |> dispatch
                                     ReactEditor.Dispatch.cursorMove "fsharp_cursor_jump" error
-                                ) ]
-                            [ Icon.icon [ Icon.Size IsSmall
-                                          Icon.CustomClass colorClass ]
-                                [ Fa.i [ icon ] [] ]
-                              span [ Class "scrollable-panel-body-row-description" ]
-                                [ str error.message ]
-                              span [ Class "scrollable-panel-body-row-position" ]
-                                [ str "("
-                                  str (string error.startLineNumber)
-                                  str ","
-                                  str (string error.startColumn)
-                                  str ")" ] ]
-                | _ -> () ] ]
+                                )
+                                prop.children [
+                                    Bulma.icon [
+                                        icon.isSmall
+                                        colorProperty
+                                        prop.children [
+                                            Fa.i [ faIcon ] []
+                                        ]
+                                    ]
+                                    
+                                    Html.span [
+                                        prop.className "scrollable-panel-body-row-description"
+                                        prop.text error.message
+                                    ]
+
+                                    Html.span [
+                                        prop.className "scrollable-panel-body-row-position"
+                                        prop.children [
+                                            Html.text "("
+                                            Html.text (string error.startLineNumber)
+                                            Html.text ","
+                                            Html.text (string error.startColumn)
+                                            Html.text ")"
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        | _ -> ()
+                ]
+            ]
+        ]
+    ]
+
 
 let private registerCompileCommand dispatch (editor : Monaco.Editor.IStandaloneCodeEditor) (monacoModule : Monaco.IExports) =
     let triggerCompile () = StartCompile None |> dispatch
@@ -665,84 +732,89 @@ let private registerCompileCommand dispatch (editor : Monaco.Editor.IStandaloneC
     editor.addCommand(monacoModule.KeyMod.CtrlCmd ||| int Monaco.KeyCode.KEY_S, triggerCompile, "") |> ignore
 
 let private editorArea model dispatch =
-    div [ Class "vertical-panel"
-          Style [ Width (numberToPercent model.PanelSplitRatio)
-                  Position PositionOptions.Relative ] ]
-        [ editorTabs model.CodeTab dispatch
-          // Html editor
-          ReactEditor.editor [ ReactEditor.Options (htmlEditorOptions
-                                                        model.Sidebar.Options.FontSize
-                                                        model.Sidebar.Options.FontFamily)
-                               ReactEditor.Value model.HtmlCode
-                               ReactEditor.IsHidden (model.CodeTab <> CodeTab.Html)
-                               ReactEditor.CustomClass (fontSizeClass model.Sidebar.Options.FontSize)
-                               ReactEditor.OnChange (ChangeHtmlCode >> dispatch)
-                               ReactEditor.EditorDidMount (registerCompileCommand dispatch) ]
-          // Css editor
-          ReactEditor.editor [ ReactEditor.Options (cssEditorOptions
-                                                        model.Sidebar.Options.FontSize
-                                                        model.Sidebar.Options.FontFamily)
-                               ReactEditor.Value model.CssCode
-                               ReactEditor.IsHidden (model.CodeTab <> CodeTab.Css)
-                               ReactEditor.CustomClass (fontSizeClass model.Sidebar.Options.FontSize)
-                               ReactEditor.OnChange (ChangeCssCode >> dispatch)
-                               ReactEditor.EditorDidMount (registerCompileCommand dispatch) ]
-          // F# editor
-          ReactEditor.editor [ ReactEditor.Options (fsharpEditorOptions
-                                                        model.Sidebar.Options.FontSize
-                                                        model.Sidebar.Options.FontFamily)
-                               ReactEditor.Value model.FSharpCode
-                               ReactEditor.IsHidden (model.CodeTab <> CodeTab.FSharp)
-                               ReactEditor.OnChange (ChangeFsharpCode >> dispatch)
-                               ReactEditor.Errors model.FSharpErrors
-                               ReactEditor.EventId "fsharp_cursor_jump"
-                               ReactEditor.CustomClass (fontSizeClass model.Sidebar.Options.FontSize)
-                               ReactEditor.EditorDidMount (fun editor monacoModule ->
-                                if not (isNull editor) then
-                                    dispatch (SetFSharpEditor editor)
+    Html.div [
+        prop.className "vertical-panel"
+        prop.style [
+            style.width (length.percent (model.PanelSplitRatio * 100.))
+            style.position.relative
+        ]
+        prop.children [
+            editorTabs model.CodeTab dispatch
+            // Html editor
+            ReactEditor.editor [ 
+                ReactEditor.Options (htmlEditorOptions model.Sidebar.Options.FontSize model.Sidebar.Options.FontFamily)
+                ReactEditor.Value model.HtmlCode
+                ReactEditor.IsHidden (model.CodeTab <> CodeTab.Html)
+                ReactEditor.CustomClass (fontSizeClass model.Sidebar.Options.FontSize)
+                ReactEditor.OnChange (ChangeHtmlCode >> dispatch)
+                ReactEditor.EditorDidMount (registerCompileCommand dispatch) 
+            ]
+            // Css editor
+            ReactEditor.editor [ 
+                ReactEditor.Options (cssEditorOptions model.Sidebar.Options.FontSize model.Sidebar.Options.FontFamily)
+                ReactEditor.Value model.CssCode
+                ReactEditor.IsHidden (model.CodeTab <> CodeTab.Css)
+                ReactEditor.CustomClass (fontSizeClass model.Sidebar.Options.FontSize)
+                ReactEditor.OnChange (ChangeCssCode >> dispatch)
+                ReactEditor.EditorDidMount (registerCompileCommand dispatch) 
+            ]
+            // F# editor
+            ReactEditor.editor [ 
+                ReactEditor.Options (fsharpEditorOptions model.Sidebar.Options.FontSize model.Sidebar.Options.FontFamily)
+                ReactEditor.Value model.FSharpCode
+                ReactEditor.IsHidden (model.CodeTab <> CodeTab.FSharp)
+                ReactEditor.OnChange (ChangeFsharpCode >> dispatch)
+                ReactEditor.Errors model.FSharpErrors
+                ReactEditor.EventId "fsharp_cursor_jump"
+                ReactEditor.CustomClass (fontSizeClass model.Sidebar.Options.FontSize)
+                ReactEditor.EditorDidMount (fun editor monacoModule ->
+                    if not (isNull editor) then
+                        dispatch (SetFSharpEditor editor)
 
-                                    // Because we have access to the monacoModule here,
-                                    // register the different provider needed for F# editor
-                                    let getTooltip line column lineText =
-                                        async {
-                                            let id = System.Guid.NewGuid()
-                                            return! model.Worker.PostAndAwaitResponse(GetTooltip(id, line, column, lineText), function
-                                                | FoundTooltip(id2, lines) when id = id2 -> Some lines
-                                                | _ -> None)
-                                        }
+                        // Because we have access to the monacoModule here,
+                        // register the different provider needed for F# editor
+                        let getTooltip line column lineText =
+                            async {
+                                let id = System.Guid.NewGuid()
+                                return! model.Worker.PostAndAwaitResponse(GetTooltip(id, line, column, lineText), function
+                                    | FoundTooltip(id2, lines) when id = id2 -> Some lines
+                                    | _ -> None)
+                            }
 
-                                    let tooltipProvider = Editor.createTooltipProvider getTooltip
-                                    monacoModule.languages.registerHoverProvider("fsharp", tooltipProvider) |> ignore
+                        let tooltipProvider = Editor.createTooltipProvider getTooltip
+                        monacoModule.languages.registerHoverProvider("fsharp", tooltipProvider) |> ignore
 
-                                    let getDeclarationLocation uri line column lineText =
-                                        async {
-                                            let id = System.Guid.NewGuid()
-                                            return! model.Worker.PostAndAwaitResponse(GetDeclarationLocation(id, line, column, lineText), function
-                                                | FoundDeclarationLocation(id2, res) when id = id2 ->
-                                                    res |> Option.map (fun (line1, col1, line2, col2) ->
-                                                        uri, line1, col1, line2, col2) |> Some
-                                                | _ -> None)
-                                        }
+                        let getDeclarationLocation uri line column lineText =
+                            async {
+                                let id = System.Guid.NewGuid()
+                                return! model.Worker.PostAndAwaitResponse(GetDeclarationLocation(id, line, column, lineText), function
+                                    | FoundDeclarationLocation(id2, res) when id = id2 ->
+                                        res |> Option.map (fun (line1, col1, line2, col2) ->
+                                            uri, line1, col1, line2, col2) |> Some
+                                    | _ -> None)
+                            }
 
-                                    let editorUri = editor.getModel().uri
-                                    let definitionProvider = Editor.createDefinitionProvider (getDeclarationLocation editorUri)
-                                    monacoModule.languages.registerDefinitionProvider("fsharp", definitionProvider) |> ignore
+                        let editorUri = editor.getModel().uri
+                        let definitionProvider = Editor.createDefinitionProvider (getDeclarationLocation editorUri)
+                        monacoModule.languages.registerDefinitionProvider("fsharp", definitionProvider) |> ignore
 
-                                    let getCompletion line column lineText =
-                                        async {
-                                            let id = System.Guid.NewGuid()
-                                            return! model.Worker.PostAndAwaitResponse(GetCompletions(id, line, column, lineText), function
-                                                | FoundCompletions(id2, lines) when id = id2 -> Some lines
-                                                | _ -> None)
-                                        }
+                        let getCompletion line column lineText =
+                            async {
+                                let id = System.Guid.NewGuid()
+                                return! model.Worker.PostAndAwaitResponse(GetCompletions(id, line, column, lineText), function
+                                    | FoundCompletions(id2, lines) when id = id2 -> Some lines
+                                    | _ -> None)
+                            }
 
-                                    let completionProvider = Editor.createCompletionProvider getCompletion
-                                    monacoModule.languages.registerCompletionItemProvider("fsharp", completionProvider) |> ignore
+                        let completionProvider = Editor.createCompletionProvider getCompletion
+                        monacoModule.languages.registerCompletionItemProvider("fsharp", completionProvider) |> ignore
 
-                                    registerCompileCommand dispatch editor monacoModule
-                               ) ]
-          problemsPanel model.IsProblemsPanelExpanded model.FSharpErrors model.CodeTab dispatch ]
-
+                        registerCompileCommand dispatch editor monacoModule
+                ) 
+            ]
+            problemsPanel model.IsProblemsPanelExpanded model.FSharpErrors model.CodeTab dispatch
+        ]
+    ]
 
 let private outputTabs (activeTab : OutputTab) dispatch =
     Bulma.tabs [
