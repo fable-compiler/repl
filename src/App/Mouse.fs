@@ -38,6 +38,7 @@ module Cmd =
     let iframeMessage (args : IframeMessageArgs<'Msg>) =
         let handler dispatch =
             window.addEventListener("message", fun ev ->
+                console.log(ev?data)
                 let iframeMessageDecoder =
                     Decode.field "type" Decode.string
                     |> Decode.option
@@ -67,6 +68,11 @@ module Cmd =
                 Decode.fromValue "$" iframeMessageDecoder ev?data
                 |> function
                     | Ok msg -> dispatch msg
-                    | Error error -> console.warn error
+                    | Error error -> 
+                        // We don't have an easy way to discard false positive
+                        // so for now, only log when in DEBUG mode
+                        #if DEBUG
+                        console.warn error
+                        #endif
             )
         [ handler ]
