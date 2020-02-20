@@ -9,7 +9,7 @@ open Thoth.Json
 open Browser
 
 [<Literal>]
-let private MONACO_DEFAULT_FONT_FAMILY = "Menlo, Monaco, \"Courier New\", monospace"
+let private MONACO_DEFAULT_FONT_FAMILY = "Menlo, Monaco, Consolas, \"Courier New\", monospace"
 
 [<Literal>]
 let private LOCAL_STORAGE_REPL_SETTING = "fable_repl_settings"
