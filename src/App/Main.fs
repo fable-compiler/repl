@@ -16,6 +16,11 @@ open Mouse
 open Thoth.Json
 open Fable.WebWorker
 
+open Fable.React
+open Fable.React.Props
+open Feliz
+open Feliz.Bulma
+
 type ISavedState =
     abstract code: string
     abstract html: string
@@ -519,8 +524,6 @@ let init () =
       IsProblemsPanelExpanded = true
       Logs = [] }, cmd
 
-open Fable.React
-open Fable.React.Props
 
 let private numberToPercent number =
     string (number * 100.) + "%"
@@ -742,27 +745,48 @@ let private editorArea model dispatch =
 
 
 let private outputTabs (activeTab : OutputTab) dispatch =
-    Tabs.tabs [ Tabs.IsCentered
-                Tabs.Size Size.IsMedium
-                Tabs.IsToggle ]
-        [ Tabs.tab [ Tabs.Tab.IsActive (activeTab = OutputTab.Live)
-                     Tabs.Tab.Props [
-                         OnClick (fun _ -> SetOutputTab OutputTab.Live |> dispatch)
-                     ] ]
-            [ a [ ] [ str "Live sample" ] ]
-          Tabs.tab [ Tabs.Tab.IsActive (activeTab = OutputTab.Code)
-                     Tabs.Tab.Props [
-                         OnClick (fun _ -> SetOutputTab OutputTab.Code |> dispatch)
-                     ] ]
-            [ a [ ] [ str "Code" ] ] ]
+    Bulma.tabs [
+        prop.className "is-centered is-medium is-toggle"
+        prop.children [
+            Html.ul [
+
+                Html.li [
+                    if (activeTab = OutputTab.Live) then
+                        prop.className "is-active"
+                    prop.onClick (fun _ ->
+                        SetOutputTab OutputTab.Live |> dispatch
+                    )
+                    prop.children [
+                        Html.a [ 
+                            prop.text "Live sample"
+                        ]
+                    ]
+                ]
+
+                Html.li [
+                    if (activeTab = OutputTab.Code) then
+                        prop.className "is-active"
+                    prop.onClick (fun _ ->
+                        SetOutputTab OutputTab.Code |> dispatch
+                    )
+                    prop.children [
+                        Html.a [ 
+                            prop.text "Code"
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    ]
 
 let private toggleDisplay cond =
     if cond then "" else "is-hidden"
 
 let private viewIframe isShown url =
-    iframe [ Src url
-             Class (toggleDisplay isShown) ]
-        [ ]
+    Html.iframe [ 
+        prop.src url
+        prop.className (toggleDisplay isShown) 
+    ]
 
 let private viewCodeEditor (model: Model) =
     let fontFamily = model.Sidebar.Options.FontFamily
@@ -779,26 +803,49 @@ let private viewCodeEditor (model: Model) =
                         o.fontLigatures <- Some (fontFamily = "Fira Code")
                     )
 
-    ReactEditor.editor [ ReactEditor.Options options
-                         ReactEditor.Value model.CodeES2015
-                         ReactEditor.IsHidden (model.OutputTab <> OutputTab.Code)
-                         ReactEditor.CustomClass (fontSizeClass model.Sidebar.Options.FontSize) ]
+    ReactEditor.editor [ 
+        ReactEditor.Options options
+        ReactEditor.Value model.CodeES2015
+        ReactEditor.IsHidden (model.OutputTab <> OutputTab.Code)
+        ReactEditor.CustomClass (fontSizeClass model.Sidebar.Options.FontSize) 
+    ]
 
 let private outputArea model dispatch =
     let isLiveViewShown = model.OutputTab = OutputTab.Live
-    let content =
-        [ outputTabs model.OutputTab dispatch
-          div [ Class "output-content"; Style [Height "100%"] ]
-            [ (if model.State = Loading then
-                    div [Class ("is-loading title has-text-centered " + (toggleDisplay isLiveViewShown))
-                         Style [Height "100%"; FontSize "1.2em"]] []
-                else viewIframe isLiveViewShown model.IFrameUrl)
-              viewCodeEditor model
-              ConsolePanel.view model.Logs ] ]
-
-    div [ Class "output-container"
-          Style [ Width (numberToPercent (1. - model.PanelSplitRatio)) ] ]
-        content
+    
+    Html.div [ 
+        prop.className "output-container"
+        prop.style [
+            style.width (length.percent ((1. - model.PanelSplitRatio) * 100.))
+        ]  
+        prop.children [
+            outputTabs model.OutputTab dispatch
+            
+            Html.div [
+                prop.className "output-content"
+                prop.style [
+                    style.height (length.percent 100)
+                ]
+                prop.children [
+                    if model.State = Loading then
+                        Html.div [ 
+                            prop.className [
+                                true, "is-loading title has-text-centered"
+                                not isLiveViewShown, "is-hidden"
+                            ]
+                            prop.style [
+                                style.height (length.percent 100)
+                                style.fontSize (length.em 1.2)
+                            ]
+                        ]
+                    else
+                        viewIframe isLiveViewShown model.IFrameUrl
+                    viewCodeEditor model
+                    ConsolePanel.view model.Logs
+                ]
+            ]
+        ]
+    ]
 
 let view (model: Model) dispatch =
     Elmish.React.Common.lazyView2
@@ -807,19 +854,38 @@ let view (model: Model) dispatch =
                 match model.DragTarget with
                 | PanelSplitter -> true
                 | NoTarget -> false
-            div [ classList [ "is-unselectable", isDragging ] ]
-                [ div [ Class "page-content" ]
-                    [ Sidebar.view (model.State = State.Compiling) model.Sidebar (SidebarMsg >> dispatch)
-                      div [ Class "main-content" ]
-                        [ editorArea model dispatch
-                          div [ Class "horizontal-resize"
-                                OnMouseDown (fun ev ->
-                                    // This prevents text selection in Safari
-                                    ev.preventDefault()
-                                    dispatch PanelDragStarted) ]
-                              [ ]
-                          outputArea model dispatch ] ] ]
 
+            Html.div [
+                prop.className [
+                    isDragging, "is-unselectable"
+                ]
+                prop.children [
+                    Html.div [
+                        prop.className "page-content"
+                        prop.children [
+                            Sidebar.view (model.State = State.Compiling) model.Sidebar (SidebarMsg >> dispatch)
+
+                            Html.div [
+                                prop.className "main-content"
+                                prop.children [
+                                    editorArea model dispatch
+
+                                    Html.div [
+                                        prop.className "horizontal-resize"
+                                        prop.onMouseDown (fun ev ->
+                                            // This prevents text selection in Safari
+                                            ev.preventDefault()
+                                            dispatch PanelDragStarted
+                                        )
+                                    ]
+                                    
+                                    outputArea model dispatch
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
         )
         model
         dispatch
