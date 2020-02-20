@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 1.0.4 - 2020-02-20
+
+* Fix #79: Use CSS classes in the F# code instead of inline style
+
 ## 1.0.3 - 2020-02-20
 
 * Fix #79: Use CSS to style the calculator example
