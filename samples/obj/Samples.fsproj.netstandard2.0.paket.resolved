@@ -1,0 +1,6 @@
+FSharp.Core,4.7,Transitive,Main,false,true
+Fable.Core,3.1.5,Direct,Main,false,true
+Fable.Browser.Blob,1.1,Transitive,Main,false,true
+Fable.Browser.Event,1.0,Transitive,Main,false,true
+Fable.Browser.WebStorage,1.0,Transitive,Main,false,true
+Fable.Browser.Dom,1.1,Direct,Main,false,true
