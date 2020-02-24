@@ -1,6 +1,6 @@
 # Fable REPL
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://github.com/fable-compiler/repl)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/fable-compiler/repl)
 
 ## Building locally
 
