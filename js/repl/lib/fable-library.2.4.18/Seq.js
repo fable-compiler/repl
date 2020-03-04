@@ -58,6 +58,14 @@ function __failIfNone(res) {
   return value(res);
 }
 
+function makeSeq(f) {
+  const seq = {
+    [Symbol.iterator]: f,
+    toString: () => "seq [" + Array.from(seq).join("; ") + "]"
+  };
+  return seq;
+}
+
 export function ofArray(xs) {
   return delay(() => unfold(i => i != null && i < xs.length ? [xs[i], i + 1] : null, 0));
 }
@@ -181,9 +189,7 @@ export function compareWith(f, xs, ys) {
   return nonZero != null ? value(nonZero) : length(xs) - length(ys);
 }
 export function delay(f) {
-  return {
-    [Symbol.iterator]: () => f()[Symbol.iterator]()
-  };
+  return makeSeq(() => f()[Symbol.iterator]());
 }
 export function empty() {
   return unfold(() => null, undefined);
@@ -545,8 +551,19 @@ export function minBy(f, xs, comparer) {
   return reduce((acc, x) => compareFn(f(acc), f(x)) === -1 ? acc : x, xs);
 }
 export function pairwise(xs) {
-  const res = Array.from(scan((last, next) => [last[1], next], [0, 0], xs));
-  return res.length < 2 ? [] : skip(2, res);
+  return delay(() => {
+    const iter = xs[Symbol.iterator]();
+    const cur = iter.next();
+
+    if (cur.done) {
+      return empty();
+    }
+
+    const hd = cur.value;
+    const tl = tail(xs);
+    const ys = scan(([_, last], next) => [last, next], [hd, hd], tl);
+    return skip(1, ys);
+  });
 }
 export function rangeChar(first, last) {
   return delay(() => unfold(x => x <= last ? [x, String.fromCharCode(x.charCodeAt(0) + 1)] : null, first));
@@ -643,19 +660,17 @@ export function singleton(y) {
   return [y];
 }
 export function skip(n, xs) {
-  return {
-    [Symbol.iterator]: () => {
-      const iter = xs[Symbol.iterator]();
+  return makeSeq(() => {
+    const iter = xs[Symbol.iterator]();
 
-      for (let i = 1; i <= n; i++) {
-        if (iter.next().done) {
-          throw new Error("Seq has not enough elements");
-        }
+    for (let i = 1; i <= n; i++) {
+      if (iter.next().done) {
+        throw new Error("Seq has not enough elements");
       }
-
-      return iter;
     }
-  };
+
+    return iter;
+  });
 }
 export function skipWhile(f, xs) {
   return delay(() => {
@@ -681,9 +696,7 @@ export function tail(xs) {
     throw new Error("Seq was empty");
   }
 
-  return {
-    [Symbol.iterator]: () => iter
-  };
+  return makeSeq(() => iter);
 }
 export function take(n, xs, truncate = false) {
   return delay(() => {
@@ -800,36 +813,34 @@ export function pick(f, xs) {
   return __failIfNone(tryPick(f, xs));
 }
 export function unfold(f, fst) {
-  return {
-    [Symbol.iterator]: () => {
-      // Capture a copy of the first value in the closure
-      // so the sequence is restarted every time, see #1230
-      let acc = fst;
-      const iter = {
-        next: () => {
-          const res = f(acc);
+  return makeSeq(() => {
+    // Capture a copy of the first value in the closure
+    // so the sequence is restarted every time, see #1230
+    let acc = fst;
+    const iter = {
+      next: () => {
+        const res = f(acc);
 
-          if (res != null) {
-            const v = value(res);
+        if (res != null) {
+          const v = value(res);
 
-            if (v != null) {
-              acc = v[1];
-              return {
-                done: false,
-                value: v[0]
-              };
-            }
+          if (v != null) {
+            acc = v[1];
+            return {
+              done: false,
+              value: v[0]
+            };
           }
-
-          return {
-            done: true,
-            value: undefined
-          };
         }
-      };
-      return iter;
-    }
-  };
+
+        return {
+          done: true,
+          value: undefined
+        };
+      }
+    };
+    return iter;
+  });
 }
 export function zip(xs, ys) {
   return map2((x, y) => [x, y], xs, ys);
@@ -842,75 +853,71 @@ export function windowed(windowSize, source) {
     throw new Error("windowSize must be positive");
   }
 
-  return {
-    [Symbol.iterator]: () => {
-      let window = [];
-      const iter = source[Symbol.iterator]();
-      const iter2 = {
-        next: () => {
-          let cur;
+  return makeSeq(() => {
+    let window = [];
+    const iter = source[Symbol.iterator]();
+    const iter2 = {
+      next: () => {
+        let cur;
 
-          while (window.length < windowSize) {
-            if ((cur = iter.next()).done) {
-              return {
-                done: true,
-                value: undefined
-              };
-            }
-
-            window.push(cur.value);
+        while (window.length < windowSize) {
+          if ((cur = iter.next()).done) {
+            return {
+              done: true,
+              value: undefined
+            };
           }
 
-          const value = window;
-          window = window.slice(1);
-          return {
-            done: false,
-            value
-          };
+          window.push(cur.value);
         }
-      };
-      return iter2;
-    }
-  };
+
+        const value = window;
+        window = window.slice(1);
+        return {
+          done: false,
+          value
+        };
+      }
+    };
+    return iter2;
+  });
 }
 export function transpose(source) {
-  return {
-    [Symbol.iterator]: () => {
-      const iters = Array.from(source, x => x[Symbol.iterator]());
-      const iter = {
-        next: () => {
-          if (iters.length === 0) {
-            return {
-              done: true,
-              value: undefined
-            }; // empty sequence
-          }
-
-          const results = Array.from(iters, iter => iter.next());
-
-          if (results[0].done) {
-            if (!results.every(x => x.done)) {
-              throw new Error("Sequences have different lengths");
-            }
-
-            return {
-              done: true,
-              value: undefined
-            };
-          } else {
-            if (!results.every(x => !x.done)) {
-              throw new Error("Sequences have different lengths");
-            }
-
-            const values = results.map(x => x.value);
-            return {
-              done: false,
-              value: values
-            };
-          }
+  return makeSeq(() => {
+    const iters = Array.from(source, x => x[Symbol.iterator]());
+    const iter = {
+      next: () => {
+        if (iters.length === 0) {
+          return {
+            done: true,
+            value: undefined
+          }; // empty sequence
         }
-      };
-      return iter;
-    }
-  };
+
+        const results = Array.from(iters, iter => iter.next());
+
+        if (results[0].done) {
+          if (!results.every(x => x.done)) {
+            throw new Error("Sequences have different lengths");
+          }
+
+          return {
+            done: true,
+            value: undefined
+          };
+        } else {
+          if (!results.every(x => !x.done)) {
+            throw new Error("Sequences have different lengths");
+          }
+
+          const values = results.map(x => x.value);
+          return {
+            done: false,
+            value: values
+          };
+        }
+      }
+    };
+    return iter;
+  });
 }

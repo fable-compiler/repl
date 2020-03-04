@@ -1,8 +1,8 @@
 import { defaultArg, value as value$$1, some } from "./Option.js";
 import { List } from "./Types.js";
-import { transpose as transpose$$1, collect as collect$$1, scanBack as scanBack$$1, scan as scan$$1, foldBack2 as foldBack2$$1, fold2 as fold2$$1, fold as fold$$1, map as map$$1 } from "./Seq.js";
-import { partialApply, getItemFromDict, addToDict, tryGetValue, addToSet, count } from "./Util.js";
-import { addInPlace, ofList } from "./Array.js";
+import { transpose as transpose$$1, pairwise as pairwise$$1, collect as collect$$1, scanBack as scanBack$$1, scan as scan$$1, foldBack2 as foldBack2$$1, fold2 as fold2$$1, fold as fold$$1, map as map$$1 } from "./Seq.js";
+import { getItemFromDict, addToDict, tryGetValue, addToSet, count } from "./Util.js";
+import { ofList } from "./Array.js";
 import { splitInto as splitInto$$1, chunkBySize as chunkBySize$$1, permute as permute$$1, findIndexBack as findIndexBack$$1, tryFindIndexBack as tryFindIndexBack$$1 } from "./Array.js";
 import { createMutable } from "./Set.js";
 import { createMutable as createMutable$$1 } from "./Map.js";
@@ -1190,90 +1190,41 @@ export function countBy(projection$$6, xs$$142, eq$$5) {
   }, xs$$144);
   return result$$2;
 }
-export function where(predicate$$2, xs$$145) {
-  return filter(predicate$$2, xs$$145);
+export function where(predicate$$2, source) {
+  return filter(predicate$$2, source);
 }
-export function pairwise(xs$$146) {
-  const inner = function inner($xs$$147$$287, $acc$$27$$288, $x1$$1$$289) {
-    inner: while (true) {
-      const xs$$147 = $xs$$147$$287,
-            acc$$27 = $acc$$27$$288,
-            x1$$1 = $x1$$1$$289;
-
-      if (xs$$147.tail != null) {
-        let copyOfStruct = acc$$27;
-        addInPlace([x1$$1, xs$$147.head], copyOfStruct);
-        $xs$$147$$287 = xs$$147.tail;
-        $acc$$27$$288 = acc$$27;
-        $x1$$1$$289 = xs$$147.head;
-        continue inner;
-      } else {
-        return ofArray(acc$$27);
-      }
-
-      break;
-    }
-  };
-
-  var $target$$290, x1$$2, x2$$2, xs$$149;
-
-  if (xs$$146.tail != null) {
-    if (xs$$146.tail.tail != null) {
-      $target$$290 = 1;
-      x1$$2 = xs$$146.head;
-      x2$$2 = xs$$146.tail.head;
-      xs$$149 = xs$$146.tail.tail;
-    } else {
-      $target$$290 = 0;
-    }
-  } else {
-    $target$$290 = 0;
-  }
-
-  switch ($target$$290) {
-    case 0:
-      {
-        return new List();
-      }
-
-    case 1:
-      {
-        const acc$$28 = [];
-        addInPlace([x1$$2, x2$$2], acc$$28);
-        const clo1 = partialApply(2, inner, [xs$$149]);
-        const clo2 = clo1(acc$$28);
-        return clo2(x2$$2);
-      }
-  }
+export function pairwise(source$$1) {
+  const xs$$145 = pairwise$$1(source$$1);
+  return ofSeq(xs$$145);
 }
-export function windowed(windowSize, source) {
+export function windowed(windowSize, source$$2) {
   if (windowSize <= 0) {
     throw new Error("windowSize must be positive");
   }
 
   let res$$3 = new List();
 
-  for (let i$$35 = length(source); i$$35 >= windowSize; i$$35--) {
-    res$$3 = new List(slice(i$$35 - windowSize, i$$35 - 1, source), res$$3);
+  for (let i$$35 = length(source$$2); i$$35 >= windowSize; i$$35--) {
+    res$$3 = new List(slice(i$$35 - windowSize, i$$35 - 1, source$$2), res$$3);
   }
 
   return res$$3;
 }
-export function splitInto(chunks, source$$1) {
-  let xs$$152;
-  let xs$$150;
+export function splitInto(chunks, source$$3) {
+  let xs$$148;
+  let xs$$146;
   let array$$5;
-  array$$5 = ofList(source$$1, Array);
-  xs$$150 = splitInto$$1(chunks, array$$5);
-  xs$$152 = ofArray(xs$$150);
-  return map(function f$$63(xs$$151) {
-    return ofArray(xs$$151);
-  }, xs$$152);
+  array$$5 = ofList(source$$3, Array);
+  xs$$146 = splitInto$$1(chunks, array$$5);
+  xs$$148 = ofArray(xs$$146);
+  return map(function f$$63(xs$$147) {
+    return ofArray(xs$$147);
+  }, xs$$148);
 }
 export function transpose(lists$$1) {
-  let xs$$154;
-  let source$$3;
-  source$$3 = transpose$$1(lists$$1);
-  xs$$154 = map$$1(ofSeq, source$$3);
-  return ofSeq(xs$$154);
+  let xs$$150;
+  let source$$5;
+  source$$5 = transpose$$1(lists$$1);
+  xs$$150 = map$$1(ofSeq, source$$5);
+  return ofSeq(xs$$150);
 }

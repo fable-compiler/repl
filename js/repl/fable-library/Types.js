@@ -62,36 +62,40 @@ function compareList(self, other) {
         return other.tail == null ? 0 : -1;
     }
 }
-export function List(head, tail) {
-    this.head = head;
-    this.tail = tail;
+export class List {
+    constructor(head, tail) {
+        this.head = head;
+        this.tail = tail;
+    }
+    toString() {
+        return "[" + Array.from(this).join("; ") + "]";
+    }
+    toJSON() {
+        return Array.from(this);
+    }
+    [Symbol.iterator]() {
+        let cur = this;
+        return {
+            next: () => {
+                var _a, _b, _c;
+                const value = (_a = cur) === null || _a === void 0 ? void 0 : _a.head;
+                const done = ((_b = cur) === null || _b === void 0 ? void 0 : _b.tail) == null;
+                cur = (_c = cur) === null || _c === void 0 ? void 0 : _c.tail;
+                return { done, value };
+            },
+        };
+    }
+    GetHashCode() {
+        const hashes = Array.from(this).map(structuralHash);
+        return combineHashCodes(hashes);
+    }
+    Equals(other) {
+        return compareList(this, other) === 0;
+    }
+    CompareTo(other) {
+        return compareList(this, other);
+    }
 }
-List.prototype.toString = function () {
-    return "[" + Array.from(this).map((x) => String(x)).join("; ") + "]";
-};
-List.prototype.toJSON = function () {
-    return Array.from(this);
-};
-List.prototype[Symbol.iterator] = function () {
-    let cur = this;
-    return {
-        next: () => {
-            const tmp = cur;
-            cur = cur.tail;
-            return { done: tmp.tail == null, value: tmp.head };
-        },
-    };
-};
-List.prototype.GetHashCode = function () {
-    const hashes = Array.from(this).map(structuralHash);
-    return combineHashCodes(hashes);
-};
-List.prototype.Equals = function (other) {
-    return compareList(this, other) === 0;
-};
-List.prototype.CompareTo = function (other) {
-    return compareList(this, other);
-};
 export function Union(tag, name, ...fields) {
     this.tag = tag | 0;
     this.name = name;

@@ -3,7 +3,7 @@ import { type, record, bool, list, union, int32 } from "./Reflection.js";
 import { value as value$$3, some } from "./Option.js";
 import { iterate as iterate$$1, empty as empty$$1, toIterator, map as map$$2, unfold, getEnumerator, fold as fold$$1 } from "./Seq.js";
 import { compare, structuralHash, isDisposable } from "./Util.js";
-import { join, toText, printf } from "./String.js";
+import { join, format } from "./String.js";
 import { MutableMap$00602$$$$002Ector$$6623D9B3 as MutableMap$002400602$0024$0024$0024$0024002Ector$0024$00246623D9B3 } from "./MutableMap.js";
 import { addInPlace } from "./Array.js";
 export const MapTree$00602 = declare(function Map_MapTree(tag, name, ...fields) {
@@ -995,13 +995,14 @@ export function FSharpMap$$ToList(__$$24) {
 }
 
 FSharpMap.prototype.toString = function () {
-  var strings;
   const this$ = this;
-  return "map [" + (strings = (map$$2(function mapping(kv) {
-    const clo1 = toText(printf("(%A, %A)"));
-    const clo2 = clo1(kv[0]);
-    return clo2(kv[1]);
-  }, this$)), (join("; ", strings))) + "]";
+  let str;
+  let strings;
+  strings = map$$2(function toStr(kv) {
+    return format("({0}, {1})", kv[0], kv[1]);
+  }, this$);
+  str = join("; ", strings);
+  return "map [" + str + "]";
 };
 
 FSharpMap.prototype.GetHashCode = function () {
@@ -1016,9 +1017,9 @@ FSharpMap.prototype.GetHashCode = function () {
 
   while (e$$1.MoveNext()) {
     const patternInput$$5 = e$$1.Current;
-    const activePatternResult3703 = patternInput$$5;
-    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3703[0]));
-    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3703[1]));
+    const activePatternResult3692 = patternInput$$5;
+    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3692[0]));
+    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3692[1]));
   }
 
   return Math.abs(res$$3) | 0;
@@ -1109,7 +1110,7 @@ FSharpMap.prototype.has = function (k$$35) {
 FSharpMap.prototype.keys = function () {
   const this$$$7 = this;
   const source$$1 = MapTreeModule$$$toSeq(FSharpMap$$get_Tree(this$$$7));
-  return map$$2(function mapping$$1(kv$$1) {
+  return map$$2(function mapping(kv$$1) {
     return kv$$1[0];
   }, source$$1);
 };
@@ -1121,7 +1122,7 @@ FSharpMap.prototype.set = function (k$$36, v$$26) {
 FSharpMap.prototype.values = function () {
   const this$$$8 = this;
   const source$$2 = MapTreeModule$$$toSeq(FSharpMap$$get_Tree(this$$$8));
-  return map$$2(function mapping$$2(kv$$2) {
+  return map$$2(function mapping$$1(kv$$2) {
     return kv$$2[1];
   }, source$$2);
 };
@@ -1273,7 +1274,7 @@ function createMutablePrivate(comparer$$22, tree$0027) {
 
     keys() {
       const source$$3 = MapTreeModule$$$toSeq(tree$$1);
-      return map$$2(function mapping$$3(kv$$3) {
+      return map$$2(function mapping$$2(kv$$3) {
         return kv$$3[0];
       }, source$$3);
     },
@@ -1286,7 +1287,7 @@ function createMutablePrivate(comparer$$22, tree$0027) {
 
     values() {
       const source$$4 = MapTreeModule$$$toSeq(tree$$1);
-      return map$$2(function mapping$$4(kv$$4) {
+      return map$$2(function mapping$$3(kv$$4) {
         return kv$$4[1];
       }, source$$4);
     },
@@ -1318,7 +1319,7 @@ export function groupBy(projection, xs, comparer$$24) {
       void value;
     }
   }, xs);
-  return map$$2(function mapping$$5(kv$$5) {
+  return map$$2(function mapping$$4(kv$$5) {
     return [kv$$5[0], kv$$5[1]];
   }, dict);
 }
@@ -1329,7 +1330,7 @@ export function countBy(projection$$1, xs$$1, comparer$$25) {
     const value$$2 = dict$$1.has(key$$1) ? dict$$1.set(key$$1, dict$$1.get(key$$1) + 1) : dict$$1.set(key$$1, 1);
     void value$$2;
   }, xs$$1);
-  return map$$2(function mapping$$6(kv$$6) {
+  return map$$2(function mapping$$5(kv$$6) {
     return [kv$$6[0], kv$$6[1]];
   }, dict$$1);
 }

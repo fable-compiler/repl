@@ -1,4 +1,4 @@
-export function create(pattern, options) {
+export function create(pattern, options = 0) {
   // Supported RegexOptions
   // * IgnoreCase:  0x0001
   // * Multiline:   0x0002

@@ -4,12 +4,6 @@
         <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
         <PaketPropsVersion>5.185.3</PaketPropsVersion>
         <PaketPropsLoaded>true</PaketPropsLoaded>
-            <!-- Disable automagic references for F# dotnet sdk -->
-            <!-- This will not do anything for other project types -->
-            <!-- see https://github.com/fsharp/fslang-design/blob/master/tooling/FST-1002-fsharp-in-dotnet-sdk.md -->
-            <DisableImplicitFSharpCoreReference>true</DisableImplicitFSharpCoreReference>
-            <DisableImplicitSystemValueTupleReference>true</DisableImplicitSystemValueTupleReference>
-            
     </PropertyGroup>
 
     <ItemGroup Condition="($(DesignTimeBuild) == true) AND (('$(TargetFramework)' == 'netstandard2.0') OR ('$(TargetFramework)' == 'netstandard20'))">

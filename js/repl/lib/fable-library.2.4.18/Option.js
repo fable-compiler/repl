@@ -37,19 +37,17 @@ export class Some {
 
 }
 export function some(x) {
-  x = x === undefined ? null : x;
   return x == null || x instanceof Some ? new Some(x) : x;
 }
-export function value(x, acceptNull) {
+export function value(x) {
   if (x == null) {
-    if (!acceptNull) {
-      throw new Error("Option has no value");
-    }
-
-    return null;
+    throw new Error("Option has no value");
   } else {
     return x instanceof Some ? x.value : x;
   }
+}
+export function tryValue(x) {
+  return x instanceof Some ? x.value : x;
 }
 export function defaultArg(opt, defaultValue, f) {
   return opt != null ? f != null ? f(value(opt)) : value(opt) : defaultValue;

@@ -3,7 +3,7 @@ import { iterateIndexed, toIterator, getEnumerator, delay, collect, map, sumBy, 
 import { type } from "./Reflection.js";
 import { equals, getItemFromDict, tryGetValue } from "./Util.js";
 import { addInPlace } from "./Array.js";
-import { toText, printf } from "./String.js";
+import { format } from "./String.js";
 export const MutableMap$00602 = declare(function Fable_Collections_MutableMap(pairs, comparer) {
   const $this$$1 = this;
   const this$ = new FSharpRef(null);
@@ -143,9 +143,7 @@ export function MutableMap$00602$$Add$$5BDDA1(this$$$8, k$$4, v$$1) {
   switch ($target$$24) {
     case 0:
       {
-        let msg;
-        const clo1 = toText(printf("An item with the same key has already been added. Key: %A"));
-        msg = clo1(k$$4);
+        const msg = format("An item with the same key has already been added. Key: {0}", k$$4);
         throw new Error(msg);
         break;
       }
