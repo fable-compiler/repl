@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 1.0.5 - 2020-03-04
+
+* Update to fable-standalone 1.3.5
+
 ## 1.0.4 - 2020-02-20
 
 * Fix #79: Use CSS classes in the F# code instead of inline style
