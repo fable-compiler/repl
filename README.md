@@ -4,7 +4,10 @@
 
 ## Building locally
 
-To develop the REPL locally, run the `WatchApp` FAKE target and then open `localhost:8080` in your browser.
+To develop the REPL locally:
+
+1. `./fake.sh build -t WatchApp` or `fake.cmd build -t WatchApp` depending on your OS
+2. Open `localhost:8080` in your browser
 
 ## How to add a sample
 
