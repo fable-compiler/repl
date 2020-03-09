@@ -26,7 +26,7 @@ let init () = { Value = "" }, Cmd.none
 let update (msg:Msg) (model:Model) =
     match msg with
     | ChangeValue newValue ->
-        { Value = newValue }, Cmd.none
+        { model with Value = newValue }, Cmd.none
 
 // VIEW (rendered with React)
 
