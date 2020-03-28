@@ -1,49 +1,73 @@
 module Toast
 
-open Fable.React
-open Fable.React.Props
-open Fulma
 open Fable.FontAwesome
 open Thoth.Elmish
+open Feliz
+open Feliz.Bulma
 
 let renderToastWithFulma =
     { new Toast.IRenderer<_> with
         member __.Toast children color =
-            Notification.notification [ Notification.CustomClass color ]
-                children
+            Bulma.notification [
+                prop.className color
+                prop.children children
+            ]
         member __.CloseButton onClick =
-            Notification.delete [ Props [ OnClick onClick ] ]
-                [ ]
+            Bulma.delete [
+                prop.onClick onClick
+            ]
         member __.InputArea children =
-            Columns.columns [ Columns.IsGapless
-                              Columns.Modifiers [ Modifier.TextAlignment (Screen.All, TextAlignment.Centered) ]
-                              Columns.CustomClass "toast-inputs-area" ]
-                children
+            Bulma.columns [
+                columns.isGapless
+                text.hasTextCentered
+                prop.className "toast-inputs-area"
+                prop.children children
+            ]
         member __.Input (txt : string) (callback : (unit -> unit)) =
-            Column.column [ ]
-                [ Button.button [ Button.OnClick (fun _ -> callback ())
-                                  Button.Color (IColor.IsCustomColor "text") ]
-                    [ str txt ] ]
+            Bulma.columns [
+                Bulma.button [
+                    prop.onClick (fun _ -> callback ())
+                    prop.className "is-text"
+                    prop.text txt
+                ]
+            ]
         member __.Title txt =
-            Heading.h5 []
-                [ str txt ]
+            Bulma.title5 [
+                prop.text txt
+            ]
         member __.Icon icon =
-            Icon.icon [ Icon.Size IsMedium ]
-                [ Fa.i [ icon; Fa.Size Fa.Fa2x ] [] ]
+            Bulma.icon [
+                prop.className "is-medium"
+                prop.children [
+                    Fa.i [ icon; Fa.Size Fa.Fa2x ] []
+                ]
+            ]
         member __.SingleLayout title message =
-            div [ ]
-                [ title; message ]
+            Html.div [
+                title
+                message
+            ]
         member __.Message txt =
-            span [ ]
-                [ str txt ]
+            Html.span [
+                prop.text txt 
+            ]
         member __.SplittedLayout iconView title message =
-            Columns.columns [ Columns.IsGapless
-                              Columns.IsVCentered ]
-                [ Column.column [ Column.Width (Screen.All, Column.Is2) ]
-                    [ iconView ]
-                  Column.column [ ]
-                    [ title
-                      message ] ]
+            Bulma.columns [
+                columns.isGapless
+                columns.isVcentered
+                prop.children [
+                    Bulma.column [
+                        column.is2
+                        prop.children iconView
+                    ]
+
+                    Bulma.column [
+                        title
+                        message
+                    ]
+                ]
+            ]
+            
         member __.StatusToColor status =
             match status with
             | Toast.Success -> "is-success"

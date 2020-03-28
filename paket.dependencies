@@ -5,18 +5,16 @@ framework: netstandard2.0
 nuget Fable.Core
 nuget Fable.Elmish.Browser
 nuget Fable.React
-nuget Fulma
-nuget Fulma.Extensions.Wikiki.Switch
 nuget Fable.Elmish
 nuget Fable.Elmish.React
 nuget Fable.Elmish.HMR
-nuget Fulma.Extensions.Wikiki.Tooltip
 nuget Thoth.Json
 nuget Thoth.Elmish.Toast
 nuget Fable.Fetch
 nuget Fable.FontAwesome.Free
 nuget Feliz
 nuget Feliz.Bulma 
+nuget Feliz.Bulma.Tooltip
 
 # REPL Lib
 github thoth-org/Thoth.Json:647d6f82da84bca2b0659e924e951cd09cba6cc9

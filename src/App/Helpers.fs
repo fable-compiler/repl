@@ -1,6 +1,17 @@
 [<AutoOpen>]
 module Helpers
 
+open Feliz
+
+type Html with 
+    static member inline ofOption (element : ReactElement option) : ReactElement = 
+        match element with
+        | Some element -> 
+            element
+            
+        | None -> 
+            Html.none
+
 module Tooltip =
 
     open System.Text.RegularExpressions

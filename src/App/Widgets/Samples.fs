@@ -1,12 +1,11 @@
 module Widgets.Samples
 
 open Fable.Core
-open Fable.React
-open Fable.React.Props
 open Fable.FontAwesome
 open Fable.Repl.Prelude
-open Fulma
 open Thoth.Json
+open Feliz
+open Feliz.Bulma
 
   /////////////////////
  // Sample def DSL  //
@@ -198,41 +197,56 @@ let update msg model =
         JS.console.error error
         model, Cmd.none, NoOp
 
-let inline genKey key = Props [ Key key ]
-
 let private menuItem info dispatch =
-    li [ ]
-       [ a [ OnClick (fun _ -> FetchSample (info.FSharpCode, info.HtmlCode, info.CssCode) |> dispatch ) ]
-           [ span [ ]
-                [ str info.Label ] ] ]
+    Html.li [
+        Html.a [
+            prop.onClick (fun _ -> FetchSample (info.FSharpCode, info.HtmlCode, info.CssCode) |> dispatch )
+            prop.children [
+                Html.span info.Label
+            ]
+        ]
+    ]
 
-let private subMenu label currentPath isActive children dispatch =
-    let children =
+let private subMenu (label : string) currentPath isActive (children : ReactElement list) dispatch =
+    Html.li [
+        Html.a [
+            prop.className "menu-group"
+            prop.onClick (fun _ -> ToggleMenuState currentPath |> dispatch )
+            prop.children [
+                Html.span label
+                Bulma.icon [
+                    Fa.i [ Fa.Solid.AngleDown; Fa.Size Fa.FaLarge ] [ ]
+                ]
+            ]
+        ]
+
         if isActive then
-            Some (ul [ ] children)
+            Html.ul children
         else
-            None
+            Html.none
+    ]
 
-    li [ ]
-       [ a [ Class "menu-group"
-             OnClick (fun _ -> ToggleMenuState currentPath |> dispatch ) ]
-           [ span [ ] [ str label ]
-             Icon.icon [ ]
-                [ Fa.i [ Fa.Solid.AngleDown; Fa.Size Fa.FaLarge ] []] ]
-         ofOption children ]
 
 let rec private render (path : int list) index (sample : MenuType) dispatch =
     // Generate the unique key from the parentKey and current index
     let currentPath = path @ [index]
 
     let renderCategory (info : CategoryInfo) =
-        [ Menu.label [ genKey "label" ]
-            [ str info.Label ]
-          Menu.list [ genKey "list" ]
-            (info.Children
+        [
+            Bulma.menuLabel [
+                prop.key "label"
+                prop.text info.Label
+            ]
+
+            Bulma.menuList [
+                prop.key "list"
+                info.Children
                 |> List.mapi (fun index child ->
-                    render currentPath index child dispatch)) ]
-        |> ofList
+                    render currentPath index child dispatch)
+                |> prop.children
+            ]
+        ]
+        |> React.fragment
 
     match sample with
     | Category info ->
@@ -260,18 +274,45 @@ let view model dispatch =
         fetchSamples () |> Promise.eitherEnd
             (FetchSamplesSuccess >> dispatch)
             (FetchSamplesError >> dispatch)
+
     let menus =
-        (Field.div [ Field.HasAddons ]
-            [ Control.div [ ]
-                [ Button.button [ Button.OnClick fetchSamplesMsg ]
-                    [ Icon.icon [ ]
-                        [ Fa.i [ Fa.Solid.SyncAlt ] [] ] ] ]
-              Control.div [ Control.IsExpanded ]
-                [ Button.button [ Button.OnClick fetchSamplesMsg
-                                  Button.IsText
-                                  Button.IsFullWidth ]
-                    [ Text.span [ ]
-                        [ str "Refresh samples" ] ] ] ])::menus
+        let additionalMenu =
+            Bulma.field [
+                field.hasAddons
+                prop.children [
+
+                    Bulma.control [
+                        Bulma.button [
+                            prop.onClick fetchSamplesMsg
+                            prop.children [
+                                Bulma.icon [
+                                    Fa.i [ Fa.Solid.SyncAlt ] []
+                                ]
+                            ]
+                        ]
+                    ]
+
+                    Bulma.control [
+                        control.isExpanded
+                        prop.children [
+                            Bulma.button [
+                                button.isFullwidth
+                                prop.className "is-text"
+
+                                prop.onClick fetchSamplesMsg
+                                prop.children [
+                                    Html.span "Refresh samples"
+                                ]
+                            ]
+                        ]
+                    ]
+
+                ]
+            ]
+
+
+        additionalMenu::menus
 #endif
 
-    Menu.menu [] menus
+    Bulma.menu menus
+    

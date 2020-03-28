@@ -1,7 +1,4 @@
 Fable.Core
-Fulma
-Fulma.Extensions.Wikiki.Switch
-Fulma.Extensions.Wikiki.Tooltip
 Fable.Elmish
 Fable.Elmish.React
 Fable.Elmish.HMR
@@ -12,3 +9,4 @@ Fable.Fetch
 Fable.FontAwesome.Free
 Feliz 
 Feliz.Bulma 
+Feliz.Bulma.Tooltip

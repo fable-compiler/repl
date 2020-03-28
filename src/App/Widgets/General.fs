@@ -1,10 +1,9 @@
 module Widgets.General
 
-open Fable.React
-open Fable.React.Props
-open Fulma
-open Fulma.Extensions.Wikiki
 open Fable.FontAwesome
+open Feliz
+open Feliz.Bulma
+open Feliz.Bulma.Tooltip
 
 type ResetState =
     | Default
@@ -77,167 +76,202 @@ let viewCollapsed (isCompiling : bool) (gistToken : string option) (model: Model
         else
             [ Fa.i [ Fa.Solid.Play ] [] ]
 
-    div [ Class "actions-area" ]
-        [ div [ Class "action-button" ]
-            [ Button.button [ Button.IsOutlined
-                              Button.Disabled isCompiling
-                              Button.OnClick (fun _ -> dispatch StartCompile)
-                              Button.CustomClass (Tooltip.ClassName + " " + Tooltip.IsTooltipRight)
-                              Button.Props [ Tooltip.dataTooltip "Compile and run (Alt+Enter)" ] ]
-                [ Icon.icon [ Icon.Size IsLarge ] compileIcon ] ]
-          div [ Class "action-button" ]
-            [ Button.button [ Button.IsOutlined
-                              Button.Disabled isCompiling
-                              Button.OnClick (fun _ -> dispatch RefreshIframe)
-                              Button.CustomClass (Tooltip.ClassName + " " + Tooltip.IsTooltipRight)
-                              Button.Props [ Tooltip.dataTooltip "Refresh the live sample (without compiling)" ] ]
-                [ Icon.icon [ Icon.Size IsLarge ]
-                    [ Fa.i [ Fa.Solid.Redo ] [] ] ] ]
-          div [ Class "action-button" ]
-            [ Button.button [ Button.IsOutlined
-                              Button.OnClick (fun _ -> dispatch AskReset)
-                              Button.CustomClass (Tooltip.ClassName + " " + Tooltip.IsTooltipRight)
-                              Button.Props [ Tooltip.dataTooltip "Reset the REPL, you will loose your current work" ] ]
-                [ Icon.icon [ Icon.Size IsLarge ]
-                    [ Fa.i [ Fa.Solid.TrashAlt ] [] ] ] ]
-          div [ Class "action-button" ]
-            [ Button.button [ Button.IsOutlined
-                              Button.OnClick (fun _ -> dispatch Share)
-                              Button.CustomClass (Tooltip.ClassName + " " + Tooltip.IsTooltipRight)
-                              Button.Props [ Tooltip.dataTooltip "Share using the URL" ] ]
-                [ Icon.icon [ Icon.Size IsLarge ]
-                    [ Fa.i [ Fa.Solid.Share ] [] ] ] ]
-          match gistToken with
-          | Some _ ->
-            div [ Class "action-button" ]
-                [ Button.button [ Button.IsOutlined
-                                  Button.OnClick (fun _ -> dispatch ShareToGist)
-                                  Button.CustomClass (Tooltip.ClassName + " " + Tooltip.IsTooltipRight)
-                                  Button.Props [ Tooltip.dataTooltip "Share to  Gist" ] ]
-                    [ Icon.icon [ Icon.Size IsLarge ]
-                        [ Fa.i [ Fa.Brand.Github ] [] ] ] ]
-          | None -> () ]
+    let actionButton tooltipText msg (faIcon : ReactElement list) =
+        Html.div [
+            prop.className "action-button"
+            prop.children [
+                Bulma.button [
+                    button.isOutlined
+                    prop.disabled isCompiling
+                    prop.onClick (fun _ -> dispatch msg)
+                    tooltip.hasTooltipRight
+                    tooltip.text tooltipText
+                    prop.children [
+                        Bulma.icon [
+                            icon.isLarge
+                            prop.children faIcon
+                        ]
+                    ]
+                ]
+            ]
+        ]
+ 
+    Html.div [
+        prop.className "actions-area"
+        prop.children [
+
+            actionButton "Compile and run (Alt+Enter)" StartCompile compileIcon
+            actionButton "Refresh the live sample (without compiling)" RefreshIframe [ Fa.i [ Fa.Solid.Redo ] [ ] ]
+            actionButton "Reset the REPL, you will loose your current work" AskReset [ Fa.i [ Fa.Solid.TrashAlt ] [ ] ]
+            actionButton "Share using the URL" Share [ Fa.i [ Fa.Solid.Share ] [ ] ]
+            match gistToken with
+            | Some _ ->
+                actionButton "Share to Gist" ShareToGist [ Fa.i [ Fa.Brand.Github ] [ ] ]
+            | None -> Html.none
+            
+        ]
+    ]
 
 
 let viewExpanded (isCompiling : bool) (gistToken : string option) (model: Model) dispatch =
+    let renderItem (text : string) isDisabled msg faIcon =
+        Bulma.field [
+            field.hasAddons
+            prop.children [
+                Bulma.control [
+                    Bulma.button [
+                        prop.onClick (fun _ -> dispatch msg)
+                        prop.disabled isDisabled
+                        prop.children [
+                            Bulma.icon [
+                                Fa.i [ faIcon ] [ ]
+                            ]
+                        ]
+                    ]
+                ]
+
+                Bulma.control [
+                    control.isExpanded
+                    prop.children [
+                        Bulma.button [
+                            prop.onClick (fun _ -> dispatch msg)
+                            prop.disabled isDisabled
+                            button.isText
+                            button.isFullwidth
+                            prop.children [ 
+                                Html.span text
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    
     let content =
         match model.ResetState with
         | Default ->
-            div [ ]
-                [ Field.div [ Field.HasAddons ]
-                    [ Control.div [ ]
-                        [ Button.button
-                            [ Button.OnClick (fun _ -> dispatch StartCompile)
-                              Button.Disabled isCompiling ]
-                            [ Icon.icon [ ]
-                                [ Fa.i [ Fa.Solid.Play ] [] ] ] ]
-                      Control.div [ Control.IsExpanded ]
-                        [ Button.button [ Button.OnClick (fun _ -> dispatch StartCompile)
-                                          Button.IsText
-                                          Button.Disabled isCompiling
-                                          Button.IsFullWidth ]
-                            [ Text.span [ ]
-                                [ str "Compile and run" ] ] ] ]
-                  Field.div [ Field.HasAddons ]
-                    [ Control.div [ ]
-                        [ Button.button
-                            [ Button.OnClick (fun _ -> dispatch RefreshIframe)
-                              Button.Disabled isCompiling ]
-                            [ Icon.icon [ ]
-                                [ Fa.i [ Fa.Solid.Redo ] [] ] ] ]
-                      Control.div [ Control.IsExpanded ]
-                        [ Button.button [ Button.OnClick (fun _ -> dispatch RefreshIframe)
-                                          Button.IsText
-                                          Button.Disabled isCompiling
-                                          Button.IsFullWidth ]
-                            [ Text.span [ ]
-                                [ str "Refresh the live sample" ] ] ] ]
-                  Field.div [ Field.HasAddons ]
-                    [ Control.div [ ]
-                        [ Button.button [ Button.OnClick (fun _ -> dispatch AskReset) ]
-                            [ Icon.icon [ ]
-                                [ Fa.i [ Fa.Solid.TrashAlt ] [] ] ] ]
-                      Control.div [ Control.IsExpanded ]
-                        [ Button.button [ Button.OnClick (fun _ -> dispatch AskReset)
-                                          Button.IsText
-                                          Button.IsFullWidth ]
-                            [ Text.span [ ]
-                                [ str "Click here to reset" ] ] ] ]
-                  Field.div [ Field.HasAddons ]
-                    [ Control.div [ ]
-                        [ Button.button [ Button.OnClick (fun _ -> dispatch Share) ]
-                            [ Icon.icon [ ]
-                                [ Fa.i [ Fa.Solid.Share ] [] ] ] ]
-                      Control.div [ Control.IsExpanded ]
-                        [ Button.button [ Button.OnClick (fun _ -> dispatch Share)
-                                          Button.IsText
-                                          Button.IsFullWidth ]
-                            [ Text.span [ ]
-                                [ str "Share using the URL" ] ] ] ]
-                  match gistToken with
-                  | Some _ ->
-                    Field.div [ Field.HasAddons ]
-                        [ Control.div [ ]
-                            [ Button.button [ Button.OnClick (fun _ -> dispatch ShareToGist) ]
-                                [ Icon.icon [ ]
-                                    [ Fa.i [ Fa.Brand.Github ] [] ] ] ]
-                          Control.div [ Control.IsExpanded ]
-                            [ Button.button [ Button.OnClick (fun _ -> dispatch ShareToGist)
-                                              Button.IsText
-                                              Button.IsFullWidth ]
-                                [ Text.span [ ]
-                                    [ str "Share to Gist" ] ] ] ]
-                  | None -> () ]
+            Html.div [
+                renderItem "Compile and run" isCompiling StartCompile Fa.Solid.Play
+                renderItem "Refresh the live sample" isCompiling RefreshIframe Fa.Solid.Redo
+                renderItem "Click here to reset" false AskReset Fa.Solid.TrashAlt
+                renderItem "Share using the URL" false Share Fa.Solid.Share
+                match gistToken with
+                | Some _ -> 
+                    renderItem "Share to Gist" false ShareToGist Fa.Brand.Github
+                | None ->
+                    Html.none
+            ]
+ 
         | Confirm ->
-            Field.div [ ]
-                [ Help.help [ Help.Color IsWarning ]
-                    [ str "Please, confirm to reset" ]
-                  Field.div [ Field.HasAddons ]
-                    [
-                      Control.p [ ]
-                        [ Button.button [ Button.OnClick (fun _ -> dispatch ConfirmReset)
-                                          Button.Color IsSuccess ]
-                            [ Icon.icon [ ]
-                                [ Fa.i [ Fa.Solid.Check ] [] ]
-                              Text.span [ ]
-                                [ str "Confirm" ] ] ]
-                      Control.p [ ]
-                        [ Button.button [ Button.OnClick (fun _ -> dispatch CancelReset)
-                                          Button.Color IsDanger ]
-                            [ Icon.icon [ ]
-                                [ Fa.i [ Fa.Solid.Times ] [] ]
-                              Text.span [ ]
-                                [ str "Cancel" ] ] ] ] ]
+            Bulma.field [
+                Bulma.help [
+                    help.isWarning
+                    prop.text "Please, confirm to reset"
+                ]
 
-    Content.content [ ]
-        [ content ]
+                Bulma.field [ 
+                    field.hasAddons
+                    prop.children [
+                        Bulma.control [
+                            Bulma.button [
+                                prop.onClick (fun _ -> dispatch ConfirmReset)
+                                button.isSuccess
+                                prop.children [
+                                    Bulma.icon [
+                                        Fa.i [ Fa.Solid.Check ] [ ]
+                                    ]
+                                    Html.span "Confirm"
+                                ]
+                            ]
+                        ]
+
+                        Bulma.control [
+                            Bulma.button [
+                                prop.onClick (fun _ -> dispatch CancelReset)
+                                button.isDanger
+                                prop.children [
+                                    Bulma.icon [
+                                        Fa.i [ Fa.Solid.Times ] [ ]
+                                    ]
+                                    Html.span "Cancel"
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+
+    Bulma.content content
 
 let viewModalResetConfirmation (model: Model) dispatch =
-    Modal.modal
-        [
-            Modal.IsActive (model.ResetState = Confirm)
-            Modal.Props [ Style [ ZIndex 2000 ] ] // Make sure to be on top of everything
+    Bulma.modal [
+        if (model.ResetState = Confirm) then 
+            modal.isActive
+        prop.style [
+            style.zIndex 2000 // Make sure to be on top of everything
         ]
-        [ Modal.background [ Props [ OnClick (fun _ -> printfn "dzkopdzkop"; dispatch CancelReset) ] ] [ ]
-          Modal.content [ ]
-            [ div [ Class "reset-confirmation-modal" ]
-                [ div [ Class "reset-confirmation-modal-content" ]
-                    [ span [ Class "reset-confirmation-modal-content-text" ]
-                        [ str "Please, confirm to reset" ]
-                      div [ Class "reset-confirmation-modal-content-foot" ]
-                        [ Field.div [ ]
-                            [ Field.div [ Field.HasAddons ]
-                                [ Control.p [ ]
-                                    [ Button.button [ Button.OnClick (fun _ -> dispatch ConfirmReset)
-                                                      Button.Color IsSuccess ]
-                                        [ Icon.icon [ ]
-                                            [ Fa.i [ Fa.Solid.Check ] [] ]
-                                          Text.span [ ]
-                                            [ str "Confirm" ] ] ]
-                                  Control.p [ ]
-                                    [ Button.button [ Button.OnClick (fun _ -> dispatch CancelReset)
-                                                      Button.Color IsDanger ]
-                                        [ Icon.icon [ ]
-                                            [ Fa.i [ Fa.Solid.Times ] [] ]
-                                          Text.span [ ]
-                                            [ str "Cancel" ] ] ] ] ] ] ] ] ] ]
+        prop.children [
+            Bulma.modalBackground [
+                prop.onClick (fun _ -> dispatch CancelReset)
+            ]
+
+            Bulma.modalContent [
+                Html.div [
+                    prop.className "reset-confirmation-modal"
+                    prop.children [
+                        Html.div [
+                            prop.className "reset-confirmation-modal-content"
+                            prop.children [
+                                Html.span [
+                                    prop.className "reset-confirmation-modal-content-text"
+                                    prop.text "Please, confirm to reset"
+                                ]
+
+                                Html.div [
+                                    prop.className "reset-confirmation-modal-content-foot"
+                                    prop.children [
+                                        Bulma.field [
+                                            prop.children [
+                                                Bulma.field [
+                                                    field.hasAddons
+                                                    prop.children [
+                                                        Bulma.control [
+                                                            Bulma.button [
+                                                                prop.onClick (fun _ -> dispatch ConfirmReset)
+                                                                button.isSuccess
+                                                                prop.children [
+                                                                    Bulma.icon [
+                                                                        Fa.i [ Fa.Solid.Check ] [ ]
+                                                                    ]
+
+                                                                    Html.span "Confirm"
+                                                                ]
+                                                            ]
+                                                        ]
+
+                                                        Bulma.control [
+                                                            Bulma.button [
+                                                                prop.onClick (fun _ -> dispatch CancelReset)
+                                                                button.isDanger
+                                                                prop.children [
+                                                                    Bulma.icon [
+                                                                        Fa.i [ Fa.Solid.Times ] [ ]
+                                                                    ]
+
+                                                                    Html.span "Cancel"
+                                                                ]
+                                                            ]
+                                                        ]
+                                                    ]
+                                                ]
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    ]
