@@ -25,14 +25,14 @@ let renderToastWithFulma =
             ]
         member __.Input (txt : string) (callback : (unit -> unit)) =
             Bulma.columns [
-                Bulma.button [
+                Bulma.button.a [
                     prop.onClick (fun _ -> callback ())
                     prop.className "is-text"
                     prop.text txt
                 ]
             ]
         member __.Title txt =
-            Bulma.title5 [
+            Bulma.title.h5 [
                 prop.text txt
             ]
         member __.Icon icon =
@@ -54,7 +54,7 @@ let renderToastWithFulma =
         member __.SplittedLayout iconView title message =
             Bulma.columns [
                 columns.isGapless
-                columns.isVcentered
+                columns.isVCentered
                 prop.children [
                     Bulma.column [
                         column.is2

@@ -65,14 +65,14 @@ let init (result: Option<Router.Page>) =
         urlUpdate result Initializing
 
 let private view (model: Model) dispatch =
-    match model with
-    | Initializing ->
-        Html.text "Initializing"
+    // match model with
+    // | Initializing ->
+    //     Html.text "Initializing"
 
-    | Running model ->
-        Main.view model (MainMsg >> dispatch)
+    // | Running model ->
+    //     Main.view model (MainMsg >> dispatch)
 
-    | InvalidPlatform ->
+    // | InvalidPlatform ->
         Html.div [
             Bulma.hero [
                 hero.isFullHeight
@@ -90,12 +90,12 @@ let private view (model: Model) dispatch =
 
                             Html.br [ ]
 
-                            Bulma.title3 [
+                            Bulma.title.h3 [
                                 text.hasTextCentered
                                 prop.text "Fable REPL"
                             ]
 
-                            Bulma.subtitle5 [
+                            Bulma.subtitle.h5 [
                                 text.hasTextCentered
                                 prop.text "is only available on desktop"
                             ]

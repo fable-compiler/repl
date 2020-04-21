@@ -80,7 +80,7 @@ let viewCollapsed (isCompiling : bool) (gistToken : string option) (model: Model
         Html.div [
             prop.className "action-button"
             prop.children [
-                Bulma.button [
+                Bulma.button.a [
                     button.isOutlined
                     prop.disabled isCompiling
                     prop.onClick (fun _ -> dispatch msg)
@@ -115,11 +115,11 @@ let viewCollapsed (isCompiling : bool) (gistToken : string option) (model: Model
 
 let viewExpanded (isCompiling : bool) (gistToken : string option) (model: Model) dispatch =
     let renderItem (text : string) isDisabled msg faIcon =
-        Bulma.field [
+        Bulma.field.div [
             field.hasAddons
             prop.children [
-                Bulma.control [
-                    Bulma.button [
+                Bulma.control.div [
+                    Bulma.button.a [
                         prop.onClick (fun _ -> dispatch msg)
                         prop.disabled isDisabled
                         prop.children [
@@ -130,14 +130,14 @@ let viewExpanded (isCompiling : bool) (gistToken : string option) (model: Model)
                     ]
                 ]
 
-                Bulma.control [
+                Bulma.control.div [
                     control.isExpanded
                     prop.children [
-                        Bulma.button [
+                        Bulma.button.a [
                             prop.onClick (fun _ -> dispatch msg)
                             prop.disabled isDisabled
                             button.isText
-                            button.isFullwidth
+                            button.isFullWidth
                             prop.children [ 
                                 Html.span text
                             ]
@@ -163,19 +163,19 @@ let viewExpanded (isCompiling : bool) (gistToken : string option) (model: Model)
             ]
  
         | Confirm ->
-            Bulma.field [
+            Bulma.field.div [
                 Bulma.help [
-                    help.isWarning
+                    color.isWarning
                     prop.text "Please, confirm to reset"
                 ]
 
-                Bulma.field [ 
+                Bulma.field.div [ 
                     field.hasAddons
                     prop.children [
-                        Bulma.control [
-                            Bulma.button [
+                        Bulma.control.div [
+                            Bulma.button.a [
                                 prop.onClick (fun _ -> dispatch ConfirmReset)
-                                button.isSuccess
+                                color.isSuccess
                                 prop.children [
                                     Bulma.icon [
                                         Fa.i [ Fa.Solid.Check ] [ ]
@@ -185,10 +185,10 @@ let viewExpanded (isCompiling : bool) (gistToken : string option) (model: Model)
                             ]
                         ]
 
-                        Bulma.control [
-                            Bulma.button [
+                        Bulma.control.div [
+                            Bulma.button.a [
                                 prop.onClick (fun _ -> dispatch CancelReset)
-                                button.isDanger
+                                color.isDanger
                                 prop.children [
                                     Bulma.icon [
                                         Fa.i [ Fa.Solid.Times ] [ ]
@@ -230,15 +230,15 @@ let viewModalResetConfirmation (model: Model) dispatch =
                                 Html.div [
                                     prop.className "reset-confirmation-modal-content-foot"
                                     prop.children [
-                                        Bulma.field [
+                                        Bulma.field.div [
                                             prop.children [
-                                                Bulma.field [
+                                                Bulma.field.div [
                                                     field.hasAddons
                                                     prop.children [
-                                                        Bulma.control [
-                                                            Bulma.button [
+                                                        Bulma.control.div [
+                                                            Bulma.button.a [
                                                                 prop.onClick (fun _ -> dispatch ConfirmReset)
-                                                                button.isSuccess
+                                                                color.isSuccess
                                                                 prop.children [
                                                                     Bulma.icon [
                                                                         Fa.i [ Fa.Solid.Check ] [ ]
@@ -249,10 +249,10 @@ let viewModalResetConfirmation (model: Model) dispatch =
                                                             ]
                                                         ]
 
-                                                        Bulma.control [
-                                                            Bulma.button [
+                                                        Bulma.control.div [
+                                                            Bulma.button.a [
                                                                 prop.onClick (fun _ -> dispatch CancelReset)
-                                                                button.isDanger
+                                                                color.isDanger
                                                                 prop.children [
                                                                     Bulma.icon [
                                                                         Fa.i [ Fa.Solid.Times ] [ ]

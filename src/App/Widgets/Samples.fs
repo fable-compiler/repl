@@ -277,12 +277,12 @@ let view model dispatch =
 
     let menus =
         let additionalMenu =
-            Bulma.field [
+            Bulma.field.div [
                 field.hasAddons
                 prop.children [
 
-                    Bulma.control [
-                        Bulma.button [
+                    Bulma.control.div [
+                        Bulma.button.a [
                             prop.onClick fetchSamplesMsg
                             prop.children [
                                 Bulma.icon [
@@ -292,11 +292,11 @@ let view model dispatch =
                         ]
                     ]
 
-                    Bulma.control [
+                    Bulma.control.div [
                         control.isExpanded
                         prop.children [
-                            Bulma.button [
-                                button.isFullwidth
+                            Bulma.button.a [
+                                button.isFullWidth
                                 prop.className "is-text"
 
                                 prop.onClick fetchSamplesMsg

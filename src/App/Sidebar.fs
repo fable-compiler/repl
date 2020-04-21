@@ -126,7 +126,7 @@ let private renderExpandedWidgets (states : Set<string>) dispatch (title, icon, 
             Bulma.cardHeader [
                 prop.onClick (fun _ -> ToggleWidget title |> dispatch )
                 prop.children [
-                    Bulma.cardHeaderTitle [
+                    Bulma.cardHeaderTitle.div [
                         Bulma.icon [
                             prop.style [
                                 style.marginRight (length.em 0.5)
@@ -138,7 +138,7 @@ let private renderExpandedWidgets (states : Set<string>) dispatch (title, icon, 
                         Html.text title
                     ]
 
-                    Bulma.cardHeaderIcon [
+                    Bulma.cardHeaderIcon.span [
                         Bulma.icon [
                             Fa.i [ headerIcon ; Fa.Size Fa.FaLarge ] []
                         ]
@@ -194,7 +194,7 @@ let renderCollapsedWidgets dispatch (title, faIcon, widget: ReactElement, maxHei
                     Bulma.cardHeader [
                         prop.onClick (fun _ -> ToggleWidget title |> dispatch )
                         prop.children [
-                            Bulma.cardHeaderTitle title
+                            Bulma.cardHeaderTitle.div title
                         ]
                     ]
 
@@ -220,8 +220,8 @@ let private collapseButton dispatch =
         prop.onClick (fun _ -> dispatch ToggleState)
         prop.children [
             Bulma.cardHeader [
-                Bulma.cardHeaderTitle "Collapse sidebar"
-                Bulma.cardHeaderIcon [
+                Bulma.cardHeaderTitle.div "Collapse sidebar"
+                Bulma.cardHeaderIcon.span [
                     Bulma.icon [
                         Fa.i [ Fa.Solid.AngleDoubleLeft; Fa.Size Fa.FaLarge ] [ ]
                     ]
@@ -240,8 +240,8 @@ let private sidebarContainer dispatch (sections : ReactElement list) =
                     Html.img [
                         prop.src "img/fable-ionide.png"
                     ]
-                    Bulma.title4 "Fable REPL"
-                ]
+                    Bulma.title.h4 "Fable REPL"
+                ] 
             ]
 
             Html.div [
@@ -259,7 +259,7 @@ let private expandButton dispatch =
         prop.onClick (fun _ -> dispatch ToggleState)
         prop.children [
             Bulma.cardHeader [
-                Bulma.cardHeaderIcon [
+                Bulma.cardHeaderIcon.span [
                     Bulma.icon [
                         Fa.i [ Fa.Solid.AngleDoubleRight; Fa.Size Fa.FaLarge ] []
                     ]

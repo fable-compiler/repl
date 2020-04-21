@@ -6,6 +6,7 @@ open Feliz.Bulma
 open Thoth.Json
 open Browser
 open Fable.Core.JsInterop
+open Fable.React.Extensions
 
 [<Literal>]
 let private MONACO_DEFAULT_FONT_FAMILY = "Menlo, Monaco, Consolas, \"Courier New\", monospace"
@@ -131,15 +132,15 @@ let private fontSizeOption (label : string) (fontSize : float) =
     ]
 
 let inline private fontSizeSetting (fontSize : float) dispatch =
-    Bulma.field [ 
+    Bulma.field.div [ 
         Bulma.label "Editors font size"
 
-        Bulma.control [
+        Bulma.control.div [
             Bulma.select [
-                select.isFullwidth
+                select.isFullWidth
                 prop.value fontSize
                 prop.onChange (fun (ev : Types.Event) ->
-                    ev.target?value |> float |> ChangeFontSize |> dispatch
+                    ev.Value |> float |> ChangeFontSize |> dispatch
                 )
                 prop.children [
                     fontSizeOption "Small" 12.
@@ -157,15 +158,15 @@ let private fontFamilyOption (label : string) (fontFamily : string) =
     ]
 
 let inline private fontFamilySetting (fontFamily : string) dispatch =
-    Bulma.field [
+    Bulma.field.div [
         Bulma.label "Editors font family"
 
-        Bulma.control [
+        Bulma.control.div [
             Bulma.select [
-                select.isFullwidth
+                select.isFullWidth
                 prop.value fontFamily
                 prop.onChange (fun (ev : Types.Event) ->
-                    ev.target?Value |> ChangeFontFamily |> dispatch
+                    ev.Value |> ChangeFontFamily |> dispatch
                 )
                 prop.children [
                     fontFamilyOption "Fira Code" "Fira Code"
@@ -177,10 +178,10 @@ let inline private fontFamilySetting (fontFamily : string) dispatch =
 
 
 let private switchOption (label : string) isActive dispatch msg =
-    Bulma.field [
-        Bulma.control [
+    Bulma.field.div [
+        Bulma.control.div [
             // TODO: Replace with Feliz.Bulma.Switch when it exist
-            Bulma.field [
+            Bulma.field.div [
                 Html.input [
                     prop.className "switch is-success"
                     prop.type' "checkbox"
@@ -209,16 +210,16 @@ let private previewLanguageSetting (model: Model) dispatch =
 let inline private gistTokenSetting (token : string option) (tokenField : string) dispatch =
     match token with
     | Some _ ->
-        Bulma.field [
-            Bulma.button [
+        Bulma.field.div [
+            Bulma.button.a [
                 prop.onClick (fun _ -> dispatch DeleteToken)
-                button.isFullwidth
+                button.isFullWidth
                 prop.text "Delete gist token"
             ]
         ]
 
     | None ->
-        Bulma.field [
+        Bulma.field.div [
             Bulma.label [
                 prop.children [
                     Html.text "Github token"
@@ -230,16 +231,16 @@ let inline private gistTokenSetting (token : string option) (tokenField : string
                 ]
             ]
 
-            Bulma.field [
+            Bulma.field.div [
                 field.hasAddons
                 prop.children [
-                    Bulma.passwordInput [
-                        prop.onChange (fun (e : Types.Event) -> e.target?value |> ChangeGistToken |> dispatch)
+                    Bulma.input.password [
+                        prop.onChange (fun (ev : Types.Event) -> ev.Value |> ChangeGistToken |> dispatch)
                         prop.placeholder "Token with gist scope"
                     ]
 
                     if tokenField.Length = 40 then
-                        Bulma.button [
+                        Bulma.button.a [
                             prop.onClick (fun _ -> dispatch SaveToken)
                             prop.text "Save"
                         ]
