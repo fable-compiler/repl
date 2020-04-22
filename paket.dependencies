@@ -16,18 +16,21 @@ nuget Feliz
 nuget Feliz.Bulma 
 nuget Feliz.Bulma.Tooltip
 
-# REPL Lib
-github thoth-org/Thoth.Json:647d6f82da84bca2b0659e924e951cd09cba6cc9
-github fable-compiler/fable-promise:e96a1ba7db446d1f12360fbc451814a32dac98a1
-github fable-compiler/fable-fetch:d5dbc4e97aafe487059f1845b5bbe3206f0aa355
-#github alfonsogarciacaro/Fable.SimpleHttp:patch-3 src/Http.fs
+group Library
+    source https://nuget.org/api/v2
+    framework: netstandard2.0
+    # REPL Lib
+    github thoth-org/Thoth.Json:647d6f82da84bca2b0659e924e951cd09cba6cc9
+    github fable-compiler/fable-promise:e96a1ba7db446d1f12360fbc451814a32dac98a1
+    github fable-compiler/fable-fetch:d5dbc4e97aafe487059f1845b5bbe3206f0aa355
+    #github alfonsogarciacaro/Fable.SimpleHttp:patch-3 src/Http.fs
 
-github fable-compiler/fable-react:634e0409ccc0d8310e37f778ea6c6e82c67e5fc8
-github fable-compiler/fable-recharts:94c91b3aa1381e36ea245a92c440ac5611dbf73f
+    github fable-compiler/fable-react:634e0409ccc0d8310e37f778ea6c6e82c67e5fc8
+    github fable-compiler/fable-recharts:94c91b3aa1381e36ea245a92c440ac5611dbf73f
 
-github elmish/elmish:69569e39876213e91c283c1c76bbe0fb88fba208
-#github elmish/react:master
-github fulma/Fulma:1e763d852112307370675a0cf692415a53d1993f
+    github elmish/elmish:69569e39876213e91c283c1c76bbe0fb88fba208
+    #github elmish/react:master
+    github fulma/Fulma:1e763d852112307370675a0cf692415a53d1993f
 
 
 group netcorebuild
