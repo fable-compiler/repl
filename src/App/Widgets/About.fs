@@ -1,18 +1,24 @@
 module Widgets.About
 
-open Fable.React
-open Fable.React.Props
-open Fulma
+open Feliz
+open Feliz.Bulma
 open Fable.Repl.Prelude
 
 let view =
-    Content.content [ ]
-        [ div [ ]
-            [ str ("REPL: " + Literals.REPL_VERSION) ]
-          div [ ]
-            [ str ("Fable: " + Literals.FABLE_VERSION) ]
-          br [ ]
-          a [ Href "https://github.com/fable-compiler/repl2/issues/new" ]
-            [ Text.span [ Modifiers [ Modifier.TextTransform TextTransform.Italic ]
-                          Props [ Style [ TextDecoration "underline" ] ] ]
-                [ str "Found a bug ?" ] ] ]
+    Bulma.content [
+        Html.div ("REPL: " + Literals.REPL_VERSION)
+        Html.div ("Fable: " + Literals.FABLE_VERSION)
+        Html.br [ ]
+        Html.a [
+            prop.href "https://github.com/fable-compiler/repl2/issues/new"
+            prop.children [
+                Html.span [
+                    text.isItalic
+                    prop.style [
+                        style.textDecoration.underline
+                    ]
+                    prop.text "Found a bug ?"
+                ]
+            ]
+        ]
+    ]

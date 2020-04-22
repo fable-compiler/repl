@@ -1,11 +1,11 @@
 module Fable.Repl.Loader
 
-open Fable.Core
-open Fulma
 open Browser
 open Elmish
 open Thoth.Elmish
 open Mouse
+open Feliz
+open Feliz.Bulma
 
 type Model =
     | Initializing
@@ -41,7 +41,7 @@ let urlUpdate (result: Option<Router.Page>) model =
 
     match result with
     | None ->
-        JS.console.error("Error parsing url: " + window.location.href)
+        console.error("Error parsing url: " + window.location.href)
         model, Cmd.batch [ cmd
                            Router.modifyUrl Router.Home ]
 
@@ -63,33 +63,46 @@ let init (result: Option<Router.Page>) =
     else
         urlUpdate result Initializing
 
-open Fable.React
-open Fable.React.Props
-
 let private view (model: Model) dispatch =
     match model with
     | Initializing ->
-        str "Initializing"
+        Html.text "Initializing"
 
     | Running model ->
         Main.view model (MainMsg >> dispatch)
 
     | InvalidPlatform ->
-        div [ ]
-            [ Hero.hero [ Hero.IsFullHeight ]
-                [ Hero.body [ ]
-                    [ Container.container [ ]
-                        [ img [ Src "img/fable-ionide.png"
-                                Style [ Display DisplayOptions.Block
-                                        Width "auto"
-                                        Margin "auto" ] ]
-                          br [ ]
-                          Heading.h3 [ Heading.Modifiers [ Modifier.TextAlignment (Screen.All, TextAlignment.Centered) ] ]
-                            [ str "Fable REPL" ]
-                          Heading.p [ Heading.IsSubtitle
-                                      Heading.Is5
-                                      Heading.Modifiers [ Modifier.TextAlignment (Screen.All, TextAlignment.Centered) ] ]
-                            [ str "is only available on desktop" ] ] ] ] ]
+        Html.div [
+            Bulma.hero [
+                hero.isFullHeight
+                prop.children [
+                    Bulma.heroBody [
+                        Bulma.container [
+                            Html.img [
+                                prop.src "img/fable-ionide.png"
+                                prop.style [
+                                    style.display.block
+                                    style.width length.auto
+                                    style.margin length.auto
+                                ]
+                            ]
+
+                            Html.br [ ]
+
+                            Bulma.title.h3 [
+                                text.hasTextCentered
+                                prop.text "Fable REPL"
+                            ]
+
+                            Bulma.subtitle.h5 [
+                                text.hasTextCentered
+                                prop.text "is only available on desktop"
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]
 
 #if !DEBUG
 open Fable.Core.JsInterop

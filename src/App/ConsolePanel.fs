@@ -1,12 +1,11 @@
 module Fable.Repl.ConsolePanel
 
 open Fable.Core.JsInterop
-open Fable.React
-open Fable.React.Props
 open Fable.FontAwesome
 open Browser.Types
 open Browser
-open Fulma
+open Feliz
+open Feliz.Bulma
 
 [<RequireQualifiedAccess>]
 type Log =
@@ -21,100 +20,135 @@ type ConsolePanelProps =
 type ConsolePanelState =
     { IsExpanded : bool }
 
-type ConsolePanel(props) =
-    inherit Component<ConsolePanelProps, ConsolePanelState>(props)
-    do base.setInitState({ IsExpanded = true })
-
-    let mutable consoleEnd : HTMLElement = null
-    let mutable autoScroll = true
-
-    member __.scroolToBottom() =
-        if autoScroll then
-            let scrollOptions =
-                createObj [
-                    "behavior" ==> "smooth"
+let renderShowLog faIcon colorClass (content : string) =
+    Html.div [
+        prop.className [ 
+            "scrollable-panel-body-row"
+            colorClass
+        ]
+        prop.children [
+            Bulma.icon [
+                icon.isSmall
+                prop.className colorClass
+                prop.children [
+                    match faIcon with
+                    | Some faIcon -> 
+                        Fa.i [ faIcon ] [ ]
+                    | None -> 
+                        Html.none
                 ]
+            ]
 
-            consoleEnd?scrollIntoView$(scrollOptions)
+            Html.span [
+                prop.className "scrollable-panel-body-row-description"
+                prop.text content
+            ]
+        ]
+    ]
 
-    override this.componentDidUpdate(_prevProps, _prevState) =
-        this.scroolToBottom()
+let renderShowSeparator =
+    Html.div [
+        prop.className "scrollable-panel-body-row is-info"
+        prop.style [
+            style.justifyContent.center
+        ]
+        prop.text "Iframe loaded"
+    ]
 
-    override this.componentDidMount() =
-        this.scroolToBottom()
-
-    member __.ShowLog icon color content =
-        let colorClass = ofColor color
-
-        div [ Class ("scrollable-panel-body-row " + colorClass) ]
-            [ Icon.icon [ Icon.Size IsSmall
-                          Icon.CustomClass colorClass ]
-                [ match icon with
-                  | Some icon -> yield Fa.i [icon] []
-                  | None -> () ]
-              span [ Class "scrollable-panel-body-row-description" ]
-                [ str content ] ]
-
-    member __.ShowSeparator =
-        div [ Class "scrollable-panel-body-row is-info"
-              Style [ JustifyContent "center" ] ]
-            [ str "Iframe loaded" ]
-
-    member __.OnContainerScroll( ev : WheelEvent) =
-        let elt = ev.currentTarget :?> HTMLDivElement
-        let isAtBottom = elt.scrollHeight - elt.scrollTop = elt.clientHeight
-        // If autoScroll is activated
-        if autoScroll && not isAtBottom then
-            autoScroll <- false
-        else if not autoScroll && isAtBottom then
-            autoScroll <- true
-
-    member this.body =
-        let bodyDisplay =
-            if this.state.IsExpanded then
-                ""
-            else
-                "is-hidden"
-
-        div [ Class ("scrollable-panel-body " + bodyDisplay)
-              OnWheel this.OnContainerScroll ]
-            [ for log in this.props.Logs do
+let renderBody (isExpanded : bool) (logs : Log list) (setConsoleEnd : HTMLElement -> unit) onContainerScroll =
+    
+    Html.div [
+        prop.className "scrollable-panel-body"
+        if not isExpanded then
+            helpers.isHidden
+        prop.onWheel onContainerScroll
+        prop.children [
+            for log in logs do
                 match log with
                 | Log.Info content ->
-                    yield this.ShowLog None IColor.NoColor content
+                    renderShowLog None "" content
                 | Log.Warn content ->
-                    yield this.ShowLog (Some Fa.Solid.ExclamationTriangle) IColor.IsWarning content
+                    renderShowLog (Some Fa.Solid.ExclamationTriangle) "is-warning" content
                 | Log.Error content ->
-                    yield this.ShowLog (Some Fa.Regular.TimesCircle) IColor.IsDanger content
+                    renderShowLog (Some Fa.Regular.TimesCircle) "is-danger" content
                 | Log.Separator ->
-                    yield this.ShowSeparator
-              yield div [ Ref (fun el ->
-                            consoleEnd <- el :?> HTMLElement
-                            window?test <- el ) ]
-                [ ] ]
+                    renderShowSeparator
+            
+            Html.div [ 
+                prop.ref (fun el ->
+                    setConsoleEnd(el :?> HTMLElement)
+                ) 
+            ]
+        ]
+    ]        
 
-    member this.ToggleDisplay _ev =
-        this.setState(fun s _ -> { s with IsExpanded = not s.IsExpanded })
 
-    override this.render() =
+let consolePanel = 
+    React.functionComponent(fun (props : ConsolePanelProps) ->
+        let (isExpanded, setIsExpanded) = React.useState (true)
+        let (consoleEnd, setConsoleEnd) : (HTMLElement * (HTMLElement -> unit)) = React.useState (null)
+        let (autoScroll, setAutoScroll) = React.useState (true)
+
+        let onContainerScroll (ev : WheelEvent) =
+            let elt = ev.currentTarget :?> HTMLDivElement
+            let isAtBottom = elt.scrollHeight - elt.scrollTop = elt.clientHeight
+            // If autoScroll is activated
+            if autoScroll && not isAtBottom then
+                setAutoScroll false
+            else if not autoScroll && isAtBottom then
+                setAutoScroll true
+
+        React.useEffect(fun () ->
+            if autoScroll then
+                let scrollOptions =
+                    createObj [
+                        "behavior" ==> "smooth"
+                    ]
+
+                if not (isNull consoleEnd) then
+                    consoleEnd?scrollIntoView$(scrollOptions)
+            
+        , [| box props.Logs |]) 
+
         let headerIcon =
-            if this.state.IsExpanded then
+            if isExpanded then
                 Fa.Solid.AngleDown
             else
                 Fa.Solid.AngleUp
 
-        div [ Class "scrollable-panel is-console" ]
-            [ div [ Class "scrollable-panel-header"
-                    OnClick this.ToggleDisplay ]
-                [ div [ Class "scrollable-panel-header-icon" ]
-                    [ Icon.icon [ ]
-                        [ Fa.i [ headerIcon; Fa.Size Fa.FaLarge ] [] ] ]
-                  div [ Class "scrollable-panel-header-title" ]
-                    [ str "Console" ]
-                  div [ Class "scrollable-panel-header-icon" ]
-                    [ Icon.icon [ ]
-                        [ Fa.i [ headerIcon; Fa.Size Fa.FaLarge ] [] ] ] ]
-              this.body ]
+        Html.div [
+            prop.className "scrollable-panel is-console"
+            prop.children [
+                Html.div [ 
+                    prop.className "scrollable-panel-header"  
+                    prop.onClick (fun _ -> setIsExpanded (not isExpanded))
+                    prop.children [
+                        Html.div [
+                            prop.className "scrollable-panel-header-icon"
+                            prop.children [
+                                Bulma.icon [
+                                    Fa.i [ headerIcon; Fa.Size Fa.FaLarge ] []
+                                ]
+                            ]
+                        ]
 
-let inline view logs =
-    ofType<ConsolePanel,_,_> { Logs = logs } [ ]
+                        Html.div [
+                            prop.className "scrollable-panel-header-title"
+                            prop.text "Console"
+                        ]
+
+                        Html.div [
+                            prop.className "scrollable-panel-header-icon"
+                            prop.children [
+                                Bulma.icon [
+                                    Fa.i [ headerIcon; Fa.Size Fa.FaLarge ] []
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+
+                renderBody isExpanded props.Logs setConsoleEnd onContainerScroll
+            ]
+        ]
+    )

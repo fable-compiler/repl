@@ -45,6 +45,7 @@ var commonPlugins = [
         filename: 'index.html',
         template: CONFIG.indexHtmlTemplate
     }),
+    new MiniCssExtractPlugin({ filename: '[name].css' }),
     new MonacoWebpackPlugin({
         languages: [
             "fsharp",
@@ -126,7 +127,6 @@ module.exports = {
     // devtool: isProduction ? "source-map" : "eval-source-map",
     plugins: isProduction ?
         commonPlugins.concat([
-            new MiniCssExtractPlugin({ filename: 'style.css' }),
             new CopyWebpackPlugin([{ from: CONFIG.assetsDir }]),
             new WorkboxPlugin.GenerateSW({
                 // these options encourage the ServiceWorkers to get in there fast
@@ -179,7 +179,13 @@ module.exports = {
             {
                 test: /\.(sass|scss|css)$/,
                 use: [
-                    isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            hmr: true,
+                            hot: true
+                        }
+                    },
                     'css-loader',
                     {
                         loader: 'sass-loader',

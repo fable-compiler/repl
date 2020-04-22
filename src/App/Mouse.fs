@@ -6,8 +6,10 @@ open Browser.Types
 open Thoth.Json
 
 type Position =
-    { X : float
-      Y : float }
+    { 
+        X : float
+        Y : float 
+    }
 
 [<RequireQualifiedAccess>]
 module Cmd =

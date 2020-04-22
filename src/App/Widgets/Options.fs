@@ -1,12 +1,12 @@
 module Widgets.Options
 
 open Fable.Core
-open Fable.React
-open Fable.React.Props
-open Fulma
-open Fulma.Extensions.Wikiki
+open Feliz
+open Feliz.Bulma
 open Thoth.Json
 open Browser
+open Fable.Core.JsInterop
+open Fable.React.Extensions
 
 [<Literal>]
 let private MONACO_DEFAULT_FONT_FAMILY = "Menlo, Monaco, Consolas, \"Courier New\", monospace"
@@ -126,49 +126,77 @@ let update msg model =
     |> saveSettings
 
 let private fontSizeOption (label : string) (fontSize : float) =
-    option [ Value (string fontSize) ]
-        [ str label ]
+    Html.option [ 
+        prop.value fontSize 
+        prop.text label
+    ]
 
 let inline private fontSizeSetting (fontSize : float) dispatch =
-    Field.div [ ]
-        [ Label.label [ ]
-            [ str "Editors font size" ]
-          Control.div [ ]
-            [ Select.select [ Select.IsFullWidth ]
-                [ select [ Value (string fontSize)
-                           OnChange (fun ev ->
-                            ev.Value |> float |> ChangeFontSize |> dispatch
-                           ) ]
-                    [ fontSizeOption "Small" 12.
-                      fontSizeOption "Medium" 14.
-                      fontSizeOption "Large" 16. ] ] ] ]
+    Bulma.field.div [ 
+        Bulma.label "Editors font size"
+
+        Bulma.control.div [
+            Bulma.select [
+                select.isFullWidth
+                prop.value fontSize
+                prop.onChange (fun (ev : Types.Event) ->
+                    ev.Value |> float |> ChangeFontSize |> dispatch
+                )
+                prop.children [
+                    fontSizeOption "Small" 12.
+                    fontSizeOption "Medium" 14.
+                    fontSizeOption "Large" 16.
+                ]
+            ]
+        ]
+    ]
 
 let private fontFamilyOption (label : string) (fontFamily : string) =
-    option [ Value fontFamily ]
-        [ str label ]
+    Html.option [
+        prop.value fontFamily 
+        prop.text label
+    ]
 
 let inline private fontFamilySetting (fontFamily : string) dispatch =
-    Field.div [ ]
-        [ Label.label [ ]
-            [ str "Editors font family" ]
-          Control.div [ ]
-            [ Select.select [ Select.IsFullWidth ]
-                [ select [ Value fontFamily
-                           OnChange (fun ev ->
-                            ev.Value |> ChangeFontFamily |> dispatch
-                           ) ]
-                    [ fontFamilyOption "Fira Code" "Fira Code"
-                      fontFamilyOption "Monaco default" MONACO_DEFAULT_FONT_FAMILY ] ] ] ]
+    Bulma.field.div [
+        Bulma.label "Editors font family"
 
-let private switchOption label isActive dispatch msg =
-    Field.div [ ]
-        [ Control.div [ ]
-            [ Switch.switch [ Switch.Id label
-                              Switch.Color IsSuccess
-                              Switch.Checked isActive
-                              Switch.OnChange (fun _ -> dispatch msg) ]
-                [ str label ] ] ]
+        Bulma.control.div [
+            Bulma.select [
+                select.isFullWidth
+                prop.value fontFamily
+                prop.onChange (fun (ev : Types.Event) ->
+                    ev.Value |> ChangeFontFamily |> dispatch
+                )
+                prop.children [
+                    fontFamilyOption "Fira Code" "Fira Code"
+                    fontFamilyOption "Monaco default" MONACO_DEFAULT_FONT_FAMILY
+                ]
+            ]
+        ]
+    ]
 
+
+let private switchOption (label : string) isActive dispatch msg =
+    Bulma.field.div [
+        Bulma.control.div [
+            // TODO: Replace with Feliz.Bulma.Switch when it exist
+            Bulma.field.div [
+                Html.input [
+                    prop.className "switch is-success"
+                    prop.type' "checkbox"
+                    prop.id label
+                    prop.isChecked isActive
+                    prop.onChange (fun (_ : Types.Event) -> dispatch msg)
+                ]
+
+                Html.label [
+                    prop.htmlFor label
+                    prop.text label
+                ]
+            ]
+        ]
+    ]
 
 let inline private optimizeSetting (model: Model) dispatch =
     switchOption "Optimize (experimental)" model.Optimize dispatch ToggleOptimize
@@ -182,38 +210,53 @@ let private previewLanguageSetting (model: Model) dispatch =
 let inline private gistTokenSetting (token : string option) (tokenField : string) dispatch =
     match token with
     | Some _ ->
-        Field.div []
-            [ Button.a
-                    [ Button.OnClick (fun _ -> dispatch DeleteToken)
-                      Button.IsFullWidth]
-            [str "Delete gist token"] ]
+        Bulma.field.div [
+            Bulma.button.a [
+                prop.onClick (fun _ -> dispatch DeleteToken)
+                button.isFullWidth
+                prop.text "Delete gist token"
+            ]
+        ]
+
     | None ->
-        Field.div []
-            [ Label.label []
-                [ str "Github token"
-                  a
-                    [ Target "_blank"
-                      Href "https://github.com/settings/tokens/new?description=fable-repl&scopes=gist"]
-                    [ str "  (Create)"] ]
-              Field.div [ Field.HasAddons ][
-                  yield Input.password
-                    [ Input.OnChange (fun e -> e.Value |> ChangeGistToken |> dispatch)
-                      Input.Placeholder "Token with gist scope"]
-                  if tokenField.Length = 40 then
-                    yield Button.a
-                        [ Button.OnClick (fun _ -> dispatch SaveToken) ]
-                        [ str "Save"]
-              ]
-         ]
+        Bulma.field.div [
+            Bulma.label [
+                prop.children [
+                    Html.text "Github token"
+                    Html.a [
+                        prop.target "_blank"
+                        prop.href "https://github.com/settings/tokens/new?description=fable-repl&scopes=gist"
+                        prop.text "  (Create)"
+                    ]
+                ]
+            ]
+
+            Bulma.field.div [
+                field.hasAddons
+                prop.children [
+                    Bulma.input.password [
+                        prop.onChange (fun (ev : Types.Event) -> ev.Value |> ChangeGistToken |> dispatch)
+                        prop.placeholder "Token with gist scope"
+                    ]
+
+                    if tokenField.Length = 40 then
+                        Bulma.button.a [
+                            prop.onClick (fun _ -> dispatch SaveToken)
+                            prop.text "Save"
+                        ]
+                ]
+            ]
+        ]
+
 
 
 let view (model: Model) dispatch =
-    div [ ]
-        [ defineDebugSetting model dispatch
-          previewLanguageSetting model dispatch
-          fontFamilySetting model.FontFamily dispatch
-          fontSizeSetting model.FontSize dispatch
-          gistTokenSetting model.GistToken model.GistTokenField dispatch          
+    Html.div [ 
+        defineDebugSetting model dispatch
+        previewLanguageSetting model dispatch
+        fontFamilySetting model.FontFamily dispatch
+        fontSizeSetting model.FontSize dispatch
+        gistTokenSetting model.GistToken model.GistTokenField dispatch          
         // TODO: Optimize is disable to prevent problems with inline functions in REPL Lib
         //   optimizeSetting model dispatch
-        ]
+    ]

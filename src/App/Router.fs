@@ -1,6 +1,5 @@
 module Router
 
-open Fable.React.Props
 open Elmish.Navigation
 open Elmish.UrlParser
 open Browser
@@ -27,9 +26,6 @@ let pageParser: Parser<Page->Page,Page> =
         map Reset (s "reset")
         map LoadGist (top <?> stringParam "gist")
         map Home top ]
-
-let href route =
-    Href (toHash route)
 
 let modifyUrl route =
     route |> toHash |> Navigation.modifyUrl
