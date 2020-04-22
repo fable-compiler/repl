@@ -163,8 +163,10 @@ let getCodeFromUrl (fsharpUrl, htmlInfo, cssInfo) =
 
 
 let fetchSamples () =
-    Fetch.fetch Literals.SAMPLES_JSON_URL []
-    |> Promise.bind (fun res -> res.json())
+    promise {
+        let! res = Fetch.fetch Literals.SAMPLES_JSON_URL []
+        return! res.json()
+    }
 
 let fetchSamplesCmd () =
     Cmd.OfPromise.either fetchSamples () FetchSamplesSuccess FetchSamplesError
@@ -315,4 +317,3 @@ let view model dispatch =
 #endif
 
     Bulma.menu menus
-    
