@@ -6,9 +6,9 @@ open Browser.Types
 open Thoth.Json
 
 type Position =
-    { 
+    {
         X : float
-        Y : float 
+        Y : float
     }
 
 [<RequireQualifiedAccess>]
@@ -69,11 +69,11 @@ module Cmd =
                 Decode.fromValue "$" iframeMessageDecoder ev?data
                 |> function
                     | Ok msg -> dispatch msg
-                    | Error error -> 
+                    | Error error ->
                         // We don't have an easy way to discard false positive
                         // so for now, only log when in DEBUG mode
                         #if DEBUG
-                        console.warn error
+                        console.warn ("You see this message because you are in DEBUG mode:\n" + error)
                         #endif
                         ()
             )
