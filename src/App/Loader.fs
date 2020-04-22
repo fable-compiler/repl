@@ -1,6 +1,5 @@
 module Fable.Repl.Loader
 
-open Fable.Core
 open Browser
 open Elmish
 open Thoth.Elmish
@@ -42,7 +41,7 @@ let urlUpdate (result: Option<Router.Page>) model =
 
     match result with
     | None ->
-        JS.console.error("Error parsing url: " + window.location.href)
+        console.error("Error parsing url: " + window.location.href)
         model, Cmd.batch [ cmd
                            Router.modifyUrl Router.Home ]
 
@@ -65,14 +64,14 @@ let init (result: Option<Router.Page>) =
         urlUpdate result Initializing
 
 let private view (model: Model) dispatch =
-    // match model with
-    // | Initializing ->
-    //     Html.text "Initializing"
+    match model with
+    | Initializing ->
+        Html.text "Initializing"
 
-    // | Running model ->
-    //     Main.view model (MainMsg >> dispatch)
+    | Running model ->
+        Main.view model (MainMsg >> dispatch)
 
-    // | InvalidPlatform ->
+    | InvalidPlatform ->
         Html.div [
             Bulma.hero [
                 hero.isFullHeight
