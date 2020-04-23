@@ -23,7 +23,8 @@ type Model =
       GistToken : string option
       GistTokenField : string }
     member this.ToOtherFSharpOptions =
-        [| if this.DefineDebug then yield "--define:DEBUG"
+        [| yield "--define:FABLE_COMPILER"
+           if this.DefineDebug then yield "--define:DEBUG"
            if this.PreviewLanguage then yield "--langversion:preview"
            yield "--optimize" + (if this.Optimize then "+" else "-") |]
     static member Default =
@@ -126,13 +127,13 @@ let update msg model =
     |> saveSettings
 
 let private fontSizeOption (label : string) (fontSize : float) =
-    Html.option [ 
-        prop.value fontSize 
+    Html.option [
+        prop.value fontSize
         prop.text label
     ]
 
 let inline private fontSizeSetting (fontSize : float) dispatch =
-    Bulma.field.div [ 
+    Bulma.field.div [
         Bulma.label "Editors font size"
 
         Bulma.control.div [
@@ -153,7 +154,7 @@ let inline private fontSizeSetting (fontSize : float) dispatch =
 
 let private fontFamilyOption (label : string) (fontFamily : string) =
     Html.option [
-        prop.value fontFamily 
+        prop.value fontFamily
         prop.text label
     ]
 
@@ -251,12 +252,12 @@ let inline private gistTokenSetting (token : string option) (tokenField : string
 
 
 let view (model: Model) dispatch =
-    Html.div [ 
+    Html.div [
         defineDebugSetting model dispatch
         previewLanguageSetting model dispatch
         fontFamilySetting model.FontFamily dispatch
         fontSizeSetting model.FontSize dispatch
-        gistTokenSetting model.GistToken model.GistTokenField dispatch          
+        gistTokenSetting model.GistToken model.GistTokenField dispatch
         // TODO: Optimize is disable to prevent problems with inline functions in REPL Lib
         //   optimizeSetting model dispatch
     ]
