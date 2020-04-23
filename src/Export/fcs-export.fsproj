@@ -16,9 +16,9 @@
 
   <ItemGroup>
     <Reference Include="../Lib/bin/Debug/netstandard2.0/Fable.Repl.Lib.dll" />
-    <PackageReference Include="FSharp.Core" Version="4.7.0" />
+    <PackageReference Include="FSharp.Core" Version="4.7.1" />
     <PackageReference Include="Dotnet.ProjInfo" Version="*" />
-    <PackageReference Include="Fable.Core" Version="3.1.1" />
+    <PackageReference Include="Fable.Core" Version="3.1.5" />
     <PackageReference Include="Fable.Browser.Dom" Version="1.1.0" />
   </ItemGroup>
 </Project>
