@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 2.0.0 - 2020-03-23
+
+* Complete from to use Feliz and Feliz.Bulma
+* Fix https://github.com/fable-compiler/Fable/issues/1954: Add FABLE_COMPILER directive
+
 ## 1.0.6 - 2020-03-09
 
 * Fix #106: Model should be updated in the update function not recreated from scratch

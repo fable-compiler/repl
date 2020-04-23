@@ -105,6 +105,7 @@ let private view (model: Model) dispatch =
         ]
 
 #if !DEBUG
+open Fable.Core
 open Fable.Core.JsInterop
 
 let [<Global>] navigator: obj = jsNative
