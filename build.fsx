@@ -28,12 +28,28 @@ let LIBS_OUTPUT = Path.Combine(CWD, "public/libs")
 let REPL_OUTPUT = Path.Combine(CWD, "public/js/repl")
 let METADATA_OUTPUT = Path.Combine(CWD, "public/metadata")
 let METADATA_SOURCE = Path.Combine(NCAVE_FCS_REPO, "temp/metadata2")
+let METADATA_EXTRA_SOURCE = Path.Combine(CWD, "metadata/lib")
 
-let METADATA_EXPORT_DIR = Path.Combine(CWD, "src/Export")
+let METADATA_EXPORT_DIR = Path.Combine(CWD, "src\Export")
 let CHANGELOG_FILE = Path.Combine(CWD, "CHANGELOG.md")
 let PRELUDE_FILE = CWD </> "src/App/Prelude.fs"
 
 module Util =
+
+    let runScript workingDir (fileName: string) args =
+        printfn "CWD: %s" workingDir
+        let fileName, args =
+            if Environment.isUnix then
+                let fileName = fileName.Replace("\\","/")
+                "bash", (fileName + ".sh " + args)
+            else
+                "cmd", ("/C " + fileName + " " + args)
+        let ok =
+            CreateProcess.fromRawCommand "cmd" [ args ]
+            |> CreateProcess.withWorkingDirectory workingDir
+            |> Proc.run
+
+        if ok.ExitCode <> 0 then failwith (sprintf "'%s> %s %s' task failed" workingDir fileName args)
 
     let visitFile (visitor: string -> string) (fileName : string) =
         File.ReadAllLines(fileName)
@@ -114,7 +130,8 @@ let copyModules = BuildTask.create "CopyModules" [ npmInstall ] {
 
     Shell.cleanDir METADATA_OUTPUT
     Shell.copyDir METADATA_OUTPUT "node_modules/fable-metadata/lib" (fun _ -> true)
-    // CopyDir METADATA_OUTPUT "public/metadata-extra" (fun _ -> true)
+    Shell.copyDir METADATA_OUTPUT METADATA_EXTRA_SOURCE (fun _ -> true)
+
     // Change extension to .txt so Github pages compress the files when being served
     !! (METADATA_OUTPUT </> "*.dll")
     |> Seq.iter(fun filename ->
@@ -129,7 +146,7 @@ let copyModules = BuildTask.create "CopyModules" [ npmInstall ] {
     let currentVersionRegex = Regex(@"^\s*""version"":\s*""(.*)""")
     let currentVersion =
         fableCompilerPackageJson
-        |> File.ReadLines 
+        |> File.ReadLines
         |> Seq.find (fun line ->
             currentVersionRegex.IsMatch(line)
         )
@@ -138,7 +155,7 @@ let copyModules = BuildTask.create "CopyModules" [ npmInstall ] {
 
     let newLines =
         PRELUDE_FILE
-        |> File.ReadLines 
+        |> File.ReadLines
         |> Seq.map (fun line ->
             reg.Replace(line, fun m ->
                 m.Groups.[0].Value.Replace(m.Groups.[1].Value, currentVersion)
@@ -149,12 +166,35 @@ let copyModules = BuildTask.create "CopyModules" [ npmInstall ] {
     File.WriteAllLines(PRELUDE_FILE, newLines)
 }
 
-// TODO re-add generate metadata for REPL lib using git submobules
-// let buildLibBinary = BuildTask.create "BuildLibBinary" [ copyModules ] {
-//     DotNet.build
-//         (DotNet.Options.withWorkingDirectory (CWD </> "src/Lib"))
-//         "Fable.Repl.Lib.fsproj"
-// }
+// This target generate the metadata for the REPL
+// We won't include all of the generated metadata !!!
+// We include on the one specific to Fable REPL because the others are coming from fable-metadata
+let generateMetadata = BuildTask.create "Generate.Metadata" [ ] {
+    Shell.cleanDirs !!METADATA_SOURCE
+    Shell.cleanDirs !!METADATA_EXTRA_SOURCE
+
+    let args =
+        sprintf "Export.Metadata -e FCS_EXPORT_PROJECT=%s" METADATA_EXPORT_DIR
+
+    Util.runScript NCAVE_FCS_REPO "fcs\\build.cmd" args
+
+    Shell.copyDir
+        METADATA_EXTRA_SOURCE
+        METADATA_SOURCE
+        (fun filename ->
+            printfn "%A" filename
+            [
+                "Browser.Blob.dll"
+                "Browser.Dom.dll"
+                "Browser.Event.dll"
+                "Browser.WebStorage.dll"
+                "Fable.Repl.Lib.dll"
+            ]
+            |> List.exists (fun dllName ->
+                filename.Contains(dllName)
+            )
+        )
+}
 
 let updatePreludeREPLVersion = BuildTask.create "UpdateREPLVersion" [ ] {
     let newVersion = Changelog.getLastVersion()
@@ -162,7 +202,7 @@ let updatePreludeREPLVersion = BuildTask.create "UpdateREPLVersion" [ ] {
     let reg = Regex(@"let \[<Literal>\] REPL_VERSION = ""(.*)""")
     let newLines =
         PRELUDE_FILE
-        |> File.ReadLines 
+        |> File.ReadLines
         |> Seq.map (fun line ->
             reg.Replace(line, fun m ->
                 let previousVersion = m.Groups.[1].Value
@@ -174,7 +214,7 @@ let updatePreludeREPLVersion = BuildTask.create "UpdateREPLVersion" [ ] {
         )
         |> Seq.toArray
 
-    File.WriteAllLines(PRELUDE_FILE, newLines)    
+    File.WriteAllLines(PRELUDE_FILE, newLines)
 }
 
 let buildLib = BuildTask.create "BuildLib" [ copyModules ] {
@@ -187,10 +227,10 @@ let buildLib = BuildTask.create "BuildLib" [ copyModules ] {
     for file in Directory.EnumerateFiles(CWD </> outDir, "*.js", SearchOption.AllDirectories) do
         let newLines =
             File.ReadLines file
-            |> Seq.map (fun line -> 
+            |> Seq.map (fun line ->
                 regAllImports.Replace(line, fun m ->
-                    // Patch the fable-library import from the "repl libs" 
-                    // to make sure they use the same `fable-library` module as the code 
+                    // Patch the fable-library import from the "repl libs"
+                    // to make sure they use the same `fable-library` module as the code
                     // compiled from the REPL
                     // This is needed in order to make reflection work
                     // See https://github.com/fable-compiler/repl/issues/97#issuecomment-588498482
@@ -199,7 +239,7 @@ let buildLib = BuildTask.create "BuildLib" [ copyModules ] {
                             m.Value.Replace(m.Groups.[1].Value, "../../fable-library")
                         )
 
-                    if adaptedLine.EndsWith(".js") then adaptedLine else adaptedLine + ".js" 
+                    if adaptedLine.EndsWith(".js") then adaptedLine else adaptedLine + ".js"
                 )
             )
             |> Seq.toArray

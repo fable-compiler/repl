@@ -122,9 +122,9 @@ NUGET
       Fable.Core (>= 3.0)
       Fable.Promise (>= 2.0)
       FSharp.Core (>= 4.7)
-    Fable.Promise (2.0)
-      Fable.Core (>= 3.0)
-      FSharp.Core (>= 4.5.2)
+    Fable.Promise (2.1)
+      Fable.Core (>= 3.1.5)
+      FSharp.Core (>= 4.7)
     Fable.React (6.0)
       Fable.Browser.Dom (>= 1.0)
       Fable.Core (>= 3.1.5)
@@ -147,19 +147,19 @@ NUGET
       FSharp.Core (>= 4.6.2)
 GITHUB
   remote: thoth-org/Thoth.Json
-    FULLPROJECT (647d6f82da84bca2b0659e924e951cd09cba6cc9)
+    FULLPROJECT (32c3fde07364ae6bb5a02853a1f4b1ef8468d639)
       Fable.Core
       FSharp.Core
   remote: fable-compiler/fable-promise
-    FULLPROJECT (e96a1ba7db446d1f12360fbc451814a32dac98a1)
+    FULLPROJECT (9c2da675fa6c31b360f05be6f3c684fda277df18)
   remote: fable-compiler/fable-fetch
-    FULLPROJECT (d5dbc4e97aafe487059f1845b5bbe3206f0aa355)
+    FULLPROJECT (b79a153b59f806771508fa36321221e5dc338269)
   remote: fable-compiler/fable-react
-    FULLPROJECT (634e0409ccc0d8310e37f778ea6c6e82c67e5fc8)
+    FULLPROJECT (2d49e61a508a9beee1567eacd46f94d7062a5a3a)
   remote: fable-compiler/fable-recharts
-    FULLPROJECT (94c91b3aa1381e36ea245a92c440ac5611dbf73f)
+    FULLPROJECT (45843b6e1f8aef387fd6552c22c1cd6201b24d72)
   remote: elmish/elmish
-    FULLPROJECT (69569e39876213e91c283c1c76bbe0fb88fba208)
+    FULLPROJECT (ed14e9d36235fd959174a11006e2c1acfeaf2b21)
       Fable.Core
       FsCheck
       FsCheck.NUnit
@@ -170,7 +170,7 @@ GITHUB
       SourceLink.Create.CommandLine
       Unquote
   remote: fulma/Fulma
-    FULLPROJECT (1e763d852112307370675a0cf692415a53d1993f)
+    FULLPROJECT (1cdc91e004fd2548143330cee982006ab0077012)
       Fable.Date
       Fable.Elmish.Browser
       Fable.Elmish.React

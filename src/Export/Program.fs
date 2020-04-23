@@ -24,7 +24,7 @@ let readRefs (folder : string) (projectFile: string) =
 
     let runCmd exePath args = runProcess folder exePath (args |> String.concat " ")
     let msbuildExec = Dotnet.ProjInfo.Inspect.dotnetMsbuild runCmd
-    let result = Dotnet.ProjInfo.Inspect.getProjectInfo ignore msbuildExec Dotnet.ProjInfo.Inspect.getFscArgs [] projectFile
+    let result = Dotnet.ProjInfo.Inspect.getProjectInfo ignore msbuildExec Dotnet.ProjInfo.Inspect.getFscArgs projectFile
     match result with
     | Ok(Dotnet.ProjInfo.Inspect.GetResult.FscArgs x) ->
         x

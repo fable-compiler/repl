@@ -8,21 +8,24 @@
     <Compile Include="../../paket-files/library/thoth-org/Thoth.Json/src/Types.fs" />
     <Compile Include="../../paket-files/library/thoth-org/Thoth.Json/src/Decode.fs" />
     <Compile Include="../../paket-files/library/thoth-org/Thoth.Json/src/Encode.fs" />
-    <!-- <Compile Include="../../paket-files/thoth-org/Thoth.Json/src/Extra.fs" /> -->
+    <Compile Include="../../paket-files/library/thoth-org/Thoth.Json/src/Extra.fs" />
 
     <Compile Include="../../paket-files/library/fable-compiler/fable-promise/src/Promise.fs" />
     <Compile Include="../../paket-files/library/fable-compiler/fable-promise/src/PromiseImpl.fs" />
+
     <Compile Include="../../paket-files/library/fable-compiler/fable-fetch/src/Fetch.fs" />
-    <!-- <Compile Include="../../paket-files/alfonsogarciacaro/Fable.SimpleHttp/src/Http.fslibrary/" /> -->
 
     <Compile Include="../../paket-files/library/fable-compiler/fable-react/src/Fable.React.fs" />
     <Compile Include="../../paket-files/library/fable-compiler/fable-react/src/Fable.ReactDom.fs" />
     <Compile Include="../../paket-files/library/fable-compiler/fable-react/src/Fable.React.Hooks.fs" />
     <Compile Include="../../paket-files/library/fable-compiler/fable-react/src/Fable.React.Props.fs" />
-    <!-- <Compile Include="../../paket-files/fable-compiler/fable-react/src/Fable.React.Extensions.fs" /> -->
+    <Compile Include="../../paket-files/library/fable-compiler/fable-react/src/Fable.React.Extensions.fs" />
     <Compile Include="../../paket-files/library/fable-compiler/fable-react/src/Fable.React.Helpers.fs" />
     <Compile Include="../../paket-files/library/fable-compiler/fable-react/src/Fable.React.Standard.fs" />
     <Compile Include="../../paket-files/library/fable-compiler/fable-react/src/Fable.React.FunctionComponent.fs" />
+    <Compile Include="../../paket-files/library/fable-compiler/fable-react/src/Fable.React.ReactiveComponents.fs" />
+    <!-- <Compile Include="../../paket-files/library/fable-compiler/fable-react/src/Fable.React.Isomorphic.fs" /> -->
+    <!-- <Compile Include="../../paket-files/library/fable-compiler/fable-react/src/Fable.ReactServer.fs" /> -->
 
     <Compile Include="../../paket-files/library/fable-compiler/fable-recharts/src/Fable.Recharts.fs" />
 
