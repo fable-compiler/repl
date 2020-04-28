@@ -15,10 +15,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="../Lib/bin/Debug/netstandard2.0/Fable.Repl.Lib.dll" />
+    <PackageReference Include="Fable.Browser.Blob" Version="1.1.0" />
+    <PackageReference Include="Fable.Browser.Css" Version="1.0.0" />
+    <PackageReference Include="Fable.Browser.Event" Version="1.0.0" />
+    <PackageReference Include="Fable.Browser.Geolocation" Version="1.0.0" />
+    <PackageReference Include="Fable.Browser.MediaQueryList" Version="1.1.0" />
+    <PackageReference Include="Fable.Browser.Navigator" Version="1.0.0" />
+    <PackageReference Include="Fable.Browser.Performance" Version="1.0.0" />
+    <PackageReference Include="Fable.Browser.Svg" Version="1.0.0" />
+    <PackageReference Include="Fable.Browser.Url" Version="1.0.0" />
+    <PackageReference Include="Fable.Browser.WebStorage" Version="1.0.0" />
+    <PackageReference Include="Fable.Browser.XMLHttpRequest" Version="1.1.0" />
     <PackageReference Include="FSharp.Core" Version="4.7.1" />
     <PackageReference Include="Dotnet.ProjInfo" Version="*" />
     <PackageReference Include="Fable.Core" Version="3.1.5" />
     <PackageReference Include="Fable.Browser.Dom" Version="1.1.0" />
+    <Reference Include="../Lib/bin/Debug/netstandard2.0/Fable.Repl.Lib.dll" />
   </ItemGroup>
 </Project>

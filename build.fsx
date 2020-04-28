@@ -107,7 +107,7 @@ let clean = BuildTask.create "Clean" [ ] {
     !! "public/js"
     ++ LIBS_OUTPUT
     ++ "deploy"
-  |> Shell.cleanDirs
+    |> Shell.cleanDirs
 }
 
 let restore = BuildTask.create "Restore" [ clean ] {
@@ -192,8 +192,15 @@ let generateMetadata = BuildTask.create "Generate.Metadata" [ ] {
         METADATA_EXTRA_SOURCE
         METADATA_SOURCE
         (fun filename ->
-            printfn "%A" filename
             [
+                "Browser.Css.dll"
+                "Browser.Geolocation.dll"
+                "Browser.MediaQueryList.dll"
+                "Browser.Navigator.dll"
+                "Browser.Performance.dll"
+                "Browser.Svg.dll"
+                "Browser.Url.dll"
+                "Browser.XMLHttpRequest.dll"
                 "Browser.Blob.dll"
                 "Browser.Dom.dll"
                 "Browser.Event.dll"

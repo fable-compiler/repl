@@ -125,7 +125,7 @@ NUGET
     Fable.Promise (2.1)
       Fable.Core (>= 3.1.5)
       FSharp.Core (>= 4.7)
-    Fable.React (6.0)
+    Fable.React (6.2)
       Fable.Browser.Dom (>= 1.0)
       Fable.Core (>= 3.1.5)
       FSharp.Core (>= 4.7)
@@ -135,7 +135,7 @@ NUGET
       FsCheck (2.14.2)
       NUnit (>= 3.10.1 < 4.0)
     FSharp.Core (4.7.1)
-    Microsoft.NET.Test.Sdk (16.6)
+    Microsoft.NET.Test.Sdk (16.6.1)
     Microsoft.NETCore.Platforms (3.1)
     NETStandard.Library (2.0.3)
       Microsoft.NETCore.Platforms (>= 1.1)
@@ -155,7 +155,7 @@ GITHUB
   remote: fable-compiler/fable-fetch
     FULLPROJECT (b79a153b59f806771508fa36321221e5dc338269)
   remote: fable-compiler/fable-react
-    FULLPROJECT (2d49e61a508a9beee1567eacd46f94d7062a5a3a)
+    FULLPROJECT (5e4de1e356a736f5e73288b92565a2bc7ae17e13)
   remote: fable-compiler/fable-recharts
     FULLPROJECT (45843b6e1f8aef387fd6552c22c1cd6201b24d72)
   remote: elmish/elmish
