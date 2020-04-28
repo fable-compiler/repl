@@ -33,6 +33,7 @@ let METADATA_EXTRA_SOURCE = Path.Combine(CWD, "metadata/lib")
 let METADATA_EXPORT_DIR = Path.Combine(CWD, "src\Export")
 let CHANGELOG_FILE = Path.Combine(CWD, "CHANGELOG.md")
 let PRELUDE_FILE = CWD </> "src/App/Prelude.fs"
+let FABLE_REPL_LIB_DIR = Path.Combine(CWD, "src/Lib")
 
 module Util =
 
@@ -170,8 +171,17 @@ let copyModules = BuildTask.create "CopyModules" [ npmInstall ] {
 // We won't include all of the generated metadata !!!
 // We include on the one specific to Fable REPL because the others are coming from fable-metadata
 let generateMetadata = BuildTask.create "Generate.Metadata" [ ] {
-    Shell.cleanDirs !!METADATA_SOURCE
-    Shell.cleanDirs !!METADATA_EXTRA_SOURCE
+    !! "src/Lib/bin"
+    ++ "src/Lib/obj"
+    ++ METADATA_SOURCE
+    ++ METADATA_EXTRA_SOURCE
+    |> Shell.cleanDirs
+
+    DotNet.build
+        (fun p ->
+            { p with Configuration = DotNet.BuildConfiguration.Debug }
+        )
+        FABLE_REPL_LIB_DIR
 
     let args =
         sprintf "Export.Metadata -e FCS_EXPORT_PROJECT=%s" METADATA_EXPORT_DIR
