@@ -127,7 +127,10 @@ module.exports = {
     // devtool: isProduction ? "source-map" : "eval-source-map",
     plugins: isProduction ?
         commonPlugins.concat([
-            new CopyWebpackPlugin([{ from: CONFIG.assetsDir }]),
+            new CopyWebpackPlugin({ 
+                patterns: [
+                    { from: CONFIG.assetsDir }
+                ]}),
             new WorkboxPlugin.GenerateSW({
                 // these options encourage the ServiceWorkers to get in there fast
                 // and not allow any straggling "old" SWs to hang around

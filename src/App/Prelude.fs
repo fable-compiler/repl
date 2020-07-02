@@ -6,8 +6,8 @@ open Fable.Core
 
 [<RequireQualifiedAccess>]
 module Literals =
-    let [<Literal>] REPL_VERSION = "2.0.0" // Do not edit manually
-    let [<Literal>] FABLE_VERSION = "2.4.18" // Do not edit manually
+    let [<Literal>] REPL_VERSION = "2.1.0" // Do not edit manually
+    let [<Literal>] FABLE_VERSION = "2.10.1" // Do not edit manually
     let [<Literal>] STORAGE_KEY = "fable-repl"
     let [<Literal>] MAX_LOGS_LENGTH = 200
     // let [<Literal>] HOST =
