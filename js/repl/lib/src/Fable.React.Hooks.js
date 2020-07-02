@@ -4,9 +4,13 @@ function HookBindings$$$makeDummyStateHook(value) {
       return value;
     },
 
-    update(x) {},
+    update(x) {
+      void null;
+    },
 
-    update(f) {}
+    update(f) {
+      void null;
+    }
 
   };
 }

@@ -1,12 +1,14 @@
 import { List, declare, Union } from "../../fable-library/Types.js";
 import { Common$002EGenericOptions$$$Parse$$9AE2F7C as Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C, Reflection$$$getCaseName as Reflection$0024$0024$0024getCaseName, Common$002EGenericOptions$$AddModifiers$$5BB435D5 as Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5, Common$002EGenericOptions$$AddClass$$Z721C83C5 as Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5, Common$002EGenericOptions$$AddProps$$416C4D0B as Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B, Common$002EGenericOptions$$AddCaseName$$1505 as Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505, Common$002EGenericOptions$$ToReactElement$$Z6D3CD4B7 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection } from "../Fulma/Common.js";
-import { bool, union, string, list, type } from "../../fable-library/Reflection.js";
+import { bool_type, union_type, string_type, list_type, class_type } from "../../fable-library/Reflection.js";
 import { createObj } from "../../fable-library/Util.js";
 export const Option = declare(function Fulma_Breadcrumb_Option(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function Option$reflection() {
-  return union("Fulma.Breadcrumb.Option", [], Option, () => ["is-centered", "is-right", "has-arrow-separator", "has-bullet-separator", "has-dot-separator", "has-succeeds-separator", ["Size", [Size$0024002EISize$0024reflection()]], ["Props", [list(type("Fable.React.Props.IHTMLProp"))]], ["CustomClass", [string]], ["Modifiers", [list(Modifier$0024002EIModifier$0024reflection())]]]);
+  return union_type("Fulma.Breadcrumb.Option", [], Option, () => ["is-centered", "is-right", "has-arrow-separator", "has-bullet-separator", "has-dot-separator", "has-succeeds-separator", ["Size", [["Item", Size$0024002EISize$0024reflection()]]], ["Props", [["Item", list_type(class_type("Fable.React.Props.IHTMLProp"))]]], ["CustomClass", [["Item", string_type]]], ["Modifiers", [["Item", list_type(Modifier$0024002EIModifier$0024reflection())]]]]);
 }
 export function breadcrumb(options, children) {
   var props$$4;
@@ -50,10 +52,12 @@ export function breadcrumb(options, children) {
   }, new List((props$$4 = [], React.createElement("ul", createObj(props$$4, 1), ...children)), new List()));
 }
 export const Item$002EOption = declare(function Fulma_Breadcrumb_Item_Option(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function Item$002EOption$reflection() {
-  return union("Fulma.Breadcrumb.Item.Option", [], Item$002EOption, () => [["is-active", [bool]], ["Props", [list(type("Fable.React.Props.IHTMLProp"))]], ["CustomClass", [string]], ["Modifiers", [list(Modifier$0024002EIModifier$0024reflection())]]]);
+  return union_type("Fulma.Breadcrumb.Item.Option", [], Item$002EOption, () => [["is-active", [["Item", bool_type]]], ["Props", [["Item", list_type(class_type("Fable.React.Props.IHTMLProp"))]]], ["CustomClass", [["Item", string_type]]], ["Modifiers", [["Item", list_type(Modifier$0024002EIModifier$0024reflection())]]]]);
 }
 export function item(options$$1, children$$6) {
   return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options$$1, function parseOptions$$1(result$$1, option$$1) {

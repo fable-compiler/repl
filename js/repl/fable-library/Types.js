@@ -77,10 +77,9 @@ export class List {
         let cur = this;
         return {
             next: () => {
-                var _a, _b, _c;
-                const value = (_a = cur) === null || _a === void 0 ? void 0 : _a.head;
-                const done = ((_b = cur) === null || _b === void 0 ? void 0 : _b.tail) == null;
-                cur = (_c = cur) === null || _c === void 0 ? void 0 : _c.tail;
+                const value = cur === null || cur === void 0 ? void 0 : cur.head;
+                const done = (cur === null || cur === void 0 ? void 0 : cur.tail) == null;
+                cur = cur === null || cur === void 0 ? void 0 : cur.tail;
                 return { done, value };
             },
         };

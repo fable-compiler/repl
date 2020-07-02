@@ -1,5 +1,5 @@
 import { declare, Record } from "../../fable-library/Types.js";
-import { record, type, string, tuple, list, lambda, unit } from "../../fable-library/Reflection.js";
+import { record_type, class_type, string_type, tuple_type, list_type, lambda_type, unit_type } from "../../fable-library/Reflection.js";
 import { Cmd$$$exec as Cmd$0024$0024$0024exec, Cmd$$$batch as Cmd$0024$0024$0024batch, Cmd$$$none as Cmd$0024$0024$0024none } from "./cmd.js";
 import { toConsole, onError as onError$$2 } from "./prelude.js";
 import { curry, partialApply, uncurry } from "../../fable-library/Util.js";
@@ -7,17 +7,17 @@ import { append, ofArray } from "../../fable-library/List.js";
 import { RingBuffer$00601$$Pop as RingBuffer$002400601$0024$0024Pop, RingBuffer$00601$$Push$$2B595 as RingBuffer$002400601$0024$0024Push$0024$00242B595, RingBuffer$00601$$$$002Ector$$Z524259A4 as RingBuffer$002400601$0024$0024$0024$0024002Ector$0024$0024Z524259A4 } from "./ring.js";
 import { value as value$$2, some } from "../../fable-library/Option.js";
 import { toText, printf } from "../../fable-library/String.js";
-export const Program$00604 = declare(function Elmish_Program(arg1, arg2, arg3, arg4, arg5, arg6, arg7) {
-  this.init = arg1;
-  this.update = arg2;
-  this.subscribe = arg3;
-  this.view = arg4;
-  this.setState = arg5;
-  this.onError = arg6;
-  this.syncDispatch = arg7;
+export const Program$00604 = declare(function Elmish_Program(init, update, subscribe, view, setState, onError, syncDispatch) {
+  this.init = init;
+  this.update = update;
+  this.subscribe = subscribe;
+  this.view = view;
+  this.setState = setState;
+  this.onError = onError;
+  this.syncDispatch = syncDispatch;
 }, Record);
 export function Program$00604$reflection($gen$$5, $gen$$6, $gen$$7, $gen$$8) {
-  return record("Elmish.Program`4", [$gen$$5, $gen$$6, $gen$$7, $gen$$8], Program$00604, () => [["init", lambda($gen$$5, tuple($gen$$6, list(lambda(lambda($gen$$7, unit), unit))))], ["update", lambda($gen$$7, lambda($gen$$6, tuple($gen$$6, list(lambda(lambda($gen$$7, unit), unit)))))], ["subscribe", lambda($gen$$6, list(lambda(lambda($gen$$7, unit), unit)))], ["view", lambda($gen$$6, lambda(lambda($gen$$7, unit), $gen$$8))], ["setState", lambda($gen$$6, lambda(lambda($gen$$7, unit), unit))], ["onError", lambda(tuple(string, type("System.Exception")), unit)], ["syncDispatch", lambda(lambda($gen$$7, unit), lambda($gen$$7, unit))]]);
+  return record_type("Elmish.Program`4", [$gen$$5, $gen$$6, $gen$$7, $gen$$8], Program$00604, () => [["init", lambda_type($gen$$5, tuple_type($gen$$6, list_type(lambda_type(lambda_type($gen$$7, unit_type), unit_type))))], ["update", lambda_type($gen$$7, lambda_type($gen$$6, tuple_type($gen$$6, list_type(lambda_type(lambda_type($gen$$7, unit_type), unit_type)))))], ["subscribe", lambda_type($gen$$6, list_type(lambda_type(lambda_type($gen$$7, unit_type), unit_type)))], ["view", lambda_type($gen$$6, lambda_type(lambda_type($gen$$7, unit_type), $gen$$8))], ["setState", lambda_type($gen$$6, lambda_type(lambda_type($gen$$7, unit_type), unit_type))], ["onError", lambda_type(tuple_type(string_type, class_type("System.Exception")), unit_type)], ["syncDispatch", lambda_type(lambda_type($gen$$7, unit_type), lambda_type($gen$$7, unit_type))]]);
 }
 export function ProgramModule$$$mkProgram(init, update, view) {
   return new Program$00604(init, update, function (_arg1) {
@@ -149,5 +149,5 @@ export function ProgramModule$$$runWith(arg$$1, program$$10) {
   Cmd$0024$0024$0024exec(syncDispatch$$1, cmd$$4);
 }
 export function ProgramModule$$$run(program$$11) {
-  ProgramModule$$$runWith(null, program$$11);
+  ProgramModule$$$runWith(void null, program$$11);
 }

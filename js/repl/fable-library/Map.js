@@ -5,12 +5,11 @@ import { iterate as iterate$$1, empty as empty$$1, toIterator, map as map$$2, un
 import { compare, structuralHash, isDisposable } from "./Util.js";
 import { join, format } from "./String.js";
 import { MutableMap$00602$$$$002Ector$$6623D9B3 as MutableMap$002400602$0024$0024$0024$0024002Ector$0024$00246623D9B3 } from "./MutableMap.js";
-import { addInPlace } from "./Array.js";
 export const MapTree$00602 = declare(function Map_MapTree(tag, name, ...fields) {
   Union.call(this, tag, name, ...fields);
 }, Union);
 export function MapTree$00602$reflection($gen$$3, $gen$$4) {
-  return union("Map.MapTree`2", [$gen$$3, $gen$$4], MapTree$00602, () => ["MapEmpty", ["MapOne", [$gen$$3, $gen$$4]], ["MapNode", [$gen$$3, $gen$$4, MapTree$00602$reflection($gen$$3, $gen$$4), MapTree$00602$reflection($gen$$3, $gen$$4), int32]]]);
+  return union("Map.MapTree`2", [$gen$$3, $gen$$4], MapTree$00602, () => ["MapEmpty", ["MapOne", [["Item1", $gen$$3], ["Item2", $gen$$4]]], ["MapNode", [["Item1", $gen$$3], ["Item2", $gen$$4], ["Item3", MapTree$00602$reflection($gen$$3, $gen$$4)], ["Item4", MapTree$00602$reflection($gen$$3, $gen$$4)], ["Item5", int32]]]]);
 }
 export function MapTreeModule$$$sizeAux($acc$$5, $m$$6) {
   MapTreeModule$$$sizeAux: while (true) {
@@ -1017,9 +1016,9 @@ FSharpMap.prototype.GetHashCode = function () {
 
   while (e$$1.MoveNext()) {
     const patternInput$$5 = e$$1.Current;
-    const activePatternResult3692 = patternInput$$5;
-    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3692[0]));
-    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3692[1]));
+    const activePatternResult3709 = patternInput$$5;
+    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3709[0]));
+    res$$3 = combineHash(res$$3, structuralHash(activePatternResult3709[1]));
   }
 
   return Math.abs(res$$3) | 0;
@@ -1313,7 +1312,7 @@ export function groupBy(projection, xs, comparer$$24) {
     const key = projection(v$$31);
 
     if (dict.has(key)) {
-      addInPlace(v$$31, dict.get(key));
+      void dict.get(key).push(v$$31);
     } else {
       const value = dict.set(key, [v$$31]);
       void value;

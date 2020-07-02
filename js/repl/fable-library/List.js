@@ -604,11 +604,11 @@ export function except(itemsToExclude, array$$2, eq$$1) {
 export function initialize(n$$2, f$$46) {
   let xs$$78 = new List();
 
-  for (let i$$15 = 1; i$$15 <= n$$2; i$$15++) {
-    xs$$78 = new List(f$$46(n$$2 - i$$15), xs$$78);
+  for (let i$$15 = 0; i$$15 <= n$$2 - 1; i$$15++) {
+    xs$$78 = new List(f$$46(i$$15), xs$$78);
   }
 
-  return xs$$78;
+  return reverse(xs$$78);
 }
 export function replicate(n$$3, x$$40) {
   return initialize(n$$3, function (_arg1$$15) {

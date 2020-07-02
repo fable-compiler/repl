@@ -1,21 +1,24 @@
 import { declare, Union } from "../../fable-library/Types.js";
-import { type, union, int32, array } from "../../fable-library/Reflection.js";
+import { class_type, union_type, int32_type, array_type } from "../../fable-library/Reflection.js";
 import { max, comparePrimitives } from "../../fable-library/Util.js";
 import { ofSeq, fill } from "../../fable-library/Array.js";
 import { some } from "../../fable-library/Option.js";
 import { append, delay, collect, rangeNumber, singleton, take, skip } from "../../fable-library/Seq.js";
 export const RingState$00601 = declare(function Elmish_RingState(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function RingState$00601$reflection($gen$$4) {
-  return union("Elmish.RingState`1", [$gen$$4], RingState$00601, () => [["Writable", [array($gen$$4), int32]], ["ReadWritable", [array($gen$$4), int32, int32]]]);
+  return union_type("Elmish.RingState`1", [$gen$$4], RingState$00601, () => [["Writable", [["wx", array_type($gen$$4)], ["ix", int32_type]]], ["ReadWritable", [["rw", array_type($gen$$4)], ["wix", int32_type], ["rix", int32_type]]]]);
 }
 export const RingBuffer$00601 = declare(function Elmish_RingBuffer(size) {
   const $this$$1 = this;
   $this$$1.state = new RingState$00601(0, "Writable", fill(new Array(max(comparePrimitives, size, 10)), 0, max(comparePrimitives, size, 10), null), 0);
+  void null;
 });
 export function RingBuffer$00601$reflection($gen$$5) {
-  return type("Elmish.RingBuffer`1", [$gen$$5]);
+  return class_type("Elmish.RingBuffer`1", [$gen$$5], RingBuffer$00601);
 }
 export function RingBuffer$00601$$$$002Ector$$Z524259A4(size) {
   return this instanceof RingBuffer$00601 ? RingBuffer$00601.call(this, size) : new RingBuffer$00601(size);
@@ -35,7 +38,7 @@ export function RingBuffer$00601$$Pop(__) {
 
     return some(matchValue.fields[0][matchValue.fields[2]]);
   } else {
-    return null;
+    return undefined;
   }
 }
 export function RingBuffer$00601$$Push$$2B595(__$$1, item) {

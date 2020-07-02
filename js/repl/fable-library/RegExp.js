@@ -1,4 +1,4 @@
-export function create(pattern, options) {
+export function create(pattern, options = 0) {
     // Supported RegexOptions
     // * IgnoreCase:  0x0001
     // * Multiline:   0x0002
@@ -74,7 +74,7 @@ export function replace(reg, input, replacement, limit, offset = 0) {
     }
     if (typeof reg === "string") {
         const tmp = reg;
-        reg = create(input, (limit !== null && limit !== void 0 ? limit : 0));
+        reg = create(input, limit !== null && limit !== void 0 ? limit : 0);
         input = tmp;
         limit = undefined;
     }
@@ -101,7 +101,7 @@ export function replace(reg, input, replacement, limit, offset = 0) {
 export function split(reg, input, limit, offset = 0) {
     if (typeof reg === "string") {
         const tmp = reg;
-        reg = create(input, (limit !== null && limit !== void 0 ? limit : 0));
+        reg = create(input, limit !== null && limit !== void 0 ? limit : 0);
         input = tmp;
         limit = undefined;
     }

@@ -2,7 +2,6 @@ import { declare, FSharpRef } from "./Types.js";
 import { iterateIndexed, toIterator, getEnumerator, delay, collect, map, sumBy, iterate } from "./Seq.js";
 import { type } from "./Reflection.js";
 import { equals, getItemFromDict, tryGetValue } from "./Util.js";
-import { addInPlace } from "./Array.js";
 import { format } from "./String.js";
 export const MutableMap$00602 = declare(function Fable_Collections_MutableMap(pairs, comparer) {
   const $this$$1 = this;
@@ -116,7 +115,7 @@ export function MutableMap$00602$$set_Item$$5BDDA1(this$$$7, k$$3, v) {
     case 1:
       {
         if (matchValue$$3[0]) {
-          const value = addInPlace([k$$3, v], getItemFromDict(this$$$7.hashMap, matchValue$$3[1]));
+          const value = void getItemFromDict(this$$$7.hashMap, matchValue$$3[1]).push([k$$3, v]);
           void null;
         } else {
           this$$$7.hashMap.set(matchValue$$3[1], [[k$$3, v]]);
@@ -151,7 +150,7 @@ export function MutableMap$00602$$Add$$5BDDA1(this$$$8, k$$4, v$$1) {
     case 1:
       {
         if (matchValue$$4[0]) {
-          const value$$1 = addInPlace([k$$4, v$$1], getItemFromDict(this$$$8.hashMap, matchValue$$4[1]));
+          const value$$1 = void getItemFromDict(this$$$8.hashMap, matchValue$$4[1]).push([k$$4, v$$1]);
           void null;
         } else {
           this$$$8.hashMap.set(matchValue$$4[1], [[k$$4, v$$1]]);

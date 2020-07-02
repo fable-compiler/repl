@@ -5,7 +5,7 @@ import { toString as toString$$2 } from "../../fable-library/TimeSpan.js";
 import { toString as toString$$3 } from "../../fable-library/Long.js";
 import { comparePrimitives, Lazy, mapCurriedArgs, uncurry } from "../../fable-library/Util.js";
 import { defaultArg, defaultArgWith, map, some } from "../../fable-library/Option.js";
-import { type, getGenerics, getGenericTypeDefinition, getTupleFields, getTupleElements, isTuple, isGenericType, getElementType, isArray, fullName, getUnionCaseFields, getUnionFields, isUnion, getRecordField, name, getRecordElements, isRecord } from "../../fable-library/Reflection.js";
+import { class_type, getGenerics, getGenericTypeDefinition, getTupleFields, getTupleElements, isTuple, isGenericType, getElementType, isArray, fullName, getUnionCaseFields, getUnionFields, isUnion, getRecordField, name, getRecordElements, isRecord } from "../../fable-library/Reflection.js";
 import { fill, map as map$$1 } from "../../fable-library/Array.js";
 import { toText, printf } from "../../fable-library/String.js";
 import { declare } from "../../fable-library/Types.js";
@@ -120,7 +120,7 @@ function autoEncodeRecordsAndUnions(extra, isCamelCase, t) {
     let setters;
     const array$$1 = getRecordElements(t, true);
     setters = map$$1(function mapping(fi) {
-      const targetKey = isCamelCase ? name(fi).slice(null, 0 + 1).toLowerCase() + name(fi).slice(1, name(fi).length) : name(fi);
+      const targetKey = isCamelCase ? name(fi).slice(undefined, 0 + 1).toLowerCase() + name(fi).slice(1, name(fi).length) : name(fi);
       const encode$$1 = autoEncoder(extra, isCamelCase, fi[1]);
       return function (source) {
         return function (target) {
@@ -128,6 +128,8 @@ function autoEncodeRecordsAndUnions(extra, isCamelCase, t) {
 
           if (!(value$$23 == null)) {
             target[targetKey] = encode$$1(value$$23);
+          } else {
+            void null;
           }
 
           return target;
@@ -310,7 +312,7 @@ function autoEncoder(extra$$1, isCamelCase$$1, t$$1) {
 
 export const Auto = declare(function Thoth_Json_Encode_Auto() {});
 export function Auto$reflection() {
-  return type("Thoth.Json.Encode.Auto");
+  return class_type("Thoth.Json.Encode.Auto", undefined, Auto);
 }
 export function Auto$$$generateEncoderCached$$4AE6C623(isCamelCase$$2, extra$$2, resolver) {
   const t$$8 = resolver.ResolveType();

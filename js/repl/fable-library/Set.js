@@ -9,7 +9,7 @@ export const SetTree$00601 = declare(function Set_SetTree(tag, name, ...fields) 
   Union.call(this, tag, name, ...fields);
 }, Union);
 export function SetTree$00601$reflection($gen$$3) {
-  return union$$1("Set.SetTree`1", [$gen$$3], SetTree$00601, () => ["SetEmpty", ["SetNode", [$gen$$3, SetTree$00601$reflection($gen$$3), SetTree$00601$reflection($gen$$3), int32]], ["SetOne", [$gen$$3]]]);
+  return union$$1("Set.SetTree`1", [$gen$$3], SetTree$00601, () => ["SetEmpty", ["SetNode", [["Item1", $gen$$3], ["Item2", SetTree$00601$reflection($gen$$3)], ["Item3", SetTree$00601$reflection($gen$$3)], ["Item4", int32]]], ["SetOne", [["Item", $gen$$3]]]]);
 }
 export function SetTreeModule$$$countAux($s$$4, $acc$$5) {
   SetTreeModule$$$countAux: while (true) {

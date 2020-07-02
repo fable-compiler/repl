@@ -87,7 +87,7 @@ export const compareTo = comparePrimitives;
 export function duration(x) {
     return Math.abs(x);
 }
-export function toString(ts, format = "c") {
+export function toString(ts, format = "c", _provider) {
     if (["c", "g", "G"].indexOf(format) === -1) {
         throw new Error("Custom formats are not supported");
     }
@@ -160,7 +160,7 @@ export function parse(str) {
     }
     throw new Error(`String '${str}' was not recognized as a valid TimeSpan.`);
 }
-export function tryParse(v) {
+export function tryParse(v, _refValue) {
     try {
         return [true, parse(v)];
     }

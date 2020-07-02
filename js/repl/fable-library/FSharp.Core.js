@@ -42,8 +42,20 @@ export function Operators$$$FailurePattern(exn) {
 export function Operators$$$NullArg(x$$4) {
   throw new Error(x$$4);
 }
-export function Operators$$$Lock(_lockObj, action) {
-  return action();
+export function Operators$$$Using(resource, action) {
+  try {
+    return action(resource);
+  } finally {
+    const matchValue = resource;
+
+    if (equals(matchValue, null)) {} else {
+      let copyOfStruct = resource;
+      copyOfStruct.Dispose();
+    }
+  }
+}
+export function Operators$$$Lock(_lockObj, action$$1) {
+  return action$$1();
 }
 export function ExtraTopLevelOperators$$$LazyPattern(input) {
   return input.Value;

@@ -87,9 +87,9 @@ function dateToStringWithCustomFormat(date, format, utc) {
 }
 function dateToStringWithOffset(date, format) {
     var _a, _b, _c;
-    const d = new Date(date.getTime() + (_a = date.offset, (_a !== null && _a !== void 0 ? _a : 0)));
+    const d = new Date(date.getTime() + ((_a = date.offset) !== null && _a !== void 0 ? _a : 0));
     if (typeof format !== "string") {
-        return d.toISOString().replace(/\.\d+/, "").replace(/[A-Z]|\.\d+/g, " ") + dateOffsetToString((_b = date.offset, (_b !== null && _b !== void 0 ? _b : 0)));
+        return d.toISOString().replace(/\.\d+/, "").replace(/[A-Z]|\.\d+/g, " ") + dateOffsetToString(((_b = date.offset) !== null && _b !== void 0 ? _b : 0));
     }
     else if (format.length === 1) {
         switch (format) {
@@ -98,7 +98,7 @@ function dateToStringWithOffset(date, format) {
             case "T":
             case "t": return dateToHalfUTCString(d, "second");
             case "O":
-            case "o": return dateToISOStringWithOffset(d, (_c = date.offset, (_c !== null && _c !== void 0 ? _c : 0)));
+            case "o": return dateToISOStringWithOffset(d, ((_c = date.offset) !== null && _c !== void 0 ? _c : 0));
             default: throw new Error("Unrecognized Date print format");
         }
     }
@@ -130,7 +130,7 @@ function dateToStringWithKind(date, format) {
         return dateToStringWithCustomFormat(date, format, utc);
     }
 }
-export function toString(date, format) {
+export function toString(date, format, _provider) {
     return date.offset != null
         ? dateToStringWithOffset(date, format)
         : dateToStringWithKind(date, format);
@@ -158,7 +158,7 @@ export function fromDateTimeOffset(date, kind) {
         case 1 /* UTC */: return DateTime(date.getTime(), 1 /* UTC */);
         case 2 /* Local */: return DateTime(date.getTime(), 2 /* Local */);
         default:
-            const d = DateTime(date.getTime() + (_a = date.offset, (_a !== null && _a !== void 0 ? _a : 0)), kind);
+            const d = DateTime(date.getTime() + ((_a = date.offset) !== null && _a !== void 0 ? _a : 0), kind);
             return DateTime(d.getTime() - dateOffset(d), kind);
     }
 }
@@ -236,7 +236,7 @@ export function parse(str, detectUTC = false) {
         : 0 /* Unspecified */;
     return DateTime(date.getTime(), kind);
 }
-export function tryParse(v) {
+export function tryParse(v, _refValue) {
     try {
         // if value is null or whitespace, parsing fails
         if (v == null || v.trim() === "") {
@@ -384,7 +384,9 @@ export function addMonths(d, v) {
     return create(newYear, newMonth, newDay, hour(d), minute(d), second(d), millisecond(d), d.kind);
 }
 export function subtract(d, that) {
-    return typeof that === "number" ? add(d, -that) : d.getTime() - that.getTime();
+    return typeof that === "number"
+        ? add(d, -that)
+        : d.getTime() - that.getTime();
 }
 export function toLongDateString(d) {
     return d.toDateString();

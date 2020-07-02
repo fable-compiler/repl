@@ -60,7 +60,9 @@ export function anonRecord(...fields) {
     return new TypeInfo("", undefined, undefined, () => fields);
 }
 export function union(fullname, generics, constructor, cases) {
-    const t = new TypeInfo(fullname, generics, constructor, undefined, () => cases().map((x, i) => typeof x === "string" ? new CaseInfo(t, i, x) : new CaseInfo(t, i, x[0], x[1])));
+    const t = new TypeInfo(fullname, generics, constructor, undefined, () => cases().map((x, i) => typeof x === "string"
+        ? new CaseInfo(t, i, x)
+        : new CaseInfo(t, i, x[0], x[1])));
     return t;
 }
 export function tuple(...generics) {
@@ -272,7 +274,7 @@ export function getUnionFields(v, t) {
     return [case_, v.fields];
 }
 export function getUnionCaseFields(uci) {
-    return uci.fields == null ? [] : uci.fields.map((t, i) => ["Data" + i, t]);
+    return uci.fields == null ? [] : uci.fields;
 }
 export function getRecordFields(v) {
     return Object.keys(v).map((k) => v[k]);
@@ -309,6 +311,9 @@ export function makeRecord(t, values) {
 }
 export function makeTuple(values, _t) {
     return values;
+}
+export function getValue(propertyInfo, v) {
+    return v[propertyInfo[0]];
 }
 // Fable.Core.Reflection
 function assertUnion(x) {

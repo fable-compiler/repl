@@ -1,13 +1,13 @@
-import { addInPlace } from "./Array.js";
 import { declare } from "./Types.js";
 import { type } from "./Reflection.js";
-import { join, format } from "./String.js";
+import { substring, join, format } from "./String.js";
+import { sumBy } from "./Seq.js";
 export const StringBuilder = declare(function System_Text_StringBuilder(value, capacity) {
   const $this$$1 = this;
   $this$$1.buf = [];
 
   if (!(value == null)) {
-    addInPlace(value, $this$$1.buf);
+    void $this$$1.buf.push(value);
   }
 });
 export function StringBuilder$reflection() {
@@ -26,24 +26,24 @@ export function StringBuilder$$$$002Ector() {
   return StringBuilder$$$$002Ector$$Z18115A39.call(this, null, 16);
 }
 export function StringBuilder$$Append$$Z721C83C5(x, s) {
-  addInPlace(s, x.buf);
+  void x.buf.push(s);
   return x;
 }
 export function StringBuilder$$Append$$244C7CD6(x$$1, c) {
-  addInPlace(c, x$$1.buf);
+  void x$$1.buf.push(c);
   return x$$1;
 }
 export function StringBuilder$$AppendFormat$$433E080(x$$2, fmt, o) {
-  addInPlace(format(fmt, o), x$$2.buf);
+  void x$$2.buf.push(format(fmt, o));
   return x$$2;
 }
 export function StringBuilder$$AppendLine(x$$3) {
-  addInPlace("\n", x$$3.buf);
+  void x$$3.buf.push("\n");
   return x$$3;
 }
 export function StringBuilder$$AppendLine$$Z721C83C5(x$$4, s$$1) {
-  addInPlace(s$$1, x$$4.buf);
-  addInPlace("\n", x$$4.buf);
+  void x$$4.buf.push(s$$1);
+  void x$$4.buf.push("\n");
   return x$$4;
 }
 
@@ -51,3 +51,22 @@ StringBuilder.prototype.toString = function () {
   const __ = this;
   return join("", __.buf);
 };
+
+export function StringBuilder$$get_Length(x$$5) {
+  return sumBy(function (str) {
+    return str.length;
+  }, x$$5.buf, {
+    GetZero() {
+      return 0;
+    },
+
+    Add($x$$2, $y$$3) {
+      return $x$$2 + $y$$3;
+    }
+
+  }) | 0;
+}
+export function StringBuilder$$ToString$$Z37302880(x$$6, firstIndex, length) {
+  const str$$1 = String(x$$6);
+  return substring(str$$1, firstIndex, length);
+}

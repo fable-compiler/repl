@@ -1,19 +1,23 @@
 import { List, declare, Union } from "../../fable-library/Types.js";
-import { list, lambda, unit, type, bool, string, union } from "../../fable-library/Reflection.js";
+import { list_type, lambda_type, unit_type, class_type, bool_type, string_type, union_type } from "../../fable-library/Reflection.js";
 import { Common$002EGenericOptions$$$Parse$$9AE2F7C as Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C, Common$002EGenericOptions$$AddModifiers$$5BB435D5 as Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5, Common$002EGenericOptions$$AddProps$$416C4D0B as Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B, Common$002EGenericOptions$$AddProp$$7BFEDA81 as Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81, Color$$$ofColor as Color$0024$0024$0024ofColor, Common$002EGenericOptions$$AddClass$$Z721C83C5 as Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5, Reflection$$$getCaseName as Reflection$0024$0024$0024getCaseName, Common$002EGenericOptions$$AddCaseName$$1505 as Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505, Common$002EGenericOptions$$ToReactElement$$Z46A53D36 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z46A53D36, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Color$002EIColor$reflection as Color$0024002EIColor$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection } from "../Fulma/Common.js";
 import { equals, createObj } from "../../fable-library/Util.js";
 import { DOMAttr, Prop, HTMLAttr } from "../src/Fable.React.Props.js";
 export const IInputType = declare(function Fulma_Input_IInputType(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function IInputType$reflection() {
-  return union("Fulma.Input.IInputType", [], IInputType, () => ["Text", "Password", "DatetimeLocal", "Date", "Month", "Time", "Week", "Number", "Email", "Url", "Search", "Tel", "ColorType"]);
+  return union_type("Fulma.Input.IInputType", [], IInputType, () => ["Text", "Password", "DatetimeLocal", "Date", "Month", "Time", "Week", "Number", "Email", "Url", "Search", "Tel", "ColorType"]);
 }
 export const Option = declare(function Fulma_Input_Option(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function Option$reflection() {
-  return union("Fulma.Input.Option", [], Option, () => [["Size", [Size$0024002EISize$0024reflection()]], ["Type", [IInputType$reflection()]], ["Color", [Color$0024002EIColor$0024reflection()]], ["Id", [string]], ["Disabled", [bool]], ["IsReadOnly", [bool]], ["is-static", [bool]], "is-rounded", ["Value", [string]], ["Key", [string]], ["DefaultValue", [string]], ["ValueOrDefault", [string]], ["Placeholder", [string]], ["OnChange", [lambda(type("Browser.Types.Event"), unit)]], ["Ref", [lambda(type("Browser.Types.Element"), unit)]], ["Props", [list(type("Fable.React.Props.IHTMLProp"))]], ["CustomClass", [string]], ["Modifiers", [list(Modifier$0024002EIModifier$0024reflection())]]]);
+  return union_type("Fulma.Input.Option", [], Option, () => [["Size", [["Item", Size$0024002EISize$0024reflection()]]], ["Type", [["Item", IInputType$reflection()]]], ["Color", [["Item", Color$0024002EIColor$0024reflection()]]], ["Id", [["Item", string_type]]], ["Disabled", [["Item", bool_type]]], ["IsReadOnly", [["Item", bool_type]]], ["is-static", [["Item", bool_type]]], "is-rounded", ["Value", [["Item", string_type]]], ["Key", [["Item", string_type]]], ["DefaultValue", [["Item", string_type]]], ["ValueOrDefault", [["Item", string_type]]], ["Placeholder", [["Item", string_type]]], ["OnChange", [["Item", lambda_type(class_type("Browser.Types.Event"), unit_type)]]], ["Ref", [["Item", lambda_type(class_type("Browser.Types.Element"), unit_type)]]], ["Props", [["Item", list_type(class_type("Fable.React.Props.IHTMLProp"))]]], ["CustomClass", [["Item", string_type]]], ["Modifiers", [["Item", list_type(Modifier$0024002EIModifier$0024reflection())]]]]);
 }
 
 function ofType(typ) {
@@ -149,6 +153,8 @@ export function input(options) {
 
             if ((value$$2 = (e == null), (!value$$2)) ? !equals(e.value, option.fields[0]) : false) {
               e.value = option.fields[0];
+            } else {
+              void null;
             }
           });
           return Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81(result, arg00$$8);

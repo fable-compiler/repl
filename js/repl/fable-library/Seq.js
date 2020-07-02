@@ -378,10 +378,10 @@ export function iterate2(f, xs, ys) {
     fold2((_, x, y) => (f(x, y), null), null, xs, ys);
 }
 export function iterateIndexed(f, xs) {
-    fold((_, x, i) => (f((i !== null && i !== void 0 ? i : 0), x), null), null, xs);
+    fold((_, x, i) => (f(i !== null && i !== void 0 ? i : 0, x), null), null, xs);
 }
 export function iterateIndexed2(f, xs, ys) {
-    fold2((_, x, y, i) => (f((i !== null && i !== void 0 ? i : 0), x, y), null), null, xs, ys);
+    fold2((_, x, y, i) => (f(i !== null && i !== void 0 ? i : 0, x, y), null), null, xs, ys);
 }
 export function isEmpty(xs) {
     const i = xs[Symbol.iterator]();
@@ -612,12 +612,7 @@ export function sumBy(f, xs, adder) {
     return fold((acc, x) => adder.Add(acc, f(x)), adder.GetZero(), xs);
 }
 export function tail(xs) {
-    const iter = xs[Symbol.iterator]();
-    const cur = iter.next();
-    if (cur.done) {
-        throw new Error("Seq was empty");
-    }
-    return makeSeq(() => iter);
+    return skip(1, xs);
 }
 export function take(n, xs, truncate = false) {
     return delay(() => {

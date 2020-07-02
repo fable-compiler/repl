@@ -3,7 +3,6 @@ import { iterateIndexed, toIterator, getEnumerator, delay, collect, map, sumBy, 
 import { type } from "./Reflection.js";
 import { getItemFromDict, tryGetValue } from "./Util.js";
 import { some } from "./Option.js";
-import { addInPlace } from "./Array.js";
 export const MutableSet$00601 = declare(function Fable_Collections_MutableSet(items, comparer) {
   const $this$$1 = this;
   const this$ = new FSharpRef(null);
@@ -107,7 +106,7 @@ export function MutableSet$00601$$Add$$2B595(this$$$6, k$$2) {
     case 1:
       {
         if (matchValue$$2[0]) {
-          const value$$1 = addInPlace(k$$2, getItemFromDict(this$$$6.hashMap, matchValue$$2[1]));
+          const value$$1 = void getItemFromDict(this$$$6.hashMap, matchValue$$2[1]).push(k$$2);
           void null;
           return true;
         } else {

@@ -1,6 +1,6 @@
 import { mapError, mapOk, Result } from "../../fable-library/Option.js";
 import { declare } from "../../fable-library/Types.js";
-import { type } from "../../fable-library/Reflection.js";
+import { class_type } from "../../fable-library/Reflection.js";
 import { iterate } from "../../fable-library/Seq.js";
 import { equals } from "../../fable-library/Util.js";
 export function reject(reason) {
@@ -42,9 +42,11 @@ export function tap(fn$$3, a$$9) {
     return x;
   });
 }
-export const PromiseBuilder = declare(function Promise_PromiseBuilder() {});
+export const PromiseBuilder = declare(function Promise_PromiseBuilder() {
+  void null;
+});
 export function PromiseBuilder$reflection() {
-  return type("Promise.PromiseBuilder");
+  return class_type("Promise.PromiseBuilder", undefined, PromiseBuilder);
 }
 export function PromiseBuilder$$$$002Ector() {
   return this instanceof PromiseBuilder ? PromiseBuilder.call(this) : new PromiseBuilder();

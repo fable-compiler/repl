@@ -168,7 +168,7 @@ export function Helpers$$$classBaseList(baseClass, classes) {
     if (tupledArg[1] ? !isNullOrEmpty(tupledArg[0]) : false) {
       return tupledArg[0];
     } else {
-      return null;
+      return undefined;
     }
   }, classes);
   arg0 = fold(function folder(state, name$$4) {

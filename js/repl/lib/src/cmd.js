@@ -40,7 +40,9 @@ export function Cmd$002EOfFunc$$$perform(task$$1, arg$$1, ofSuccess$$1) {
     try {
       const $arg$$5 = task$$1(arg$$1);
       dispatch$$3(ofSuccess$$1($arg$$5));
-    } catch (x$$1) {}
+    } catch (x$$1) {
+      void null;
+    }
   }, new List());
 }
 export function Cmd$002EOfFunc$$$attempt(task$$2, arg$$2, ofError$$1) {
@@ -80,6 +82,7 @@ export function Cmd$002EOfAsync$$$perform(task$$4, arg$$4, ofSuccess$$3) {
           $arg$$8(ofSuccess$$3(_arg1$$1.fields[0]));
           return singleton.Zero();
         } else {
+          void null;
           return singleton.Zero();
         }
       });
@@ -97,6 +100,7 @@ export function Cmd$002EOfAsync$$$attempt(task$$5, arg$$5, ofError$$3) {
           $arg$$9(ofError$$3(_arg1$$2.fields[0]));
           return singleton.Zero();
         } else {
+          void null;
           return singleton.Zero();
         }
       });
@@ -113,6 +117,7 @@ export function Cmd$002EOfAsync$$$result(task$$6) {
           $arg$$10(_arg1$$3.fields[0]);
           return singleton.Zero();
         } else {
+          void null;
           return singleton.Zero();
         }
       });

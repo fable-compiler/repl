@@ -1,19 +1,23 @@
 import { declare, Union } from "../../fable-library/Types.js";
 import { Common$002EGenericOptions$$AddProp$$7BFEDA81 as Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81, Common$$$parseOptions as Common$0024$0024$0024parseOptions, Common$002EGenericOptions$$$Parse$$9AE2F7C as Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C, Common$002EGenericOptions$$AddModifiers$$5BB435D5 as Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5, Common$002EGenericOptions$$AddProps$$416C4D0B as Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B, Common$002EGenericOptions$$AddClass$$Z721C83C5 as Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5, Reflection$$$getCaseName as Reflection$0024$0024$0024getCaseName, Common$002EGenericOptions$$AddCaseName$$1505 as Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505, Common$002EGenericOptions$$ToReactElement$$Z6D3CD4B7 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection } from "../Fulma/Common.js";
-import { bool, union, list as list$$1, type, string } from "../../fable-library/Reflection.js";
+import { bool_type, union_type, list_type, class_type, string_type } from "../../fable-library/Reflection.js";
 import { createObj } from "../../fable-library/Util.js";
 import { DangerousHtml, DOMAttr } from "../src/Fable.React.Props.js";
 export const Option = declare(function Fulma_Pagination_Option(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function Option$reflection() {
-  return union("Fulma.Pagination.Option", [], Option, () => ["is-centered", "is-right", "is-rounded", ["Size", [Size$0024002EISize$0024reflection()]], ["CustomClass", [string]], ["Props", [list$$1(type("Fable.React.Props.IHTMLProp"))]], ["Modifiers", [list$$1(Modifier$0024002EIModifier$0024reflection())]]]);
+  return union_type("Fulma.Pagination.Option", [], Option, () => ["is-centered", "is-right", "is-rounded", ["Size", [["Item", Size$0024002EISize$0024reflection()]]], ["CustomClass", [["Item", string_type]]], ["Props", [["Item", list_type(class_type("Fable.React.Props.IHTMLProp"))]]], ["Modifiers", [["Item", list_type(Modifier$0024002EIModifier$0024reflection())]]]]);
 }
 export const Link$002EOption = declare(function Fulma_Pagination_Link_Option(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function Link$002EOption$reflection() {
-  return union("Fulma.Pagination.Link.Option", [], Link$002EOption, () => [["is-current", [bool]], ["CustomClass", [string]], ["Props", [list$$1(type("Fable.React.Props.IHTMLProp"))]], ["Modifiers", [list$$1(Modifier$0024002EIModifier$0024reflection())]]]);
+  return union_type("Fulma.Pagination.Link.Option", [], Link$002EOption, () => [["is-current", [["Item", bool_type]]], ["CustomClass", [["Item", string_type]]], ["Props", [["Item", list_type(class_type("Fable.React.Props.IHTMLProp"))]]], ["Modifiers", [["Item", list_type(Modifier$0024002EIModifier$0024reflection())]]]]);
 }
 export function pagination(options, children) {
   return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options, function parseOptions(result, option) {

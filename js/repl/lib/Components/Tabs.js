@@ -1,18 +1,22 @@
 import { List, declare, Union } from "../../fable-library/Types.js";
 import { Common$002EGenericOptions$$$Parse$$9AE2F7C as Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C, Common$002EGenericOptions$$AddModifiers$$5BB435D5 as Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5, Common$002EGenericOptions$$AddProps$$416C4D0B as Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B, Common$002EGenericOptions$$AddClass$$Z721C83C5 as Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5, Reflection$$$getCaseName as Reflection$0024$0024$0024getCaseName, Common$002EGenericOptions$$AddCaseName$$1505 as Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505, Common$002EGenericOptions$$ToReactElement$$Z6D3CD4B7 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Size$002EISize$reflection as Size$0024002EISize$0024reflection } from "../Fulma/Common.js";
-import { bool, union, list, type, string } from "../../fable-library/Reflection.js";
+import { bool_type, union_type, list_type, class_type, string_type } from "../../fable-library/Reflection.js";
 import { createObj } from "../../fable-library/Util.js";
 export const Option = declare(function Fulma_Tabs_Option(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function Option$reflection() {
-  return union("Fulma.Tabs.Option", [], Option, () => [["Size", [Size$0024002EISize$0024reflection()]], "is-centered", "is-right", "is-boxed", "is-toggle", "is-toggle-rounded", "is-fullwidth", ["CustomClass", [string]], ["Props", [list(type("Fable.React.Props.IHTMLProp"))]], ["Modifiers", [list(Modifier$0024002EIModifier$0024reflection())]]]);
+  return union_type("Fulma.Tabs.Option", [], Option, () => [["Size", [["Item", Size$0024002EISize$0024reflection()]]], "is-centered", "is-right", "is-boxed", "is-toggle", "is-toggle-rounded", "is-fullwidth", ["CustomClass", [["Item", string_type]]], ["Props", [["Item", list_type(class_type("Fable.React.Props.IHTMLProp"))]]], ["Modifiers", [["Item", list_type(Modifier$0024002EIModifier$0024reflection())]]]]);
 }
 export const Tab$002EOption = declare(function Fulma_Tabs_Tab_Option(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function Tab$002EOption$reflection() {
-  return union("Fulma.Tabs.Tab.Option", [], Tab$002EOption, () => [["is-active", [bool]], ["CustomClass", [string]], ["Props", [list(type("Fable.React.Props.IHTMLProp"))]], ["Modifiers", [list(Modifier$0024002EIModifier$0024reflection())]]]);
+  return union_type("Fulma.Tabs.Tab.Option", [], Tab$002EOption, () => [["is-active", [["Item", bool_type]]], ["CustomClass", [["Item", string_type]]], ["Props", [["Item", list_type(class_type("Fable.React.Props.IHTMLProp"))]]], ["Modifiers", [["Item", list_type(Modifier$0024002EIModifier$0024reflection())]]]]);
 }
 export function tabs(options, children) {
   var props$$4;

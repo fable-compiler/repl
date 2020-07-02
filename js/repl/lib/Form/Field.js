@@ -1,18 +1,22 @@
 import { declare, Union } from "../../fable-library/Types.js";
-import { union, list, type, string } from "../../fable-library/Reflection.js";
+import { union_type, list_type, class_type, string_type } from "../../fable-library/Reflection.js";
 import { Reflection$$$getCaseName as Reflection$0024$0024$0024getCaseName, Common$002EGenericOptions$$AddModifiers$$5BB435D5 as Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5, Common$002EGenericOptions$$AddClass$$Z721C83C5 as Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5, Common$002EGenericOptions$$AddProps$$416C4D0B as Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B, Common$002EGenericOptions$$AddCaseName$$1505 as Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505, Common$002EGenericOptions$$$Parse$$9AE2F7C as Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C, Common$$$parseOptions as Common$0024$0024$0024parseOptions, Common$002EGenericOptions$$ToReactElement$$Z6D3CD4B7 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7, Size$002EISize$reflection as Size$0024002EISize$0024reflection, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection } from "../Fulma/Common.js";
 import { createObj } from "../../fable-library/Util.js";
 export const Option = declare(function Fulma_Field_Option(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function Option$reflection() {
-  return union("Fulma.Field.Option", [], Option, () => ["has-addons", "has-addons-centered", "has-addons-right", "has-addons-fullwidth", "is-grouped", "is-grouped-centered", "is-grouped-right", "is-grouped-multiline", "is-horizontal", "is-expanded", ["CustomClass", [string]], ["Props", [list(type("Fable.React.Props.IHTMLProp"))]], ["Modifiers", [list(Modifier$0024002EIModifier$0024reflection())]]]);
+  return union_type("Fulma.Field.Option", [], Option, () => ["has-addons", "has-addons-centered", "has-addons-right", "has-addons-fullwidth", "is-grouped", "is-grouped-centered", "is-grouped-right", "is-grouped-multiline", "is-horizontal", "is-expanded", ["CustomClass", [["Item", string_type]]], ["Props", [["Item", list_type(class_type("Fable.React.Props.IHTMLProp"))]]], ["Modifiers", [["Item", list_type(Modifier$0024002EIModifier$0024reflection())]]]]);
 }
 export const Label$002EOption = declare(function Fulma_Field_Label_Option(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function Label$002EOption$reflection() {
-  return union("Fulma.Field.Label.Option", [], Label$002EOption, () => [["Size", [Size$0024002EISize$0024reflection()]], "is-normal", ["CustomClass", [string]], ["Props", [list(type("Fable.React.Props.IHTMLProp"))]], ["Modifiers", [list(Modifier$0024002EIModifier$0024reflection())]]]);
+  return union_type("Fulma.Field.Label.Option", [], Label$002EOption, () => [["Size", [["Item", Size$0024002EISize$0024reflection()]]], "is-normal", ["CustomClass", [["Item", string_type]]], ["Props", [["Item", list_type(class_type("Fable.React.Props.IHTMLProp"))]]], ["Modifiers", [["Item", list_type(Modifier$0024002EIModifier$0024reflection())]]]]);
 }
 export function body(options, children) {
   return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options, Common$0024$0024$0024parseOptions, "field-body"), function (props, children$$1) {

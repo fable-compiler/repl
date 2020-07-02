@@ -1,43 +1,43 @@
 import { isValid } from "./Int32.js";
-import * as Long from "./lib/long.js";
-export default Long.Long;
-export const get_Zero = Long.ZERO;
-export const get_One = Long.ONE;
-export const op_Addition = Long.add;
-export const op_Subtraction = Long.subtract;
-export const op_Multiply = Long.multiply;
-export const op_Division = Long.divide;
-export const op_Modulus = Long.modulo;
-export const op_UnaryNegation = Long.negate;
-export const op_LeftShift = Long.shiftLeft;
-export const op_RightShift = Long.shiftRight;
-export const op_RightShiftUnsigned = Long.shiftRightUnsigned;
-export const op_BitwiseAnd = Long.and;
-export const op_BitwiseOr = Long.or;
-export const op_ExclusiveOr = Long.xor;
-export const op_LogicalNot = Long.not;
-export const op_LessThan = Long.lessThan;
-export const op_LessThanOrEqual = Long.lessThanOrEqual;
-export const op_GreaterThan = Long.greaterThan;
-export const op_GreaterThanOrEqual = Long.greaterThanOrEqual;
-export const op_Equality = Long.equals;
-export const op_Inequality = Long.notEquals;
-export const equals = Long.equals;
-export const compare = Long.compare;
-export const fromInt = Long.fromInt;
-export const fromBits = Long.fromBits;
-export const fromBytes = Long.fromBytes;
-export const fromNumber = Long.fromNumber;
-export const fromString = Long.fromString;
-export const fromValue = Long.fromValue;
-export const toInt = Long.toInt;
-export const toBytes = Long.toBytes;
-export const toNumber = Long.toNumber;
-export const toString = Long.toString;
-export const getLowBits = Long.getLowBits;
-export const getHighBits = Long.getHighBits;
-export const getLowBitsUnsigned = Long.getLowBitsUnsigned;
-export const getHighBitsUnsigned = Long.getHighBitsUnsigned;
+import * as LongLib from "./lib/long.js";
+export default LongLib.Long;
+export const get_Zero = LongLib.ZERO;
+export const get_One = LongLib.ONE;
+export const op_Addition = LongLib.add;
+export const op_Subtraction = LongLib.subtract;
+export const op_Multiply = LongLib.multiply;
+export const op_Division = LongLib.divide;
+export const op_Modulus = LongLib.modulo;
+export const op_UnaryNegation = LongLib.negate;
+export const op_LeftShift = LongLib.shiftLeft;
+export const op_RightShift = LongLib.shiftRight;
+export const op_RightShiftUnsigned = LongLib.shiftRightUnsigned;
+export const op_BitwiseAnd = LongLib.and;
+export const op_BitwiseOr = LongLib.or;
+export const op_ExclusiveOr = LongLib.xor;
+export const op_LogicalNot = LongLib.not;
+export const op_LessThan = LongLib.lessThan;
+export const op_LessThanOrEqual = LongLib.lessThanOrEqual;
+export const op_GreaterThan = LongLib.greaterThan;
+export const op_GreaterThanOrEqual = LongLib.greaterThanOrEqual;
+export const op_Equality = LongLib.equals;
+export const op_Inequality = LongLib.notEquals;
+export const equals = LongLib.equals;
+export const compare = LongLib.compare;
+export const fromInt = LongLib.fromInt;
+export const fromBits = LongLib.fromBits;
+export const fromBytes = LongLib.fromBytes;
+export const fromNumber = LongLib.fromNumber;
+export const fromString = LongLib.fromString;
+export const fromValue = LongLib.fromValue;
+export const toInt = LongLib.toInt;
+export const toBytes = LongLib.toBytes;
+export const toNumber = LongLib.toNumber;
+export const toString = LongLib.toString;
+export const getLowBits = LongLib.getLowBits;
+export const getHighBits = LongLib.getHighBits;
+export const getLowBitsUnsigned = LongLib.getLowBitsUnsigned;
+export const getHighBitsUnsigned = LongLib.getHighBitsUnsigned;
 function getMaxValue(unsigned, radix, isNegative) {
     switch (radix) {
         case 2: return unsigned ?
@@ -57,7 +57,7 @@ function getMaxValue(unsigned, radix, isNegative) {
     }
 }
 export function abs(x) {
-    if (!x.unsigned && Long.isNegative(x)) {
+    if (!x.unsigned && LongLib.isNegative(x)) {
         return op_UnaryNegation(x);
     }
     else {
@@ -90,7 +90,7 @@ export function fromInteger(value, unsigned, kind) {
             x = value >>> 0;
             break;
     }
-    return Long.fromBits(x, xh >> 31, unsigned);
+    return LongLib.fromBits(x, xh >> 31, unsigned);
 }
 export function parse(str, style, unsigned, _bitsize, radix) {
     const res = isValid(str, style, radix);
@@ -103,7 +103,7 @@ export function parse(str, style, unsigned, _bitsize, radix) {
         const maxValue = getMaxValue(unsigned || res.radix !== 10, res.radix, isNegative);
         if (lessOrEqual(res.digits.toUpperCase(), maxValue)) {
             str = isNegative ? res.sign + res.digits : res.digits;
-            return Long.fromString(str, unsigned, res.radix);
+            return LongLib.fromString(str, unsigned, res.radix);
         }
     }
     throw new Error("Input string was not in a correct format.");
@@ -116,22 +116,22 @@ export function tryParse(str, style, unsigned, bitsize) {
     catch (_a) {
         // supress error
     }
-    return [false, Long.ZERO];
+    return [false, LongLib.ZERO];
 }
 export function unixEpochMillisecondsToTicks(ms, offset) {
-    return op_Multiply(op_Addition(op_Addition(Long.fromNumber(ms), 62135596800000), offset), 10000);
+    return op_Multiply(op_Addition(op_Addition(LongLib.fromNumber(ms), 62135596800000), offset), 10000);
 }
 export function ticksToUnixEpochMilliseconds(ticks) {
-    return Long.toNumber(op_Subtraction(op_Division(ticks, 10000), 62135596800000));
+    return LongLib.toNumber(op_Subtraction(op_Division(ticks, 10000), 62135596800000));
 }
 export function makeRangeStepFunction(step, last, unsigned) {
-    const stepComparedWithZero = Long.compare(step, unsigned ? Long.UZERO : Long.ZERO);
+    const stepComparedWithZero = LongLib.compare(step, unsigned ? LongLib.UZERO : LongLib.ZERO);
     if (stepComparedWithZero === 0) {
         throw new Error("The step of a range cannot be zero");
     }
     const stepGreaterThanZero = stepComparedWithZero > 0;
     return (x) => {
-        const comparedWithLast = Long.compare(x, last);
+        const comparedWithLast = LongLib.compare(x, last);
         if ((stepGreaterThanZero && comparedWithLast <= 0)
             || (!stepGreaterThanZero && comparedWithLast >= 0)) {
             return [x, op_Addition(x, step)];

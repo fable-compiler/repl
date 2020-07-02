@@ -1,158 +1,180 @@
 import { Union, declare, Record } from "../../fable-library/Types.js";
-import { union, lambda, unit, bool, obj, type, string, record, float64 } from "../../fable-library/Reflection.js";
+import { union_type, lambda_type, unit_type, bool_type, obj_type, class_type, string_type, record_type, float64_type } from "../../fable-library/Reflection.js";
 import { createObj } from "../../fable-library/Util.js";
-export const Props$002EPoint2 = declare(function Fable_Recharts_Props_Point2(arg1, arg2) {
-  this.x = arg1;
-  this.y = arg2;
+export const Props$002EPoint2 = declare(function Fable_Recharts_Props_Point2(x, y) {
+  this.x = x;
+  this.y = y;
 }, Record);
 export function Props$002EPoint2$reflection() {
-  return record("Fable.Recharts.Props.Point2", [], Props$002EPoint2, () => [["x", float64], ["y", float64]]);
+  return record_type("Fable.Recharts.Props.Point2", [], Props$002EPoint2, () => [["x", float64_type], ["y", float64_type]]);
 }
-export const Props$002EPoint3 = declare(function Fable_Recharts_Props_Point3(arg1, arg2, arg3) {
-  this.x = arg1;
-  this.y = arg2;
-  this.z = arg3;
+export const Props$002EPoint3 = declare(function Fable_Recharts_Props_Point3(x, y, z) {
+  this.x = x;
+  this.y = y;
+  this.z = z;
 }, Record);
 export function Props$002EPoint3$reflection() {
-  return record("Fable.Recharts.Props.Point3", [], Props$002EPoint3, () => [["x", float64], ["y", float64], ["z", float64]]);
+  return record_type("Fable.Recharts.Props.Point3", [], Props$002EPoint3, () => [["x", float64_type], ["y", float64_type], ["z", float64_type]]);
 }
-export const Props$002ELinePoint = declare(function Fable_Recharts_Props_LinePoint(arg1, arg2, arg3) {
-  this.x = arg1;
-  this.y = arg2;
-  this.value = arg3;
+export const Props$002ELinePoint = declare(function Fable_Recharts_Props_LinePoint(x, y, value) {
+  this.x = x;
+  this.y = y;
+  this.value = value;
 }, Record);
 export function Props$002ELinePoint$reflection() {
-  return record("Fable.Recharts.Props.LinePoint", [], Props$002ELinePoint, () => [["x", float64], ["y", float64], ["value", float64]]);
+  return record_type("Fable.Recharts.Props.LinePoint", [], Props$002ELinePoint, () => [["x", float64_type], ["y", float64_type], ["value", float64_type]]);
 }
-export const Props$002EScatterPoint = declare(function Fable_Recharts_Props_ScatterPoint(arg1, arg2, arg3, arg4) {
-  this.cx = arg1;
-  this.cy = arg2;
-  this.r = arg3;
-  this.payload = arg4;
+export const Props$002EScatterPoint = declare(function Fable_Recharts_Props_ScatterPoint(cx, cy, r, payload) {
+  this.cx = cx;
+  this.cy = cy;
+  this.r = r;
+  this.payload = payload;
 }, Record);
 export function Props$002EScatterPoint$reflection() {
-  return record("Fable.Recharts.Props.ScatterPoint", [], Props$002EScatterPoint, () => [["cx", float64], ["cy", float64], ["r", float64], ["payload", Props$002EPoint3$reflection()]]);
+  return record_type("Fable.Recharts.Props.ScatterPoint", [], Props$002EScatterPoint, () => [["cx", float64_type], ["cy", float64_type], ["r", float64_type], ["payload", Props$002EPoint3$reflection()]]);
 }
-export const Props$002EMargin = declare(function Fable_Recharts_Props_Margin(arg1, arg2, arg3, arg4) {
-  this.top = arg1;
-  this.bottom = arg2;
-  this.right = arg3;
-  this.left = arg4;
+export const Props$002EMargin = declare(function Fable_Recharts_Props_Margin(top, bottom, right, left) {
+  this.top = top;
+  this.bottom = bottom;
+  this.right = right;
+  this.left = left;
 }, Record);
 export function Props$002EMargin$reflection() {
-  return record("Fable.Recharts.Props.Margin", [], Props$002EMargin, () => [["top", float64], ["bottom", float64], ["right", float64], ["left", float64]]);
+  return record_type("Fable.Recharts.Props.Margin", [], Props$002EMargin, () => [["top", float64_type], ["bottom", float64_type], ["right", float64_type], ["left", float64_type]]);
 }
-export const Props$002EViewBox = declare(function Fable_Recharts_Props_ViewBox(arg1, arg2, arg3, arg4) {
-  this.x = arg1;
-  this.y = arg2;
-  this.width = arg3;
-  this.height = arg4;
+export const Props$002EViewBox = declare(function Fable_Recharts_Props_ViewBox(x, y, width, height) {
+  this.x = x;
+  this.y = y;
+  this.width = width;
+  this.height = height;
 }, Record);
 export function Props$002EViewBox$reflection() {
-  return record("Fable.Recharts.Props.ViewBox", [], Props$002EViewBox, () => [["x", float64], ["y", float64], ["width", float64], ["height", float64]]);
+  return record_type("Fable.Recharts.Props.ViewBox", [], Props$002EViewBox, () => [["x", float64_type], ["y", float64_type], ["width", float64_type], ["height", float64_type]]);
 }
 export const Props$002EChart = declare(function Fable_Recharts_Props_Chart(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function Props$002EChart$reflection() {
-  return union("Fable.Recharts.Props.Chart", [], Props$002EChart, () => [["SyncId", [string]], ["Layout", [string]], ["Width", [float64]], ["Height", [float64]], ["Data", [type("System.Array")]], ["Margin", [Props$002EMargin$reflection()]], ["BarCategoryGap", [obj]], ["BarGap", [obj]], ["BarSize", [float64]], ["MaxBarSize", [float64]], ["StackOffset", [string]], ["BaseValue", [string]], ["baseValue", [float64]], ["ReverseStackOrder", [bool]], ["Cx", [obj]], ["Cy", [obj]], ["StartAngle", [float64]], ["EndAngle", [float64]], ["InnerRadius", [obj]], ["OuterRadius", [obj]], ["OnClick", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseDown", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseUp", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseMove", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseOver", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseEnter", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseLeave", [lambda(type("Browser.Types.MouseEvent"), unit)]]]);
+  return union_type("Fable.Recharts.Props.Chart", [], Props$002EChart, () => [["SyncId", [["Item", string_type]]], ["Layout", [["Item", string_type]]], ["Width", [["Item", float64_type]]], ["Height", [["Item", float64_type]]], ["Data", [["Item", class_type("System.Array")]]], ["Margin", [["Item", Props$002EMargin$reflection()]]], ["BarCategoryGap", [["Item", obj_type]]], ["BarGap", [["Item", obj_type]]], ["BarSize", [["Item", float64_type]]], ["MaxBarSize", [["Item", float64_type]]], ["StackOffset", [["Item", string_type]]], ["BaseValue", [["Item", string_type]]], ["baseValue", [["Item", float64_type]]], ["ReverseStackOrder", [["Item", bool_type]]], ["Cx", [["Item", obj_type]]], ["Cy", [["Item", obj_type]]], ["StartAngle", [["Item", float64_type]]], ["EndAngle", [["Item", float64_type]]], ["InnerRadius", [["Item", obj_type]]], ["OuterRadius", [["Item", obj_type]]], ["OnClick", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseDown", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseUp", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseMove", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseOver", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseEnter", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseLeave", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]]]);
 }
 export function Props$002EChart$$$Custom$$433E080(key, value) {
   return [key, value];
 }
 export const Props$002ETreemap = declare(function Fable_Recharts_Props_Treemap(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function Props$002ETreemap$reflection() {
-  return union("Fable.Recharts.Props.Treemap", [], Props$002ETreemap, () => [["Width", [float64]], ["Height", [float64]], ["Data", [type("System.Array")]], ["DataKey", [obj]], ["AspectRatio", [float64]], ["IsAnimationActive", [bool]], ["AnimationBegin", [float64]], ["AnimationDuration", [float64]], ["AnimationEasing", [string]]]);
+  return union_type("Fable.Recharts.Props.Treemap", [], Props$002ETreemap, () => [["Width", [["Item", float64_type]]], ["Height", [["Item", float64_type]]], ["Data", [["Item", class_type("System.Array")]]], ["DataKey", [["Item", obj_type]]], ["AspectRatio", [["Item", float64_type]]], ["IsAnimationActive", [["Item", bool_type]]], ["AnimationBegin", [["Item", float64_type]]], ["AnimationDuration", [["Item", float64_type]]], ["AnimationEasing", [["Item", string_type]]]]);
 }
 export function Props$002ETreemap$$$Custom$$433E080(key$$1, value$$1) {
   return [key$$1, value$$1];
 }
 export const Props$002EResponsive = declare(function Fable_Recharts_Props_Responsive(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function Props$002EResponsive$reflection() {
-  return union("Fable.Recharts.Props.Responsive", [], Props$002EResponsive, () => [["Aspect", [float64]], ["Width", [obj]], ["Height", [obj]], ["MinWidth", [float64]], ["MinHeight", [float64]], ["Debounce", [float64]]]);
+  return union_type("Fable.Recharts.Props.Responsive", [], Props$002EResponsive, () => [["Aspect", [["Item", float64_type]]], ["Width", [["Item", obj_type]]], ["Height", [["Item", obj_type]]], ["MinWidth", [["Item", float64_type]]], ["MinHeight", [["Item", float64_type]]], ["Debounce", [["Item", float64_type]]]]);
 }
 export function Props$002EResponsive$$$Custom$$433E080(key$$2, value$$2) {
   return [key$$2, value$$2];
 }
 export const Props$002ELegend = declare(function Fable_Recharts_Props_Legend(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function Props$002ELegend$reflection() {
-  return union("Fable.Recharts.Props.Legend", [], Props$002ELegend, () => [["Width", [float64]], ["Height", [float64]], ["Layout", [string]], ["Align", [string]], ["VerticalAlign", [string]], ["IconSize", [float64]], ["IconType", [string]], ["PayLoad", [type("System.Array")]], ["ChartWidth", [float64]], ["ChartHeight", [float64]], ["Margin", [Props$002EMargin$reflection()]], ["Content", [obj]], ["WrapperStyle", [obj]], ["OnClick", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseDown", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseUp", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseMove", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseOver", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseEnter", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseLeave", [lambda(type("Browser.Types.MouseEvent"), unit)]]]);
+  return union_type("Fable.Recharts.Props.Legend", [], Props$002ELegend, () => [["Width", [["Item", float64_type]]], ["Height", [["Item", float64_type]]], ["Layout", [["Item", string_type]]], ["Align", [["Item", string_type]]], ["VerticalAlign", [["Item", string_type]]], ["IconSize", [["Item", float64_type]]], ["IconType", [["Item", string_type]]], ["PayLoad", [["Item", class_type("System.Array")]]], ["ChartWidth", [["Item", float64_type]]], ["ChartHeight", [["Item", float64_type]]], ["Margin", [["Item", Props$002EMargin$reflection()]]], ["Content", [["Item", obj_type]]], ["WrapperStyle", [["Item", obj_type]]], ["OnClick", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseDown", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseUp", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseMove", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseOver", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseEnter", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseLeave", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]]]);
 }
 export function Props$002ELegend$$$Custom$$433E080(key$$3, value$$3) {
   return [key$$3, value$$3];
 }
 export const Props$002ETooltip = declare(function Fable_Recharts_Props_Tooltip(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function Props$002ETooltip$reflection() {
-  return union("Fable.Recharts.Props.Tooltip", [], Props$002ETooltip, () => [["Separator", [string]], ["Offset", [float64]], ["ItemStyle", [obj]], ["WrapperStyle", [obj]], ["LabelStyle", [obj]], ["Cursor", [obj]], ["ViewBox", [Props$002EViewBox$reflection()]], ["Active", [bool]], ["Coordinate", [Props$002EPoint2$reflection()]], ["Payload", [type("System.Array")]], ["Label", [obj]], ["Content", [obj]], ["Formatter", [obj]], ["LabelFormatter", [obj]], ["ItemSorter", [obj]], ["IsAnimationActive", [bool]], ["AnimationBegin", [float64]], ["AnimationDuration", [float64]], ["AnimationEasing", [string]]]);
+  return union_type("Fable.Recharts.Props.Tooltip", [], Props$002ETooltip, () => [["Separator", [["Item", string_type]]], ["Offset", [["Item", float64_type]]], ["ItemStyle", [["Item", obj_type]]], ["WrapperStyle", [["Item", obj_type]]], ["LabelStyle", [["Item", obj_type]]], ["Cursor", [["Item", obj_type]]], ["ViewBox", [["Item", Props$002EViewBox$reflection()]]], ["Active", [["Item", bool_type]]], ["Coordinate", [["Item", Props$002EPoint2$reflection()]]], ["Payload", [["Item", class_type("System.Array")]]], ["Label", [["Item", obj_type]]], ["Content", [["Item", obj_type]]], ["Formatter", [["Item", obj_type]]], ["LabelFormatter", [["Item", obj_type]]], ["ItemSorter", [["Item", obj_type]]], ["IsAnimationActive", [["Item", bool_type]]], ["AnimationBegin", [["Item", float64_type]]], ["AnimationDuration", [["Item", float64_type]]], ["AnimationEasing", [["Item", string_type]]]]);
 }
 export function Props$002ETooltip$$$Custom$$433E080(key$$4, value$$4) {
   return [key$$4, value$$4];
 }
 export const Props$002ECell = declare(function Fable_Recharts_Props_Cell(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function Props$002ECell$reflection() {
-  return union("Fable.Recharts.Props.Cell", [], Props$002ECell, () => [["Fill", [string]], ["Stroke", [string]]]);
+  return union_type("Fable.Recharts.Props.Cell", [], Props$002ECell, () => [["Fill", [["Item", string_type]]], ["Stroke", [["Item", string_type]]]]);
 }
 export function Props$002ECell$$$Custom$$433E080(key$$5, value$$5) {
   return [key$$5, value$$5];
 }
 export const Props$002EText = declare(function Fable_Recharts_Props_Text(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function Props$002EText$reflection() {
-  return union("Fable.Recharts.Props.Text", [], Props$002EText, () => [["ScaleToFit", [bool]], ["Angle", [float64]], ["Width", [float64]], ["TextAnchor", [string]], ["VerticalAnchor", [string]]]);
+  return union_type("Fable.Recharts.Props.Text", [], Props$002EText, () => [["ScaleToFit", [["Item", bool_type]]], ["Angle", [["Item", float64_type]]], ["Width", [["Item", float64_type]]], ["TextAnchor", [["Item", string_type]]], ["VerticalAnchor", [["Item", string_type]]]]);
 }
 export function Props$002EText$$$Custom$$433E080(key$$6, value$$6) {
   return [key$$6, value$$6];
 }
 export const Props$002ELabel = declare(function Fable_Recharts_Props_Label(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function Props$002ELabel$reflection() {
-  return union("Fable.Recharts.Props.Label", [], Props$002ELabel, () => [["ViewBox", [Props$002EViewBox$reflection()]], ["Formatter", [lambda(obj, obj)]], ["Value", [obj]], ["Position", [string]], ["Offset", [float64]], ["Children", [obj]], ["Content", [obj]], ["Id", [string]]]);
+  return union_type("Fable.Recharts.Props.Label", [], Props$002ELabel, () => [["ViewBox", [["Item", Props$002EViewBox$reflection()]]], ["Formatter", [["Item", lambda_type(obj_type, obj_type)]]], ["Value", [["Item", obj_type]]], ["Position", [["Item", string_type]]], ["Offset", [["Item", float64_type]]], ["Children", [["Item", obj_type]]], ["Content", [["Item", obj_type]]], ["Id", [["Item", string_type]]]]);
 }
 export function Props$002ELabel$$$Custom$$433E080(key$$7, value$$7) {
   return [key$$7, value$$7];
 }
 export const Props$002ELabelList = declare(function Fable_Recharts_Props_LabelList(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function Props$002ELabelList$reflection() {
-  return union("Fable.Recharts.Props.LabelList", [], Props$002ELabelList, () => [["DataKey", [obj]], ["ValueAccessor", [obj]], ["Content", [obj]], ["Position", [string]], ["Offset", [float64]], ["Formatter", [lambda(obj, obj)]], ["Data", [float64]], ["ClockWise", [string]], ["Id", [string]]]);
+  return union_type("Fable.Recharts.Props.LabelList", [], Props$002ELabelList, () => [["DataKey", [["Item", obj_type]]], ["ValueAccessor", [["Item", obj_type]]], ["Content", [["Item", obj_type]]], ["Position", [["Item", string_type]]], ["Offset", [["Item", float64_type]]], ["Formatter", [["Item", lambda_type(obj_type, obj_type)]]], ["Data", [["Item", float64_type]]], ["ClockWise", [["Item", string_type]]], ["Id", [["Item", string_type]]]]);
 }
 export function Props$002ELabelList$$$Custom$$433E080(key$$8, value$$8) {
   return [key$$8, value$$8];
 }
 export const Props$002ECartesian = declare(function Fable_Recharts_Props_Cartesian(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function Props$002ECartesian$reflection() {
-  return union("Fable.Recharts.Props.Cartesian", [], Props$002ECartesian, () => [["Type", [obj]], ["Data", [type("System.Array")]], ["DataKey", [obj]], ["LegendType", [string]], ["Label", [obj]], ["Stroke", [string]], ["StrokeWidth", [string]], ["Layout", [string]], ["BaseLine", [obj]], ["Unit", [string]], ["Name", [string]], ["Id", [string]], ["StackId", [obj]], ["IsAnimationActive", [bool]], ["AnimationBegin", [float64]], ["AnimationDuration", [float64]], ["AnimationEasing", [string]], ["Dot", [obj]], ["ActiveDot", [obj]], ["Points", [type("System.Array")]], ["ConnectNulls", [bool]], ["BarSize", [float64]], ["MaxBarSize", [float64]], ["MinPointSize", [float64]], ["Background", [obj]], ["Shape", [obj]], ["Line", [obj]], ["LineType", [string]], ["Hide", [bool]], ["Width", [float64]], ["Height", [float64]], ["XAxisId", [obj]], ["YAxisId", [obj]], ["ZAxisId", [obj]], ["Range", [type("System.Array")]], ["AxisLine", [obj]], ["Orientation", [string]], ["AllowDecimals", [bool]], ["AllowDataOverflow", [bool]], ["AllowDuplicatedCategory", [bool]], ["MinTickGap", [float64]], ["TickCount", [float64]], ["TickSize", [float64]], ["TickLine", [obj]], ["TickMargin", [float64]], ["TickFormatter", [obj]], ["Ticks", [type("System.Array")]], ["Tick", [obj]], ["Domain", [type("System.Array")]], ["Interval", [obj]], ["Padding", [obj]], ["Mirror", [bool]], ["Reversed", [bool]], ["Scale", [string]], ["X", [float64]], ["Y", [float64]], ["X1", [obj]], ["X2", [obj]], ["Y1", [obj]], ["Y2", [obj]], ["TravellerWidth", [float64]], ["StartIndex", [float64]], ["EndIndex", [float64]], ["ViewBox", [Props$002EViewBox$reflection()]], ["Horizontal", [bool]], ["Vertical", [bool]], ["HorizontalPoints", [type("System.Array")]], ["VerticalPoints", [type("System.Array")]], ["XAxis", [obj]], ["YAxis", [obj]], ["AlwaysShow", [bool]], ["IsFront", [bool]], ["Direction", [string]], ["OnChange", [lambda(unit, unit)]], ["OnClick", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseDown", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseUp", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseOver", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseOut", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseEnter", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseMove", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseLeave", [lambda(type("Browser.Types.MouseEvent"), unit)]]]);
+  return union_type("Fable.Recharts.Props.Cartesian", [], Props$002ECartesian, () => [["Type", [["Item", obj_type]]], ["Data", [["Item", class_type("System.Array")]]], ["DataKey", [["Item", obj_type]]], ["LegendType", [["Item", string_type]]], ["Label", [["Item", obj_type]]], ["Stroke", [["Item", string_type]]], ["StrokeWidth", [["Item", string_type]]], ["Layout", [["Item", string_type]]], ["BaseLine", [["Item", obj_type]]], ["Unit", [["Item", string_type]]], ["Name", [["Item", string_type]]], ["Id", [["Item", string_type]]], ["StackId", [["Item", obj_type]]], ["IsAnimationActive", [["Item", bool_type]]], ["AnimationBegin", [["Item", float64_type]]], ["AnimationDuration", [["Item", float64_type]]], ["AnimationEasing", [["Item", string_type]]], ["Dot", [["Item", obj_type]]], ["ActiveDot", [["Item", obj_type]]], ["Points", [["Item", class_type("System.Array")]]], ["ConnectNulls", [["Item", bool_type]]], ["BarSize", [["Item", float64_type]]], ["MaxBarSize", [["Item", float64_type]]], ["MinPointSize", [["Item", float64_type]]], ["Background", [["Item", obj_type]]], ["Shape", [["Item", obj_type]]], ["Line", [["Item", obj_type]]], ["LineType", [["Item", string_type]]], ["Hide", [["Item", bool_type]]], ["Width", [["Item", float64_type]]], ["Height", [["Item", float64_type]]], ["XAxisId", [["Item", obj_type]]], ["YAxisId", [["Item", obj_type]]], ["ZAxisId", [["Item", obj_type]]], ["Range", [["Item", class_type("System.Array")]]], ["AxisLine", [["Item", obj_type]]], ["Orientation", [["Item", string_type]]], ["AllowDecimals", [["Item", bool_type]]], ["AllowDataOverflow", [["Item", bool_type]]], ["AllowDuplicatedCategory", [["Item", bool_type]]], ["MinTickGap", [["Item", float64_type]]], ["TickCount", [["Item", float64_type]]], ["TickSize", [["Item", float64_type]]], ["TickLine", [["Item", obj_type]]], ["TickMargin", [["Item", float64_type]]], ["TickFormatter", [["Item", obj_type]]], ["Ticks", [["Item", class_type("System.Array")]]], ["Tick", [["Item", obj_type]]], ["Domain", [["Item", class_type("System.Array")]]], ["Interval", [["Item", obj_type]]], ["Padding", [["Item", obj_type]]], ["Mirror", [["Item", bool_type]]], ["Reversed", [["Item", bool_type]]], ["Scale", [["Item", string_type]]], ["X", [["Item", float64_type]]], ["Y", [["Item", float64_type]]], ["X1", [["Item", obj_type]]], ["X2", [["Item", obj_type]]], ["Y1", [["Item", obj_type]]], ["Y2", [["Item", obj_type]]], ["TravellerWidth", [["Item", float64_type]]], ["StartIndex", [["Item", float64_type]]], ["EndIndex", [["Item", float64_type]]], ["ViewBox", [["Item", Props$002EViewBox$reflection()]]], ["Horizontal", [["Item", bool_type]]], ["Vertical", [["Item", bool_type]]], ["HorizontalPoints", [["Item", class_type("System.Array")]]], ["VerticalPoints", [["Item", class_type("System.Array")]]], ["XAxis", [["Item", obj_type]]], ["YAxis", [["Item", obj_type]]], ["AlwaysShow", [["Item", bool_type]]], ["IsFront", [["Item", bool_type]]], ["Direction", [["Item", string_type]]], ["OnChange", [["Item", lambda_type(unit_type, unit_type)]]], ["OnClick", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseDown", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseUp", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseOver", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseOut", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseEnter", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseMove", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseLeave", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]]]);
 }
 export function Props$002ECartesian$$$Custom$$433E080(key$$9, value$$9) {
   return [key$$9, value$$9];
 }
 export const Props$002EPolar = declare(function Fable_Recharts_Props_Polar(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function Props$002EPolar$reflection() {
-  return union("Fable.Recharts.Props.Polar", [], Props$002EPolar, () => [["Cx", [obj]], ["Cy", [obj]], ["InnerRadius", [obj]], ["OuterRadius", [obj]], ["StartAngle", [float64]], ["EndAngle", [float64]], ["MinAngle", [float64]], ["PaddingAngle", [float64]], ["NameKey", [string]], ["ActiveInex", [type("System.Array")]], ["ActiveShape", [obj]], ["PolarAngles", [type("System.Array")]], ["PolarRadius", [type("System.Array")]], ["GridType", [string]], ["Angle", [float64]], ["Type", [obj]], ["Data", [type("System.Array")]], ["DataKey", [obj]], ["LegendType", [string]], ["Label", [obj]], ["LabelLine", [obj]], ["IsAnimationActive", [bool]], ["AnimationBegin", [float64]], ["AnimationDuration", [float64]], ["AnimationEasing", [string]], ["Dot", [obj]], ["Points", [type("System.Array")]], ["Background", [obj]], ["Shape", [obj]], ["AxisLine", [obj]], ["Orientation", [string]], ["AllowDuplicatedCategory", [bool]], ["TickCount", [float64]], ["TickLine", [obj]], ["TickFormatter", [obj]], ["Ticks", [type("System.Array")]], ["Tick", [obj]], ["Domain", [type("System.Array")]], ["Scale", [string]], ["OnClick", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseDown", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseUp", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseOver", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseOut", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseEnter", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseMove", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["OnMouseLeave", [lambda(type("Browser.Types.MouseEvent"), unit)]]]);
+  return union_type("Fable.Recharts.Props.Polar", [], Props$002EPolar, () => [["Cx", [["Item", obj_type]]], ["Cy", [["Item", obj_type]]], ["InnerRadius", [["Item", obj_type]]], ["OuterRadius", [["Item", obj_type]]], ["StartAngle", [["Item", float64_type]]], ["EndAngle", [["Item", float64_type]]], ["MinAngle", [["Item", float64_type]]], ["PaddingAngle", [["Item", float64_type]]], ["NameKey", [["Item", string_type]]], ["ActiveInex", [["Item", class_type("System.Array")]]], ["ActiveShape", [["Item", obj_type]]], ["PolarAngles", [["Item", class_type("System.Array")]]], ["PolarRadius", [["Item", class_type("System.Array")]]], ["GridType", [["Item", string_type]]], ["Angle", [["Item", float64_type]]], ["Type", [["Item", obj_type]]], ["Data", [["Item", class_type("System.Array")]]], ["DataKey", [["Item", obj_type]]], ["LegendType", [["Item", string_type]]], ["Label", [["Item", obj_type]]], ["LabelLine", [["Item", obj_type]]], ["IsAnimationActive", [["Item", bool_type]]], ["AnimationBegin", [["Item", float64_type]]], ["AnimationDuration", [["Item", float64_type]]], ["AnimationEasing", [["Item", string_type]]], ["Dot", [["Item", obj_type]]], ["Points", [["Item", class_type("System.Array")]]], ["Background", [["Item", obj_type]]], ["Shape", [["Item", obj_type]]], ["AxisLine", [["Item", obj_type]]], ["Orientation", [["Item", string_type]]], ["AllowDuplicatedCategory", [["Item", bool_type]]], ["TickCount", [["Item", float64_type]]], ["TickLine", [["Item", obj_type]]], ["TickFormatter", [["Item", obj_type]]], ["Ticks", [["Item", class_type("System.Array")]]], ["Tick", [["Item", obj_type]]], ["Domain", [["Item", class_type("System.Array")]]], ["Scale", [["Item", string_type]]], ["OnClick", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseDown", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseUp", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseOver", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseOut", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseEnter", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseMove", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["OnMouseLeave", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]]]);
 }
 export function Props$002EPolar$$$Custom$$433E080(key$$10, value$$10) {
   return [key$$10, value$$10];
 }
 export const Props$002EShape = declare(function Fable_Recharts_Props_Shape() {});
 export function Props$002EShape$reflection() {
-  return type("Fable.Recharts.Props.Shape");
+  return class_type("Fable.Recharts.Props.Shape", undefined, Props$002EShape);
 }
 export function Props$002EShape$$$Custom$$433E080(key$$11, value$$11) {
   return [key$$11, value$$11];

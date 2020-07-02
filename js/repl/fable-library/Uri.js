@@ -50,6 +50,9 @@ export default class Uri {
             this.kind = 1 /* Absolute */;
         }
     }
+    toString() {
+        return decodeURIComponent(this.parseUrl().toString());
+    }
     parseUrl() {
         if (this.kind === 1 /* Absolute */) {
             return this.url;

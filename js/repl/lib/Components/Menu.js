@@ -1,7 +1,7 @@
 import { createObj } from "../../fable-library/Util.js";
 import { Common$002EGenericOptions$$AddCaseName$$1505 as Common$0024002EGenericOptions$0024$0024AddCaseName$0024$00241505, Common$002EGenericOptions$$AddModifiers$$5BB435D5 as Common$0024002EGenericOptions$0024$0024AddModifiers$0024$00245BB435D5, Common$002EGenericOptions$$AddClass$$Z721C83C5 as Common$0024002EGenericOptions$0024$0024AddClass$0024$0024Z721C83C5, Common$002EGenericOptions$$AddProps$$416C4D0B as Common$0024002EGenericOptions$0024$0024AddProps$0024$0024416C4D0B, Common$002EGenericOptions$$AddProp$$7BFEDA81 as Common$0024002EGenericOptions$0024$0024AddProp$0024$00247BFEDA81, Modifier$002EIModifier$reflection as Modifier$0024002EIModifier$0024reflection, Common$002EGenericOptions$$$Parse$$9AE2F7C as Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C, Common$$$parseOptions as Common$0024$0024$0024parseOptions, Common$002EGenericOptions$$ToReactElement$$Z6D3CD4B7 as Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7 } from "../Fulma/Common.js";
 import { declare, Union } from "../../fable-library/Types.js";
-import { union, lambda, unit, string, list as list$$1, type, bool } from "../../fable-library/Reflection.js";
+import { union_type, lambda_type, unit_type, string_type, list_type, class_type, bool_type } from "../../fable-library/Reflection.js";
 import { HTMLAttr, DOMAttr } from "../src/Fable.React.Props.js";
 export function menu(options, children) {
   return Common$0024002EGenericOptions$0024$0024ToReactElement$0024$0024Z6D3CD4B7(Common$0024002EGenericOptions$0024$0024$0024Parse$0024$00249AE2F7C(options, Common$0024$0024$0024parseOptions, "menu"), function (props, children$$1) {
@@ -25,10 +25,12 @@ export function list(options$$2, children$$8) {
   }, children$$8);
 }
 export const Item$002EOption = declare(function Fulma_Menu_Item_Option(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function Item$002EOption$reflection() {
-  return union("Fulma.Menu.Item.Option", [], Item$002EOption, () => [["is-active", [bool]], ["Props", [list$$1(type("Fable.React.Props.IHTMLProp"))]], ["CustomClass", [string]], ["OnClick", [lambda(type("Browser.Types.MouseEvent"), unit)]], ["Href", [string]], ["Modifiers", [list$$1(Modifier$0024002EIModifier$0024reflection())]]]);
+  return union_type("Fulma.Menu.Item.Option", [], Item$002EOption, () => [["is-active", [["Item", bool_type]]], ["Props", [["Item", list_type(class_type("Fable.React.Props.IHTMLProp"))]]], ["CustomClass", [["Item", string_type]]], ["OnClick", [["Item", lambda_type(class_type("Browser.Types.MouseEvent"), unit_type)]]], ["Href", [["Item", string_type]]], ["Modifiers", [["Item", list_type(Modifier$0024002EIModifier$0024reflection())]]]]);
 }
 
 function Item$$$generateAnchor(options$$3, children$$12) {

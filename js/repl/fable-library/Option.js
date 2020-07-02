@@ -46,8 +46,11 @@ export function value(x) {
 export function tryValue(x) {
     return x instanceof Some ? x.value : x;
 }
-export function defaultArg(opt, defaultValue, f) {
-    return (opt != null) ? (f != null ? f(value(opt)) : value(opt)) : defaultValue;
+export function toArray(opt) {
+    return (opt == null) ? [] : [value(opt)];
+}
+export function defaultArg(opt, defaultValue) {
+    return (opt != null) ? value(opt) : defaultValue;
 }
 export function defaultArgWith(opt, defThunk) {
     return (opt != null) ? value(opt) : defThunk();

@@ -12,10 +12,10 @@ import { tryParse as tryParse$$4, minValue as minValue$$1 } from "../../fable-li
 import { tryParse as tryParse$$5 } from "../../fable-library/TimeSpan.js";
 import { declare, List } from "../../fable-library/Types.js";
 import { ofArray, map as map$$1, length, ofSeq, append, reverse, fold, tryLast } from "../../fable-library/List.js";
-import { ofList as ofList$$1, map as map$$2, tryFind, foldBack2, foldBack, addInPlace, fill, fold as fold$$1 } from "../../fable-library/Array.js";
+import { ofList as ofList$$1, map as map$$2, tryFind, foldBack2, foldBack, fill, fold as fold$$1 } from "../../fable-library/Array.js";
 import { fold as fold$$2 } from "../../fable-library/Seq.js";
 import { empty, tryFind as tryFind$$1, ofSeq as ofSeq$$1, ofList } from "../../fable-library/Map.js";
-import { getGenerics, getGenericTypeDefinition, makeTuple, getTupleElements, isTuple, isGenericType, getElementType, isArray, isUnion, makeRecord, getRecordElements, isRecord, fullName, getUnionCaseFields, makeUnion as makeUnion$$1, name as name$$6, getUnionCases, type } from "../../fable-library/Reflection.js";
+import { getGenerics, getGenericTypeDefinition, makeTuple, getTupleElements, isTuple, isGenericType, getElementType, isArray, isUnion, makeRecord, getRecordElements, isRecord, fullName, getUnionCaseFields, makeUnion as makeUnion$$1, name as name$$6, getUnionCases, class_type } from "../../fable-library/Reflection.js";
 import { ofSeq as ofSeq$$2 } from "../../fable-library/Set.js";
 export function Helpers$$$getField(fieldName, o) {
   return o[fieldName];
@@ -352,7 +352,7 @@ function decodeMaybeNull(path$$17, decoder$$7, value$$30) {
 
   if (matchValue$$14.tag === 1) {
     if (o$$55 = value$$30, o$$55 == null) {
-      return new Result(0, "Ok", null);
+      return new Result(0, "Ok", undefined);
     } else {
       if (matchValue$$14.tag === 1) {
         return new Result(1, "Error", matchValue$$14.fields[0]);
@@ -370,7 +370,7 @@ export function optional(fieldName$$2, decoder$$8, path$$18, value$$31) {
     const fieldValue = value$$31[fieldName$$2];
 
     if (Helpers$$$isUndefined(fieldValue)) {
-      return new Result(0, "Ok", null);
+      return new Result(0, "Ok", undefined);
     } else {
       return decodeMaybeNull(path$$18 + "." + fieldName$$2, decoder$$8, fieldValue);
     }
@@ -389,7 +389,7 @@ function badPathError(fieldNames, currentPath, value$$32) {
 export function optionalAt(fieldNames$$1, decoder$$9, firstPath, firstValue) {
   let _arg1;
 
-  const state = [firstPath, firstValue, null];
+  const state = [firstPath, firstValue, undefined];
   _arg1 = fold(function folder(tupledArg, field$$1) {
     if (tupledArg[2] == null) {
       if (tupledArg[1] == null) {
@@ -397,7 +397,7 @@ export function optionalAt(fieldNames$$1, decoder$$9, firstPath, firstValue) {
         return [tupledArg[0], tupledArg[1], res$$1];
       } else if (tupledArg[1] === null ? false : Object.getPrototypeOf(tupledArg[1] || false) === Object.prototype) {
         const curValue$$1 = tupledArg[1][field$$1];
-        return [tupledArg[0] + "." + field$$1, curValue$$1, null];
+        return [tupledArg[0] + "." + field$$1, curValue$$1, undefined];
       } else {
         const res$$2 = new Result(1, "Error", [tupledArg[0], new ErrorReason(2, "BadType", "an object", tupledArg[1])]);
         return [tupledArg[0], tupledArg[1], res$$2];
@@ -409,7 +409,7 @@ export function optionalAt(fieldNames$$1, decoder$$9, firstPath, firstValue) {
 
   if (_arg1[2] == null) {
     if (Helpers$$$isUndefined(_arg1[1])) {
-      return new Result(0, "Ok", null);
+      return new Result(0, "Ok", undefined);
     } else {
       return decodeMaybeNull(_arg1[0], decoder$$9, _arg1[1]);
     }
@@ -434,7 +434,7 @@ export function field(fieldName$$5, decoder$$10, path$$19, value$$34) {
 export function at(fieldNames$$2, decoder$$11, firstPath$$1, firstValue$$1) {
   let _arg1$$1;
 
-  const state$$1 = [firstPath$$1, firstValue$$1, null];
+  const state$$1 = [firstPath$$1, firstValue$$1, undefined];
   _arg1$$1 = fold(function folder$$1(tupledArg$$1, field$$2) {
     if (tupledArg$$1[2] == null) {
       if (tupledArg$$1[1] == null) {
@@ -444,10 +444,10 @@ export function at(fieldNames$$2, decoder$$11, firstPath$$1, firstValue$$1) {
         const curValue$$3 = tupledArg$$1[1][field$$2];
 
         if (Helpers$$$isUndefined(curValue$$3)) {
-          const res$$6 = badPathError(fieldNames$$2, null, firstValue$$1);
+          const res$$6 = badPathError(fieldNames$$2, undefined, firstValue$$1);
           return [tupledArg$$1[0], curValue$$3, res$$6];
         } else {
-          return [tupledArg$$1[0] + "." + field$$2, curValue$$3, null];
+          return [tupledArg$$1[0] + "." + field$$2, curValue$$3, undefined];
         }
       } else {
         const res$$7 = new Result(1, "Error", [tupledArg$$1[0], new ErrorReason(2, "BadType", "an object", tupledArg$$1[1])]);
@@ -486,7 +486,7 @@ export function index(requestedIndex, decoder$$12, path$$20, value$$35) {
 }
 export function option(decoder$$13, path$$21, value$$36) {
   if (value$$36 == null) {
-    return new Result(0, "Ok", null);
+    return new Result(0, "Ok", undefined);
   } else {
     const result = decoder$$13(path$$21, value$$36);
     return mapOk(function mapping(arg0$$35) {
@@ -775,7 +775,7 @@ function unwrapWith(errors$$1, path$$39, decoder$$20, value$$58) {
   matchValue$$28 = clo1$$2(value$$58);
 
   if (matchValue$$28.tag === 1) {
-    addInPlace(matchValue$$28.fields[0], errors$$1);
+    void errors$$1.push(matchValue$$28.fields[0]);
     return null;
   } else {
     return matchValue$$28.fields[0];
@@ -849,21 +849,21 @@ export const Getters$00601 = declare(function Thoth_Json_Decode_Getters(path$$40
           case 0:
             {
               if (v$$6 == null) {
-                return null;
+                return undefined;
               } else {
-                addInPlace(matchValue$$29.fields[0], $this$$3.errors);
+                void $this$$3.errors.push(matchValue$$29.fields[0]);
                 return null;
               }
             }
 
           case 1:
             {
-              return null;
+              return undefined;
             }
 
           case 2:
             {
-              addInPlace(matchValue$$29.fields[0], $this$$3.errors);
+              void $this$$3.errors.push(matchValue$$29.fields[0]);
               return null;
             }
         }
@@ -873,9 +873,10 @@ export const Getters$00601 = declare(function Thoth_Json_Decode_Getters(path$$40
     }
 
   };
+  void null;
 });
 export function Getters$00601$reflection($gen$$207) {
-  return type("Thoth.Json.Decode.Getters`1", [$gen$$207]);
+  return class_type("Thoth.Json.Decode.Getters`1", [$gen$$207], Getters$00601);
 }
 export function Getters$00601$$$$002Ector$$4A51B60E(path$$40, v$$4) {
   return this instanceof Getters$00601 ? Getters$00601.call(this, path$$40, v$$4) : new Getters$00601(path$$40, v$$4);
@@ -1234,7 +1235,7 @@ function autoDecodeRecordsAndUnions(extra$$1, isCamelCase$$1, isOptional, t$$1) 
     let decoders$$4;
     const array$$6 = getRecordElements(t$$1, true);
     decoders$$4 = map$$2(function mapping$$7(fi$$1) {
-      const name$$3 = isCamelCase$$1 ? name$$6(fi$$1).slice(null, 0 + 1).toLowerCase() + name$$6(fi$$1).slice(1, name$$6(fi$$1).length) : name$$6(fi$$1);
+      const name$$3 = isCamelCase$$1 ? name$$6(fi$$1).slice(undefined, 0 + 1).toLowerCase() + name$$6(fi$$1).slice(1, name$$6(fi$$1).length) : name$$6(fi$$1);
       return [name$$3, autoDecoder(extra$$1, isCamelCase$$1, false, fi$$1[1])];
     }, array$$6, Array);
     return function (path$$119) {
@@ -1467,7 +1468,7 @@ function autoDecoder(extra$$2, isCamelCase$$2, isOptional$$1, t$$2) {
 
 export const Auto = declare(function Thoth_Json_Decode_Auto() {});
 export function Auto$reflection() {
-  return type("Thoth.Json.Decode.Auto");
+  return class_type("Thoth.Json.Decode.Auto", undefined, Auto);
 }
 export function Auto$$$generateDecoderCached$$4AE6C623(isCamelCase$$3, extra$$3, resolver) {
   const t$$10 = resolver.ResolveType();
