@@ -31,7 +31,7 @@ class MailboxQueue {
         return void 0;
     }
 }
-export default class MailboxProcessor {
+export class MailboxProcessor {
     constructor(body, cancellationToken) {
         this.body = body;
         this.cancellationToken = cancellationToken || defaultCancellationToken;
@@ -90,4 +90,5 @@ export function start(body, cancellationToken) {
     startInstance(mbox);
     return mbox;
 }
+export default MailboxProcessor;
 //# sourceMappingURL=MailboxProcessor.js.map

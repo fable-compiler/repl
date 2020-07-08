@@ -37,13 +37,15 @@ export function getSubArray(array$$3, start$$1, count$$2) {
 export function last(array$$5) {
   if (array$$5.length === 0) {
     throw new Error("The input array was empty\\nParameter name: array");
+  } else {
+    void null;
   }
 
   return array$$5[array$$5.length - 1];
 }
 export function tryLast(array$$6) {
   if (array$$6.length === 0) {
-    return null;
+    return undefined;
   } else {
     return some(array$$6[array$$6.length - 1]);
   }
@@ -83,6 +85,8 @@ export function map(f$$1, source$$1, cons$$2) {
 export function mapIndexed2(f$$2, source1, source2, cons$$3) {
   if (source1.length !== source2.length) {
     throw new Error("Arrays had different lengths");
+  } else {
+    void null;
   }
 
   const result = new cons$$3(source1.length);
@@ -96,6 +100,8 @@ export function mapIndexed2(f$$2, source1, source2, cons$$3) {
 export function map2(f$$3, source1$$1, source2$$1, cons$$4) {
   if (source1$$1.length !== source2$$1.length) {
     throw new Error("Arrays had different lengths");
+  } else {
+    void null;
   }
 
   const result$$1 = new cons$$4(source1$$1.length);
@@ -109,6 +115,8 @@ export function map2(f$$3, source1$$1, source2$$1, cons$$4) {
 export function mapIndexed3(f$$4, source1$$2, source2$$2, source3, cons$$5) {
   if (source1$$2.length !== source2$$2.length ? true : source2$$2.length !== source3.length) {
     throw new Error("Arrays had different lengths");
+  } else {
+    void null;
   }
 
   const result$$2 = new cons$$5(source1$$2.length);
@@ -122,6 +130,8 @@ export function mapIndexed3(f$$4, source1$$2, source2$$2, source3, cons$$5) {
 export function map3(f$$5, source1$$3, source2$$3, source3$$1, cons$$6) {
   if (source1$$3.length !== source2$$3.length ? true : source2$$3.length !== source3$$1.length) {
     throw new Error("Arrays had different lengths");
+  } else {
+    void null;
   }
 
   const result$$3 = new cons$$6(source1$$3.length);
@@ -334,6 +344,8 @@ export function singleton(value$$6, cons$$14) {
 export function initialize(count$$8, initializer, cons$$15) {
   if (count$$8 < 0) {
     throw new Error("The input must be non-negative\\nParameter name: count");
+  } else {
+    void null;
   }
 
   const result$$7 = new cons$$15(count$$8);
@@ -361,6 +373,8 @@ export function pairwise(array$$30) {
 export function replicate(count$$10, initial, cons$$16) {
   if (count$$10 < 0) {
     throw new Error("The input must be non-negative\\nParameter name: count");
+  } else {
+    void null;
   }
 
   const result$$9 = new cons$$16(count$$10);
@@ -401,6 +415,8 @@ export function scanBack(folder$$1, array$$38, state$$3, cons$$20) {
 export function skip(count$$11, array$$39, cons$$21) {
   if (count$$11 > array$$39.length) {
     throw new Error("count is greater than array length\\nParameter name: count");
+  } else {
+    void null;
   }
 
   if (count$$11 === array$$39.length) {
@@ -427,10 +443,14 @@ export function skipWhile(predicate$$7, array$$41, cons$$23) {
 export function take(count$$16, array$$43, cons$$25) {
   if (count$$16 < 0) {
     throw new Error("The input must be non-negative\\nParameter name: count");
+  } else {
+    void null;
   }
 
   if (count$$16 > array$$43.length) {
     throw new Error("count is greater than array length\\nParameter name: count");
+  } else {
+    void null;
   }
 
   if (count$$16 === 0) {
@@ -543,7 +563,7 @@ export function tryFindIndex(predicate$$17, array$$65) {
   if (matchValue$$7 > -1) {
     return matchValue$$7;
   } else {
-    return null;
+    return undefined;
   }
 }
 export function pick(chooser, array$$67) {
@@ -577,7 +597,7 @@ export function tryPick(chooser$$1, array$$68) {
       const i$$23 = $i$$23$$152;
 
       if (i$$23 >= array$$68.length) {
-        return null;
+        return undefined;
       } else {
         const matchValue$$9 = chooser$$1(array$$68[i$$23]);
 
@@ -621,7 +641,7 @@ export function tryFindBack(predicate$$20, array$$70) {
       const i$$25 = $i$$25$$158;
 
       if (i$$25 < 0) {
-        return null;
+        return undefined;
       } else if (predicate$$20(array$$70[i$$25])) {
         return some(array$$70[i$$25]);
       } else {
@@ -681,7 +701,7 @@ export function tryFindIndexBack(predicate$$23, array$$73) {
       const i$$28 = $i$$28$$167;
 
       if (i$$28 < 0) {
-        return null;
+        return undefined;
       } else if (predicate$$23(array$$73[i$$28])) {
         return i$$28;
       } else {
@@ -728,6 +748,8 @@ export function iterateIndexed(action$$1, array$$81) {
 export function iterate2(action$$2, array1$$2, array2$$2) {
   if (array1$$2.length !== array2$$2.length) {
     throw new Error("Arrays had different lengths");
+  } else {
+    void null;
   }
 
   for (let i$$32 = 0; i$$32 <= array1$$2.length - 1; i$$32++) {
@@ -737,6 +759,8 @@ export function iterate2(action$$2, array1$$2, array2$$2) {
 export function iterateIndexed2(action$$3, array1$$3, array2$$3) {
   if (array1$$3.length !== array2$$3.length) {
     throw new Error("Arrays had different lengths");
+  } else {
+    void null;
   }
 
   for (let i$$33 = 0; i$$33 <= array1$$3.length - 1; i$$33++) {
@@ -758,6 +782,8 @@ export function permute(f$$8, array$$85) {
 
     if (j$$1 < 0 ? true : j$$1 >= size) {
       throw new Error("Not a valid permutation");
+    } else {
+      void null;
     }
 
     res$$7[j$$1] = x$$9;
@@ -770,6 +796,8 @@ export function permute(f$$8, array$$85) {
 
   if (!isValid) {
     throw new Error("Not a valid permutation");
+  } else {
+    void null;
   }
 
   return res$$7;
@@ -841,6 +869,8 @@ export function unfold(generator, state$$8) {
         void value$$11;
         $state$$9$$226 = s$$2;
         continue loop$$8;
+      } else {
+        void null;
       }
 
       break;
@@ -875,6 +905,8 @@ export function unzip3(array$$96) {
 export function zip(array1$$4, array2$$4) {
   if (array1$$4.length !== array2$$4.length) {
     throw new Error("Arrays had different lengths");
+  } else {
+    void null;
   }
 
   let result$$10;
@@ -890,6 +922,8 @@ export function zip(array1$$4, array2$$4) {
 export function zip3(array1$$5, array2$$5, array3) {
   if (array1$$5.length !== array2$$5.length ? true : array2$$5.length !== array3.length) {
     throw new Error("Arrays had different lengths");
+  } else {
+    void null;
   }
 
   let result$$11;
@@ -905,6 +939,8 @@ export function zip3(array1$$5, array2$$5, array3) {
 export function chunkBySize(chunkSize, array$$97) {
   if (chunkSize < 1) {
     throw new Error("The input must be positive.\\nParameter name: size");
+  } else {
+    void null;
   }
 
   if (array$$97.length === 0) {
@@ -925,10 +961,14 @@ export function chunkBySize(chunkSize, array$$97) {
 export function splitAt(index$$4, array$$100) {
   if (index$$4 < 0) {
     throw new Error("The input must be non-negative\\nParameter name: index");
+  } else {
+    void null;
   }
 
   if (index$$4 > array$$100.length) {
     throw new Error("The input sequence has an insufficient number of elements.\\nParameter name: index");
+  } else {
+    void null;
   }
 
   return [array$$100.slice(0, 0 + index$$4), array$$100.slice(index$$4)];
@@ -983,7 +1023,7 @@ export function head(array$$104) {
 }
 export function tryHead(array$$105) {
   if (array$$105.length === 0) {
-    return null;
+    return undefined;
   } else {
     return some(array$$105[0]);
   }
@@ -991,6 +1031,8 @@ export function tryHead(array$$105) {
 export function tail(array$$106) {
   if (array$$106.length === 0) {
     throw new Error("Not enough elements\\nParameter name: array");
+  } else {
+    void null;
   }
 
   return array$$106.slice(1);
@@ -1000,7 +1042,7 @@ export function item(index$$5, array$$108) {
 }
 export function tryItem(index$$6, array$$109) {
   if (index$$6 < 0 ? true : index$$6 >= array$$109.length) {
-    return null;
+    return undefined;
   } else {
     return some(array$$109[index$$6]);
   }
@@ -1020,6 +1062,8 @@ export function foldIndexed2(folder$$10, state$$14, array1$$8, array2$$8) {
 
   if (array1$$8.length !== array2$$8.length) {
     throw new Error("Arrays have different lengths");
+  } else {
+    void null;
   }
 
   for (let i$$42 = 0; i$$42 <= array1$$8.length - 1; i$$42++) {
@@ -1038,6 +1082,8 @@ export function foldBackIndexed2(folder$$12, array1$$10, array2$$10, state$$16) 
 
   if (array1$$10.length !== array2$$10.length) {
     throw new Error("Arrays had different lengths");
+  } else {
+    void null;
   }
 
   const size$$1 = array1$$10.length | 0;
@@ -1056,6 +1102,8 @@ export function foldBack2(f$$9, array1$$11, array2$$11, state$$17) {
 export function reduce(reduction, array$$114) {
   if (array$$114.length === 0) {
     throw new Error("The input array was empty");
+  } else {
+    void null;
   }
 
   return array$$114.reduce(reduction);
@@ -1063,6 +1111,8 @@ export function reduce(reduction, array$$114) {
 export function reduceBack(reduction$$2, array$$116) {
   if (array$$116.length === 0) {
     throw new Error("The input array was empty");
+  } else {
+    void null;
   }
 
   return array$$116.reduceRight(reduction$$2);
@@ -1120,6 +1170,8 @@ export function existsOffset2($predicate$$32$$286, $array1$$13$$287, $array2$$13
 export function exists2(predicate$$33, array1$$14, array2$$14) {
   if (array1$$14.length !== array2$$14.length) {
     throw new Error("Arrays had different lengths");
+  } else {
+    void null;
   }
 
   return existsOffset2(predicate$$33, array1$$14, array2$$14, 0);
@@ -1165,6 +1217,8 @@ export function min(xs$$15, comparer$$17) {
 export function average(array$$122, averager) {
   if (array$$122.length === 0) {
     throw new Error("The input array was empty\\nParameter name: array");
+  } else {
+    void null;
   }
 
   let total = averager.GetZero();
@@ -1178,6 +1232,8 @@ export function average(array$$122, averager) {
 export function averageBy(projection$$9, array$$123, averager$$1) {
   if (array$$123.length === 0) {
     throw new Error("The input array was empty\\nParameter name: array");
+  } else {
+    void null;
   }
 
   let total$$1 = averager$$1.GetZero();
@@ -1207,6 +1263,8 @@ export function toList(source$$8) {
 export function windowed(windowSize, source$$9) {
   if (windowSize <= 0) {
     throw new Error("windowSize must be positive");
+  } else {
+    void null;
   }
 
   let res$$9;
@@ -1222,6 +1280,8 @@ export function windowed(windowSize, source$$9) {
 export function splitInto(chunks, array$$124) {
   if (chunks < 1) {
     throw new Error("The input must be positive.\\nParameter name: chunks");
+  } else {
+    void null;
   }
 
   if (array$$124.length === 0) {
@@ -1257,6 +1317,8 @@ export function transpose(arrays$$2, cons$$33) {
       return a.length === lenInner;
     }, arrays$$3)), (!value$$14)) {
       throw new Error("Arrays had different lengths");
+    } else {
+      void null;
     }
 
     const result$$15 = new Array(lenInner);

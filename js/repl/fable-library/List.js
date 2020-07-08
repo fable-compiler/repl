@@ -17,7 +17,7 @@ export function tryHead(_arg1$$1) {
   if (_arg1$$1.tail != null) {
     return some(_arg1$$1.head);
   } else {
-    return null;
+    return undefined;
   }
 }
 export function tail(_arg1$$2) {
@@ -57,7 +57,7 @@ export function tryLast($_arg1$$4$$6) {
         continue tryLast;
       }
     } else {
-      return null;
+      return undefined;
     }
 
     break;
@@ -399,22 +399,22 @@ export function mapFoldBack(f$$23, xs$$45, s$$2) {
 export function iterate(f$$24, xs$$46) {
   fold(function (unitVar0, x$$24) {
     f$$24(x$$24);
-  }, null, xs$$46);
+  }, void null, xs$$46);
 }
 export function iterate2(f$$25, xs$$47, ys$$15) {
   fold2(function (unitVar0$$1, x$$25, y$$8) {
     f$$25(x$$25, y$$8);
-  }, null, xs$$47, ys$$15);
+  }, void null, xs$$47, ys$$15);
 }
 export function iterateIndexed(f$$26, xs$$48) {
   foldIndexed(function (i$$7, unitVar1, x$$26) {
     f$$26(i$$7, x$$26);
-  }, null, xs$$48);
+  }, void null, xs$$48);
 }
 export function iterateIndexed2(f$$27, xs$$49, ys$$16) {
   foldIndexed2(function (i$$8, unitVar1$$1, x$$27, y$$9) {
     f$$27(i$$8, x$$27, y$$9);
-  }, null, xs$$49, ys$$16);
+  }, void null, xs$$49, ys$$16);
 }
 export function ofArray(xs$$50) {
   let res$$1 = new List();
@@ -453,7 +453,7 @@ export function tryPickIndexedAux($f$$28$$120, $i$$10$$121, $_arg1$$9$$122) {
         return result;
       }
     } else {
-      return null;
+      return undefined;
     }
 
     break;
@@ -479,12 +479,12 @@ export function pick(f$$31, xs$$54) {
 }
 export function tryFindIndexed(f$$32, xs$$55) {
   return tryPickIndexed(function (i$$11, x$$31) {
-    return f$$32(i$$11, x$$31) ? some(x$$31) : null;
+    return f$$32(i$$11, x$$31) ? some(x$$31) : undefined;
   }, xs$$55);
 }
 export function tryFind(f$$33, xs$$56) {
   return tryPickIndexed(function (_arg1$$11, x$$32) {
-    return f$$33(x$$32) ? some(x$$32) : null;
+    return f$$33(x$$32) ? some(x$$32) : undefined;
   }, xs$$56);
 }
 export function findIndexed(f$$34, xs$$57) {
@@ -514,7 +514,7 @@ export function tryFindBack(f$$37, xs$$62) {
 }
 export function tryFindIndex(f$$38, xs$$65) {
   return tryPickIndexed(function (i$$12, x$$35) {
-    return f$$38(x$$35) ? i$$12 : null;
+    return f$$38(x$$35) ? i$$12 : undefined;
   }, xs$$65);
 }
 export function tryFindIndexBack(f$$39, xs$$66) {
@@ -1120,6 +1120,8 @@ export function slice(lower, upper, xs$$132) {
 
     if (lower$$1 > lastIndex + 1 ? true : hasUpper ? upper > lastIndex : false) {
       outOfRange();
+    } else {
+      void null;
     }
 
     return reverse(res$$2);
@@ -1200,6 +1202,8 @@ export function pairwise(source$$1) {
 export function windowed(windowSize, source$$2) {
   if (windowSize <= 0) {
     throw new Error("windowSize must be positive");
+  } else {
+    void null;
   }
 
   let res$$3 = new List();

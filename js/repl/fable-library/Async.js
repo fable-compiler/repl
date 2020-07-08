@@ -3,10 +3,10 @@ import { CancellationToken } from "./AsyncBuilder.js";
 import { protectedCont } from "./AsyncBuilder.js";
 import { protectedBind } from "./AsyncBuilder.js";
 import { protectedReturn } from "./AsyncBuilder.js";
-import { choice1, choice2 } from "./Option.js";
+import { choice1Of2, choice2Of2 } from "./Option.js";
 import { map } from "./Seq.js";
 // Implemented just for type references
-export default class Async {
+export class Async {
 }
 function emptyContinuation(_x) {
     // NOP
@@ -60,8 +60,8 @@ export const defaultCancellationToken = new CancellationToken();
 export function catchAsync(work) {
     return protectedCont((ctx) => {
         work({
-            onSuccess: (x) => ctx.onSuccess(choice1(x)),
-            onError: (ex) => ctx.onSuccess(choice2(ex)),
+            onSuccess: (x) => ctx.onSuccess(choice1Of2(x)),
+            onError: (ex) => ctx.onSuccess(choice2Of2(ex)),
             onCancel: ctx.onCancel,
             cancelToken: ctx.cancelToken,
             trampoline: ctx.trampoline,
@@ -113,4 +113,5 @@ export function startWithContinuations(computation, continuation, exceptionConti
 export function startAsPromise(computation, cancellationToken) {
     return new Promise((resolve, reject) => startWithContinuations(computation, resolve, reject, reject, cancellationToken ? cancellationToken : defaultCancellationToken));
 }
+export default Async;
 //# sourceMappingURL=Async.js.map

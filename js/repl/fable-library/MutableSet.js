@@ -1,6 +1,6 @@
 import { declare, FSharpRef } from "./Types.js";
 import { iterateIndexed, toIterator, getEnumerator, delay, collect, map, sumBy, iterate } from "./Seq.js";
-import { type } from "./Reflection.js";
+import { class_type } from "./Reflection.js";
 import { getItemFromDict, tryGetValue } from "./Util.js";
 import { some } from "./Option.js";
 export const MutableSet$00601 = declare(function Fable_Collections_MutableSet(items, comparer) {
@@ -14,9 +14,10 @@ export const MutableSet$00601 = declare(function Fable_Collections_MutableSet(it
     const value = MutableSet$00601$$Add$$2B595(this$.contents, item);
     void value;
   }, items);
+  void null;
 });
 export function MutableSet$00601$reflection($gen$$4) {
-  return type("Fable.Collections.MutableSet`1", [$gen$$4]);
+  return class_type("Fable.Collections.MutableSet`1", [$gen$$4], MutableSet$00601);
 }
 export function MutableSet$00601$$$$002Ector$$Z6150332D(items, comparer) {
   return this instanceof MutableSet$00601 ? MutableSet$00601.call(this, items, comparer) : new MutableSet$00601(items, comparer);
@@ -57,7 +58,7 @@ function MutableSet$00601$$TryFind$$2B595(this$$$2, k$$1) {
 
     case 1:
       {
-        return null;
+        return undefined;
       }
   }
 }

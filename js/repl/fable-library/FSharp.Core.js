@@ -48,9 +48,10 @@ export function Operators$$$Using(resource, action) {
   } finally {
     const matchValue = resource;
 
-    if (equals(matchValue, null)) {} else {
-      let copyOfStruct = resource;
-      copyOfStruct.Dispose();
+    if (equals(matchValue, null)) {
+      void null;
+    } else {
+      resource.Dispose();
     }
   }
 }

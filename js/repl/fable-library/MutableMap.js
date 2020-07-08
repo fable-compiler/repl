@@ -1,6 +1,6 @@
 import { declare, FSharpRef } from "./Types.js";
 import { iterateIndexed, toIterator, getEnumerator, delay, collect, map, sumBy, iterate } from "./Seq.js";
-import { type } from "./Reflection.js";
+import { class_type } from "./Reflection.js";
 import { equals, getItemFromDict, tryGetValue } from "./Util.js";
 import { format } from "./String.js";
 export const MutableMap$00602 = declare(function Fable_Collections_MutableMap(pairs, comparer) {
@@ -13,9 +13,10 @@ export const MutableMap$00602 = declare(function Fable_Collections_MutableMap(pa
   iterate(function (pair) {
     MutableMap$00602$$Add$$5BDDA1(this$.contents, pair[0], pair[1]);
   }, pairs);
+  void null;
 });
 export function MutableMap$00602$reflection($gen$$4, $gen$$5) {
-  return type("Fable.Collections.MutableMap`2", [$gen$$4, $gen$$5]);
+  return class_type("Fable.Collections.MutableMap`2", [$gen$$4, $gen$$5], MutableMap$00602);
 }
 export function MutableMap$00602$$$$002Ector$$6623D9B3(pairs, comparer) {
   return this instanceof MutableMap$00602 ? MutableMap$00602.call(this, pairs, comparer) : new MutableMap$00602(pairs, comparer);
@@ -56,7 +57,7 @@ export function MutableMap$00602$$TryFind$$2B595(this$$$2, k$$1) {
 
     case 1:
       {
-        return null;
+        return undefined;
       }
   }
 }
@@ -294,6 +295,8 @@ MutableMap$00602.prototype.Remove = function (item$$2) {
     if (equals(pair$$4[1], item$$2[1])) {
       const value$$2 = MutableMap$00602$$Remove$$2B595(this$$$18, item$$2[0]);
       void value$$2;
+    } else {
+      void null;
     }
 
     return true;

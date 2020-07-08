@@ -1,4 +1,12 @@
 // tslint:disable:ban-types
+export function bindThis(this$, source) {
+    for (const key of Object.keys(source)) {
+        if (typeof source[key] === "function") {
+            source[key] = source[key].bind(this$);
+        }
+    }
+    return source;
+}
 // Object.assign flattens getters and setters
 // See https://stackoverflow.com/questions/37054596/js-es5-how-to-assign-objects-with-setters-and-getters
 export function extend(target, ...sources) {
@@ -142,16 +150,20 @@ export function int32ToString(i, radix) {
     i = i < 0 && radix != null && radix !== 10 ? 0xFFFFFFFF + i + 1 : i;
     return i.toString(radix);
 }
-export class ObjectRef {
-    static id(o) {
-        if (!ObjectRef.idMap.has(o)) {
-            ObjectRef.idMap.set(o, ++ObjectRef.count);
+let ObjectRef = /** @class */ (() => {
+    class ObjectRef {
+        static id(o) {
+            if (!ObjectRef.idMap.has(o)) {
+                ObjectRef.idMap.set(o, ++ObjectRef.count);
+            }
+            return ObjectRef.idMap.get(o);
         }
-        return ObjectRef.idMap.get(o);
     }
-}
-ObjectRef.idMap = new WeakMap();
-ObjectRef.count = 0;
+    ObjectRef.idMap = new WeakMap();
+    ObjectRef.count = 0;
+    return ObjectRef;
+})();
+export { ObjectRef };
 export function stringHash(s) {
     let i = 0;
     let h = 5381;
@@ -535,7 +547,7 @@ const CURRIED_KEY = "__CURRIED__";
 export function uncurry(arity, f) {
     // f may be a function option with None value
     if (f == null) {
-        return null;
+        return undefined;
     }
     // The function is already uncurried
     if (f.length > 1) {
@@ -599,7 +611,7 @@ export function curry(arity, f) {
 }
 export function partialApply(arity, f, args) {
     if (f == null) {
-        return null;
+        return undefined;
     }
     else if (CURRIED_KEY in f) {
         f = f[CURRIED_KEY];
@@ -614,21 +626,21 @@ export function partialApply(arity, f, args) {
                 // Wrap arguments to make sure .concat doesn't destruct arrays. Example
                 // [1,2].concat([3,4],5)   --> [1,2,3,4,5]    // fails
                 // [1,2].concat([[3,4],5]) --> [1,2,[3,4],5]  // ok
-                return (a1) => f.apply(null, args.concat([a1]));
+                return (a1) => f.apply(undefined, args.concat([a1]));
             case 2:
-                return (a1) => (a2) => f.apply(null, args.concat([a1, a2]));
+                return (a1) => (a2) => f.apply(undefined, args.concat([a1, a2]));
             case 3:
-                return (a1) => (a2) => (a3) => f.apply(null, args.concat([a1, a2, a3]));
+                return (a1) => (a2) => (a3) => f.apply(undefined, args.concat([a1, a2, a3]));
             case 4:
-                return (a1) => (a2) => (a3) => (a4) => f.apply(null, args.concat([a1, a2, a3, a4]));
+                return (a1) => (a2) => (a3) => (a4) => f.apply(undefined, args.concat([a1, a2, a3, a4]));
             case 5:
-                return (a1) => (a2) => (a3) => (a4) => (a5) => f.apply(null, args.concat([a1, a2, a3, a4, a5]));
+                return (a1) => (a2) => (a3) => (a4) => (a5) => f.apply(undefined, args.concat([a1, a2, a3, a4, a5]));
             case 6:
-                return (a1) => (a2) => (a3) => (a4) => (a5) => (a6) => f.apply(null, args.concat([a1, a2, a3, a4, a5, a6]));
+                return (a1) => (a2) => (a3) => (a4) => (a5) => (a6) => f.apply(undefined, args.concat([a1, a2, a3, a4, a5, a6]));
             case 7:
-                return (a1) => (a2) => (a3) => (a4) => (a5) => (a6) => (a7) => f.apply(null, args.concat([a1, a2, a3, a4, a5, a6, a7]));
+                return (a1) => (a2) => (a3) => (a4) => (a5) => (a6) => (a7) => f.apply(undefined, args.concat([a1, a2, a3, a4, a5, a6, a7]));
             case 8:
-                return (a1) => (a2) => (a3) => (a4) => (a5) => (a6) => (a7) => (a8) => f.apply(null, args.concat([a1, a2, a3, a4, a5, a6, a7, a8]));
+                return (a1) => (a2) => (a3) => (a4) => (a5) => (a6) => (a7) => (a8) => f.apply(undefined, args.concat([a1, a2, a3, a4, a5, a6, a7, a8]));
             default:
                 throw new Error("Partially applying to more than 8-arity is not supported: " + arity);
         }

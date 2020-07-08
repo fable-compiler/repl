@@ -135,7 +135,7 @@ export function toString(date, format, _provider) {
         ? dateToStringWithOffset(date, format)
         : dateToStringWithKind(date, format);
 }
-export default function DateTime(value, kind) {
+export function DateTime(value, kind) {
     const d = new Date(value);
     d.kind = (kind == null ? 0 /* Unspecified */ : kind) | 0;
     return d;
@@ -419,4 +419,5 @@ export function isDaylightSavingTime(x) {
 function isDST(janOffset, julOffset, tOffset) {
     return Math.min(janOffset, julOffset) === tOffset;
 }
+export default DateTime;
 //# sourceMappingURL=Date.js.map

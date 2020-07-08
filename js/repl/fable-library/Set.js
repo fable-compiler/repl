@@ -1,15 +1,17 @@
 import { List, Record, declare, Union } from "./Types.js";
-import { type, record, bool, list, union as union$$1, int32 } from "./Reflection.js";
+import { class_type, record_type, bool_type, list_type, union_type, int32_type } from "./Reflection.js";
 import { value as value$$2, some, Choice } from "./Option.js";
 import { iterate as iterate$$1, delay, collect, singleton as singleton$$1, empty as empty$$1, fold as fold$$1, toIterator, map as map$$1, reduce, getEnumerator, unfold } from "./Seq.js";
 import { structuralHash, isDisposable } from "./Util.js";
 import { join } from "./String.js";
 import { MutableSet$00601$$Add$$2B595 as MutableSet$002400601$0024$0024Add$0024$00242B595, MutableSet$00601$$$$002Ector$$Z6150332D as MutableSet$002400601$0024$0024$0024$0024002Ector$0024$0024Z6150332D } from "./MutableSet.js";
 export const SetTree$00601 = declare(function Set_SetTree(tag, name, ...fields) {
-  Union.call(this, tag, name, ...fields);
+  this.tag = tag | 0;
+  this.name = name;
+  this.fields = fields;
 }, Union);
 export function SetTree$00601$reflection($gen$$3) {
-  return union$$1("Set.SetTree`1", [$gen$$3], SetTree$00601, () => ["SetEmpty", ["SetNode", [["Item1", $gen$$3], ["Item2", SetTree$00601$reflection($gen$$3)], ["Item3", SetTree$00601$reflection($gen$$3)], ["Item4", int32]]], ["SetOne", [["Item", $gen$$3]]]]);
+  return union_type("Set.SetTree`1", [$gen$$3], SetTree$00601, () => ["SetEmpty", ["SetNode", [["Item1", $gen$$3], ["Item2", SetTree$00601$reflection($gen$$3)], ["Item3", SetTree$00601$reflection($gen$$3)], ["Item4", int32_type]]], ["SetOne", [["Item", $gen$$3]]]]);
 }
 export function SetTreeModule$$$countAux($s$$4, $acc$$5) {
   SetTreeModule$$$countAux: while (true) {
@@ -389,6 +391,7 @@ export function SetTreeModule$$$iter($f$$38, $t$$6$$39) {
 
       case 0:
         {
+          void null;
           break;
         }
 
@@ -787,7 +790,7 @@ export function SetTreeModule$$$$007CMatchSetNode$007CMatchSetEmpty$007C(s$$6) {
 
     case 0:
       {
-        return new Choice(1, "Choice2Of2", null);
+        return new Choice(1, "Choice2Of2", void null);
       }
 
     default:
@@ -832,7 +835,7 @@ export function SetTreeModule$$$minimumElementOpt(s$$8) {
 
     case 0:
       {
-        return null;
+        return undefined;
       }
 
     default:
@@ -877,7 +880,7 @@ export function SetTreeModule$$$maximumElementOpt(s$$10) {
 
     case 0:
       {
-        return null;
+        return undefined;
       }
 
     default:
@@ -906,12 +909,12 @@ export function SetTreeModule$$$maximumElement(s$$12) {
     return k$$28;
   }
 }
-export const SetTreeModule$002ESetIterator$00601 = declare(function Set_SetTreeModule_SetIterator(arg1, arg2) {
-  this.stack = arg1;
-  this.started = arg2;
+export const SetTreeModule$002ESetIterator$00601 = declare(function Set_SetTreeModule_SetIterator(stack, started) {
+  this.stack = stack;
+  this.started = started;
 }, Record);
 export function SetTreeModule$002ESetIterator$00601$reflection($gen$$103) {
-  return record("Set.SetTreeModule.SetIterator`1", [$gen$$103], SetTreeModule$002ESetIterator$00601, () => [["stack", list(SetTree$00601$reflection($gen$$103))], ["started", bool]]);
+  return record_type("Set.SetTreeModule.SetIterator`1", [$gen$$103], SetTreeModule$002ESetIterator$00601, () => [["stack", list_type(SetTree$00601$reflection($gen$$103))], ["started", bool_type]]);
 }
 export function SetTreeModule$$$collapseLHS($stack$$104) {
   SetTreeModule$$$collapseLHS: while (true) {
@@ -979,9 +982,10 @@ export const SetTreeModule$002EmkIEnumerator$00601 = declare(function Set_SetTre
   const $this$$1 = this;
   $this$$1.s = s$$14;
   $this$$1.i = SetTreeModule$$$mkIterator($this$$1.s);
+  void null;
 });
 export function SetTreeModule$002EmkIEnumerator$00601$reflection($gen$$108) {
-  return type("Set.SetTreeModule.mkIEnumerator`1", [$gen$$108]);
+  return class_type("Set.SetTreeModule.mkIEnumerator`1", [$gen$$108], SetTreeModule$002EmkIEnumerator$00601);
 }
 export function SetTreeModule$002EmkIEnumerator$00601$$$$002Ector$$Z5B395D56(s$$14) {
   return this instanceof SetTreeModule$002EmkIEnumerator$00601 ? SetTreeModule$002EmkIEnumerator$00601.call(this, s$$14) : new SetTreeModule$002EmkIEnumerator$00601(s$$14);
@@ -1003,7 +1007,9 @@ SetTreeModule$002EmkIEnumerator$00601.prototype.Reset = function () {
   __$$2.i = SetTreeModule$$$mkIterator(__$$2.s);
 };
 
-SetTreeModule$002EmkIEnumerator$00601.prototype.Dispose = function () {};
+SetTreeModule$002EmkIEnumerator$00601.prototype.Dispose = function () {
+  void null;
+};
 
 export function SetTreeModule$$$mkIEnumerator(s$$15) {
   return SetTreeModule$002EmkIEnumerator$00601$$$$002Ector$$Z5B395D56(s$$15);
@@ -1014,7 +1020,7 @@ export function SetTreeModule$$$toSeq(s$$16) {
     if (en$$1.MoveNext()) {
       return [en$$1.Current, en$$1];
     } else {
-      return null;
+      return undefined;
     }
   }, en);
 }
@@ -1323,6 +1329,8 @@ export function SetTreeModule$$$ofSeq(comparer$$20, c$$11) {
   } finally {
     if (isDisposable(ie)) {
       ie.Dispose();
+    } else {
+      void null;
     }
   }
 }
@@ -1339,9 +1347,10 @@ export const FSharpSet = declare(function Set_Set(comparer$$22, tree) {
   const $this$$2 = this;
   $this$$2.comparer = comparer$$22;
   $this$$2.tree = tree;
+  void null;
 });
 export function FSharpSet$reflection($gen$$133) {
-  return type("Set.FSharpSet", [$gen$$133]);
+  return class_type("Set.FSharpSet", [$gen$$133], FSharpSet);
 }
 export function FSharpSet$$$$002Ector$$2528C5CB(comparer$$22, tree) {
   return this instanceof FSharpSet ? FSharpSet.call(this, comparer$$22, tree) : new FSharpSet(comparer$$22, tree);
@@ -1624,121 +1633,57 @@ export function minElement(s$$51) {
 export function maxElement(s$$52) {
   return FSharpSet$$get_MaximumElement(s$$52);
 }
-
-function createMutablePrivate(comparer$$31, tree$0027) {
-  let tree$$1 = tree$0027;
-  return {
-    get size() {
-      return SetTreeModule$$$count(tree$$1);
-    },
-
-    add(x$$33) {
-      const this$$$4 = this;
-      tree$$1 = SetTreeModule$$$add(comparer$$31, x$$33, tree$$1);
-      return this$$$4;
-    },
-
-    add_(x$$34) {
-      if (SetTreeModule$$$mem(comparer$$31, x$$34, tree$$1)) {
-        return false;
-      } else {
-        tree$$1 = SetTreeModule$$$add(comparer$$31, x$$34, tree$$1);
-        return true;
-      }
-    },
-
-    clear() {
-      tree$$1 = new SetTree$00601(0, "SetEmpty");
-    },
-
-    delete(x$$35) {
-      if (SetTreeModule$$$mem(comparer$$31, x$$35, tree$$1)) {
-        tree$$1 = SetTreeModule$$$remove(comparer$$31, x$$35, tree$$1);
-        return true;
-      } else {
-        return false;
-      }
-    },
-
-    has(x$$36) {
-      return SetTreeModule$$$mem(comparer$$31, x$$36, tree$$1);
-    },
-
-    keys() {
-      return SetTreeModule$$$toSeq(tree$$1);
-    },
-
-    values() {
-      return SetTreeModule$$$toSeq(tree$$1);
-    },
-
-    entries() {
-      const source = SetTreeModule$$$toSeq(tree$$1);
-      return map$$1(function mapping(v) {
-        return [v, v];
-      }, source);
-    },
-
-    [Symbol.iterator]() {
-      return toIterator(SetTreeModule$$$mkIEnumerator(tree$$1));
-    },
-
-    GetEnumerator() {
-      return SetTreeModule$$$mkIEnumerator(tree$$1);
-    }
-
-  };
-}
-
-export function createMutable(source$$1, comparer$$32) {
-  const set = MutableSet$002400601$0024$0024$0024$0024002Ector$0024$0024Z6150332D(source$$1, comparer$$32);
+export function createMutable(source, comparer$$31) {
+  const set = MutableSet$002400601$0024$0024$0024$0024002Ector$0024$0024Z6150332D(source, comparer$$31);
   return set;
 }
-export function distinct(xs, comparer$$33) {
+export function distinct(xs, comparer$$32) {
   return delay(function () {
-    const set$$1 = MutableSet$002400601$0024$0024$0024$0024002Ector$0024$0024Z6150332D(empty$$1(), comparer$$33);
-    return collect(function (x$$37) {
-      return MutableSet$002400601$0024$0024Add$0024$00242B595(set$$1, x$$37) ? singleton$$1(x$$37) : empty$$1();
+    const set$$1 = MutableSet$002400601$0024$0024$0024$0024002Ector$0024$0024Z6150332D(empty$$1(), comparer$$32);
+    return collect(function (x$$33) {
+      return MutableSet$002400601$0024$0024Add$0024$00242B595(set$$1, x$$33) ? singleton$$1(x$$33) : empty$$1();
     }, xs);
   });
 }
-export function distinctBy(projection, xs$$1, comparer$$34) {
+export function distinctBy(projection, xs$$1, comparer$$33) {
   return delay(function () {
-    const set$$2 = MutableSet$002400601$0024$0024$0024$0024002Ector$0024$0024Z6150332D(empty$$1(), comparer$$34);
-    return collect(function (x$$38) {
-      return MutableSet$002400601$0024$0024Add$0024$00242B595(set$$2, projection(x$$38)) ? singleton$$1(x$$38) : empty$$1();
+    const set$$2 = MutableSet$002400601$0024$0024$0024$0024002Ector$0024$0024Z6150332D(empty$$1(), comparer$$33);
+    return collect(function (x$$34) {
+      return MutableSet$002400601$0024$0024Add$0024$00242B595(set$$2, projection(x$$34)) ? singleton$$1(x$$34) : empty$$1();
     }, xs$$1);
   });
 }
 export function unionWith(s1$$4, s2$$4) {
-  return fold$$1(function folder(acc$$14, x$$39) {
-    return acc$$14.add(x$$39);
+  return fold$$1(function folder(acc$$14, x$$35) {
+    return acc$$14.add(x$$35);
   }, s1$$4, s2$$4);
 }
-export function intersectWith(s1$$5, s2$$5, comparer$$35) {
-  const s2$$6 = ofSeq(s2$$5, comparer$$35);
-  iterate$$1(function (x$$40) {
-    if (!FSharpSet$$Contains$$2B595(s2$$6, x$$40)) {
-      const value = s1$$5.delete(x$$40);
+export function intersectWith(s1$$5, s2$$5, comparer$$34) {
+  const s2$$6 = ofSeq(s2$$5, comparer$$34);
+  iterate$$1(function (x$$36) {
+    if (!FSharpSet$$Contains$$2B595(s2$$6, x$$36)) {
+      const value = s1$$5.delete(x$$36);
       void value;
+    } else {
+      void null;
     }
   }, s1$$5);
 }
 export function exceptWith(s1$$6, s2$$7) {
-  iterate$$1(function (x$$41) {
-    const value$$1 = s1$$6.delete(x$$41);
+  iterate$$1(function (x$$37) {
+    const value$$1 = s1$$6.delete(x$$37);
     void value$$1;
   }, s2$$7);
 }
-export function isSubsetOf(s1$$7, s2$$8, comparer$$36) {
-  return isSubset(ofSeq(s1$$7, comparer$$36), ofSeq(s2$$8, comparer$$36));
+export function isSubsetOf(s1$$7, s2$$8, comparer$$35) {
+  return isSubset(ofSeq(s1$$7, comparer$$35), ofSeq(s2$$8, comparer$$35));
 }
-export function isSupersetOf(s1$$8, s2$$9, comparer$$37) {
-  return isSuperset(ofSeq(s1$$8, comparer$$37), ofSeq(s2$$9, comparer$$37));
+export function isSupersetOf(s1$$8, s2$$9, comparer$$36) {
+  return isSuperset(ofSeq(s1$$8, comparer$$36), ofSeq(s2$$9, comparer$$36));
 }
-export function isProperSubsetOf(s1$$9, s2$$10, comparer$$38) {
-  return isProperSubset(ofSeq(s1$$9, comparer$$38), ofSeq(s2$$10, comparer$$38));
+export function isProperSubsetOf(s1$$9, s2$$10, comparer$$37) {
+  return isProperSubset(ofSeq(s1$$9, comparer$$37), ofSeq(s2$$10, comparer$$37));
 }
-export function isProperSupersetOf(s1$$10, s2$$11, comparer$$39) {
-  return isProperSuperset(ofSeq(s1$$10, comparer$$39), ofSeq(s2$$11, comparer$$39));
+export function isProperSupersetOf(s1$$10, s2$$11, comparer$$38) {
+  return isProperSuperset(ofSeq(s1$$10, comparer$$38), ofSeq(s2$$11, comparer$$38));
 }

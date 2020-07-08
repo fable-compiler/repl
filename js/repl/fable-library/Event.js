@@ -1,7 +1,7 @@
 import { Observer, protect } from "./Observable.js";
-import { some, tryValueIfChoice1, tryValueIfChoice2, value } from "./Option.js";
+import { some, tryValueIfChoice1Of2, tryValueIfChoice2Of2, value } from "./Option.js";
 import { iterate as seqIterate } from "./Seq.js";
-export default class Event {
+export class Event {
     constructor(_subscriber, delegates) {
         this._subscriber = _subscriber;
         this.delegates = delegates || new Array();
@@ -72,7 +72,7 @@ export function choose(chooser, sourceEvent) {
     } }, observer.OnError), observer.OnError, observer.OnCompleted)), source.delegates);
 }
 export function filter(predicate, sourceEvent) {
-    return choose((x) => predicate(x) ? some(x) : null, sourceEvent);
+    return choose((x) => predicate(x) ? some(x) : undefined, sourceEvent);
 }
 export function map(mapping, sourceEvent) {
     const source = sourceEvent;
@@ -150,8 +150,9 @@ export function scan(collector, state, sourceEvent) {
 }
 export function split(splitter, sourceEvent) {
     return [
-        choose((v) => tryValueIfChoice1(splitter(v)), sourceEvent),
-        choose((v) => tryValueIfChoice2(splitter(v)), sourceEvent),
+        choose((v) => tryValueIfChoice1Of2(splitter(v)), sourceEvent),
+        choose((v) => tryValueIfChoice2Of2(splitter(v)), sourceEvent),
     ];
 }
+export default Event;
 //# sourceMappingURL=Event.js.map

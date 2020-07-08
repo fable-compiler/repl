@@ -175,7 +175,7 @@ export function makeRangeStepFunction(step, last) {
             return [x, op_Addition(x, step)];
         }
         else {
-            return null;
+            return undefined;
         }
     };
 }

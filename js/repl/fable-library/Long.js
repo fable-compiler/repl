@@ -137,7 +137,7 @@ export function makeRangeStepFunction(step, last, unsigned) {
             return [x, op_Addition(x, step)];
         }
         else {
-            return null;
+            return undefined;
         }
     };
 }

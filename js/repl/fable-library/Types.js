@@ -28,18 +28,17 @@ export function declare(cons, superClass) {
     inherits(cons, superClass || SystemObject);
     return cons;
 }
-export function SystemObject() {
-    return;
+export class SystemObject {
+    toString() {
+        return "{" + Object.entries(this).map(([k, v]) => k + " = " + String(v)).join(";\n ") + "}";
+    }
+    GetHashCode(x) {
+        return identityHash(x !== null && x !== void 0 ? x : this);
+    }
+    Equals(x, y) {
+        return x === (y !== null && y !== void 0 ? y : this);
+    }
 }
-SystemObject.prototype.toString = function () {
-    return "{" + Object.keys(this).map((k) => k + " = " + String(this[k])).join(";\n ") + "}";
-};
-SystemObject.prototype.GetHashCode = function () {
-    return identityHash(this);
-};
-SystemObject.prototype.Equals = function (other) {
-    return this === other;
-};
 function compareList(self, other) {
     if (self === other) {
         return 0;
@@ -95,53 +94,56 @@ export class List {
         return compareList(this, other);
     }
 }
-export function Union(tag, name, ...fields) {
-    this.tag = tag | 0;
-    this.name = name;
-    this.fields = fields;
+export class Union extends SystemObject {
+    constructor(tag, name, ...fields) {
+        super();
+        this.tag = tag | 0;
+        this.name = name;
+        this.fields = fields;
+    }
+    toString() {
+        const len = this.fields.length;
+        if (len === 0) {
+            return this.name;
+        }
+        else if (len === 1) {
+            return this.name + " " + String(this.fields[0]);
+        }
+        else {
+            return this.name + " (" + this.fields.map((x) => String(x)).join(",") + ")";
+        }
+    }
+    toJSON() {
+        return this.fields.length === 0
+            ? this.name
+            : [this.name].concat(this.fields);
+    }
+    GetHashCode() {
+        const hashes = this.fields.map((x) => structuralHash(x));
+        hashes.splice(0, 0, numberHash(this.tag));
+        return combineHashCodes(hashes);
+    }
+    Equals(other) {
+        return this === other
+            || (sameType(this, other)
+                && this.tag === other.tag
+                && equalArrays(this.fields, other.fields));
+    }
+    CompareTo(other) {
+        if (this === other) {
+            return 0;
+        }
+        else if (!sameType(this, other)) {
+            return -1;
+        }
+        else if (this.tag === other.tag) {
+            return compareArrays(this.fields, other.fields);
+        }
+        else {
+            return this.tag < other.tag ? -1 : 1;
+        }
+    }
 }
-Union.prototype.toString = function () {
-    const len = this.fields.length;
-    if (len === 0) {
-        return this.name;
-    }
-    else if (len === 1) {
-        return this.name + " " + String(this.fields[0]);
-    }
-    else {
-        return this.name + " (" + this.fields.map((x) => String(x)).join(",") + ")";
-    }
-};
-Union.prototype.toJSON = function () {
-    return this.fields.length === 0
-        ? this.name
-        : [this.name].concat(this.fields);
-};
-Union.prototype.GetHashCode = function () {
-    const hashes = this.fields.map((x) => structuralHash(x));
-    hashes.splice(0, 0, numberHash(this.tag));
-    return combineHashCodes(hashes);
-};
-Union.prototype.Equals = function (other) {
-    return this === other
-        || (sameType(this, other)
-            && this.tag === other.tag
-            && equalArrays(this.fields, other.fields));
-};
-Union.prototype.CompareTo = function (other) {
-    if (this === other) {
-        return 0;
-    }
-    else if (!sameType(this, other)) {
-        return -1;
-    }
-    else if (this.tag === other.tag) {
-        return compareArrays(this.fields, other.fields);
-    }
-    else {
-        return this.tag < other.tag ? -1 : 1;
-    }
-};
 function recordToJson(record, getFieldNames) {
     const o = {};
     const keys = getFieldNames == null ? Object.keys(record) : getFieldNames(record);
@@ -185,31 +187,33 @@ function recordCompare(self, other, getFieldNames) {
         return 0;
     }
 }
-export function Record() {
-    return;
+export class Record extends SystemObject {
+    toString() {
+        return "{" + Object.entries(this).map(([k, v]) => k + " = " + String(v)).join(";\n ") + "}";
+    }
+    toJSON() {
+        return recordToJson(this);
+    }
+    GetHashCode() {
+        const hashes = Object.values(this).map((v) => structuralHash(v));
+        return combineHashCodes(hashes);
+    }
+    Equals(other) {
+        return recordEquals(this, other);
+    }
+    CompareTo(other) {
+        return recordCompare(this, other);
+    }
 }
-Record.prototype.toString = function () {
-    return "{" + Object.keys(this).map((k) => k + " = " + String(this[k])).join(";\n ") + "}";
-};
-Record.prototype.toJSON = function () {
-    return recordToJson(this);
-};
-Record.prototype.GetHashCode = function () {
-    const hashes = Object.keys(this).map((k) => structuralHash(this[k]));
-    return combineHashCodes(hashes);
-};
-Record.prototype.Equals = function (other) {
-    return recordEquals(this, other);
-};
-Record.prototype.CompareTo = function (other) {
-    return recordCompare(this, other);
-};
 export function anonRecord(o) {
     return Object.assign(Object.create(Record.prototype), o);
 }
-export const FSharpRef = declare(function FSharpRef(contents) {
-    this.contents = contents;
-}, Record);
+export class FSharpRef extends Record {
+    constructor(contents) {
+        super();
+        this.contents = contents;
+    }
+}
 export const Exception = declare(function Exception(message) {
     this.stack = Error().stack;
     this.message = message;
@@ -220,40 +224,45 @@ export function isException(x) {
 function getFSharpExceptionFieldNames(self) {
     return Object.keys(self).filter((k) => k !== "message" && k !== "stack");
 }
-export const FSharpException = declare(function FSharpException() {
-    Exception.call(this);
-}, Exception);
-FSharpException.prototype.toString = function () {
-    const fieldNames = getFSharpExceptionFieldNames(this);
-    const len = fieldNames.length;
-    if (len === 0) {
-        return this.message;
+export class FSharpException extends Exception {
+    toString() {
+        var _a;
+        // const fieldNames = getFSharpExceptionFieldNames(this);
+        const fields = Object.entries(this).filter(([k, _]) => k !== "message" && k !== "stack");
+        const len = fields.length;
+        if (len === 0) {
+            return (_a = this.message) !== null && _a !== void 0 ? _a : "";
+        }
+        else if (len === 1) {
+            return this.message + " " + String(fields[1]);
+        }
+        else {
+            return this.message + " (" + fields.map(([_, v]) => String(v)).join(",") + ")";
+        }
     }
-    else if (len === 1) {
-        return this.message + " " + String(this[fieldNames[0]]);
+    toJSON() {
+        return recordToJson(this, getFSharpExceptionFieldNames);
     }
-    else {
-        return this.message + " (" + fieldNames.map((k) => String(this[k])).join(",") + ")";
+    GetHashCode() {
+        const fields = Object.entries(this).filter(([k, _]) => k !== "message" && k !== "stack");
+        const hashes = fields.map(([_, v]) => structuralHash(v));
+        return combineHashCodes(hashes);
     }
-};
-FSharpException.prototype.toJSON = function () {
-    return recordToJson(this, getFSharpExceptionFieldNames);
-};
-FSharpException.prototype.GetHashCode = function () {
-    const hashes = getFSharpExceptionFieldNames(this).map((k) => structuralHash(this[k]));
-    return combineHashCodes(hashes);
-};
-FSharpException.prototype.Equals = function (other) {
-    return recordEquals(this, other, getFSharpExceptionFieldNames);
-};
-FSharpException.prototype.CompareTo = function (other) {
-    return recordCompare(this, other, getFSharpExceptionFieldNames);
-};
-export const MatchFailureException = declare(function MatchFailureException(arg1, arg2, arg3) {
-    this.arg1 = arg1;
-    this.arg2 = arg2 | 0;
-    this.arg3 = arg3 | 0;
-    this.message = "The match cases were incomplete";
-}, FSharpException);
+    Equals(other) {
+        return recordEquals(this, other, getFSharpExceptionFieldNames);
+    }
+    CompareTo(other) {
+        return recordCompare(this, other, getFSharpExceptionFieldNames);
+    }
+}
+export class MatchFailureException extends FSharpException {
+    constructor(arg1, arg2, arg3) {
+        super();
+        this.arg1 = arg1;
+        this.arg2 = arg2 | 0;
+        this.arg3 = arg3 | 0;
+        this.message = "The match cases were incomplete";
+    }
+}
 export const Attribute = declare(function Attribute() { return; }, SystemObject);
 //# sourceMappingURL=Types.js.map

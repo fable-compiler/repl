@@ -1,5 +1,5 @@
 import { declare, Record } from "../Types.js";
-import { type } from "../Reflection.js";
+import { class_type } from "../Reflection.js";
 import { BigNatModule$$$factorial as BigNatModule$0024$0024$0024factorial, BigNatModule$$$ofString as BigNatModule$0024$0024$0024ofString, BigNatModule$$$toFloat as BigNatModule$0024$0024$0024toFloat, BigNatModule$$$toUInt64 as BigNatModule$0024$0024$0024toUInt64, BigNatModule$$$toUInt32 as BigNatModule$0024$0024$0024toUInt32, BigNatModule$$$pow as BigNatModule$0024$0024$0024pow, BigNatModule$$$rem as BigNatModule$0024$0024$0024rem, BigNatModule$$$two as BigNatModule$0024$0024$0024two, BigNatModule$$$lte as BigNatModule$0024$0024$0024lte, BigNatModule$$$hcf as BigNatModule$0024$0024$0024hcf, BigNatModule$$$bitXor as BigNatModule$0024$0024$0024bitXor, BigNatModule$$$bitOr as BigNatModule$0024$0024$0024bitOr, BigNatModule$$$bitAnd as BigNatModule$0024$0024$0024bitAnd, BigNatModule$$$divmod as BigNatModule$0024$0024$0024divmod, BigNatModule$$$mul as BigNatModule$0024$0024$0024mul, BigNatModule$$$isOne as BigNatModule$0024$0024$0024isOne, BigNatModule$$$sub as BigNatModule$0024$0024$0024sub, BigNatModule$$$gte as BigNatModule$0024$0024$0024gte, BigNatModule$$$scale as BigNatModule$0024$0024$0024scale, BigNatModule$$$add as BigNatModule$0024$0024$0024add, BigNatModule$$$one as BigNatModule$0024$0024$0024one, BigNatModule$$$ofInt64 as BigNatModule$0024$0024$0024ofInt64, BigNatModule$$$toString as BigNatModule$0024$0024$0024toString, BigNatModule$$$hash as BigNatModule$0024$0024$0024hash, BigNatModule$$$gt as BigNatModule$0024$0024$0024gt, BigNatModule$$$lt as BigNatModule$0024$0024$0024lt, BigNatModule$$$isZero as BigNatModule$0024$0024$0024isZero, BigNatModule$$$equal as BigNatModule$0024$0024$0024equal, BigNatModule$$$getSmall as BigNatModule$0024$0024$0024getSmall, BigNatModule$$$isSmall as BigNatModule$0024$0024$0024isSmall, BigNatModule$$$ofInt32 as BigNatModule$0024$0024$0024ofInt32 } from "./n.js";
 import { initialize } from "../Array.js";
 import { op_Addition, op_Multiply, fromValue, equals, compare, fromBits, op_UnaryNegation, fromInteger } from "../Long.js";
@@ -7,11 +7,13 @@ import { op_UnaryNegation_Int32 } from "../Int32.js";
 import Decimal from "../Decimal.js";
 export const BigInteger = declare(function BigInt_BigInteger(signInt, v) {
   const $this$$1 = this;
+  void null;
   $this$$1.signInt = signInt;
   $this$$1.v = v;
+  void null;
 }, Record);
 export function BigInteger$reflection() {
-  return type("BigInt.BigInteger");
+  return class_type("BigInt.BigInteger", undefined, BigInteger);
 }
 export function BigInteger$$$$002Ector$$Z2BE94A1(signInt, v) {
   return this instanceof BigInteger ? BigInteger.call(this, signInt, v) : new BigInteger(signInt, v);
@@ -23,6 +25,7 @@ export function BigInteger$$$$002Ector$$Z2BE94A1(signInt, v) {
   BigInteger.one = BigInteger$$$$002Ector$$Z524259A4(1);
   BigInteger.two = BigInteger$$$$002Ector$$Z524259A4(2);
   BigInteger.zero = BigInteger$$$$002Ector$$Z524259A4(0);
+  void null;
 })();
 
 export function BigInteger$$$nat$$Z67CCE57D(n$$1) {
@@ -601,6 +604,8 @@ export function BigInteger$$$op_Multiply$$56F059C0(x$$14, y$$6) {
 export function BigInteger$$$DivRem$$56F059C0(x$$15, y$$7) {
   if (BigInteger$$get_IsZero(y$$7)) {
     throw new Error();
+  } else {
+    void null;
   }
 
   if (BigInteger$$get_IsZero(x$$15)) {
@@ -908,6 +913,8 @@ export function BigInteger$$$op_GreaterThanOrEqual$$56F059C0(x$$28, y$$17) {
 export function BigInteger$$$Pow$$62E082A2(x$$29, y$$18) {
   if (y$$18 < 0) {
     throw new Error("y");
+  } else {
+    void null;
   }
 
   const matchValue$$11 = [BigInteger$$get_IsZero(x$$29), y$$18];
@@ -1013,6 +1020,8 @@ export function BigInteger$$get_ToDecimal(x$$40) {
 export function BigInteger$$$Parse$$Z721C83C5(text) {
   if (text == null) {
     throw new Error("text");
+  } else {
+    void null;
   }
 
   const text$$1 = text.trim();
@@ -1020,6 +1029,8 @@ export function BigInteger$$$Parse$$Z721C83C5(text) {
 
   if (len === 0) {
     throw new Error();
+  } else {
+    void null;
   }
 
   const matchValue$$13 = [text$$1[0], len];
@@ -1050,6 +1061,8 @@ export function BigInteger$$get_IsSmall(x$$41) {
 export function BigInteger$$$Factorial$$Z665282C2(x$$42) {
   if (BigInteger$$get_IsNegative(x$$42)) {
     throw new Error("mustBeNonNegative\\nParameter name: x");
+  } else {
+    void null;
   }
 
   if (BigInteger$$get_IsPositive(x$$42)) {

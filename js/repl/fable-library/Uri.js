@@ -1,4 +1,4 @@
-export default class Uri {
+export class Uri {
     constructor(value, kindOrUri = 1 /* Absolute */) {
         if (typeof value === "string" && typeof kindOrUri === "number") {
             if (kindOrUri === 1 /* Absolute */) {
@@ -92,4 +92,5 @@ export default class Uri {
         return this.parseUrl().hash;
     }
 }
+export default Uri;
 //# sourceMappingURL=Uri.js.map

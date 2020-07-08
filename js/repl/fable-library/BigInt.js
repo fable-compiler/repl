@@ -261,6 +261,8 @@ export function toByteArray(value$$1) {
 export function fromByteArray(bytes) {
   if (bytes == null) {
     throw new Error("bytes");
+  } else {
+    void null;
   }
 
   if (bytes.length === 0) {
@@ -330,12 +332,14 @@ export function makeRangeStepFunction(step, last) {
 
   if (stepComparedWithZero === 0) {
     throw new Error("The step of a range cannot be zero");
+  } else {
+    void null;
   }
 
   const stepGreaterThanZero = stepComparedWithZero > 0;
   return function (x$$20) {
     const comparedWithLast = x$$20.CompareTo(last) | 0;
-    return ((stepGreaterThanZero ? comparedWithLast <= 0 : false) ? true : !stepGreaterThanZero ? comparedWithLast >= 0 : false) ? [x$$20, BigInteger$0024$0024$0024op_Addition$0024$002456F059C0(x$$20, step)] : null;
+    return ((stepGreaterThanZero ? comparedWithLast <= 0 : false) ? true : !stepGreaterThanZero ? comparedWithLast >= 0 : false) ? [x$$20, BigInteger$0024$0024$0024op_Addition$0024$002456F059C0(x$$20, step)] : undefined;
   };
 }
 export function range(first, step$$1, last$$1) {

@@ -9,10 +9,10 @@ export class CaseInfo {
     }
 }
 export class TypeInfo {
-    constructor(fullname, generics, constructor, fields, cases, enumCases) {
+    constructor(fullname, generics, construct, fields, cases, enumCases) {
         this.fullname = fullname;
         this.generics = generics;
-        this.constructor = constructor;
+        this.construct = construct;
         this.fields = fields;
         this.cases = cases;
         this.enumCases = enumCases;
@@ -50,56 +50,56 @@ export function compare(t1, t2) {
         return compareArraysWith(getGenerics(t1), getGenerics(t2), compare);
     }
 }
-export function type(fullname, generics) {
-    return new TypeInfo(fullname, generics);
+export function class_type(fullname, generics, construct) {
+    return new TypeInfo(fullname, generics, construct);
 }
-export function record(fullname, generics, constructor, fields) {
-    return new TypeInfo(fullname, generics, constructor, fields);
+export function record_type(fullname, generics, construct, fields) {
+    return new TypeInfo(fullname, generics, construct, fields);
 }
-export function anonRecord(...fields) {
+export function anonRecord_type(...fields) {
     return new TypeInfo("", undefined, undefined, () => fields);
 }
-export function union(fullname, generics, constructor, cases) {
-    const t = new TypeInfo(fullname, generics, constructor, undefined, () => cases().map((x, i) => typeof x === "string"
+export function union_type(fullname, generics, construct, cases) {
+    const t = new TypeInfo(fullname, generics, construct, undefined, () => cases().map((x, i) => typeof x === "string"
         ? new CaseInfo(t, i, x)
         : new CaseInfo(t, i, x[0], x[1])));
     return t;
 }
-export function tuple(...generics) {
+export function tuple_type(...generics) {
     return new TypeInfo("System.Tuple`" + generics.length, generics);
 }
-export function delegate(...generics) {
+export function delegate_type(...generics) {
     return new TypeInfo("System.Func`" + generics.length, generics);
 }
-export function lambda(argType, returnType) {
+export function lambda_type(argType, returnType) {
     return new TypeInfo("Microsoft.FSharp.Core.FSharpFunc`2", [argType, returnType]);
 }
-export function option(generic) {
+export function option_type(generic) {
     return new TypeInfo("Microsoft.FSharp.Core.FSharpOption`1", [generic]);
 }
-export function list(generic) {
+export function list_type(generic) {
     return new TypeInfo("Microsoft.FSharp.Collections.FSharpList`1", [generic]);
 }
-export function array(generic) {
+export function array_type(generic) {
     return new TypeInfo(generic.fullname + "[]", [generic]);
 }
-export function enumType(fullname, underlyingType, enumCases) {
+export function enum_type(fullname, underlyingType, enumCases) {
     return new TypeInfo(fullname, [underlyingType], undefined, undefined, undefined, enumCases);
 }
-export const obj = new TypeInfo("System.Object");
-export const unit = new TypeInfo("Microsoft.FSharp.Core.Unit");
-export const char = new TypeInfo("System.Char");
-export const string = new TypeInfo("System.String");
-export const bool = new TypeInfo("System.Boolean");
-export const int8 = new TypeInfo("System.SByte");
-export const uint8 = new TypeInfo("System.Byte");
-export const int16 = new TypeInfo("System.Int16");
-export const uint16 = new TypeInfo("System.UInt16");
-export const int32 = new TypeInfo("System.Int32");
-export const uint32 = new TypeInfo("System.UInt32");
-export const float32 = new TypeInfo("System.Single");
-export const float64 = new TypeInfo("System.Double");
-export const decimal = new TypeInfo("System.Decimal");
+export const obj_type = new TypeInfo("System.Object");
+export const unit_type = new TypeInfo("Microsoft.FSharp.Core.Unit");
+export const char_type = new TypeInfo("System.Char");
+export const string_type = new TypeInfo("System.String");
+export const bool_type = new TypeInfo("System.Boolean");
+export const int8_type = new TypeInfo("System.SByte");
+export const uint8_type = new TypeInfo("System.Byte");
+export const int16_type = new TypeInfo("System.Int16");
+export const uint16_type = new TypeInfo("System.UInt16");
+export const int32_type = new TypeInfo("System.Int32");
+export const uint32_type = new TypeInfo("System.UInt32");
+export const float32_type = new TypeInfo("System.Single");
+export const float64_type = new TypeInfo("System.Double");
+export const decimal_type = new TypeInfo("System.Decimal");
 export function name(info) {
     if (Array.isArray(info)) {
         return info[0];
@@ -143,7 +143,7 @@ export function isEnum(t) {
  * but it should be enough for type comparison purposes
  */
 export function getGenericTypeDefinition(t) {
-    return t.generics == null ? t : new TypeInfo(t.fullname, t.generics.map(() => obj));
+    return t.generics == null ? t : new TypeInfo(t.fullname, t.generics.map(() => obj_type));
 }
 export function getEnumUnderlyingType(t) {
     var _a;
@@ -293,8 +293,8 @@ export function makeUnion(uci, values) {
     if (values.length !== expectedLength) {
         throw new Error(`Expected an array of length ${expectedLength} but got ${values.length}`);
     }
-    return uci.declaringType.constructor != null
-        ? new uci.declaringType.constructor(uci.tag, uci.name, ...values)
+    return uci.declaringType.construct != null
+        ? new uci.declaringType.construct(uci.tag, uci.name, ...values)
         : {};
 }
 export function makeRecord(t, values) {
@@ -302,8 +302,8 @@ export function makeRecord(t, values) {
     if (fields.length !== values.length) {
         throw new Error(`Expected an array of length ${fields.length} but got ${values.length}`);
     }
-    return t.constructor != null
-        ? new t.constructor(...values)
+    return t.construct != null
+        ? new t.construct(...values)
         : makeAnonRecord(fields.reduce((obj, [key, _t], i) => {
             obj[key] = values[i];
             return obj;
@@ -311,6 +311,19 @@ export function makeRecord(t, values) {
 }
 export function makeTuple(values, _t) {
     return values;
+}
+export function makeGenericType(t, generics) {
+    return new TypeInfo(t.fullname, generics, t.construct, t.fields, t.cases);
+}
+export function createInstance(t, consArgs) {
+    // TODO: Check if consArgs length is same as t.construct?
+    // (Arg types can still be different)
+    if (typeof t.construct === "function") {
+        return new t.construct(...(consArgs !== null && consArgs !== void 0 ? consArgs : []));
+    }
+    else {
+        throw new Error(`Cannot access constructor of ${t.fullname}`);
+    }
 }
 export function getValue(propertyInfo, v) {
     return v[propertyInfo[0]];

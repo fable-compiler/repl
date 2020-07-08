@@ -1,9 +1,11 @@
 import { declare } from "./Types.js";
-import { type } from "./Reflection.js";
+import { class_type } from "./Reflection.js";
 import { structuralHash, equals, compare } from "./Util.js";
-export const Comparer$00601 = declare(function System_Collections_Generic_Comparer() {});
+export const Comparer$00601 = declare(function System_Collections_Generic_Comparer() {
+  void null;
+});
 export function Comparer$00601$reflection($gen$$3) {
-  return type("System.Collections.Generic.Comparer`1", [$gen$$3]);
+  return class_type("System.Collections.Generic.Comparer`1", [$gen$$3], Comparer$00601);
 }
 export function Comparer$00601$$$$002Ector() {
   return this instanceof Comparer$00601 ? Comparer$00601.call(this) : new Comparer$00601();
@@ -21,9 +23,11 @@ Comparer$00601.prototype.Compare = function (x$$1, y$$1) {
   return compare(x$$1, y$$1);
 };
 
-export const EqualityComparer$00601 = declare(function System_Collections_Generic_EqualityComparer() {});
+export const EqualityComparer$00601 = declare(function System_Collections_Generic_EqualityComparer() {
+  void null;
+});
 export function EqualityComparer$00601$reflection($gen$$4) {
-  return type("System.Collections.Generic.EqualityComparer`1", [$gen$$4]);
+  return class_type("System.Collections.Generic.EqualityComparer`1", [$gen$$4], EqualityComparer$00601);
 }
 export function EqualityComparer$00601$$$$002Ector() {
   return this instanceof EqualityComparer$00601 ? EqualityComparer$00601.call(this) : new EqualityComparer$00601();

@@ -1,4 +1,4 @@
-import { declare, Union } from "./Types.js";
+import { Union } from "./Types.js";
 import { compare, equals, structuralHash } from "./Util.js";
 // Using a class here for better compatibility with TS files importing Some
 export class Some {
@@ -56,46 +56,56 @@ export function defaultArgWith(opt, defThunk) {
     return (opt != null) ? value(opt) : defThunk();
 }
 export function filter(predicate, opt) {
-    return (opt != null) ? (predicate(value(opt)) ? opt : null) : opt;
+    return (opt != null) ? (predicate(value(opt)) ? opt : undefined) : opt;
 }
 export function map(mapping, opt) {
-    return (opt != null) ? some(mapping(value(opt))) : null;
+    return (opt != null) ? some(mapping(value(opt))) : undefined;
 }
 export function map2(mapping, opt1, opt2) {
-    return (opt1 != null && opt2 != null) ? mapping(value(opt1), value(opt2)) : null;
+    return (opt1 != null && opt2 != null) ? mapping(value(opt1), value(opt2)) : undefined;
 }
 export function map3(mapping, opt1, opt2, opt3) {
-    return (opt1 != null && opt2 != null && opt3 != null) ? mapping(value(opt1), value(opt2), value(opt3)) : null;
+    return (opt1 != null && opt2 != null && opt3 != null) ? mapping(value(opt1), value(opt2), value(opt3)) : undefined;
 }
 export function bind(binder, opt) {
-    return opt != null ? binder(value(opt)) : null;
+    return opt != null ? binder(value(opt)) : undefined;
 }
 export function tryOp(op, arg) {
     try {
         return some(op(arg));
     }
     catch (_a) {
-        return null;
+        return undefined;
     }
 }
-export const Choice = declare(function Choice(tag, name, field) {
-    Union.call(this, tag, name, field);
-}, Union);
-export function choice1(x) {
+// CHOICE
+export class Choice extends Union {
+}
+export class Choice3 extends Union {
+}
+export class Choice4 extends Union {
+}
+export class Choice5 extends Union {
+}
+export class Choice6 extends Union {
+}
+export class Choice7 extends Union {
+}
+export function choice1Of2(x) {
     return new Choice(0, "Choice1Of2", x);
 }
-export function choice2(x) {
+export function choice2Of2(x) {
     return new Choice(1, "Choice2Of2", x);
 }
-export function tryValueIfChoice1(x) {
-    return x.tag === 0 ? some(x.fields[0]) : null;
+export function tryValueIfChoice1Of2(x) {
+    return x.tag === 0 ? some(x.fields[0]) : undefined;
 }
-export function tryValueIfChoice2(x) {
-    return x.tag === 1 ? some(x.fields[0]) : null;
+export function tryValueIfChoice2Of2(x) {
+    return x.tag === 1 ? some(x.fields[0]) : undefined;
 }
-export const Result = declare(function Result(tag, name, field) {
-    Union.call(this, tag, name, field);
-}, Union);
+// RESULT
+export class Result extends Union {
+}
 export function ok(x) {
     return new Result(0, "Ok", x);
 }

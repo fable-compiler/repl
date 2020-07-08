@@ -1,5 +1,5 @@
 import Event from "./Event.js";
-export default class Timer {
+export class Timer {
     constructor(interval) {
         this._enabled = false;
         this._isDisposed = false;
@@ -64,4 +64,5 @@ export default class Timer {
         this.Enabled = false;
     }
 }
+export default Timer;
 //# sourceMappingURL=Timer.js.map
