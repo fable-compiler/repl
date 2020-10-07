@@ -19,15 +19,15 @@ let [<Literal>] ESC_KEY = 27.
 let [<Literal>] ENTER_KEY = 13.
 
 type WhatIsVisible =
-   | All 
+   | All
    | Active
-   | Completed 
+   | Completed
 
-let toStr v = 
+let toStr v =
     match v with
-    |All -> "All"
-    |Active -> "Active"
-    |Completed -> "Completed"
+    | All -> "All"
+    | Active -> "Active"
+    | Completed -> "Completed"
 
 // MODEL
 type Entry =
