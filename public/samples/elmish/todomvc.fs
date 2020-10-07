@@ -45,7 +45,7 @@ type Model =
 
 let emptyModel () =
     { entries = []
-      visibility = WhatIsVisible.All
+      visibility = All
       field = ""
       uid = 0 }
 
@@ -218,11 +218,11 @@ let visibilitySwap uri visibility actualVisibility dispatch =
 let viewControlsFilters visibility dispatch =
   ul
     [ Class "filters" ]
-    [ visibilitySwap "#/" WhatIsVisible.All visibility dispatch
+    [ visibilitySwap "#/" All visibility dispatch
       str " "
-      visibilitySwap "#/active" WhatIsVisible.Active visibility dispatch
+      visibilitySwap "#/active" Active visibility dispatch
       str " "
-      visibilitySwap "#/completed" WhatIsVisible.Completed visibility dispatch ]
+      visibilitySwap "#/completed" Completed visibility dispatch ]
 
 let viewControlsCount entriesLeft =
   let item =
