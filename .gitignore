@@ -1,3 +1,4 @@
+*.fs.js
 public/js
 public/libs
 public/metadata

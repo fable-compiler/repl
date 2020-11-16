@@ -38,7 +38,6 @@ let view (model : Model) =
                 row "FCS checker" model.FCS_checker
                 row "FCS parsing" model.FCS_parsing
                 row "Fable transform" model.Fable_transform
-                row "Babel generation" model.Babel_generation
             ]
         ]
     ]

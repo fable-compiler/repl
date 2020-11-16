@@ -6,8 +6,7 @@ open Fable.Core
 
 [<RequireQualifiedAccess>]
 module Literals =
-    let [<Literal>] REPL_VERSION = "2.1.1" // Do not edit manually
-    let [<Literal>] FABLE_VERSION = "2.10.1" // Do not edit manually
+    let [<Literal>] REPL_VERSION = "3.0.0-rc" // Do not edit manually
     let [<Literal>] STORAGE_KEY = "fable-repl"
     let [<Literal>] MAX_LOGS_LENGTH = 200
     // let [<Literal>] HOST =
@@ -30,7 +29,8 @@ module Literals =
           "Browser.Event"
           "Browser.WebStorage"
           "Browser.Dom"
-          "Fable.Repl.Lib"|]
+        //   "Fable.Repl.Lib"
+        |]
 
 let [<Global>] private setTimeout(f: unit->unit, ms: int): unit = jsNative
 

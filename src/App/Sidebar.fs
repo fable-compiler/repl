@@ -6,13 +6,14 @@ open Feliz
 open Feliz.Bulma
 
 type Model =
-    { 
+    {
         IsExpanded : bool
+        FableVersion: string
         WidgetsState : Set<string>
         Samples : Widgets.Samples.Model
         Options : Widgets.Options.Model
         General : Widgets.General.Model
-        Statistics : Widgets.Stats.Model 
+        Statistics : Widgets.Stats.Model
     }
 
 type Msg =
@@ -34,19 +35,19 @@ type ExternalMsg =
 
 let init () =
     let samplesModel, samplesCmd = Widgets.Samples.init ()
-    { 
+    {
         IsExpanded = false
+        FableVersion = "0.0.0"
         WidgetsState = Set.empty
         General = Widgets.General.init()
         Samples = samplesModel
         Options = Widgets.Options.init ()
         Statistics =
-            { 
+            {
                 FCS_checker = 0.
                 FCS_parsing = 0.
                 Fable_transform = 0.
-                Babel_generation = 0. 
-            } 
+            }
     }
     , Cmd.map SamplesMsg samplesCmd
 
@@ -60,8 +61,8 @@ let update msg model =
             | Widgets.Samples.NoOp -> NoOp
             | Widgets.Samples.LoadSample (fsharpCode, htmlCode, cssCode) -> LoadSample (fsharpCode, htmlCode, cssCode)
 
-        { model with 
-            Samples = samplesModel 
+        { model with
+            Samples = samplesModel
         }
         , Cmd.map SamplesMsg samplesCmd
         , extraMsg
@@ -69,7 +70,7 @@ let update msg model =
     | OptionsMsg msg ->
         let optionsModel = Widgets.Options.update msg model.Options
         { model with
-            Options = optionsModel 
+            Options = optionsModel
         }
         , Cmd.none
         , NoOp
@@ -87,8 +88,8 @@ let update msg model =
             | Widgets.General.ExternalMessage.ShareToGist -> ShareToGist
 
 
-        { model with 
-            General = generalModel 
+        { model with
+            General = generalModel
         }
         , Cmd.none
         , externalMsg
@@ -100,22 +101,22 @@ let update msg model =
             else
                 model.WidgetsState.Add id
 
-        { model with 
-            WidgetsState = newWidgetsState 
+        { model with
+            WidgetsState = newWidgetsState
         }
         , Cmd.none
         , NoOp
 
     | ToggleState ->
-        { model with 
-            IsExpanded = not model.IsExpanded 
+        { model with
+            IsExpanded = not model.IsExpanded
         }
         , Cmd.none
         , NoOp
 
     | UpdateStats stats ->
-        { model with 
-            Statistics = stats 
+        { model with
+            Statistics = stats
         }
         , Cmd.none
         , NoOp
@@ -241,7 +242,7 @@ let private sidebarContainer dispatch (sections : ReactElement list) =
                         prop.src "img/fable-ionide.png"
                     ]
                     Bulma.title.h4 "Fable REPL"
-                ] 
+                ]
             ]
 
             Html.div [
@@ -270,13 +271,13 @@ let private expandButton dispatch =
 
 let view (isCompiling : bool) (model: Model) dispatch =
     let widgets =
-        [ 
+        [
             if model.IsExpanded then
-                "General", Fa.Solid.Th, Widgets.General.viewExpanded isCompiling model.Options.GistToken model.General (GeneralMsg >> dispatch), None           
+                "General", Fa.Solid.Th, Widgets.General.viewExpanded isCompiling model.Options.GistToken model.General (GeneralMsg >> dispatch), None
             "Samples", Fa.Solid.Book, Widgets.Samples.view model.Samples (SamplesMsg >> dispatch), Some 500
             "Options", Fa.Solid.Cog, Widgets.Options.view model.Options (OptionsMsg >> dispatch), None
             "Statistics", Fa.Regular.Clock, Widgets.Stats.view model.Statistics, None
-            "About", Fa.Solid.Info, Widgets.About.view, None 
+            "About", Fa.Solid.Info, Widgets.About.view model.FableVersion, None
         ]
         |> List.map (renderWidgets model dispatch)
 
@@ -290,7 +291,7 @@ let view (isCompiling : bool) (model: Model) dispatch =
             prop.className "sidebar is-collapsed"
             prop.children [
                 Widgets.General.viewModalResetConfirmation model.General (GeneralMsg >> dispatch)
-                
+
                 Html.div [
                     prop.className "brand"
                     prop.children [
@@ -304,7 +305,7 @@ let view (isCompiling : bool) (model: Model) dispatch =
                     prop.className "widgets-list"
                     prop.children (generalCollapsedView::widgets)
                 ]
-                
-                expandButton dispatch 
+
+                expandButton dispatch
             ]
         ]

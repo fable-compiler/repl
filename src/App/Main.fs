@@ -60,7 +60,7 @@ type EditorCollapse =
     | FSharpOnly
 
 type Model =
-    { 
+    {
         FSharpEditor: IEditor
         Worker: ObservableWorker<WorkerAnswer>
         State: State
@@ -76,14 +76,14 @@ type Model =
         PanelSplitRatio : float
         Sidebar : Sidebar.Model
         IsProblemsPanelExpanded : bool
-        Logs : ConsolePanel.Log list 
+        Logs : ConsolePanel.Log list
     }
 
 type EndCompileStatus = Result<string * Fable.Standalone.Error[], string>
 
 type Msg =
     | SetFSharpEditor of IEditor
-    | LoadSuccess
+    | LoadSuccess of version: string
     | LoadFail
     | ParseEditorCode
     | Reset
@@ -136,12 +136,12 @@ let fetchAs<'T> (url: string) (decoder: Decoder<'T>) (init: RequestProperties li
     }
 
 let private addLog log (model : Model) =
-    { model with 
+    { model with
         Logs =
             if model.Logs.Length >= Literals.MAX_LOGS_LENGTH then
                 model.Logs.Tail @ [log]
             else
-                model.Logs @ [log] 
+                model.Logs @ [log]
     }
 
 let private generateHtmlUrl (model: Model) jsCode =
@@ -205,7 +205,7 @@ let private loadGist =
             let! code = recover code
             let! html = recover html
             let! css = css |> Option.map recover |> Option.defaultValue (Promise.lift "")
-            return (code, html, css) 
+            return (code, html, css)
         }
 
 let private showGlobalErrorToast msg =
@@ -219,7 +219,7 @@ let private showGlobalErrorToast msg =
 
 let update msg (model : Model) =
     match msg with
-    | LoadSuccess ->
+    | LoadSuccess version ->
         let activateParsing dispatch =
             let obs = createObservable(fun trigger ->
                 model.FSharpEditor.getModel().onDidChangeContent(fun _ -> trigger()) |> ignore)
@@ -241,19 +241,20 @@ let update msg (model : Model) =
             else
                 Cmd.none
 
-        { model with 
-            State = Idle 
+        { model with
+            State = Idle
+            Sidebar = { model.Sidebar with FableVersion = version }
         }
-        , Cmd.batch [ 
+        , Cmd.batch [
             [ activateParsing ]
             Cmd.ofMsg (StartCompile None)
-            browserAdviceCommand 
+            browserAdviceCommand
         ]
 
     | LoadFail ->
         let msg = "Assemblies couldn't be loaded. Some firewalls prevent download of binary files, please check."
-        { model with 
-            State = Idle 
+        { model with
+            State = Idle
         }
         , showGlobalErrorToast msg
 
@@ -263,15 +264,15 @@ let update msg (model : Model) =
         model
         , Cmd.none
 
-    | SetFSharpEditor ed -> 
-        { model with 
-            FSharpEditor = ed 
+    | SetFSharpEditor ed ->
+        { model with
+            FSharpEditor = ed
         }
         , Cmd.none
 
     | ToggleProblemsPanel ->
-        { model with 
-            IsProblemsPanelExpanded = not model.IsProblemsPanelExpanded 
+        { model with
+            IsProblemsPanelExpanded = not model.IsProblemsPanelExpanded
         }
         , Cmd.none
 
@@ -282,21 +283,21 @@ let update msg (model : Model) =
     | Reset ->
         window.localStorage.removeItem(Literals.STORAGE_KEY)
         let saved = loadState(Literals.STORAGE_KEY)
-        { model with 
+        { model with
             FSharpCode = saved.code
             HtmlCode = saved.html
             CssCode = saved.css
             CodeES2015 = ""
             IFrameUrl = ""
-            Logs = [] 
+            Logs = []
         }
         , Router.newUrl Router.Home
 
     | GistLoaded (code, html, css) ->
-        { model with 
+        { model with
             FSharpCode = code
             HtmlCode = html
-            CssCode = css 
+            CssCode = css
         }
         , Cmd.ofMsg (StartCompile (Some code))
 
@@ -304,7 +305,7 @@ let update msg (model : Model) =
         model
         , Cmd.batch [
             Router.modifyUrl (Router.LoadGist (Some gist))
-            Cmd.ofMsg (ShareableUrlReady ()) 
+            Cmd.ofMsg (ShareableUrlReady ())
         ]
 
     | ShareGistError exn ->
@@ -325,22 +326,22 @@ let update msg (model : Model) =
 
     | UrlHashChange ->
         let parsed = loadState(Literals.STORAGE_KEY)
-        { model with 
+        { model with
             FSharpCode = parsed.code
             HtmlCode = parsed.html
-            CssCode = parsed.css 
+            CssCode = parsed.css
         }
         , Cmd.ofMsg (StartCompile (Some parsed.code))
 
     | MarkEditorErrors errors ->
-        { model with 
-            FSharpErrors = mapErrorToMarker errors 
+        { model with
+            FSharpErrors = mapErrorToMarker errors
         }
         , Cmd.none
 
     | StartCompile code ->
         match model.State with
-        | Loading | Compiling -> 
+        | Loading | Compiling ->
             model
             , Cmd.none
 
@@ -351,9 +352,9 @@ let update msg (model : Model) =
                 | None -> model.FSharpCode
             let opts = model.Sidebar.Options
             CompileCode(code, opts.ToOtherFSharpOptions) |> model.Worker.Post
-            
-            { model with 
-                State = Compiling 
+
+            { model with
+                State = Compiling
             }
             , Cmd.none
 
@@ -368,11 +369,11 @@ let update msg (model : Model) =
                     |> Toast.icon Fa.Solid.Exclamation
                     |> Toast.dismissOnClick
                     |> Toast.error
-                
-                { model with 
+
+                { model with
                     State = Compiled
                     FSharpErrors = mapErrorToMarker errors
-                    Logs = [ ConsolePanel.Log.Separator ] 
+                    Logs = [ ConsolePanel.Log.Separator ]
                 }
                 , toastCmd
 
@@ -383,39 +384,39 @@ let update msg (model : Model) =
                     |> Toast.icon Fa.Solid.Check
                     |> Toast.dismissOnClick
                     |> Toast.success
-                
-                { model with 
+
+                { model with
                     CodeES2015 = codeES2015
                     State = Compiled
                     FSharpErrors = mapErrorToMarker errors
-                    Logs = [ ConsolePanel.Log.Separator ] 
+                    Logs = [ ConsolePanel.Log.Separator ]
                 }
-                , Cmd.batch [ 
+                , Cmd.batch [
                     Cmd.OfFunc.perform (generateHtmlUrl model) codeES2015 SetIFrameUrl
-                    toastCmd 
+                    toastCmd
                 ]
 
         | Error msg ->
-            { model with 
-                State = Compiled 
+            { model with
+                State = Compiled
             }
             , showGlobalErrorToast msg
 
     | SetIFrameUrl newUrl ->
-        { model with 
-            IFrameUrl = newUrl 
+        { model with
+            IFrameUrl = newUrl
         }
         , Cmd.none
 
     | SetOutputTab newTab ->
-        { model with 
-            OutputTab = newTab 
+        { model with
+            OutputTab = newTab
         }
         , Cmd.none
 
     | SetCodeTab newTab ->
-        { model with 
-            CodeTab = newTab 
+        { model with
+            CodeTab = newTab
         }
         , Cmd.none
 
@@ -425,7 +426,7 @@ let update msg (model : Model) =
             | NoTarget -> Cmd.none
             | PanelSplitter ->
                 Cmd.ofMsg PanelDragEnded
-        
+
         model
         , cmd
 
@@ -435,19 +436,19 @@ let update msg (model : Model) =
             | NoTarget -> Cmd.none
             | PanelSplitter ->
                 Cmd.ofMsg (PanelDrag position)
-        
+
         model
         , cmd
 
     | PanelDragStarted ->
-        { model with 
-            DragTarget = PanelSplitter 
+        { model with
+            DragTarget = PanelSplitter
         }
         , Cmd.none
 
     | PanelDragEnded ->
-        { model with 
-            DragTarget = NoTarget 
+        { model with
+            DragTarget = NoTarget
         }
         , Cmd.none
 
@@ -461,8 +462,8 @@ let update msg (model : Model) =
             |> clamp 0.2 0.8
         // printfn "PANELDRAG: x %f offset %f innerWidth %f splitRatio %f"
         //     position.X offset window.innerWidth splitRatio
-        { model with 
-            PanelSplitRatio = splitRatio 
+        { model with
+            PanelSplitRatio = splitRatio
         }
         , Cmd.none
 
@@ -476,11 +477,11 @@ let update msg (model : Model) =
                     match model.State with
                     | Loading -> Cmd.none
                     | _ -> Cmd.ofMsg (StartCompile (Some fsharpCode)) // Trigger a new compilation
-                
-                { model with 
+
+                { model with
                     FSharpCode = fsharpCode
                     HtmlCode = htmlCode
-                    CssCode = cssCode 
+                    CssCode = cssCode
                 }
                 , cmd
 
@@ -508,29 +509,29 @@ let update msg (model : Model) =
                 model
                 , Cmd.ofMsg RefreshIframe
 
-        { newModel with 
-            Sidebar = subModel 
+        { newModel with
+            Sidebar = subModel
         }
-        , Cmd.batch [ 
+        , Cmd.batch [
             Cmd.map SidebarMsg cmd
-            extraCmd 
+            extraCmd
         ]
 
     | ChangeFsharpCode newCode ->
-        { model with 
-            FSharpCode = newCode 
+        { model with
+            FSharpCode = newCode
         }
         , Cmd.none
 
     | ChangeHtmlCode newCode ->
-        { model with 
-            HtmlCode = newCode 
+        { model with
+            HtmlCode = newCode
         }
         , Cmd.none
 
     | ChangeCssCode newCode ->
-        { model with 
-            CssCode = newCode 
+        { model with
+            CssCode = newCode
         }
         , Cmd.none
 
@@ -564,8 +565,8 @@ let update msg (model : Model) =
         , Cmd.ofMsg (SidebarMsg (Sidebar.UpdateStats stats))
 
     | RefreshIframe ->
-        { model with 
-            Logs = [ ConsolePanel.Log.Separator ] 
+        { model with
+            Logs = [ ConsolePanel.Log.Separator ]
         }
         , Cmd.OfFunc.perform (Generator.generateHtmlBlobUrl model.HtmlCode model.CssCode) model.CodeES2015 SetIFrameUrl
 
@@ -588,8 +589,8 @@ let workerCmd (worker : ObservableWorker<_>)=
     let handler dispatch =
         worker
         |> Observable.add (function
-            | Loaded ->
-                LoadSuccess |> dispatch
+            | Loaded version ->
+                LoadSuccess version |> dispatch
             | LoadFailed -> LoadFail |> dispatch
             | ParsedCode errors -> MarkEditorErrors errors |> dispatch
             | CompilationFinished (jsCode, errors, stats) ->
@@ -607,9 +608,7 @@ let init () =
     let saved = loadState(Literals.STORAGE_KEY)
     let sidebarModel, sidebarCmd = Sidebar.init ()
     let worker = ObservableWorker(Worker(), WorkerAnswer.Decoder, "MAIN APP")
-    CreateChecker(Literals.METADATA_DIR, Literals.EXTRA_REFS,
-                  Some ".txt", Some Literals.REPL_LIB_MAP_JSON_URL,
-                  sidebarModel.Options.ToOtherFSharpOptions)
+    CreateChecker(Literals.METADATA_DIR, Literals.EXTRA_REFS, Some ".txt", sidebarModel.Options.ToOtherFSharpOptions)
     |> worker.Post
     let cmd = Cmd.batch [
                 Cmd.ups MouseUp
@@ -623,7 +622,7 @@ let init () =
                 Cmd.map SidebarMsg sidebarCmd
                 workerCmd worker ]
 
-    { 
+    {
         State = Loading
         FSharpEditor = Unchecked.defaultof<IEditor>
         Worker = worker
@@ -639,7 +638,7 @@ let init () =
         PanelSplitRatio = 0.5
         Sidebar = sidebarModel
         IsProblemsPanelExpanded = true
-        Logs = [] 
+        Logs = []
     }, cmd
 
 
@@ -749,11 +748,11 @@ let private problemsPanel (isExpanded : bool) (errors : Monaco.Editor.IMarkerDat
 
     let title =
         if errors.Length = 0 then
-            Html.span [ 
-                prop.text "Problems" 
-            ] 
+            Html.span [
+                prop.text "Problems"
+            ]
         else
-            Html.span [ 
+            Html.span [
                 prop.children [
                     Html.text  "Problems: "
                     Html.span [
@@ -786,12 +785,12 @@ let private problemsPanel (isExpanded : bool) (errors : Monaco.Editor.IMarkerDat
                         prop.children [ title ]
                     ]
 
-                    Html.div [ 
+                    Html.div [
                         prop.className "scrollable-panel-header-icon"
-                        prop.children [ 
-                            Bulma.icon [ 
-                                Fa.i [ headerIcon; Fa.Size Fa.FaLarge ] [ ] 
-                            ] 
+                        prop.children [
+                            Bulma.icon [
+                                Fa.i [ headerIcon; Fa.Size Fa.FaLarge ] [ ]
+                            ]
                         ]
                     ]
                 ]
@@ -825,7 +824,7 @@ let private problemsPanel (isExpanded : bool) (errors : Monaco.Editor.IMarkerDat
                                             Fa.i [ faIcon ] []
                                         ]
                                     ]
-                                    
+
                                     Html.span [
                                         prop.className "scrollable-panel-body-row-description"
                                         prop.text error.message
@@ -918,25 +917,25 @@ let private editorArea model dispatch =
         prop.children [
             editorTabs model.CodeTab dispatch
             // Html editor
-            ReactEditor.editor [ 
+            ReactEditor.editor [
                 editor.options (htmlEditorOptions model.Sidebar.Options.FontSize model.Sidebar.Options.FontFamily)
                 editor.value model.HtmlCode
                 editor.isHidden (model.CodeTab <> CodeTab.Html)
                 editor.customClass (fontSizeClass model.Sidebar.Options.FontSize)
                 editor.onChange (ChangeHtmlCode >> dispatch)
-                editor.editorDidMount (registerCompileCommand dispatch) 
+                editor.editorDidMount (registerCompileCommand dispatch)
             ]
             // Css editor
-            ReactEditor.editor [ 
+            ReactEditor.editor [
                 editor.options (cssEditorOptions model.Sidebar.Options.FontSize model.Sidebar.Options.FontFamily)
                 editor.value model.CssCode
                 editor.isHidden (model.CodeTab <> CodeTab.Css)
                 editor.customClass (fontSizeClass model.Sidebar.Options.FontSize)
                 editor.onChange (ChangeCssCode >> dispatch)
-                editor.editorDidMount (registerCompileCommand dispatch) 
+                editor.editorDidMount (registerCompileCommand dispatch)
             ]
             // F# editor
-            ReactEditor.editor [ 
+            ReactEditor.editor [
                 editor.options (fsharpEditorOptions model.Sidebar.Options.FontSize model.Sidebar.Options.FontFamily)
                 editor.value model.FSharpCode
                 editor.isHidden (model.CodeTab <> CodeTab.FSharp)
@@ -965,7 +964,7 @@ let private outputTabs (activeTab : OutputTab) dispatch =
                         SetOutputTab OutputTab.Live |> dispatch
                     )
                     prop.children [
-                        Html.a [ 
+                        Html.a [
                             prop.text "Live sample"
                         ]
                     ]
@@ -978,7 +977,7 @@ let private outputTabs (activeTab : OutputTab) dispatch =
                         SetOutputTab OutputTab.Code |> dispatch
                     )
                     prop.children [
-                        Html.a [ 
+                        Html.a [
                             prop.text "Code"
                         ]
                     ]
@@ -991,9 +990,9 @@ let private toggleDisplay cond =
     if cond then "" else "is-hidden"
 
 let private viewIframe isShown url =
-    Html.iframe [ 
+    Html.iframe [
         prop.src url
-        prop.className (toggleDisplay isShown) 
+        prop.className (toggleDisplay isShown)
     ]
 
 let private viewCodeEditor (model: Model) =
@@ -1011,24 +1010,24 @@ let private viewCodeEditor (model: Model) =
                         o.fontLigatures <- Some (fontFamily = "Fira Code")
                     )
 
-    ReactEditor.editor [ 
+    ReactEditor.editor [
         editor.options options
         editor.value model.CodeES2015
         editor.isHidden (model.OutputTab <> OutputTab.Code)
-        editor.customClass (fontSizeClass model.Sidebar.Options.FontSize) 
+        editor.customClass (fontSizeClass model.Sidebar.Options.FontSize)
     ]
 
 let private outputArea model dispatch =
     let isLiveViewShown = model.OutputTab = OutputTab.Live
-    
-    Html.div [ 
+
+    Html.div [
         prop.className "output-container"
         prop.style [
             style.width (length.percent ((1. - model.PanelSplitRatio) * 100.))
-        ]  
+        ]
         prop.children [
             outputTabs model.OutputTab dispatch
-            
+
             Html.div [
                 prop.className "output-content"
                 prop.style [
@@ -1036,7 +1035,7 @@ let private outputArea model dispatch =
                 ]
                 prop.children [
                     if model.State = Loading then
-                        Html.div [ 
+                        Html.div [
                             prop.className [
                                 true, "is-loading title has-text-centered"
                                 not isLiveViewShown, "is-hidden"
@@ -1086,7 +1085,7 @@ let view (model: Model) dispatch =
                                             dispatch PanelDragStarted
                                         )
                                     ]
-                                    
+
                                     outputArea model dispatch
                                 ]
                             ]

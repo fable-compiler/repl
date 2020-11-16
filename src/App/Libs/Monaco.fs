@@ -1227,14 +1227,14 @@ module Editor =
     type IEditorModel =
         U2<ITextModel, IDiffEditorModel>
 
-    [<RequireQualifiedAccess; CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-    module IEditorModel =
-        let ofITextModel v: IEditorModel = v |> U2.Case1
-        let isITextModel (v: IEditorModel) = match v with U2.Case1 _ -> true | _ -> false
-        let asITextModel (v: IEditorModel) = match v with U2.Case1 o -> Some o | _ -> None
-        let ofIDiffEditorModel v: IEditorModel = v |> U2.Case2
-        let isIDiffEditorModel (v: IEditorModel) = match v with U2.Case2 _ -> true | _ -> false
-        let asIDiffEditorModel (v: IEditorModel) = match v with U2.Case2 o -> Some o | _ -> None
+    // [<RequireQualifiedAccess; CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+    // module IEditorModel =
+    //     let ofITextModel v: IEditorModel = v |> U2.Case1
+    //     let isITextModel (v: IEditorModel) = match v with U2.Case1 _ -> true | _ -> false
+    //     let asITextModel (v: IEditorModel) = match v with U2.Case1 o -> Some o | _ -> None
+    //     let ofIDiffEditorModel v: IEditorModel = v |> U2.Case2
+    //     let isIDiffEditorModel (v: IEditorModel) = match v with U2.Case2 _ -> true | _ -> false
+    //     let asIDiffEditorModel (v: IEditorModel) = match v with U2.Case2 o -> Some o | _ -> None
 
     /// A (serializable) state of the cursors.
     type [<AllowNullLiteral>] ICursorState =
@@ -1266,14 +1266,14 @@ module Editor =
     type IEditorViewState =
         U2<ICodeEditorViewState, IDiffEditorViewState>
 
-    [<RequireQualifiedAccess; CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-    module IEditorViewState =
-        let ofICodeEditorViewState v: IEditorViewState = v |> U2.Case1
-        let isICodeEditorViewState (v: IEditorViewState) = match v with U2.Case1 _ -> true | _ -> false
-        let asICodeEditorViewState (v: IEditorViewState) = match v with U2.Case1 o -> Some o | _ -> None
-        let ofIDiffEditorViewState v: IEditorViewState = v |> U2.Case2
-        let isIDiffEditorViewState (v: IEditorViewState) = match v with U2.Case2 _ -> true | _ -> false
-        let asIDiffEditorViewState (v: IEditorViewState) = match v with U2.Case2 o -> Some o | _ -> None
+    // [<RequireQualifiedAccess; CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+    // module IEditorViewState =
+    //     let ofICodeEditorViewState v: IEditorViewState = v |> U2.Case1
+    //     let isICodeEditorViewState (v: IEditorViewState) = match v with U2.Case1 _ -> true | _ -> false
+    //     let asICodeEditorViewState (v: IEditorViewState) = match v with U2.Case1 o -> Some o | _ -> None
+    //     let ofIDiffEditorViewState v: IEditorViewState = v |> U2.Case2
+    //     let isIDiffEditorViewState (v: IEditorViewState) = match v with U2.Case2 _ -> true | _ -> false
+    //     let asIDiffEditorViewState (v: IEditorViewState) = match v with U2.Case2 o -> Some o | _ -> None
 
     type [<RequireQualifiedAccess>] ScrollType =
         | Smooth = 0

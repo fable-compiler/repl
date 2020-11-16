@@ -122,31 +122,6 @@ let copyModules = BuildTask.create "CopyModules" [ npmInstall ] {
     )
 
     Shell.copyDir REPL_OUTPUT "node_modules/fable-standalone/dist" (fun _ -> true)
-
-    // Automatically update the version in Prelude.fs
-    let reg = Regex(@"let \[<Literal>\] FABLE_VERSION = ""(.*)""")
-    let fableCompilerPackageJson = CWD </> "node_modules/fable-compiler/package.json"
-    let currentVersionRegex = Regex(@"^\s*""version"":\s*""(.*)""")
-    let currentVersion =
-        fableCompilerPackageJson
-        |> File.ReadLines 
-        |> Seq.find (fun line ->
-            currentVersionRegex.IsMatch(line)
-        )
-        |> fun line ->
-            currentVersionRegex.Match(line).Groups.[1].Value
-
-    let newLines =
-        PRELUDE_FILE
-        |> File.ReadLines 
-        |> Seq.map (fun line ->
-            reg.Replace(line, fun m ->
-                m.Groups.[0].Value.Replace(m.Groups.[1].Value, currentVersion)
-            )
-        )
-        |> Seq.toArray
-
-    File.WriteAllLines(PRELUDE_FILE, newLines)
 }
 
 // TODO re-add generate metadata for REPL lib using git submobules
@@ -162,7 +137,7 @@ let updatePreludeREPLVersion = BuildTask.create "UpdateREPLVersion" [ ] {
     let reg = Regex(@"let \[<Literal>\] REPL_VERSION = ""(.*)""")
     let newLines =
         PRELUDE_FILE
-        |> File.ReadLines 
+        |> File.ReadLines
         |> Seq.map (fun line ->
             reg.Replace(line, fun m ->
                 let previousVersion = m.Groups.[1].Value
@@ -174,7 +149,7 @@ let updatePreludeREPLVersion = BuildTask.create "UpdateREPLVersion" [ ] {
         )
         |> Seq.toArray
 
-    File.WriteAllLines(PRELUDE_FILE, newLines)    
+    File.WriteAllLines(PRELUDE_FILE, newLines)
 }
 
 let buildLib = BuildTask.create "BuildLib" [ copyModules ] {
@@ -187,10 +162,10 @@ let buildLib = BuildTask.create "BuildLib" [ copyModules ] {
     for file in Directory.EnumerateFiles(CWD </> outDir, "*.js", SearchOption.AllDirectories) do
         let newLines =
             File.ReadLines file
-            |> Seq.map (fun line -> 
+            |> Seq.map (fun line ->
                 regAllImports.Replace(line, fun m ->
-                    // Patch the fable-library import from the "repl libs" 
-                    // to make sure they use the same `fable-library` module as the code 
+                    // Patch the fable-library import from the "repl libs"
+                    // to make sure they use the same `fable-library` module as the code
                     // compiled from the REPL
                     // This is needed in order to make reflection work
                     // See https://github.com/fable-compiler/repl/issues/97#issuecomment-588498482
@@ -199,25 +174,25 @@ let buildLib = BuildTask.create "BuildLib" [ copyModules ] {
                             m.Value.Replace(m.Groups.[1].Value, "../../fable-library")
                         )
 
-                    if adaptedLine.EndsWith(".js") then adaptedLine else adaptedLine + ".js" 
+                    if adaptedLine.EndsWith(".js") then adaptedLine else adaptedLine + ".js"
                 )
             )
             |> Seq.toArray
         File.WriteAllLines(file, newLines)
 }
 
-let buildApp = BuildTask.create "BuildApp" [ updatePreludeREPLVersion.IfNeeded; buildLib ] {
+let buildApp = BuildTask.create "BuildApp" [ updatePreludeREPLVersion.IfNeeded; copyModules ] {
     Npm.run "build" id
 }
 
-let watchApp = BuildTask.create "WatchApp" [ buildLib ] {
+let watchApp = BuildTask.create "WatchApp" [ copyModules ] {
     Npm.run "start" id
 }
 
 let _release = BuildTask.create "Release" [ updatePreludeREPLVersion; buildApp ] {
     let token =
         match Environment.environVarOrDefault "GITHUB_TOKEN" "" with
-        | s when not (String.IsNullOrWhiteSpace s) -> s
+        | s when not (System.String.IsNullOrWhiteSpace s) -> s
         | _ -> failwith "The Github token must be set in a GITHUB_TOKEN environmental variable"
 
     let version = Changelog.getLastVersion()

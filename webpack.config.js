@@ -3,7 +3,7 @@
 
 var CONFIG = {
     indexHtmlTemplate: "./src/index.html",
-    fsharpEntry: "./src/App/App.fsproj",
+    fsharpEntry: "./src/App/Loader.fs.js",
     cssEntry: "./src/style/main.scss",
     outputDir: "./deploy",
     assetsDir: "./public",
@@ -127,7 +127,7 @@ module.exports = {
     // devtool: isProduction ? "source-map" : "eval-source-map",
     plugins: isProduction ?
         commonPlugins.concat([
-            new CopyWebpackPlugin({ 
+            new CopyWebpackPlugin({
                 patterns: [
                     { from: CONFIG.assetsDir }
                 ]}),
@@ -161,15 +161,6 @@ module.exports = {
             {
                 test: /\.worker\.js$/,
                 use: "worker-loader"
-            },
-            {
-                test: /\.fs(x|proj)?$/,
-                use: {
-                    loader: "fable-loader",
-                    options: {
-                        babel: CONFIG.babel
-                    }
-                }
             },
             {
                 test: /\.js$/,
