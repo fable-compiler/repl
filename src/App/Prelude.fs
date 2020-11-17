@@ -15,7 +15,7 @@ module Literals =
         // "http://localhost:8080"
         Browser.Dom.window.location.href
 #else
-        "https://fable.io/repl/"
+        "https://fable.io/repl3/"
 #endif
     let (*[<Literal>]*) SAMPLES_JSON_URL = HOST + "samples/samples.json"
     let (*[<Literal>]*) REPL_LIB_MAP_JSON_URL = HOST + "repl-lib-map.json"

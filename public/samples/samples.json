@@ -60,12 +60,6 @@
                         "label": "Color Fountain",
                         "fsharpCode": "visual/color-fountain.fs",
                         "htmlCode": "visual/color-fountain.html"
-                    },
-                    {
-                        "type": "menu-item",
-                        "label": "Recharts",
-                        "fsharpCode": "visual/recharts.fs",
-                        "htmlCode": "visual/recharts.html"
                     }
                 ]
             }
