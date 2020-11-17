@@ -62,6 +62,7 @@ type EditorCollapse =
 type Model =
     {
         FSharpEditor: IEditor
+        JsEditor: IEditor
         Worker: ObservableWorker<WorkerAnswer>
         State: State
         IFrameUrl : string
@@ -83,6 +84,7 @@ type EndCompileStatus = Result<string * Fable.Standalone.Error[], string>
 
 type Msg =
     | SetFSharpEditor of IEditor
+    | SetJsEditor of IEditor
     | LoadSuccess of version: string
     | LoadFail
     | ParseEditorCode
@@ -217,6 +219,17 @@ let private showGlobalErrorToast msg =
     |> Toast.withCloseButton
     |> Toast.error
 
+[<Struct>]
+type MyUnion =
+    | U1 of foo: string
+    | U2 of int
+
+open FSharp.Reflection
+
+// let test(u: MyUnion) =
+//     match u with
+//     | U1(bar) ->
+
 let update msg (model : Model) =
     match msg with
     | LoadSuccess version ->
@@ -228,17 +241,17 @@ let update msg (model : Model) =
             obs.Trigger() // Trigger a first parse
 
         let browserAdviceCommand =
-            if not ReactDeviceDetect.exports.isChrome
-                && not ReactDeviceDetect.exports.isSafari then
+            // if not ReactDeviceDetect.exports.isChrome
+            //     && not ReactDeviceDetect.exports.isSafari then
 
-                Toast.message "We recommend using Chrome or Safari, for best performance"
-                |> Toast.icon Fa.Solid.Info
-                |> Toast.position Toast.BottomRight
-                |> Toast.timeout (System.TimeSpan.FromSeconds 5.)
-                |> Toast.dismissOnClick
-                |> Toast.info
+            //     Toast.message "We recommend using Chrome or Safari, for best performance"
+            //     |> Toast.icon Fa.Solid.Info
+            //     |> Toast.position Toast.BottomRight
+            //     |> Toast.timeout (System.TimeSpan.FromSeconds 5.)
+            //     |> Toast.dismissOnClick
+            //     |> Toast.info
 
-            else
+            // else
                 Cmd.none
 
         { model with
@@ -267,6 +280,12 @@ let update msg (model : Model) =
     | SetFSharpEditor ed ->
         { model with
             FSharpEditor = ed
+        }
+        , Cmd.none
+
+    | SetJsEditor ed ->
+        { model with
+            JsEditor = ed
         }
         , Cmd.none
 
@@ -565,10 +584,12 @@ let update msg (model : Model) =
         , Cmd.ofMsg (SidebarMsg (Sidebar.UpdateStats stats))
 
     | RefreshIframe ->
+        let jsCode = model.JsEditor.getValue()
         { model with
+            CodeES2015 = jsCode
             Logs = [ ConsolePanel.Log.Separator ]
         }
-        , Cmd.OfFunc.perform (Generator.generateHtmlBlobUrl model.HtmlCode model.CssCode) model.CodeES2015 SetIFrameUrl
+        , Cmd.OfFunc.perform (Generator.generateHtmlBlobUrl model.HtmlCode model.CssCode) jsCode SetIFrameUrl
 
     | AddConsoleLog content ->
         model
@@ -625,6 +646,7 @@ let init () =
     {
         State = Loading
         FSharpEditor = Unchecked.defaultof<IEditor>
+        JsEditor = Unchecked.defaultof<IEditor>
         Worker = worker
         IFrameUrl = ""
         OutputTab = OutputTab.Live
@@ -852,16 +874,24 @@ let private problemsPanel (isExpanded : bool) (errors : Monaco.Editor.IMarkerDat
 let private registerCompileCommand dispatch =
     System.Func<_,_,_>(
         fun (editor : Monaco.Editor.IStandaloneCodeEditor) (monacoModule : Monaco.IExports) ->
-            printfn "maxime regsiter compile thing"
             let triggerCompile () = StartCompile None |> dispatch
             editor.addCommand(monacoModule.KeyMod.Alt ||| int Monaco.KeyCode.Enter, triggerCompile, "") |> ignore
             editor.addCommand(monacoModule.KeyMod.CtrlCmd ||| int Monaco.KeyCode.KEY_S, triggerCompile, "") |> ignore
     )
 
+let private onJsEditorDidMount model dispatch =
+    System.Func<_,_,_>(
+        fun (editor : Monaco.Editor.IStandaloneCodeEditor) (monacoModule : Monaco.IExports) ->
+            if not (isNull editor) then
+                dispatch (SetJsEditor editor)
+                let triggerCompile () = RefreshIframe |> dispatch
+                editor.addCommand(monacoModule.KeyMod.Alt ||| int Monaco.KeyCode.Enter, triggerCompile, "") |> ignore
+                editor.addCommand(monacoModule.KeyMod.CtrlCmd ||| int Monaco.KeyCode.KEY_S, triggerCompile, "") |> ignore
+    )
+
 let private onFSharpEditorDidMount model dispatch =
     System.Func<_,_,_>(
         fun (editor : Monaco.Editor.IStandaloneCodeEditor) (monacoModule : Monaco.IExports) ->
-            printfn "maxime from f# editor"
             if not (isNull editor) then
                 dispatch (SetFSharpEditor editor)
 
@@ -995,7 +1025,7 @@ let private viewIframe isShown url =
         prop.className (toggleDisplay isShown)
     ]
 
-let private viewCodeEditor (model: Model) =
+let private viewCodeEditor (model: Model) dispatch =
     let fontFamily = model.Sidebar.Options.FontFamily
     let options = jsOptions<Monaco.Editor.IEditorConstructionOptions>(fun o ->
                         let minimapOptions = jsOptions<Monaco.Editor.IEditorMinimapOptions>(fun oMinimap ->
@@ -1005,7 +1035,7 @@ let private viewCodeEditor (model: Model) =
                         o.fontSize <- Some model.Sidebar.Options.FontSize
                         o.theme <- Some "vs-dark"
                         o.minimap <- Some minimapOptions
-                        o.readOnly <- Some true
+                        // o.readOnly <- Some true
                         o.fontFamily <- Some fontFamily
                         o.fontLigatures <- Some (fontFamily = "Fira Code")
                     )
@@ -1015,6 +1045,7 @@ let private viewCodeEditor (model: Model) =
         editor.value model.CodeES2015
         editor.isHidden (model.OutputTab <> OutputTab.Code)
         editor.customClass (fontSizeClass model.Sidebar.Options.FontSize)
+        editor.editorDidMount (onJsEditorDidMount model dispatch)
     ]
 
 let private outputArea model dispatch =
@@ -1047,7 +1078,7 @@ let private outputArea model dispatch =
                         ]
                     else
                         viewIframe isLiveViewShown model.IFrameUrl
-                    viewCodeEditor model
+                    viewCodeEditor model dispatch
                     ConsolePanel.consolePanel { Logs = model.Logs }
                 ]
             ]
