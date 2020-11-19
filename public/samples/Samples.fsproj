@@ -54,6 +54,7 @@
     <Compile Include="visual/raytracer.fs" />
     <Compile Include="visual/hokusai.fs" />
     <Compile Include="visual/color-fountain.fs" />
+    <Compile Include="visual/fractal.fs" />
     <Compile Include="visual/recharts.fs" />
     <Compile Include="tour/functions.fs" />
     <Compile Include="tour/primitives.fs" />

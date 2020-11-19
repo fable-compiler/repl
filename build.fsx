@@ -33,6 +33,13 @@ let METADATA_EXPORT_DIR = Path.Combine(CWD, "src/Export")
 let CHANGELOG_FILE = Path.Combine(CWD, "CHANGELOG.md")
 let PRELUDE_FILE = CWD </> "src/App/Prelude.fs"
 
+let METADATA_LIB, STANDALONE_DIST =
+    match Environment.environVarOrNone "LOCAL_PKG" with
+    | Some _ ->
+        printfn "Using local packages..."
+        "../fable/src/fable-metadata/lib", "../fable/src/fable-standalone/dist"
+    | None -> "node_modules/fable-metadata/lib", "node_modules/fable-standalone/dist"
+
 module Util =
 
     let visitFile (visitor: string -> string) (fileName : string) =
@@ -113,7 +120,8 @@ let copyModules = BuildTask.create "CopyModules" [ npmInstall ] {
     Shell.copyDir (LIBS_OUTPUT </> "webfonts") "node_modules/@fortawesome/fontawesome-free/webfonts" (fun _ -> true)
 
     Shell.cleanDir METADATA_OUTPUT
-    Shell.copyDir METADATA_OUTPUT "node_modules/fable-metadata/lib" (fun _ -> true)
+    Shell.copyDir METADATA_OUTPUT METADATA_LIB (fun _ -> true)
+
     // CopyDir METADATA_OUTPUT "public/metadata-extra" (fun _ -> true)
     // Change extension to .txt so Github pages compress the files when being served
     !! (METADATA_OUTPUT </> "*.dll")
@@ -121,7 +129,7 @@ let copyModules = BuildTask.create "CopyModules" [ npmInstall ] {
         Shell.rename (filename + ".txt") filename
     )
 
-    Shell.copyDir REPL_OUTPUT "node_modules/fable-standalone/dist" (fun _ -> true)
+    Shell.copyDir REPL_OUTPUT STANDALONE_DIST (fun _ -> true)
 }
 
 // TODO re-add generate metadata for REPL lib using git submobules

@@ -60,6 +60,12 @@
                         "label": "Color Fountain",
                         "fsharpCode": "visual/color-fountain.fs",
                         "htmlCode": "visual/color-fountain.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Fractal",
+                        "fsharpCode": "visual/fractal.fs",
+                        "htmlCode": "visual/fractal.html"
                     }
                 ]
             }

@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.0-rc-2 - 2020-11-20
+
+* Skip Fable compilation if there're F# errors
+* Add Fractal sample
+
 ## 3.0.0-rc - 2020-11-16
 
 * Nagareyama
