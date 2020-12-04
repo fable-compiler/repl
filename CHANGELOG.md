@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.0
+
+* Fable 3 official release
+* Add Spreadsheet sample
+* Add WebComponent sample
+
 ## 3.0.0-rc-2 - 2020-11-20
 
 * Skip Fable compilation if there're F# errors
