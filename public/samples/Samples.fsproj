@@ -2,19 +2,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>preview</LangVersion>
+    <DisableImplicitFSharpCoreReference>true</DisableImplicitFSharpCoreReference>
   </PropertyGroup>
-  <ItemGroup>
+  <!-- <ItemGroup>
     <Reference Include="../../src/Lib/bin/Debug/netstandard2.0/Fable.Repl.Lib.dll" />
-  </ItemGroup>
+  </ItemGroup> -->
   <ItemGroup>
-    <Compile Include="elmish/simple_input.fs" />
+    <!-- <Compile Include="elmish/simple_input.fs" />
     <Compile Include="elmish/thoth_random_user.fs" />
     <Compile Include="elmish/clock.fs" />
     <Compile Include="elmish/calculator.fs" />
     <Compile Include="elmish/todomvc.fs" />
     <Compile Include="elmish/sudoku.fs" />
     <Compile Include="elmish/memory.fs" />
-    <Compile Include="elmish/spreadsheet.fs" />
     <Compile Include="elmish/validation.fs" />
     <Compile Include="fulma/box.fs" />
     <Compile Include="fulma/button.fs" />
@@ -45,7 +46,9 @@
     <Compile Include="fulma/footer.fs" />
     <Compile Include="fulma/section.fs" />
     <Compile Include="fulma/tile.fs" />
-    <Compile Include="fulma/columns.fs" />
+    <Compile Include="fulma/columns.fs" /> -->
+    <Compile Include="ui/spreadsheet.fs" />
+    <Compile Include="ui/webcomponent.fs" />
     <Compile Include="games/mario.fs" />
     <Compile Include="games/ozmo.fs" />
     <Compile Include="games/pacman.fs" />
@@ -64,5 +67,8 @@
     <Compile Include="tour/units.fs" />
     <Compile Include="tour/classes.fs" />
   </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
+  <ItemGroup>
+    <PackageReference Include="Fable.Browser.WebGL" Version="1.0.0" />
+    <PackageReference Include="FSharp.Core" Version="5.0.0" />
+  </ItemGroup>
 </Project>

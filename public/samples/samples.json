@@ -5,6 +5,24 @@
         "children": [
             {
                 "type": "sub-category",
+                "label": "UI",
+                "children": [
+                    {
+                        "type": "menu-item",
+                        "label": "Spreadsheet",
+                        "fsharpCode": "ui/spreadsheet.fs",
+                        "htmlCode": "ui/spreadsheet.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "Web Component",
+                        "fsharpCode": "ui/webcomponent.fs",
+                        "htmlCode": "ui/webcomponent.html"
+                    }
+                ]
+            },
+            {
+                "type": "sub-category",
                 "label": "Fun and Games",
                 "children": [
                     {

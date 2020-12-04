@@ -23,7 +23,7 @@ module IntegersAndNumbers =
     let sampleTableOfSquares = [ for i in 0 .. 99 -> (i, i*i) ]
 
     // The next line prints a list that includes tuples, using '%A' for generic printing.
-    printfn "The table of squares from 0 to 99 is:\n%A" sampleTableOfSquares
+    printfn $"The table of squares from 0 to 99 is:\n{sampleTableOfSquares}"
 
 
 module Booleans =
@@ -36,7 +36,7 @@ module Booleans =
     let boolean3 = not boolean1 && (boolean2 || false)
 
     // This line uses '%b'to print a boolean value.  This is type-safe.
-    printfn "The expression 'not boolean1 && (boolean2 || false)' is %b" boolean3
+    printfn $"The expression 'not boolean1 && (boolean2 || false)' is %b{boolean3}"
 
 
 module StringManipulation =
