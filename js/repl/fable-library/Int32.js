@@ -96,15 +96,14 @@ export function parse(str, style, unsigned, bitsize, radix) {
     }
     throw new Error("Input string was not in a correct format.");
 }
-export function tryParse(str, style, unsigned, bitsize) {
+export function tryParse(str, style, unsigned, bitsize, defValue) {
     try {
-        const v = parse(str, style, unsigned, bitsize);
-        return [true, v];
+        defValue.contents = parse(str, style, unsigned, bitsize);
+        return true;
     }
     catch (_a) {
-        // supress error
+        return false;
     }
-    return [false, 0];
 }
 export function op_UnaryNegation_Int8(x) {
     return x === -128 ? x : -x;
@@ -115,4 +114,3 @@ export function op_UnaryNegation_Int16(x) {
 export function op_UnaryNegation_Int32(x) {
     return x === -2147483648 ? x : -x;
 }
-//# sourceMappingURL=Int32.js.map

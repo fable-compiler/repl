@@ -80,7 +80,7 @@ function utf8_decode(bytes) {
             return ((i1 & 0x07) << 18) | ((i2 & 0x3F) << 12) | ((i3 & 0x3F) << 6) | (i4 & 0x3F);
         }
         else {
-            throw RangeError("Invalid UTF8 byte: " + i1);
+            throw new RangeError("Invalid UTF8 byte: " + i1);
         }
     };
     const chars = new Array();
@@ -92,6 +92,7 @@ function utf8_decode(bytes) {
 }
 class UTF16LE {
     getBytes(str, index, count) {
+        str = Array.isArray(str) ? str.join("") : str;
         if (index != null && count != null) {
             str = str.substring(index, index + count);
         }
@@ -128,6 +129,7 @@ class UTF16LE {
 }
 class UTF8 {
     getBytes(str, index, count) {
+        str = Array.isArray(str) ? str.join("") : str;
         if (index != null && count != null) {
             str = str.substring(index, index + count);
         }
@@ -169,4 +171,3 @@ const _UTF16 = new UTF16LE();
 const _UTF8 = new UTF8();
 export function get_Unicode() { return _UTF16; }
 export function get_UTF8() { return _UTF8; }
-//# sourceMappingURL=Encoding.js.map

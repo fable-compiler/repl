@@ -1,43 +1,39 @@
-// tslint:disable: space-before-function-paren
-import { combineHashCodes, compare, compareArrays, equalArrays, equals, identityHash, numberHash, structuralHash } from "./Util.js";
-function sameType(x, y) {
-    return y != null && Object.getPrototypeOf(x).constructor === Object.getPrototypeOf(y).constructor;
-}
-// Taken from Babel helpers
-function inherits(subClass, superClass) {
-    // if (typeof superClass !== "function" && superClass !== null) {
-    //   throw new TypeError(
-    //     "Super expression must either be null or a function, not " +
-    //       typeof superClass
-    //   );
-    // }
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-        constructor: {
-            value: subClass,
-            enumerable: false,
-            writable: true,
-            configurable: true,
-        },
-    });
-    // if (superClass)
-    //   Object.setPrototypeOf
-    //     ? Object.setPrototypeOf(subClass, superClass)
-    //     : (subClass.__proto__ = superClass);
-}
-export function declare(cons, superClass) {
-    inherits(cons, superClass || SystemObject);
-    return cons;
-}
-export class SystemObject {
-    toString() {
-        return "{" + Object.entries(this).map(([k, v]) => k + " = " + String(v)).join(";\n ") + "}";
+import { combineHashCodes, compare, compareArrays, equalArrays, equals, sameConstructor, numberHash, structuralHash } from "./Util.js";
+export function seqToString(self) {
+    let count = 0;
+    let str = "[";
+    for (const x of self) {
+        if (count === 0) {
+            str += toString(x);
+        }
+        else if (count === 100) {
+            str += "; ...";
+            break;
+        }
+        else {
+            str += "; " + toString(x);
+        }
+        count++;
     }
-    GetHashCode(x) {
-        return identityHash(x !== null && x !== void 0 ? x : this);
+    return str + "]";
+}
+export function toString(x, callStack = 0) {
+    if (x != null && typeof x === "object") {
+        if (typeof x.toString === "function") {
+            return x.toString();
+        }
+        else if (Symbol.iterator in x) {
+            return seqToString(x);
+        }
+        else { // TODO: Date?
+            const cons = Object.getPrototypeOf(x).constructor;
+            return cons === Object && callStack < 10
+                // Same format as recordToString
+                ? "{ " + Object.entries(x).map(([k, v]) => k + " = " + toString(v, callStack + 1)).join("\n  ") + " }"
+                : cons.name;
+        }
     }
-    Equals(x, y) {
-        return x === (y !== null && y !== void 0 ? y : this);
-    }
+    return String(x);
 }
 function compareList(self, other) {
     if (self === other) {
@@ -66,12 +62,6 @@ export class List {
         this.head = head;
         this.tail = tail;
     }
-    toString() {
-        return "[" + Array.from(this).join("; ") + "]";
-    }
-    toJSON() {
-        return Array.from(this);
-    }
     [Symbol.iterator]() {
         let cur = this;
         return {
@@ -83,40 +73,36 @@ export class List {
             },
         };
     }
-    GetHashCode() {
-        const hashes = Array.from(this).map(structuralHash);
-        return combineHashCodes(hashes);
-    }
-    Equals(other) {
-        return compareList(this, other) === 0;
-    }
-    CompareTo(other) {
-        return compareList(this, other);
-    }
+    toJSON() { return Array.from(this); }
+    toString() { return seqToString(this); }
+    GetHashCode() { return combineHashCodes(Array.from(this).map(structuralHash)); }
+    Equals(other) { return compareList(this, other) === 0; }
+    CompareTo(other) { return compareList(this, other); }
 }
-export class Union extends SystemObject {
-    constructor(tag, name, ...fields) {
-        super();
-        this.tag = tag | 0;
-        this.name = name;
-        this.fields = fields;
-    }
-    toString() {
-        const len = this.fields.length;
-        if (len === 0) {
-            return this.name;
-        }
-        else if (len === 1) {
-            return this.name + " " + String(this.fields[0]);
-        }
-        else {
-            return this.name + " (" + this.fields.map((x) => String(x)).join(",") + ")";
-        }
+export class Union {
+    get name() {
+        return this.cases()[this.tag];
     }
     toJSON() {
-        return this.fields.length === 0
-            ? this.name
-            : [this.name].concat(this.fields);
+        return this.fields.length === 0 ? this.name : [this.name].concat(this.fields);
+    }
+    toString() {
+        if (this.fields.length === 0) {
+            return this.name;
+        }
+        else {
+            let fields = "";
+            let withParens = true;
+            if (this.fields.length === 1) {
+                const field = toString(this.fields[0]);
+                withParens = field.indexOf(" ") >= 0;
+                fields = field;
+            }
+            else {
+                fields = this.fields.map((x) => toString(x)).join(", ");
+            }
+            return this.name + (withParens ? " (" : " ") + fields + (withParens ? ")" : "");
+        }
     }
     GetHashCode() {
         const hashes = this.fields.map((x) => structuralHash(x));
@@ -124,16 +110,24 @@ export class Union extends SystemObject {
         return combineHashCodes(hashes);
     }
     Equals(other) {
-        return this === other
-            || (sameType(this, other)
-                && this.tag === other.tag
-                && equalArrays(this.fields, other.fields));
+        if (this === other) {
+            return true;
+        }
+        else if (!sameConstructor(this, other)) {
+            return false;
+        }
+        else if (this.tag === other.tag) {
+            return equalArrays(this.fields, other.fields);
+        }
+        else {
+            return false;
+        }
     }
     CompareTo(other) {
         if (this === other) {
             return 0;
         }
-        else if (!sameType(this, other)) {
+        else if (!sameConstructor(this, other)) {
             return -1;
         }
         else if (this.tag === other.tag) {
@@ -144,23 +138,30 @@ export class Union extends SystemObject {
         }
     }
 }
-function recordToJson(record, getFieldNames) {
+function recordToJSON(self) {
     const o = {};
-    const keys = getFieldNames == null ? Object.keys(record) : getFieldNames(record);
+    const keys = Object.keys(self);
     for (let i = 0; i < keys.length; i++) {
-        o[keys[i]] = record[keys[i]];
+        o[keys[i]] = self[keys[i]];
     }
     return o;
 }
-function recordEquals(self, other, getFieldNames) {
+function recordToString(self) {
+    return "{ " + Object.entries(self).map(([k, v]) => k + " = " + toString(v)).join("\n  ") + " }";
+}
+function recordGetHashCode(self) {
+    const hashes = Object.values(self).map((v) => structuralHash(v));
+    return combineHashCodes(hashes);
+}
+function recordEquals(self, other) {
     if (self === other) {
         return true;
     }
-    else if (!sameType(self, other)) {
+    else if (!sameConstructor(self, other)) {
         return false;
     }
     else {
-        const thisNames = getFieldNames == null ? Object.keys(self) : getFieldNames(self);
+        const thisNames = Object.keys(self);
         for (let i = 0; i < thisNames.length; i++) {
             if (!equals(self[thisNames[i]], other[thisNames[i]])) {
                 return false;
@@ -169,15 +170,15 @@ function recordEquals(self, other, getFieldNames) {
         return true;
     }
 }
-function recordCompare(self, other, getFieldNames) {
+function recordCompareTo(self, other) {
     if (self === other) {
         return 0;
     }
-    else if (!sameType(self, other)) {
+    else if (!sameConstructor(self, other)) {
         return -1;
     }
     else {
-        const thisNames = getFieldNames == null ? Object.keys(self) : getFieldNames(self);
+        const thisNames = Object.keys(self);
         for (let i = 0; i < thisNames.length; i++) {
             const result = compare(self[thisNames[i]], other[thisNames[i]]);
             if (result !== 0) {
@@ -187,73 +188,47 @@ function recordCompare(self, other, getFieldNames) {
         return 0;
     }
 }
-export class Record extends SystemObject {
-    toString() {
-        return "{" + Object.entries(this).map(([k, v]) => k + " = " + String(v)).join(";\n ") + "}";
-    }
-    toJSON() {
-        return recordToJson(this);
-    }
-    GetHashCode() {
-        const hashes = Object.values(this).map((v) => structuralHash(v));
-        return combineHashCodes(hashes);
-    }
-    Equals(other) {
-        return recordEquals(this, other);
-    }
-    CompareTo(other) {
-        return recordCompare(this, other);
-    }
+export class Record {
+    toJSON() { return recordToJSON(this); }
+    toString() { return recordToString(this); }
+    GetHashCode() { return recordGetHashCode(this); }
+    Equals(other) { return recordEquals(this, other); }
+    CompareTo(other) { return recordCompareTo(this, other); }
 }
-export function anonRecord(o) {
-    return Object.assign(Object.create(Record.prototype), o);
-}
-export class FSharpRef extends Record {
-    constructor(contents) {
-        super();
-        this.contents = contents;
-    }
-}
-export const Exception = declare(function Exception(message) {
-    this.stack = Error().stack;
-    this.message = message;
-}, SystemObject);
-export function isException(x) {
-    return x instanceof Error || x instanceof Exception;
-}
-function getFSharpExceptionFieldNames(self) {
-    return Object.keys(self).filter((k) => k !== "message" && k !== "stack");
-}
-export class FSharpException extends Exception {
-    toString() {
-        var _a;
-        // const fieldNames = getFSharpExceptionFieldNames(this);
-        const fields = Object.entries(this).filter(([k, _]) => k !== "message" && k !== "stack");
-        const len = fields.length;
-        if (len === 0) {
-            return (_a = this.message) !== null && _a !== void 0 ? _a : "";
-        }
-        else if (len === 1) {
-            return this.message + " " + String(fields[1]);
+export class FSharpRef {
+    constructor(contentsOrGetter, setter) {
+        if (typeof setter === "function") {
+            this.getter = contentsOrGetter;
+            this.setter = setter;
         }
         else {
-            return this.message + " (" + fields.map(([_, v]) => String(v)).join(",") + ")";
+            this.getter = () => contentsOrGetter;
+            this.setter = (v) => { contentsOrGetter = v; };
         }
     }
-    toJSON() {
-        return recordToJson(this, getFSharpExceptionFieldNames);
+    get contents() {
+        return this.getter();
     }
-    GetHashCode() {
-        const fields = Object.entries(this).filter(([k, _]) => k !== "message" && k !== "stack");
-        const hashes = fields.map(([_, v]) => structuralHash(v));
-        return combineHashCodes(hashes);
+    set contents(v) {
+        this.setter(v);
     }
-    Equals(other) {
-        return recordEquals(this, other, getFSharpExceptionFieldNames);
+}
+// EXCEPTIONS
+// Exception is intentionally not derived from Error, for performance reasons (see #2160)
+export class Exception {
+    constructor(message) {
+        this.message = message;
     }
-    CompareTo(other) {
-        return recordCompare(this, other, getFSharpExceptionFieldNames);
-    }
+}
+export function isException(x) {
+    return x instanceof Exception || x instanceof Error;
+}
+export class FSharpException extends Exception {
+    toJSON() { return recordToJSON(this); }
+    toString() { return recordToString(this); }
+    GetHashCode() { return recordGetHashCode(this); }
+    Equals(other) { return recordEquals(this, other); }
+    CompareTo(other) { return recordCompareTo(this, other); }
 }
 export class MatchFailureException extends FSharpException {
     constructor(arg1, arg2, arg3) {
@@ -264,5 +239,5 @@ export class MatchFailureException extends FSharpException {
         this.message = "The match cases were incomplete";
     }
 }
-export const Attribute = declare(function Attribute() { return; }, SystemObject);
-//# sourceMappingURL=Types.js.map
+export class Attribute {
+}

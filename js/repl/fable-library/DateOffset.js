@@ -57,12 +57,13 @@ export function parse(str) {
                 + parseInt(offsetMatch[2], 10) * 60000);
     return DateTimeOffset(date.getTime(), offset);
 }
-export function tryParse(v, _refValue) {
+export function tryParse(v, defValue) {
     try {
-        return [true, parse(v)];
+        defValue.contents = parse(v);
+        return true;
     }
     catch (_err) {
-        return [false, minValue()];
+        return false;
     }
 }
 export function create(year, month, day, h, m, s, ms, offset) {
@@ -248,4 +249,3 @@ export function op_Addition(x, y) {
 export function op_Subtraction(x, y) {
     return subtract(x, y);
 }
-//# sourceMappingURL=DateOffset.js.map

@@ -71,6 +71,15 @@ export class Uri {
             return false;
         }
     }
+    get absoluteUri() {
+        if (this.kind === 1 /* Absolute */) {
+            return this.url.href;
+        }
+        if (this.kind === 0 /* RelativeOrAbsolute */) {
+            return this.url;
+        }
+        throw new Error("This operation is not supported for a relative URI.");
+    }
     get scheme() {
         const protocol = this.parseUrl().protocol;
         return protocol.slice(0, protocol.length - 1);
@@ -93,4 +102,3 @@ export class Uri {
     }
 }
 export default Uri;
-//# sourceMappingURL=Uri.js.map

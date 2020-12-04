@@ -108,15 +108,14 @@ export function parse(str, style, unsigned, _bitsize, radix) {
     }
     throw new Error("Input string was not in a correct format.");
 }
-export function tryParse(str, style, unsigned, bitsize) {
+export function tryParse(str, style, unsigned, bitsize, defValue) {
     try {
-        const v = parse(str, style, unsigned, bitsize);
-        return [true, v];
+        defValue.contents = parse(str, style, unsigned, bitsize);
+        return true;
     }
     catch (_a) {
-        // supress error
+        return false;
     }
-    return [false, LongLib.ZERO];
 }
 export function unixEpochMillisecondsToTicks(ms, offset) {
     return op_Multiply(op_Addition(op_Addition(LongLib.fromNumber(ms), 62135596800000), offset), 10000);
@@ -141,4 +140,3 @@ export function makeRangeStepFunction(step, last, unsigned) {
         }
     };
 }
-//# sourceMappingURL=Long.js.map

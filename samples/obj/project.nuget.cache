@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "dgSpecHash": "b3W+nxz3g8406G5GltubVuLlZ6XvwBcc0hsaO0LHfq1fvQlPOOZIhoERN2EbUn2EUyTPJR99i4q/8541OdLOvw==",
+  "success": true,
+  "projectFilePath": "/Users/alfonso/Documents/repl3/public/samples/Samples.fsproj",
+  "expectedPackageFiles": [
+    "/Users/alfonso/.nuget/packages/fable.browser.blob/1.1.0/fable.browser.blob.1.1.0.nupkg.sha512",
+    "/Users/alfonso/.nuget/packages/fable.browser.dom/1.2.0/fable.browser.dom.1.2.0.nupkg.sha512",
+    "/Users/alfonso/.nuget/packages/fable.browser.event/1.0.0/fable.browser.event.1.0.0.nupkg.sha512",
+    "/Users/alfonso/.nuget/packages/fable.browser.webgl/1.0.0/fable.browser.webgl.1.0.0.nupkg.sha512",
+    "/Users/alfonso/.nuget/packages/fable.browser.webstorage/1.0.0/fable.browser.webstorage.1.0.0.nupkg.sha512",
+    "/Users/alfonso/.nuget/packages/fable.core/3.1.5/fable.core.3.1.5.nupkg.sha512",
+    "/Users/alfonso/.nuget/packages/fsharp.core/5.0.0/fsharp.core.5.0.0.nupkg.sha512",
+    "/Users/alfonso/.nuget/packages/microsoft.netcore.platforms/1.1.0/microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "/Users/alfonso/.nuget/packages/netstandard.library/2.0.3/netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -6,15 +6,18 @@ export class Enumerator {
     constructor(iter) {
         this.iter = iter;
     }
-    MoveNext() {
+    ["System.Collections.Generic.IEnumerator`1.get_Current"]() {
+        return this.current;
+    }
+    ["System.Collections.IEnumerator.get_Current"]() {
+        return this.current;
+    }
+    ["System.Collections.IEnumerator.MoveNext"]() {
         const cur = this.iter.next();
         this.current = cur.value;
         return !cur.done;
     }
-    get Current() {
-        return this.current;
-    }
-    Reset() {
+    ["System.Collections.IEnumerator.Reset"]() {
         throw new Error("JS iterators cannot be reset");
     }
     Dispose() {
@@ -22,14 +25,17 @@ export class Enumerator {
     }
 }
 export function getEnumerator(o) {
-    return new Enumerator(o[Symbol.iterator]());
+    return typeof o.GetEnumerator === "function"
+        ? o.GetEnumerator()
+        : new Enumerator(o[Symbol.iterator]());
 }
 export function toIterator(en) {
     return {
+        [Symbol.iterator]() { return this; },
         next() {
-            return en.MoveNext()
-                ? { done: false, value: en.Current }
-                : { done: true, value: undefined };
+            const hasNext = en["System.Collections.IEnumerator.MoveNext"]();
+            const current = hasNext ? en["System.Collections.IEnumerator.get_Current"]() : undefined;
+            return { done: !hasNext, value: current };
         },
     };
 }
@@ -46,15 +52,33 @@ function __failIfNone(res) {
     }
     return value(res);
 }
+class Seq {
+    constructor(f) {
+        this.f = f;
+    }
+    [Symbol.iterator]() { return new Seq(this.f); }
+    next() {
+        var _a;
+        this.iter = (_a = this.iter) !== null && _a !== void 0 ? _a : this.f();
+        return this.iter.next();
+    }
+    toString() {
+        return "seq [" + Array.from(this).join("; ") + "]";
+    }
+}
 function makeSeq(f) {
-    const seq = {
-        [Symbol.iterator]: f,
-        toString: () => "seq [" + Array.from(seq).join("; ") + "]",
-    };
-    return seq;
+    return new Seq(f);
+}
+function isArrayOrBufferView(xs) {
+    return Array.isArray(xs) || ArrayBuffer.isView(xs);
 }
 export function ofArray(xs) {
-    return delay(() => unfold((i) => i != null && i < xs.length ? [xs[i], i + 1] : undefined, 0));
+    if (Array.isArray(xs)) {
+        return delay(() => xs);
+    }
+    else {
+        return delay(() => unfold((i) => i != null && i < xs.length ? [xs[i], i + 1] : undefined, 0));
+    }
 }
 export function allPairs(xs, ys) {
     let firstEl = true;
@@ -162,17 +186,33 @@ export function choose(f, xs) {
     }, xs[Symbol.iterator]()));
 }
 export function compareWith(f, xs, ys) {
-    const nonZero = tryFind((i) => i !== 0, map2(f, xs, ys));
-    return nonZero != null ? value(nonZero) : length(xs) - length(ys);
+    if (xs === ys) {
+        return 0;
+    }
+    let cur1;
+    let cur2;
+    let c = 0;
+    for (const iter1 = xs[Symbol.iterator](), iter2 = ys[Symbol.iterator]();;) {
+        cur1 = iter1.next();
+        cur2 = iter2.next();
+        if (cur1.done || cur2.done) {
+            break;
+        }
+        c = f(cur1.value, cur2.value);
+        if (c !== 0) {
+            break;
+        }
+    }
+    return (c !== 0) ? c : (cur1.done && !cur2.done) ? -1 : (!cur1.done && cur2.done) ? 1 : 0;
 }
 export function delay(f) {
     return makeSeq(() => f()[Symbol.iterator]());
 }
 export function empty() {
-    return [];
+    return delay(() => []);
 }
 export function singleton(y) {
-    return [y];
+    return delay(() => [y]);
 }
 export function enumerateFromFunctions(factory, moveNext, current) {
     return delay(() => unfold((e) => moveNext(e) ? [current(e), e] : undefined, factory()));
@@ -296,7 +336,7 @@ export function where(f, xs) {
     return filter(f, xs);
 }
 export function fold(f, acc, xs) {
-    if (Array.isArray(xs) || ArrayBuffer.isView(xs)) {
+    if (isArrayOrBufferView(xs)) {
         return xs.reduce(f, acc);
     }
     else {
@@ -312,7 +352,7 @@ export function fold(f, acc, xs) {
     }
 }
 export function foldBack(f, xs, acc) {
-    const arr = Array.isArray(xs) || ArrayBuffer.isView(xs) ? xs : Array.from(xs);
+    const arr = isArrayOrBufferView(xs) ? xs : Array.from(xs);
     for (let i = arr.length - 1; i >= 0; i--) {
         acc = f(arr[i], acc, i);
     }
@@ -334,8 +374,8 @@ export function fold2(f, acc, xs, ys) {
     return acc;
 }
 export function foldBack2(f, xs, ys, acc) {
-    const ar1 = Array.isArray(xs) || ArrayBuffer.isView(xs) ? xs : Array.from(xs);
-    const ar2 = Array.isArray(ys) || ArrayBuffer.isView(ys) ? ys : Array.from(ys);
+    const ar1 = isArrayOrBufferView(xs) ? xs : Array.from(xs);
+    const ar2 = isArrayOrBufferView(ys) ? ys : Array.from(ys);
     for (let i = ar1.length - 1; i >= 0; i--) {
         acc = f(ar1[i], ar2[i], acc, i);
     }
@@ -359,7 +399,7 @@ export function tryItem(i, xs) {
     if (i < 0) {
         return undefined;
     }
-    if (Array.isArray(xs) || ArrayBuffer.isView(xs)) {
+    if (isArrayOrBufferView(xs)) {
         return i < xs.length ? some(xs[i]) : undefined;
     }
     for (let j = 0, iter = xs[Symbol.iterator]();; j++) {
@@ -399,7 +439,7 @@ export function last(xs) {
     return __failIfNone(tryLast(xs));
 }
 export function length(xs) {
-    return Array.isArray(xs) || ArrayBuffer.isView(xs)
+    return isArrayOrBufferView(xs)
         ? xs.length
         : fold((acc, _x) => acc + 1, 0, xs);
 }
@@ -472,7 +512,7 @@ export function mapFold(f, acc, xs, transform) {
     return transform !== void 0 ? [transform(result), acc] : [result, acc];
 }
 export function mapFoldBack(f, xs, acc, transform) {
-    const arr = Array.isArray(xs) || ArrayBuffer.isView(xs) ? xs : Array.from(xs);
+    const arr = isArrayOrBufferView(xs) ? xs : Array.from(xs);
     const result = [];
     let r;
     for (let i = arr.length - 1; i >= 0; i--) {
@@ -531,7 +571,7 @@ export function readOnly(xs) {
     return map((x) => x, xs);
 }
 export function reduce(f, xs) {
-    if (Array.isArray(xs) || ArrayBuffer.isView(xs)) {
+    if (isArrayOrBufferView(xs)) {
         return xs.reduce(f);
     }
     const iter = xs[Symbol.iterator]();
@@ -550,7 +590,7 @@ export function reduce(f, xs) {
     return acc;
 }
 export function reduceBack(f, xs) {
-    const ar = Array.isArray(xs) || ArrayBuffer.isView(xs) ? xs : Array.from(xs);
+    const ar = isArrayOrBufferView(xs) ? xs : Array.from(xs);
     if (ar.length === 0) {
         throw new Error("Seq was empty");
     }
@@ -564,7 +604,7 @@ export function replicate(n, x) {
     return initialize(n, () => x);
 }
 export function reverse(xs) {
-    const ar = Array.isArray(xs) || ArrayBuffer.isView(xs) ? xs.slice(0) : Array.from(xs);
+    const ar = isArrayOrBufferView(xs) ? xs.slice(0) : Array.from(xs);
     return ofArray(ar.reverse());
 }
 export function scan(f, seed, xs) {
@@ -664,7 +704,7 @@ export function find(f, xs) {
     return __failIfNone(tryFind(f, xs));
 }
 export function tryFindBack(f, xs, defaultValue) {
-    const arr = Array.isArray(xs) || ArrayBuffer.isView(xs) ? xs.slice(0) : Array.from(xs);
+    const arr = isArrayOrBufferView(xs) ? xs.slice(0) : Array.from(xs);
     return tryFind(f, arr.reverse(), defaultValue);
 }
 export function findBack(f, xs) {
@@ -686,7 +726,7 @@ export function findIndex(f, xs) {
     return __failIfNone(tryFindIndex(f, xs));
 }
 export function tryFindIndexBack(f, xs) {
-    const arr = Array.isArray(xs) || ArrayBuffer.isView(xs) ? xs.slice(0) : Array.from(xs);
+    const arr = isArrayOrBufferView(xs) ? xs.slice(0) : Array.from(xs);
     for (let i = arr.length - 1; i >= 0; i--) {
         if (f(arr[i], i)) {
             return i;
@@ -791,4 +831,3 @@ export function transpose(source) {
         return iter;
     });
 }
-//# sourceMappingURL=Seq.js.map

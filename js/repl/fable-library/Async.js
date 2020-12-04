@@ -3,7 +3,7 @@ import { CancellationToken } from "./AsyncBuilder.js";
 import { protectedCont } from "./AsyncBuilder.js";
 import { protectedBind } from "./AsyncBuilder.js";
 import { protectedReturn } from "./AsyncBuilder.js";
-import { choice1Of2, choice2Of2 } from "./Option.js";
+import { Choice_makeChoice1Of2, Choice_makeChoice2Of2 } from "./Choice.js";
 import { map } from "./Seq.js";
 // Implemented just for type references
 export class Async {
@@ -43,6 +43,11 @@ export function cancelAfter(token, ms) {
 export function isCancellationRequested(token) {
     return token != null && token.isCancelled;
 }
+export function throwIfCancellationRequested(token) {
+    if (token != null && token.isCancelled) {
+        throw new Error("Operation is cancelled");
+    }
+}
 export function startChild(computation) {
     const promise = startAsPromise(computation);
     // JS Promises are hot, computation has already started
@@ -60,8 +65,8 @@ export const defaultCancellationToken = new CancellationToken();
 export function catchAsync(work) {
     return protectedCont((ctx) => {
         work({
-            onSuccess: (x) => ctx.onSuccess(choice1Of2(x)),
-            onError: (ex) => ctx.onSuccess(choice2Of2(ex)),
+            onSuccess: (x) => ctx.onSuccess(Choice_makeChoice1Of2(x)),
+            onError: (ex) => ctx.onSuccess(Choice_makeChoice2Of2(ex)),
             onCancel: ctx.onCancel,
             cancelToken: ctx.cancelToken,
             trampoline: ctx.trampoline,
@@ -114,4 +119,3 @@ export function startAsPromise(computation, cancellationToken) {
     return new Promise((resolve, reject) => startWithContinuations(computation, resolve, reject, reject, cancellationToken ? cancellationToken : defaultCancellationToken));
 }
 export default Async;
-//# sourceMappingURL=Async.js.map

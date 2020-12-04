@@ -91,4 +91,3 @@ export function start(body, cancellationToken) {
     return mbox;
 }
 export default MailboxProcessor;
-//# sourceMappingURL=MailboxProcessor.js.map

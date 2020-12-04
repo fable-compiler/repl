@@ -1315,4 +1315,3 @@ export function fromBytesBE(bytes, unsigned) {
         bytes[3], unsigned);
 }
 ;
-//# sourceMappingURL=long.js.map

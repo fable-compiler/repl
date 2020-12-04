@@ -1,32 +1,33 @@
-import { compare, identityHash, equals, structuralHash } from "./Util.js";
-export function HashIdentity$$$FromFunctions(hash, eq) {
-  return {
-    Equals(x, y) {
-      return eq(x, y);
-    },
+import { compare, physicalHash, equals, structuralHash } from "./Util.js";
 
-    GetHashCode(x$$1) {
-      return hash(x$$1);
-    }
+export function HashIdentity_FromFunctions(hash, eq) {
+    return {
+        Equals(x, y) {
+            return eq(x, y);
+        },
+        GetHashCode(x_1) {
+            return hash(x_1);
+        },
+    };
+}
 
-  };
+export function HashIdentity_Structural() {
+    return HashIdentity_FromFunctions(structuralHash, equals);
 }
-export function HashIdentity$$$Structural() {
-  return HashIdentity$$$FromFunctions(structuralHash, equals);
-}
-export function HashIdentity$$$Reference() {
-  return HashIdentity$$$FromFunctions(identityHash, function (e1$$1, e2$$1) {
-    return e1$$1 === e2$$1;
-  });
-}
-export function ComparisonIdentity$$$FromFunction(comparer) {
-  return {
-    Compare(x$$2, y$$1) {
-      return comparer(x$$2, y$$1);
-    }
 
-  };
+export function HashIdentity_Reference() {
+    return HashIdentity_FromFunctions(physicalHash, (e1, e2) => (e1 === e2));
 }
-export function ComparisonIdentity$$$Structural() {
-  return ComparisonIdentity$$$FromFunction(compare);
+
+export function ComparisonIdentity_FromFunction(comparer) {
+    return {
+        Compare(x, y) {
+            return comparer(x, y);
+        },
+    };
 }
+
+export function ComparisonIdentity_Structural() {
+    return ComparisonIdentity_FromFunction(compare);
+}
+

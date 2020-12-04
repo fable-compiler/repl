@@ -160,12 +160,12 @@ export function parse(str) {
     }
     throw new Error(`String '${str}' was not recognized as a valid TimeSpan.`);
 }
-export function tryParse(v, _refValue) {
+export function tryParse(v, defValue) {
     try {
-        return [true, parse(v)];
+        defValue.contents = parse(v);
+        return true;
     }
-    catch (_err) {
-        return [false, 0];
+    catch (_a) {
+        return false;
     }
 }
-//# sourceMappingURL=TimeSpan.js.map

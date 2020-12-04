@@ -91,7 +91,7 @@ function charCodeAt(s, index) {
         return s.charCodeAt(index);
     }
     else {
-        throw Error("Index out of range.");
+        throw new Error("Index out of range.");
     }
 }
 export const getUnicodeCategory = (s) => getUnicodeCategory2(s, 0);
@@ -183,7 +183,6 @@ export function parse(input) {
         return input[0];
     }
     else {
-        throw Error("String must be exactly one character long.");
+        throw new Error("String must be exactly one character long.");
     }
 }
-//# sourceMappingURL=Char.js.map

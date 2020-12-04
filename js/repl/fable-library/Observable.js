@@ -1,4 +1,5 @@
-import { tryValueIfChoice1Of2, tryValueIfChoice2Of2, value } from "./Option.js";
+import { Choice_tryValueIfChoice1Of2, Choice_tryValueIfChoice2Of2 } from "./Choice.js";
+import { value } from "./Option.js";
 export class Observer {
     constructor(onNext, onError, onCompleted) {
         this.OnNext = onNext;
@@ -103,11 +104,10 @@ export function scan(collector, state, source) {
 }
 export function split(splitter, source) {
     return [
-        choose((v) => tryValueIfChoice1Of2(splitter(v)), source),
-        choose((v) => tryValueIfChoice2Of2(splitter(v)), source)
+        choose((v) => Choice_tryValueIfChoice1Of2(splitter(v)), source),
+        choose((v) => Choice_tryValueIfChoice2Of2(splitter(v)), source)
     ];
 }
 export function subscribe(callback, source) {
     return source.Subscribe(new Observer(callback));
 }
-//# sourceMappingURL=Observable.js.map

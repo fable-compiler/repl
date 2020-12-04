@@ -17,9 +17,17 @@ open Elmish.React
 
 let [<Literal>] ESC_KEY = 27.
 let [<Literal>] ENTER_KEY = 13.
-let [<Literal>] ALL_TODOS = "all"
-let [<Literal>] ACTIVE_TODOS = "active"
-let [<Literal>] COMPLETED_TODOS = "completed"
+
+type WhatIsVisible =
+   | All
+   | Active
+   | Completed
+
+let toStr v =
+    match v with
+    | All -> "All"
+    | Active -> "Active"
+    | Completed -> "Completed"
 
 // MODEL
 type Entry =
@@ -33,11 +41,11 @@ type Model =
     { entries : Entry list
       field : string
       uid : int
-      visibility : string }
+      visibility : WhatIsVisible }
 
 let emptyModel () =
     { entries = []
-      visibility = ALL_TODOS
+      visibility = All
       field = ""
       uid = 0 }
 
@@ -63,7 +71,7 @@ type Msg =
     | DeleteComplete
     | Check of int*bool
     | CheckAll of bool
-    | ChangeVisibility of string
+    | ChangeVisibility of WhatIsVisible
 
 // How we update our Model on a given Msg?
 let update (msg:Msg) (model:Model) =
@@ -171,9 +179,9 @@ let viewEntry todo dispatch =
 let viewEntries visibility entries dispatch =
     let isVisible todo =
         match visibility with
-        | COMPLETED_TODOS -> todo.completed
-        | ACTIVE_TODOS -> not todo.completed
-        | _ -> true
+        | Completed -> todo.completed
+        | Active -> not todo.completed
+        | All -> true
 
     let allCompleted =
         List.forall (fun t -> t.completed) entries
@@ -205,16 +213,16 @@ let visibilitySwap uri visibility actualVisibility dispatch =
     [ OnClick (fun _ -> ChangeVisibility visibility |> dispatch) ]
     [ a [ Href uri
           classList ["selected", visibility = actualVisibility] ]
-          [ str visibility ] ]
+          [ str (toStr visibility) ] ]
 
 let viewControlsFilters visibility dispatch =
   ul
     [ Class "filters" ]
-    [ visibilitySwap "#/" ALL_TODOS visibility dispatch
+    [ visibilitySwap "#/" All visibility dispatch
       str " "
-      visibilitySwap "#/active" ACTIVE_TODOS visibility dispatch
+      visibilitySwap "#/active" Active visibility dispatch
       str " "
-      visibilitySwap "#/completed" COMPLETED_TODOS visibility dispatch ]
+      visibilitySwap "#/completed" Completed visibility dispatch ]
 
 let viewControlsCount entriesLeft =
   let item =

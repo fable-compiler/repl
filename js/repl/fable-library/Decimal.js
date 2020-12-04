@@ -1,4 +1,5 @@
 import Decimal from "./lib/big.js";
+import { FSharpRef } from "./Types.js";
 export default Decimal;
 export const get_Zero = new Decimal(0);
 export const get_One = new Decimal(1);
@@ -61,18 +62,19 @@ export const negate = op_UnaryNegation;
 export function toString(x) {
     return x.toString();
 }
-export function tryParse(str) {
+export function tryParse(str, defValue) {
     try {
-        return [true, new Decimal(str.trim())];
+        defValue.contents = new Decimal(str.trim());
+        return true;
     }
     catch (_a) {
-        return [false, get_Zero];
+        return false;
     }
 }
 export function parse(str) {
-    const [ok, value] = tryParse(str);
-    if (ok) {
-        return value;
+    const defValue = new FSharpRef(get_Zero);
+    if (tryParse(str, defValue)) {
+        return defValue.contents;
     }
     else {
         throw new Error("Input string was not in a correct format.");
@@ -179,4 +181,3 @@ export function makeRangeStepFunction(step, last) {
         }
     };
 }
-//# sourceMappingURL=Decimal.js.map

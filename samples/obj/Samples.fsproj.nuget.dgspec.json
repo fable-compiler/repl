@@ -1,0 +1,68 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/alfonso/Documents/repl3/public/samples/Samples.fsproj": {}
+  },
+  "projects": {
+    "/Users/alfonso/Documents/repl3/public/samples/Samples.fsproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/alfonso/Documents/repl3/public/samples/Samples.fsproj",
+        "projectName": "Samples",
+        "projectPath": "/Users/alfonso/Documents/repl3/public/samples/Samples.fsproj",
+        "packagesPath": "/Users/alfonso/.nuget/packages/",
+        "outputPath": "/Users/alfonso/Documents/repl3/public/samples/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/alfonso/Documents/repl3/NuGet.Config",
+          "/Users/alfonso/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "dependencies": {
+            "FSharp.Core": {
+              "target": "Package",
+              "version": "[5.0.0, )",
+              "generatePathProperty": true
+            },
+            "Fable.Browser.WebGL": {
+              "target": "Package",
+              "version": "[1.0.0, )",
+              "generatePathProperty": true
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true,
+              "generatePathProperty": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.402/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

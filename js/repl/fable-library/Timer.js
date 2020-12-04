@@ -65,4 +65,3 @@ export class Timer {
     }
 }
 export default Timer;
-//# sourceMappingURL=Timer.js.map

@@ -108,4 +108,3 @@ export function split(reg, input, limit, offset = 0) {
     input = input.substring(offset);
     return input.split(reg, limit);
 }
-//# sourceMappingURL=RegExp.js.map

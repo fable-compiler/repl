@@ -2,12 +2,10 @@ import { toString as dateToString } from "./Date.js";
 import Decimal from "./Decimal.js";
 import Long, * as _Long from "./Long.js";
 import { escape } from "./RegExp.js";
+import { toString } from "./Types.js";
 const fsFormatRegExp = /(^|[^%])%([0+\- ]*)(\d+)?(?:\.(\d+))?(\w)/;
+const interpolateRegExp = /(?:(^|[^%])%([0+\- ]*)(\d+)?(?:\.(\d+))?(\w))?%P\(\)/g;
 const formatRegExp = /\{(\d+)(,-?\d+)?(?:\:([a-zA-Z])(\d{0,2})|\:(.+?))?\}/g;
-// RFC 4122 compliant. From https://stackoverflow.com/a/13653180/3922220
-// const guidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
-// Relax GUID parsing, see #1637
-const guidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 // These are used for formatting and only take longs and decimals into account (no bigint)
 function isNumeric(x) {
     return typeof x === "number" || x instanceof Long || x instanceof Decimal;
@@ -151,80 +149,102 @@ export function printf(input) {
         cont: fsFormat(input),
     };
 }
+export function interpolate(input, values) {
+    let i = 0;
+    return input.replace(interpolateRegExp, (_, prefix, flags, padLength, precision, format) => {
+        return formatReplacement(values[i++], prefix, flags, padLength, precision, format);
+    });
+}
+function continuePrint(cont, arg) {
+    return typeof arg === "string" ? cont(arg) : arg.cont(cont);
+}
 export function toConsole(arg) {
     // Don't remove the lambda here, see #1357
-    return arg.cont((x) => { console.log(x); });
+    return continuePrint((x) => console.log(x), arg);
 }
 export function toConsoleError(arg) {
-    return arg.cont((x) => { console.error(x); });
+    return continuePrint((x) => console.error(x), arg);
 }
 export function toText(arg) {
-    return arg.cont((x) => x);
+    return continuePrint((x) => x, arg);
 }
 export function toFail(arg) {
-    return arg.cont((x) => { throw new Error(x); });
+    return continuePrint((x) => {
+        throw new Error(x);
+    }, arg);
+}
+function formatReplacement(rep, prefix, flags, padLength, precision, format) {
+    let sign = "";
+    flags = flags || "";
+    format = format || "";
+    if (isNumeric(rep)) {
+        if (format.toLowerCase() !== "x") {
+            if (isLessThan(rep, 0)) {
+                rep = multiply(rep, -1);
+                sign = "-";
+            }
+            else {
+                if (flags.indexOf(" ") >= 0) {
+                    sign = " ";
+                }
+                else if (flags.indexOf("+") >= 0) {
+                    sign = "+";
+                }
+            }
+        }
+        precision = precision == null ? null : parseInt(precision, 10);
+        switch (format) {
+            case "f":
+            case "F":
+                precision = precision != null ? precision : 6;
+                rep = toFixed(rep, precision);
+                break;
+            case "g":
+            case "G":
+                rep = precision != null ? toPrecision(rep, precision) : toPrecision(rep);
+                break;
+            case "e":
+            case "E":
+                rep = precision != null ? toExponential(rep, precision) : toExponential(rep);
+                break;
+            case "x":
+                rep = toHex(rep);
+                break;
+            case "X":
+                rep = toHex(rep).toUpperCase();
+                break;
+            default: // AOid
+                rep = String(rep);
+                break;
+        }
+    }
+    else if (rep instanceof Date) {
+        rep = dateToString(rep);
+    }
+    else {
+        rep = toString(rep);
+    }
+    padLength = parseInt(padLength, 10);
+    if (!isNaN(padLength)) {
+        const zeroFlag = flags.indexOf("0") >= 0; // Use '0' for left padding
+        const minusFlag = flags.indexOf("-") >= 0; // Right padding
+        const ch = minusFlag || !zeroFlag ? " " : "0";
+        if (ch === "0") {
+            rep = padLeft(rep, padLength - sign.length, ch, minusFlag);
+            rep = sign + rep;
+        }
+        else {
+            rep = padLeft(sign + rep, padLength, ch, minusFlag);
+        }
+    }
+    else {
+        rep = sign + rep;
+    }
+    return prefix ? prefix + rep : rep;
 }
 function formatOnce(str2, rep) {
     return str2.replace(fsFormatRegExp, (_, prefix, flags, padLength, precision, format) => {
-        let sign = "";
-        if (isNumeric(rep)) {
-            if (format.toLowerCase() !== "x") {
-                if (isLessThan(rep, 0)) {
-                    rep = multiply(rep, -1);
-                    sign = "-";
-                }
-                else {
-                    if (flags.indexOf(" ") >= 0) {
-                        sign = " ";
-                    }
-                    else if (flags.indexOf("+") >= 0) {
-                        sign = "+";
-                    }
-                }
-            }
-            precision = precision == null ? null : parseInt(precision, 10);
-            switch (format) {
-                case "f":
-                case "F":
-                    precision = precision != null ? precision : 6;
-                    rep = toFixed(rep, precision);
-                    break;
-                case "g":
-                case "G":
-                    rep = precision != null ? toPrecision(rep, precision) : toPrecision(rep);
-                    break;
-                case "e":
-                case "E":
-                    rep = precision != null ? toExponential(rep, precision) : toExponential(rep);
-                    break;
-                case "x":
-                    rep = toHex(rep);
-                    break;
-                case "X":
-                    rep = toHex(rep).toUpperCase();
-                    break;
-                default: // AOid
-                    rep = String(rep);
-                    break;
-            }
-        }
-        padLength = parseInt(padLength, 10);
-        if (!isNaN(padLength)) {
-            const zeroFlag = flags.indexOf("0") >= 0; // Use '0' for left padding
-            const minusFlag = flags.indexOf("-") >= 0; // Right padding
-            const ch = minusFlag || !zeroFlag ? " " : "0";
-            if (ch === "0") {
-                rep = padLeft(rep, padLength - sign.length, ch, minusFlag);
-                rep = sign + rep;
-            }
-            else {
-                rep = padLeft(sign + rep, padLength, ch, minusFlag);
-            }
-        }
-        else {
-            rep = sign + rep;
-        }
-        const once = prefix + rep;
+        const once = formatReplacement(rep, prefix, flags, padLength, precision, format);
         return once.replace(/%/g, "%%");
     });
 }
@@ -305,6 +325,9 @@ export function format(str, ...args) {
         else if (rep instanceof Date) {
             rep = dateToString(rep, pattern || format);
         }
+        else {
+            rep = toString(rep);
+        }
         padLength = parseInt((padLength || " ").substring(1), 10);
         if (!isNaN(padLength)) {
             rep = padLeft(String(rep), Math.abs(padLength), " ", padLength < 0);
@@ -355,102 +378,6 @@ export function joinWithIndices(delimiter, xs, startIndex, count) {
         throw new Error("Index and count must refer to a location within the buffer.");
     }
     return xs.slice(startIndex, endIndexPlusOne).join(delimiter);
-}
-/** Validates UUID as specified in RFC4122 (versions 1-5). Trims braces. */
-export function validateGuid(str, doNotThrow) {
-    const trimmedAndLowered = trim(str, "{", "}").toLowerCase();
-    if (guidRegex.test(trimmedAndLowered)) {
-        return doNotThrow ? [true, trimmedAndLowered] : trimmedAndLowered;
-    }
-    else if (doNotThrow) {
-        return [false, "00000000-0000-0000-0000-000000000000"];
-    }
-    throw new Error("Guid should contain 32 digits with 4 dashes: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx");
-}
-// From https://gist.github.com/LeverOne/1308368
-export function newGuid() {
-    let b = "";
-    for (let a = 0; a++ < 36;) {
-        b += a * 51 & 52
-            ? (a ^ 15 ? 8 ^ Math.random() * (a ^ 20 ? 16 : 4) : 4).toString(16)
-            : "-";
-    }
-    return b;
-}
-// Maps for number <-> hex string conversion
-let _convertMapsInitialized = false;
-let _byteToHex;
-let _hexToByte;
-function initConvertMaps() {
-    _byteToHex = new Array(256);
-    _hexToByte = {};
-    for (let i = 0; i < 256; i++) {
-        _byteToHex[i] = (i + 0x100).toString(16).substr(1);
-        _hexToByte[_byteToHex[i]] = i;
-    }
-    _convertMapsInitialized = true;
-}
-/** Parse a UUID into it's component bytes */
-// Adapted from https://github.com/zefferus/uuid-parse
-export function guidToArray(s) {
-    if (!_convertMapsInitialized) {
-        initConvertMaps();
-    }
-    let i = 0;
-    const buf = new Uint8Array(16);
-    s.toLowerCase().replace(/[0-9a-f]{2}/g, ((oct) => {
-        switch (i) {
-            // .NET saves first three byte groups with different endianness
-            // See https://stackoverflow.com/a/16722909/3922220
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-                buf[3 - i++] = _hexToByte[oct];
-                break;
-            case 4:
-            case 5:
-                buf[9 - i++] = _hexToByte[oct];
-                break;
-            case 6:
-            case 7:
-                buf[13 - i++] = _hexToByte[oct];
-                break;
-            case 8:
-            case 9:
-            case 10:
-            case 11:
-            case 12:
-            case 13:
-            case 14:
-            case 15:
-                buf[i++] = _hexToByte[oct];
-                break;
-        }
-    }));
-    // Zero out remaining bytes if string was short
-    while (i < 16) {
-        buf[i++] = 0;
-    }
-    return buf;
-}
-/** Convert UUID byte array into a string */
-export function arrayToGuid(buf) {
-    if (buf.length !== 16) {
-        throw new Error("Byte array for GUID must be exactly 16 bytes long");
-    }
-    if (!_convertMapsInitialized) {
-        initConvertMaps();
-    }
-    const guid = _byteToHex[buf[3]] + _byteToHex[buf[2]] +
-        _byteToHex[buf[1]] + _byteToHex[buf[0]] + "-" +
-        _byteToHex[buf[5]] + _byteToHex[buf[4]] + "-" +
-        _byteToHex[buf[7]] + _byteToHex[buf[6]] + "-" +
-        _byteToHex[buf[8]] + _byteToHex[buf[9]] + "-" +
-        _byteToHex[buf[10]] + _byteToHex[buf[11]] +
-        _byteToHex[buf[12]] + _byteToHex[buf[13]] +
-        _byteToHex[buf[14]] + _byteToHex[buf[15]];
-    return guid;
 }
 function notSupported(name) {
     throw new Error("The environment doesn't support '" + name + "', please use a polyfill.");
@@ -568,4 +495,3 @@ export function substring(str, startIndex, length) {
     }
     return length != null ? str.substr(startIndex, length) : str.substr(startIndex);
 }
-//# sourceMappingURL=String.js.map

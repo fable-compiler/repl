@@ -1,5 +1,5 @@
-import { anonRecord as makeAnonRecord, Record, Union } from "./Types.js";
-import { compareArraysWith, equalArraysWith } from "./Util.js";
+import { Record, Union } from "./Types.js";
+import { combineHashCodes, equalArraysWith, stringHash } from "./Util.js";
 export class CaseInfo {
     constructor(declaringType, tag, name, fields) {
         this.declaringType = declaringType;
@@ -9,10 +9,11 @@ export class CaseInfo {
     }
 }
 export class TypeInfo {
-    constructor(fullname, generics, construct, fields, cases, enumCases) {
+    constructor(fullname, generics, construct, parent, fields, cases, enumCases) {
         this.fullname = fullname;
         this.generics = generics;
         this.construct = construct;
+        this.parent = parent;
         this.fields = fields;
         this.cases = cases;
         this.enumCases = enumCases;
@@ -20,15 +21,20 @@ export class TypeInfo {
     toString() {
         return fullName(this);
     }
+    GetHashCode() {
+        return getHashCode(this);
+    }
     Equals(other) {
         return equals(this, other);
-    }
-    CompareTo(other) {
-        return compare(this, other);
     }
 }
 export function getGenerics(t) {
     return t.generics != null ? t.generics : [];
+}
+export function getHashCode(t) {
+    const fullnameHash = stringHash(t.fullname);
+    const genHashes = getGenerics(t).map(getHashCode);
+    return combineHashCodes([fullnameHash, ...genHashes]);
 }
 export function equals(t1, t2) {
     if (t1.fullname === "") { // Anonymous records
@@ -40,29 +46,20 @@ export function equals(t1, t2) {
             && equalArraysWith(getGenerics(t1), getGenerics(t2), equals);
     }
 }
-// System.Type is not comparable in .NET, but let's implement this
-// in case users want to create a dictionary with types as keys
-export function compare(t1, t2) {
-    if (t1.fullname !== t2.fullname) {
-        return t1.fullname < t2.fullname ? -1 : 1;
-    }
-    else {
-        return compareArraysWith(getGenerics(t1), getGenerics(t2), compare);
-    }
-}
-export function class_type(fullname, generics, construct) {
-    return new TypeInfo(fullname, generics, construct);
+export function class_type(fullname, generics, construct, parent) {
+    return new TypeInfo(fullname, generics, construct, parent);
 }
 export function record_type(fullname, generics, construct, fields) {
-    return new TypeInfo(fullname, generics, construct, fields);
+    return new TypeInfo(fullname, generics, construct, undefined, fields);
 }
 export function anonRecord_type(...fields) {
-    return new TypeInfo("", undefined, undefined, () => fields);
+    return new TypeInfo("", undefined, undefined, undefined, () => fields);
 }
 export function union_type(fullname, generics, construct, cases) {
-    const t = new TypeInfo(fullname, generics, construct, undefined, () => cases().map((x, i) => typeof x === "string"
-        ? new CaseInfo(t, i, x)
-        : new CaseInfo(t, i, x[0], x[1])));
+    const t = new TypeInfo(fullname, generics, construct, undefined, undefined, () => {
+        const caseNames = construct.prototype.cases();
+        return cases().map((fields, i) => new CaseInfo(t, i, caseNames[i], fields));
+    });
     return t;
 }
 export function tuple_type(...generics) {
@@ -84,7 +81,7 @@ export function array_type(generic) {
     return new TypeInfo(generic.fullname + "[]", [generic]);
 }
 export function enum_type(fullname, underlyingType, enumCases) {
-    return new TypeInfo(fullname, [underlyingType], undefined, undefined, undefined, enumCases);
+    return new TypeInfo(fullname, [underlyingType], undefined, undefined, undefined, undefined, enumCases);
 }
 export const obj_type = new TypeInfo("System.Object");
 export const unit_type = new TypeInfo("Microsoft.FSharp.Core.Unit");
@@ -137,6 +134,10 @@ export function isGenericType(t) {
 }
 export function isEnum(t) {
     return t.enumCases != null && t.enumCases.length > 0;
+}
+export function isSubclassOf(t1, t2) {
+    var _a, _b;
+    return (_b = (_a = t1.parent) === null || _a === void 0 ? void 0 : _a.Equals(t2)) !== null && _b !== void 0 ? _b : false;
 }
 /**
  * This doesn't replace types for fields (records) or cases (unions)
@@ -194,15 +195,14 @@ export function parseEnum(t, str) {
     const value = parseInt(str, 10);
     return getEnumCase(t, isNaN(value) ? str : value)[1];
 }
-export function tryParseEnum(t, str) {
+export function tryParseEnum(t, str, defValue) {
     try {
-        const v = parseEnum(t, str);
-        return [true, v];
+        defValue.contents = parseEnum(t, str);
+        return true;
     }
     catch (_a) {
-        // supress error
+        return false;
     }
-    return [false, NaN];
 }
 export function getEnumName(t, v) {
     return getEnumCase(t, v)[0];
@@ -258,7 +258,7 @@ export function isRecord(t) {
     return t instanceof TypeInfo ? t.fields != null : t instanceof Record;
 }
 export function isTuple(t) {
-    return t.fullname.startsWith("System.Tuple");
+    return t.fullname.startsWith("System.Tuple") && !isArray(t);
 }
 // In .NET this is false for delegates
 export function isFunction(t) {
@@ -276,6 +276,9 @@ export function getUnionFields(v, t) {
 export function getUnionCaseFields(uci) {
     return uci.fields == null ? [] : uci.fields;
 }
+// This is used as replacement of `FSharpValue.GetRecordFields`
+// For `FSharpTypes.GetRecordFields` see `getRecordElements`
+// Object.keys returns keys in the order they were added to the object
 export function getRecordFields(v) {
     return Object.keys(v).map((k) => v[k]);
 }
@@ -294,7 +297,7 @@ export function makeUnion(uci, values) {
         throw new Error(`Expected an array of length ${expectedLength} but got ${values.length}`);
     }
     return uci.declaringType.construct != null
-        ? new uci.declaringType.construct(uci.tag, uci.name, ...values)
+        ? new uci.declaringType.construct(uci.tag, ...values)
         : {};
 }
 export function makeRecord(t, values) {
@@ -304,16 +307,16 @@ export function makeRecord(t, values) {
     }
     return t.construct != null
         ? new t.construct(...values)
-        : makeAnonRecord(fields.reduce((obj, [key, _t], i) => {
+        : fields.reduce((obj, [key, _t], i) => {
             obj[key] = values[i];
             return obj;
-        }, {}));
+        }, {});
 }
 export function makeTuple(values, _t) {
     return values;
 }
 export function makeGenericType(t, generics) {
-    return new TypeInfo(t.fullname, generics, t.construct, t.fields, t.cases);
+    return new TypeInfo(t.fullname, generics, t.construct, t.parent, t.fields, t.cases);
 }
 export function createInstance(t, consArgs) {
     // TODO: Check if consArgs length is same as t.construct?
@@ -340,10 +343,9 @@ export function getCaseTag(x) {
 }
 export function getCaseName(x) {
     assertUnion(x);
-    return x.name;
+    return x.cases()[x.tag];
 }
 export function getCaseFields(x) {
     assertUnion(x);
     return x.fields;
 }
-//# sourceMappingURL=Reflection.js.map

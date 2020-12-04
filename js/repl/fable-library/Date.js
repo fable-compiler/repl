@@ -173,12 +173,18 @@ export function maxValue() {
     // This is "9999-12-31T23:59:59.999Z", actual JS max value is 8640000000000000
     return DateTime(253402300799999, 0 /* Unspecified */);
 }
-export function parseRaw(str) {
-    let date = new Date(str);
+export function parseRaw(input) {
+    if (input === null) {
+        throw new Error("Value cannot be null when parsing DateTime");
+    }
+    if (input.trim() === "") {
+        throw new Error("An empty string is not recognized as a valid DateTime");
+    }
+    let date = new Date(input);
     if (isNaN(date.getTime())) {
         // Try to check strings JS Date cannot parse (see #1045, #1422)
         // tslint:disable-next-line:max-line-length
-        const m = /^\s*(\d+[^\w\s:]\d+[^\w\s:]\d+)?\s*(\d+:\d+(?::\d+(?:\.\d+)?)?)?\s*([AaPp][Mm])?\s*([+-]\d+(?::\d+)?)?\s*$/.exec(str);
+        const m = /^\s*(\d+[^\w\s:]\d+[^\w\s:]\d+)?\s*(\d+:\d+(?::\d+(?:\.\d+)?)?)?\s*([AaPp][Mm])?\s*([+-]\d+(?::\d+)?)?\s*$/.exec(input);
         if (m != null) {
             let baseDate;
             let timeInSeconds = 0;
@@ -236,16 +242,13 @@ export function parse(str, detectUTC = false) {
         : 0 /* Unspecified */;
     return DateTime(date.getTime(), kind);
 }
-export function tryParse(v, _refValue) {
+export function tryParse(v, defValue) {
     try {
-        // if value is null or whitespace, parsing fails
-        if (v == null || v.trim() === "") {
-            return [false, minValue()];
-        }
-        return [true, parse(v)];
+        defValue.contents = parse(v);
+        return true;
     }
     catch (_err) {
-        return [false, minValue()];
+        return false;
     }
 }
 export function create(year, month, day, h = 0, m = 0, s = 0, ms = 0, kind) {
@@ -420,4 +423,3 @@ function isDST(janOffset, julOffset, tOffset) {
     return Math.min(janOffset, julOffset) === tOffset;
 }
 export default DateTime;
-//# sourceMappingURL=Date.js.map

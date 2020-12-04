@@ -1,45 +1,27 @@
 // tslint:disable:ban-types
-export function bindThis(this$, source) {
-    for (const key of Object.keys(source)) {
-        if (typeof source[key] === "function") {
-            source[key] = source[key].bind(this$);
-        }
-    }
-    return source;
-}
-// Object.assign flattens getters and setters
-// See https://stackoverflow.com/questions/37054596/js-es5-how-to-assign-objects-with-setters-and-getters
-export function extend(target, ...sources) {
-    for (const source of sources) {
-        for (const key of Object.keys(source)) {
-            const descr = Object.getOwnPropertyDescriptor(source, key);
-            if (descr) {
-                Object.defineProperty(target, key, descr);
-            }
-        }
-    }
-    return target;
-}
 export function isIterable(x) {
     return x != null && typeof x === "object" && Symbol.iterator in x;
 }
 export function isArrayLike(x) {
-    return x != null && (Array.isArray(x) || ArrayBuffer.isView(x));
+    return Array.isArray(x) || ArrayBuffer.isView(x);
 }
-export function isComparer(x) {
-    return x != null && typeof x.Compare === "function";
+function isComparer(x) {
+    return typeof x.Compare === "function";
 }
-export function isComparable(x) {
-    return x != null && typeof x.CompareTo === "function";
+function isComparable(x) {
+    return typeof x.CompareTo === "function";
 }
-export function isEquatable(x) {
-    return x != null && typeof x.Equals === "function";
+function isEquatable(x) {
+    return typeof x.Equals === "function";
 }
-export function isHashable(x) {
-    return x != null && typeof x.GetHashCode === "function";
+function isHashable(x) {
+    return typeof x.GetHashCode === "function";
 }
 export function isDisposable(x) {
     return x != null && typeof x.Dispose === "function";
+}
+export function sameConstructor(x, y) {
+    return Object.getPrototypeOf(x).constructor === Object.getPrototypeOf(y).constructor;
 }
 export class Comparer {
     constructor(f) {
@@ -63,25 +45,6 @@ export function comparerFromEqualityComparer(comparer) {
             }
         });
     }
-}
-// TODO: Move these three methods to Map and Set modules
-export function containsValue(v, map) {
-    for (const kv of map) {
-        if (equals(v, kv[1])) {
-            return true;
-        }
-    }
-    return false;
-}
-export function tryGetValue(map, key, defaultValue) {
-    return map.has(key) ? [true, map.get(key)] : [false, defaultValue];
-}
-export function addToSet(v, set) {
-    if (set.has(v)) {
-        return false;
-    }
-    set.add(v);
-    return true;
 }
 export function assertEqual(actual, expected, msg) {
     if (!equals(actual, expected)) {
@@ -185,7 +148,7 @@ export function combineHashCodes(hashes) {
         return ((h1 << 5) + h1) ^ h2;
     });
 }
-export function identityHash(x) {
+export function physicalHash(x) {
     if (x == null) {
         return 0;
     }
@@ -199,6 +162,28 @@ export function identityHash(x) {
         default:
             return numberHash(ObjectRef.id(x));
     }
+}
+export function identityHash(x) {
+    if (x == null) {
+        return 0;
+    }
+    else if (isHashable(x)) {
+        return x.GetHashCode();
+    }
+    else {
+        return physicalHash(x);
+    }
+}
+export function dateHash(x) {
+    return x.getTime();
+}
+export function arrayHash(x) {
+    const len = x.length;
+    const hashes = new Array(len);
+    for (let i = 0; i < len; i++) {
+        hashes[i] = structuralHash(x[i]);
+    }
+    return combineHashCodes(hashes);
 }
 export function structuralHash(x) {
     if (x == null) {
@@ -216,18 +201,31 @@ export function structuralHash(x) {
                 return x.GetHashCode();
             }
             else if (isArrayLike(x)) {
-                const len = x.length;
-                const hashes = new Array(len);
-                for (let i = 0; i < len; i++) {
-                    hashes[i] = structuralHash(x[i]);
-                }
+                return arrayHash(x);
+            }
+            else if (x instanceof Date) {
+                return dateHash(x);
+            }
+            else if (Object.getPrototypeOf(x).constructor === Object) {
+                // TODO: check call-stack to prevent cyclic objects?
+                const hashes = Object.values(x).map((v) => structuralHash(v));
                 return combineHashCodes(hashes);
             }
             else {
-                return stringHash(String(x));
+                // Classes don't implement GetHashCode by default, but must use identity hashing
+                return numberHash(ObjectRef.id(x));
+                // return stringHash(String(x));
             }
         }
     }
+}
+// Intended for custom numeric types, like long or decimal
+export function fastStructuralHash(x) {
+    return stringHash(String(x));
+}
+// Intended for declared types that may or may not implement GetHashCode
+export function safeHash(x) {
+    return x == null ? 0 : isHashable(x) ? x.GetHashCode() : numberHash(ObjectRef.id(x));
 }
 export function equalArraysWith(x, y, eq) {
     if (x == null) {
@@ -249,23 +247,25 @@ export function equalArraysWith(x, y, eq) {
 export function equalArrays(x, y) {
     return equalArraysWith(x, y, equals);
 }
-// export function equalObjects(x: { [k: string]: any }, y: { [k: string]: any }): boolean {
-//   if (x == null) { return y == null; }
-//   if (y == null) { return false; }
-//   const xKeys = Object.keys(x);
-//   const yKeys = Object.keys(y);
-//   if (xKeys.length !== yKeys.length) {
-//     return false;
-//   }
-//   xKeys.sort();
-//   yKeys.sort();
-//   for (let i = 0; i < xKeys.length; i++) {
-//     if (xKeys[i] !== yKeys[i] || !equals(x[xKeys[i]], y[yKeys[i]])) {
-//       return false;
-//     }
-//   }
-//   return true;
-// }
+function equalObjects(x, y) {
+    const xKeys = Object.keys(x);
+    const yKeys = Object.keys(y);
+    if (xKeys.length !== yKeys.length) {
+        return false;
+    }
+    xKeys.sort();
+    yKeys.sort();
+    for (let i = 0; i < xKeys.length; i++) {
+        if (xKeys[i] !== yKeys[i] || !equals(x[xKeys[i]], y[yKeys[i]])) {
+            return false;
+        }
+    }
+    return true;
+}
+export function equalsSafe(x, y) {
+    var _a;
+    return (_a = x === null || x === void 0 ? void 0 : x.Equals(y)) !== null && _a !== void 0 ? _a : y == null;
+}
 export function equals(x, y) {
     if (x === y) {
         return true;
@@ -289,7 +289,7 @@ export function equals(x, y) {
         return (y instanceof Date) && compareDates(x, y) === 0;
     }
     else {
-        return false;
+        return Object.getPrototypeOf(x).constructor === Object && equalObjects(x, y);
     }
 }
 export function compareDates(x, y) {
@@ -330,13 +330,7 @@ export function compareArraysWith(x, y, comp) {
 export function compareArrays(x, y) {
     return compareArraysWith(x, y, compare);
 }
-export function compareObjects(x, y) {
-    if (x == null) {
-        return y == null ? 0 : 1;
-    }
-    if (y == null) {
-        return -1;
-    }
+function compareObjects(x, y) {
     const xKeys = Object.keys(x);
     const yKeys = Object.keys(y);
     if (xKeys.length !== yKeys.length) {
@@ -358,6 +352,10 @@ export function compareObjects(x, y) {
     }
     return 0;
 }
+export function compareSafe(x, y) {
+    var _a;
+    return (_a = x === null || x === void 0 ? void 0 : x.CompareTo(y)) !== null && _a !== void 0 ? _a : (y == null ? 0 : -1);
+}
 export function compare(x, y) {
     if (x === y) {
         return 0;
@@ -374,14 +372,14 @@ export function compare(x, y) {
     else if (isComparable(x)) {
         return x.CompareTo(y);
     }
-    else if (isArrayLike(x) && isArrayLike(y)) {
-        return compareArrays(x, y);
+    else if (isArrayLike(x)) {
+        return isArrayLike(y) ? compareArrays(x, y) : -1;
     }
-    else if (x instanceof Date && y instanceof Date) {
-        return compareDates(x, y);
+    else if (x instanceof Date) {
+        return y instanceof Date ? compareDates(x, y) : -1;
     }
     else {
-        return 1;
+        return Object.getPrototypeOf(x).constructor === Object ? compareObjects(x, y) : -1;
     }
 }
 export function min(comparer, x, y) {
@@ -390,10 +388,13 @@ export function min(comparer, x, y) {
 export function max(comparer, x, y) {
     return comparer(x, y) > 0 ? x : y;
 }
+export function clamp(comparer, value, min, max) {
+    return (comparer(value, min) < 0) ? min : (comparer(value, max) > 0) ? max : value;
+}
 export function createAtom(value) {
     let atom = value;
-    return (value) => {
-        if (value === void 0) {
+    return (value, isSetter) => {
+        if (!isSetter) {
             return atom;
         }
         else {
@@ -402,73 +403,12 @@ export function createAtom(value) {
         }
     };
 }
-const CaseRules = {
-    None: 0,
-    LowerFirst: 1,
-    SnakeCase: 2,
-    SnakeCaseAllCaps: 3,
-    KebabCase: 4,
-};
-function dashify(str, separator) {
-    return str.replace(/[a-z]?[A-Z]/g, (m) => m.length === 1
-        ? m.toLowerCase()
-        : m.charAt(0) + separator + m.charAt(1).toLowerCase());
-}
-function changeCase(str, caseRule) {
-    switch (caseRule) {
-        case CaseRules.LowerFirst:
-            return str.charAt(0).toLowerCase() + str.slice(1);
-        case CaseRules.SnakeCase:
-            return dashify(str, "_");
-        case CaseRules.SnakeCaseAllCaps:
-            return dashify(str, "_").toUpperCase();
-        case CaseRules.KebabCase:
-            return dashify(str, "-");
-        case CaseRules.None:
-        default:
-            return str;
+export function createObj(fields) {
+    const obj = {};
+    for (const kv of fields) {
+        obj[kv[0]] = kv[1];
     }
-}
-export function createObj(fields, caseRule = CaseRules.None) {
-    function fail(kvPair) {
-        throw new Error("Cannot infer key and value of " + String(kvPair));
-    }
-    const o = {};
-    const definedCaseRule = caseRule;
-    for (let kvPair of fields) {
-        let caseRule = CaseRules.None;
-        if (kvPair == null) {
-            fail(kvPair);
-        }
-        // Deflate unions and use the defined case rule
-        if (typeof kvPair.toJSON === "function") {
-            kvPair = kvPair.toJSON();
-            caseRule = definedCaseRule;
-        }
-        if (Array.isArray(kvPair)) {
-            switch (kvPair.length) {
-                case 0:
-                    fail(kvPair);
-                    break;
-                case 1:
-                    o[changeCase(kvPair[0], caseRule)] = true;
-                    break;
-                case 2:
-                    const value = kvPair[1];
-                    o[changeCase(kvPair[0], caseRule)] = value;
-                    break;
-                default:
-                    o[changeCase(kvPair[0], caseRule)] = kvPair.slice(1);
-            }
-        }
-        else if (typeof kvPair === "string") {
-            o[changeCase(kvPair, caseRule)] = true;
-        }
-        else {
-            fail(kvPair);
-        }
-    }
-    return o;
+    return obj;
 }
 export function jsOptions(mutator) {
     const opts = {};
@@ -669,18 +609,3 @@ export function mapCurriedArgs(fn, mappings) {
     }
     return (arg) => mapArg(fn, arg, mappings, 0);
 }
-export function addToDict(dict, k, v) {
-    if (dict.has(k)) {
-        throw new Error("An item with the same key has already been added. Key: " + k);
-    }
-    dict.set(k, v);
-}
-export function getItemFromDict(map, key) {
-    if (map.has(key)) {
-        return map.get(key);
-    }
-    else {
-        throw new Error(`The given key '${key}' was not present in the dictionary.`);
-    }
-}
-//# sourceMappingURL=Util.js.map

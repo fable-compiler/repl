@@ -146,4 +146,3 @@ export function toString(bytes, offset, count) {
     }
     return Array.from(buffer).map((b) => ("0" + b.toString(16)).slice(-2)).join("-");
 }
-//# sourceMappingURL=BitConverter.js.map
