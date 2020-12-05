@@ -131,17 +131,17 @@ module.exports = {
                 patterns: [
                     { from: CONFIG.assetsDir }
                 ]}),
-            new WorkboxPlugin.GenerateSW({
-                cleanupOutdatedCaches: true,
-                // these options encourage the ServiceWorkers to get in there fast
-                // and not allow any straggling "old" SWs to hang around
-                clientsClaim: true,
-                skipWaiting: true,
-                // runtimeCaching: [{
-                //     urlPattern: new RegExp('/api/.*'),
-                //     handler: 'staleWhileRevalidate'
-                //   }]
-            }),
+            // new WorkboxPlugin.GenerateSW({
+            //     cleanupOutdatedCaches: true,
+            //     // these options encourage the ServiceWorkers to get in there fast
+            //     // and not allow any straggling "old" SWs to hang around
+            //     clientsClaim: true,
+            //     skipWaiting: true,
+            //     // runtimeCaching: [{
+            //     //     urlPattern: new RegExp('/api/.*'),
+            //     //     handler: 'staleWhileRevalidate'
+            //     //   }]
+            // }),
         ])
         : commonPlugins.concat([
             new webpack.HotModuleReplacementPlugin(),

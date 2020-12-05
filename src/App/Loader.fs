@@ -112,6 +112,7 @@ let [<Global>] navigator: obj = jsNative
 let [<Emit("$0 in $1")>] hasField (key: string) (o: obj): bool = jsNative
 if hasField "serviceWorker" navigator then
     navigator?serviceWorker?register("./service-worker.js")
+        ?``then``(fun registration -> registration?unregister())
 #endif
 
 open Elmish.React
