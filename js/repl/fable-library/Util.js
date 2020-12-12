@@ -262,10 +262,6 @@ function equalObjects(x, y) {
     }
     return true;
 }
-export function equalsSafe(x, y) {
-    var _a;
-    return (_a = x === null || x === void 0 ? void 0 : x.Equals(y)) !== null && _a !== void 0 ? _a : y == null;
-}
 export function equals(x, y) {
     if (x === y) {
         return true;
@@ -351,10 +347,6 @@ function compareObjects(x, y) {
         }
     }
     return 0;
-}
-export function compareSafe(x, y) {
-    var _a;
-    return (_a = x === null || x === void 0 ? void 0 : x.CompareTo(y)) !== null && _a !== void 0 ? _a : (y == null ? 0 : -1);
 }
 export function compare(x, y) {
     if (x === y) {

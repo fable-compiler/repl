@@ -471,7 +471,7 @@ export function copyTo(source, sourceIndex, target, targetIndex, count) {
 export function indexOf(array, item_1, start, count) {
     const start_1 = defaultArg(start, 0) | 0;
     const i = array.indexOf(item_1, start_1);
-    if ((count != null) ? (i >= (start_1 + count)) : false) {
+    if ((count != null) ? (i >= (start_1 + value_2(count))) : false) {
         return -1;
     }
     else {

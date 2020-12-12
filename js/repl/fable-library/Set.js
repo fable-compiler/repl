@@ -1,5 +1,5 @@
 import { record_type, bool_type, list_type, option_type, class_type } from "./Reflection.js";
-import { value as value_1, some } from "./Option.js";
+import { some, value as value_1 } from "./Option.js";
 import { toString, List, Record } from "./Types.js";
 import { singleton as singleton_1, collect, empty as empty_1, delay, fold as fold_2, reduce, iterate as iterate_1, toIterator, map as map_1, getEnumerator } from "./Seq.js";
 import { fold as fold_1 } from "./Array.js";
@@ -133,10 +133,10 @@ export function SetTreeModule_rebalance(t1, v, t2) {
         t2h = 0;
     }
     if (t2h > (t1h + 2)) {
-        const matchValue = t2;
+        const matchValue = value_1(t2);
         if (matchValue instanceof SetTreeNode$1) {
             if ((t_2 = SetTreeNode$1__get_Left(matchValue), (t_2 != null) ? (t2_3 = t_2, (t2_3 instanceof SetTreeNode$1) ? SetTreeNode$1__get_Height(t2_3) : 1) : 0) > (t1h + 1)) {
-                const matchValue_1 = SetTreeNode$1__get_Left(matchValue);
+                const matchValue_1 = value_1(SetTreeNode$1__get_Left(matchValue));
                 if (matchValue_1 instanceof SetTreeNode$1) {
                     return SetTreeModule_mk(SetTreeModule_mk(t1, v, SetTreeNode$1__get_Left(matchValue_1)), SetTreeLeaf$1__get_Key(matchValue_1), SetTreeModule_mk(SetTreeNode$1__get_Right(matchValue_1), SetTreeLeaf$1__get_Key(matchValue), SetTreeNode$1__get_Right(matchValue)));
                 }
@@ -153,10 +153,10 @@ export function SetTreeModule_rebalance(t1, v, t2) {
         }
     }
     else if (t1h > (t2h + 2)) {
-        const matchValue_2 = t1;
+        const matchValue_2 = value_1(t1);
         if (matchValue_2 instanceof SetTreeNode$1) {
             if ((t_3 = SetTreeNode$1__get_Right(matchValue_2), (t_3 != null) ? (t2_4 = t_3, (t2_4 instanceof SetTreeNode$1) ? SetTreeNode$1__get_Height(t2_4) : 1) : 0) > (t2h + 1)) {
-                const matchValue_3 = SetTreeNode$1__get_Right(matchValue_2);
+                const matchValue_3 = value_1(SetTreeNode$1__get_Right(matchValue_2));
                 if (matchValue_3 instanceof SetTreeNode$1) {
                     return SetTreeModule_mk(SetTreeModule_mk(SetTreeNode$1__get_Left(matchValue_2), SetTreeLeaf$1__get_Key(matchValue_2), SetTreeNode$1__get_Left(matchValue_3)), SetTreeLeaf$1__get_Key(matchValue_3), SetTreeModule_mk(SetTreeNode$1__get_Right(matchValue_3), v, t2));
                 }

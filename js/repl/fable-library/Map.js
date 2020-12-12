@@ -1,5 +1,5 @@
 import { record_type, bool_type, list_type, option_type, class_type } from "./Reflection.js";
-import { value as value_2, some } from "./Option.js";
+import { some, value as value_2 } from "./Option.js";
 import { Record, List } from "./Types.js";
 import { fold as fold_1 } from "./List.js";
 import { structuralHash, compare, equals, isArrayLike } from "./Util.js";
@@ -139,10 +139,10 @@ export function MapTreeModule_rebalance(t1, k, v, t2) {
         t2h = 0;
     }
     if (t2h > (t1h + 2)) {
-        const matchValue = t2;
+        const matchValue = value_2(t2);
         if (matchValue instanceof MapTreeNode$2) {
             if ((m_2 = MapTreeNode$2__get_Left(matchValue), (m_2 != null) ? (m2_2 = m_2, (m2_2 instanceof MapTreeNode$2) ? MapTreeNode$2__get_Height(m2_2) : 1) : 0) > (t1h + 1)) {
-                const matchValue_1 = MapTreeNode$2__get_Left(matchValue);
+                const matchValue_1 = value_2(MapTreeNode$2__get_Left(matchValue));
                 if (matchValue_1 instanceof MapTreeNode$2) {
                     return MapTreeModule_mk(MapTreeModule_mk(t1, k, v, MapTreeNode$2__get_Left(matchValue_1)), MapTreeLeaf$2__get_Key(matchValue_1), MapTreeLeaf$2__get_Value(matchValue_1), MapTreeModule_mk(MapTreeNode$2__get_Right(matchValue_1), MapTreeLeaf$2__get_Key(matchValue), MapTreeLeaf$2__get_Value(matchValue), MapTreeNode$2__get_Right(matchValue)));
                 }
@@ -159,10 +159,10 @@ export function MapTreeModule_rebalance(t1, k, v, t2) {
         }
     }
     else if (t1h > (t2h + 2)) {
-        const matchValue_2 = t1;
+        const matchValue_2 = value_2(t1);
         if (matchValue_2 instanceof MapTreeNode$2) {
             if ((m_3 = MapTreeNode$2__get_Right(matchValue_2), (m_3 != null) ? (m2_3 = m_3, (m2_3 instanceof MapTreeNode$2) ? MapTreeNode$2__get_Height(m2_3) : 1) : 0) > (t2h + 1)) {
-                const matchValue_3 = MapTreeNode$2__get_Right(matchValue_2);
+                const matchValue_3 = value_2(MapTreeNode$2__get_Right(matchValue_2));
                 if (matchValue_3 instanceof MapTreeNode$2) {
                     return MapTreeModule_mk(MapTreeModule_mk(MapTreeNode$2__get_Left(matchValue_2), MapTreeLeaf$2__get_Key(matchValue_2), MapTreeLeaf$2__get_Value(matchValue_2), MapTreeNode$2__get_Left(matchValue_3)), MapTreeLeaf$2__get_Key(matchValue_3), MapTreeLeaf$2__get_Value(matchValue_3), MapTreeModule_mk(MapTreeNode$2__get_Right(matchValue_3), k, v, t2));
                 }

@@ -1035,21 +1035,21 @@ export function getSlice(lower, upper, xs) {
     if (lower_1 < 0) {
         return outOfRange();
     }
-    else if (hasUpper ? (upper < lower_1) : false) {
+    else if (hasUpper ? (value_1(upper) < lower_1) : false) {
         return new List_1();
     }
     else {
         let lastIndex = -1;
         const res = foldIndexed((i, acc, x) => {
             lastIndex = i;
-            if ((lower_1 <= i) ? ((!hasUpper) ? true : (i <= upper)) : false) {
+            if ((lower_1 <= i) ? ((!hasUpper) ? true : (i <= value_1(upper))) : false) {
                 return new List_1(x, acc);
             }
             else {
                 return acc;
             }
         }, new List_1(), xs);
-        if ((lower_1 > (lastIndex + 1)) ? true : (hasUpper ? (upper > lastIndex) : false)) {
+        if ((lower_1 > (lastIndex + 1)) ? true : (hasUpper ? (value_1(upper) > lastIndex) : false)) {
             outOfRange();
         }
         return reverse(res);

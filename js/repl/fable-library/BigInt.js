@@ -1,6 +1,6 @@
 import { BigInteger_op_Inequality_56F059C0, BigInteger_op_Equality_56F059C0, BigInteger_op_GreaterThanOrEqual_56F059C0, BigInteger_op_GreaterThan_56F059C0, BigInteger_op_LessThanOrEqual_56F059C0, BigInteger_op_LessThan_56F059C0, BigInteger_op_ExclusiveOr_56F059C0, BigInteger_op_BitwiseOr_56F059C0, BigInteger_op_BitwiseAnd_56F059C0, BigInteger_op_LeftShift_62E082A2, BigInteger_op_RightShift_62E082A2, BigInteger_op_UnaryPlus_Z665282C2, BigInteger_op_UnaryNegation_Z665282C2, BigInteger_op_Modulus_56F059C0, BigInteger_op_Division_56F059C0, BigInteger_op_Multiply_56F059C0, BigInteger_op_Subtraction_56F059C0, BigInteger_op_Addition_56F059C0, BigInteger__get_IsOne, BigInteger__get_IsZero, BigInteger__get_Sign, BigInteger__get_ToDecimal, BigInteger__get_ToDouble, BigInteger__get_ToSingle, BigInteger__get_ToUInt64, BigInteger__get_ToInt64, BigInteger__get_ToUInt32, BigInteger__get_ToInt32, BigInteger__get_ToUInt16, BigInteger__get_ToInt16, BigInteger__get_ToByte, BigInteger__get_ToSByte, BigInteger_$ctor_Z524259A4, BigInteger_$ctor_Z524259C1, BigInteger_get_Two, BigInteger_get_One, BigInteger_get_Zero, BigInteger_Abs_Z665282C2, BigInteger_Pow_62E082A2, BigInteger_GreatestCommonDivisor_56F059C0, BigInteger_DivRem_56F059C0, BigInteger_Parse_Z721C83C5, BigInteger } from "./BigInt/z.js";
 import { fromInteger } from "./Long.js";
-import { comparePrimitives, min, compareSafe, equalsSafe, safeHash } from "./Util.js";
+import { comparePrimitives, min, compare as compare_1, equals as equals_1, safeHash } from "./Util.js";
 import { List, toString as toString_1 } from "./Types.js";
 import { fold, head, skipWhile, ofSeq, find } from "./List.js";
 import { unfold, delay, rangeNumber } from "./Seq.js";
@@ -138,7 +138,7 @@ export function compare(x, y) {
 }
 
 export function equals(x, y) {
-    return equalsSafe(x, y);
+    return equals_1(x, y);
 }
 
 export function toString(x) {
@@ -235,11 +235,11 @@ function flipTwosComplement(currByte, lowBitFound) {
 }
 
 export function toByteArray(value) {
-    if (equalsSafe(value, zero)) {
+    if (equals_1(value, zero)) {
         return new Uint8Array([0]);
     }
     else {
-        const isPositive = compareSafe(value, zero) > 0;
+        const isPositive = compare_1(value, zero) > 0;
         const value_1 = isPositive ? value : BigInteger_op_Multiply_56F059C0(BigInteger_$ctor_Z524259A4(-1), value);
         const mask32 = fromInt64(fromInteger(4294967295, false, 6));
         const loop = (accumBytes_mut, consumeValue_mut, lowBitFound_mut) => {
@@ -247,7 +247,7 @@ export function toByteArray(value) {
             loop:
             while (true) {
                 const accumBytes = accumBytes_mut, consumeValue = consumeValue_mut, lowBitFound = lowBitFound_mut;
-                if (compareSafe(consumeValue, zero) <= 0) {
+                if (compare_1(consumeValue, zero) <= 0) {
                     const accumBytes_1 = isPositive ? skipWhile((b) => (b === 0), accumBytes) : skipWhile((b_1) => (b_1 === 255), accumBytes);
                     const isHighBitOne = (head(accumBytes_1) & 128) !== 0;
                     return reverse(Uint8Array.from((isPositive ? isHighBitOne : false) ? (new List(0, accumBytes_1)) : (((!isPositive) ? (!isHighBitOne) : false) ? (new List(255, accumBytes_1)) : accumBytes_1)));
@@ -342,13 +342,13 @@ export function fromByteArray(bytes) {
 }
 
 export function makeRangeStepFunction(step, last) {
-    const stepComparedWithZero = compareSafe(step, zero) | 0;
+    const stepComparedWithZero = compare_1(step, zero) | 0;
     if (stepComparedWithZero === 0) {
         throw (new Error("The step of a range cannot be zero"));
     }
     const stepGreaterThanZero = stepComparedWithZero > 0;
     return (x) => {
-        const comparedWithLast = compareSafe(x, last) | 0;
+        const comparedWithLast = compare_1(x, last) | 0;
         return ((stepGreaterThanZero ? (comparedWithLast <= 0) : false) ? true : ((!stepGreaterThanZero) ? (comparedWithLast >= 0) : false)) ? [x, BigInteger_op_Addition_56F059C0(x, step)] : (void 0);
     };
 }
