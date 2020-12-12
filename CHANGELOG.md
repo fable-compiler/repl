@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.4
+
+* New attempt at removing ServiceWorker
+
 ## 3.0.3
 
 * Fable fixes
