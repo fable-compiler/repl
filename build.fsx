@@ -33,12 +33,12 @@ let METADATA_EXPORT_DIR = Path.Combine(CWD, "src/Export")
 let CHANGELOG_FILE = Path.Combine(CWD, "CHANGELOG.md")
 let PRELUDE_FILE = CWD </> "src/App/Prelude.fs"
 
-let METADATA_LIB, STANDALONE_DIST =
+let METADATA_LIB, STANDALONE_DIST, STANDALONE_SRC =
     match Environment.environVarOrNone "LOCAL_PKG" with
     | Some _ ->
         printfn "Using local packages..."
-        "../fable/src/fable-metadata/lib", "../fable/src/fable-standalone/dist"
-    | None -> "node_modules/fable-metadata/lib", "node_modules/fable-standalone/dist"
+        "../Fable/src/fable-metadata/lib", "../Fable/src/fable-standalone/dist", "../Fable/src/fable-standalone/src"
+    | None -> "node_modules/fable-metadata/lib", "node_modules/fable-standalone/dist", "node_modules/fable-standalone/dist"
 
 module Util =
 
@@ -130,6 +130,7 @@ let copyModules = BuildTask.create "CopyModules" [ npmInstall ] {
     )
 
     Shell.copyDir REPL_OUTPUT STANDALONE_DIST (fun _ -> true)
+    Shell.copyDir "src/Standalone" STANDALONE_SRC (fun f -> f.EndsWith(".fs"))
 }
 
 // TODO re-add generate metadata for REPL lib using git submobules
@@ -197,7 +198,7 @@ let watchApp = BuildTask.create "WatchApp" [ copyModules ] {
     Npm.run "start" id
 }
 
-let _release = BuildTask.create "Release" [ updatePreludeREPLVersion; buildApp ] {
+let _release = BuildTask.create "Release" [ updatePreludeREPLVersion; ] {
     let token =
         match Environment.environVarOrDefault "GITHUB_TOKEN" "" with
         | s when not (System.String.IsNullOrWhiteSpace s) -> s

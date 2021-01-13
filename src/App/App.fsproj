@@ -4,8 +4,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\..\node_modules\fable-standalone\src\Interfaces.fs" />
-    <Compile Include="..\..\node_modules\fable-standalone\src\Worker\Shared.fs" />
+    <Compile Include="..\Standalone\Interfaces.fs" />
+    <Compile Include="..\Standalone\Worker\Shared.fs" />
     <Compile Include="Libs\Monaco.fs" />
     <Compile Include="Libs/ReactDeviceDetect.fs" />
     <Compile Include="Prelude.fs" />
