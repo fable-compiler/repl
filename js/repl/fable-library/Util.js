@@ -113,20 +113,16 @@ export function int32ToString(i, radix) {
     i = i < 0 && radix != null && radix !== 10 ? 0xFFFFFFFF + i + 1 : i;
     return i.toString(radix);
 }
-let ObjectRef = /** @class */ (() => {
-    class ObjectRef {
-        static id(o) {
-            if (!ObjectRef.idMap.has(o)) {
-                ObjectRef.idMap.set(o, ++ObjectRef.count);
-            }
-            return ObjectRef.idMap.get(o);
+export class ObjectRef {
+    static id(o) {
+        if (!ObjectRef.idMap.has(o)) {
+            ObjectRef.idMap.set(o, ++ObjectRef.count);
         }
+        return ObjectRef.idMap.get(o);
     }
-    ObjectRef.idMap = new WeakMap();
-    ObjectRef.count = 0;
-    return ObjectRef;
-})();
-export { ObjectRef };
+}
+ObjectRef.idMap = new WeakMap();
+ObjectRef.count = 0;
 export function stringHash(s) {
     let i = 0;
     let h = 5381;

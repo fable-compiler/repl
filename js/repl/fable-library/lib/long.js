@@ -1,6 +1,7 @@
 // Adapted from: https://github.com/dcodeIO/long.js/blob/master/src/long.js
 // Apache License 2.0: https://github.com/dcodeIO/long.js/blob/master/LICENSE
-export default Long;
+/* tslint:disable */
+import { symbol } from "../Numeric.js";
 /**
  * wasm optimizations, to do native i64 multiplication and divide
  */
@@ -50,6 +51,16 @@ Long.prototype.Equals = function (x) { return equals(this, x); };
 Long.prototype.CompareTo = function (x) { return compare(this, x); };
 Long.prototype.toString = function (radix) { return toString(this, radix); };
 Long.prototype.toJSON = function () { return toString(this); };
+Long.prototype[symbol] = function () {
+    const x = this;
+    return {
+        multiply: y => multiply(x, y),
+        toPrecision: sd => String(x) + (0).toPrecision(sd).substr(1),
+        toExponential: dp => String(x) + (0).toExponential(dp).substr(1),
+        toFixed: dp => String(x) + (0).toFixed(dp).substr(1),
+        toHex: () => toString(x.unsigned ? x : fromBytes(toBytes(x), true), 16),
+    };
+};
 // The internal representation of a long is the two given signed, 32-bit values.
 // We use 32-bit pieces because these are the size of integers on which
 // Javascript performs bit-operations.  For operations like addition and

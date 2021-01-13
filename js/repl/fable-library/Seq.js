@@ -551,7 +551,9 @@ export function pairwise(xs) {
     });
 }
 export function rangeChar(first, last) {
-    return delay(() => unfold((x) => x <= last ? [x, String.fromCharCode(x.charCodeAt(0) + 1)] : undefined, first));
+    const firstNum = first.charCodeAt(0);
+    const lastNum = last.charCodeAt(0);
+    return delay(() => unfold((x) => x <= lastNum ? [String.fromCharCode(x), x + 1] : undefined, firstNum));
 }
 export function rangeLong(first, step, last, unsigned) {
     const stepFn = makeLongRangeStepFunction(step, last, unsigned);
