@@ -2,6 +2,7 @@
 public/js
 public/libs
 public/metadata
+src/Standalone/
 deploy/
 temp/
 .idea
