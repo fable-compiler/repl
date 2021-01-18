@@ -17,20 +17,21 @@ let private LOCAL_STORAGE_REPL_SETTING = "fable_repl_settings"
 type Model =
     { Optimize : bool
       DefineDebug : bool
-      PreviewLanguage : bool
+      TypedArrays : bool
       FontSize : float
       FontFamily : string
       GistToken : string option
       GistTokenField : string }
     member this.ToOtherFSharpOptions =
         [| yield "--define:FABLE_COMPILER"
+           yield "--langversion:preview"
            if this.DefineDebug then yield "--define:DEBUG"
-           if this.PreviewLanguage then yield "--langversion:preview"
-           yield "--optimize" + (if this.Optimize then "+" else "-") |]
+           yield "--optimize" + (if this.Optimize then "+" else "-")
+           if this.TypedArrays then yield "--typedArrays" |]
     static member Default =
         { Optimize = false
           DefineDebug = true
-          PreviewLanguage = true
+          TypedArrays = true
           FontSize = 14.
           FontFamily = MONACO_DEFAULT_FONT_FAMILY
           GistToken = None
@@ -43,7 +44,7 @@ type Model =
                         //  get.Optional.Field "optimize" Decode.bool
                         //     |> Option.defaultValue false
               DefineDebug = get.Optional.Field "defineDebug" Decode.bool |> Option.defaultValue true
-              PreviewLanguage = get.Optional.Field "previewLanguage" Decode.bool |> Option.defaultValue true
+              TypedArrays = get.Optional.Field "typedArrays" Decode.bool |> Option.defaultValue true
               FontSize = get.Optional.Field "fontSize" Decode.float
                             |> Option.defaultValue 14.
               FontFamily = get.Optional.Field "fontFamily" Decode.string
@@ -56,7 +57,7 @@ type Model =
         Encode.object
             [ yield "optimize", Encode.bool model.Optimize
               yield "defineDebug", Encode.bool model.DefineDebug
-              yield "previewLanguage", Encode.bool model.PreviewLanguage
+              yield "typedArrays", Encode.bool model.TypedArrays
               yield "fontSize", Encode.float model.FontSize
               yield "fontFamily", Encode.string model.FontFamily
               match model.GistToken with
@@ -104,7 +105,7 @@ let update msg model =
         { model with DefineDebug = not model.DefineDebug }
 
     | TogglePreviewLanguage ->
-        { model with PreviewLanguage = not model.PreviewLanguage }
+        { model with TypedArrays = not model.TypedArrays }
 
     | ChangeFontSize newSize ->
         { model with FontSize = newSize }
@@ -206,7 +207,7 @@ let private defineDebugSetting (model: Model) dispatch =
     switchOption "Define DEBUG" model.DefineDebug dispatch ToggleDefineDebug
 
 let private previewLanguageSetting (model: Model) dispatch =
-    switchOption "Preview F# features" model.PreviewLanguage dispatch TogglePreviewLanguage
+    switchOption "Typed Arrays" model.TypedArrays dispatch TogglePreviewLanguage
 
 let inline private gistTokenSetting (token : string option) (tokenField : string) dispatch =
     match token with
@@ -258,6 +259,6 @@ let view (model: Model) dispatch =
         fontFamilySetting model.FontFamily dispatch
         fontSizeSetting model.FontSize dispatch
         gistTokenSetting model.GistToken model.GistTokenField dispatch
-        // TODO: Optimize is disable to prevent problems with inline functions in REPL Lib
+        // TODO: Optimize is disabled to prevent problems with inline functions in REPL Lib
         //   optimizeSetting model dispatch
     ]
