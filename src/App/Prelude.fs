@@ -31,6 +31,7 @@ module Literals =
           "Browser.Dom"
           "Browser.WebGL"
         //   "Fable.Repl.Lib"
+          "Fable.Sveltish"
         |]
 
 let [<Global>] private setTimeout(f: unit->unit, ms: int): unit = jsNative
