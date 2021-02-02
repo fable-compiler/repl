@@ -29,7 +29,7 @@ module Literals =
           "Browser.Event"
           "Browser.WebStorage"
           "Browser.Dom"
-          "Browser.WebGL"
+        //   "Browser.WebGL"
         //   "Fable.Repl.Lib"
         |]
 
