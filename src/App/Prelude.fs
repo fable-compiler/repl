@@ -6,7 +6,7 @@ open Fable.Core
 
 [<RequireQualifiedAccess>]
 module Literals =
-    let [<Literal>] REPL_VERSION = "3.1.1" // Do not edit manually
+    let [<Literal>] REPL_VERSION = "3.1.4" // Do not edit manually
     let [<Literal>] STORAGE_KEY = "fable-repl"
     let [<Literal>] MAX_LOGS_LENGTH = 200
     // let [<Literal>] HOST =
@@ -29,7 +29,7 @@ module Literals =
           "Browser.Event"
           "Browser.WebStorage"
           "Browser.Dom"
-        //   "Browser.WebGL"
+          "Browser.WebGL"
         //   "Fable.Repl.Lib"
         |]
 
