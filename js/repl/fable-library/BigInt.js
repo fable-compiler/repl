@@ -309,7 +309,7 @@ export function fromByteArray(bytes) {
                     }
                 }
                 else {
-                    const bytesToProcess = min(comparePrimitives, bytesRemaining, 4) | 0;
+                    const bytesToProcess = min((x, y) => comparePrimitives(x, y), bytesRemaining, 4) | 0;
                     for (let i_1 = 0; i_1 <= (bytesToProcess - 1); i_1++) {
                         buffer[i_1] = bytes[currIndex + i_1];
                     }

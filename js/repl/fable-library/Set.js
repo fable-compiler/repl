@@ -1655,7 +1655,7 @@ export function FSharpSet_Intersection(a, b) {
 }
 
 export function FSharpSet_IntersectionMany(sets) {
-    return reduce(FSharpSet_Intersection, sets);
+    return reduce((s1, s2) => FSharpSet_Intersection(s1, s2), sets);
 }
 
 export function FSharpSet_Equality(a, b) {
@@ -1742,7 +1742,7 @@ export function union(set1, set2) {
 }
 
 export function unionMany(sets, comparer) {
-    return fold_2(FSharpSet_op_Addition, FSharpSet_Empty(comparer), sets);
+    return fold_2((s1, s2) => FSharpSet_op_Addition(s1, s2), FSharpSet_Empty(comparer), sets);
 }
 
 export function intersect(set1, set2) {

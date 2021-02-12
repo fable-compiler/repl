@@ -474,12 +474,7 @@ export function clear(col) {
 const CURRIED_KEY = "__CURRIED__";
 export function uncurry(arity, f) {
     // f may be a function option with None value
-    if (f == null) {
-        return undefined;
-    }
-    // The function is already uncurried
-    if (f.length > 1) {
-        // if (CURRIED_KEY in f) { // This doesn't always work
+    if (f == null || f.length > 1) {
         return f;
     }
     let uncurriedFn;
@@ -512,8 +507,8 @@ export function uncurry(arity, f) {
     return uncurriedFn;
 }
 export function curry(arity, f) {
-    if (f == null) {
-        return undefined;
+    if (f == null || f.length === 1) {
+        return f;
     }
     if (CURRIED_KEY in f) {
         return f[CURRIED_KEY];
@@ -536,6 +531,11 @@ export function curry(arity, f) {
         default:
             throw new Error("Currying to more than 8-arity is not supported: " + arity);
     }
+}
+export function checkArity(arity, f) {
+    return f.length > arity
+        ? (...args1) => (...args2) => f.apply(undefined, args1.concat(args2))
+        : f;
 }
 export function partialApply(arity, f, args) {
     if (f == null) {

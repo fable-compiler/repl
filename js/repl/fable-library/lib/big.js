@@ -185,7 +185,8 @@ function round(x, dp, rm, more) {
                 (more || i < 0 || xc[i + 1] !== UNDEFINED || xc[i - 1] & 1);
         }
         else if (rm === 3) {
-            more = more || !!xc[0];
+            const isZero = xc.findIndex((xci, idx) => idx >= i && xci > 0) < 0;
+            more = more || !isZero;
         }
         else {
             more = false;

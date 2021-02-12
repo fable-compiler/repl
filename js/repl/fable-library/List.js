@@ -387,25 +387,25 @@ export function mapFoldBack(f, xs, s) {
 }
 
 export function iterate(f, xs) {
-    fold((unitVar0, x) => {
+    return fold((unitVar0, x) => {
         f(x);
     }, void 0, xs);
 }
 
 export function iterate2(f, xs, ys) {
-    fold2((unitVar0, x, y) => {
+    return fold2((unitVar0, x, y) => {
         f(x, y);
     }, void 0, xs, ys);
 }
 
 export function iterateIndexed(f, xs) {
-    foldIndexed((i, unitVar1, x) => {
+    return foldIndexed((i, unitVar1, x) => {
         f(i, x);
     }, void 0, xs);
 }
 
 export function iterateIndexed2(f, xs, ys) {
-    foldIndexed2((i, unitVar1, x, y) => {
+    return foldIndexed2((i, unitVar1, x, y) => {
         f(i, x, y);
     }, void 0, xs, ys);
 }
@@ -768,7 +768,7 @@ export function permute(f, xs) {
 }
 
 export function chunkBySize(chunkSize, xs) {
-    return map(ofArray, ofArray(chunkBySize_1(chunkSize, Array.from(xs))));
+    return map((xs_2) => ofArray(xs_2), ofArray(chunkBySize_1(chunkSize, Array.from(xs))));
 }
 
 export function skip(i, xs) {
@@ -1149,10 +1149,10 @@ export function windowed(windowSize, source) {
 }
 
 export function splitInto(chunks, source) {
-    return map(ofArray, ofArray(splitInto_1(chunks, Array.from(source))));
+    return map((xs_1) => ofArray(xs_1), ofArray(splitInto_1(chunks, Array.from(source))));
 }
 
 export function transpose(lists) {
-    return ofSeq(map_1(ofSeq, transpose_1(lists)));
+    return ofSeq(map_1((xs) => ofSeq(xs), transpose_1(lists)));
 }
 

@@ -1267,9 +1267,9 @@ export function FSharpMap__ComputeHashCode(this$) {
     const enumerator = getEnumerator(this$);
     try {
         while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
-            const activePatternResult4281 = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
-            res = combineHash(res, structuralHash(activePatternResult4281[0]));
-            res = combineHash(res, structuralHash(activePatternResult4281[1]));
+            const activePatternResult4293 = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
+            res = combineHash(res, structuralHash(activePatternResult4293[0]));
+            res = combineHash(res, structuralHash(activePatternResult4293[1]));
         }
     }
     finally {

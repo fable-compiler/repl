@@ -59,7 +59,7 @@ export function BigInteger_$ctor_Z2BE94A1(signInt, v) {
 
 (() => {
     BigInteger.smallLim = 4096;
-    BigInteger.smallPosTab = initialize(BigInteger.smallLim, BigNatModule_ofInt32);
+    BigInteger.smallPosTab = initialize(BigInteger.smallLim, (n) => BigNatModule_ofInt32(n));
     BigInteger.one = BigInteger_$ctor_Z524259A4(1);
     BigInteger.two = BigInteger_$ctor_Z524259A4(2);
     BigInteger.zero = BigInteger_$ctor_Z524259A4(0);
