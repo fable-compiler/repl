@@ -1066,14 +1066,12 @@ export class FSharpMap {
         }
     }
     ["System.Collections.Generic.ICollection`1.Add2B595"](x) {
-        void x;
         throw (new Error("Map cannot be mutated"));
     }
     ["System.Collections.Generic.ICollection`1.Clear"]() {
         throw (new Error("Map cannot be mutated"));
     }
     ["System.Collections.Generic.ICollection`1.Remove2B595"](x) {
-        void x;
         throw (new Error("Map cannot be mutated"));
     }
     ["System.Collections.Generic.ICollection`1.Contains2B595"](x) {
@@ -1420,8 +1418,7 @@ export function groupBy(projection, xs, comparer) {
                 void (dict.get(key).push(v));
             }
             else {
-                const value = dict.set(key, [v]);
-                void value;
+                void dict.set(key, [v]);
             }
         }
     }
@@ -1437,8 +1434,7 @@ export function countBy(projection, xs, comparer) {
     try {
         while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
             const key = projection(enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]());
-            const value_1 = dict.has(key) ? dict.set(key, dict.get(key) + 1) : dict.set(key, 1);
-            void value_1;
+            void (dict.has(key) ? dict.set(key, dict.get(key) + 1) : dict.set(key, 1));
         }
     }
     finally {

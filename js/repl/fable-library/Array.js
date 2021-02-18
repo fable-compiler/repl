@@ -226,8 +226,7 @@ export function countBy(projection, array, eq) {
         }
         else {
             dict.set(key, 1);
-            const value_1 = keys.push(key);
-            void value_1;
+            void (keys.push(key));
         }
     }
     return map((key_1) => [key_1, getItemFromDict(dict, key_1)], keys, null);
@@ -293,8 +292,7 @@ export function groupBy(projection, array, eq) {
         }
         else {
             addToDict(dict, key, [v]);
-            const value = keys.push(key);
-            void value;
+            void (keys.push(key));
         }
     }
     return map((key_1) => [key_1, Array.from(getItemFromDict(dict, key_1))], keys, null);
@@ -432,22 +430,19 @@ export function takeWhile(predicate, array, cons) {
 }
 
 export function addInPlace(x, array) {
-    const value = array.push(x);
-    void value;
+    void (array.push(x));
 }
 
 export function addRangeInPlace(range, array) {
     iterate_1((x) => {
-        const value = array.push(x);
-        void value;
+        void (array.push(x));
     }, range);
 }
 
 export function removeInPlace(item_1, array) {
     const i = array.indexOf(item_1, 0);
     if (i > -1) {
-        const value = array.splice(i, 1);
-        void value;
+        void (array.splice(i, 1));
         return true;
     }
     else {
@@ -459,8 +454,7 @@ export function removeAllInPlace(predicate, array) {
     const countRemoveAll = (count) => {
         const i = array.findIndex(predicate);
         if (i > -1) {
-            const value = array.splice(i, 1);
-            void value;
+            void (array.splice(i, 1));
             return (countRemoveAll(count) + 1) | 0;
         }
         else {
@@ -829,8 +823,7 @@ export function unfold(generator, state) {
             if (matchValue != null) {
                 const x = matchValue[0];
                 const s = matchValue[1];
-                const value = res.push(x);
-                void value;
+                void (res.push(x));
                 state_1_mut = s;
                 continue loop;
             }
@@ -900,8 +893,7 @@ export function chunkBySize(chunkSize, array) {
             let slice;
             const start_1 = (x * chunkSize) | 0;
             slice = (array.slice(start_1, (start_1 + chunkSize)));
-            const value = result.push(slice);
-            void value;
+            void (result.push(slice));
         }
         return result;
     }
@@ -1200,8 +1192,7 @@ export function splitInto(chunks, array) {
             let slice;
             const start_1 = ((i * minChunkSize) + min_1((x_1, y_1) => comparePrimitives(x_1, y_1), chunksWithExtraItem, i)) | 0;
             slice = (array.slice(start_1, (start_1 + chunkSize)));
-            const value = result.push(slice);
-            void value;
+            void (result.push(slice));
         }
         return result;
     }

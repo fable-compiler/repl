@@ -1458,14 +1458,12 @@ export class FSharpSet {
         return SetTreeModule_compare(FSharpSet__get_Comparer(s), FSharpSet__get_Tree(s), FSharpSet__get_Tree(that)) | 0;
     }
     ["System.Collections.Generic.ICollection`1.Add2B595"](x) {
-        void x;
         throw (new Error("ReadOnlyCollection"));
     }
     ["System.Collections.Generic.ICollection`1.Clear"]() {
         throw (new Error("ReadOnlyCollection"));
     }
     ["System.Collections.Generic.ICollection`1.Remove2B595"](x) {
-        void x;
         throw (new Error("ReadOnlyCollection"));
     }
     ["System.Collections.Generic.ICollection`1.Contains2B595"](x) {
@@ -1874,8 +1872,7 @@ export function intersectWith(s1, s2, comparer) {
         while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
             const x = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
             if (!FSharpSet__Contains(s2_1, x)) {
-                const value = s1.delete(x);
-                void value;
+                void s1.delete(x);
             }
         }
     }
@@ -1888,8 +1885,7 @@ export function exceptWith(s1, s2) {
     const enumerator = getEnumerator(s2);
     try {
         while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
-            const value = s1.delete(enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]());
-            void value;
+            void s1.delete(enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]());
         }
     }
     finally {
