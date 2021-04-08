@@ -1066,12 +1066,14 @@ export class FSharpMap {
         }
     }
     ["System.Collections.Generic.ICollection`1.Add2B595"](x) {
+        void x;
         throw (new Error("Map cannot be mutated"));
     }
     ["System.Collections.Generic.ICollection`1.Clear"]() {
         throw (new Error("Map cannot be mutated"));
     }
     ["System.Collections.Generic.ICollection`1.Remove2B595"](x) {
+        void x;
         throw (new Error("Map cannot be mutated"));
     }
     ["System.Collections.Generic.ICollection`1.Contains2B595"](x) {
@@ -1265,9 +1267,9 @@ export function FSharpMap__ComputeHashCode(this$) {
     const enumerator = getEnumerator(this$);
     try {
         while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
-            const activePatternResult4293 = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
-            res = combineHash(res, structuralHash(activePatternResult4293[0]));
-            res = combineHash(res, structuralHash(activePatternResult4293[1]));
+            const activePatternResult4281 = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
+            res = combineHash(res, structuralHash(activePatternResult4281[0]));
+            res = combineHash(res, structuralHash(activePatternResult4281[1]));
         }
     }
     finally {
@@ -1418,7 +1420,8 @@ export function groupBy(projection, xs, comparer) {
                 void (dict.get(key).push(v));
             }
             else {
-                void dict.set(key, [v]);
+                const value = dict.set(key, [v]);
+                void value;
             }
         }
     }
@@ -1434,7 +1437,8 @@ export function countBy(projection, xs, comparer) {
     try {
         while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
             const key = projection(enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]());
-            void (dict.has(key) ? dict.set(key, dict.get(key) + 1) : dict.set(key, 1));
+            const value_1 = dict.has(key) ? dict.set(key, dict.get(key) + 1) : dict.set(key, 1);
+            void value_1;
         }
     }
     finally {

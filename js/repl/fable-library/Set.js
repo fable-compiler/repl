@@ -1458,12 +1458,14 @@ export class FSharpSet {
         return SetTreeModule_compare(FSharpSet__get_Comparer(s), FSharpSet__get_Tree(s), FSharpSet__get_Tree(that)) | 0;
     }
     ["System.Collections.Generic.ICollection`1.Add2B595"](x) {
+        void x;
         throw (new Error("ReadOnlyCollection"));
     }
     ["System.Collections.Generic.ICollection`1.Clear"]() {
         throw (new Error("ReadOnlyCollection"));
     }
     ["System.Collections.Generic.ICollection`1.Remove2B595"](x) {
+        void x;
         throw (new Error("ReadOnlyCollection"));
     }
     ["System.Collections.Generic.ICollection`1.Contains2B595"](x) {
@@ -1653,7 +1655,7 @@ export function FSharpSet_Intersection(a, b) {
 }
 
 export function FSharpSet_IntersectionMany(sets) {
-    return reduce((s1, s2) => FSharpSet_Intersection(s1, s2), sets);
+    return reduce(FSharpSet_Intersection, sets);
 }
 
 export function FSharpSet_Equality(a, b) {
@@ -1740,7 +1742,7 @@ export function union(set1, set2) {
 }
 
 export function unionMany(sets, comparer) {
-    return fold_2((s1, s2) => FSharpSet_op_Addition(s1, s2), FSharpSet_Empty(comparer), sets);
+    return fold_2(FSharpSet_op_Addition, FSharpSet_Empty(comparer), sets);
 }
 
 export function intersect(set1, set2) {
@@ -1872,7 +1874,8 @@ export function intersectWith(s1, s2, comparer) {
         while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
             const x = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
             if (!FSharpSet__Contains(s2_1, x)) {
-                void s1.delete(x);
+                const value = s1.delete(x);
+                void value;
             }
         }
     }
@@ -1885,7 +1888,8 @@ export function exceptWith(s1, s2) {
     const enumerator = getEnumerator(s2);
     try {
         while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
-            void s1.delete(enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]());
+            const value = s1.delete(enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]());
+            void value;
         }
     }
     finally {

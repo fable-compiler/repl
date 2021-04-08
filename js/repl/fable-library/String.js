@@ -1,12 +1,60 @@
 import { toString as dateToString } from "./Date.js";
-import { compare as numericCompare, isNumeric, multiply, toExponential, toFixed, toHex, toPrecision } from "./Numeric.js";
+import Decimal from "./Decimal.js";
+import Long, * as _Long from "./Long.js";
 import { escape } from "./RegExp.js";
-import { FSharpRef, toString } from "./Types.js";
-const fsFormatRegExp = /(^|[^%])%([0+\- ]*)(\*|\d+)?(?:\.(\d+))?(\w)/;
+import { toString } from "./Types.js";
+const fsFormatRegExp = /(^|[^%])%([0+\- ]*)(\d+)?(?:\.(\d+))?(\w)/;
 const interpolateRegExp = /(?:(^|[^%])%([0+\- ]*)(\d+)?(?:\.(\d+))?(\w))?%P\(\)/g;
 const formatRegExp = /\{(\d+)(,-?\d+)?(?:\:([a-zA-Z])(\d{0,2})|\:(.+?))?\}/g;
+// These are used for formatting and only take longs and decimals into account (no bigint)
+function isNumeric(x) {
+    return typeof x === "number" || x instanceof Long || x instanceof Decimal;
+}
 function isLessThan(x, y) {
-    return numericCompare(x, y) < 0;
+    if (x instanceof Long) {
+        return _Long.compare(x, y) < 0;
+    }
+    else if (x instanceof Decimal) {
+        return x.cmp(y) < 0;
+    }
+    else {
+        return x < y;
+    }
+}
+function multiply(x, y) {
+    if (x instanceof Long) {
+        return _Long.op_Multiply(x, y);
+    }
+    else if (x instanceof Decimal) {
+        return x.mul(y);
+    }
+    else {
+        return x * y;
+    }
+}
+function toFixed(x, dp) {
+    if (x instanceof Long) {
+        return String(x) + (0).toFixed(dp).substr(1);
+    }
+    else {
+        return x.toFixed(dp);
+    }
+}
+function toPrecision(x, sd) {
+    if (x instanceof Long) {
+        return String(x) + (0).toPrecision(sd).substr(1);
+    }
+    else {
+        return x.toPrecision(sd);
+    }
+}
+function toExponential(x, dp) {
+    if (x instanceof Long) {
+        return String(x) + (0).toExponential(dp).substr(1);
+    }
+    else {
+        return x.toExponential(dp);
+    }
 }
 function cmp(x, y, ic) {
     function isIgnoreCase(i) {
@@ -86,6 +134,14 @@ export function indexOfAny(str, anyOf, ...args) {
         }
     }
     return -1;
+}
+function toHex(x) {
+    if (x instanceof Long) {
+        return _Long.toString(x.unsigned ? x : _Long.fromBytes(_Long.toBytes(x), true), 16);
+    }
+    else {
+        return (Number(x) >>> 0).toString(16);
+    }
 }
 export function printf(input) {
     return {
@@ -168,7 +224,7 @@ function formatReplacement(rep, prefix, flags, padLength, precision, format) {
     else {
         rep = toString(rep);
     }
-    padLength = typeof padLength === "number" ? padLength : parseInt(padLength, 10);
+    padLength = parseInt(padLength, 10);
     if (!isNaN(padLength)) {
         const zeroFlag = flags.indexOf("0") >= 0; // Use '0' for left padding
         const minusFlag = flags.indexOf("-") >= 0; // Right padding
@@ -186,32 +242,21 @@ function formatReplacement(rep, prefix, flags, padLength, precision, format) {
     }
     return prefix ? prefix + rep : rep;
 }
-function formatOnce(str2, rep, padRef) {
-    return str2.replace(fsFormatRegExp, (match, prefix, flags, padLength, precision, format) => {
-        if (padRef.contents != null) {
-            padLength = padRef.contents;
-            padRef.contents = null;
-        }
-        else if (padLength === "*") {
-            if (rep < 0) {
-                throw new Error("Non-negative number required");
-            }
-            padRef.contents = rep;
-            return match;
-        }
+function formatOnce(str2, rep) {
+    return str2.replace(fsFormatRegExp, (_, prefix, flags, padLength, precision, format) => {
         const once = formatReplacement(rep, prefix, flags, padLength, precision, format);
         return once.replace(/%/g, "%%");
     });
 }
-function createPrinter(str, cont, padRef = new FSharpRef(null)) {
+function createPrinter(str, cont) {
     return (...args) => {
         // Make a copy as the function may be used several times
         let strCopy = str;
         for (const arg of args) {
-            strCopy = formatOnce(strCopy, arg, padRef);
+            strCopy = formatOnce(strCopy, arg);
         }
         return fsFormatRegExp.test(strCopy)
-            ? createPrinter(strCopy, cont, padRef)
+            ? createPrinter(strCopy, cont)
             : cont(strCopy.replace(/%%/g, "%"));
     };
 }

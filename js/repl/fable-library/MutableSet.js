@@ -14,7 +14,8 @@ export class HashSet {
         const enumerator = getEnumerator(items);
         try {
             while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
-                void HashSet__Add_2B595(this$.contents, enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]());
+                const value = HashSet__Add_2B595(this$.contents, enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]());
+                void value;
             }
         }
         finally {
@@ -37,7 +38,8 @@ export class HashSet {
     }
     ["System.Collections.Generic.ICollection`1.Add2B595"](item) {
         const this$ = this;
-        void HashSet__Add_2B595(this$, item);
+        const value = HashSet__Add_2B595(this$, item);
+        void value;
     }
     ["System.Collections.Generic.ICollection`1.Clear"]() {
         const this$ = this;
@@ -70,7 +72,8 @@ export class HashSet {
     }
     add(k) {
         const this$ = this;
-        void HashSet__Add_2B595(this$, k);
+        const value = HashSet__Add_2B595(this$, k);
+        void value;
         return this$;
     }
     clear() {
@@ -188,6 +191,7 @@ export function HashSet__Add_2B595(this$, k) {
         case 1: {
             if (matchValue[0]) {
                 const value = void (getItemFromDict(this$.hashMap, matchValue[1]).push(k));
+                void undefined;
                 return true;
             }
             else {

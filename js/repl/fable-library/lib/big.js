@@ -1,22 +1,11 @@
 // https://github.com/MikeMcl/big.js/blob/01b3ce3a6b0ba7b42442ea48ec4ffc88d1669ec4/big.mjs
 /* tslint:disable */
 import { combineHashCodes } from "../Util.js";
-import { symbol } from "../Numeric.js";
 // The shared prototype object.
 var P = {
     GetHashCode() { return combineHashCodes([this.s, this.e].concat(this.c)); },
     Equals(x) { return !this.cmp(x); },
     CompareTo(x) { return this.cmp(x); },
-    [symbol]() {
-        const _this = this;
-        return {
-            multiply: y => _this.mul(y),
-            toPrecision: sd => _this.toPrecision(sd),
-            toExponential: dp => _this.toExponential(dp),
-            toFixed: dp => _this.toFixed(dp),
-            toHex: () => (Number(_this) >>> 0).toString(16),
-        };
-    }
 };
 /*
  *  big.js v5.2.2
@@ -185,8 +174,7 @@ function round(x, dp, rm, more) {
                 (more || i < 0 || xc[i + 1] !== UNDEFINED || xc[i - 1] & 1);
         }
         else if (rm === 3) {
-            const isZero = xc.findIndex((xci, idx) => idx >= i && xci > 0) < 0;
-            more = more || !isZero;
+            more = more || !!xc[0];
         }
         else {
             more = false;

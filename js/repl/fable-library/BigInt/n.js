@@ -202,7 +202,7 @@ export function BigNatModule_FFT_computeFftPolynomialProduct(degu, u, degv, v) {
     const n = bigK | 0;
     const uT = BigNatModule_FFT_computFftInPlace(n, w, u_1);
     const vT = BigNatModule_FFT_computFftInPlace(n, w, v_1);
-    return map((x_1) => BigNatModule_FFT_Fp_toInt(x_1), BigNatModule_FFT_computeInverseFftInPlace(n, w, initialize(n, (i) => {
+    return map(BigNatModule_FFT_Fp_toInt, BigNatModule_FFT_computeInverseFftInPlace(n, w, initialize(n, (i) => {
         const x = uT[i];
         const y = vT[i];
         return toInt(op_Modulus(op_Multiply(fromInteger(x, true, 6), fromInteger(y, true, 6)), BigNatModule_FFT_Fp_p64)) >>> 0;
@@ -969,7 +969,7 @@ export function BigNatModule_recMulKaratsuba(mul, p, q) {
 }
 
 export function BigNatModule_mulKaratsuba(x, y) {
-    return BigNatModule_recMulKaratsuba((x_1, y_1) => BigNatModule_mulKaratsuba(x_1, y_1), x, y);
+    return BigNatModule_recMulKaratsuba(BigNatModule_mulKaratsuba, x, y);
 }
 
 export const BigNatModule_productDigitsUpperSchoolBook = ~(~(64000 / BigNatModule_baseBits));

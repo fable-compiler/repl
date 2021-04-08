@@ -87,7 +87,8 @@ export class Dictionary {
         const matchValue = Dictionary__TryFind_2B595(this$, item[0]);
         if (matchValue != null) {
             if (equals(matchValue[1], item[1])) {
-                void Dictionary__Remove_2B595(this$, item[0]);
+                const value = Dictionary__Remove_2B595(this$, item[0]);
+                void value;
             }
             return true;
         }
@@ -234,6 +235,7 @@ export function Dictionary__set_Item_5BDDA1(this$, k, v) {
         case 1: {
             if (matchValue[0]) {
                 const value = void (getItemFromDict(this$.hashMap, matchValue[1]).push([k, v]));
+                void undefined;
             }
             else {
                 this$.hashMap.set(matchValue[1], [[k, v]]);
@@ -266,6 +268,7 @@ export function Dictionary__Add_5BDDA1(this$, k, v) {
         case 1: {
             if (matchValue[0]) {
                 const value = void (getItemFromDict(this$.hashMap, matchValue[1]).push([k, v]));
+                void undefined;
             }
             else {
                 this$.hashMap.set(matchValue[1], [[k, v]]);

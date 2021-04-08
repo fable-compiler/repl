@@ -12,11 +12,11 @@ export function HashIdentity_FromFunctions(hash, eq) {
 }
 
 export function HashIdentity_Structural() {
-    return HashIdentity_FromFunctions((obj) => structuralHash(obj), (e1, e2) => equals(e1, e2));
+    return HashIdentity_FromFunctions(structuralHash, equals);
 }
 
 export function HashIdentity_Reference() {
-    return HashIdentity_FromFunctions((obj) => physicalHash(obj), (e1, e2) => (e1 === e2));
+    return HashIdentity_FromFunctions(physicalHash, (e1, e2) => (e1 === e2));
 }
 
 export function ComparisonIdentity_FromFunction(comparer) {
@@ -28,6 +28,6 @@ export function ComparisonIdentity_FromFunction(comparer) {
 }
 
 export function ComparisonIdentity_Structural() {
-    return ComparisonIdentity_FromFunction((e1, e2) => compare(e1, e2));
+    return ComparisonIdentity_FromFunction(compare);
 }
 
