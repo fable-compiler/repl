@@ -6,8 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-## 3.1.6
+## 3.1.12
 
+* Update Fable
 * Add sample: @Rickasaurus 's F# Ant Colony game to Fable. @robertpi
 
 ## 3.1.5
