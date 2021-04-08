@@ -1,5 +1,5 @@
-import { sumBy, iterate, map, iterateIndexed, toIterator, concat, getEnumerator } from "./Seq.js";
-import { equals } from "./Util.js";
+import { equals, toIterator, getEnumerator } from "./Util.js";
+import { iterate, map, iterateIndexed, concat } from "./Seq.js";
 import { FSharpRef } from "./Types.js";
 import { class_type } from "./Reflection.js";
 import { getItemFromDict, tryGetValue } from "./MapUtil.js";
@@ -25,6 +25,10 @@ export class Dictionary {
     }
     get [Symbol.toStringTag]() {
         return "Dictionary";
+    }
+    toJSON(_key) {
+        const this$ = this;
+        return Array.from(this$);
     }
     ["System.Collections.IEnumerable.GetEnumerator"]() {
         const this$ = this;
@@ -87,8 +91,7 @@ export class Dictionary {
         const matchValue = Dictionary__TryFind_2B595(this$, item[0]);
         if (matchValue != null) {
             if (equals(matchValue[1], item[1])) {
-                const value = Dictionary__Remove_2B595(this$, item[0]);
-                void value;
+                void Dictionary__Remove_2B595(this$, item[0]);
             }
             return true;
         }
@@ -197,10 +200,18 @@ export function Dictionary__Clear(this$) {
 }
 
 export function Dictionary__get_Count(this$) {
-    return sumBy((pairs) => pairs.length, this$.hashMap.values(), {
-        GetZero: () => 0,
-        Add: (x, y) => (x + y),
-    });
+    let count = 0;
+    let enumerator = getEnumerator(this$.hashMap.values());
+    try {
+        while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
+            const pairs = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
+            count = ((count + pairs.length) | 0);
+        }
+    }
+    finally {
+        enumerator.Dispose();
+    }
+    return count | 0;
 }
 
 export function Dictionary__get_Item_2B595(this$, k) {
@@ -235,7 +246,6 @@ export function Dictionary__set_Item_5BDDA1(this$, k, v) {
         case 1: {
             if (matchValue[0]) {
                 const value = void (getItemFromDict(this$.hashMap, matchValue[1]).push([k, v]));
-                void undefined;
             }
             else {
                 this$.hashMap.set(matchValue[1], [[k, v]]);
@@ -268,7 +278,6 @@ export function Dictionary__Add_5BDDA1(this$, k, v) {
         case 1: {
             if (matchValue[0]) {
                 const value = void (getItemFromDict(this$.hashMap, matchValue[1]).push([k, v]));
-                void undefined;
             }
             else {
                 this$.hashMap.set(matchValue[1], [[k, v]]);

@@ -1,9 +1,8 @@
 import { BigInteger_op_Inequality_56F059C0, BigInteger_op_Equality_56F059C0, BigInteger_op_GreaterThanOrEqual_56F059C0, BigInteger_op_GreaterThan_56F059C0, BigInteger_op_LessThanOrEqual_56F059C0, BigInteger_op_LessThan_56F059C0, BigInteger_op_ExclusiveOr_56F059C0, BigInteger_op_BitwiseOr_56F059C0, BigInteger_op_BitwiseAnd_56F059C0, BigInteger_op_LeftShift_62E082A2, BigInteger_op_RightShift_62E082A2, BigInteger_op_UnaryPlus_Z665282C2, BigInteger_op_UnaryNegation_Z665282C2, BigInteger_op_Modulus_56F059C0, BigInteger_op_Division_56F059C0, BigInteger_op_Multiply_56F059C0, BigInteger_op_Subtraction_56F059C0, BigInteger_op_Addition_56F059C0, BigInteger__get_IsOne, BigInteger__get_IsZero, BigInteger__get_Sign, BigInteger__get_ToDecimal, BigInteger__get_ToDouble, BigInteger__get_ToSingle, BigInteger__get_ToUInt64, BigInteger__get_ToInt64, BigInteger__get_ToUInt32, BigInteger__get_ToInt32, BigInteger__get_ToUInt16, BigInteger__get_ToInt16, BigInteger__get_ToByte, BigInteger__get_ToSByte, BigInteger_$ctor_Z524259A4, BigInteger_$ctor_Z524259C1, BigInteger_get_Two, BigInteger_get_One, BigInteger_get_Zero, BigInteger_Abs_Z665282C2, BigInteger_Pow_62E082A2, BigInteger_GreatestCommonDivisor_56F059C0, BigInteger_DivRem_56F059C0, BigInteger_Parse_Z721C83C5, BigInteger } from "./BigInt/z.js";
 import { fromInteger } from "./Long.js";
 import { comparePrimitives, min, compare as compare_1, equals as equals_1, safeHash } from "./Util.js";
-import { List, toString as toString_1 } from "./Types.js";
-import { fold, head, skipWhile, ofSeq, find } from "./List.js";
-import { unfold, delay, rangeNumber } from "./Seq.js";
+import { toString as toString_1 } from "./Types.js";
+import { fold, empty, ofArrayWithTail, cons, toArray, head, skipWhile } from "./List.js";
 import { fill, reverse } from "./Array.js";
 
 export function isBigInt(x) {
@@ -230,7 +229,7 @@ function flipTwosComplement(currByte, lowBitFound) {
         return [0, false];
     }
     else {
-        return [(currByte ^ (254 << find((i) => ((currByte & (1 << i)) > 0), ofSeq(rangeNumber(0, 1, 7))))) & 255, true];
+        return [(currByte ^ (254 << (new Int32Array([0, 1, 2, 3, 4, 5, 6, 7])).find((i) => ((currByte & (1 << i)) > 0)))) & 255, true];
     }
 }
 
@@ -250,7 +249,7 @@ export function toByteArray(value) {
                 if (compare_1(consumeValue, zero) <= 0) {
                     const accumBytes_1 = isPositive ? skipWhile((b) => (b === 0), accumBytes) : skipWhile((b_1) => (b_1 === 255), accumBytes);
                     const isHighBitOne = (head(accumBytes_1) & 128) !== 0;
-                    return reverse(Uint8Array.from((isPositive ? isHighBitOne : false) ? (new List(0, accumBytes_1)) : (((!isPositive) ? (!isHighBitOne) : false) ? (new List(255, accumBytes_1)) : accumBytes_1)));
+                    return reverse(toArray((isPositive ? isHighBitOne : false) ? cons(0, accumBytes_1) : (((!isPositive) ? (!isHighBitOne) : false) ? cons(255, accumBytes_1) : accumBytes_1)));
                 }
                 else {
                     const currValue = toUInt32(BigInteger_op_BitwiseAnd_56F059C0(consumeValue, mask32));
@@ -262,7 +261,7 @@ export function toByteArray(value) {
                         let b2;
                         const value_5 = currValue >>> 16;
                         b2 = (value_5 & 0xFF);
-                        accumBytes_mut = (new List((value_6 = (currValue >>> 24), value_6 & 0xFF), new List(b2, new List(b1, new List(b0, accumBytes)))));
+                        accumBytes_mut = ofArrayWithTail([(value_6 = (currValue >>> 24), value_6 & 0xFF), b2, b1, b0], accumBytes);
                         consumeValue_mut = BigInteger_op_RightShift_62E082A2(consumeValue, 32);
                         lowBitFound_mut = false;
                         continue loop;
@@ -272,7 +271,7 @@ export function toByteArray(value) {
                         const patternInput_1 = flipTwosComplement((value_8 = (currValue >>> 8), value_8 & 0xFF), patternInput[1]);
                         const patternInput_2 = flipTwosComplement((value_9 = (currValue >>> 16), value_9 & 0xFF), patternInput_1[1]);
                         const patternInput_3 = flipTwosComplement((value_10 = (currValue >>> 24), value_10 & 0xFF), patternInput_2[1]);
-                        accumBytes_mut = (new List(patternInput_3[0], new List(patternInput_2[0], new List(patternInput_1[0], new List(patternInput[0], accumBytes)))));
+                        accumBytes_mut = ofArrayWithTail([patternInput_3[0], patternInput_2[0], patternInput_1[0], patternInput[0]], accumBytes);
                         consumeValue_mut = BigInteger_op_RightShift_62E082A2(consumeValue, 32);
                         lowBitFound_mut = patternInput_3[1];
                         continue loop;
@@ -281,7 +280,7 @@ export function toByteArray(value) {
                 break;
             }
         };
-        return loop(new List(), value_1, false);
+        return loop(empty(), value_1, false);
     }
 }
 
@@ -309,13 +308,13 @@ export function fromByteArray(bytes) {
                     }
                 }
                 else {
-                    const bytesToProcess = min(comparePrimitives, bytesRemaining, 4) | 0;
+                    const bytesToProcess = min((x, y) => comparePrimitives(x, y), bytesRemaining, 4) | 0;
                     for (let i_1 = 0; i_1 <= (bytesToProcess - 1); i_1++) {
                         buffer[i_1] = bytes[currIndex + i_1];
                     }
                     if (isPositive) {
                         fill(buffer, bytesToProcess, 4 - bytesToProcess, 0);
-                        accumUInt32_mut = (new List((((((buffer[0] | ((buffer[1] << 8) >>> 0)) >>> 0) | ((buffer[2] << 16) >>> 0)) >>> 0) | ((buffer[3] << 24) >>> 0)) >>> 0, accumUInt32));
+                        accumUInt32_mut = cons((((((buffer[0] | ((buffer[1] << 8) >>> 0)) >>> 0) | ((buffer[2] << 16) >>> 0)) >>> 0) | ((buffer[3] << 24) >>> 0)) >>> 0, accumUInt32);
                         currIndex_mut = (currIndex + bytesToProcess);
                         bytesRemaining_mut = (bytesRemaining - bytesToProcess);
                         lowBitFound_mut = false;
@@ -327,7 +326,7 @@ export function fromByteArray(bytes) {
                         const patternInput_1 = flipTwosComplement(buffer[1], patternInput[1]);
                         const patternInput_2 = flipTwosComplement(buffer[2], patternInput_1[1]);
                         const patternInput_3 = flipTwosComplement(buffer[3], patternInput_2[1]);
-                        accumUInt32_mut = (new List((((((patternInput[0] | ((patternInput_1[0] << 8) >>> 0)) >>> 0) | ((patternInput_2[0] << 16) >>> 0)) >>> 0) | ((patternInput_3[0] << 24) >>> 0)) >>> 0, accumUInt32));
+                        accumUInt32_mut = cons((((((patternInput[0] | ((patternInput_1[0] << 8) >>> 0)) >>> 0) | ((patternInput_2[0] << 16) >>> 0)) >>> 0) | ((patternInput_3[0] << 24) >>> 0)) >>> 0, accumUInt32);
                         currIndex_mut = (currIndex + bytesToProcess);
                         bytesRemaining_mut = (bytesRemaining - bytesToProcess);
                         lowBitFound_mut = patternInput_3[1];
@@ -337,24 +336,7 @@ export function fromByteArray(bytes) {
                 break;
             }
         };
-        return loop(new List(), 0, bytes.length, false);
+        return loop(empty(), 0, bytes.length, false);
     }
-}
-
-export function makeRangeStepFunction(step, last) {
-    const stepComparedWithZero = compare_1(step, zero) | 0;
-    if (stepComparedWithZero === 0) {
-        throw (new Error("The step of a range cannot be zero"));
-    }
-    const stepGreaterThanZero = stepComparedWithZero > 0;
-    return (x) => {
-        const comparedWithLast = compare_1(x, last) | 0;
-        return ((stepGreaterThanZero ? (comparedWithLast <= 0) : false) ? true : ((!stepGreaterThanZero) ? (comparedWithLast >= 0) : false)) ? [x, BigInteger_op_Addition_56F059C0(x, step)] : (void 0);
-    };
-}
-
-export function range(first, step, last) {
-    const stepFn = makeRangeStepFunction(step, last);
-    return delay(() => unfold(stepFn, first));
 }
 

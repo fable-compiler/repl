@@ -1,5 +1,5 @@
 import { BigNatModule_factorial, BigNatModule_ofString, BigNatModule_toFloat, BigNatModule_toUInt64, BigNatModule_toUInt32, BigNatModule_pow, BigNatModule_two, BigNatModule_rem, BigNatModule_lte, BigNatModule_hcf, BigNatModule_bitXor, BigNatModule_bitOr, BigNatModule_bitAnd, BigNatModule_divmod, BigNatModule_mul, BigNatModule_isOne, BigNatModule_sub, BigNatModule_gte, BigNatModule_scale, BigNatModule_one, BigNatModule_add, BigNatModule_ofInt64, BigNatModule_hash, BigNatModule_gt, BigNatModule_lt, BigNatModule_equal, BigNatModule_getSmall, BigNatModule_isSmall, BigNatModule_ofInt32, BigNatModule_toString, BigNatModule_isZero } from "./n.js";
-import { toString, Record } from "../Types.js";
+import { Record, toString } from "../Types.js";
 import { class_type } from "../Reflection.js";
 import { initialize } from "../Array.js";
 import { op_Addition, op_Multiply, fromValue, equals, fromBits, compare, fromInteger, op_UnaryNegation } from "../Long.js";
@@ -9,7 +9,7 @@ import Decimal from "../Decimal.js";
 export class BigInteger extends Record {
     constructor(signInt, v) {
         super();
-        this.signInt = signInt;
+        this.signInt = (signInt | 0);
         this.v = v;
     }
     toString() {
@@ -38,6 +38,10 @@ export class BigInteger extends Record {
         const x = this;
         return BigInteger_hash_Z665282C2(x) | 0;
     }
+    toJSON(_key) {
+        const this$ = this;
+        return toString(this$);
+    }
     CompareTo(obj) {
         const this$ = this;
         if (obj instanceof BigInteger) {
@@ -59,7 +63,7 @@ export function BigInteger_$ctor_Z2BE94A1(signInt, v) {
 
 (() => {
     BigInteger.smallLim = 4096;
-    BigInteger.smallPosTab = initialize(BigInteger.smallLim, BigNatModule_ofInt32);
+    BigInteger.smallPosTab = initialize(BigInteger.smallLim, (n) => BigNatModule_ofInt32(n));
     BigInteger.one = BigInteger_$ctor_Z524259A4(1);
     BigInteger.two = BigInteger_$ctor_Z524259A4(2);
     BigInteger.zero = BigInteger_$ctor_Z524259A4(0);

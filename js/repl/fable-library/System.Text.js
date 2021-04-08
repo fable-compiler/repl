@@ -2,7 +2,6 @@ import { substring, format, isNullOrEmpty, join } from "./String.js";
 import { class_type } from "./Reflection.js";
 import { clear, int32ToString } from "./Util.js";
 import { toString } from "./Types.js";
-import { sumBy } from "./Seq.js";
 
 export class StringBuilder {
     constructor(value, capacity) {
@@ -94,10 +93,11 @@ export function StringBuilder__AppendLine_Z721C83C5(x, s) {
 }
 
 export function StringBuilder__get_Length(x) {
-    return sumBy((str) => str.length, x.buf, {
-        GetZero: () => 0,
-        Add: (x_1, y) => (x_1 + y),
-    });
+    let len = 0;
+    for (let i = x.buf.length - 1; i >= 0; i--) {
+        len = ((len + x.buf[i].length) | 0);
+    }
+    return len | 0;
 }
 
 export function StringBuilder__ToString_Z37302880(x, firstIndex, length) {

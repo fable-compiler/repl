@@ -123,20 +123,19 @@ export function unixEpochMillisecondsToTicks(ms, offset) {
 export function ticksToUnixEpochMilliseconds(ticks) {
     return LongLib.toNumber(op_Subtraction(op_Division(ticks, 10000), 62135596800000));
 }
-export function makeRangeStepFunction(step, last, unsigned) {
-    const stepComparedWithZero = LongLib.compare(step, unsigned ? LongLib.UZERO : LongLib.ZERO);
-    if (stepComparedWithZero === 0) {
-        throw new Error("The step of a range cannot be zero");
-    }
-    const stepGreaterThanZero = stepComparedWithZero > 0;
-    return (x) => {
-        const comparedWithLast = LongLib.compare(x, last);
-        if ((stepGreaterThanZero && comparedWithLast <= 0)
-            || (!stepGreaterThanZero && comparedWithLast >= 0)) {
-            return [x, op_Addition(x, step)];
-        }
-        else {
-            return undefined;
-        }
-    };
-}
+// export function makeRangeStepFunction(step: Long, last: Long, unsigned: boolean) {
+//   const stepComparedWithZero = LongLib.compare(step, unsigned ? LongLib.UZERO : LongLib.ZERO);
+//   if (stepComparedWithZero === 0) {
+//     throw new Error("The step of a range cannot be zero");
+//   }
+//   const stepGreaterThanZero = stepComparedWithZero > 0;
+//   return (x: Long) => {
+//     const comparedWithLast = LongLib.compare(x, last);
+//     if ((stepGreaterThanZero && comparedWithLast <= 0)
+//       || (!stepGreaterThanZero && comparedWithLast >= 0)) {
+//       return [x, op_Addition(x, step)];
+//     } else {
+//       return undefined;
+//     }
+//   };
+// }

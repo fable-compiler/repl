@@ -4,7 +4,6 @@ import { protectedCont } from "./AsyncBuilder.js";
 import { protectedBind } from "./AsyncBuilder.js";
 import { protectedReturn } from "./AsyncBuilder.js";
 import { Choice_makeChoice1Of2, Choice_makeChoice2Of2 } from "./Choice.js";
-import { map } from "./Seq.js";
 // Implemented just for type references
 export class Async {
 }
@@ -80,7 +79,7 @@ export function ignore(computation) {
     return protectedBind(computation, (_x) => protectedReturn(void 0));
 }
 export function parallel(computations) {
-    return awaitPromise(Promise.all(map((w) => startAsPromise(w), computations)));
+    return awaitPromise(Promise.all(Array.from(computations, (w) => startAsPromise(w))));
 }
 export function sleep(millisecondsDueTime) {
     return protectedCont((ctx) => {

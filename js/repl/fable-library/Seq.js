@@ -1,835 +1,1276 @@
-import { makeRangeStepFunction as makeDecimalRangeStepFunction } from "./Decimal.js";
-import { makeRangeStepFunction as makeLongRangeStepFunction } from "./Long.js";
-import { some, value } from "./Option.js";
-import { compare, equals } from "./Util.js";
-export class Enumerator {
-    constructor(iter) {
-        this.iter = iter;
-    }
-    ["System.Collections.Generic.IEnumerator`1.get_Current"]() {
-        return this.current;
-    }
-    ["System.Collections.IEnumerator.get_Current"]() {
-        return this.current;
-    }
-    ["System.Collections.IEnumerator.MoveNext"]() {
-        const cur = this.iter.next();
-        this.current = cur.value;
-        return !cur.done;
-    }
-    ["System.Collections.IEnumerator.Reset"]() {
-        throw new Error("JS iterators cannot be reset");
-    }
-    Dispose() {
-        return;
-    }
+import { equals, isArrayLike, isDisposable, toIterator, getEnumerator } from "./Util.js";
+import { toString } from "./Types.js";
+import { class_type } from "./Reflection.js";
+import { some, value as value_1 } from "./Option.js";
+import { Operators_NullArg } from "./FSharp.Core.js";
+import { chunkBySize as chunkBySize_1, permute as permute_1, transpose as transpose_1, windowed as windowed_1, splitInto as splitInto_1, map as map_1, pairwise as pairwise_1, scanBack as scanBack_1, reverse as reverse_1, mapFoldBack as mapFoldBack_1, mapFold as mapFold_1, tryItem as tryItem_1, tryHead as tryHead_1, foldBack2 as foldBack2_1, foldBack as foldBack_1, tryFindIndexBack as tryFindIndexBack_1, tryFindBack as tryFindBack_1, singleton as singleton_1 } from "./Array.js";
+import { length as length_1, tryItem as tryItem_2, isEmpty as isEmpty_1, tryHead as tryHead_2, ofSeq as ofSeq_1, ofArray as ofArray_1, toArray as toArray_1, FSharpList } from "./List.js";
+
+export const SR_enumerationAlreadyFinished = "Enumeration already finished.";
+
+export const SR_enumerationNotStarted = "Enumeration has not started. Call MoveNext.";
+
+export const SR_inputSequenceEmpty = "The input sequence was empty.";
+
+export const SR_inputSequenceTooLong = "The input sequence contains more than one element.";
+
+export const SR_keyNotFoundAlt = "An index satisfying the predicate was not found in the collection.";
+
+export const SR_notEnoughElements = "The input sequence has an insufficient number of elements.";
+
+export const SR_resetNotSupported = "Reset is not supported on this enumerator.";
+
+export function Enumerator_noReset() {
+    throw (new Error(SR_resetNotSupported));
 }
-export function getEnumerator(o) {
-    return typeof o.GetEnumerator === "function"
-        ? o.GetEnumerator()
-        : new Enumerator(o[Symbol.iterator]());
+
+export function Enumerator_notStarted() {
+    throw (new Error(SR_enumerationNotStarted));
 }
-export function toIterator(en) {
-    return {
-        [Symbol.iterator]() { return this; },
-        next() {
-            const hasNext = en["System.Collections.IEnumerator.MoveNext"]();
-            const current = hasNext ? en["System.Collections.IEnumerator.get_Current"]() : undefined;
-            return { done: !hasNext, value: current };
-        },
-    };
+
+export function Enumerator_alreadyFinished() {
+    throw (new Error(SR_enumerationAlreadyFinished));
 }
-// export function toIterable<T>(en: IEnumerable<T>): Iterable<T> {
-//   return {
-//     [Symbol.iterator]() {
-//       return toIterator(en.GetEnumerator());
-//     },
-//   };
-// }
-function __failIfNone(res) {
-    if (res == null) {
-        throw new Error("Seq did not contain any matching element");
-    }
-    return value(res);
-}
-class Seq {
+
+export class Enumerator_Seq {
     constructor(f) {
         this.f = f;
     }
-    [Symbol.iterator]() { return new Seq(this.f); }
-    next() {
-        var _a;
-        this.iter = (_a = this.iter) !== null && _a !== void 0 ? _a : this.f();
-        return this.iter.next();
-    }
     toString() {
-        return "seq [" + Array.from(this).join("; ") + "]";
+        const xs = this;
+        const maxCount = 4;
+        let i = 0;
+        let str = "seq [";
+        const e = getEnumerator(xs);
+        try {
+            while ((i < maxCount) ? e["System.Collections.IEnumerator.MoveNext"]() : false) {
+                if (i > 0) {
+                    str = (str + "; ");
+                }
+                str = (str + toString(e["System.Collections.Generic.IEnumerator`1.get_Current"]()));
+                i = ((i + 1) | 0);
+            }
+            if (i === maxCount) {
+                str = (str + "; ...");
+            }
+            return str + "]";
+        }
+        finally {
+            e.Dispose();
+        }
+    }
+    GetEnumerator() {
+        const x = this;
+        return x.f();
+    }
+    [Symbol.iterator]() {
+        return toIterator(this.GetEnumerator());
+    }
+    ["System.Collections.IEnumerable.GetEnumerator"]() {
+        const x = this;
+        return x.f();
     }
 }
-function makeSeq(f) {
-    return new Seq(f);
+
+export function Enumerator_Seq$reflection(gen0) {
+    return class_type("SeqModule.Enumerator.Seq", [gen0], Enumerator_Seq);
 }
-function isArrayOrBufferView(xs) {
-    return Array.isArray(xs) || ArrayBuffer.isView(xs);
+
+export function Enumerator_Seq_$ctor_673A07F2(f) {
+    return new Enumerator_Seq(f);
 }
-export function ofArray(xs) {
-    if (Array.isArray(xs)) {
-        return delay(() => xs);
+
+export class Enumerator_FromFunctions$1 {
+    constructor(current, next, dispose) {
+        this.current = current;
+        this.next = next;
+        this.dispose = dispose;
     }
-    else {
-        return delay(() => unfold((i) => i != null && i < xs.length ? [xs[i], i + 1] : undefined, 0));
+    ["System.Collections.Generic.IEnumerator`1.get_Current"]() {
+        const __ = this;
+        return __.current();
+    }
+    ["System.Collections.IEnumerator.get_Current"]() {
+        const __ = this;
+        return __.current();
+    }
+    ["System.Collections.IEnumerator.MoveNext"]() {
+        const __ = this;
+        return __.next();
+    }
+    ["System.Collections.IEnumerator.Reset"]() {
+        return Enumerator_noReset();
+    }
+    Dispose() {
+        const __ = this;
+        __.dispose();
     }
 }
-export function allPairs(xs, ys) {
-    let firstEl = true;
-    const ysCache = [];
-    return collect((x) => {
-        if (firstEl) {
-            firstEl = false;
-            return map((y) => {
-                ysCache.push(y);
-                return [x, y];
-            }, ys);
+
+export function Enumerator_FromFunctions$1$reflection(gen0) {
+    return class_type("SeqModule.Enumerator.FromFunctions`1", [gen0], Enumerator_FromFunctions$1);
+}
+
+export function Enumerator_FromFunctions$1_$ctor_58C54629(current, next, dispose) {
+    return new Enumerator_FromFunctions$1(current, next, dispose);
+}
+
+export function Enumerator_cast(e) {
+    return Enumerator_FromFunctions$1_$ctor_58C54629(() => e["System.Collections.IEnumerator.get_Current"](), () => e["System.Collections.IEnumerator.MoveNext"](), () => {
+        if (isDisposable(e)) {
+            e.Dispose();
+        }
+    });
+}
+
+export function Enumerator_concat(sources) {
+    let outerOpt = void 0;
+    let innerOpt = void 0;
+    let started = false;
+    let finished = false;
+    let curr = void 0;
+    const finish = () => {
+        finished = true;
+        if (innerOpt != null) {
+            const inner = innerOpt;
+            try {
+                inner.Dispose();
+            }
+            finally {
+                innerOpt = (void 0);
+            }
+        }
+        if (outerOpt != null) {
+            const outer = outerOpt;
+            try {
+                outer.Dispose();
+            }
+            finally {
+                outerOpt = (void 0);
+            }
+        }
+    };
+    return Enumerator_FromFunctions$1_$ctor_58C54629(() => {
+        if (!started) {
+            Enumerator_notStarted();
+        }
+        else if (finished) {
+            Enumerator_alreadyFinished();
+        }
+        if (curr != null) {
+            return value_1(curr);
         }
         else {
-            return ysCache.map((y) => [x, y]);
-            // return map(function (i) {
-            //     return [x, ysCache[i]];
-            // }, rangeNumber(0, 1, ysCache.length - 1));
+            return Enumerator_alreadyFinished();
+        }
+    }, () => {
+        let copyOfStruct;
+        if (!started) {
+            started = true;
+        }
+        if (finished) {
+            return false;
+        }
+        else {
+            let res = void 0;
+            while (res == null) {
+                const matchValue = [outerOpt, innerOpt];
+                if (matchValue[0] != null) {
+                    if (matchValue[1] != null) {
+                        const inner_1 = matchValue[1];
+                        if (inner_1["System.Collections.IEnumerator.MoveNext"]()) {
+                            curr = some(inner_1["System.Collections.Generic.IEnumerator`1.get_Current"]());
+                            res = true;
+                        }
+                        else {
+                            try {
+                                inner_1.Dispose();
+                            }
+                            finally {
+                                innerOpt = (void 0);
+                            }
+                        }
+                    }
+                    else {
+                        const outer_1 = matchValue[0];
+                        if (outer_1["System.Collections.IEnumerator.MoveNext"]()) {
+                            const ie = outer_1["System.Collections.Generic.IEnumerator`1.get_Current"]();
+                            innerOpt = (copyOfStruct = ie, getEnumerator(copyOfStruct));
+                        }
+                        else {
+                            finish();
+                            res = false;
+                        }
+                    }
+                }
+                else {
+                    outerOpt = getEnumerator(sources);
+                }
+            }
+            return value_1(res);
+        }
+    }, () => {
+        if (!finished) {
+            finish();
+        }
+    });
+}
+
+export function Enumerator_enumerateThenFinally(f, e) {
+    return Enumerator_FromFunctions$1_$ctor_58C54629(() => e["System.Collections.Generic.IEnumerator`1.get_Current"](), () => e["System.Collections.IEnumerator.MoveNext"](), () => {
+        try {
+            e.Dispose();
+        }
+        finally {
+            f();
+        }
+    });
+}
+
+export function Enumerator_generateWhileSome(openf, compute, closef) {
+    let started = false;
+    let curr = void 0;
+    let state = some(openf());
+    const dispose = () => {
+        if (state != null) {
+            const x_1 = value_1(state);
+            try {
+                closef(x_1);
+            }
+            finally {
+                state = (void 0);
+            }
+        }
+    };
+    const finish = () => {
+        try {
+            dispose();
+        }
+        finally {
+            curr = (void 0);
+        }
+    };
+    return Enumerator_FromFunctions$1_$ctor_58C54629(() => {
+        if (!started) {
+            Enumerator_notStarted();
+        }
+        if (curr != null) {
+            return value_1(curr);
+        }
+        else {
+            return Enumerator_alreadyFinished();
+        }
+    }, () => {
+        if (!started) {
+            started = true;
+        }
+        if (state != null) {
+            const s = value_1(state);
+            let matchValue_1;
+            try {
+                matchValue_1 = compute(s);
+            }
+            catch (matchValue) {
+                finish();
+                throw matchValue;
+            }
+            if (matchValue_1 != null) {
+                curr = matchValue_1;
+                return true;
+            }
+            else {
+                finish();
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+    }, dispose);
+}
+
+export function Enumerator_unfold(f, state) {
+    let curr = void 0;
+    let acc = state;
+    return Enumerator_FromFunctions$1_$ctor_58C54629(() => {
+        if (curr != null) {
+            const st = curr[1];
+            return curr[0];
+        }
+        else {
+            return Enumerator_notStarted();
+        }
+    }, () => {
+        curr = f(acc);
+        if (curr != null) {
+            const x_1 = curr[0];
+            const st_1 = curr[1];
+            acc = st_1;
+            return true;
+        }
+        else {
+            return false;
+        }
+    }, () => {
+    });
+}
+
+export function indexNotFound() {
+    throw (new Error(SR_keyNotFoundAlt));
+}
+
+export function checkNonNull(argName, arg) {
+    if (arg == null) {
+        Operators_NullArg(argName);
+    }
+}
+
+export function mkSeq(f) {
+    return Enumerator_Seq_$ctor_673A07F2(f);
+}
+
+export function ofSeq(xs) {
+    checkNonNull("source", xs);
+    return getEnumerator(xs);
+}
+
+export function delay(generator) {
+    return mkSeq(() => getEnumerator(generator()));
+}
+
+export function concat(sources) {
+    return mkSeq(() => Enumerator_concat(sources));
+}
+
+export function unfold(generator, state) {
+    return mkSeq(() => Enumerator_unfold(generator, state));
+}
+
+export function empty() {
+    return delay(() => (new Array(0)));
+}
+
+export function singleton(x) {
+    return delay(() => singleton_1(x));
+}
+
+export function ofArray(arr) {
+    return arr;
+}
+
+export function toArray(xs) {
+    if (isArrayLike(xs)) {
+        return xs;
+    }
+    else if (xs instanceof FSharpList) {
+        return toArray_1(xs);
+    }
+    else {
+        return Array.from(xs);
+    }
+}
+
+export function ofList(xs) {
+    return xs;
+}
+
+export function toList(xs) {
+    if (isArrayLike(xs)) {
+        return ofArray_1(xs);
+    }
+    else if (xs instanceof FSharpList) {
+        return xs;
+    }
+    else {
+        return ofSeq_1(xs);
+    }
+}
+
+export function generate(create, compute, dispose) {
+    return mkSeq(() => Enumerator_generateWhileSome(create, compute, dispose));
+}
+
+export function generateIndexed(create, compute, dispose) {
+    return mkSeq(() => {
+        let i = -1;
+        return Enumerator_generateWhileSome(create, (x) => {
+            i = ((i + 1) | 0);
+            return compute(i, x);
+        }, dispose);
+    });
+}
+
+export function append(xs, ys) {
+    return concat([xs, ys]);
+}
+
+export function cast(xs) {
+    return mkSeq(() => {
+        checkNonNull("source", xs);
+        return Enumerator_cast(getEnumerator(xs));
+    });
+}
+
+export function choose(chooser, xs) {
+    return generate(() => ofSeq(xs), (e) => {
+        let curr = void 0;
+        while ((curr == null) ? e["System.Collections.IEnumerator.MoveNext"]() : false) {
+            curr = chooser(e["System.Collections.Generic.IEnumerator`1.get_Current"]());
+        }
+        return curr;
+    }, (e_1) => {
+        e_1.Dispose();
+    });
+}
+
+export function compareWith(comparer, xs, ys) {
+    const e1 = ofSeq(xs);
+    try {
+        const e2 = ofSeq(ys);
+        try {
+            let c = 0;
+            let b1 = e1["System.Collections.IEnumerator.MoveNext"]();
+            let b2 = e2["System.Collections.IEnumerator.MoveNext"]();
+            while (((c === 0) ? b1 : false) ? b2 : false) {
+                c = (comparer(e1["System.Collections.Generic.IEnumerator`1.get_Current"](), e2["System.Collections.Generic.IEnumerator`1.get_Current"]()) | 0);
+                if (c === 0) {
+                    b1 = e1["System.Collections.IEnumerator.MoveNext"]();
+                    b2 = e2["System.Collections.IEnumerator.MoveNext"]();
+                }
+            }
+            return ((c !== 0) ? c : (b1 ? 1 : (b2 ? -1 : 0))) | 0;
+        }
+        finally {
+            e2.Dispose();
+        }
+    }
+    finally {
+        e1.Dispose();
+    }
+}
+
+export function contains(value, xs, comparer) {
+    const e = ofSeq(xs);
+    try {
+        let found = false;
+        while ((!found) ? e["System.Collections.IEnumerator.MoveNext"]() : false) {
+            found = comparer.Equals(value, e["System.Collections.Generic.IEnumerator`1.get_Current"]());
+        }
+        return found;
+    }
+    finally {
+        e.Dispose();
+    }
+}
+
+export function enumerateFromFunctions(create, moveNext, current) {
+    return generate(create, (x) => (moveNext(x) ? some(current(x)) : (void 0)), (x_1) => {
+        const matchValue = x_1;
+        if (isDisposable(matchValue)) {
+            matchValue.Dispose();
+        }
+    });
+}
+
+export function enumerateThenFinally(source, compensation) {
+    const compensation_1 = compensation;
+    return mkSeq(() => {
+        try {
+            return Enumerator_enumerateThenFinally(compensation_1, ofSeq(source));
+        }
+        catch (matchValue) {
+            compensation_1();
+            throw matchValue;
+        }
+    });
+}
+
+export function enumerateUsing(resource, source) {
+    const compensation = () => {
+        if (equals(resource, null)) {
+        }
+        else {
+            let copyOfStruct = resource;
+            copyOfStruct.Dispose();
+        }
+    };
+    return mkSeq(() => {
+        try {
+            return Enumerator_enumerateThenFinally(compensation, ofSeq(source(resource)));
+        }
+        catch (matchValue_1) {
+            compensation();
+            throw matchValue_1;
+        }
+    });
+}
+
+export function enumerateWhile(guard, xs) {
+    return concat(unfold((i) => (guard() ? [xs, i + 1] : (void 0)), 0));
+}
+
+export function filter(f, xs) {
+    return choose((x) => {
+        if (f(x)) {
+            return some(x);
+        }
+        else {
+            return void 0;
         }
     }, xs);
 }
-export function append(xs, ys) {
-    return delay(() => {
-        let firstDone = false;
-        const i = xs[Symbol.iterator]();
-        let iters = [i, undefined];
-        return unfold(() => {
-            var _a, _b;
-            let cur;
-            if (!firstDone) {
-                cur = (_a = iters[0]) === null || _a === void 0 ? void 0 : _a.next();
-                if (cur != null && !cur.done) {
-                    return [cur.value, iters];
-                }
-                else {
-                    firstDone = true;
-                    iters = [undefined, ys[Symbol.iterator]()];
-                }
-            }
-            cur = (_b = iters[1]) === null || _b === void 0 ? void 0 : _b.next();
-            return cur != null && !cur.done ? [cur.value, iters] : undefined;
-        }, iters);
-    });
-}
-export function average(xs, averager) {
-    let count = 0;
-    const total = fold((acc, x) => {
-        count++;
-        return averager.Add(acc, x);
-    }, averager.GetZero(), xs);
-    return averager.DivideByInt(total, count);
-}
-export function averageBy(f, xs, averager) {
-    let count = 0;
-    const total = fold((acc, x) => {
-        count++;
-        return averager.Add(acc, f(x));
-    }, averager.GetZero(), xs);
-    return averager.DivideByInt(total, count);
-}
-export function concat(xs) {
-    return delay(() => {
-        const iter = xs[Symbol.iterator]();
-        let output;
-        return unfold((innerIter) => {
-            let hasFinished = false;
-            while (!hasFinished) {
-                if (innerIter == null) {
-                    const cur = iter.next();
-                    if (!cur.done) {
-                        innerIter = cur.value[Symbol.iterator]();
-                    }
-                    else {
-                        hasFinished = true;
-                    }
-                }
-                else {
-                    const cur = innerIter.next();
-                    if (!cur.done) {
-                        output = cur.value;
-                        hasFinished = true;
-                    }
-                    else {
-                        innerIter = undefined;
-                    }
-                }
-            }
-            return innerIter != null ? [output, innerIter] : undefined;
-        }, undefined);
-    });
-}
-export function collect(f, xs) {
-    return concat(map(f, xs));
-}
-export function choose(f, xs) {
-    return delay(() => unfold((iter) => {
-        let cur = iter.next();
-        while (!cur.done) {
-            const y = f(cur.value);
-            if (y != null) {
-                return [value(y), iter];
-            }
-            cur = iter.next();
-        }
-        return undefined;
-    }, xs[Symbol.iterator]()));
-}
-export function compareWith(f, xs, ys) {
-    if (xs === ys) {
-        return 0;
-    }
-    let cur1;
-    let cur2;
-    let c = 0;
-    for (const iter1 = xs[Symbol.iterator](), iter2 = ys[Symbol.iterator]();;) {
-        cur1 = iter1.next();
-        cur2 = iter2.next();
-        if (cur1.done || cur2.done) {
-            break;
-        }
-        c = f(cur1.value, cur2.value);
-        if (c !== 0) {
-            break;
-        }
-    }
-    return (c !== 0) ? c : (cur1.done && !cur2.done) ? -1 : (!cur1.done && cur2.done) ? 1 : 0;
-}
-export function delay(f) {
-    return makeSeq(() => f()[Symbol.iterator]());
-}
-export function empty() {
-    return delay(() => []);
-}
-export function singleton(y) {
-    return delay(() => [y]);
-}
-export function enumerateFromFunctions(factory, moveNext, current) {
-    return delay(() => unfold((e) => moveNext(e) ? [current(e), e] : undefined, factory()));
-}
-export function enumerateWhile(cond, xs) {
-    return concat(unfold(() => cond() ? [xs, true] : undefined, undefined));
-}
-export function enumerateThenFinally(xs, finalFn) {
-    return delay(() => {
-        let iter;
-        try {
-            iter = xs[Symbol.iterator]();
-        }
-        catch (err) {
-            try {
-                return empty();
-            }
-            finally {
-                finalFn();
-            }
-        }
-        return unfold((it) => {
-            try {
-                const cur = it.next();
-                return !cur.done ? [cur.value, it] : undefined;
-            }
-            catch (err) {
-                return undefined;
-            }
-            finally {
-                finalFn();
-            }
-        }, iter);
-    });
-}
-export function enumerateUsing(disp, work) {
-    let isDisposed = false;
-    const disposeOnce = () => {
-        if (!isDisposed) {
-            isDisposed = true;
-            disp.Dispose();
-        }
-    };
+
+export function exists(predicate, xs) {
+    const e = ofSeq(xs);
     try {
-        return enumerateThenFinally(work(disp), disposeOnce);
-    }
-    catch (err) {
-        return void 0;
+        let found = false;
+        while ((!found) ? e["System.Collections.IEnumerator.MoveNext"]() : false) {
+            found = predicate(e["System.Collections.Generic.IEnumerator`1.get_Current"]());
+        }
+        return found;
     }
     finally {
-        disposeOnce();
+        e.Dispose();
     }
 }
-export function exactlyOne(xs) {
-    const iter = xs[Symbol.iterator]();
-    const fst = iter.next();
-    if (fst.done) {
-        throw new Error("Seq was empty");
-    }
-    const snd = iter.next();
-    if (!snd.done) {
-        throw new Error("Seq had multiple items");
-    }
-    return fst.value;
-}
-export function except(itemsToExclude, source) {
-    const exclusionItems = Array.from(itemsToExclude);
-    const testIsNotInExclusionItems = (element) => !exclusionItems.some((excludedItem) => equals(excludedItem, element));
-    return filter(testIsNotInExclusionItems, source);
-}
-export function exists(f, xs) {
-    let cur;
-    for (const iter = xs[Symbol.iterator]();;) {
-        cur = iter.next();
-        if (cur.done) {
-            break;
-        }
-        if (f(cur.value)) {
-            return true;
-        }
-    }
-    return false;
-}
-export function exists2(f, xs, ys) {
-    let cur1;
-    let cur2;
-    for (const iter1 = xs[Symbol.iterator](), iter2 = ys[Symbol.iterator]();;) {
-        cur1 = iter1.next();
-        cur2 = iter2.next();
-        if (cur1.done || cur2.done) {
-            break;
-        }
-        if (f(cur1.value, cur2.value)) {
-            return true;
-        }
-    }
-    return false;
-}
-export function forAll(f, xs) {
-    return !exists((x) => !f(x), xs);
-}
-export function forAll2(f, xs, ys) {
-    return !exists2((x, y) => !f(x, y), xs, ys);
-}
-export function contains(i, xs) {
-    return exists((x) => equals(x, i), xs);
-}
-export function filter(f, xs) {
-    return delay(() => unfold((iter) => {
-        let cur = iter.next();
-        while (!cur.done) {
-            if (f(cur.value)) {
-                return [cur.value, iter];
+
+export function exists2(predicate, xs, ys) {
+    const e1 = ofSeq(xs);
+    try {
+        const e2 = ofSeq(ys);
+        try {
+            let found = false;
+            while (((!found) ? e1["System.Collections.IEnumerator.MoveNext"]() : false) ? e2["System.Collections.IEnumerator.MoveNext"]() : false) {
+                found = predicate(e1["System.Collections.Generic.IEnumerator`1.get_Current"](), e2["System.Collections.Generic.IEnumerator`1.get_Current"]());
             }
-            cur = iter.next();
+            return found;
         }
-        return undefined;
-    }, xs[Symbol.iterator]()));
+        finally {
+            e2.Dispose();
+        }
+    }
+    finally {
+        e1.Dispose();
+    }
 }
-export function where(f, xs) {
-    return filter(f, xs);
+
+export function exactlyOne(xs) {
+    const e = ofSeq(xs);
+    try {
+        if (e["System.Collections.IEnumerator.MoveNext"]()) {
+            const v = e["System.Collections.Generic.IEnumerator`1.get_Current"]();
+            if (e["System.Collections.IEnumerator.MoveNext"]()) {
+                throw (new Error((SR_inputSequenceTooLong + "\\nParameter name: ") + "source"));
+            }
+            else {
+                return v;
+            }
+        }
+        else {
+            throw (new Error((SR_inputSequenceEmpty + "\\nParameter name: ") + "source"));
+        }
+    }
+    finally {
+        e.Dispose();
+    }
 }
-export function fold(f, acc, xs) {
-    if (isArrayOrBufferView(xs)) {
-        return xs.reduce(f, acc);
+
+export function tryExactlyOne(xs) {
+    const e = ofSeq(xs);
+    try {
+        if (e["System.Collections.IEnumerator.MoveNext"]()) {
+            const v = e["System.Collections.Generic.IEnumerator`1.get_Current"]();
+            return e["System.Collections.IEnumerator.MoveNext"]() ? (void 0) : some(v);
+        }
+        else {
+            return void 0;
+        }
+    }
+    finally {
+        e.Dispose();
+    }
+}
+
+export function tryFind(predicate, xs) {
+    const e = ofSeq(xs);
+    try {
+        let res = void 0;
+        while ((res == null) ? e["System.Collections.IEnumerator.MoveNext"]() : false) {
+            const c = e["System.Collections.Generic.IEnumerator`1.get_Current"]();
+            if (predicate(c)) {
+                res = some(c);
+            }
+        }
+        return res;
+    }
+    finally {
+        e.Dispose();
+    }
+}
+
+export function find(predicate, xs) {
+    const matchValue = tryFind(predicate, xs);
+    if (matchValue == null) {
+        return indexNotFound();
     }
     else {
-        let cur;
-        for (let i = 0, iter = xs[Symbol.iterator]();; i++) {
-            cur = iter.next();
-            if (cur.done) {
+        return value_1(matchValue);
+    }
+}
+
+export function tryFindBack(predicate, xs) {
+    return tryFindBack_1(predicate, toArray(xs));
+}
+
+export function findBack(predicate, xs) {
+    const matchValue = tryFindBack(predicate, xs);
+    if (matchValue == null) {
+        return indexNotFound();
+    }
+    else {
+        return value_1(matchValue);
+    }
+}
+
+export function tryFindIndex(predicate, xs) {
+    const e = ofSeq(xs);
+    try {
+        const loop = (i_mut) => {
+            loop:
+            while (true) {
+                const i = i_mut;
+                if (e["System.Collections.IEnumerator.MoveNext"]()) {
+                    if (predicate(e["System.Collections.Generic.IEnumerator`1.get_Current"]())) {
+                        return i;
+                    }
+                    else {
+                        i_mut = (i + 1);
+                        continue loop;
+                    }
+                }
+                else {
+                    return void 0;
+                }
                 break;
             }
-            acc = f(acc, cur.value, i);
+        };
+        return loop(0);
+    }
+    finally {
+        e.Dispose();
+    }
+}
+
+export function findIndex(predicate, xs) {
+    const matchValue = tryFindIndex(predicate, xs);
+    if (matchValue == null) {
+        return indexNotFound();
+    }
+    else {
+        return matchValue | 0;
+    }
+}
+
+export function tryFindIndexBack(predicate, xs) {
+    return tryFindIndexBack_1(predicate, toArray(xs));
+}
+
+export function findIndexBack(predicate, xs) {
+    const matchValue = tryFindIndexBack(predicate, xs);
+    if (matchValue == null) {
+        return indexNotFound();
+    }
+    else {
+        return matchValue | 0;
+    }
+}
+
+export function fold(folder, state, xs) {
+    const e = ofSeq(xs);
+    try {
+        let acc = state;
+        while (e["System.Collections.IEnumerator.MoveNext"]()) {
+            acc = folder(acc, e["System.Collections.Generic.IEnumerator`1.get_Current"]());
         }
         return acc;
     }
-}
-export function foldBack(f, xs, acc) {
-    const arr = isArrayOrBufferView(xs) ? xs : Array.from(xs);
-    for (let i = arr.length - 1; i >= 0; i--) {
-        acc = f(arr[i], acc, i);
+    finally {
+        e.Dispose();
     }
-    return acc;
 }
-export function fold2(f, acc, xs, ys) {
-    const iter1 = xs[Symbol.iterator]();
-    const iter2 = ys[Symbol.iterator]();
-    let cur1;
-    let cur2;
-    for (let i = 0;; i++) {
-        cur1 = iter1.next();
-        cur2 = iter2.next();
-        if (cur1.done || cur2.done) {
-            break;
+
+export function foldBack(folder, xs, state) {
+    return foldBack_1(folder, toArray(xs), state);
+}
+
+export function fold2(folder, state, xs, ys) {
+    const e1 = ofSeq(xs);
+    try {
+        const e2 = ofSeq(ys);
+        try {
+            let acc = state;
+            while (e1["System.Collections.IEnumerator.MoveNext"]() ? e2["System.Collections.IEnumerator.MoveNext"]() : false) {
+                acc = folder(acc, e1["System.Collections.Generic.IEnumerator`1.get_Current"](), e2["System.Collections.Generic.IEnumerator`1.get_Current"]());
+            }
+            return acc;
         }
-        acc = f(acc, cur1.value, cur2.value, i);
+        finally {
+            e2.Dispose();
+        }
     }
-    return acc;
-}
-export function foldBack2(f, xs, ys, acc) {
-    const ar1 = isArrayOrBufferView(xs) ? xs : Array.from(xs);
-    const ar2 = isArrayOrBufferView(ys) ? ys : Array.from(ys);
-    for (let i = ar1.length - 1; i >= 0; i--) {
-        acc = f(ar1[i], ar2[i], acc, i);
+    finally {
+        e1.Dispose();
     }
-    return acc;
 }
+
+export function foldBack2(folder, xs, ys, state) {
+    return foldBack2_1(folder, toArray(xs), toArray(ys), state);
+}
+
+export function forAll(predicate, xs) {
+    return !exists((x) => (!predicate(x)), xs);
+}
+
+export function forAll2(predicate, xs, ys) {
+    return !exists2((x, y) => (!predicate(x, y)), xs, ys);
+}
+
 export function tryHead(xs) {
-    const iter = xs[Symbol.iterator]();
-    const cur = iter.next();
-    return cur.done ? undefined : some(cur.value);
+    if (isArrayLike(xs)) {
+        return tryHead_1(xs);
+    }
+    else if (xs instanceof FSharpList) {
+        return tryHead_2(xs);
+    }
+    else {
+        const e = ofSeq(xs);
+        try {
+            return e["System.Collections.IEnumerator.MoveNext"]() ? some(e["System.Collections.Generic.IEnumerator`1.get_Current"]()) : (void 0);
+        }
+        finally {
+            e.Dispose();
+        }
+    }
 }
+
 export function head(xs) {
-    return __failIfNone(tryHead(xs));
+    const matchValue = tryHead(xs);
+    if (matchValue == null) {
+        throw (new Error((SR_inputSequenceEmpty + "\\nParameter name: ") + "source"));
+    }
+    else {
+        return value_1(matchValue);
+    }
 }
-export function initialize(n, f) {
-    return delay(() => unfold((i) => i < n ? [f(i), i + 1] : undefined, 0));
+
+export function initialize(count, f) {
+    return unfold((i) => ((i < count) ? [f(i), i + 1] : (void 0)), 0);
 }
+
 export function initializeInfinite(f) {
-    return delay(() => unfold((i) => [f(i), i + 1], 0));
+    return initialize(2147483647, f);
 }
-export function tryItem(i, xs) {
-    if (i < 0) {
-        return undefined;
-    }
-    if (isArrayOrBufferView(xs)) {
-        return i < xs.length ? some(xs[i]) : undefined;
-    }
-    for (let j = 0, iter = xs[Symbol.iterator]();; j++) {
-        const cur = iter.next();
-        if (cur.done) {
-            break;
-        }
-        if (j === i) {
-            return some(cur.value);
-        }
-    }
-    return undefined;
-}
-export function item(i, xs) {
-    return __failIfNone(tryItem(i, xs));
-}
-export function iterate(f, xs) {
-    fold((_, x) => (f(x), undefined), undefined, xs);
-}
-export function iterate2(f, xs, ys) {
-    fold2((_, x, y) => (f(x, y), undefined), undefined, xs, ys);
-}
-export function iterateIndexed(f, xs) {
-    fold((_, x, i) => (f(i !== null && i !== void 0 ? i : 0, x), undefined), undefined, xs);
-}
-export function iterateIndexed2(f, xs, ys) {
-    fold2((_, x, y, i) => (f(i !== null && i !== void 0 ? i : 0, x, y), undefined), undefined, xs, ys);
-}
+
 export function isEmpty(xs) {
-    const i = xs[Symbol.iterator]();
-    return i.next().done;
+    if (isArrayLike(xs)) {
+        return xs.length === 0;
+    }
+    else if (xs instanceof FSharpList) {
+        return isEmpty_1(xs);
+    }
+    else {
+        const e = ofSeq(xs);
+        try {
+            return !e["System.Collections.IEnumerator.MoveNext"]();
+        }
+        finally {
+            e.Dispose();
+        }
+    }
 }
+
+export function tryItem(index, xs) {
+    if (isArrayLike(xs)) {
+        return tryItem_1(index, xs);
+    }
+    else if (xs instanceof FSharpList) {
+        return tryItem_2(index, xs);
+    }
+    else {
+        const e = ofSeq(xs);
+        try {
+            const loop = (index_1_mut) => {
+                loop:
+                while (true) {
+                    const index_1 = index_1_mut;
+                    if (!e["System.Collections.IEnumerator.MoveNext"]()) {
+                        return void 0;
+                    }
+                    else if (index_1 === 0) {
+                        return some(e["System.Collections.Generic.IEnumerator`1.get_Current"]());
+                    }
+                    else {
+                        index_1_mut = (index_1 - 1);
+                        continue loop;
+                    }
+                    break;
+                }
+            };
+            return loop(index);
+        }
+        finally {
+            e.Dispose();
+        }
+    }
+}
+
+export function item(index, xs) {
+    const matchValue = tryItem(index, xs);
+    if (matchValue == null) {
+        throw (new Error((SR_notEnoughElements + "\\nParameter name: ") + "index"));
+    }
+    else {
+        return value_1(matchValue);
+    }
+}
+
+export function iterate(action, xs) {
+    return fold((unitVar0, x) => {
+        action(x);
+    }, void 0, xs);
+}
+
+export function iterate2(action, xs, ys) {
+    return fold2((unitVar0, x, y) => {
+        action(x, y);
+    }, void 0, xs, ys);
+}
+
+export function iterateIndexed(action, xs) {
+    void fold((i, x) => {
+        action(i, x);
+        return (i + 1) | 0;
+    }, 0, xs);
+}
+
+export function iterateIndexed2(action, xs, ys) {
+    void fold2((i, x, y) => {
+        action(i, x, y);
+        return (i + 1) | 0;
+    }, 0, xs, ys);
+}
+
 export function tryLast(xs) {
-    return isEmpty(xs) ? undefined : some(reduce((_, x) => x, xs));
+    const e = ofSeq(xs);
+    try {
+        const loop = (acc_mut) => {
+            loop:
+            while (true) {
+                const acc = acc_mut;
+                if (!e["System.Collections.IEnumerator.MoveNext"]()) {
+                    return acc;
+                }
+                else {
+                    acc_mut = e["System.Collections.Generic.IEnumerator`1.get_Current"]();
+                    continue loop;
+                }
+                break;
+            }
+        };
+        return e["System.Collections.IEnumerator.MoveNext"]() ? some(loop(e["System.Collections.Generic.IEnumerator`1.get_Current"]())) : (void 0);
+    }
+    finally {
+        e.Dispose();
+    }
 }
+
 export function last(xs) {
-    return __failIfNone(tryLast(xs));
+    const matchValue = tryLast(xs);
+    if (matchValue == null) {
+        throw (new Error((SR_notEnoughElements + "\\nParameter name: ") + "source"));
+    }
+    else {
+        return value_1(matchValue);
+    }
 }
+
 export function length(xs) {
-    return isArrayOrBufferView(xs)
-        ? xs.length
-        : fold((acc, _x) => acc + 1, 0, xs);
+    if (isArrayLike(xs)) {
+        return xs.length | 0;
+    }
+    else if (xs instanceof FSharpList) {
+        return length_1(xs) | 0;
+    }
+    else {
+        const e = ofSeq(xs);
+        try {
+            let count = 0;
+            while (e["System.Collections.IEnumerator.MoveNext"]()) {
+                count = ((count + 1) | 0);
+            }
+            return count | 0;
+        }
+        finally {
+            e.Dispose();
+        }
+    }
 }
-export function map(f, xs) {
-    return delay(() => unfold((iter) => {
-        const cur = iter.next();
-        return !cur.done ? [f(cur.value), iter] : undefined;
-    }, xs[Symbol.iterator]()));
-}
-export function mapIndexed(f, xs) {
-    return delay(() => {
-        let i = 0;
-        return unfold((iter) => {
-            const cur = iter.next();
-            return !cur.done ? [f(i++, cur.value), iter] : undefined;
-        }, xs[Symbol.iterator]());
+
+export function map(mapping, xs) {
+    return generate(() => ofSeq(xs), (e) => (e["System.Collections.IEnumerator.MoveNext"]() ? some(mapping(e["System.Collections.Generic.IEnumerator`1.get_Current"]())) : (void 0)), (e_1) => {
+        e_1.Dispose();
     });
 }
+
+export function mapIndexed(mapping, xs) {
+    return generateIndexed(() => ofSeq(xs), (i, e) => (e["System.Collections.IEnumerator.MoveNext"]() ? some(mapping(i, e["System.Collections.Generic.IEnumerator`1.get_Current"]())) : (void 0)), (e_1) => {
+        e_1.Dispose();
+    });
+}
+
 export function indexed(xs) {
     return mapIndexed((i, x) => [i, x], xs);
 }
-export function map2(f, xs, ys) {
-    return delay(() => {
-        const iter1 = xs[Symbol.iterator]();
-        const iter2 = ys[Symbol.iterator]();
-        return unfold(() => {
-            const cur1 = iter1.next();
-            const cur2 = iter2.next();
-            return !cur1.done && !cur2.done ? [f(cur1.value, cur2.value), undefined] : undefined;
-        }, undefined);
-    });
-}
-export function mapIndexed2(f, xs, ys) {
-    return delay(() => {
-        let i = 0;
-        const iter1 = xs[Symbol.iterator]();
-        const iter2 = ys[Symbol.iterator]();
-        return unfold(() => {
-            const cur1 = iter1.next();
-            const cur2 = iter2.next();
-            return !cur1.done && !cur2.done ? [f(i++, cur1.value, cur2.value), undefined] : undefined;
-        }, undefined);
-    });
-}
-export function map3(f, xs, ys, zs) {
-    return delay(() => {
-        const iter1 = xs[Symbol.iterator]();
-        const iter2 = ys[Symbol.iterator]();
-        const iter3 = zs[Symbol.iterator]();
-        return unfold(() => {
-            const cur1 = iter1.next();
-            const cur2 = iter2.next();
-            const cur3 = iter3.next();
-            return !cur1.done && !cur2.done && !cur3.done ? [f(cur1.value, cur2.value, cur3.value), undefined] : undefined;
-        }, undefined);
-    });
-}
-export function mapFold(f, acc, xs, transform) {
-    const result = [];
-    let r;
-    let cur;
-    for (let i = 0, iter = xs[Symbol.iterator]();; i++) {
-        cur = iter.next();
-        if (cur.done) {
-            break;
+
+export function map2(mapping, xs, ys) {
+    return generate(() => [ofSeq(xs), ofSeq(ys)], (tupledArg) => {
+        const e1 = tupledArg[0];
+        const e2 = tupledArg[1];
+        return (e1["System.Collections.IEnumerator.MoveNext"]() ? e2["System.Collections.IEnumerator.MoveNext"]() : false) ? some(mapping(e1["System.Collections.Generic.IEnumerator`1.get_Current"](), e2["System.Collections.Generic.IEnumerator`1.get_Current"]())) : (void 0);
+    }, (tupledArg_1) => {
+        try {
+            tupledArg_1[0].Dispose();
         }
-        [r, acc] = f(acc, cur.value);
-        result.push(r);
-    }
-    return transform !== void 0 ? [transform(result), acc] : [result, acc];
-}
-export function mapFoldBack(f, xs, acc, transform) {
-    const arr = isArrayOrBufferView(xs) ? xs : Array.from(xs);
-    const result = [];
-    let r;
-    for (let i = arr.length - 1; i >= 0; i--) {
-        [r, acc] = f(arr[i], acc);
-        result.push(r);
-    }
-    return transform !== void 0 ? [transform(result), acc] : [result, acc];
-}
-export function max(xs, comparer) {
-    const compareFn = comparer != null ? comparer.Compare : compare;
-    return reduce((acc, x) => compareFn(acc, x) === 1 ? acc : x, xs);
-}
-export function maxBy(f, xs, comparer) {
-    const compareFn = comparer != null ? comparer.Compare : compare;
-    return reduce((acc, x) => compareFn(f(acc), f(x)) === 1 ? acc : x, xs);
-}
-export function min(xs, comparer) {
-    const compareFn = comparer != null ? comparer.Compare : compare;
-    return reduce((acc, x) => compareFn(acc, x) === -1 ? acc : x, xs);
-}
-export function minBy(f, xs, comparer) {
-    const compareFn = comparer != null ? comparer.Compare : compare;
-    return reduce((acc, x) => compareFn(f(acc), f(x)) === -1 ? acc : x, xs);
-}
-export function pairwise(xs) {
-    return delay(() => {
-        const iter = xs[Symbol.iterator]();
-        const cur = iter.next();
-        if (cur.done) {
-            return empty();
+        finally {
+            tupledArg_1[1].Dispose();
         }
-        const hd = cur.value;
-        const tl = tail(xs);
-        const ys = scan(([_, last], next) => [last, next], [hd, hd], tl);
-        return skip(1, ys);
     });
 }
-export function rangeChar(first, last) {
-    const firstNum = first.charCodeAt(0);
-    const lastNum = last.charCodeAt(0);
-    return delay(() => unfold((x) => x <= lastNum ? [String.fromCharCode(x), x + 1] : undefined, firstNum));
+
+export function mapIndexed2(mapping, xs, ys) {
+    return generateIndexed(() => [ofSeq(xs), ofSeq(ys)], (i, tupledArg) => {
+        const e1 = tupledArg[0];
+        const e2 = tupledArg[1];
+        return (e1["System.Collections.IEnumerator.MoveNext"]() ? e2["System.Collections.IEnumerator.MoveNext"]() : false) ? some(mapping(i, e1["System.Collections.Generic.IEnumerator`1.get_Current"](), e2["System.Collections.Generic.IEnumerator`1.get_Current"]())) : (void 0);
+    }, (tupledArg_1) => {
+        try {
+            tupledArg_1[0].Dispose();
+        }
+        finally {
+            tupledArg_1[1].Dispose();
+        }
+    });
 }
-export function rangeLong(first, step, last, unsigned) {
-    const stepFn = makeLongRangeStepFunction(step, last, unsigned);
-    return delay(() => unfold(stepFn, first));
+
+export function map3(mapping, xs, ys, zs) {
+    return generate(() => [ofSeq(xs), ofSeq(ys), ofSeq(zs)], (tupledArg) => {
+        const e1 = tupledArg[0];
+        const e2 = tupledArg[1];
+        const e3 = tupledArg[2];
+        return ((e1["System.Collections.IEnumerator.MoveNext"]() ? e2["System.Collections.IEnumerator.MoveNext"]() : false) ? e3["System.Collections.IEnumerator.MoveNext"]() : false) ? some(mapping(e1["System.Collections.Generic.IEnumerator`1.get_Current"](), e2["System.Collections.Generic.IEnumerator`1.get_Current"](), e3["System.Collections.Generic.IEnumerator`1.get_Current"]())) : (void 0);
+    }, (tupledArg_1) => {
+        try {
+            tupledArg_1[0].Dispose();
+        }
+        finally {
+            try {
+                tupledArg_1[1].Dispose();
+            }
+            finally {
+                tupledArg_1[2].Dispose();
+            }
+        }
+    });
 }
-export function rangeDecimal(first, step, last) {
-    const stepFn = makeDecimalRangeStepFunction(step, last);
-    return delay(() => unfold(stepFn, first));
-}
-export function rangeNumber(first, step, last) {
-    if (step === 0) {
-        throw new Error("Step cannot be 0");
-    }
-    return delay(() => unfold((x) => step > 0 && x <= last || step < 0 && x >= last ? [x, x + step] : undefined, first));
-}
+
 export function readOnly(xs) {
+    checkNonNull("source", xs);
     return map((x) => x, xs);
 }
-export function reduce(f, xs) {
-    if (isArrayOrBufferView(xs)) {
-        return xs.reduce(f);
-    }
-    const iter = xs[Symbol.iterator]();
-    let cur = iter.next();
-    if (cur.done) {
-        throw new Error("Seq was empty");
-    }
-    let acc = cur.value;
-    while (true) {
-        cur = iter.next();
-        if (cur.done) {
-            break;
+
+export function cache(xs) {
+    let cached = false;
+    const xsCache = [];
+    return delay(() => {
+        if (!cached) {
+            cached = true;
+            return map((x) => {
+                void (xsCache.push(x));
+                return x;
+            }, xs);
         }
-        acc = f(acc, cur.value);
-    }
-    return acc;
+        else {
+            return xsCache;
+        }
+    });
 }
-export function reduceBack(f, xs) {
-    const ar = isArrayOrBufferView(xs) ? xs : Array.from(xs);
-    if (ar.length === 0) {
-        throw new Error("Seq was empty");
-    }
-    let acc = ar[ar.length - 1];
-    for (let i = ar.length - 2; i >= 0; i--) {
-        acc = f(ar[i], acc, i);
-    }
-    return acc;
+
+export function allPairs(xs, ys) {
+    const ysCache = cache(ys);
+    return delay(() => concat(map((x) => map((y) => [x, y], ysCache), xs)));
 }
+
+export function mapFold(mapping, state, xs) {
+    const patternInput = mapFold_1(mapping, state, toArray(xs));
+    return [readOnly(patternInput[0]), patternInput[1]];
+}
+
+export function mapFoldBack(mapping, xs, state) {
+    const patternInput = mapFoldBack_1(mapping, toArray(xs), state);
+    return [readOnly(patternInput[0]), patternInput[1]];
+}
+
+export function tryPick(chooser, xs) {
+    const e = ofSeq(xs);
+    try {
+        let res = void 0;
+        while ((res == null) ? e["System.Collections.IEnumerator.MoveNext"]() : false) {
+            res = chooser(e["System.Collections.Generic.IEnumerator`1.get_Current"]());
+        }
+        return res;
+    }
+    finally {
+        e.Dispose();
+    }
+}
+
+export function pick(chooser, xs) {
+    const matchValue = tryPick(chooser, xs);
+    if (matchValue == null) {
+        return indexNotFound();
+    }
+    else {
+        return value_1(matchValue);
+    }
+}
+
+export function reduce(folder, xs) {
+    const e = ofSeq(xs);
+    try {
+        const loop = (acc_mut) => {
+            loop:
+            while (true) {
+                const acc = acc_mut;
+                if (e["System.Collections.IEnumerator.MoveNext"]()) {
+                    acc_mut = folder(acc, e["System.Collections.Generic.IEnumerator`1.get_Current"]());
+                    continue loop;
+                }
+                else {
+                    return acc;
+                }
+                break;
+            }
+        };
+        if (e["System.Collections.IEnumerator.MoveNext"]()) {
+            return loop(e["System.Collections.Generic.IEnumerator`1.get_Current"]());
+        }
+        else {
+            throw (new Error(SR_inputSequenceEmpty));
+        }
+    }
+    finally {
+        e.Dispose();
+    }
+}
+
+export function reduceBack(folder, xs) {
+    const arr = toArray(xs);
+    if (arr.length > 0) {
+        return arr.reduceRight(folder);
+    }
+    else {
+        throw (new Error(SR_inputSequenceEmpty));
+    }
+}
+
 export function replicate(n, x) {
-    return initialize(n, () => x);
+    return initialize(n, (_arg1) => x);
 }
+
 export function reverse(xs) {
-    const ar = isArrayOrBufferView(xs) ? xs.slice(0) : Array.from(xs);
-    return ofArray(ar.reverse());
+    return delay(() => ofArray(reverse_1(toArray(xs))));
 }
-export function scan(f, seed, xs) {
+
+export function scan(folder, state, xs) {
     return delay(() => {
-        const iter = xs[Symbol.iterator]();
-        return unfold((acc) => {
-            if (acc == null) {
-                return [seed, seed];
-            }
-            const cur = iter.next();
-            if (!cur.done) {
-                acc = f(acc, cur.value);
-                return [acc, acc];
-            }
-            return undefined;
-        }, undefined);
+        let acc = state;
+        return concat([singleton(state), map((x) => {
+            acc = folder(acc, x);
+            return acc;
+        }, xs)]);
     });
 }
-export function scanBack(f, xs, seed) {
-    return reverse(scan((acc, x) => f(x, acc), seed, reverse(xs)));
+
+export function scanBack(folder, xs, state) {
+    return delay(() => ofArray(scanBack_1(folder, toArray(xs), state)));
 }
-export function skip(n, xs) {
-    return makeSeq(() => {
-        const iter = xs[Symbol.iterator]();
-        for (let i = 1; i <= n; i++) {
-            if (iter.next().done) {
-                throw new Error("Seq has not enough elements");
+
+export function skip(count, xs) {
+    return mkSeq(() => {
+        const e = ofSeq(xs);
+        try {
+            for (let i = 1; i <= count; i++) {
+                if (!e["System.Collections.IEnumerator.MoveNext"]()) {
+                    throw (new Error((SR_notEnoughElements + "\\nParameter name: ") + "source"));
+                }
             }
+            return Enumerator_enumerateThenFinally(() => {
+            }, e);
         }
-        return iter;
+        catch (matchValue) {
+            e.Dispose();
+            throw matchValue;
+        }
     });
 }
-export function skipWhile(f, xs) {
+
+export function skipWhile(predicate, xs) {
     return delay(() => {
-        let hasPassed = false;
-        return filter((x) => hasPassed || (hasPassed = !f(x)), xs);
+        let skipped = true;
+        return filter((x) => {
+            if (skipped) {
+                skipped = predicate(x);
+            }
+            return !skipped;
+        }, xs);
     });
 }
-export function sortWith(f, xs) {
-    const ys = Array.from(xs);
-    return ofArray(ys.sort(f));
-}
-export function sum(xs, adder) {
-    return fold((acc, x) => adder.Add(acc, x), adder.GetZero(), xs);
-}
-export function sumBy(f, xs, adder) {
-    return fold((acc, x) => adder.Add(acc, f(x)), adder.GetZero(), xs);
-}
+
 export function tail(xs) {
     return skip(1, xs);
 }
-export function take(n, xs, truncate = false) {
-    return delay(() => {
-        const iter = xs[Symbol.iterator]();
-        return unfold((i) => {
-            if (i < n) {
-                const cur = iter.next();
-                if (!cur.done) {
-                    return [cur.value, i + 1];
-                }
-                if (!truncate) {
-                    throw new Error("Seq has not enough elements");
-                }
+
+export function take(count, xs) {
+    return generateIndexed(() => ofSeq(xs), (i, e) => {
+        if (i < count) {
+            if (e["System.Collections.IEnumerator.MoveNext"]()) {
+                return some(e["System.Collections.Generic.IEnumerator`1.get_Current"]());
             }
-            return undefined;
-        }, 0);
-    });
-}
-export function truncate(n, xs) {
-    return take(n, xs, true);
-}
-export function takeWhile(f, xs) {
-    return delay(() => {
-        const iter = xs[Symbol.iterator]();
-        return unfold(() => {
-            const cur = iter.next();
-            if (!cur.done && f(cur.value)) {
-                return [cur.value, undefined];
+            else {
+                throw (new Error((SR_notEnoughElements + "\\nParameter name: ") + "source"));
             }
-            return undefined;
-        }, 0);
+        }
+        else {
+            return void 0;
+        }
+    }, (e_1) => {
+        e_1.Dispose();
     });
 }
-export function tryFind(f, xs, defaultValue) {
-    for (let i = 0, iter = xs[Symbol.iterator]();; i++) {
-        const cur = iter.next();
-        if (cur.done) {
-            break;
-        }
-        if (f(cur.value, i)) {
-            return some(cur.value);
-        }
-    }
-    return defaultValue === void 0 ? undefined : some(defaultValue);
-}
-export function find(f, xs) {
-    return __failIfNone(tryFind(f, xs));
-}
-export function tryFindBack(f, xs, defaultValue) {
-    const arr = isArrayOrBufferView(xs) ? xs.slice(0) : Array.from(xs);
-    return tryFind(f, arr.reverse(), defaultValue);
-}
-export function findBack(f, xs) {
-    return __failIfNone(tryFindBack(f, xs));
-}
-export function tryFindIndex(f, xs) {
-    for (let i = 0, iter = xs[Symbol.iterator]();; i++) {
-        const cur = iter.next();
-        if (cur.done) {
-            break;
-        }
-        if (f(cur.value, i)) {
-            return i;
-        }
-    }
-    return undefined;
-}
-export function findIndex(f, xs) {
-    return __failIfNone(tryFindIndex(f, xs));
-}
-export function tryFindIndexBack(f, xs) {
-    const arr = isArrayOrBufferView(xs) ? xs.slice(0) : Array.from(xs);
-    for (let i = arr.length - 1; i >= 0; i--) {
-        if (f(arr[i], i)) {
-            return i;
-        }
-    }
-    return undefined;
-}
-export function findIndexBack(f, xs) {
-    return __failIfNone(tryFindIndexBack(f, xs));
-}
-export function tryPick(f, xs) {
-    for (let i = 0, iter = xs[Symbol.iterator]();; i++) {
-        const cur = iter.next();
-        if (cur.done) {
-            break;
-        }
-        const y = f(cur.value, i);
-        if (y != null) {
-            return y;
-        }
-    }
-    return undefined;
-}
-export function pick(f, xs) {
-    return __failIfNone(tryPick(f, xs));
-}
-export function unfold(f, fst) {
-    return makeSeq(() => {
-        // Capture a copy of the first value in the closure
-        // so the sequence is restarted every time, see #1230
-        let acc = fst;
-        const iter = {
-            next() {
-                const res = f(acc);
-                if (res != null) {
-                    const v = value(res);
-                    if (v != null) {
-                        acc = v[1];
-                        return { done: false, value: v[0] };
-                    }
-                }
-                return { done: true, value: undefined };
-            },
-        };
-        return iter;
+
+export function takeWhile(predicate, xs) {
+    return generate(() => ofSeq(xs), (e) => ((e["System.Collections.IEnumerator.MoveNext"]() ? predicate(e["System.Collections.Generic.IEnumerator`1.get_Current"]()) : false) ? some(e["System.Collections.Generic.IEnumerator`1.get_Current"]()) : (void 0)), (e_1) => {
+        e_1.Dispose();
     });
 }
+
+export function truncate(count, xs) {
+    return generateIndexed(() => ofSeq(xs), (i, e) => (((i < count) ? e["System.Collections.IEnumerator.MoveNext"]() : false) ? some(e["System.Collections.Generic.IEnumerator`1.get_Current"]()) : (void 0)), (e_1) => {
+        e_1.Dispose();
+    });
+}
+
 export function zip(xs, ys) {
     return map2((x, y) => [x, y], xs, ys);
 }
+
 export function zip3(xs, ys, zs) {
     return map3((x, y, z) => [x, y, z], xs, ys, zs);
 }
-export function windowed(windowSize, source) {
-    if (windowSize <= 0) {
-        throw new Error("windowSize must be positive");
-    }
-    return makeSeq(() => {
-        let window = [];
-        const iter = source[Symbol.iterator]();
-        const iter2 = {
-            next() {
-                let cur;
-                while (window.length < windowSize) {
-                    if ((cur = iter.next()).done) {
-                        return { done: true, value: undefined };
-                    }
-                    window.push(cur.value);
-                }
-                const value = window;
-                window = window.slice(1);
-                return { done: false, value };
-            },
-        };
-        return iter2;
+
+export function collect(mapping, xs) {
+    return delay(() => concat(map(mapping, xs)));
+}
+
+export function where(predicate, xs) {
+    return filter(predicate, xs);
+}
+
+export function pairwise(xs) {
+    return delay(() => ofArray(pairwise_1(toArray(xs))));
+}
+
+export function splitInto(chunks, xs) {
+    return delay(() => ofArray(map_1((arr) => ofArray(arr), splitInto_1(chunks, toArray(xs)))));
+}
+
+export function windowed(windowSize, xs) {
+    return delay(() => ofArray(map_1((arr) => ofArray(arr), windowed_1(windowSize, toArray(xs)))));
+}
+
+export function transpose(xss) {
+    return delay(() => ofArray(map_1((arr) => ofArray(arr), transpose_1(map_1((xs_1) => toArray(xs_1), toArray(xss))))));
+}
+
+export function sortWith(comparer, xs) {
+    return delay(() => {
+        const arr = toArray(xs);
+        arr.sort(comparer);
+        return ofArray(arr);
     });
 }
-export function transpose(source) {
-    return makeSeq(() => {
-        const iters = Array.from(source, (x) => x[Symbol.iterator]());
-        const iter = {
-            next() {
-                if (iters.length === 0) {
-                    return { done: true, value: undefined }; // empty sequence
-                }
-                const results = Array.from(iters, (iter) => iter.next());
-                if (results[0].done) {
-                    if (!results.every((x) => x.done)) {
-                        throw new Error("Sequences have different lengths");
-                    }
-                    return { done: true, value: undefined };
-                }
-                else {
-                    if (!results.every((x) => !x.done)) {
-                        throw new Error("Sequences have different lengths");
-                    }
-                    const values = results.map((x) => x.value);
-                    return { done: false, value: values };
-                }
-            },
-        };
-        return iter;
-    });
+
+export function sort(xs, comparer) {
+    return sortWith((x, y) => comparer.Compare(x, y), xs);
 }
+
+export function sortBy(projection, xs, comparer) {
+    return sortWith((x, y) => comparer.Compare(projection(x), projection(y)), xs);
+}
+
+export function sortDescending(xs, comparer) {
+    return sortWith((x, y) => (comparer.Compare(x, y) * -1), xs);
+}
+
+export function sortByDescending(projection, xs, comparer) {
+    return sortWith((x, y) => (comparer.Compare(projection(x), projection(y)) * -1), xs);
+}
+
+export function sum(xs, adder) {
+    return fold((acc, x) => adder.Add(acc, x), adder.GetZero(), xs);
+}
+
+export function sumBy(f, xs, adder) {
+    return fold((acc, x) => adder.Add(acc, f(x)), adder.GetZero(), xs);
+}
+
+export function maxBy(projection, xs, comparer) {
+    return reduce((x, y) => ((comparer.Compare(projection(y), projection(x)) > 0) ? y : x), xs);
+}
+
+export function max(xs, comparer) {
+    return reduce((x, y) => ((comparer.Compare(y, x) > 0) ? y : x), xs);
+}
+
+export function minBy(projection, xs, comparer) {
+    return reduce((x, y) => ((comparer.Compare(projection(y), projection(x)) > 0) ? x : y), xs);
+}
+
+export function min(xs, comparer) {
+    return reduce((x, y) => ((comparer.Compare(y, x) > 0) ? x : y), xs);
+}
+
+export function average(xs, averager) {
+    let count = 0;
+    return averager.DivideByInt(fold((acc, x) => {
+        count = ((count + 1) | 0);
+        return averager.Add(acc, x);
+    }, averager.GetZero(), xs), count);
+}
+
+export function averageBy(f, xs, averager) {
+    let count = 0;
+    return averager.DivideByInt(fold((acc, x) => {
+        count = ((count + 1) | 0);
+        return averager.Add(acc, f(x));
+    }, averager.GetZero(), xs), count);
+}
+
+export function permute(f, xs) {
+    return delay(() => ofArray(permute_1(f, toArray(xs))));
+}
+
+export function chunkBySize(chunkSize, xs) {
+    return delay(() => ofArray(map_1((arr) => ofArray(arr), chunkBySize_1(chunkSize, toArray(xs)))));
+}
+

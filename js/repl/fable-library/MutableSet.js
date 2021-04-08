@@ -1,4 +1,5 @@
-import { sumBy, iterate, map, iterateIndexed, toIterator, concat, getEnumerator } from "./Seq.js";
+import { toIterator, getEnumerator } from "./Util.js";
+import { iterate, map, iterateIndexed, concat } from "./Seq.js";
 import { FSharpRef } from "./Types.js";
 import { class_type } from "./Reflection.js";
 import { getItemFromDict, tryGetValue } from "./MapUtil.js";
@@ -14,8 +15,7 @@ export class HashSet {
         const enumerator = getEnumerator(items);
         try {
             while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
-                const value = HashSet__Add_2B595(this$.contents, enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]());
-                void value;
+                void HashSet__Add_2B595(this$.contents, enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]());
             }
         }
         finally {
@@ -24,6 +24,10 @@ export class HashSet {
     }
     get [Symbol.toStringTag]() {
         return "HashSet";
+    }
+    toJSON(_key) {
+        const this$ = this;
+        return Array.from(this$);
     }
     ["System.Collections.IEnumerable.GetEnumerator"]() {
         const this$ = this;
@@ -38,8 +42,7 @@ export class HashSet {
     }
     ["System.Collections.Generic.ICollection`1.Add2B595"](item) {
         const this$ = this;
-        const value = HashSet__Add_2B595(this$, item);
-        void value;
+        void HashSet__Add_2B595(this$, item);
     }
     ["System.Collections.Generic.ICollection`1.Clear"]() {
         const this$ = this;
@@ -72,8 +75,7 @@ export class HashSet {
     }
     add(k) {
         const this$ = this;
-        const value = HashSet__Add_2B595(this$, k);
-        void value;
+        void HashSet__Add_2B595(this$, k);
         return this$;
     }
     clear() {
@@ -164,10 +166,18 @@ export function HashSet__Clear(this$) {
 }
 
 export function HashSet__get_Count(this$) {
-    return sumBy((pairs) => pairs.length, this$.hashMap.values(), {
-        GetZero: () => 0,
-        Add: (x, y) => (x + y),
-    });
+    let count = 0;
+    let enumerator = getEnumerator(this$.hashMap.values());
+    try {
+        while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
+            const items = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
+            count = ((count + items.length) | 0);
+        }
+    }
+    finally {
+        enumerator.Dispose();
+    }
+    return count | 0;
 }
 
 export function HashSet__Add_2B595(this$, k) {
@@ -191,7 +201,6 @@ export function HashSet__Add_2B595(this$, k) {
         case 1: {
             if (matchValue[0]) {
                 const value = void (getItemFromDict(this$.hashMap, matchValue[1]).push(k));
-                void undefined;
                 return true;
             }
             else {

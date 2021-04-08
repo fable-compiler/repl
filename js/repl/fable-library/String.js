@@ -1,60 +1,12 @@
 import { toString as dateToString } from "./Date.js";
-import Decimal from "./Decimal.js";
-import Long, * as _Long from "./Long.js";
+import { compare as numericCompare, isNumeric, multiply, toExponential, toFixed, toHex, toPrecision } from "./Numeric.js";
 import { escape } from "./RegExp.js";
 import { toString } from "./Types.js";
-const fsFormatRegExp = /(^|[^%])%([0+\- ]*)(\d+)?(?:\.(\d+))?(\w)/;
+const fsFormatRegExp = /(^|[^%])%([0+\- ]*)(\*|\d+)?(?:\.(\d+))?(\w)/g;
 const interpolateRegExp = /(?:(^|[^%])%([0+\- ]*)(\d+)?(?:\.(\d+))?(\w))?%P\(\)/g;
 const formatRegExp = /\{(\d+)(,-?\d+)?(?:\:([a-zA-Z])(\d{0,2})|\:(.+?))?\}/g;
-// These are used for formatting and only take longs and decimals into account (no bigint)
-function isNumeric(x) {
-    return typeof x === "number" || x instanceof Long || x instanceof Decimal;
-}
 function isLessThan(x, y) {
-    if (x instanceof Long) {
-        return _Long.compare(x, y) < 0;
-    }
-    else if (x instanceof Decimal) {
-        return x.cmp(y) < 0;
-    }
-    else {
-        return x < y;
-    }
-}
-function multiply(x, y) {
-    if (x instanceof Long) {
-        return _Long.op_Multiply(x, y);
-    }
-    else if (x instanceof Decimal) {
-        return x.mul(y);
-    }
-    else {
-        return x * y;
-    }
-}
-function toFixed(x, dp) {
-    if (x instanceof Long) {
-        return String(x) + (0).toFixed(dp).substr(1);
-    }
-    else {
-        return x.toFixed(dp);
-    }
-}
-function toPrecision(x, sd) {
-    if (x instanceof Long) {
-        return String(x) + (0).toPrecision(sd).substr(1);
-    }
-    else {
-        return x.toPrecision(sd);
-    }
-}
-function toExponential(x, dp) {
-    if (x instanceof Long) {
-        return String(x) + (0).toExponential(dp).substr(1);
-    }
-    else {
-        return x.toExponential(dp);
-    }
+    return numericCompare(x, y) < 0;
 }
 function cmp(x, y, ic) {
     function isIgnoreCase(i) {
@@ -135,25 +87,32 @@ export function indexOfAny(str, anyOf, ...args) {
     }
     return -1;
 }
-function toHex(x) {
-    if (x instanceof Long) {
-        return _Long.toString(x.unsigned ? x : _Long.fromBytes(_Long.toBytes(x), true), 16);
-    }
-    else {
-        return (Number(x) >>> 0).toString(16);
-    }
-}
 export function printf(input) {
     return {
         input,
         cont: fsFormat(input),
     };
 }
-export function interpolate(input, values) {
-    let i = 0;
-    return input.replace(interpolateRegExp, (_, prefix, flags, padLength, precision, format) => {
-        return formatReplacement(values[i++], prefix, flags, padLength, precision, format);
-    });
+export function interpolate(str, values) {
+    let valIdx = 0;
+    let strIdx = 0;
+    let result = "";
+    interpolateRegExp.lastIndex = 0;
+    let match = interpolateRegExp.exec(str);
+    while (match) {
+        // The first group corresponds to the no-escape char (^|[^%]), the actual pattern starts in the next char
+        // Note: we don't use negative lookbehind because some browsers don't support it yet
+        const matchIndex = match.index + (match[1] || "").length;
+        result += str.substring(strIdx, matchIndex).replace(/%%/g, "%");
+        const [, , flags, padLength, precision, format] = match;
+        result += formatReplacement(values[valIdx++], flags, padLength, precision, format);
+        strIdx = interpolateRegExp.lastIndex;
+        // Likewise we need to move interpolateRegExp.lastIndex one char behind to make sure we match the no-escape char next time
+        interpolateRegExp.lastIndex -= 1;
+        match = interpolateRegExp.exec(str);
+    }
+    result += str.substring(strIdx).replace(/%%/g, "%");
+    return result;
 }
 function continuePrint(cont, arg) {
     return typeof arg === "string" ? cont(arg) : arg.cont(cont);
@@ -173,7 +132,7 @@ export function toFail(arg) {
         throw new Error(x);
     }, arg);
 }
-function formatReplacement(rep, prefix, flags, padLength, precision, format) {
+function formatReplacement(rep, flags, padLength, precision, format) {
     let sign = "";
     flags = flags || "";
     format = format || "";
@@ -224,7 +183,7 @@ function formatReplacement(rep, prefix, flags, padLength, precision, format) {
     else {
         rep = toString(rep);
     }
-    padLength = parseInt(padLength, 10);
+    padLength = typeof padLength === "number" ? padLength : parseInt(padLength, 10);
     if (!isNaN(padLength)) {
         const zeroFlag = flags.indexOf("0") >= 0; // Use '0' for left padding
         const minusFlag = flags.indexOf("-") >= 0; // Right padding
@@ -240,31 +199,67 @@ function formatReplacement(rep, prefix, flags, padLength, precision, format) {
     else {
         rep = sign + rep;
     }
-    return prefix ? prefix + rep : rep;
+    return rep;
 }
-function formatOnce(str2, rep) {
-    return str2.replace(fsFormatRegExp, (_, prefix, flags, padLength, precision, format) => {
-        const once = formatReplacement(rep, prefix, flags, padLength, precision, format);
-        return once.replace(/%/g, "%%");
-    });
-}
-function createPrinter(str, cont) {
+function createPrinter(cont, _strParts, _matches, _result = "", padArg = -1) {
     return (...args) => {
-        // Make a copy as the function may be used several times
-        let strCopy = str;
+        // Make copies of the values passed by reference because the function can be used multiple times
+        let result = _result;
+        const strParts = _strParts.slice();
+        const matches = _matches.slice();
         for (const arg of args) {
-            strCopy = formatOnce(strCopy, arg);
+            const [, , flags, _padLength, precision, format] = matches[0];
+            let padLength = _padLength;
+            if (padArg >= 0) {
+                padLength = padArg;
+                padArg = -1;
+            }
+            else if (padLength === "*") {
+                if (arg < 0) {
+                    throw new Error("Non-negative number required");
+                }
+                padArg = arg;
+                continue;
+            }
+            result += strParts[0];
+            result += formatReplacement(arg, flags, padLength, precision, format);
+            strParts.splice(0, 1);
+            matches.splice(0, 1);
         }
-        return fsFormatRegExp.test(strCopy)
-            ? createPrinter(strCopy, cont)
-            : cont(strCopy.replace(/%%/g, "%"));
+        if (matches.length === 0) {
+            result += strParts[0];
+            return cont(result);
+        }
+        else {
+            return createPrinter(cont, strParts, matches, result, padArg);
+        }
     };
 }
 export function fsFormat(str) {
     return (cont) => {
-        return fsFormatRegExp.test(str)
-            ? createPrinter(str, cont)
-            : cont(str);
+        fsFormatRegExp.lastIndex = 0;
+        const strParts = [];
+        const matches = [];
+        let strIdx = 0;
+        let match = fsFormatRegExp.exec(str);
+        while (match) {
+            // The first group corresponds to the no-escape char (^|[^%]), the actual pattern starts in the next char
+            // Note: we don't use negative lookbehind because some browsers don't support it yet
+            const matchIndex = match.index + (match[1] || "").length;
+            strParts.push(str.substring(strIdx, matchIndex).replace(/%%/g, "%"));
+            matches.push(match);
+            strIdx = fsFormatRegExp.lastIndex;
+            // Likewise we need to move fsFormatRegExp.lastIndex one char behind to make sure we match the no-escape char next time
+            fsFormatRegExp.lastIndex -= 1;
+            match = fsFormatRegExp.exec(str);
+        }
+        if (strParts.length === 0) {
+            return cont(str.replace(/%%/g, "%"));
+        }
+        else {
+            strParts.push(str.substring(strIdx).replace(/%%/g, "%"));
+            return createPrinter(cont, strParts, matches);
+        }
     };
 }
 export function format(str, ...args) {

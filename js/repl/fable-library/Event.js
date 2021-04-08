@@ -1,7 +1,6 @@
 import { Observer, protect } from "./Observable.js";
 import { some, value } from "./Option.js";
 import { Choice_tryValueIfChoice1Of2, Choice_tryValueIfChoice2Of2 } from "./Choice.js";
-import { iterate as seqIterate } from "./Seq.js";
 export class Event {
     constructor(_subscriber, delegates) {
         this._subscriber = _subscriber;
@@ -15,7 +14,7 @@ export class Event {
         return this;
     }
     Trigger(value) {
-        seqIterate((f) => f(value), this.delegates);
+        this.delegates.forEach((f) => f(value));
     }
     // IDelegateEvent<T> methods
     AddHandler(handler) {

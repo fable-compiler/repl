@@ -35,49 +35,22 @@ export function toString(x, callStack = 0) {
     }
     return String(x);
 }
-function compareList(self, other) {
-    if (self === other) {
-        return 0;
+export function unionToString(name, fields) {
+    if (fields.length === 0) {
+        return name;
     }
     else {
-        if (other == null) {
-            return -1;
+        let fieldStr = "";
+        let withParens = true;
+        if (fields.length === 1) {
+            fieldStr = toString(fields[0]);
+            withParens = fieldStr.indexOf(" ") >= 0;
         }
-        while (self.tail != null) {
-            if (other.tail == null) {
-                return 1;
-            }
-            const res = compare(self.head, other.head);
-            if (res !== 0) {
-                return res;
-            }
-            self = self.tail;
-            other = other.tail;
+        else {
+            fieldStr = fields.map((x) => toString(x)).join(", ");
         }
-        return other.tail == null ? 0 : -1;
+        return name + (withParens ? " (" : " ") + fieldStr + (withParens ? ")" : "");
     }
-}
-export class List {
-    constructor(head, tail) {
-        this.head = head;
-        this.tail = tail;
-    }
-    [Symbol.iterator]() {
-        let cur = this;
-        return {
-            next: () => {
-                const value = cur === null || cur === void 0 ? void 0 : cur.head;
-                const done = (cur === null || cur === void 0 ? void 0 : cur.tail) == null;
-                cur = cur === null || cur === void 0 ? void 0 : cur.tail;
-                return { done, value };
-            },
-        };
-    }
-    toJSON() { return Array.from(this); }
-    toString() { return seqToString(this); }
-    GetHashCode() { return combineHashCodes(Array.from(this).map(structuralHash)); }
-    Equals(other) { return compareList(this, other) === 0; }
-    CompareTo(other) { return compareList(this, other); }
 }
 export class Union {
     get name() {
@@ -87,22 +60,7 @@ export class Union {
         return this.fields.length === 0 ? this.name : [this.name].concat(this.fields);
     }
     toString() {
-        if (this.fields.length === 0) {
-            return this.name;
-        }
-        else {
-            let fields = "";
-            let withParens = true;
-            if (this.fields.length === 1) {
-                const field = toString(this.fields[0]);
-                withParens = field.indexOf(" ") >= 0;
-                fields = field;
-            }
-            else {
-                fields = this.fields.map((x) => toString(x)).join(", ");
-            }
-            return this.name + (withParens ? " (" : " ") + fields + (withParens ? ")" : "");
-        }
+        return unionToString(this.name, this.fields);
     }
     GetHashCode() {
         const hashes = this.fields.map((x) => structuralHash(x));
