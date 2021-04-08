@@ -52,6 +52,7 @@
     <Compile Include="games/mario.fs" />
     <Compile Include="games/ozmo.fs" />
     <Compile Include="games/pacman.fs" />
+    <Compile Include="games/ants.fs" />
     <Compile Include="visual/basic-canvas.fs" />
     <Compile Include="visual/mandelbrot.fs" />
     <Compile Include="visual/raytracer.fs" />
