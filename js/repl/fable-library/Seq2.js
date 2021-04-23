@@ -37,7 +37,7 @@ export function countBy(projection, xs, comparer) {
                 let matchValue;
                 let outArg = 0;
                 matchValue = [tryGetValue(dict, key, new FSharpRef(() => outArg, (v) => {
-                    outArg = v;
+                    outArg = (v | 0);
                 })), outArg];
                 if (matchValue[0]) {
                     dict.set(key, matchValue[1] + 1);

@@ -1,5 +1,5 @@
 import { equals, toIterator, getEnumerator } from "./Util.js";
-import { iterate, map, iterateIndexed, concat } from "./Seq.js";
+import { iterate, map, delay, toArray, iterateIndexed, concat } from "./Seq.js";
 import { FSharpRef } from "./Types.js";
 import { class_type } from "./Reflection.js";
 import { getItemFromDict, tryGetValue } from "./MapUtil.js";
@@ -98,6 +98,46 @@ export class Dictionary {
         else {
             return false;
         }
+    }
+    ["System.Collections.Generic.IDictionary`2.Add5BDDA1"](key, value) {
+        const this$ = this;
+        Dictionary__Add_5BDDA1(this$, key, value);
+    }
+    ["System.Collections.Generic.IDictionary`2.ContainsKey2B595"](key) {
+        const this$ = this;
+        return Dictionary__ContainsKey_2B595(this$, key);
+    }
+    ["System.Collections.Generic.IDictionary`2.get_Item2B595"](key) {
+        const this$ = this;
+        return Dictionary__get_Item_2B595(this$, key);
+    }
+    ["System.Collections.Generic.IDictionary`2.set_Item5BDDA1"](key, v) {
+        const this$ = this;
+        Dictionary__set_Item_5BDDA1(this$, key, v);
+    }
+    ["System.Collections.Generic.IDictionary`2.get_Keys"]() {
+        const this$ = this;
+        return toArray(delay(() => map((pair) => pair[0], this$)));
+    }
+    ["System.Collections.Generic.IDictionary`2.Remove2B595"](key) {
+        const this$ = this;
+        return Dictionary__Remove_2B595(this$, key);
+    }
+    ["System.Collections.Generic.IDictionary`2.TryGetValue23A0B95A"](key, value) {
+        const this$ = this;
+        const matchValue = Dictionary__TryFind_2B595(this$, key);
+        if (matchValue != null) {
+            const pair = matchValue;
+            value.contents = pair[1];
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    ["System.Collections.Generic.IDictionary`2.get_Values"]() {
+        const this$ = this;
+        return toArray(delay(() => map((pair) => pair[1], this$)));
     }
     get size() {
         const this$ = this;

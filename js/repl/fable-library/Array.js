@@ -380,7 +380,7 @@ export function addRangeInPlace(range, array) {
 
 export function insertRangeInPlace(index, range, array) {
     let index_1;
-    let i = index | 0;
+    let i = index;
     const enumerator = getEnumerator(range);
     try {
         while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
@@ -485,7 +485,7 @@ export function findIndex(predicate, array) {
         return matchValue | 0;
     }
     else {
-        return indexNotFound();
+        return indexNotFound() | 0;
     }
 }
 
@@ -616,7 +616,7 @@ export function findIndexBack(predicate, array) {
         while (true) {
             const i = i_mut;
             if (i < 0) {
-                return indexNotFound();
+                return indexNotFound() | 0;
             }
             else if (predicate(array[i])) {
                 return i | 0;

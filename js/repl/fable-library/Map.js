@@ -786,7 +786,7 @@ export function MapTreeModule_toList(m) {
 }
 
 export function MapTreeModule_copyToArray(m, arr, i) {
-    let j = i | 0;
+    let j = i;
     MapTreeModule_iter((x, y) => {
         arr[j] = [x, y];
         j = ((j + 1) | 0);
@@ -1272,9 +1272,9 @@ export function FSharpMap__ComputeHashCode(this$) {
     const enumerator = getEnumerator(this$);
     try {
         while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
-            const activePatternResult5257 = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
-            res = (combineHash(res, structuralHash(activePatternResult5257[0])) | 0);
-            res = (combineHash(res, structuralHash(activePatternResult5257[1])) | 0);
+            const activePatternResult5329 = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
+            res = (combineHash(res, structuralHash(activePatternResult5329[0])) | 0);
+            res = (combineHash(res, structuralHash(activePatternResult5329[1])) | 0);
         }
     }
     finally {

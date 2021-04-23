@@ -478,13 +478,13 @@ export function unfold(gen, state) {
 }
 
 export function iterate(action, xs) {
-    return fold((unitVar0, x) => {
+    fold((unitVar0, x) => {
         action(x);
     }, void 0, xs);
 }
 
 export function iterate2(action, xs, ys) {
-    return fold2((unitVar0, x, y) => {
+    fold2((unitVar0, x, y) => {
         action(x, y);
     }, void 0, xs, ys);
 }

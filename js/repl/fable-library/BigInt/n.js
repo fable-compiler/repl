@@ -750,7 +750,7 @@ export function BigNatModule_mulSchoolBookNeitherSmall(p, q) {
     for (let i = 0; i <= (p.bound - 1); i++) {
         const pai = fromInteger(p.digits[i], false, 2);
         let c = fromBits(0, 0, false);
-        let k = i | 0;
+        let k = i;
         for (let j = 0; j <= (q.bound - 1); j++) {
             const qaj = fromInteger(q.digits[j], false, 2);
             const rak = op_Addition(op_Addition(fromInteger(ra[k], false, 2), c), op_Multiply(pai, qaj));
@@ -995,7 +995,7 @@ export function BigNatModule_scaleSubInPlace(x, f, a, n) {
         if (j > patternInput[1]) {
             throw (new Error("scaleSubInPlace: pre-condition did not apply, result would be -ve"));
         }
-        let zLo = (~(~toInt(op_BitwiseAnd(z, BigNatModule_baseMaski64)))) | 0;
+        let zLo = ~(~toInt(op_BitwiseAnd(z, BigNatModule_baseMaski64)));
         let zHi = op_Division(z, BigNatModule_baseNi64);
         if (zLo <= x_1[j + n]) {
             x_1[j + n] = ((x_1[j + n] - zLo) | 0);
@@ -1034,7 +1034,7 @@ export function BigNatModule_scaleAddInPlace(x, f, a, n) {
         if (j > patternInput[1]) {
             throw (new Error("scaleSubInPlace: pre-condition did not apply, result would be -ve"));
         }
-        let zLo = (~(~toInt(op_BitwiseAnd(z, BigNatModule_baseMaski64)))) | 0;
+        let zLo = ~(~toInt(op_BitwiseAnd(z, BigNatModule_baseMaski64)));
         let zHi = op_Division(z, BigNatModule_baseNi64);
         if (zLo < (BigNatModule_baseN - x_1[j + n])) {
             x_1[j + n] = ((x_1[j + n] + zLo) | 0);
@@ -1096,9 +1096,9 @@ export function BigNatModule_divmod(b, a) {
     else {
         const x = BigNatModule_copyN(b);
         const d = BigNatModule_createN(((BigNatModule_degree(b) - BigNatModule_degree(a)) + 1) + 1);
-        let p = BigNatModule_degree(b) | 0;
+        let p = BigNatModule_degree(b);
         const m = BigNatModule_degree(a) | 0;
-        let n = (p - m) | 0;
+        let n = p - m;
         const Invariant = (tupledArg) => {
         };
         let finished = false;

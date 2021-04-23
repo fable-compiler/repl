@@ -99,7 +99,7 @@ export class Enumerator_FromFunctions$1 {
         return __.next();
     }
     ["System.Collections.IEnumerator.Reset"]() {
-        return Enumerator_noReset();
+        Enumerator_noReset();
     }
     Dispose() {
         const __ = this;
@@ -664,7 +664,7 @@ export function tryFindIndex(predicate, xs) {
 export function findIndex(predicate, xs) {
     const matchValue = tryFindIndex(predicate, xs);
     if (matchValue == null) {
-        return indexNotFound();
+        return indexNotFound() | 0;
     }
     else {
         return matchValue | 0;
@@ -678,7 +678,7 @@ export function tryFindIndexBack(predicate, xs) {
 export function findIndexBack(predicate, xs) {
     const matchValue = tryFindIndexBack(predicate, xs);
     if (matchValue == null) {
-        return indexNotFound();
+        return indexNotFound() | 0;
     }
     else {
         return matchValue | 0;
@@ -835,13 +835,13 @@ export function item(index, xs) {
 }
 
 export function iterate(action, xs) {
-    return fold((unitVar0, x) => {
+    fold((unitVar0, x) => {
         action(x);
     }, void 0, xs);
 }
 
 export function iterate2(action, xs, ys) {
-    return fold2((unitVar0, x, y) => {
+    fold2((unitVar0, x, y) => {
         action(x, y);
     }, void 0, xs, ys);
 }

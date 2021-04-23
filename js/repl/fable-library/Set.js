@@ -1385,7 +1385,7 @@ export function SetTreeModule_toList(t) {
 }
 
 export function SetTreeModule_copyToArray(s, arr, i) {
-    let j = i | 0;
+    let j = i;
     SetTreeModule_iter((x) => {
         arr[j] = x;
         j = ((j + 1) | 0);
