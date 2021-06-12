@@ -20,5 +20,6 @@
     "terminal.integrated.fontSize": 13,
     "editor.fontLigatures": true,
     "editor.fontFamily": "JetBrains Mono, Consolas, 'Courier New', monospace",
-    "gitlens.codeLens.enabled": false
+    "gitlens.codeLens.enabled": false,
+    "material-icon-theme.showWelcomeMessage": false
 }

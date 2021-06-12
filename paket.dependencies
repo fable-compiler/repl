@@ -1,4 +1,4 @@
-source https://nuget.org/api/v2
+source https://api.nuget.org/v3/index.json
 storage:none
 framework: netstandard2.0
 
@@ -13,7 +13,7 @@ nuget Thoth.Elmish.Toast
 nuget Fable.Fetch
 nuget Fable.FontAwesome.Free
 nuget Feliz
-nuget Feliz.Bulma 
+nuget Feliz.Bulma
 nuget Feliz.Bulma.Tooltip
 
 # REPL Lib
@@ -31,10 +31,10 @@ github fulma/Fulma:1e763d852112307370675a0cf692415a53d1993f
 
 
 group netcorebuild
-    source https://www.nuget.org/api/v2
+    source https://api.nuget.org/v3/index.json
     framework: netstandard2.0
 
-    nuget NETStandard.Library.NETFramework
+    #nuget NETStandard.Library.NETFramework
     nuget Fake.DotNet.Cli
     nuget Fake.Core.Target
     nuget Fake.Core.Process

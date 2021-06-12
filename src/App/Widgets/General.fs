@@ -3,7 +3,6 @@ module Widgets.General
 open Fable.FontAwesome
 open Feliz
 open Feliz.Bulma
-open Feliz.Bulma.Tooltip
 
 type ResetState =
     | Default
@@ -95,7 +94,7 @@ let viewCollapsed (isCompiling : bool) (gistToken : string option) (model: Model
                 ]
             ]
         ]
- 
+
     Html.div [
         prop.className "actions-area"
         prop.children [
@@ -108,7 +107,7 @@ let viewCollapsed (isCompiling : bool) (gistToken : string option) (model: Model
             | Some _ ->
                 actionButton "Share to Gist" ShareToGist [ Fa.i [ Fa.Brand.Github ] [ ] ]
             | None -> Html.none
-            
+
         ]
     ]
 
@@ -138,7 +137,7 @@ let viewExpanded (isCompiling : bool) (gistToken : string option) (model: Model)
                             prop.disabled isDisabled
                             button.isText
                             button.isFullWidth
-                            prop.children [ 
+                            prop.children [
                                 Html.span text
                             ]
                         ]
@@ -146,7 +145,7 @@ let viewExpanded (isCompiling : bool) (gistToken : string option) (model: Model)
                 ]
             ]
         ]
-    
+
     let content =
         match model.ResetState with
         | Default ->
@@ -156,12 +155,12 @@ let viewExpanded (isCompiling : bool) (gistToken : string option) (model: Model)
                 renderItem "Click here to reset" false AskReset Fa.Solid.TrashAlt
                 renderItem "Share using the URL" false Share Fa.Solid.Share
                 match gistToken with
-                | Some _ -> 
+                | Some _ ->
                     renderItem "Share to Gist" false ShareToGist Fa.Brand.Github
                 | None ->
                     Html.none
             ]
- 
+
         | Confirm ->
             Bulma.field.div [
                 Bulma.help [
@@ -169,7 +168,7 @@ let viewExpanded (isCompiling : bool) (gistToken : string option) (model: Model)
                     prop.text "Please, confirm to reset"
                 ]
 
-                Bulma.field.div [ 
+                Bulma.field.div [
                     field.hasAddons
                     prop.children [
                         Bulma.control.div [
@@ -205,7 +204,7 @@ let viewExpanded (isCompiling : bool) (gistToken : string option) (model: Model)
 
 let viewModalResetConfirmation (model: Model) dispatch =
     Bulma.modal [
-        if (model.ResetState = Confirm) then 
+        if (model.ResetState = Confirm) then
             modal.isActive
         prop.style [
             style.zIndex 2000 // Make sure to be on top of everything
