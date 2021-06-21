@@ -130,8 +130,8 @@ let createTooltipProvider getTooltip =
 let mapErrorToMarker (errors: Error[]) =
     errors |> Array.map (fun err ->
         jsOptions<Monaco.Editor.IMarkerData>(fun m ->
-            m.startLineNumber <- err.StartLineAlternate
-            m.endLineNumber <- err.EndLineAlternate
+            m.startLineNumber <- err.StartLine
+            m.endLineNumber <- err.EndLine
             m.startColumn <- err.StartColumn + 1
             m.endColumn <- err.EndColumn + 1
             m.message <- err.Message
