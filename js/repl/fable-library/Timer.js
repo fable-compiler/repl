@@ -9,7 +9,7 @@ export class Timer {
         this.AutoReset = true;
         this._elapsed = new Event();
     }
-    get Elapsed() {
+    Elapsed() {
         return this._elapsed;
     }
     get Enabled() {

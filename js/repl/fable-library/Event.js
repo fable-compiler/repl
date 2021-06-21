@@ -1,44 +1,43 @@
-import { Observer, protect } from "./Observable.js";
+import { Observer } from "./Observable.js";
 import { some, value } from "./Option.js";
 import { Choice_tryValueIfChoice1Of2, Choice_tryValueIfChoice2Of2 } from "./Choice.js";
 export class Event {
-    constructor(_subscriber, delegates) {
-        this._subscriber = _subscriber;
-        this.delegates = delegates || new Array();
+    constructor() {
+        this.delegates = [];
     }
     Add(f) {
         this._addHandler(f);
     }
-    // IEvent<T> methods
     get Publish() {
         return this;
     }
-    Trigger(value) {
-        this.delegates.forEach((f) => f(value));
+    Trigger(senderOrValue, valueOrUndefined) {
+        let sender;
+        let value;
+        if (valueOrUndefined === undefined) {
+            sender = null;
+            value = senderOrValue;
+        }
+        else {
+            sender = senderOrValue;
+            value = valueOrUndefined;
+        }
+        this.delegates.forEach((f) => f.length === 1 ? f(value) : f(sender, value));
     }
     // IDelegateEvent<T> methods
     AddHandler(handler) {
-        if (this._dotnetDelegates == null) {
-            this._dotnetDelegates = new Map();
-        }
-        const f = (x) => handler(null, x);
-        this._dotnetDelegates.set(handler, f);
-        this._addHandler(f);
+        this._addHandler(handler);
     }
     RemoveHandler(handler) {
-        if (this._dotnetDelegates != null) {
-            const f = this._dotnetDelegates.get(handler);
-            if (f != null) {
-                this._dotnetDelegates.delete(handler);
-                this._removeHandler(f);
-            }
-        }
+        this._removeHandler(handler);
     }
     // IObservable<T> methods
     Subscribe(arg) {
-        return typeof arg === "function"
-            ? this._subscribeFromCallback(arg)
-            : this._subscribeFromObserver(arg);
+        const callback = typeof arg === "function"
+            ? arg
+            : arg.OnNext;
+        this._addHandler(callback);
+        return { Dispose: () => { this._removeHandler(callback); } };
     }
     _addHandler(f) {
         this.delegates.push(f);
@@ -49,109 +48,76 @@ export class Event {
             this.delegates.splice(index, 1);
         }
     }
-    _subscribeFromObserver(observer) {
-        if (this._subscriber) {
-            return this._subscriber(observer);
-        }
-        const callback = observer.OnNext;
-        this._addHandler(callback);
-        return { Dispose: () => { this._removeHandler(callback); } };
-    }
-    _subscribeFromCallback(callback) {
-        this._addHandler(callback);
-        return { Dispose: () => { this._removeHandler(callback); } };
-    }
 }
 export function add(callback, sourceEvent) {
-    sourceEvent.Subscribe(new Observer(callback));
+    if (sourceEvent instanceof Event) {
+        sourceEvent.Add(callback);
+    }
+    else {
+        sourceEvent.Subscribe(new Observer(callback));
+    }
 }
 export function choose(chooser, sourceEvent) {
-    const source = sourceEvent;
-    return new Event((observer) => source.Subscribe(new Observer((t) => protect(() => chooser(t), (u) => { if (u != null) {
-        observer.OnNext(value(u));
-    } }, observer.OnError), observer.OnError, observer.OnCompleted)), source.delegates);
+    const ev = new Event();
+    add((t) => {
+        const u = chooser(t);
+        if (u != null) {
+            ev.Trigger(value(u));
+        }
+    }, sourceEvent);
+    return ev;
 }
 export function filter(predicate, sourceEvent) {
     return choose((x) => predicate(x) ? some(x) : undefined, sourceEvent);
 }
 export function map(mapping, sourceEvent) {
-    const source = sourceEvent;
-    return new Event((observer) => source.Subscribe(new Observer((t) => protect(() => mapping(t), observer.OnNext, observer.OnError), observer.OnError, observer.OnCompleted)), source.delegates);
+    const ev = new Event();
+    add((t) => ev.Trigger(mapping(t)), sourceEvent);
+    return ev;
 }
 export function merge(event1, event2) {
-    const source1 = event1;
-    const source2 = event2;
-    return new Event((observer) => {
-        let stopped = false;
-        let completed1 = false;
-        let completed2 = false;
-        const h1 = source1.Subscribe(new Observer((v) => { if (!stopped) {
-            observer.OnNext(v);
-        } }, (e) => {
-            if (!stopped) {
-                stopped = true;
-                observer.OnError(e);
-            }
-        }, () => {
-            if (!stopped) {
-                completed1 = true;
-                if (completed2) {
-                    stopped = true;
-                    observer.OnCompleted();
-                }
-            }
-        }));
-        const h2 = source2.Subscribe(new Observer((v) => { if (!stopped) {
-            observer.OnNext(v);
-        } }, (e) => {
-            if (!stopped) {
-                stopped = true;
-                observer.OnError(e);
-            }
-        }, () => {
-            if (!stopped) {
-                completed2 = true;
-                if (completed1) {
-                    stopped = true;
-                    observer.OnCompleted();
-                }
-            }
-        }));
-        return {
-            Dispose() {
-                h1.Dispose();
-                h2.Dispose();
-            },
-        };
-    }, source1.delegates.concat(source2.delegates));
+    const ev = new Event();
+    const fn = (x) => ev.Trigger(x);
+    add(fn, event1);
+    add(fn, event2);
+    return ev;
 }
 export function pairwise(sourceEvent) {
-    const source = sourceEvent;
-    return new Event((observer) => {
-        let last;
-        return source.Subscribe(new Observer((next) => {
-            if (last != null) {
-                observer.OnNext([last, next]);
-            }
-            last = next;
-        }, observer.OnError, observer.OnCompleted));
-    }, source.delegates);
+    const ev = new Event();
+    let last;
+    let haveLast = false;
+    add((next) => {
+        if (haveLast) {
+            ev.Trigger([last, next]);
+        }
+        last = next;
+        haveLast = true;
+    }, sourceEvent);
+    return ev;
 }
 export function partition(predicate, sourceEvent) {
     return [filter(predicate, sourceEvent), filter((x) => !predicate(x), sourceEvent)];
 }
 export function scan(collector, state, sourceEvent) {
-    const source = sourceEvent;
-    return new Event((observer) => {
-        return source.Subscribe(new Observer((t) => {
-            protect(() => collector(state, t), (u) => { state = u; observer.OnNext(u); }, observer.OnError);
-        }, observer.OnError, observer.OnCompleted));
-    }, source.delegates);
+    return map((t) => state = collector(state, t), sourceEvent);
 }
 export function split(splitter, sourceEvent) {
     return [
         choose((v) => Choice_tryValueIfChoice1Of2(splitter(v)), sourceEvent),
         choose((v) => Choice_tryValueIfChoice2Of2(splitter(v)), sourceEvent),
     ];
+}
+export function createEvent(addHandler, removeHandler) {
+    return {
+        AddHandler(h) { addHandler(h); },
+        RemoveHandler(h) { removeHandler(h); },
+        Subscribe(r) {
+            const h = (_, args) => r.OnNext(args);
+            addHandler(h);
+            return {
+                Dispose() { removeHandler(h); }
+            };
+        }
+    };
 }
 export default Event;

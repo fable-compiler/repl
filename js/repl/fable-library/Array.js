@@ -385,7 +385,7 @@ export function insertRangeInPlace(index, range, array) {
     try {
         while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
             const x = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
-            void (index_1 = (i | 0), array.splice(index_1, 0, x));
+            void ((index_1 = (i | 0), array.splice(index_1, 0, x)));
             i = ((i + 1) | 0);
         }
     }

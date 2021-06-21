@@ -154,9 +154,9 @@ export function BigNatModule_FFT_computeFFT(lambda, mu, n, w, u, res, offset) {
         for (let j = 0; j <= (halfN - 1); j++) {
             const even = res[offset + j];
             const odd = res[offsetHalfN + j];
-            res[offset + j] = ((even + (x_1 = wj, toInt(op_Modulus(op_Multiply(fromInteger(x_1, true, 6), fromInteger(odd, true, 6)), BigNatModule_FFT_Fp_p64)) >>> 0)) % BigNatModule_FFT_Fp_p);
-            res[offsetHalfN + j] = (((even + BigNatModule_FFT_Fp_p) - (x_3 = wj, toInt(op_Modulus(op_Multiply(fromInteger(x_3, true, 6), fromInteger(odd, true, 6)), BigNatModule_FFT_Fp_p64)) >>> 0)) % BigNatModule_FFT_Fp_p);
-            wj = (y_5 = wj, toInt(op_Modulus(op_Multiply(fromInteger(w, true, 6), fromInteger(y_5, true, 6)), BigNatModule_FFT_Fp_p64)) >>> 0);
+            res[offset + j] = ((even + ((x_1 = wj, toInt(op_Modulus(op_Multiply(fromInteger(x_1, true, 6), fromInteger(odd, true, 6)), BigNatModule_FFT_Fp_p64)) >>> 0))) % BigNatModule_FFT_Fp_p);
+            res[offsetHalfN + j] = (((even + BigNatModule_FFT_Fp_p) - ((x_3 = wj, toInt(op_Modulus(op_Multiply(fromInteger(x_3, true, 6), fromInteger(odd, true, 6)), BigNatModule_FFT_Fp_p64)) >>> 0))) % BigNatModule_FFT_Fp_p);
+            wj = ((y_5 = wj, toInt(op_Modulus(op_Multiply(fromInteger(w, true, 6), fromInteger(y_5, true, 6)), BigNatModule_FFT_Fp_p64)) >>> 0));
         }
     }
 }
@@ -460,7 +460,7 @@ export function BigNatModule_addP(i_mut, n_mut, c_mut, p_mut, q_mut, r_mut) {
     while (true) {
         const i = i_mut, n = n_mut, c = c_mut, p = p_mut, q = q_mut, r = r_mut;
         if (i < n) {
-            const x = (((z = p, (i_1 = (i | 0), (i_1 < z.bound) ? z.digits[i_1] : 0)) + (z_1 = q, (i_2 = (i | 0), (i_2 < z_1.bound) ? z_1.digits[i_2] : 0))) + c) | 0;
+            const x = ((((z = p, (i_1 = (i | 0), (i_1 < z.bound) ? z.digits[i_1] : 0))) + ((z_1 = q, (i_2 = (i | 0), (i_2 < z_1.bound) ? z_1.digits[i_2] : 0)))) + c) | 0;
             r.digits[i] = (BigNatModule_modbase(x) | 0);
             i_mut = (i + 1);
             n_mut = n;
@@ -487,7 +487,7 @@ export function BigNatModule_subP(i_mut, n_mut, c_mut, p_mut, q_mut, r_mut) {
     while (true) {
         const i = i_mut, n = n_mut, c = c_mut, p = p_mut, q = q_mut, r = r_mut;
         if (i < n) {
-            const x = (((z = p, (i_1 = (i | 0), (i_1 < z.bound) ? z.digits[i_1] : 0)) - (z_1 = q, (i_2 = (i | 0), (i_2 < z_1.bound) ? z_1.digits[i_2] : 0))) + c) | 0;
+            const x = ((((z = p, (i_1 = (i | 0), (i_1 < z.bound) ? z.digits[i_1] : 0))) - ((z_1 = q, (i_2 = (i | 0), (i_2 < z_1.bound) ? z_1.digits[i_2] : 0)))) + c) | 0;
             if (x > 0) {
                 r.digits[i] = (BigNatModule_modbase(x) | 0);
                 i_mut = (i + 1);
@@ -874,10 +874,10 @@ export function BigNatModule_extractBits(n, enc, bi) {
     const bjw = (~(~(((bi + enc.bigL) - 1) / BigNatModule_baseBits))) | 0;
     if (biw !== bjw) {
         const xbit = (bi % BigNatModule_baseBits) | 0;
-        return ((((z = n, (i = (biw | 0), (i < z.bound) ? z.digits[i] : 0)) >> xbit) | ((z_1 = n, (i_1 = (bjw | 0), (i_1 < z_1.bound) ? z_1.digits[i_1] : 0)) << (BigNatModule_baseBits - xbit))) & BigNatModule_bitmask[enc.bigL]) | 0;
+        return (((((z = n, (i = (biw | 0), (i < z.bound) ? z.digits[i] : 0))) >> xbit) | (((z_1 = n, (i_1 = (bjw | 0), (i_1 < z_1.bound) ? z_1.digits[i_1] : 0))) << (BigNatModule_baseBits - xbit))) & BigNatModule_bitmask[enc.bigL]) | 0;
     }
     else {
-        return (((z_2 = n, (i_2 = (biw | 0), (i_2 < z_2.bound) ? z_2.digits[i_2] : 0)) >> (bi % BigNatModule_baseBits)) & BigNatModule_bitmask[enc.bigL]) | 0;
+        return ((((z_2 = n, (i_2 = (biw | 0), (i_2 < z_2.bound) ? z_2.digits[i_2] : 0))) >> (bi % BigNatModule_baseBits)) & BigNatModule_bitmask[enc.bigL]) | 0;
     }
 }
 

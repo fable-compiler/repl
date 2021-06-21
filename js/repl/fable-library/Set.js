@@ -135,7 +135,7 @@ export function SetTreeModule_rebalance(t1, v, t2) {
     if (t2h > (t1h + 2)) {
         const matchValue = value_1(t2);
         if (matchValue instanceof SetTreeNode$1) {
-            if ((t_2 = SetTreeNode$1__get_Left(matchValue), (t_2 != null) ? (t2_3 = t_2, (t2_3 instanceof SetTreeNode$1) ? SetTreeNode$1__get_Height(t2_3) : 1) : 0) > (t1h + 1)) {
+            if (((t_2 = SetTreeNode$1__get_Left(matchValue), (t_2 != null) ? ((t2_3 = t_2, (t2_3 instanceof SetTreeNode$1) ? SetTreeNode$1__get_Height(t2_3) : 1)) : 0)) > (t1h + 1)) {
                 const matchValue_1 = value_1(SetTreeNode$1__get_Left(matchValue));
                 if (matchValue_1 instanceof SetTreeNode$1) {
                     return SetTreeModule_mk(SetTreeModule_mk(t1, v, SetTreeNode$1__get_Left(matchValue_1)), SetTreeLeaf$1__get_Key(matchValue_1), SetTreeModule_mk(SetTreeNode$1__get_Right(matchValue_1), SetTreeLeaf$1__get_Key(matchValue), SetTreeNode$1__get_Right(matchValue)));
@@ -155,7 +155,7 @@ export function SetTreeModule_rebalance(t1, v, t2) {
     else if (t1h > (t2h + 2)) {
         const matchValue_2 = value_1(t1);
         if (matchValue_2 instanceof SetTreeNode$1) {
-            if ((t_3 = SetTreeNode$1__get_Right(matchValue_2), (t_3 != null) ? (t2_4 = t_3, (t2_4 instanceof SetTreeNode$1) ? SetTreeNode$1__get_Height(t2_4) : 1) : 0) > (t2h + 1)) {
+            if (((t_3 = SetTreeNode$1__get_Right(matchValue_2), (t_3 != null) ? ((t2_4 = t_3, (t2_4 instanceof SetTreeNode$1) ? SetTreeNode$1__get_Height(t2_4) : 1)) : 0)) > (t2h + 1)) {
                 const matchValue_3 = value_1(SetTreeNode$1__get_Right(matchValue_2));
                 if (matchValue_3 instanceof SetTreeNode$1) {
                     return SetTreeModule_mk(SetTreeModule_mk(SetTreeNode$1__get_Left(matchValue_2), SetTreeLeaf$1__get_Key(matchValue_2), SetTreeNode$1__get_Left(matchValue_3)), SetTreeLeaf$1__get_Key(matchValue_3), SetTreeModule_mk(SetTreeNode$1__get_Right(matchValue_3), v, t2));
@@ -1717,12 +1717,13 @@ export function FSharpSet__ToArray(x) {
 }
 
 export function FSharpSet__ComputeHashCode(this$) {
+    let y;
     let res = 0;
     const enumerator = getEnumerator(this$);
     try {
         while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
             const x_1 = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
-            res = ((((res << 1) + structuralHash(x_1)) + 631) | 0);
+            res = (((y = (structuralHash(x_1) | 0), ((res << 1) + y) + 631)) | 0);
         }
     }
     finally {

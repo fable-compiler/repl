@@ -195,7 +195,7 @@ export function Enumerator_concat(sources) {
                         const outer_1 = matchValue[0];
                         if (outer_1["System.Collections.IEnumerator.MoveNext"]()) {
                             const ie = outer_1["System.Collections.Generic.IEnumerator`1.get_Current"]();
-                            innerOpt = (copyOfStruct = ie, getEnumerator(copyOfStruct));
+                            innerOpt = ((copyOfStruct = ie, getEnumerator(copyOfStruct)));
                         }
                         else {
                             finish();
@@ -294,8 +294,9 @@ export function Enumerator_unfold(f, state) {
     let acc = state;
     return Enumerator_FromFunctions$1_$ctor_58C54629(() => {
         if (curr != null) {
+            const x = curr[0];
             const st = curr[1];
-            return curr[0];
+            return x;
         }
         else {
             return Enumerator_notStarted();
@@ -1252,18 +1253,30 @@ export function min(xs, comparer) {
 
 export function average(xs, averager) {
     let count = 0;
-    return averager.DivideByInt(fold((acc, x) => {
+    const total = fold((acc, x) => {
         count = ((count + 1) | 0);
         return averager.Add(acc, x);
-    }, averager.GetZero(), xs), count);
+    }, averager.GetZero(), xs);
+    if (count === 0) {
+        throw (new Error("The input sequence was empty\\nParameter name: xs"));
+    }
+    else {
+        return averager.DivideByInt(total, count);
+    }
 }
 
 export function averageBy(f, xs, averager) {
     let count = 0;
-    return averager.DivideByInt(fold((acc, x) => {
+    const total = fold((acc, x) => {
         count = ((count + 1) | 0);
         return averager.Add(acc, f(x));
-    }, averager.GetZero(), xs), count);
+    }, averager.GetZero(), xs);
+    if (count === 0) {
+        throw (new Error("The input sequence was empty\\nParameter name: xs"));
+    }
+    else {
+        return averager.DivideByInt(total, count);
+    }
 }
 
 export function permute(f, xs) {
