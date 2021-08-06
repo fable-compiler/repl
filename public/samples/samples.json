@@ -27,6 +27,18 @@
                 "children": [
                     {
                         "type": "menu-item",
+                        "label": "Undertone - Programmable music",
+                        "fsharpCode": "games/undertone.fs",
+                        "htmlCode": "games/undertone.html"
+                    },
+                    {
+                        "type": "menu-item",
+                        "label": "F# Ant Colony Fable Edition",
+                        "fsharpCode": "games/ants.fs",
+                        "htmlCode": "games/ants.html"
+                    },
+                    {
+                        "type": "menu-item",
                         "label": "Super Fable Mario",
                         "fsharpCode": "games/mario.fs",
                         "htmlCode": "games/mario.html"

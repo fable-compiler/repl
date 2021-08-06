@@ -6,6 +6,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.2.6
+
+* Update Fable
+
+## 3.1.15
+
+* Update Fable
+* Add sample: Undertone - Programmable music. @robertpi
+
+## 3.1.12
+
+* Update Fable
+* Add sample: @Rickasaurus 's F# Ant Colony game to Fable. @robertpi
+
+## 3.1.5
+
+* Update Fable & Fable.Core
+
+## 3.1.4
+
+* Update Fable
+
 ## 3.1.1
 
 * Update Fable

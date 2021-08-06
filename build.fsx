@@ -38,7 +38,7 @@ let METADATA_LIB, STANDALONE_DIST, STANDALONE_SRC =
     | Some _ ->
         printfn "Using local packages..."
         "../Fable/src/fable-metadata/lib", "../Fable/src/fable-standalone/dist", "../Fable/src/fable-standalone/src"
-    | None -> "node_modules/fable-metadata/lib", "node_modules/fable-standalone/dist", "node_modules/fable-standalone/dist"
+    | None -> "node_modules/fable-metadata/lib", "node_modules/fable-standalone/dist", "node_modules/fable-standalone/src"
 
 module Util =
 
