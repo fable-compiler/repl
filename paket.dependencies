@@ -2,6 +2,7 @@ source https://nuget.org/api/v2
 storage:none
 framework: netstandard2.0
 
+nuget FSharp.Core
 nuget Fable.Core
 nuget Fable.Elmish.Browser
 nuget Fable.React
@@ -9,32 +10,37 @@ nuget Fable.Elmish
 nuget Fable.Elmish.React
 nuget Fable.Elmish.HMR
 nuget Thoth.Json
-nuget Thoth.Elmish.Toast
+nuget Thoth.Elmish.Toast ~> 2
 nuget Fable.Fetch
 nuget Fable.FontAwesome.Free
 nuget Feliz
-nuget Feliz.Bulma 
+nuget Feliz.Bulma
 nuget Feliz.Bulma.Tooltip
+nuget Fable.Browser.Css
+nuget Fable.Browser.Dom
+nuget Fable.Browser.Event
+nuget Fable.Browser.MediaQueryList
 
 # REPL Lib
-github thoth-org/Thoth.Json:647d6f82da84bca2b0659e924e951cd09cba6cc9
-github fable-compiler/fable-promise:e96a1ba7db446d1f12360fbc451814a32dac98a1
-github fable-compiler/fable-fetch:d5dbc4e97aafe487059f1845b5bbe3206f0aa355
+
+#github thoth-org/Thoth.Json:647d6f82da84bca2b0659e924e951cd09cba6cc9
 #github alfonsogarciacaro/Fable.SimpleHttp:patch-3 src/Http.fs
-
-github fable-compiler/fable-react:634e0409ccc0d8310e37f778ea6c6e82c67e5fc8
-github fable-compiler/fable-recharts:94c91b3aa1381e36ea245a92c440ac5611dbf73f
-
-github elmish/elmish:69569e39876213e91c283c1c76bbe0fb88fba208
+#github fable-compiler/fable-fetch:d5dbc4e97aafe487059f1845b5bbe3206f0aa355
+#github fable-compiler/fable-react:634e0409ccc0d8310e37f778ea6c6e82c67e5fc8
+#github fable-compiler/fable-recharts:94c91b3aa1381e36ea245a92c440ac5611dbf73f
 #github elmish/react:master
-github fulma/Fulma:1e763d852112307370675a0cf692415a53d1993f
+#github fulma/Fulma:1e763d852112307370675a0cf692415a53d1993f#
 
+#github elmish/elmish:69569e39876213e91c283c1c76bbe0fb88fba28
+
+github fable-compiler/fable-promise:master
+github alfonsogarciacaro/Feliz.Engine:main
+github davedawkins/Feliz.Engine.Bulma:main
+github davedawkins/Sutil:main
 
 group netcorebuild
     source https://www.nuget.org/api/v2
-    framework: netstandard2.0
 
-    nuget NETStandard.Library.NETFramework
     nuget Fake.DotNet.Cli
     nuget Fake.Core.Target
     nuget Fake.Core.Process

@@ -21,7 +21,7 @@ module Literals =
     let (*[<Literal>]*) REPL_LIB_MAP_JSON_URL = HOST + "repl-lib-map.json"
     let (*[<Literal>]*) WORKER_BUNDLE_URL = HOST + "js/repl/worker.min.js"
     let (*[<Literal>]*) FABLE_LIBRARY_DIR = HOST + "js/repl/fable-library"
-    let (*[<Literal>]*) FABLE_REPL_LIB_DIR = HOST + "js/repl/lib"
+    let (*[<Literal>]*) FABLE_REPL_LIB_DIR = HOST + "js/repl/fable-repl-lib"
     let (*[<Literal>]*) METADATA_DIR = HOST + "metadata"
 
     let EXTRA_REFS =
@@ -30,8 +30,9 @@ module Literals =
           "Browser.WebStorage"
           "Browser.Dom"
           "Browser.WebGL"
-        //   "Fable.Repl.Lib"
-          "Fable.Sveltish"
+          "Browser.Css"
+          "Browser.MediaQueryList"
+          "Fable.Repl.Lib"
         |]
 
 let [<Global>] private setTimeout(f: unit->unit, ms: int): unit = jsNative

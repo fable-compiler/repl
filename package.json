@@ -1,7 +1,8 @@
 {
   "private": true,
   "scripts": {
-    "build-lib": "fable-splitter -c src/Lib/splitter.config.js",
+    "build-lib": "dotnet fable src/Fable.Repl.Lib -o public/js/repl/fable-repl-lib --rootModule false --fableLib public/js/repl/fable-library",
+    "postbuild-lib": "cd src/Fable.Repl.Lib && cp --parents **/*.js ../../public/js/repl/fable-repl-lib/",
     "build": "dotnet fable src/App --run webpack",
     "start": "dotnet fable watch src/App --run webpack-dev-server",
     "deploy": "gh-pages -d deploy"
@@ -44,8 +45,5 @@
     "webpack-dev-server": "^3.11.0",
     "workbox-webpack-plugin": "^5.1.4",
     "worker-loader": "^2.0.0"
-  },
-  "devDependencies": {
-    "npm-check-updates": "^7.0.1"
   }
 }

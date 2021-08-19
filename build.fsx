@@ -133,13 +133,6 @@ let copyModules = BuildTask.create "CopyModules" [ npmInstall ] {
     Shell.copyDir "src/Standalone" STANDALONE_SRC (fun f -> f.EndsWith(".fs"))
 }
 
-// TODO re-add generate metadata for REPL lib using git submobules
-// let buildLibBinary = BuildTask.create "BuildLibBinary" [ copyModules ] {
-//     DotNet.build
-//         (DotNet.Options.withWorkingDirectory (CWD </> "src/Lib"))
-//         "Fable.Repl.Lib.fsproj"
-// }
-
 let updatePreludeREPLVersion = BuildTask.create "UpdateREPLVersion" [ ] {
     let newVersion = Changelog.getLastVersion()
 
@@ -163,38 +156,13 @@ let updatePreludeREPLVersion = BuildTask.create "UpdateREPLVersion" [ ] {
 
 let buildLib = BuildTask.create "BuildLib" [ copyModules ] {
     Npm.run "build-lib" id
-
-    // Ensure that all imports end with .js
-    let outDir = REPL_OUTPUT </> "lib"
-    let regAllImports = Regex(@"^import.+?""[^""]+")
-    let reqFableLibrary = Regex(@"((../)fable-library[^/]*)")
-    for file in Directory.EnumerateFiles(CWD </> outDir, "*.js", SearchOption.AllDirectories) do
-        let newLines =
-            File.ReadLines file
-            |> Seq.map (fun line ->
-                regAllImports.Replace(line, fun m ->
-                    // Patch the fable-library import from the "repl libs"
-                    // to make sure they use the same `fable-library` module as the code
-                    // compiled from the REPL
-                    // This is needed in order to make reflection work
-                    // See https://github.com/fable-compiler/repl/issues/97#issuecomment-588498482
-                    let adaptedLine =
-                        reqFableLibrary.Replace(m.Value, fun m ->
-                            m.Value.Replace(m.Groups.[1].Value, "../../fable-library")
-                        )
-
-                    if adaptedLine.EndsWith(".js") then adaptedLine else adaptedLine + ".js"
-                )
-            )
-            |> Seq.toArray
-        File.WriteAllLines(file, newLines)
 }
 
-let buildApp = BuildTask.create "BuildApp" [ updatePreludeREPLVersion.IfNeeded; copyModules ] {
+let buildApp = BuildTask.create "BuildApp" [ updatePreludeREPLVersion.IfNeeded; buildLib ] {
     Npm.run "build" id
 }
 
-let watchApp = BuildTask.create "WatchApp" [ copyModules ] {
+let watchApp = BuildTask.create "WatchApp" [ ] {
     Npm.run "start" id
 }
 
