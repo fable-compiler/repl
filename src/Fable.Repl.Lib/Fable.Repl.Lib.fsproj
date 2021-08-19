@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <DefineConstants>$(DefineConstants);FABLE_COMPILER;FABLE_REPL_LIB</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Promise/Promise.fs" />
+    <Compile Include="Promise/PromiseImpl.fs" />
+
+    <!-- <Compile Include="../../paket-files/thoth-org/Thoth.Json/src/Types.fs" />
+    <Compile Include="../../paket-files/thoth-org/Thoth.Json/src/Decode.fs" />
+    <Compile Include="../../paket-files/thoth-org/Thoth.Json/src/Encode.fs" /> -->
+    <!-- <Compile Include="../../paket-files/thoth-org/Thoth.Json/src/Extra.fs" /> -->
+
+    <!-- <Compile Include="../../paket-files/fable-compiler/fable-fetch/src/Fetch.fs" /> -->
+    <!-- <Compile Include="../../paket-files/alfonsogarciacaro/Fable.SimpleHttp/src/Http.fs" /> -->
+
+    <Compile Include="Feliz.Engine/CssEngine.fs" />
+    <Compile Include="Feliz.Engine/HtmlEngine.fs" />
+    <Compile Include="Feliz.Engine/SvgEngine.fs" />
+    <Compile Include="Feliz.Engine/AttrEngine.fs" />
+    <Compile Include="Feliz.Engine.Event/EventEngine.fs" />
+
+    <!-- <Compile Include="../../paket-files/davedawkins/Feliz.Engine.Bulma/src/Feliz.Engine.Bulma/Modifiers.fs" />
+    <Compile Include="../../paket-files/davedawkins/Feliz.Engine.Bulma/src/Feliz.Engine.Bulma/Bulma.fs" /> -->
+
+    <Compile Include="Sutil/Easing.fs" />
+    <Compile Include="Sutil/Interop.fs" />
+    <Compile Include="Sutil/Types.fs" />
+    <Compile Include="Sutil/Logging.fs" />
+    <Compile Include="Sutil/Helpers.fs" />
+    <Compile Include="Sutil/DOM.fs" />
+    <Compile Include="Sutil/ResizeObserver.fs" />
+    <Compile Include="Sutil/ObservableStore.fs" />
+    <Compile Include="Sutil/Observable.fs" />
+    <Compile Include="Sutil/Store.fs" />
+    <Compile Include="Sutil/Promise.fs" />
+    <Compile Include="Sutil/Styling.fs" />
+    <Compile Include="Sutil/Transition.fs" />
+    <Compile Include="Sutil/TransitionFunctions.fs" />
+    <Compile Include="Sutil/Attr.fs" />
+    <Compile Include="Sutil/Svg.fs" />
+    <Compile Include="Sutil/Bindings.fs" />
+    <Compile Include="Sutil/Html.fs" />
+    <Compile Include="Sutil/MediaQuery.fs" />
+    <Compile Include="Sutil/Navigable.fs" />
+    <Compile Include="Sutil/Program.fs" />
+    <!-- <Compile Include="Sutil/Bulma.fs" /> -->
+
+    <!-- <Compile Include="../../paket-files/elmish/elmish/src/prelude.fs" />
+    <Compile Include="../../paket-files/elmish/elmish/src/cmd.fs" />
+    <Compile Include="../../paket-files/elmish/elmish/src/ring.fs" />
+    <Compile Include="../../paket-files/elmish/elmish/src/program.fs" /> -->
+
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>
