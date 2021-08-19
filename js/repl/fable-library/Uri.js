@@ -1,104 +1,137 @@
+const ok = (value) => ({
+    tag: "ok",
+    value,
+});
+const error = (error) => ({ tag: "error", error });
 export class Uri {
-    constructor(value, kindOrUri = 1 /* Absolute */) {
-        if (typeof value === "string" && typeof kindOrUri === "number") {
-            if (kindOrUri === 1 /* Absolute */) {
-                try {
-                    this.url = new URL(value);
-                    this.kind = kindOrUri;
-                }
-                catch (e) {
-                    throw new Error("Invalid URI: The format of the URI could not be determined.");
-                }
-            }
-            else if (kindOrUri === 2 /* Relative */) {
-                let isRelativeUrl = false;
-                try {
-                    const url = new URL(value);
-                    isRelativeUrl = false && url;
-                }
-                catch (e) {
-                    isRelativeUrl = true;
-                }
-                if (isRelativeUrl) {
-                    this.url = value;
-                    this.kind = kindOrUri;
-                }
-                else {
-                    throw new Error("uri is not a relative path");
-                }
-            }
-            else {
-                this.url = value;
-                this.kind = kindOrUri;
-            }
-        }
-        else if (value instanceof Uri && typeof kindOrUri === "string") {
-            if (value.kind !== 1 /* Absolute */) {
-                throw new Error("base uri should has Absolute kind");
-            }
-            this.url = new URL(kindOrUri, value.url);
-            this.kind = 1 /* Absolute */;
-        }
-        else if (value instanceof Uri && kindOrUri instanceof Uri) {
-            if (value.kind !== 1 /* Absolute */) {
-                throw new Error("base uri should has Absolute kind");
-            }
-            if (kindOrUri.kind !== 2 /* Relative */) {
-                throw new Error("relative uri should has Relative kind");
-            }
-            this.url = new URL(kindOrUri.url, value.url);
-            this.kind = 1 /* Absolute */;
-        }
+    constructor(state) {
+        this.uri = state;
     }
-    toString() {
-        return decodeURIComponent(this.parseUrl().toString());
-    }
-    parseUrl() {
-        if (this.kind === 1 /* Absolute */) {
-            return this.url;
-        }
-        if (this.kind === 0 /* RelativeOrAbsolute */) {
-            return new URL(this.url);
-        }
-        throw new Error("relative url can not parse as a URI");
-    }
-    get isAbsoluteUri() {
+    static isAbsoluteUri(uri) {
         try {
-            this.parseUrl();
+            // tslint:disable-next-line no-unused-expression
+            new URL(uri);
             return true;
         }
-        catch (e) {
+        catch (_a) {
             return false;
         }
     }
+    static tryCreateWithKind(uri, kind) {
+        switch (kind) {
+            case 1 /* Absolute */:
+                return Uri.isAbsoluteUri(uri)
+                    ? ok(new Uri({ value: new URL(uri), kind }))
+                    : error("Invalid URI: The format of the URI could not be determined.");
+            case 2 /* Relative */:
+                return Uri.isAbsoluteUri(uri)
+                    ? error("URI is not a relative path.")
+                    : ok(new Uri({ value: uri, kind }));
+            case 0 /* RelativeOrAbsolute */:
+                return Uri.isAbsoluteUri(uri)
+                    ? ok(new Uri({ value: new URL(uri), kind: 1 /* Absolute */ }))
+                    : ok(new Uri({ value: uri, kind: 2 /* Relative */ }));
+            default:
+                const never = kind;
+                return never;
+        }
+    }
+    static tryCreateWithBase(baseUri, relativeUri) {
+        return baseUri.uri.kind !== 1 /* Absolute */
+            ? error("Base URI should have Absolute kind")
+            : typeof relativeUri === "string"
+                ? ok(new Uri({
+                    value: new URL(relativeUri, baseUri.uri.value),
+                    kind: 1 /* Absolute */,
+                }))
+                : relativeUri.uri.kind === 2 /* Relative */
+                    ? ok(new Uri({
+                        value: new URL(relativeUri.uri.value, baseUri.uri.value),
+                        kind: 1 /* Absolute */,
+                    }))
+                    : ok(baseUri);
+    }
+    static tryCreateImpl(value, kindOrUri = 1 /* Absolute */) {
+        return typeof value === "string"
+            ? typeof kindOrUri !== "number"
+                ? error("Kind must be specified when the baseUri is a string.")
+                : Uri.tryCreateWithKind(value, kindOrUri)
+            : typeof kindOrUri === "number"
+                ? error("Kind should not be specified when the baseUri is an absolute Uri.")
+                : Uri.tryCreateWithBase(value, kindOrUri);
+    }
+    static create(value, kindOrUri = 1 /* Absolute */) {
+        const result = Uri.tryCreateImpl(value, kindOrUri);
+        switch (result.tag) {
+            case "ok":
+                return result.value;
+            case "error":
+                throw new Error(result.error);
+            default:
+                const never = result;
+                return never;
+        }
+    }
+    static tryCreate(value, kindOrUri = 1 /* Absolute */, out) {
+        const result = Uri.tryCreateImpl(value, kindOrUri);
+        switch (result.tag) {
+            case "ok":
+                out.contents = result.value;
+                return true;
+            case "error":
+                return false;
+            default:
+                const never = result;
+                return never;
+        }
+    }
+    toString() {
+        switch (this.uri.kind) {
+            case 1 /* Absolute */:
+                return decodeURIComponent(this.asUrl().toString());
+            case 2 /* Relative */:
+                return this.uri.value;
+            default:
+                const never = this.uri;
+                return never;
+        }
+    }
+    asUrl() {
+        switch (this.uri.kind) {
+            case 1 /* Absolute */:
+                return this.uri.value;
+            case 2 /* Relative */:
+                throw new Error("This operation is not supported for a relative URI.");
+            default:
+                const never = this.uri;
+                return never;
+        }
+    }
+    get isAbsoluteUri() {
+        return this.uri.kind === 1 /* Absolute */;
+    }
     get absoluteUri() {
-        if (this.kind === 1 /* Absolute */) {
-            return this.url.href;
-        }
-        if (this.kind === 0 /* RelativeOrAbsolute */) {
-            return this.url;
-        }
-        throw new Error("This operation is not supported for a relative URI.");
+        return this.asUrl().href;
     }
     get scheme() {
-        const protocol = this.parseUrl().protocol;
+        const protocol = this.asUrl().protocol;
         return protocol.slice(0, protocol.length - 1);
     }
     get host() {
-        return this.parseUrl().host;
+        return this.asUrl().host;
     }
     get absolutePath() {
-        return this.parseUrl().pathname;
+        return this.asUrl().pathname;
     }
     get query() {
-        return this.parseUrl().search;
+        return this.asUrl().search;
     }
     get pathAndQuery() {
-        const url = this.parseUrl();
+        const url = this.asUrl();
         return url.pathname + url.search;
     }
     get fragment() {
-        return this.parseUrl().hash;
+        return this.asUrl().hash;
     }
 }
 export default Uri;
