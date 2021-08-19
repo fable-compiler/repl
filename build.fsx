@@ -27,9 +27,8 @@ let NCAVE_FCS_REPO = Path.Combine(CWD, "../fsharp_fable")
 let LIBS_OUTPUT = Path.Combine(CWD, "public/libs")
 let REPL_OUTPUT = Path.Combine(CWD, "public/js/repl")
 let METADATA_OUTPUT = Path.Combine(CWD, "public/metadata")
-let METADATA_SOURCE = Path.Combine(NCAVE_FCS_REPO, "temp/metadata2")
+let METADATA_EXTRA = Path.Combine(CWD, "src/metadata")
 
-let METADATA_EXPORT_DIR = Path.Combine(CWD, "src/Export")
 let CHANGELOG_FILE = Path.Combine(CWD, "CHANGELOG.md")
 let PRELUDE_FILE = CWD </> "src/App/Prelude.fs"
 
@@ -111,18 +110,18 @@ let npmInstall = BuildTask.create "NpmInstall" [ restore ] {
 }
 
 let copyModules = BuildTask.create "CopyModules" [ npmInstall ] {
-    let cssOutput = LIBS_OUTPUT </> "css"
-    Directory.create cssOutput
-    Shell.copyFile LIBS_OUTPUT "node_modules/react/umd/react.production.min.js"
-    Shell.copyFile LIBS_OUTPUT "node_modules/react-dom/umd/react-dom.production.min.js"
-    Shell.copyFile cssOutput "node_modules/bulma/css/bulma.min.css"
-    Shell.copyFile cssOutput "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
-    Shell.copyDir (LIBS_OUTPUT </> "webfonts") "node_modules/@fortawesome/fontawesome-free/webfonts" (fun _ -> true)
+    // let cssOutput = LIBS_OUTPUT </> "css"
+    // Directory.create cssOutput
+    // Shell.copyFile LIBS_OUTPUT "node_modules/react/umd/react.production.min.js"
+    // Shell.copyFile LIBS_OUTPUT "node_modules/react-dom/umd/react-dom.production.min.js"
+    // Shell.copyFile cssOutput "node_modules/bulma/css/bulma.min.css"
+    // Shell.copyFile cssOutput "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
+    // Shell.copyDir (LIBS_OUTPUT </> "webfonts") "node_modules/@fortawesome/fontawesome-free/webfonts" (fun _ -> true)
 
     Shell.cleanDir METADATA_OUTPUT
     Shell.copyDir METADATA_OUTPUT METADATA_LIB (fun _ -> true)
+    Shell.copyDir METADATA_OUTPUT METADATA_EXTRA (fun _ -> true)
 
-    // CopyDir METADATA_OUTPUT "public/metadata-extra" (fun _ -> true)
     // Change extension to .txt so Github pages compress the files when being served
     !! (METADATA_OUTPUT </> "*.dll")
     |> Seq.iter(fun filename ->

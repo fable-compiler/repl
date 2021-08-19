@@ -1,7 +1,6 @@
 open System.IO
 open System.Collections.Generic
-open FSharp.Compiler
-open FSharp.Compiler.SourceCodeServices
+open FSharp.Compiler.CodeAnalysis
 
 let readRefs (folder : string) (projectFile: string) =
     let runProcess (workingDir: string) (exePath: string) (args: string) =
@@ -24,7 +23,7 @@ let readRefs (folder : string) (projectFile: string) =
 
     let runCmd exePath args = runProcess folder exePath (args |> String.concat " ")
     let msbuildExec = Dotnet.ProjInfo.Inspect.dotnetMsbuild runCmd
-    let result = Dotnet.ProjInfo.Inspect.getProjectInfo ignore msbuildExec Dotnet.ProjInfo.Inspect.getFscArgs [] projectFile
+    let result = Dotnet.ProjInfo.Inspect.getProjectInfo ignore msbuildExec Dotnet.ProjInfo.Inspect.getFscArgs projectFile
     match result with
     | Ok(Dotnet.ProjInfo.Inspect.GetResult.FscArgs x) ->
         x
@@ -62,14 +61,14 @@ let parseAndCheckScript (file, input) =
     let dllName = Path.ChangeExtension(file, ".dll")
     let projName = Path.ChangeExtension(file, ".fsproj")
     let args = mkProjectCommandLineArgsForScript (dllName, [file])
-    // printfn "file: %s" file
-    // args |> Array.iter (printfn "args: %s")
+    printfn "file: %s" file
+    args |> Array.iter (printfn "args: %s")
     let projectOptions = checker.GetProjectOptionsFromCommandLineArgs (projName, args)
     let parseRes, typedRes = checker.ParseAndCheckFileInProject(file, 0, input, projectOptions) |> Async.RunSynchronously
 
-    if parseRes.Errors.Length > 0 then
+    if parseRes.Diagnostics.Length > 0 then
         printfn "---> Parse Input = %A" input
-        printfn "---> Parse Error = %A" parseRes.Errors
+        printfn "---> Parse Error = %A" parseRes.Diagnostics
 
     match typedRes with
     | FSharpCheckFileAnswer.Succeeded(res) -> parseRes, res
