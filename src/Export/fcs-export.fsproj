@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <DisableImplicitFSharpCoreReference>true</DisableImplicitFSharpCoreReference>
   </PropertyGroup>
 
@@ -11,14 +11,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../../../fsharp_fable/fcs/FSharp.Compiler.Service/FSharp.Compiler.Service.fsproj" />
+    <!-- <ProjectReference Include="../../src/fsharp/FSharp.Compiler.Service/FSharp.Compiler.Service.fsproj" /> -->
+    <Reference Include="../../../fsharp_fable/artifacts/bin/FSharp.Compiler.Service/Release/netstandard2.0/FSharp.Core.dll" />
+    <Reference Include="../../../fsharp_fable/artifacts/bin/FSharp.Compiler.Service/Release/netstandard2.0/FSharp.Compiler.Service.dll" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="../Lib/bin/Debug/netstandard2.0/Fable.Repl.Lib.dll" />
-    <PackageReference Include="FSharp.Core" Version="4.7.0" />
-    <PackageReference Include="Dotnet.ProjInfo" Version="*" />
-    <PackageReference Include="Fable.Core" Version="3.1.1" />
-    <PackageReference Include="Fable.Browser.Dom" Version="1.1.0" />
+    <!-- <PackageReference Include="FSharp.Core" Version="5.0.1" /> -->
+    <PackageReference Include="Fable.Core" Version="3.2.6" />
+    <PackageReference Include="Dotnet.ProjInfo" Version="0.44.0" />
+    <PackageReference Include="Fable.Browser.Css" Version="2.*" />
+    <PackageReference Include="Fable.Browser.Dom" Version="2.*" />
+    <PackageReference Include="Fable.Browser.MediaQueryList" Version="1.*" />
+    <PackageReference Include="Fable.Browser.WebGL" Version="1.0.3" />
   </ItemGroup>
-</Project>
+<ItemGroup><Reference Include="../Fable.Repl.Lib/bin/Debug/netstandard2.0/Fable.Repl.Lib.dll" /></ItemGroup></Project>

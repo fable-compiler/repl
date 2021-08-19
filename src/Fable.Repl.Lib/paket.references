@@ -1,0 +1,5 @@
+FSharp.Core
+Fable.Core
+Fable.Browser.Css
+Fable.Browser.Dom
+Fable.Browser.MediaQueryList

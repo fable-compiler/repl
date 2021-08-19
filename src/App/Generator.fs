@@ -121,7 +121,7 @@ let generateHtmlBlobUrl (htmlCode : string) (cssCode : string) (jsCode : string)
             if m.Groups.[2].Value = "fable-repl-lib"
             then Literals.FABLE_REPL_LIB_DIR
             else Literals.FABLE_LIBRARY_DIR
-        let filename = m.Groups.[3].Value
+        let filename = Regex.Replace(m.Groups.[3].Value, "\.fs$", ".js")
         sprintf "import %s\"%s%s%s\"%s"
             m.Groups.[1].Value baseDir filename
             (if filename.EndsWith(".js") then "" else ".js")

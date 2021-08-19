@@ -66,3 +66,18 @@ You can add three types of entries:
 - cssCode (*optional field*): Relative url of the css code
 
 All the urls for `fsharpCode`, `htmlCode` are relative to the `public/samples` folder.
+
+## How to build Fable.Repl.Lib
+
+Building the library for the repl is a bit convoluted an involves an additional repository: ncave's fork of the F# compiler. This is used to generate .dlls containing only metada so they're lighter to load in the repl. We need to perform two steps:
+
+1. Generate the Fable.Repl.Lib.dll (and Browser bindings) assembly that will be used by Fable standalone in the repl (for compilation and analysis)
+2. Generate the JS files for Fable.Repl.Lib that will be loaded by the compiled JS code in the playground
+
+The first step is the most complicated as it requires using a custom build of the F# compiler (in `export` branch of ncave's fsharp fork). Most of the steps to do this are automated in the `src/Export/build.sh` script.
+
+The second step can be run with the `BuildLib` FAKE target.
+
+> If you want to use fable-standalone (and base metadata) from a local Fable repo in a sibling folder enable the `LOCAL_PKG` env var as in `LOCAL_PKG=1 dotnet fake build -t BuildLib`
+
+One important thing to remember is **public inlined functions won't work** with precompiled libs so please refrain from using them in Fable.Repl.Lib source.

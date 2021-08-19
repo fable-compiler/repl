@@ -1067,9 +1067,9 @@ let private outputArea model dispatch =
                 prop.children [
                     if model.State = Loading then
                         Html.div [
-                            prop.className [
-                                true, "is-loading title has-text-centered"
-                                not isLiveViewShown, "is-hidden"
+                            prop.classes [
+                                "is-loading title has-text-centered"
+                                if isLiveViewShown then "is-hidden"
                             ]
                             prop.style [
                                 style.height (length.percent 100)
@@ -1094,9 +1094,9 @@ let view (model: Model) dispatch =
                 | NoTarget -> false
 
             Html.div [
-                prop.className [
-                    isDragging, "is-unselectable"
-                ]
+                if isDragging then
+                    prop.className "is-unselectable"
+
                 prop.children [
                     Html.div [
                         prop.className "page-content"
