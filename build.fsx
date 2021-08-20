@@ -155,6 +155,17 @@ let updatePreludeREPLVersion = BuildTask.create "UpdateREPLVersion" [ ] {
 
 let buildLib = BuildTask.create "BuildLib" [ copyModules ] {
     Npm.run "build-lib" id
+
+    // Copy JS files
+    let replSource = Path.GetFullPath("src/Fable.Repl.Lib")
+    let replTarget = Path.GetFullPath("public/js/repl/fable-repl-lib")
+
+    !! "src/Fable.Repl.Lib/**/*.js"
+    |> Seq.iter (fun source ->
+        let target = Path.GetFullPath(source).Replace(replSource, replTarget)
+        Shell.copyFile target source
+        printfn $"Copied {source} to {target}"
+    )
 }
 
 let buildApp = BuildTask.create "BuildApp" [ updatePreludeREPLVersion.IfNeeded; buildLib ] {
