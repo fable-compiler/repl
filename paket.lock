@@ -91,7 +91,20 @@ NUGET
     Feliz.CompilerPlugins (1.6)
       Fable.AST (>= 3.0)
       FSharp.Core (>= 4.7.2)
+    FsCheck (2.16)
+      FSharp.Core (>= 4.2.3)
+    FsCheck.NUnit (2.16)
+      FsCheck (2.16)
+      NUnit (>= 3.13.1 < 4.0)
     FSharp.Core (5.0.2)
+    Microsoft.NET.Test.Sdk (16.11)
+    Microsoft.NETCore.Platforms (5.0.2)
+    NETStandard.Library (2.0.3)
+      Microsoft.NETCore.Platforms (>= 1.1)
+    NUnit (3.13.2)
+      NETStandard.Library (>= 2.0)
+    NUnit3TestAdapter (4.0)
+    SourceLink.Create.CommandLine (2.8.3)
     Thoth.Elmish.Toast (2.1)
       Fable.Core (>= 3.0)
       Fable.Elmish (>= 3.0)
@@ -101,11 +114,26 @@ NUGET
     Thoth.Json (6.0)
       Fable.Core (>= 3.1.6)
       FSharp.Core (>= 4.7.2)
+    Unquote (6.1)
+      FSharp.Core (>= 4.7.2)
 GITHUB
+  remote: elmish/elmish
+    FULLPROJECT (8354fe939afe8a5de633586915c7da31b29e162a)
+      Fable.Core
+      FsCheck
+      FsCheck.NUnit
+      FSharp.Core
+      Microsoft.NET.Test.Sdk
+      nunit
+      NUnit3TestAdapter
+      SourceLink.Create.CommandLine
+      Unquote
   remote: fable-compiler/fable-promise
-    FULLPROJECT (f5ad55f26b037d1c19865a96f9295a1eb4bb06e3)
+    FULLPROJECT (703b555263cafc86f90ce82a1405864443a041cc)
   remote: alfonsogarciacaro/Feliz.Engine
     FULLPROJECT (f08a3bd19ea854ace8b308c4eb2290c0c001e916)
+  remote: alfonsogarciacaro/Feliz.Snabbdom
+    FULLPROJECT (7b28ccbceebcc9b66a8cb67aab89b7ae9576dbfb)
   remote: davedawkins/Feliz.Engine.Bulma
     FULLPROJECT (e960f99e842b362f6cc54524d857d12557da520b)
   remote: davedawkins/Sutil

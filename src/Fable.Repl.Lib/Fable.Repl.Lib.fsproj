@@ -48,10 +48,16 @@
     <Compile Include="Sutil/Program.fs" />
     <!-- <Compile Include="Sutil/Bulma.fs" /> -->
 
-    <!-- <Compile Include="../../paket-files/elmish/elmish/src/prelude.fs" />
-    <Compile Include="../../paket-files/elmish/elmish/src/cmd.fs" />
-    <Compile Include="../../paket-files/elmish/elmish/src/ring.fs" />
-    <Compile Include="../../paket-files/elmish/elmish/src/program.fs" /> -->
+    <Compile Include="Elmish/prelude.fs" />
+    <Compile Include="Elmish/cmd.fs" />
+    <Compile Include="Elmish/ring.fs" />
+    <Compile Include="Elmish/program.fs" />
+
+    <Compile Include="Feliz.Snabbdom/Snabbdom.fs" />
+    <Compile Include="Feliz.Snabbdom/Feliz.Snabbdom.fs" />
+
+    <Compile Include="Elmish.Snabbdom/Elmish.Snabbdom.fs" />
+    <!-- <Compile Include="Elmish.Snabbdom/Elmish.Snabbdom.HMR.fs" /> -->
 
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />

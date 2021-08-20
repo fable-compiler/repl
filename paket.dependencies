@@ -31,10 +31,10 @@ nuget Fable.Browser.MediaQueryList
 #github elmish/react:master
 #github fulma/Fulma:1e763d852112307370675a0cf692415a53d1993f#
 
-#github elmish/elmish:69569e39876213e91c283c1c76bbe0fb88fba28
-
+github elmish/elmish:v3.x
 github fable-compiler/fable-promise:master
 github alfonsogarciacaro/Feliz.Engine:main
+github alfonsogarciacaro/Feliz.Snabbdom:main
 github davedawkins/Feliz.Engine.Bulma:main
 github davedawkins/Sutil:main
 
