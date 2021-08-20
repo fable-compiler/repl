@@ -170,6 +170,54 @@ export function Sutil_Cmd_OfAsync_start(x) {
     });
 }
 
+export function Sutil_Cmd_OfAsync_either(task, arg, ofSuccess, ofError) {
+    return Sutil_Cmd_OfAsyncWith_either((x) => {
+        Sutil_Cmd_OfAsync_start(x);
+    }, task, arg, ofSuccess, ofError);
+}
+
+export function Sutil_Cmd_OfAsync_perform(task, arg, ofSuccess) {
+    return Sutil_Cmd_OfAsyncWith_perform((x) => {
+        Sutil_Cmd_OfAsync_start(x);
+    }, task, arg, ofSuccess);
+}
+
+export function Sutil_Cmd_OfAsync_attempt(task, arg, ofError) {
+    return Sutil_Cmd_OfAsyncWith_attempt((x) => {
+        Sutil_Cmd_OfAsync_start(x);
+    }, task, arg, ofError);
+}
+
+export function Sutil_Cmd_OfAsync_result(task) {
+    return Sutil_Cmd_OfAsyncWith_result((x) => {
+        Sutil_Cmd_OfAsync_start(x);
+    }, task);
+}
+
+export function Sutil_Cmd_OfAsyncImmediate_either(task, arg, ofSuccess, ofError) {
+    return Sutil_Cmd_OfAsyncWith_either((arg00) => {
+        startImmediate(arg00);
+    }, task, arg, ofSuccess, ofError);
+}
+
+export function Sutil_Cmd_OfAsyncImmediate_perform(task, arg, ofSuccess) {
+    return Sutil_Cmd_OfAsyncWith_perform((arg00) => {
+        startImmediate(arg00);
+    }, task, arg, ofSuccess);
+}
+
+export function Sutil_Cmd_OfAsyncImmediate_attempt(task, arg, ofError) {
+    return Sutil_Cmd_OfAsyncWith_attempt((arg00) => {
+        startImmediate(arg00);
+    }, task, arg, ofError);
+}
+
+export function Sutil_Cmd_OfAsyncImmediate_result(task) {
+    return Sutil_Cmd_OfAsyncWith_result((arg00) => {
+        startImmediate(arg00);
+    }, task);
+}
+
 export function Sutil_Cmd_OfPromise_either(task, arg, ofSuccess, ofError) {
     return singleton((dispatch) => {
         void task(arg).then((arg_1) => dispatch(ofSuccess(arg_1))).catch((arg_3) => dispatch(ofError(arg_3)));
@@ -194,5 +242,9 @@ export function Sutil_Cmd_OfPromise_result(task) {
     return singleton((dispatch) => {
         void task.then(dispatch);
     });
+}
+
+export function Sutil_Cmd_ofPromise(task, arg, ofSuccess, ofError) {
+    return Sutil_Cmd_OfPromise_either(task, arg, ofSuccess, ofError);
 }
 
