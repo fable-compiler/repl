@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.4.8
+
+* Update Fable
+
 ## 3.2.11
 
 * Enable Fable.Repl.Lib
