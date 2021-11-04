@@ -91,7 +91,7 @@ export class Dictionary {
         const matchValue = Dictionary__TryFind_2B595(this$, item[0]);
         if (matchValue != null) {
             if (equals(matchValue[1], item[1])) {
-                void Dictionary__Remove_2B595(this$, item[0]);
+                Dictionary__Remove_2B595(this$, item[0]);
             }
             return true;
         }

@@ -443,8 +443,8 @@ export function split(str, splitters, count, removeEmpty) {
             splitters[key - 1] = arguments[key];
         }
     }
-    splitters = splitters.map((x) => escape(x));
-    splitters = splitters.length > 0 ? splitters : [" "];
+    splitters = splitters.filter((x) => x).map((x) => escape(x));
+    splitters = splitters.length > 0 ? splitters : ["\\s"];
     let i = 0;
     const splits = [];
     const reg = new RegExp(splitters.join("|"), "g");
@@ -489,4 +489,15 @@ export function substring(str, startIndex, length) {
         throw new Error("Invalid startIndex and/or length");
     }
     return length != null ? str.substr(startIndex, length) : str.substr(startIndex);
+}
+export function fmt(strs, ...args) {
+    return ({ strs, args });
+}
+export function fmtWith(fmts) {
+    return (strs, ...args) => ({ strs, args, fmts });
+}
+export function getFormat(s) {
+    return s.fmts
+        ? s.strs.reduce((acc, newPart, index) => acc + `{${String(index - 1) + s.fmts[index - 1]}}` + newPart)
+        : s.strs.reduce((acc, newPart, index) => acc + `{${index - 1}}` + newPart);
 }

@@ -12,7 +12,7 @@
  *
  * Basically; invariant: date.getTime() always return UTC time.
  */
-import { create as createDate, dateOffsetToString, daysInMonth, offsetRegex, parseRaw } from "./Date.js";
+import { create as createDate, dateOffsetToString, daysInMonth, parseRaw } from "./Date.js";
 import { fromValue, ticksToUnixEpochMilliseconds, unixEpochMillisecondsToTicks } from "./Long.js";
 import { compareDates, padWithZeros } from "./Util.js";
 export default function DateTimeOffset(value, offset) {
@@ -75,14 +75,10 @@ export function maxValue() {
     return DateTimeOffset(253402300799999, 0);
 }
 export function parse(str) {
-    const date = parseRaw(str);
-    const offsetMatch = offsetRegex.exec(str);
+    const [date, offsetMatch] = parseRaw(str);
     const offset = offsetMatch == null
         ? date.getTimezoneOffset() * -60000
-        : (offsetMatch[0] === "Z"
-            ? 0
-            : parseInt(offsetMatch[1], 10) * 3600000
-                + parseInt(offsetMatch[2], 10) * 60000);
+        : (offsetMatch === "Z" ? 0 : offsetMatch * 60000);
     return DateTimeOffset(date.getTime(), offset);
 }
 export function tryParse(v, defValue) {

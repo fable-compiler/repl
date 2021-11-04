@@ -9,7 +9,6 @@
  */
 import { fromValue, ticksToUnixEpochMilliseconds, unixEpochMillisecondsToTicks } from "./Long.js";
 import { compareDates, dateOffset, padWithZeros } from "./Util.js";
-export const offsetRegex = /(?:Z|[+-](\d+):?([0-5]?\d)?)\s*$/;
 export function dateOffsetToString(offset) {
     const isMinus = offset < 0;
     offset = Math.abs(offset);
@@ -174,17 +173,18 @@ export function maxValue() {
     return DateTime(253402300799999, 0 /* Unspecified */);
 }
 export function parseRaw(input) {
-    if (input === null) {
-        throw new Error("Value cannot be null when parsing DateTime");
+    function fail() {
+        throw new Error(`The string is not a valid Date: ${input}`);
     }
-    if (input.trim() === "") {
-        throw new Error("An empty string is not recognized as a valid DateTime");
+    if (input === null || input.trim() === "") {
+        fail();
     }
     let date = new Date(input);
+    let offset = null;
     if (isNaN(date.getTime())) {
         // Try to check strings JS Date cannot parse (see #1045, #1422)
         // tslint:disable-next-line:max-line-length
-        const m = /^\s*(\d+[^\w\s:]\d+[^\w\s:]\d+)?\s*(\d+:\d+(?::\d+(?:\.\d+)?)?)?\s*([AaPp][Mm])?\s*([+-]\d+(?::\d+)?)?\s*$/.exec(input);
+        const m = /^\s*(\d+[^\w\s:]\d+[^\w\s:]\d+)?\s*(\d+:\d+(?::\d+(?:\.\d+)?)?)?\s*([AaPp][Mm])?\s*(Z|[+-]([01]?\d):?([0-5]?\d)?)?\s*$/.exec(input);
         if (m != null) {
             let baseDate;
             let timeInSeconds = 0;
@@ -206,12 +206,17 @@ export function parseRaw(input) {
                     const d = new Date();
                     baseDate = new Date(d.getUTCFullYear() + "/" + (d.getUTCMonth() + 1) + "/" + d.getUTCDate());
                 }
-                const offsetParts = m[4].substr(1).split(":");
-                let offsetInMinutes = parseInt(offsetParts[0], 10) * 60 + parseInt(offsetParts[1] || "0", 10);
-                if (m[4][0] === "+") {
-                    offsetInMinutes *= -1;
+                if (m[4] === "Z") {
+                    offset = "Z";
                 }
-                timeInSeconds += offsetInMinutes * 60;
+                else {
+                    let offsetInMinutes = parseInt(m[5], 10) * 60 + parseInt(m[6] || "0", 10);
+                    if (m[4][0] === "-") {
+                        offsetInMinutes *= -1;
+                    }
+                    offset = offsetInMinutes;
+                    timeInSeconds -= offsetInMinutes * 60;
+                }
             }
             else {
                 if (m[1] != null) {
@@ -227,18 +232,21 @@ export function parseRaw(input) {
             date = new Date(date.getTime() + (date.getTimezoneOffset() - baseDate.getTimezoneOffset()) * 60000);
         }
         else {
-            throw new Error("The string is not a valid Date.");
+            fail();
+        }
+        // Check again the date is valid after transformations, see #2229
+        if (isNaN(date.getTime())) {
+            fail();
         }
     }
-    return date;
+    return [date, offset];
 }
 export function parse(str, detectUTC = false) {
-    const date = parseRaw(str);
-    const offset = offsetRegex.exec(str);
+    const [date, offset] = parseRaw(str);
     // .NET always parses DateTime as Local if there's offset info (even "Z")
     // Newtonsoft.Json uses UTC if the offset is "Z"
     const kind = offset != null
-        ? (detectUTC && offset[0] === "Z" ? 1 /* UTC */ : 2 /* Local */)
+        ? (detectUTC && offset === "Z" ? 1 /* UTC */ : 2 /* Local */)
         : 0 /* Unspecified */;
     return DateTime(date.getTime(), kind);
 }

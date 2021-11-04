@@ -4,11 +4,16 @@ import { protectedCont } from "./AsyncBuilder.js";
 import { protectedBind } from "./AsyncBuilder.js";
 import { protectedReturn } from "./AsyncBuilder.js";
 import { Choice_makeChoice1Of2, Choice_makeChoice2Of2 } from "./Choice.js";
+import { TimeoutException } from "./SystemException.js";
 // Implemented just for type references
 export class Async {
 }
 function emptyContinuation(_x) {
     // NOP
+}
+// see AsyncBuilder.Delay
+function delay(generator) {
+    return protectedCont((ctx) => generator()(ctx));
 }
 // MakeAsync: body:(AsyncActivation<'T> -> AsyncReturn) -> Async<'T>
 export function makeAsync(body) {
@@ -47,7 +52,24 @@ export function throwIfCancellationRequested(token) {
         throw new Error("Operation is cancelled");
     }
 }
-export function startChild(computation) {
+function throwAfter(millisecondsDueTime) {
+    return protectedCont((ctx) => {
+        let tokenId;
+        const timeoutId = setTimeout(() => {
+            ctx.cancelToken.removeListener(tokenId);
+            ctx.onError(new TimeoutException());
+        }, millisecondsDueTime);
+        tokenId = ctx.cancelToken.addListener(() => {
+            clearTimeout(timeoutId);
+            ctx.onCancel(new OperationCanceledError());
+        });
+    });
+}
+export function startChild(computation, ms) {
+    if (ms) {
+        const computationWithTimeout = protectedBind(parallel2(computation, throwAfter(ms)), xs => protectedReturn(xs[0]));
+        return startChild(computationWithTimeout);
+    }
     const promise = startAsPromise(computation);
     // JS Promises are hot, computation has already started
     // but we delay returning the result
@@ -79,7 +101,20 @@ export function ignore(computation) {
     return protectedBind(computation, (_x) => protectedReturn(void 0));
 }
 export function parallel(computations) {
-    return awaitPromise(Promise.all(Array.from(computations, (w) => startAsPromise(w))));
+    return delay(() => awaitPromise(Promise.all(Array.from(computations, (w) => startAsPromise(w)))));
+}
+function parallel2(a, b) {
+    return delay(() => awaitPromise(Promise.all([startAsPromise(a), startAsPromise(b)])));
+}
+export function sequential(computations) {
+    function _sequential(computations) {
+        let pr = Promise.resolve([]);
+        for (const c of computations) {
+            pr = pr.then(results => startAsPromise(c).then(r => results.concat([r])));
+        }
+        return pr;
+    }
+    return delay(() => awaitPromise(_sequential(computations)));
 }
 export function sleep(millisecondsDueTime) {
     return protectedCont((ctx) => {
@@ -93,6 +128,9 @@ export function sleep(millisecondsDueTime) {
             ctx.onCancel(new OperationCanceledError());
         });
     });
+}
+export function runSynchronously() {
+    throw new Error("Asynchronous code cannot be run synchronously in JS");
 }
 export function start(computation, cancellationToken) {
     return startWithContinuations(computation, cancellationToken);

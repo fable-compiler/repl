@@ -1012,7 +1012,7 @@ export function BigNatModule_scaleSubInPlace(x, f, a, n) {
         }
         j = ((j + 1) | 0);
     }
-    void BigNatModule_normN(x);
+    BigNatModule_normN(x);
 }
 
 export function BigNatModule_scaleSub(x, f, a, n) {
@@ -1051,7 +1051,7 @@ export function BigNatModule_scaleAddInPlace(x, f, a, n) {
         }
         j = ((j + 1) | 0);
     }
-    void BigNatModule_normN(x);
+    BigNatModule_normN(x);
 }
 
 export function BigNatModule_scaleAdd(x, f, a, n) {

@@ -1,11 +1,20 @@
 import { Record, Union } from "./Types.js";
 import { combineHashCodes, equalArraysWith, stringHash } from "./Util.js";
+import Decimal from "./Decimal.js";
+import { fromInt as int64FromInt } from "./Long.js";
 export class CaseInfo {
     constructor(declaringType, tag, name, fields) {
         this.declaringType = declaringType;
         this.tag = tag;
         this.name = name;
         this.fields = fields;
+    }
+}
+export class MethodInfo {
+    constructor(name, parameters, returnType) {
+        this.name = name;
+        this.parameters = parameters;
+        this.returnType = returnType;
     }
 }
 export class TypeInfo {
@@ -26,6 +35,11 @@ export class TypeInfo {
     }
     Equals(other) {
         return equals(this, other);
+    }
+}
+export class GenericParameter extends TypeInfo {
+    constructor(name) {
+        super(name);
     }
 }
 export function getGenerics(t) {
@@ -83,6 +97,12 @@ export function array_type(generic) {
 export function enum_type(fullname, underlyingType, enumCases) {
     return new TypeInfo(fullname, [underlyingType], undefined, undefined, undefined, undefined, enumCases);
 }
+export function measure_type(fullname) {
+    return new TypeInfo(fullname);
+}
+export function generic_type(name) {
+    return new GenericParameter(name);
+}
 export const obj_type = new TypeInfo("System.Object");
 export const unit_type = new TypeInfo("Microsoft.FSharp.Core.Unit");
 export const char_type = new TypeInfo("System.Char");
@@ -101,12 +121,12 @@ export function name(info) {
     if (Array.isArray(info)) {
         return info[0];
     }
-    else if (info instanceof CaseInfo) {
-        return info.name;
-    }
-    else {
+    else if (info instanceof TypeInfo) {
         const i = info.fullname.lastIndexOf(".");
         return i === -1 ? info.fullname : info.fullname.substr(i + 1);
+    }
+    else {
+        return info.name;
     }
 }
 export function fullName(t) {
@@ -132,12 +152,40 @@ export function getElementType(t) {
 export function isGenericType(t) {
     return t.generics != null && t.generics.length > 0;
 }
+export function isGenericParameter(t) {
+    return t instanceof GenericParameter;
+}
 export function isEnum(t) {
     return t.enumCases != null && t.enumCases.length > 0;
 }
 export function isSubclassOf(t1, t2) {
-    var _a, _b;
-    return (_b = (_a = t1.parent) === null || _a === void 0 ? void 0 : _a.Equals(t2)) !== null && _b !== void 0 ? _b : false;
+    return t1.parent != null && (t1.parent.Equals(t2) || isSubclassOf(t1.parent, t2));
+}
+function isErasedToNumber(t) {
+    return isEnum(t) || [
+        int8_type.fullname,
+        uint8_type.fullname,
+        int16_type.fullname,
+        uint16_type.fullname,
+        int32_type.fullname,
+        uint32_type.fullname,
+        float32_type.fullname,
+        float64_type.fullname,
+    ].includes(t.fullname);
+}
+export function isInstanceOfType(t, o) {
+    switch (typeof o) {
+        case "boolean":
+            return t.fullname === bool_type.fullname;
+        case "string":
+            return t.fullname === string_type.fullname;
+        case "function":
+            return isFunction(t);
+        case "number":
+            return isErasedToNumber(t);
+        default:
+            return t.construct != null && o instanceof t.construct;
+    }
 }
 /**
  * This doesn't replace types for fields (records) or cases (unions)
@@ -324,8 +372,28 @@ export function createInstance(t, consArgs) {
     if (typeof t.construct === "function") {
         return new t.construct(...(consArgs !== null && consArgs !== void 0 ? consArgs : []));
     }
+    else if (isErasedToNumber(t)) {
+        return 0;
+    }
     else {
-        throw new Error(`Cannot access constructor of ${t.fullname}`);
+        switch (t.fullname) {
+            case obj_type.fullname:
+                return {};
+            case bool_type.fullname:
+                return false;
+            case "System.Int64":
+            case "System.UInt64":
+                // typeof<int64> and typeof<uint64> get transformed to class_type("System.Int64")
+                // and class_type("System.UInt64") respectively. Test for the name of the primitive type.
+                return int64FromInt(0);
+            case decimal_type.fullname:
+                return new Decimal(0);
+            case char_type.fullname:
+                // Even though char is a value type, it's erased to string, and Unchecked.defaultof<char> is null
+                return null;
+            default:
+                throw new Error(`Cannot access constructor of ${t.fullname}`);
+        }
     }
 }
 export function getValue(propertyInfo, v) {

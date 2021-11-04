@@ -5,7 +5,8 @@ import { FSharpList, fold as fold_2, cons, singleton as singleton_1, empty as em
 import { fold as fold_1, fill } from "./Array.js";
 import { structuralHash, toIterator, getEnumerator, isArrayLike } from "./Util.js";
 import { join } from "./String.js";
-import { fold as fold_3, reduce, iterate as iterate_1, map as map_1 } from "./Seq.js";
+import { exists as exists_1, cache, forAll as forAll_1, fold as fold_3, reduce, iterate as iterate_1, map as map_1 } from "./Seq.js";
+import { HashSet__get_Comparer, HashSet_$ctor_Z6150332D, HashSet } from "./MutableSet.js";
 
 export class SetTreeLeaf$1 {
     constructor(k) {
@@ -1864,47 +1865,56 @@ export function unionWith(s1, s2) {
     return fold_3((acc, x) => acc.add(x), s1, s2);
 }
 
-export function intersectWith(s1, s2, comparer) {
-    const s2_1 = ofSeq(s2, comparer);
-    const enumerator = getEnumerator(s1.keys());
-    try {
-        while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
-            const x = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
-            if (!FSharpSet__Contains(s2_1, x)) {
-                void s1.delete(x);
-            }
+export function newMutableSetWith(s1, s2) {
+    if (s1 instanceof HashSet) {
+        return HashSet_$ctor_Z6150332D(s2, HashSet__get_Comparer(s1));
+    }
+    else {
+        return new Set(s2);
+    }
+}
+
+export function intersectWith(s1, s2) {
+    const s2_1 = newMutableSetWith(s1, s2);
+    iterate_1((x) => {
+        if (!s2_1.has(x)) {
+            s1.delete(x);
         }
-    }
-    finally {
-        enumerator.Dispose();
-    }
+    }, s1.values());
 }
 
 export function exceptWith(s1, s2) {
-    const enumerator = getEnumerator(s2);
-    try {
-        while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
-            void s1.delete(enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]());
-        }
+    iterate_1((x) => {
+        s1.delete(x);
+    }, s2);
+}
+
+export function isSubsetOf(s1, s2) {
+    const s2_1 = newMutableSetWith(s1, s2);
+    return forAll_1((arg00) => s2_1.has(arg00), s1.values());
+}
+
+export function isSupersetOf(s1, s2) {
+    return forAll_1((arg00) => s1.has(arg00), s2);
+}
+
+export function isProperSubsetOf(s1, s2) {
+    const s2_1 = newMutableSetWith(s1, s2);
+    if (s2_1.size > s1.size) {
+        return forAll_1((arg00) => s2_1.has(arg00), s1.values());
     }
-    finally {
-        enumerator.Dispose();
+    else {
+        return false;
     }
 }
 
-export function isSubsetOf(s1, s2, comparer) {
-    return isSubset(ofSeq(s1.values(), comparer), ofSeq(s2, comparer));
-}
-
-export function isSupersetOf(s1, s2, comparer) {
-    return isSuperset(ofSeq(s1.values(), comparer), ofSeq(s2, comparer));
-}
-
-export function isProperSubsetOf(s1, s2, comparer) {
-    return isProperSubset(ofSeq(s1.values(), comparer), ofSeq(s2, comparer));
-}
-
-export function isProperSupersetOf(s1, s2, comparer) {
-    return isProperSuperset(ofSeq(s1.values(), comparer), ofSeq(s2, comparer));
+export function isProperSupersetOf(s1, s2) {
+    const s2_1 = cache(s2);
+    if (exists_1((arg) => (!s1.has(arg)), s2_1)) {
+        return forAll_1((arg00_1) => s1.has(arg00_1), s2_1);
+    }
+    else {
+        return false;
+    }
 }
 

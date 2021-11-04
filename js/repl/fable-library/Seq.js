@@ -1,4 +1,4 @@
-import { equals, isArrayLike, isDisposable, toIterator, getEnumerator } from "./Util.js";
+import { clear, equals, isArrayLike, isDisposable, toIterator, getEnumerator } from "./Util.js";
 import { toString } from "./Types.js";
 import { class_type } from "./Reflection.js";
 import { some, value as value_1 } from "./Option.js";
@@ -848,14 +848,14 @@ export function iterate2(action, xs, ys) {
 }
 
 export function iterateIndexed(action, xs) {
-    void fold((i, x) => {
+    fold((i, x) => {
         action(i, x);
         return (i + 1) | 0;
     }, 0, xs);
 }
 
 export function iterateIndexed2(action, xs, ys) {
-    void fold2((i, x, y) => {
+    fold2((i, x, y) => {
         action(i, x, y);
         return (i + 1) | 0;
     }, 0, xs, ys);
@@ -989,21 +989,97 @@ export function readOnly(xs) {
     return map((x) => x, xs);
 }
 
-export function cache(xs) {
-    let cached = false;
-    const xsCache = [];
-    return delay(() => {
-        if (!cached) {
-            cached = true;
-            return map((x) => {
-                void (xsCache.push(x));
-                return x;
-            }, xs);
+export class CachedSeq$1 {
+    constructor(cleanup, res) {
+        this.cleanup = cleanup;
+        this.res = res;
+    }
+    Dispose() {
+        const _ = this;
+        _.cleanup();
+    }
+    GetEnumerator() {
+        const _ = this;
+        return getEnumerator(_.res);
+    }
+    [Symbol.iterator]() {
+        return toIterator(this.GetEnumerator());
+    }
+    ["System.Collections.IEnumerable.GetEnumerator"]() {
+        const _ = this;
+        return getEnumerator(_.res);
+    }
+}
+
+export function CachedSeq$1$reflection(gen0) {
+    return class_type("SeqModule.CachedSeq`1", [gen0], CachedSeq$1);
+}
+
+export function CachedSeq$1_$ctor_Z7A8347D4(cleanup, res) {
+    return new CachedSeq$1(cleanup, res);
+}
+
+export function CachedSeq$1__Clear(_) {
+    _.cleanup();
+}
+
+export function cache(source) {
+    checkNonNull("source", source);
+    const prefix = [];
+    let enumeratorR = void 0;
+    return CachedSeq$1_$ctor_Z7A8347D4(() => {
+        clear(prefix);
+        let pattern_matching_result, e;
+        if (enumeratorR != null) {
+            if (value_1(enumeratorR) != null) {
+                pattern_matching_result = 0;
+                e = value_1(enumeratorR);
+            }
+            else {
+                pattern_matching_result = 1;
+            }
         }
         else {
-            return xsCache;
+            pattern_matching_result = 1;
         }
-    });
+        switch (pattern_matching_result) {
+            case 0: {
+                e.Dispose();
+                break;
+            }
+        }
+        enumeratorR = (void 0);
+    }, unfold((i_1) => {
+        if (i_1 < prefix.length) {
+            return [prefix[i_1], i_1 + 1];
+        }
+        else {
+            if (i_1 >= prefix.length) {
+                let optEnumerator_2;
+                if (enumeratorR != null) {
+                    optEnumerator_2 = value_1(enumeratorR);
+                }
+                else {
+                    const optEnumerator = getEnumerator(source);
+                    enumeratorR = some(optEnumerator);
+                    optEnumerator_2 = optEnumerator;
+                }
+                if (optEnumerator_2 == null) {
+                }
+                else {
+                    const enumerator = optEnumerator_2;
+                    if (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
+                        void (prefix.push(enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]()));
+                    }
+                    else {
+                        enumerator.Dispose();
+                        enumeratorR = some(void 0);
+                    }
+                }
+            }
+            return (i_1 < prefix.length) ? [prefix[i_1], i_1 + 1] : (void 0);
+        }
+    }, 0));
 }
 
 export function allPairs(xs, ys) {

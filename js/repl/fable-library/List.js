@@ -490,14 +490,14 @@ export function iterate2(action, xs, ys) {
 }
 
 export function iterateIndexed(action, xs) {
-    void fold((i, x) => {
+    fold((i, x) => {
         action(i, x);
         return (i + 1) | 0;
     }, 0, xs);
 }
 
 export function iterateIndexed2(action, xs, ys) {
-    void fold2((i, x, y) => {
+    fold2((i, x, y) => {
         action(i, x, y);
         return (i + 1) | 0;
     }, 0, xs, ys);

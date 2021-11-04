@@ -21,16 +21,16 @@ export class Uri {
         switch (kind) {
             case 1 /* Absolute */:
                 return Uri.isAbsoluteUri(uri)
-                    ? ok(new Uri({ value: new URL(uri), kind }))
+                    ? ok(new Uri({ original: uri, value: new URL(uri), kind }))
                     : error("Invalid URI: The format of the URI could not be determined.");
             case 2 /* Relative */:
                 return Uri.isAbsoluteUri(uri)
                     ? error("URI is not a relative path.")
-                    : ok(new Uri({ value: uri, kind }));
+                    : ok(new Uri({ original: uri, value: uri, kind }));
             case 0 /* RelativeOrAbsolute */:
                 return Uri.isAbsoluteUri(uri)
-                    ? ok(new Uri({ value: new URL(uri), kind: 1 /* Absolute */ }))
-                    : ok(new Uri({ value: uri, kind: 2 /* Relative */ }));
+                    ? ok(new Uri({ original: uri, value: new URL(uri), kind: 1 /* Absolute */ }))
+                    : ok(new Uri({ original: uri, value: uri, kind: 2 /* Relative */ }));
             default:
                 const never = kind;
                 return never;
@@ -41,11 +41,13 @@ export class Uri {
             ? error("Base URI should have Absolute kind")
             : typeof relativeUri === "string"
                 ? ok(new Uri({
+                    original: new URL(relativeUri, baseUri.uri.value).toString(),
                     value: new URL(relativeUri, baseUri.uri.value),
                     kind: 1 /* Absolute */,
                 }))
                 : relativeUri.uri.kind === 2 /* Relative */
                     ? ok(new Uri({
+                        original: new URL(relativeUri.uri.value, baseUri.uri.value).toString(),
                         value: new URL(relativeUri.uri.value, baseUri.uri.value),
                         kind: 1 /* Absolute */,
                     }))
@@ -132,6 +134,9 @@ export class Uri {
     }
     get fragment() {
         return this.asUrl().hash;
+    }
+    get originalString() {
+        return this.uri.original;
     }
 }
 export default Uri;

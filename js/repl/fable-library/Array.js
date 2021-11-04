@@ -1,5 +1,5 @@
 import { value as value_2, defaultArg, some } from "./Option.js";
-import { min as min_1, compare, getEnumerator, comparePrimitives, max as max_1 } from "./Util.js";
+import { min as min_1, getEnumerator, comparePrimitives, max as max_1 } from "./Util.js";
 
 export function Helpers_allocateArrayFromCons(cons, len) {
     if ((typeof cons) === "function") {
@@ -363,7 +363,7 @@ export function takeWhile(predicate, array, cons) {
 }
 
 export function addInPlace(x, array) {
-    void (array.push(x));
+    array.push(x);
 }
 
 export function addRangeInPlace(range, array) {
@@ -385,7 +385,7 @@ export function insertRangeInPlace(index, range, array) {
     try {
         while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
             const x = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
-            void ((index_1 = (i | 0), array.splice(index_1, 0, x)));
+            (index_1 = (i | 0), array.splice(index_1, 0, x));
             i = ((i + 1) | 0);
         }
     }
@@ -397,7 +397,7 @@ export function insertRangeInPlace(index, range, array) {
 export function removeInPlace(item_1, array) {
     const i = array.indexOf(item_1, 0);
     if (i > -1) {
-        void (array.splice(i, 1));
+        array.splice(i, 1);
         return true;
     }
     else {
@@ -409,7 +409,7 @@ export function removeAllInPlace(predicate, array) {
     const countRemoveAll = (count) => {
         const i = array.findIndex(predicate);
         if (i > -1) {
-            void (array.splice(i, 1));
+            array.splice(i, 1);
             return (countRemoveAll(count) + 1) | 0;
         }
         else {
@@ -658,7 +658,7 @@ export function choose(chooser, array, cons) {
         const matchValue = chooser(array[i]);
         if (matchValue != null) {
             const y = value_2(matchValue);
-            void (res.push(y));
+            res.push(y);
         }
     }
     if ((typeof cons) === "function") {
@@ -727,7 +727,7 @@ export function permute(f, array) {
         res[j] = x;
         checkFlags[j] = 1;
     }, array);
-    if (!(checkFlags.every(((y) => (1 === y))))) {
+    if (!(checkFlags.every((y) => (1 === y)))) {
         throw (new Error("Not a valid permutation"));
     }
     return res;
@@ -743,34 +743,34 @@ export function setSlice(target, lower, upper, source) {
 }
 
 export function sortInPlaceBy(projection, xs, comparer) {
-    xs.sort(((x, y) => comparer.Compare(projection(x), projection(y))));
+    xs.sort((x, y) => comparer.Compare(projection(x), projection(y)));
 }
 
 export function sortInPlace(xs, comparer) {
-    xs.sort(((x, y) => comparer.Compare(x, y)));
+    xs.sort((x, y) => comparer.Compare(x, y));
 }
 
 export function sort(xs, comparer) {
     const xs_1 = xs.slice();
-    xs_1.sort(((x, y) => comparer.Compare(x, y)));
+    xs_1.sort((x, y) => comparer.Compare(x, y));
     return xs_1;
 }
 
 export function sortBy(projection, xs, comparer) {
     const xs_1 = xs.slice();
-    xs_1.sort(((x, y) => comparer.Compare(projection(x), projection(y))));
+    xs_1.sort((x, y) => comparer.Compare(projection(x), projection(y)));
     return xs_1;
 }
 
 export function sortDescending(xs, comparer) {
     const xs_1 = xs.slice();
-    xs_1.sort(((x, y) => (comparer.Compare(x, y) * -1)));
+    xs_1.sort((x, y) => (comparer.Compare(x, y) * -1));
     return xs_1;
 }
 
 export function sortByDescending(projection, xs, comparer) {
     const xs_1 = xs.slice();
-    xs_1.sort(((x, y) => (comparer.Compare(projection(x), projection(y)) * -1)));
+    xs_1.sort((x, y) => (comparer.Compare(projection(x), projection(y)) * -1));
     return xs_1;
 }
 
@@ -784,7 +784,7 @@ export function sortWith(comparer, xs) {
 export function allPairs(xs, ys) {
     const len1 = xs.length | 0;
     const len2 = ys.length | 0;
-    const res = new Array((len1 * len2));
+    const res = new Array(len1 * len2);
     for (let i = 0; i <= (xs.length - 1); i++) {
         for (let j = 0; j <= (ys.length - 1); j++) {
             res[(i * len2) + j] = [xs[i], ys[j]];
@@ -803,7 +803,7 @@ export function unfold(generator, state) {
             if (matchValue != null) {
                 const x = matchValue[0];
                 const s = matchValue[1];
-                void (res.push(x));
+                res.push(x);
                 state_1_mut = s;
                 continue loop;
             }
@@ -873,7 +873,7 @@ export function chunkBySize(chunkSize, array) {
             let slice;
             const start_1 = (x * chunkSize) | 0;
             slice = (array.slice(start_1, (start_1 + chunkSize)));
-            void (result.push(slice));
+            result.push(slice);
         }
         return result;
     }
@@ -923,8 +923,37 @@ export function compareWith(comparer, array1, array2) {
     }
 }
 
-export function equalsWith(comparer, array1, array2) {
-    return compareWith((e1, e2) => compare(e1, e2), array1, array2) === 0;
+export function equalsWith(equals, array1, array2) {
+    if (array1 == null) {
+        if (array2 == null) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    else if (array2 == null) {
+        return false;
+    }
+    else {
+        let i = 0;
+        let result = true;
+        const length1 = array1.length | 0;
+        const length2 = array2.length | 0;
+        if (length1 > length2) {
+            return false;
+        }
+        else if (length1 < length2) {
+            return false;
+        }
+        else {
+            while ((i < length1) ? result : false) {
+                result = equals(array1[i], array2[i]);
+                i = ((i + 1) | 0);
+            }
+            return result;
+        }
+    }
 }
 
 export function exactlyOne(array) {
@@ -1181,7 +1210,7 @@ export function splitInto(chunks, array) {
             let slice;
             const start_1 = ((i * minChunkSize) + min_1((x_1, y_1) => comparePrimitives(x_1, y_1), chunksWithExtraItem, i)) | 0;
             slice = (array.slice(start_1, (start_1 + chunkSize)));
-            void (result.push(slice));
+            result.push(slice);
         }
         return result;
     }

@@ -71,7 +71,7 @@ export function ExtraTopLevelOperators_LazyPattern(input) {
 
 export function PrintfModule_PrintFormatToStringBuilderThen(continuation, builder, format) {
     return format.cont((s) => {
-        void StringBuilder__Append_Z721C83C5(builder, s);
+        StringBuilder__Append_Z721C83C5(builder, s);
         return continuation();
     });
 }

@@ -15,7 +15,7 @@ export class HashSet {
         const enumerator = getEnumerator(items);
         try {
             while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
-                void HashSet__Add_2B595(this$.contents, enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]());
+                HashSet__Add_2B595(this$.contents, enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]());
             }
         }
         finally {
@@ -42,7 +42,7 @@ export class HashSet {
     }
     ["System.Collections.Generic.ICollection`1.Add2B595"](item) {
         const this$ = this;
-        void HashSet__Add_2B595(this$, item);
+        HashSet__Add_2B595(this$, item);
     }
     ["System.Collections.Generic.ICollection`1.Clear"]() {
         const this$ = this;
@@ -75,7 +75,7 @@ export class HashSet {
     }
     add(k) {
         const this$ = this;
-        void HashSet__Add_2B595(this$, k);
+        HashSet__Add_2B595(this$, k);
         return this$;
     }
     clear() {
