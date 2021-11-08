@@ -141,7 +141,7 @@ export function DateTime(value, kind) {
 }
 export function fromTicks(ticks, kind) {
     ticks = fromValue(ticks);
-    kind = kind != null ? kind : 0 /* Unspecified */;
+    kind = kind != null ? kind : 2 /* Local */; // better default than Unspecified
     let date = DateTime(ticksToUnixEpochMilliseconds(ticks), kind);
     // Ticks are local to offset (in this case, either UTC or Local/Unknown).
     // If kind is anything but UTC, that means that the tick number was not
@@ -178,6 +178,10 @@ export function parseRaw(input) {
     }
     if (input === null || input.trim() === "") {
         fail();
+    }
+    // ISO dates without TZ are parsed as UTC. Adding time without TZ keeps them local.
+    if (input.length === 10 && input[4] === "-" && input[7] === "-") {
+        input += "T00:00:00";
     }
     let date = new Date(input);
     let offset = null;

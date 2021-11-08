@@ -424,44 +424,47 @@ export function getCharAtIndex(input, index) {
     }
     return input[index];
 }
-export function split(str, splitters, count, removeEmpty) {
+export function split(str, splitters, count, options) {
     count = typeof count === "number" ? count : undefined;
-    removeEmpty = typeof removeEmpty === "number" ? removeEmpty : undefined;
+    options = typeof options === "number" ? options : 0;
     if (count && count < 0) {
         throw new Error("Count cannot be less than zero");
     }
     if (count === 0) {
         return [];
     }
-    if (!Array.isArray(splitters)) {
-        if (removeEmpty === 0) {
-            return str.split(splitters, count);
-        }
-        const len = arguments.length;
-        splitters = Array(len - 1);
-        for (let key = 1; key < len; key++) {
-            splitters[key - 1] = arguments[key];
-        }
-    }
-    splitters = splitters.filter((x) => x).map((x) => escape(x));
+    const removeEmpty = (options & 1) === 1;
+    const trim = (options & 2) === 2;
+    splitters = splitters || [];
+    splitters = splitters.filter(x => x).map(escape);
     splitters = splitters.length > 0 ? splitters : ["\\s"];
-    let i = 0;
     const splits = [];
     const reg = new RegExp(splitters.join("|"), "g");
-    while (count == null || count > 1) {
-        const m = reg.exec(str);
-        if (m === null) {
-            break;
+    let findSplits = true;
+    let i = 0;
+    do {
+        const match = reg.exec(str);
+        if (match === null) {
+            const candidate = trim ? str.substring(i).trim() : str.substring(i);
+            if (!removeEmpty || candidate.length > 0) {
+                splits.push(candidate);
+            }
+            findSplits = false;
         }
-        if (!removeEmpty || (m.index - i) > 0) {
-            count = count != null ? count - 1 : count;
-            splits.push(str.substring(i, m.index));
+        else {
+            const candidate = trim ? str.substring(i, match.index).trim() : str.substring(i, match.index);
+            if (!removeEmpty || candidate.length > 0) {
+                if (count != null && splits.length + 1 === count) {
+                    splits.push(trim ? str.substring(i).trim() : str.substring(i));
+                    findSplits = false;
+                }
+                else {
+                    splits.push(candidate);
+                }
+            }
+            i = reg.lastIndex;
         }
-        i = reg.lastIndex;
-    }
-    if (!removeEmpty || (str.length - i) > 0) {
-        splits.push(str.substring(i));
-    }
+    } while (findSplits);
     return splits;
 }
 export function trim(str, ...chars) {

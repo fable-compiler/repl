@@ -360,10 +360,7 @@ export function ofArray(arr) {
 }
 
 export function toArray(xs) {
-    if (isArrayLike(xs)) {
-        return xs;
-    }
-    else if (xs instanceof FSharpList) {
+    if (xs instanceof FSharpList) {
         return toArray_1(xs);
     }
     else {
