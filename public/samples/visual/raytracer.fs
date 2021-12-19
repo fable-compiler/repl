@@ -3,8 +3,6 @@
 
 module RayTracer
 
-open System
-
 [<Struct>]
 type Vector =
     { X: float; Y: float; Z: float }
@@ -63,7 +61,7 @@ type Intersection =
 
 and SceneObject =
     abstract Surface: Surface
-    abstract Intersect: Ray -> Intersection
+    abstract Intersect: Ray -> float
     abstract Normal: Vector -> Vector
 
 type Light =
@@ -71,25 +69,21 @@ type Light =
       Color : Color }
 
 type Scene =
-    { Things : SceneObject list;
-      Lights : Light list;
+    { Things : SceneObject[];
+      Lights : Light[];
       Camera : Camera }
-
 
 module RayTracer =
 
     let maxDepth = 5
 
     let NearestIntersection ray scene =
-        match scene.Things with
-        | [] -> None
-        | h::t ->
-            let mutable acc = h.Intersect ray
-            for x in t do
-                let curr = x.Intersect ray
-                if curr.Dist < acc.Dist then
-                    acc <- curr
-            Some acc
+        let mutable acc = None
+        for x in scene.Things do
+            let dist = x.Intersect ray
+            if acc.IsNone || dist < acc.Value.Dist then
+                acc <- Some { Thing = x; Ray = ray; Dist = dist }
+        acc
 
     let TestRay ray scene =
         match NearestIntersection ray scene with
@@ -122,35 +116,33 @@ module RayTracer =
         Color.Scale (thing.Surface.Reflect (pos), TraceRay { Start = pos; Dir = rd } scene (depth + 1))
 
     and GetNaturalColor thing pos normal rd scene =
-        let addLight (thing: SceneObject) pos normal rd scene color light =
-            let ldis = light.Pos - pos
-            let livec = Vector.Norm (ldis)
-            let neatIsect = TestRay { Start = pos; Dir = livec } scene
-            let isInShadow = match neatIsect with
-                             | None -> false
-                             | Some d -> not (d > Vector.Mag (ldis))
-            if isInShadow then color
-            else
-                 let illum = Vector.Dot (livec, normal)
-                 let lcolor = if illum > 0.0
-                              then Color.Scale (illum, light.Color)
-                              else Color.DefaultColor
-                 let specular = Vector.Dot (livec, Vector.Norm (rd))
-                 let scolor =
-                    if specular > 0.0
-                    then Color.Scale (Math.Pow (specular, thing.Surface.Roughness), light.Color)
-                    else Color.DefaultColor
-                 color + thing.Surface.Diffuse (pos) * lcolor +
-                        thing.Surface.Specular (pos) * scolor
-        // let addColor = addLight thing pos normal rd scene
-        // scene.Lights |> List.fold addColor Color.DefaultColor
-        match scene.Lights with
-        | [] -> Color.DefaultColor
-        | lights ->
-            let mutable color = Color.DefaultColor
-            for light in lights do
-                color <- addLight thing pos normal rd scene color light
-            color
+        let mutable color = Color.DefaultColor
+        for light in scene.Lights do
+            color <- AddLight thing pos normal rd scene color light
+        color
+
+    and AddLight (thing: SceneObject) pos normal rd scene color light =
+        let ldis = light.Pos - pos
+        let livec = Vector.Norm (ldis)
+        let neatIsect = TestRay { Start = pos; Dir = livec } scene
+        let isInShadow =
+            match neatIsect with
+            | None -> false
+            | Some d -> not (d > Vector.Mag (ldis))
+        if isInShadow then color
+        else
+            let illum = Vector.Dot (livec, normal)
+            let lcolor =
+                if illum > 0.0
+                then Color.Scale (illum, light.Color)
+                else Color.DefaultColor
+            let specular = Vector.Dot (livec, Vector.Norm (rd))
+            let scolor =
+                if specular > 0.0
+                then Color.Scale (specular ** thing.Surface.Roughness, light.Color)
+                else Color.DefaultColor
+            color + thing.Surface.Diffuse (pos) * lcolor +
+                    thing.Surface.Specular (pos) * scolor
 
     let GetPoint x y width height (camera: Camera) =
         let RecenterX x =  (float x - (float width / 2.0))  / (2.0 * float width)
@@ -158,7 +150,7 @@ module RayTracer =
         Vector.Norm (camera.Forward + RecenterX (x) * camera.Right + RecenterY (y) * camera.Up)
 
     let Render scene (data: byte[]) (x, y, width, height) =
-        let clamp v = Math.Floor (255.0 * Math.Min(v, 1.0)) |> byte
+        let clamp v = min (max (v * 255.0) 0.0) 255.0 |> byte
         for y = y to height-1 do
             let stride = y * width
             for x = x to width-1 do
@@ -173,8 +165,8 @@ module RayTracer =
 
 module SceneObjects =
 
-    let Sphere (center, radius, surface) =
-        { new SceneObject with
+    type Sphere (center, radius, surface) =
+        interface SceneObject with
             member this.Surface = surface
             member this.Normal pos = Vector.Norm (pos - center)
             member this.Intersect ray =
@@ -187,11 +179,10 @@ module SceneObjects =
                         if disc < 0.0
                         then infinity
                         else v - (sqrt (disc))
-                { Thing = this; Ray = ray; Dist = dist }
-        }
+                dist
 
-    let Plane (normal, offset, surface) =
-        { new SceneObject with
+    type Plane (normal, offset, surface) =
+        interface SceneObject with
             member this.Surface = surface
             member this.Normal pos = normal
             member this.Intersect ray =
@@ -200,42 +191,47 @@ module SceneObjects =
                     if denom > 0.0
                     then infinity
                     else (Vector.Dot (normal, ray.Start) + offset) / (-denom)
-                { Thing = this; Ray = ray; Dist = dist }
-        }
+                dist
 
 module Surfaces =
 
-    let Shiny =
-        { new Surface with
+    type Shiny() =
+        interface Surface with
             member s.Diffuse pos = Color.White
             member s.Specular pos = Color.Grey
             member s.Reflect pos = 0.7
-            member s.Roughness = 250.0 }
+            member s.Roughness = 250.0
 
-    let Checkerboard =
-        { new Surface with
+    type Checkerboard() =
+        interface Surface with
             member s.Diffuse pos =
-                if (int (Math.Floor (pos.Z) + Math.Floor (pos.X))) % 2 <> 0
+                if (int (floor (pos.Z) + floor (pos.X))) % 2 <> 0
                 then Color.White
                 else Color.Black
             member s.Specular pos = Color.White
             member s.Reflect pos =
-                if (int (Math.Floor (pos.Z) + Math.Floor (pos.X))) % 2 <> 0
+                if (int (floor (pos.Z) + floor (pos.X))) % 2 <> 0
                 then 0.1
                 else 0.7
-            member s.Roughness = 150.0 }
+            member s.Roughness = 150.0
 
 module Scenes =
 
-    let TwoSpheresOnACheckerboard =
-        { Things = [ SceneObjects.Plane ({ X = 0.0; Y = 1.0; Z = 0.0 }, 0.0, Surfaces.Checkerboard);
-                     SceneObjects.Sphere ({ X = 0.0; Y = 1.0; Z = -0.25 }, 1.0, Surfaces.Shiny)
-                     SceneObjects.Sphere ({ X = -1.0; Y = 0.5; Z = 1.5 }, 0.5, Surfaces.Shiny) ];
-          Lights = [ { Pos = { X = -2.0; Y = 2.5; Z = 0.0 }; Color = { R = 0.49; G = 0.07; B = 0.07 } };
-                     { Pos = { X = 1.5; Y = 2.5; Z = 1.5 }; Color = { R = 0.07; G = 0.07; B = 0.49 } };
-                     { Pos = { X = 1.5; Y = 2.5; Z = -1.5 }; Color = { R = 0.07; G = 0.49; B = 0.071 } };
-                     { Pos = { X = 0.0; Y = 3.5; Z = 0.0 }; Color = { R = 0.21; G = 0.21; B = 0.35 } } ];
-          Camera = Camera ({ X = 3.0; Y = 2.0; Z = 4.0 }, { X = -1.0; Y = 0.5; Z = 0.0 }) }
+    let TwoSpheresOnACheckerboard = {
+        Things = [|
+            SceneObjects.Plane ({ X = 0.0; Y = 1.0; Z = 0.0 }, 0.0, Surfaces.Checkerboard())
+            SceneObjects.Sphere ({ X = 0.0; Y = 1.0; Z = -0.25 }, 1.0, Surfaces.Shiny())
+            SceneObjects.Sphere ({ X = -1.0; Y = 0.5; Z = 1.5 }, 0.5, Surfaces.Shiny())
+        |];
+        Lights = [|
+            { Pos = { X = -2.0; Y = 2.5; Z = 0.0 }; Color = { R = 0.49; G = 0.07; B = 0.07 } }
+            { Pos = { X = 1.5; Y = 2.5; Z = 1.5 }; Color = { R = 0.07; G = 0.07; B = 0.49 } }
+            { Pos = { X = 1.5; Y = 2.5; Z = -1.5 }; Color = { R = 0.07; G = 0.49; B = 0.071 } }
+            { Pos = { X = 0.0; Y = 3.5; Z = 0.0 }; Color = { R = 0.21; G = 0.21; B = 0.35 } }
+        |];
+        Camera =
+            Camera ({ X = 3.0; Y = 2.0; Z = 4.0 }, { X = -1.0; Y = 0.5; Z = 0.0 })
+    }
 
 open Fable.Core.JsInterop
 open Browser.Types
