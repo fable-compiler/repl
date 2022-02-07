@@ -10,23 +10,11 @@ open Feliz.Bulma
 type Model =
     | Initializing
     | Running of Main.Model
-    | InvalidPlatform
+    | InvalidPlatform of Option<Router.Page>
 
 type Msg =
+    | Initialize of Option<Router.Page>
     | MainMsg of Main.Msg
-
-let update msg (model : Model) =
-    match model with
-    | Initializing -> model, Cmd.none
-
-    | Running model ->
-        match msg with
-        | MainMsg subMsg ->
-            let (mainModel, mainCmd) = Main.update subMsg model
-            Running mainModel, Cmd.map MainMsg mainCmd
-
-    | InvalidPlatform ->
-        model, Cmd.none
 
 let urlUpdate (result: Option<Router.Page>) model =
     let (model, cmd) =
@@ -37,7 +25,7 @@ let urlUpdate (result: Option<Router.Page>) model =
 
         | Running model -> Running model, Cmd.ofMsg (MainMsg Main.UrlHashChange)
 
-        | InvalidPlatform -> InvalidPlatform, Cmd.none
+        | InvalidPlatform p -> InvalidPlatform p, Cmd.none
 
     match result with
     | None ->
@@ -57,9 +45,21 @@ let urlUpdate (result: Option<Router.Page>) model =
             model, Cmd.batch [ cmd
                                Cmd.ofMsg (MainMsg Main.Reset) ]
 
+let update msg (model : Model) =
+    match msg with
+    | Initialize p -> urlUpdate p Initializing
+
+    | MainMsg subMsg ->
+        match model with
+        | Initializing
+        | InvalidPlatform _ -> model, Cmd.none
+        | Running model ->
+            let (mainModel, mainCmd) = Main.update subMsg model
+            Running mainModel, Cmd.map MainMsg mainCmd
+
 let init (result: Option<Router.Page>) =
     if ReactDeviceDetect.exports.isMobile then
-        urlUpdate result InvalidPlatform
+        InvalidPlatform result |> urlUpdate result
     else
         urlUpdate result Initializing
 
@@ -71,7 +71,7 @@ let private view (model: Model) dispatch =
     | Running model ->
         Main.view model (MainMsg >> dispatch)
 
-    | InvalidPlatform ->
+    | InvalidPlatform p ->
         Html.div [
             Bulma.hero [
                 hero.isFullHeight
@@ -96,8 +96,18 @@ let private view (model: Model) dispatch =
 
                             Bulma.subtitle.h5 [
                                 text.hasTextCentered
-                                prop.text "is only available on desktop"
+                                prop.text "For best experience we recommend running the REPL on a desktop"
                             ]
+
+                            Bulma.level [
+                                Bulma.levelItem [
+                                    Bulma.button.a [
+                                        prop.onClick (fun _ -> Initialize p |> dispatch)
+                                        prop.text "Continue"
+                                    ]
+                                ]
+                            ]
+
                         ]
                     ]
                 ]

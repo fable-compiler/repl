@@ -35,9 +35,8 @@ let view (model : Model) =
             ]
 
             Html.tbody [
-                row "FCS checker" model.FCS_checker
-                row "FCS parsing" model.FCS_parsing
-                row "Fable transform" model.Fable_transform
+                row "FCS" model.FCS_parsing
+                row "Fable" model.Fable_transform
             ]
         ]
     ]

@@ -617,6 +617,9 @@ let workerCmd (worker : ObservableWorker<_>)=
             | CompilationFinished (jsCode, errors, stats) ->
                 Ok(jsCode, errors) |> EndCompile |> dispatch
                 UpdateStats stats |> dispatch
+            | CompilationsFinished (jsCode, errors, stats) ->
+                Ok(Array.last jsCode, errors) |> EndCompile |> dispatch
+                UpdateStats stats |> dispatch
             | CompilerCrashed msg -> Error msg |> EndCompile |> dispatch
             // Do nothing, these will be handled by .PostAndAwaitResponse
             | FoundTooltip _ -> ()
