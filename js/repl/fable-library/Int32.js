@@ -114,3 +114,14 @@ export function op_UnaryNegation_Int16(x) {
 export function op_UnaryNegation_Int32(x) {
     return x === -2147483648 ? x : -x;
 }
+export function divRem(x, y, out) {
+    const div = ~~(x / y);
+    const rem = x % y;
+    if (out != null) {
+        out.contents = rem;
+        return div;
+    }
+    else {
+        return [div, rem];
+    }
+}

@@ -221,6 +221,7 @@ export function op_Inequality(arg00, arg01) {
 }
 
 function flipTwosComplement(currByte, lowBitFound) {
+    let array;
     const matchValue = [currByte, lowBitFound];
     if (matchValue[1]) {
         return [(currByte ^ 255) & 255, true];
@@ -229,7 +230,7 @@ function flipTwosComplement(currByte, lowBitFound) {
         return [0, false];
     }
     else {
-        return [(currByte ^ (254 << (new Int32Array([0, 1, 2, 3, 4, 5, 6, 7])).find((i) => ((currByte & (1 << i)) > 0)))) & 255, true];
+        return [(currByte ^ (254 << ((array = (new Int32Array([0, 1, 2, 3, 4, 5, 6, 7])), array.find((i) => ((currByte & (1 << i)) > 0)))))) & 255, true];
     }
 }
 
@@ -249,7 +250,7 @@ export function toByteArray(value) {
                 if (compare_1(consumeValue, zero) <= 0) {
                     const accumBytes_1 = isPositive ? skipWhile((b) => (b === 0), accumBytes) : skipWhile((b_1) => (b_1 === 255), accumBytes);
                     const isHighBitOne = (head(accumBytes_1) & 128) !== 0;
-                    return reverse(toArray((isPositive ? isHighBitOne : false) ? cons(0, accumBytes_1) : (((!isPositive) ? (!isHighBitOne) : false) ? cons(255, accumBytes_1) : accumBytes_1)));
+                    return reverse(toArray((isPositive && isHighBitOne) ? cons(0, accumBytes_1) : (((!isPositive) && (!isHighBitOne)) ? cons(255, accumBytes_1) : accumBytes_1)));
                 }
                 else {
                     const currValue = toUInt32(BigInteger_op_BitwiseAnd_56F059C0(consumeValue, mask32));

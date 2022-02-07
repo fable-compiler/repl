@@ -12,7 +12,7 @@ export function makeRangeStepFunction(step, stop, zero, add) {
     const stepGreaterThanZero = stepComparedWithZero > 0;
     return (x) => {
         const comparedWithLast = compare(x, stop) | 0;
-        return ((stepGreaterThanZero ? (comparedWithLast <= 0) : false) ? true : ((!stepGreaterThanZero) ? (comparedWithLast >= 0) : false)) ? [x, add(x, step)] : (void 0);
+        return ((stepGreaterThanZero && (comparedWithLast <= 0)) ? true : ((!stepGreaterThanZero) && (comparedWithLast >= 0))) ? [x, add(x, step)] : (void 0);
     };
 }
 

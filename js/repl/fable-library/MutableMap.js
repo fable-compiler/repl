@@ -1,4 +1,4 @@
-import { equals, toIterator, getEnumerator } from "./Util.js";
+import { disposeSafe, equals, toIterator, getEnumerator } from "./Util.js";
 import { iterate, map, delay, toArray, iterateIndexed, concat } from "./Seq.js";
 import { FSharpRef } from "./Types.js";
 import { class_type } from "./Reflection.js";
@@ -20,7 +20,7 @@ export class Dictionary {
             }
         }
         finally {
-            enumerator.Dispose();
+            disposeSafe(enumerator);
         }
     }
     get [Symbol.toStringTag]() {
@@ -249,7 +249,7 @@ export function Dictionary__get_Count(this$) {
         }
     }
     finally {
-        enumerator.Dispose();
+        disposeSafe(enumerator);
     }
     return count | 0;
 }

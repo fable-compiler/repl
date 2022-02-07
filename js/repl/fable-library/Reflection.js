@@ -189,6 +189,8 @@ function isErasedToNumber(t) {
     ].includes(t.fullname);
 }
 export function isInstanceOfType(t, o) {
+    if (t.fullname === obj_type.fullname)
+        return true;
     switch (typeof o) {
         case "boolean":
             return t.fullname === bool_type.fullname;

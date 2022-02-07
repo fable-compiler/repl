@@ -32,7 +32,7 @@ export class BigInteger extends Record {
     }
     Equals(obj) {
         const this$ = this;
-        return (obj instanceof BigInteger) ? BigInteger_op_Equality_56F059C0(this$, obj) : false;
+        return (obj instanceof BigInteger) && BigInteger_op_Equality_56F059C0(this$, obj);
     }
     GetHashCode() {
         const x = this;
@@ -70,7 +70,7 @@ export function BigInteger_$ctor_Z2BE94A1(signInt, v) {
 })();
 
 export function BigInteger_nat_Z67CCE57D(n) {
-    if (BigNatModule_isSmall(n) ? (BigNatModule_getSmall(n) < BigInteger.smallLim) : false) {
+    if (BigNatModule_isSmall(n) && (BigNatModule_getSmall(n) < BigInteger.smallLim)) {
         return BigInteger.smallPosTab[BigNatModule_getSmall(n)];
     }
     else {
@@ -953,7 +953,7 @@ export function BigInteger__get_ToInt32(x) {
         if (u <= (2147483647 >>> 0)) {
             return (BigInteger__get_SignInt(x) * (~(~u))) | 0;
         }
-        else if ((BigInteger__get_SignInt(x) === -1) ? (u === ((2147483647 + 1) >>> 0)) : false) {
+        else if ((BigInteger__get_SignInt(x) === -1) && (u === ((2147483647 + 1) >>> 0))) {
             return -2147483648;
         }
         else {
@@ -980,7 +980,7 @@ export function BigInteger__get_ToInt64(x) {
         if (compare(u, fromValue(fromBits(4294967295, 2147483647, false), true)) <= 0) {
             return op_Multiply(fromInteger(BigInteger__get_SignInt(x), false, 2), fromValue(u, false));
         }
-        else if ((BigInteger__get_SignInt(x) === -1) ? equals(u, fromValue(op_Addition(fromBits(4294967295, 2147483647, false), fromBits(1, 0, false)), true)) : false) {
+        else if ((BigInteger__get_SignInt(x) === -1) && equals(u, fromValue(op_Addition(fromBits(4294967295, 2147483647, false), fromBits(1, 0, false)), true))) {
             return fromBits(0, 2147483648, false);
         }
         else {

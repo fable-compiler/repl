@@ -20,33 +20,24 @@ export function escape(str) {
 export function unescape(str) {
     return str.replace(/\\([\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|])/g, "$1");
 }
-export function isMatch(str, pattern, options = 0) {
-    let reg;
-    reg = str instanceof RegExp
-        ? (reg = str, str = pattern, reg.lastIndex = options, reg)
-        : reg = create(pattern, options);
-    return reg.test(str);
+export function isMatch(reg, input, startAt = 0) {
+    reg.lastIndex = startAt;
+    return reg.test(input);
 }
-export function match(str, pattern, options = 0) {
-    let reg;
-    reg = str instanceof RegExp
-        ? (reg = str, str = pattern, reg.lastIndex = options, reg)
-        : reg = create(pattern, options);
-    return reg.exec(str);
+export function match(reg, input, startAt = 0) {
+    reg.lastIndex = startAt;
+    return reg.exec(input);
 }
-export function matches(str, pattern, options = 0) {
-    let reg;
-    reg = str instanceof RegExp
-        ? (reg = str, str = pattern, reg.lastIndex = options, reg)
-        : reg = create(pattern, options);
+export function matches(reg, input, startAt = 0) {
+    reg.lastIndex = startAt;
     if (!reg.global) {
         throw new Error("Non-global RegExp"); // Prevent infinite loop
     }
-    let m = reg.exec(str);
+    let m = reg.exec(input);
     const matches = [];
     while (m !== null) {
         matches.push(m);
-        m = reg.exec(str);
+        m = reg.exec(input);
     }
     return matches;
 }

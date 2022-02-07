@@ -2,7 +2,7 @@ import { toList, toArray, map, filter, delay } from "./Seq.js";
 import { HashSet } from "./MutableSet.js";
 import { addToDict, getItemFromDict, tryGetValue, addToSet } from "./MapUtil.js";
 import { Dictionary } from "./MutableMap.js";
-import { getEnumerator } from "./Util.js";
+import { disposeSafe, getEnumerator } from "./Util.js";
 import { FSharpRef } from "./Types.js";
 
 export function distinct(xs, comparer) {
@@ -49,7 +49,7 @@ export function countBy(projection, xs, comparer) {
             }
         }
         finally {
-            enumerator.Dispose();
+            disposeSafe(enumerator);
         }
         return map((key_1) => [key_1, getItemFromDict(dict, key_1)], keys);
     });
@@ -79,7 +79,7 @@ export function groupBy(projection, xs, comparer) {
             }
         }
         finally {
-            enumerator.Dispose();
+            disposeSafe(enumerator);
         }
         return map((key_1) => [key_1, getItemFromDict(dict, key_1)], keys);
     });

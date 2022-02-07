@@ -1,4 +1,4 @@
-import { comparePrimitives, max, toIterator, getEnumerator, structuralHash, equals, compare } from "./Util.js";
+import { disposeSafe, comparePrimitives, max, toIterator, getEnumerator, structuralHash, equals, compare } from "./Util.js";
 import { class_type } from "./Reflection.js";
 import { toArray, empty, singleton, append, enumerateWhile, delay } from "./Seq.js";
 import { initialize, copyTo, fill } from "./Array.js";
@@ -127,7 +127,7 @@ export function Stack$1__Peek(this$) {
 export function Stack$1__Contains_2B595(this$, x) {
     let found = false;
     let i = 0;
-    while ((i < this$.count) ? (!found) : false) {
+    while ((i < this$.count) && (!found)) {
         if (equals(x, this$.contents[i])) {
             found = true;
         }
@@ -276,7 +276,7 @@ export function Queue$1__TryPeek_404CD8EE(this$, result) {
 export function Queue$1__Contains_2B595(this$, x) {
     let found = false;
     let i = 0;
-    while ((i < this$.count) ? (!found) : false) {
+    while ((i < this$.count) && (!found)) {
         if (equals(x, this$.contents[Queue$1__toIndex_Z524259A4(this$, i)])) {
             found = true;
         }
@@ -315,7 +315,7 @@ export function Queue$1__CopyTo_Z2E171D71(this$, target, start) {
         }
     }
     finally {
-        enumerator.Dispose();
+        disposeSafe(enumerator);
     }
 }
 

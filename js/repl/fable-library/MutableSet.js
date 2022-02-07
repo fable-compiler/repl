@@ -1,4 +1,4 @@
-import { toIterator, getEnumerator } from "./Util.js";
+import { disposeSafe, toIterator, getEnumerator } from "./Util.js";
 import { iterate, map, iterateIndexed, concat } from "./Seq.js";
 import { FSharpRef } from "./Types.js";
 import { class_type } from "./Reflection.js";
@@ -15,11 +15,12 @@ export class HashSet {
         const enumerator = getEnumerator(items);
         try {
             while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
-                HashSet__Add_2B595(this$.contents, enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]());
+                const item = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
+                HashSet__Add_2B595(this$.contents, item);
             }
         }
         finally {
-            enumerator.Dispose();
+            disposeSafe(enumerator);
         }
     }
     get [Symbol.toStringTag]() {
@@ -175,7 +176,7 @@ export function HashSet__get_Count(this$) {
         }
     }
     finally {
-        enumerator.Dispose();
+        disposeSafe(enumerator);
     }
     return count | 0;
 }

@@ -3,7 +3,7 @@ import { some, value as value_1 } from "./Option.js";
 import { toString, Record } from "./Types.js";
 import { FSharpList, fold as fold_2, cons, singleton as singleton_1, empty as empty_1, ofArrayWithTail, tail, head, isEmpty as isEmpty_1 } from "./List.js";
 import { fold as fold_1, fill } from "./Array.js";
-import { structuralHash, toIterator, getEnumerator, isArrayLike } from "./Util.js";
+import { structuralHash, toIterator, disposeSafe, getEnumerator, isArrayLike } from "./Util.js";
 import { join } from "./String.js";
 import { exists as exists_1, cache, forAll as forAll_1, fold as fold_3, reduce, iterate as iterate_1, map as map_1 } from "./Seq.js";
 import { HashSet__get_Comparer, HashSet_$ctor_Z6150332D, HashSet } from "./MutableSet.js";
@@ -454,7 +454,7 @@ export function SetTreeModule_forall(f_mut, t_mut) {
         if (t != null) {
             const t2 = t;
             if (t2 instanceof SetTreeNode$1) {
-                if (f(SetTreeLeaf$1__get_Key(t2)) ? SetTreeModule_forall(f, SetTreeNode$1__get_Left(t2)) : false) {
+                if (f(SetTreeLeaf$1__get_Key(t2)) && SetTreeModule_forall(f, SetTreeNode$1__get_Left(t2))) {
                     f_mut = f;
                     t_mut = SetTreeNode$1__get_Right(t2);
                     continue SetTreeModule_forall;
@@ -1438,7 +1438,7 @@ export function SetTreeModule_ofSeq(comparer, c) {
             return SetTreeModule_mkFromEnumerator(comparer, SetTreeModule_empty(), ie);
         }
         finally {
-            ie.Dispose();
+            disposeSafe(ie);
         }
     }
 }
@@ -1454,7 +1454,7 @@ export class FSharpSet {
     }
     Equals(that) {
         const this$ = this;
-        return (that instanceof FSharpSet) ? (SetTreeModule_compare(FSharpSet__get_Comparer(this$), FSharpSet__get_Tree(this$), FSharpSet__get_Tree(that)) === 0) : false;
+        return (that instanceof FSharpSet) && (SetTreeModule_compare(FSharpSet__get_Comparer(this$), FSharpSet__get_Tree(this$), FSharpSet__get_Tree(that)) === 0);
     }
     toString() {
         const this$ = this;
@@ -1728,7 +1728,7 @@ export function FSharpSet__ComputeHashCode(this$) {
         }
     }
     finally {
-        enumerator.Dispose();
+        disposeSafe(enumerator);
     }
     return Math.abs(res) | 0;
 }

@@ -1,8 +1,8 @@
 import { record_type, bool_type, list_type, option_type, class_type } from "./Reflection.js";
 import { some, value as value_1 } from "./Option.js";
 import { singleton, ofArrayWithTail, head, tail, isEmpty as isEmpty_1, FSharpList, fold as fold_1, empty as empty_1, cons } from "./List.js";
-import { fill } from "./Array.js";
-import { structuralHash, compare, toIterator, equals, getEnumerator, isArrayLike } from "./Util.js";
+import { map as map_2, fill } from "./Array.js";
+import { structuralHash, compare, toIterator, equals, disposeSafe, getEnumerator, isArrayLike } from "./Util.js";
 import { Record } from "./Types.js";
 import { tryPick as tryPick_1, pick as pick_1, iterate as iterate_1, compareWith, map as map_1, unfold } from "./Seq.js";
 import { format, join } from "./String.js";
@@ -593,7 +593,7 @@ export function MapTreeModule_forallOpt(f_mut, m_mut) {
         if (m != null) {
             const m2 = m;
             if (m2 instanceof MapTreeNode$2) {
-                if (MapTreeModule_forallOpt(f, MapTreeNode$2__get_Left(m2)) ? f(MapTreeLeaf$2__get_Key(m2), MapTreeLeaf$2__get_Value(m2)) : false) {
+                if (MapTreeModule_forallOpt(f, MapTreeNode$2__get_Left(m2)) && f(MapTreeLeaf$2__get_Key(m2), MapTreeLeaf$2__get_Value(m2))) {
                     f_mut = f;
                     m_mut = MapTreeNode$2__get_Right(m2);
                     continue MapTreeModule_forallOpt;
@@ -724,7 +724,7 @@ export function MapTreeModule_foldSectionOpt(comparer, lo, hi, f, m, x) {
                     const cLoKey = comparer.Compare(lo, MapTreeLeaf$2__get_Key(m2)) | 0;
                     const cKeyHi = comparer.Compare(MapTreeLeaf$2__get_Key(m2), hi) | 0;
                     const x_2 = (cLoKey < 0) ? foldFromTo(f_1, MapTreeNode$2__get_Left(m2), x_1) : x_1;
-                    const x_3 = ((cLoKey <= 0) ? (cKeyHi <= 0) : false) ? f_1(MapTreeLeaf$2__get_Key(m2), MapTreeLeaf$2__get_Value(m2), x_2) : x_2;
+                    const x_3 = ((cLoKey <= 0) && (cKeyHi <= 0)) ? f_1(MapTreeLeaf$2__get_Key(m2), MapTreeLeaf$2__get_Value(m2), x_2) : x_2;
                     if (cKeyHi < 0) {
                         f_1_mut = f_1;
                         m_1_mut = MapTreeNode$2__get_Right(m2);
@@ -735,7 +735,7 @@ export function MapTreeModule_foldSectionOpt(comparer, lo, hi, f, m, x) {
                         return x_3;
                     }
                 }
-                else if ((comparer.Compare(lo, MapTreeLeaf$2__get_Key(m2)) <= 0) ? (comparer.Compare(MapTreeLeaf$2__get_Key(m2), hi) <= 0) : false) {
+                else if ((comparer.Compare(lo, MapTreeLeaf$2__get_Key(m2)) <= 0) && (comparer.Compare(MapTreeLeaf$2__get_Key(m2), hi) <= 0)) {
                     return f_1(MapTreeLeaf$2__get_Key(m2), MapTreeLeaf$2__get_Value(m2), x_1);
                 }
                 else {
@@ -844,7 +844,7 @@ export function MapTreeModule_ofSeq(comparer, c) {
             return MapTreeModule_mkFromEnumerator(comparer, MapTreeModule_empty(), ie);
         }
         finally {
-            ie.Dispose();
+            disposeSafe(ie);
         }
     }
 }
@@ -1012,7 +1012,7 @@ export class FSharpMap {
                             else {
                                 const e1c = e1["System.Collections.Generic.IEnumerator`1.get_Current"]();
                                 const e2c = e2["System.Collections.Generic.IEnumerator`1.get_Current"]();
-                                if (equals(e1c[0], e2c[0]) ? equals(e1c[1], e2c[1]) : false) {
+                                if (equals(e1c[0], e2c[0]) && equals(e1c[1], e2c[1])) {
                                     return loop();
                                 }
                                 else {
@@ -1027,11 +1027,11 @@ export class FSharpMap {
                     return loop();
                 }
                 finally {
-                    e2.Dispose();
+                    disposeSafe(e2);
                 }
             }
             finally {
-                e1.Dispose();
+                disposeSafe(e1);
             }
         }
         else {
@@ -1083,7 +1083,7 @@ export class FSharpMap {
     }
     ["System.Collections.Generic.ICollection`1.Contains2B595"](x) {
         const m = this;
-        return FSharpMap__ContainsKey(m, x[0]) ? equals(FSharpMap__get_Item(m, x[0]), x[1]) : false;
+        return FSharpMap__ContainsKey(m, x[0]) && equals(FSharpMap__get_Item(m, x[0]), x[1]);
     }
     ["System.Collections.Generic.ICollection`1.CopyToZ2E171D71"](arr, i) {
         const m = this;
@@ -1254,6 +1254,14 @@ export function FSharpMap__TryGetValue(__, key, value) {
     }
 }
 
+export function FSharpMap__get_Keys(__) {
+    return map_2((kvp) => kvp[0], MapTreeModule_toArray(__.tree));
+}
+
+export function FSharpMap__get_Values(__) {
+    return map_2((kvp) => kvp[1], MapTreeModule_toArray(__.tree));
+}
+
 export function FSharpMap__TryFind(m, key) {
     return MapTreeModule_tryFind(m.comparer, key, m.tree);
 }
@@ -1272,13 +1280,13 @@ export function FSharpMap__ComputeHashCode(this$) {
     const enumerator = getEnumerator(this$);
     try {
         while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
-            const activePatternResult5668 = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
-            res = (combineHash(res, structuralHash(activePatternResult5668[0])) | 0);
-            res = (combineHash(res, structuralHash(activePatternResult5668[1])) | 0);
+            const activePatternResult8261 = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
+            res = (combineHash(res, structuralHash(activePatternResult8261[0])) | 0);
+            res = (combineHash(res, structuralHash(activePatternResult8261[1])) | 0);
         }
     }
     finally {
-        enumerator.Dispose();
+        disposeSafe(enumerator);
     }
     return res | 0;
 }
@@ -1404,6 +1412,14 @@ export function toList(table) {
 
 export function toArray(table) {
     return FSharpMap__ToArray(table);
+}
+
+export function keys(table) {
+    return FSharpMap__get_Keys(table);
+}
+
+export function values(table) {
+    return FSharpMap__get_Values(table);
 }
 
 export function empty() {

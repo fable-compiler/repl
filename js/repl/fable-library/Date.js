@@ -176,7 +176,7 @@ export function parseRaw(input) {
     function fail() {
         throw new Error(`The string is not a valid Date: ${input}`);
     }
-    if (input === null || input.trim() === "") {
+    if (input == null || input.trim() === "") {
         fail();
     }
     // ISO dates without TZ are parsed as UTC. Adding time without TZ keeps them local.

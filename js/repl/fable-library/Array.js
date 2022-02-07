@@ -1,5 +1,6 @@
 import { value as value_2, defaultArg, some } from "./Option.js";
-import { min as min_1, getEnumerator, comparePrimitives, max as max_1 } from "./Util.js";
+import { min as min_1, disposeSafe, getEnumerator, comparePrimitives, max as max_1 } from "./Util.js";
+import { SR_indexOutOfBounds } from "./Global.js";
 
 export function Helpers_allocateArrayFromCons(cons, len) {
     if ((typeof cons) === "function") {
@@ -319,7 +320,7 @@ export function skip(count, array, cons) {
 
 export function skipWhile(predicate, array, cons) {
     let count = 0;
-    while ((count < array.length) ? predicate(array[count]) : false) {
+    while ((count < array.length) && predicate(array[count])) {
         count = ((count + 1) | 0);
     }
     if (count === array.length) {
@@ -349,7 +350,7 @@ export function take(count, array, cons) {
 
 export function takeWhile(predicate, array, cons) {
     let count = 0;
-    while ((count < array.length) ? predicate(array[count]) : false) {
+    while ((count < array.length) && predicate(array[count])) {
         count = ((count + 1) | 0);
     }
     if (count === 0) {
@@ -374,7 +375,7 @@ export function addRangeInPlace(range, array) {
         }
     }
     finally {
-        enumerator.Dispose();
+        disposeSafe(enumerator);
     }
 }
 
@@ -390,12 +391,12 @@ export function insertRangeInPlace(index, range, array) {
         }
     }
     finally {
-        enumerator.Dispose();
+        disposeSafe(enumerator);
     }
 }
 
 export function removeInPlace(item_1, array) {
-    const i = array.indexOf(item_1, 0);
+    const i = (array.indexOf(item_1, 0)) | 0;
     if (i > -1) {
         array.splice(i, 1);
         return true;
@@ -407,7 +408,7 @@ export function removeInPlace(item_1, array) {
 
 export function removeAllInPlace(predicate, array) {
     const countRemoveAll = (count) => {
-        const i = array.findIndex(predicate);
+        const i = (array.findIndex(predicate)) | 0;
         if (i > -1) {
             array.splice(i, 1);
             return (countRemoveAll(count) + 1) | 0;
@@ -437,8 +438,8 @@ export function copyToTypedArray(source, sourceIndex, target, targetIndex, count
 
 export function indexOf(array, item_1, start, count) {
     const start_1 = defaultArg(start, 0) | 0;
-    const i = array.indexOf(item_1, start_1);
-    if ((count != null) ? (i >= (start_1 + value_2(count))) : false) {
+    const i = (array.indexOf(item_1, start_1)) | 0;
+    if ((count != null) && (i >= (start_1 + value_2(count)))) {
         return -1;
     }
     else {
@@ -480,7 +481,7 @@ export function tryFind(predicate, array) {
 }
 
 export function findIndex(predicate, array) {
-    const matchValue = array.findIndex(predicate);
+    const matchValue = (array.findIndex(predicate)) | 0;
     if (matchValue > -1) {
         return matchValue | 0;
     }
@@ -490,7 +491,7 @@ export function findIndex(predicate, array) {
 }
 
 export function tryFindIndex(predicate, array) {
-    const matchValue = array.findIndex(predicate);
+    const matchValue = (array.findIndex(predicate)) | 0;
     if (matchValue > -1) {
         return matchValue;
     }
@@ -758,8 +759,7 @@ export function sort(xs, comparer) {
 
 export function sortBy(projection, xs, comparer) {
     const xs_1 = xs.slice();
-    xs_1.sort((x, y) => comparer.Compare(projection(x), projection(y)));
-    return xs_1;
+    return (xs_1.sort((x, y) => comparer.Compare(projection(x), projection(y))), xs_1);
 }
 
 export function sortDescending(xs, comparer) {
@@ -770,8 +770,7 @@ export function sortDescending(xs, comparer) {
 
 export function sortByDescending(projection, xs, comparer) {
     const xs_1 = xs.slice();
-    xs_1.sort((x, y) => (comparer.Compare(projection(x), projection(y)) * -1));
-    return xs_1;
+    return (xs_1.sort((x, y) => (comparer.Compare(projection(x), projection(y)) * -1)), xs_1);
 }
 
 export function sortWith(comparer, xs) {
@@ -881,11 +880,8 @@ export function chunkBySize(chunkSize, array) {
 
 export function splitAt(index, array) {
     let start;
-    if (index < 0) {
-        throw (new Error("The input must be non-negative\\nParameter name: index"));
-    }
-    if (index > array.length) {
-        throw (new Error("The input sequence has an insufficient number of elements.\\nParameter name: index"));
+    if ((index < 0) ? true : (index > array.length)) {
+        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
     }
     return [(start = 0, array.slice(start, (start + index))), array.slice(index)];
 }
@@ -914,7 +910,7 @@ export function compareWith(comparer, array1, array2) {
             return -1;
         }
         else {
-            while ((i < length1) ? (result === 0) : false) {
+            while ((i < length1) && (result === 0)) {
                 result = (comparer(array1[i], array2[i]) | 0);
                 i = ((i + 1) | 0);
             }
@@ -947,7 +943,7 @@ export function equalsWith(equals, array1, array2) {
             return false;
         }
         else {
-            while ((i < length1) ? result : false) {
+            while ((i < length1) && result) {
                 result = equals(array1[i], array2[i]);
                 i = ((i + 1) | 0);
             }
@@ -1071,7 +1067,7 @@ export function reduceBack(reduction, array) {
 }
 
 export function forAll2(predicate, array1, array2) {
-    return fold2((acc, x, y) => (acc ? predicate(x, y) : false), true, array1, array2);
+    return fold2((acc, x, y) => (acc && predicate(x, y)), true, array1, array2);
 }
 
 export function existsOffset(predicate_mut, array_mut, index_mut) {
@@ -1223,7 +1219,8 @@ export function transpose(arrays, cons) {
         return new Array(0);
     }
     else {
-        const lenInner = arrays_1[0].length | 0;
+        const firstArray = arrays_1[0];
+        const lenInner = firstArray.length | 0;
         if (!forAll((a) => (a.length === lenInner), arrays_1)) {
             differentLengths();
         }
@@ -1236,5 +1233,94 @@ export function transpose(arrays, cons) {
         }
         return result;
     }
+}
+
+export function insertAt(index, y, xs) {
+    const len = xs.length | 0;
+    if ((index < 0) ? true : (index > len)) {
+        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+    }
+    const target = new xs.constructor(len + 1);
+    for (let i = 0; i <= (index - 1); i++) {
+        target[i] = xs[i];
+    }
+    target[index] = y;
+    for (let i_1 = index; i_1 <= (len - 1); i_1++) {
+        target[i_1 + 1] = xs[i_1];
+    }
+    return target;
+}
+
+export function insertManyAt(index, ys, xs) {
+    const len = xs.length | 0;
+    if ((index < 0) ? true : (index > len)) {
+        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+    }
+    const ys_1 = Array.from(ys);
+    const len2 = ys_1.length | 0;
+    const target = new xs.constructor(len + len2);
+    for (let i = 0; i <= (index - 1); i++) {
+        target[i] = xs[i];
+    }
+    for (let i_1 = 0; i_1 <= (len2 - 1); i_1++) {
+        target[index + i_1] = ys_1[i_1];
+    }
+    for (let i_2 = index; i_2 <= (len - 1); i_2++) {
+        target[i_2 + len2] = xs[i_2];
+    }
+    return target;
+}
+
+export function removeAt(index, xs) {
+    if ((index < 0) ? true : (index >= xs.length)) {
+        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+    }
+    let i = -1;
+    return filter((_arg1) => {
+        i = ((i + 1) | 0);
+        return i !== index;
+    }, xs);
+}
+
+export function removeManyAt(index, count, xs) {
+    let i = -1;
+    let status = -1;
+    const ys = filter((_arg1) => {
+        i = ((i + 1) | 0);
+        if (i === index) {
+            status = 0;
+            return false;
+        }
+        else if (i > index) {
+            if (i < (index + count)) {
+                return false;
+            }
+            else {
+                status = 1;
+                return true;
+            }
+        }
+        else {
+            return true;
+        }
+    }, xs);
+    const status_1 = (((status === 0) && ((i + 1) === (index + count))) ? 1 : status) | 0;
+    if (status_1 < 1) {
+        const arg = (status_1 < 0) ? "index" : "count";
+        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + arg));
+    }
+    return ys;
+}
+
+export function updateAt(index, y, xs) {
+    const len = xs.length | 0;
+    if ((index < 0) ? true : (index >= len)) {
+        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+    }
+    const target = new xs.constructor(len);
+    for (let i = 0; i <= (len - 1); i++) {
+        target[i] = ((i === index) ? y : xs[i]);
+    }
+    return target;
 }
 

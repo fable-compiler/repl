@@ -20,6 +20,11 @@ function isHashable(x) {
 export function isDisposable(x) {
     return x != null && typeof x.Dispose === "function";
 }
+export function disposeSafe(x) {
+    if (isDisposable(x)) {
+        x.Dispose();
+    }
+}
 export function sameConstructor(x, y) {
     return Object.getPrototypeOf(x).constructor === Object.getPrototypeOf(y).constructor;
 }
@@ -451,26 +456,6 @@ export function round(value, digits = 0) {
 }
 export function sign(x) {
     return x > 0 ? 1 : x < 0 ? -1 : 0;
-}
-export function randomNext(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
-}
-export function randomBytes(buffer) {
-    if (buffer == null) {
-        throw new Error("Buffer cannot be null");
-    }
-    for (let i = 0; i < buffer.length; i += 6) {
-        // Pick random 48-bit number. Fill buffer in 2 24-bit chunks to avoid bitwise truncation.
-        let r = Math.floor(Math.random() * 281474976710656); // Low 24 bits = chunk 1.
-        const rhi = Math.floor(r / 16777216); // High 24 bits shifted via division = chunk 2.
-        for (let j = 0; j < 6 && i + j < buffer.length; j++) {
-            if (j === 3) {
-                r = rhi;
-            }
-            buffer[i + j] = r & 255;
-            r >>>= 8;
-        }
-    }
 }
 export function unescapeDataString(s) {
     // https://stackoverflow.com/a/4458580/524236

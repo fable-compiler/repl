@@ -139,3 +139,14 @@ export function ticksToUnixEpochMilliseconds(ticks) {
 //     }
 //   };
 // }
+export function divRem(x, y, out) {
+    const div = op_Division(x, y);
+    const rem = op_Modulus(x, y);
+    if (out != null) {
+        out.contents = rem;
+        return div;
+    }
+    else {
+        return [div, rem];
+    }
+}

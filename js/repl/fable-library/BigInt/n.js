@@ -766,7 +766,7 @@ export function BigNatModule_mulSchoolBookNeitherSmall(p, q) {
 export function BigNatModule_mulSchoolBook(p, q) {
     const pSmall = BigNatModule_bound(p) === 1;
     const qSmall = BigNatModule_bound(q) === 1;
-    if (pSmall ? qSmall : false) {
+    if (pSmall && qSmall) {
         return BigNatModule_mulSchoolBookBothSmall(BigNatModule_coeff(p, 0), BigNatModule_coeff(q, 0));
     }
     else if (pSmall) {
@@ -814,7 +814,7 @@ export function BigNatModule_encodingGivenResultBits(bitsRes) {
         selectFrom:
         while (true) {
             const i = i_mut;
-            if (((i + 1) < BigNatModule_table.length) ? (bitsRes < BigNatModule_table[i + 1].bigN) : false) {
+            if (((i + 1) < BigNatModule_table.length) && (bitsRes < BigNatModule_table[i + 1].bigN)) {
                 i_mut = (i + 1);
                 continue selectFrom;
             }
@@ -1111,7 +1111,7 @@ export function BigNatModule_divmod(b, a) {
                 Invariant([d, x, n, p]);
             }
             else {
-                finished = ((f === 0) ? (n === 0) : false);
+                finished = ((f === 0) && (n === 0));
                 if (!finished) {
                     if (p === (m + n)) {
                         Invariant([d, x, n - 1, p]);
@@ -1355,7 +1355,7 @@ export function BigNatModule_toString(n) {
                 const patternInput = BigNatModule_divmod(n_1, head(_arg1)[1]);
                 const nL = patternInput[1];
                 const nH = patternInput[0];
-                if (isLeading ? BigNatModule_isZero(nH) : false) {
+                if (isLeading && BigNatModule_isZero(nH)) {
                     isLeading_mut = isLeading;
                     digits_mut = digits;
                     n_1_mut = nL;
@@ -1372,7 +1372,7 @@ export function BigNatModule_toString(n) {
             }
             else {
                 const n_2 = BigNatModule_eval32(n_1) | 0;
-                if (isLeading ? (n_2 === 0) : false) {
+                if (isLeading && (n_2 === 0)) {
                     return digits;
                 }
                 else {
@@ -1405,8 +1405,9 @@ export function BigNatModule_ofString(str) {
                 return acc;
             }
             else {
-                const d = (str[i].charCodeAt(0) - "0".charCodeAt(0)) | 0;
-                if ((0 <= d) ? (d <= 9) : false) {
+                const c = str[i];
+                const d = (c.charCodeAt(0) - 48) | 0;
+                if ((0 <= d) && (d <= 9)) {
                     acc_mut = BigNatModule_add(BigNatModule_mul(ten, acc), BigNatModule_embed(d));
                     i_mut = (i + 1);
                     continue build;

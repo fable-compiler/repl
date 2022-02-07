@@ -1,25 +1,10 @@
 import { join } from "./String.js";
-import { uncurry, isArrayLike, getEnumerator, toIterator, compare, structuralHash, equals } from "./Util.js";
+import { uncurry, disposeSafe, isArrayLike, getEnumerator, toIterator, compare, structuralHash, equals } from "./Util.js";
 import { Record } from "./Types.js";
 import { class_type, record_type, option_type } from "./Reflection.js";
+import { SR_inputSequenceTooLong, SR_inputSequenceEmpty, SR_inputMustBeNonNegative, SR_notEnoughElements, SR_differentLengths, SR_keyNotFoundAlt, SR_indexOutOfBounds, SR_inputWasEmpty } from "./Global.js";
 import { defaultArg, value as value_1, some } from "./Option.js";
 import { transpose as transpose_1, splitInto as splitInto_1, windowed as windowed_1, pairwise as pairwise_1, chunkBySize as chunkBySize_1, map as map_1, permute as permute_1, tryFindIndexBack as tryFindIndexBack_1, tryFindBack as tryFindBack_1, scanBack as scanBack_1, foldBack2 as foldBack2_1, foldBack as foldBack_1, fill } from "./Array.js";
-
-export const SR_indexOutOfBounds = "The index was outside the range of elements in the list.";
-
-export const SR_inputListWasEmpty = "List was empty";
-
-export const SR_inputMustBeNonNegative = "The input must be non-negative.";
-
-export const SR_inputSequenceEmpty = "The input sequence was empty.";
-
-export const SR_inputSequenceTooLong = "The input sequence contains more than one element.";
-
-export const SR_keyNotFoundAlt = "An index satisfying the predicate was not found in the collection.";
-
-export const SR_listsHadDifferentLengths = "The lists had different lengths.";
-
-export const SR_notEnoughElements = "The input sequence has an insufficient number of elements.";
 
 export class FSharpList extends Record {
     constructor(head, tail) {
@@ -237,7 +222,7 @@ export function FSharpList__get_Head(xs) {
         return xs.head;
     }
     else {
-        throw (new Error((SR_inputListWasEmpty + "\\nParameter name: ") + "list"));
+        throw (new Error((SR_inputWasEmpty + "\\nParameter name: ") + "list"));
     }
 }
 
@@ -247,7 +232,7 @@ export function FSharpList__get_Tail(xs) {
         return matchValue;
     }
     else {
-        throw (new Error((SR_inputListWasEmpty + "\\nParameter name: ") + "list"));
+        throw (new Error((SR_inputWasEmpty + "\\nParameter name: ") + "list"));
     }
 }
 
@@ -337,7 +322,7 @@ export function tryLast(xs_mut) {
 export function last(xs) {
     const matchValue = tryLast(xs);
     if (matchValue == null) {
-        throw (new Error(SR_inputListWasEmpty));
+        throw (new Error(SR_inputWasEmpty));
     }
     else {
         return value_1(matchValue);
@@ -440,7 +425,7 @@ export function fold2(folder, state, xs, ys) {
     let acc = state;
     let xs_1 = xs;
     let ys_1 = ys;
-    while ((!FSharpList__get_IsEmpty(xs_1)) ? (!FSharpList__get_IsEmpty(ys_1)) : false) {
+    while ((!FSharpList__get_IsEmpty(xs_1)) && (!FSharpList__get_IsEmpty(ys_1))) {
         acc = folder(acc, FSharpList__get_Head(xs_1), FSharpList__get_Head(ys_1));
         xs_1 = FSharpList__get_Tail(xs_1);
         ys_1 = FSharpList__get_Tail(ys_1);
@@ -538,7 +523,7 @@ export function ofSeq(xs) {
             }
         }
         finally {
-            enumerator.Dispose();
+            disposeSafe(enumerator);
         }
         const xs_5 = node;
         const t_2 = FSharpList_get_Empty();
@@ -571,7 +556,7 @@ export function concat(lists) {
             }
         }
         finally {
-            enumerator.Dispose();
+            disposeSafe(enumerator);
         }
     }
     const xs_6 = node;
@@ -581,12 +566,9 @@ export function concat(lists) {
 }
 
 export function scan(folder, state, xs) {
-    let xs_4, t_2;
+    let t, xs_4, t_2;
     const root = FSharpList_get_Empty();
-    let node;
-    const t = new FSharpList(state, void 0);
-    root.tail = t;
-    node = t;
+    let node = (t = (new FSharpList(state, void 0)), (root.tail = t, t));
     let acc = state;
     let xs_3 = xs;
     while (!FSharpList__get_IsEmpty(xs_3)) {
@@ -630,9 +612,8 @@ export function collect(mapping, xs) {
 export function mapIndexed(mapping, xs) {
     const root = FSharpList_get_Empty();
     const node = foldIndexed((i, acc, x) => {
-        const t = new FSharpList(mapping(i, x), void 0);
-        acc.tail = t;
-        return t;
+        let t;
+        return (t = (new FSharpList(mapping(i, x), void 0)), (acc.tail = t, t));
     }, root, xs);
     const t_2 = FSharpList_get_Empty();
     node.tail = t_2;
@@ -642,9 +623,8 @@ export function mapIndexed(mapping, xs) {
 export function map(mapping, xs) {
     const root = FSharpList_get_Empty();
     const node = fold((acc, x) => {
-        const t = new FSharpList(mapping(x), void 0);
-        acc.tail = t;
-        return t;
+        let t;
+        return (t = (new FSharpList(mapping(x), void 0)), (acc.tail = t, t));
     }, root, xs);
     const t_2 = FSharpList_get_Empty();
     node.tail = t_2;
@@ -658,9 +638,8 @@ export function indexed(xs) {
 export function map2(mapping, xs, ys) {
     const root = FSharpList_get_Empty();
     const node = fold2((acc, x, y) => {
-        const t = new FSharpList(mapping(x, y), void 0);
-        acc.tail = t;
-        return t;
+        let t;
+        return (t = (new FSharpList(mapping(x, y), void 0)), (acc.tail = t, t));
     }, root, xs, ys);
     const t_2 = FSharpList_get_Empty();
     node.tail = t_2;
@@ -946,7 +925,7 @@ export function replicate(n, x) {
 
 export function reduce(f, xs) {
     if (FSharpList__get_IsEmpty(xs)) {
-        throw (new Error(SR_inputListWasEmpty));
+        throw (new Error(SR_inputWasEmpty));
     }
     else {
         return fold(f, head(xs), tail(xs));
@@ -955,7 +934,7 @@ export function reduce(f, xs) {
 
 export function reduceBack(f, xs) {
     if (FSharpList__get_IsEmpty(xs)) {
-        throw (new Error(SR_inputListWasEmpty));
+        throw (new Error(SR_inputWasEmpty));
     }
     else {
         return foldBack(f, tail(xs), head(xs));
@@ -963,11 +942,11 @@ export function reduceBack(f, xs) {
 }
 
 export function forAll(f, xs) {
-    return fold((acc, x) => (acc ? f(x) : false), true, xs);
+    return fold((acc, x) => (acc && f(x)), true, xs);
 }
 
 export function forAll2(f, xs, ys) {
-    return fold2((acc, x, y) => (acc ? f(x, y) : false), true, xs, ys);
+    return fold2((acc, x, y) => (acc && f(x, y)), true, xs, ys);
 }
 
 export function exists(f, xs) {
@@ -1010,7 +989,7 @@ export function exists2(f_mut, xs_mut, ys_mut) {
                 }
             }
             case 2: {
-                throw (new Error((SR_listsHadDifferentLengths + "\\nParameter name: ") + "list2"));
+                throw (new Error((SR_differentLengths + "\\nParameter name: ") + "list2"));
             }
         }
         break;
@@ -1081,18 +1060,20 @@ export function min(xs, comparer) {
 
 export function average(xs, averager) {
     let count = 0;
-    return averager.DivideByInt(fold((acc, x) => {
+    const total = fold((acc, x) => {
         count = ((count + 1) | 0);
         return averager.Add(acc, x);
-    }, averager.GetZero(), xs), count);
+    }, averager.GetZero(), xs);
+    return averager.DivideByInt(total, count);
 }
 
 export function averageBy(f, xs, averager) {
     let count = 0;
-    return averager.DivideByInt(fold((acc, x) => {
+    const total = fold((acc, x) => {
         count = ((count + 1) | 0);
         return averager.Add(acc, f(x));
-    }, averager.GetZero(), xs), count);
+    }, averager.GetZero(), xs);
+    return averager.DivideByInt(total, count);
 }
 
 export function permute(f, xs) {
@@ -1283,7 +1264,7 @@ export function exactlyOne(xs) {
 }
 
 export function tryExactlyOne(xs) {
-    if ((!FSharpList__get_IsEmpty(xs)) ? FSharpList__get_IsEmpty(FSharpList__get_Tail(xs)) : false) {
+    if ((!FSharpList__get_IsEmpty(xs)) && FSharpList__get_IsEmpty(FSharpList__get_Tail(xs))) {
         return some(FSharpList__get_Head(xs));
     }
     else {
@@ -1309,5 +1290,108 @@ export function splitInto(chunks, xs) {
 
 export function transpose(lists) {
     return ofArray(map_1((xs_1) => ofArray(xs_1), transpose_1(map_1((xs) => toArray(xs), Array.from(lists)))));
+}
+
+export function insertAt(index, y, xs) {
+    let i = -1;
+    let isDone = false;
+    const result = fold((acc, x) => {
+        i = ((i + 1) | 0);
+        if (i === index) {
+            isDone = true;
+            return FSharpList_Cons_305B8EAC(x, FSharpList_Cons_305B8EAC(y, acc));
+        }
+        else {
+            return FSharpList_Cons_305B8EAC(x, acc);
+        }
+    }, FSharpList_get_Empty(), xs);
+    return reverse(isDone ? result : (((i + 1) === index) ? FSharpList_Cons_305B8EAC(y, result) : (() => {
+        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+    })()));
+}
+
+export function insertManyAt(index, ys, xs) {
+    let i = -1;
+    let isDone = false;
+    const ys_1 = ofSeq(ys);
+    const result = fold((acc, x) => {
+        i = ((i + 1) | 0);
+        if (i === index) {
+            isDone = true;
+            return FSharpList_Cons_305B8EAC(x, append(ys_1, acc));
+        }
+        else {
+            return FSharpList_Cons_305B8EAC(x, acc);
+        }
+    }, FSharpList_get_Empty(), xs);
+    return reverse(isDone ? result : (((i + 1) === index) ? append(ys_1, result) : (() => {
+        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+    })()));
+}
+
+export function removeAt(index, xs) {
+    let i = -1;
+    let isDone = false;
+    const ys = filter((_arg1) => {
+        i = ((i + 1) | 0);
+        if (i === index) {
+            isDone = true;
+            return false;
+        }
+        else {
+            return true;
+        }
+    }, xs);
+    if (!isDone) {
+        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+    }
+    return ys;
+}
+
+export function removeManyAt(index, count, xs) {
+    let i = -1;
+    let status = -1;
+    const ys = filter((_arg1) => {
+        i = ((i + 1) | 0);
+        if (i === index) {
+            status = 0;
+            return false;
+        }
+        else if (i > index) {
+            if (i < (index + count)) {
+                return false;
+            }
+            else {
+                status = 1;
+                return true;
+            }
+        }
+        else {
+            return true;
+        }
+    }, xs);
+    const status_1 = (((status === 0) && ((i + 1) === (index + count))) ? 1 : status) | 0;
+    if (status_1 < 1) {
+        const arg = (status_1 < 0) ? "index" : "count";
+        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + arg));
+    }
+    return ys;
+}
+
+export function updateAt(index, y, xs) {
+    let isDone = false;
+    const ys = mapIndexed((i, x) => {
+        if (i === index) {
+            isDone = true;
+            return y;
+        }
+        else {
+            return x;
+        }
+    }, xs);
+    if (!isDone) {
+        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+    }
+    return ys;
 }
 
