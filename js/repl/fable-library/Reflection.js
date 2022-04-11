@@ -114,6 +114,11 @@ export const int16_type = new TypeInfo("System.Int16");
 export const uint16_type = new TypeInfo("System.UInt16");
 export const int32_type = new TypeInfo("System.Int32");
 export const uint32_type = new TypeInfo("System.UInt32");
+export const int64_type = new TypeInfo("System.Int64");
+export const uint64_type = new TypeInfo("System.UInt64");
+export const bigint_type = new TypeInfo("System.Numerics.BigInteger");
+export const nativeint_type = new TypeInfo("System.IntPtr");
+export const unativeint_type = new TypeInfo("System.UIntPtr");
 export const float32_type = new TypeInfo("System.Single");
 export const float64_type = new TypeInfo("System.Double");
 export const decimal_type = new TypeInfo("System.Decimal");
@@ -174,7 +179,7 @@ export function isEnum(t) {
     return t.enumCases != null && t.enumCases.length > 0;
 }
 export function isSubclassOf(t1, t2) {
-    return t1.parent != null && (t1.parent.Equals(t2) || isSubclassOf(t1.parent, t2));
+    return (t2.fullname === obj_type.fullname) || (t1.parent != null && (t1.parent.Equals(t2) || isSubclassOf(t1.parent, t2)));
 }
 function isErasedToNumber(t) {
     return isEnum(t) || [

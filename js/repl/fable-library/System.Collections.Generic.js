@@ -90,23 +90,23 @@ function Stack$1_$ctor_Z2E171D71(initialContents, initialCount) {
 }
 
 export function Stack$1_$ctor_Z524259A4(initialCapacity) {
-    return Stack$1_$ctor_Z2E171D71(fill(new Array(initialCapacity), 0, initialCapacity, null), 0);
+    return new Stack$1_$ctor_Z2E171D71(fill(new Array(initialCapacity), 0, initialCapacity, null), 0);
 }
 
 export function Stack$1_$ctor() {
-    return Stack$1_$ctor_Z524259A4(4);
+    return new Stack$1_$ctor_Z524259A4(4);
 }
 
 export function Stack$1_$ctor_BB573A(xs) {
     const arr = Array.from(xs);
-    return Stack$1_$ctor_Z2E171D71(arr, arr.length);
+    return new Stack$1_$ctor_Z2E171D71(arr, arr.length);
 }
 
 export function Stack$1__Ensure_Z524259A4(this$, newSize) {
     const oldSize = this$.contents.length | 0;
     if (newSize > oldSize) {
         const old = this$.contents;
-        this$.contents = fill(new Array(max((x, y) => comparePrimitives(x, y), newSize, oldSize * 2)), 0, max((x, y) => comparePrimitives(x, y), newSize, oldSize * 2), null);
+        this$.contents = fill(new Array(max(comparePrimitives, newSize, oldSize * 2)), 0, max(comparePrimitives, newSize, oldSize * 2), null);
         copyTo(old, 0, this$.contents, 0, this$.count);
     }
 }
@@ -138,7 +138,7 @@ export function Stack$1__Contains_2B595(this$, x) {
     return found;
 }
 
-export function Stack$1__TryPeek_404CD8EE(this$, result) {
+export function Stack$1__TryPeek_1F3DB691(this$, result) {
     if (this$.count > 0) {
         result.contents = Stack$1__Peek(this$);
         return true;
@@ -148,7 +148,7 @@ export function Stack$1__TryPeek_404CD8EE(this$, result) {
     }
 }
 
-export function Stack$1__TryPop_404CD8EE(this$, result) {
+export function Stack$1__TryPop_1F3DB691(this$, result) {
     if (this$.count > 0) {
         result.contents = Stack$1__Pop(this$);
         return true;
@@ -209,18 +209,18 @@ function Queue$1_$ctor_Z2E171D71(initialContents, initialCount) {
 
 export function Queue$1_$ctor_Z524259A4(initialCapacity) {
     if (initialCapacity < 0) {
-        throw (new Error("capacity is less than 0"));
+        throw new Error("capacity is less than 0");
     }
-    return Queue$1_$ctor_Z2E171D71(fill(new Array(initialCapacity), 0, initialCapacity, null), 0);
+    return new Queue$1_$ctor_Z2E171D71(fill(new Array(initialCapacity), 0, initialCapacity, null), 0);
 }
 
 export function Queue$1_$ctor() {
-    return Queue$1_$ctor_Z524259A4(4);
+    return new Queue$1_$ctor_Z524259A4(4);
 }
 
 export function Queue$1_$ctor_BB573A(xs) {
     const arr = Array.from(xs);
-    return Queue$1_$ctor_Z2E171D71(arr, arr.length);
+    return new Queue$1_$ctor_Z2E171D71(arr, arr.length);
 }
 
 export function Queue$1__get_Count(_) {
@@ -238,7 +238,7 @@ export function Queue$1__Enqueue_2B595(_, value) {
 
 export function Queue$1__Dequeue(_) {
     if (_.count === 0) {
-        throw (new Error("Queue is empty"));
+        throw new Error("Queue is empty");
     }
     const value = _.contents[_.head];
     _.head = (((_.head + 1) % Queue$1__size(_)) | 0);
@@ -248,12 +248,12 @@ export function Queue$1__Dequeue(_) {
 
 export function Queue$1__Peek(_) {
     if (_.count === 0) {
-        throw (new Error("Queue is empty"));
+        throw new Error("Queue is empty");
     }
     return _.contents[_.head];
 }
 
-export function Queue$1__TryDequeue_404CD8EE(this$, result) {
+export function Queue$1__TryDequeue_1F3DB691(this$, result) {
     if (this$.count === 0) {
         return false;
     }
@@ -263,7 +263,7 @@ export function Queue$1__TryDequeue_404CD8EE(this$, result) {
     }
 }
 
-export function Queue$1__TryPeek_404CD8EE(this$, result) {
+export function Queue$1__TryPeek_1F3DB691(this$, result) {
     if (this$.count === 0) {
         return false;
     }

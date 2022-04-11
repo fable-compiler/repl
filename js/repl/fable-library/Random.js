@@ -6,29 +6,26 @@ function Native_random() {
 }
 
 function Native_randomNext(min, max) {
-    
-        if (max < min) {
-            throw new Error("minValue must be less than maxValue");
-        }
-        return Math.floor(Math.random() * (max - min)) + min
-        ;
+    if (max < min) {
+    throw new Error("minValue must be less than maxValue");
+    }
+    return Math.floor(Math.random() * (max - min)) + min
 }
 
 function Native_randomBytes(buffer) {
-    
-        if (buffer == null) {
-            throw new Error("Buffer cannot be null");
-        }
-        for (let i = 0; i < buffer.length; i += 6) {
-            // Pick random 48-bit number. Fill buffer in 2 24-bit chunks to avoid bitwise truncation.
-            let r = Math.floor(Math.random() * 281474976710656); // Low 24 bits = chunk 1.
-            const rhi = Math.floor(r / 16777216); // High 24 bits shifted via division = chunk 2.
-            for (let j = 0; j < 6 && i + j < buffer.length; j++) {
-                if (j === 3) { r = rhi; }
-                buffer[i + j] = r & 255;
-                r >>>= 8;
-            }
-        };
+    if (buffer == null) {
+    throw new Error("Buffer cannot be null");
+    }
+    for (let i = 0; i < buffer.length; i += 6) {
+    // Pick random 48-bit number. Fill buffer in 2 24-bit chunks to avoid bitwise truncation.
+    let r = Math.floor(Math.random() * 281474976710656); // Low 24 bits = chunk 1.
+    const rhi = Math.floor(r / 16777216); // High 24 bits shifted via division = chunk 2.
+    for (let j = 0; j < 6 && i + j < buffer.length; j++) {
+    if (j === 3) { r = rhi; }
+    buffer[i + j] = r & 255;
+    r >>>= 8;
+    }
+    };
 }
 
 export class NonSeeded {
@@ -99,16 +96,14 @@ export class Seeded {
     Next1(maxValue) {
         const this$ = this;
         if (maxValue < 0) {
-            const exn = new Error("maxValue", "maxValue must be positive");
-            throw exn;
+            throw new Error("maxValue", "maxValue must be positive");
         }
         return (~(~(Seeded__Sample(this$) * maxValue))) | 0;
     }
     Next2(minValue, maxValue) {
         const this$ = this;
         if (minValue > maxValue) {
-            const exn = new Error("minValue", "minValue must be less than maxValue");
-            throw exn;
+            throw new Error("minValue", "minValue must be less than maxValue");
         }
         const range = fromInteger(maxValue - minValue, false, 2);
         return ((compare(range, fromInteger(2147483647, false, 2)) <= 0) ? ((~(~(Seeded__Sample(this$) * toNumber(range)))) + minValue) : (~(~toInt(op_Addition(fromNumber(Seeded__GetSampleForLargeRange(this$) * toNumber(range), false), fromInteger(minValue, false, 2)))))) | 0;
@@ -120,8 +115,7 @@ export class Seeded {
     NextBytes(buffer) {
         const this$ = this;
         if (buffer == null) {
-            const exn = new Error("buffer");
-            throw exn;
+            throw new Error("buffer");
         }
         for (let i = 0; i <= (buffer.length - 1); i++) {
             buffer[i] = ((Seeded__InternalSample(this$) % ((~(~255)) + 1)) & 0xFF);
@@ -178,10 +172,10 @@ export function Seeded__GetSampleForLargeRange(this$) {
 }
 
 export function nonSeeded() {
-    return NonSeeded_$ctor();
+    return new NonSeeded_$ctor();
 }
 
 export function seeded(seed) {
-    return Seeded_$ctor_Z524259A4(seed);
+    return new Seeded_$ctor_Z524259A4(seed);
 }
 

@@ -1,4 +1,4 @@
-import { substring, format, isNullOrEmpty, join } from "./String.js";
+import { format, substring, isNullOrEmpty, join } from "./String.js";
 import { class_type } from "./Reflection.js";
 import { clear, int32ToString } from "./Util.js";
 import { toString } from "./Types.js";
@@ -25,19 +25,24 @@ export function StringBuilder_$ctor_Z18115A39(value, capacity) {
 }
 
 export function StringBuilder_$ctor_Z524259A4(capacity) {
-    return StringBuilder_$ctor_Z18115A39("", capacity);
+    return new StringBuilder_$ctor_Z18115A39("", capacity);
 }
 
 export function StringBuilder_$ctor_Z721C83C5(value) {
-    return StringBuilder_$ctor_Z18115A39(value, 16);
+    return new StringBuilder_$ctor_Z18115A39(value, 16);
 }
 
 export function StringBuilder_$ctor() {
-    return StringBuilder_$ctor_Z18115A39("", 16);
+    return new StringBuilder_$ctor_Z18115A39("", 16);
 }
 
 export function StringBuilder__Append_Z721C83C5(x, s) {
     void (x.buf.push(s));
+    return x;
+}
+
+export function StringBuilder__Append_487EF8FB(x, s, startIndex, count) {
+    void (x.buf.push(substring(s, startIndex, count)));
     return x;
 }
 

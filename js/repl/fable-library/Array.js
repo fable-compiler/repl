@@ -1,22 +1,14 @@
+import { Helpers_allocateArrayFromCons } from "./Native.js";
 import { value as value_2, defaultArg, some } from "./Option.js";
-import { min as min_1, disposeSafe, getEnumerator, comparePrimitives, max as max_1 } from "./Util.js";
+import { min as min_1, equals as equals_1, disposeSafe, getEnumerator, comparePrimitives, max as max_1 } from "./Util.js";
 import { SR_indexOutOfBounds } from "./Global.js";
 
-export function Helpers_allocateArrayFromCons(cons, len) {
-    if ((typeof cons) === "function") {
-        return new cons(len);
-    }
-    else {
-        return new Array(len);
-    }
-}
-
 function indexNotFound() {
-    throw (new Error("An index satisfying the predicate was not found in the collection."));
+    throw new Error("An index satisfying the predicate was not found in the collection.");
 }
 
 function differentLengths() {
-    throw (new Error("Arrays had different lengths"));
+    throw new Error("Arrays had different lengths");
 }
 
 export function append(array1, array2, cons) {
@@ -48,7 +40,7 @@ export function getSubArray(array, start, count) {
 
 export function last(array) {
     if (array.length === 0) {
-        throw (new Error("The input array was empty\\nParameter name: array"));
+        throw new Error("The input array was empty\\nParameter name: array");
     }
     return array[array.length - 1];
 }
@@ -82,7 +74,7 @@ export function map(f, source, cons) {
 
 export function mapIndexed2(f, source1, source2, cons) {
     if (source1.length !== source2.length) {
-        throw (new Error("Arrays had different lengths"));
+        throw new Error("Arrays had different lengths");
     }
     const result = Helpers_allocateArrayFromCons(cons, source1.length);
     for (let i = 0; i <= (source1.length - 1); i++) {
@@ -93,7 +85,7 @@ export function mapIndexed2(f, source1, source2, cons) {
 
 export function map2(f, source1, source2, cons) {
     if (source1.length !== source2.length) {
-        throw (new Error("Arrays had different lengths"));
+        throw new Error("Arrays had different lengths");
     }
     const result = Helpers_allocateArrayFromCons(cons, source1.length);
     for (let i = 0; i <= (source1.length - 1); i++) {
@@ -104,7 +96,7 @@ export function map2(f, source1, source2, cons) {
 
 export function mapIndexed3(f, source1, source2, source3, cons) {
     if ((source1.length !== source2.length) ? true : (source2.length !== source3.length)) {
-        throw (new Error("Arrays had different lengths"));
+        throw new Error("Arrays had different lengths");
     }
     const result = Helpers_allocateArrayFromCons(cons, source1.length);
     for (let i = 0; i <= (source1.length - 1); i++) {
@@ -115,7 +107,7 @@ export function mapIndexed3(f, source1, source2, source3, cons) {
 
 export function map3(f, source1, source2, source3, cons) {
     if ((source1.length !== source2.length) ? true : (source2.length !== source3.length)) {
-        throw (new Error("Arrays had different lengths"));
+        throw new Error("Arrays had different lengths");
     }
     const result = Helpers_allocateArrayFromCons(cons, source1.length);
     for (let i = 0; i <= (source1.length - 1); i++) {
@@ -168,7 +160,7 @@ export function indexed(source) {
 }
 
 export function truncate(count, array) {
-    const count_1 = max_1((x, y) => comparePrimitives(x, y), 0, count) | 0;
+    const count_1 = max_1(comparePrimitives, 0, count) | 0;
     const start = 0;
     return array.slice(start, (start + count_1));
 }
@@ -176,30 +168,28 @@ export function truncate(count, array) {
 export function concat(arrays, cons) {
     const arrays_1 = Array.isArray(arrays) ? arrays : (Array.from(arrays));
     const matchValue = arrays_1.length | 0;
-    switch (matchValue) {
-        case 0: {
-            return Helpers_allocateArrayFromCons(cons, 0);
+    if (matchValue === 0) {
+        return Helpers_allocateArrayFromCons(cons, 0);
+    }
+    else if (matchValue === 1) {
+        return arrays_1[0];
+    }
+    else {
+        let totalIdx = 0;
+        let totalLength = 0;
+        for (let idx = 0; idx <= (arrays_1.length - 1); idx++) {
+            const arr_1 = arrays_1[idx];
+            totalLength = ((totalLength + arr_1.length) | 0);
         }
-        case 1: {
-            return arrays_1[0];
-        }
-        default: {
-            let totalIdx = 0;
-            let totalLength = 0;
-            for (let idx = 0; idx <= (arrays_1.length - 1); idx++) {
-                const arr_1 = arrays_1[idx];
-                totalLength = ((totalLength + arr_1.length) | 0);
+        const result = Helpers_allocateArrayFromCons(cons, totalLength);
+        for (let idx_1 = 0; idx_1 <= (arrays_1.length - 1); idx_1++) {
+            const arr_2 = arrays_1[idx_1];
+            for (let j = 0; j <= (arr_2.length - 1); j++) {
+                result[totalIdx] = arr_2[j];
+                totalIdx = ((totalIdx + 1) | 0);
             }
-            const result = Helpers_allocateArrayFromCons(cons, totalLength);
-            for (let idx_1 = 0; idx_1 <= (arrays_1.length - 1); idx_1++) {
-                const arr_2 = arrays_1[idx_1];
-                for (let j = 0; j <= (arr_2.length - 1); j++) {
-                    result[totalIdx] = arr_2[j];
-                    totalIdx = ((totalIdx + 1) | 0);
-                }
-            }
-            return result;
         }
+        return result;
     }
 }
 
@@ -244,7 +234,7 @@ export function singleton(value, cons) {
 
 export function initialize(count, initializer, cons) {
     if (count < 0) {
-        throw (new Error("The input must be non-negative\\nParameter name: count"));
+        throw new Error("The input must be non-negative\\nParameter name: count");
     }
     const result = Helpers_allocateArrayFromCons(cons, count);
     for (let i = 0; i <= (count - 1); i++) {
@@ -269,7 +259,7 @@ export function pairwise(array) {
 
 export function replicate(count, initial, cons) {
     if (count < 0) {
-        throw (new Error("The input must be non-negative\\nParameter name: count"));
+        throw new Error("The input must be non-negative\\nParameter name: count");
     }
     const result = Helpers_allocateArrayFromCons(cons, count);
     for (let i = 0; i <= (result.length - 1); i++) {
@@ -307,7 +297,7 @@ export function scanBack(folder, array, state, cons) {
 
 export function skip(count, array, cons) {
     if (count > array.length) {
-        throw (new Error("count is greater than array length\\nParameter name: count"));
+        throw new Error("count is greater than array length\\nParameter name: count");
     }
     if (count === array.length) {
         return Helpers_allocateArrayFromCons(cons, 0);
@@ -334,10 +324,10 @@ export function skipWhile(predicate, array, cons) {
 
 export function take(count, array, cons) {
     if (count < 0) {
-        throw (new Error("The input must be non-negative\\nParameter name: count"));
+        throw new Error("The input must be non-negative\\nParameter name: count");
     }
     if (count > array.length) {
-        throw (new Error("count is greater than array length\\nParameter name: count"));
+        throw new Error("count is greater than array length\\nParameter name: count");
     }
     if (count === 0) {
         return Helpers_allocateArrayFromCons(cons, 0);
@@ -662,11 +652,11 @@ export function choose(chooser, array, cons) {
             res.push(y);
         }
     }
-    if ((typeof cons) === "function") {
-        return map((x) => x, res, cons);
+    if (equals_1(cons, null)) {
+        return res;
     }
     else {
-        return res;
+        return map((x) => x, res, cons);
     }
 }
 
@@ -675,7 +665,7 @@ export function foldIndexed(folder, state, array) {
 }
 
 export function fold(folder, state, array) {
-    return array.reduce(((delegateArg0, delegateArg1) => folder(delegateArg0, delegateArg1)), state);
+    return array.reduce((folder), state);
 }
 
 export function iterate(action, array) {
@@ -723,21 +713,21 @@ export function permute(f, array) {
     iterateIndexed((i, x) => {
         const j = f(i) | 0;
         if ((j < 0) ? true : (j >= size)) {
-            throw (new Error("Not a valid permutation"));
+            throw new Error("Not a valid permutation");
         }
         res[j] = x;
         checkFlags[j] = 1;
     }, array);
     if (!(checkFlags.every((y) => (1 === y)))) {
-        throw (new Error("Not a valid permutation"));
+        throw new Error("Not a valid permutation");
     }
     return res;
 }
 
 export function setSlice(target, lower, upper, source) {
     const lower_1 = defaultArg(lower, 0) | 0;
-    const upper_1 = defaultArg(upper, 0) | 0;
-    const length = (((upper_1 > 0) ? upper_1 : (target.length - 1)) - lower_1) | 0;
+    const upper_1 = defaultArg(upper, -1) | 0;
+    const length = (((upper_1 >= 0) ? upper_1 : (target.length - 1)) - lower_1) | 0;
     for (let i = 0; i <= length; i++) {
         target[i + lower_1] = source[i];
     }
@@ -861,7 +851,7 @@ export function zip3(array1, array2, array3) {
 
 export function chunkBySize(chunkSize, array) {
     if (chunkSize < 1) {
-        throw (new Error("The input must be positive.\\nParameter name: size"));
+        throw new Error("The input must be positive.\\nParameter name: size");
     }
     if (array.length === 0) {
         return [[]];
@@ -881,7 +871,7 @@ export function chunkBySize(chunkSize, array) {
 export function splitAt(index, array) {
     let start;
     if ((index < 0) ? true : (index > array.length)) {
-        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
     return [(start = 0, array.slice(start, (start + index))), array.slice(index)];
 }
@@ -957,10 +947,10 @@ export function exactlyOne(array) {
         return array[0];
     }
     else if (array.length === 0) {
-        throw (new Error("The input sequence was empty\\nParameter name: array"));
+        throw new Error("The input sequence was empty\\nParameter name: array");
     }
     else {
-        throw (new Error("Input array too long\\nParameter name: array"));
+        throw new Error("Input array too long\\nParameter name: array");
     }
 }
 
@@ -975,7 +965,7 @@ export function tryExactlyOne(array) {
 
 export function head(array) {
     if (array.length === 0) {
-        throw (new Error("The input array was empty\\nParameter name: array"));
+        throw new Error("The input array was empty\\nParameter name: array");
     }
     else {
         return array[0];
@@ -993,7 +983,7 @@ export function tryHead(array) {
 
 export function tail(array) {
     if (array.length === 0) {
-        throw (new Error("Not enough elements\\nParameter name: array"));
+        throw new Error("Not enough elements\\nParameter name: array");
     }
     return array.slice(1);
 }
@@ -1022,7 +1012,7 @@ export function foldBack(folder, array, state) {
 export function foldIndexed2(folder, state, array1, array2) {
     let acc = state;
     if (array1.length !== array2.length) {
-        throw (new Error("Arrays have different lengths"));
+        throw new Error("Arrays have different lengths");
     }
     for (let i = 0; i <= (array1.length - 1); i++) {
         acc = folder(i, acc, array1[i], array2[i]);
@@ -1052,7 +1042,7 @@ export function foldBack2(f, array1, array2, state) {
 
 export function reduce(reduction, array) {
     if (array.length === 0) {
-        throw (new Error("The input array was empty"));
+        throw new Error("The input array was empty");
     }
     const reduction_1 = reduction;
     return array.reduce(reduction_1);
@@ -1060,7 +1050,7 @@ export function reduce(reduction, array) {
 
 export function reduceBack(reduction, array) {
     if (array.length === 0) {
-        throw (new Error("The input array was empty"));
+        throw new Error("The input array was empty");
     }
     const reduction_1 = reduction;
     return array.reduceRight(reduction_1);
@@ -1156,7 +1146,7 @@ export function min(xs, comparer) {
 
 export function average(array, averager) {
     if (array.length === 0) {
-        throw (new Error("The input array was empty\\nParameter name: array"));
+        throw new Error("The input array was empty\\nParameter name: array");
     }
     let total = averager.GetZero();
     for (let i = 0; i <= (array.length - 1); i++) {
@@ -1167,7 +1157,7 @@ export function average(array, averager) {
 
 export function averageBy(projection, array, averager) {
     if (array.length === 0) {
-        throw (new Error("The input array was empty\\nParameter name: array"));
+        throw new Error("The input array was empty\\nParameter name: array");
     }
     let total = averager.GetZero();
     for (let i = 0; i <= (array.length - 1); i++) {
@@ -1178,10 +1168,10 @@ export function averageBy(projection, array, averager) {
 
 export function windowed(windowSize, source) {
     if (windowSize <= 0) {
-        throw (new Error("windowSize must be positive"));
+        throw new Error("windowSize must be positive");
     }
     let res;
-    const len = max_1((x, y) => comparePrimitives(x, y), 0, source.length - windowSize) | 0;
+    const len = max_1(comparePrimitives, 0, (source.length - windowSize) + 1) | 0;
     res = (new Array(len));
     for (let i = windowSize; i <= source.length; i++) {
         res[i - windowSize] = source.slice(i - windowSize, (i - 1) + 1);
@@ -1191,20 +1181,20 @@ export function windowed(windowSize, source) {
 
 export function splitInto(chunks, array) {
     if (chunks < 1) {
-        throw (new Error("The input must be positive.\\nParameter name: chunks"));
+        throw new Error("The input must be positive.\\nParameter name: chunks");
     }
     if (array.length === 0) {
         return [[]];
     }
     else {
         const result = [];
-        const chunks_1 = min_1((x, y) => comparePrimitives(x, y), chunks, array.length) | 0;
+        const chunks_1 = min_1(comparePrimitives, chunks, array.length) | 0;
         const minChunkSize = (~(~(array.length / chunks_1))) | 0;
         const chunksWithExtraItem = (array.length % chunks_1) | 0;
         for (let i = 0; i <= (chunks_1 - 1); i++) {
             const chunkSize = ((i < chunksWithExtraItem) ? (minChunkSize + 1) : minChunkSize) | 0;
             let slice;
-            const start_1 = ((i * minChunkSize) + min_1((x_1, y_1) => comparePrimitives(x_1, y_1), chunksWithExtraItem, i)) | 0;
+            const start_1 = ((i * minChunkSize) + min_1(comparePrimitives, chunksWithExtraItem, i)) | 0;
             slice = (array.slice(start_1, (start_1 + chunkSize)));
             result.push(slice);
         }
@@ -1238,7 +1228,7 @@ export function transpose(arrays, cons) {
 export function insertAt(index, y, xs) {
     const len = xs.length | 0;
     if ((index < 0) ? true : (index > len)) {
-        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
     const target = new xs.constructor(len + 1);
     for (let i = 0; i <= (index - 1); i++) {
@@ -1254,7 +1244,7 @@ export function insertAt(index, y, xs) {
 export function insertManyAt(index, ys, xs) {
     const len = xs.length | 0;
     if ((index < 0) ? true : (index > len)) {
-        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
     const ys_1 = Array.from(ys);
     const len2 = ys_1.length | 0;
@@ -1273,7 +1263,7 @@ export function insertManyAt(index, ys, xs) {
 
 export function removeAt(index, xs) {
     if ((index < 0) ? true : (index >= xs.length)) {
-        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
     let i = -1;
     return filter((_arg1) => {
@@ -1306,8 +1296,7 @@ export function removeManyAt(index, count, xs) {
     }, xs);
     const status_1 = (((status === 0) && ((i + 1) === (index + count))) ? 1 : status) | 0;
     if (status_1 < 1) {
-        const arg = (status_1 < 0) ? "index" : "count";
-        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + arg));
+        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + ((status_1 < 0) ? "index" : "count"));
     }
     return ys;
 }
@@ -1315,7 +1304,7 @@ export function removeManyAt(index, count, xs) {
 export function updateAt(index, y, xs) {
     const len = xs.length | 0;
     if ((index < 0) ? true : (index >= len)) {
-        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
     const target = new xs.constructor(len);
     for (let i = 0; i <= (len - 1); i++) {

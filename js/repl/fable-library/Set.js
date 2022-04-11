@@ -39,7 +39,7 @@ export function SetTreeNode$1$reflection(gen0) {
     return class_type("Set.SetTreeNode`1", [gen0], SetTreeNode$1, SetTreeLeaf$1$reflection(gen0));
 }
 
-export function SetTreeNode$1_$ctor_Z6E7BE5F7(v, left, right, h) {
+export function SetTreeNode$1_$ctor_5F465FC9(v, left, right, h) {
     return new SetTreeNode$1(v, left, right, h);
 }
 
@@ -106,10 +106,10 @@ export function SetTreeModule_mk(l, k, r) {
     }
     const m = ((hl < hr) ? hr : hl) | 0;
     if (m === 0) {
-        return SetTreeLeaf$1_$ctor_2B595(k);
+        return new SetTreeLeaf$1_$ctor_2B595(k);
     }
     else {
-        return SetTreeNode$1_$ctor_Z6E7BE5F7(k, l, r, m + 1);
+        return new SetTreeNode$1_$ctor_5F465FC9(k, l, r, m + 1);
     }
 }
 
@@ -142,7 +142,7 @@ export function SetTreeModule_rebalance(t1, v, t2) {
                     return SetTreeModule_mk(SetTreeModule_mk(t1, v, SetTreeNode$1__get_Left(matchValue_1)), SetTreeLeaf$1__get_Key(matchValue_1), SetTreeModule_mk(SetTreeNode$1__get_Right(matchValue_1), SetTreeLeaf$1__get_Key(matchValue), SetTreeNode$1__get_Right(matchValue)));
                 }
                 else {
-                    throw (new Error("internal error: Set.rebalance"));
+                    throw new Error("internal error: Set.rebalance");
                 }
             }
             else {
@@ -150,7 +150,7 @@ export function SetTreeModule_rebalance(t1, v, t2) {
             }
         }
         else {
-            throw (new Error("internal error: Set.rebalance"));
+            throw new Error("internal error: Set.rebalance");
         }
     }
     else if (t1h > (t2h + 2)) {
@@ -162,7 +162,7 @@ export function SetTreeModule_rebalance(t1, v, t2) {
                     return SetTreeModule_mk(SetTreeModule_mk(SetTreeNode$1__get_Left(matchValue_2), SetTreeLeaf$1__get_Key(matchValue_2), SetTreeNode$1__get_Left(matchValue_3)), SetTreeLeaf$1__get_Key(matchValue_3), SetTreeModule_mk(SetTreeNode$1__get_Right(matchValue_3), v, t2));
                 }
                 else {
-                    throw (new Error("internal error: Set.rebalance"));
+                    throw new Error("internal error: Set.rebalance");
                 }
             }
             else {
@@ -170,7 +170,7 @@ export function SetTreeModule_rebalance(t1, v, t2) {
             }
         }
         else {
-            throw (new Error("internal error: Set.rebalance"));
+            throw new Error("internal error: Set.rebalance");
         }
     }
     else {
@@ -196,18 +196,18 @@ export function SetTreeModule_add(comparer, k, t) {
         else {
             const c_1 = comparer.Compare(k, SetTreeLeaf$1__get_Key(t2)) | 0;
             if (c_1 < 0) {
-                return SetTreeNode$1_$ctor_Z6E7BE5F7(k, SetTreeModule_empty(), t, 2);
+                return new SetTreeNode$1_$ctor_5F465FC9(k, SetTreeModule_empty(), t, 2);
             }
             else if (c_1 === 0) {
                 return t;
             }
             else {
-                return SetTreeNode$1_$ctor_Z6E7BE5F7(k, t, SetTreeModule_empty(), 2);
+                return new SetTreeNode$1_$ctor_5F465FC9(k, t, SetTreeModule_empty(), 2);
             }
         }
     }
     else {
-        return SetTreeLeaf$1_$ctor_2B595(k);
+        return new SetTreeLeaf$1_$ctor_2B595(k);
     }
 }
 
@@ -297,7 +297,7 @@ export function SetTreeModule_spliceOutSuccessor(t) {
         }
     }
     else {
-        throw (new Error("internal error: Set.spliceOutSuccessor"));
+        throw new Error("internal error: Set.spliceOutSuccessor");
     }
 }
 
@@ -760,7 +760,7 @@ export function SetTreeModule_maximumElementOpt(t) {
 export function SetTreeModule_minimumElement(s) {
     const matchValue = SetTreeModule_minimumElementOpt(s);
     if (matchValue == null) {
-        throw (new Error("Set contains no elements"));
+        throw new Error("Set contains no elements");
     }
     else {
         return value_1(matchValue);
@@ -770,7 +770,7 @@ export function SetTreeModule_minimumElement(s) {
 export function SetTreeModule_maximumElement(s) {
     const matchValue = SetTreeModule_maximumElementOpt(s);
     if (matchValue == null) {
-        throw (new Error("Set contains no elements"));
+        throw new Error("Set contains no elements");
     }
     else {
         return value_1(matchValue);
@@ -799,7 +799,7 @@ export function SetTreeModule_collapseLHS(stack_mut) {
             if (x != null) {
                 const x2 = x;
                 if (x2 instanceof SetTreeNode$1) {
-                    stack_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x2), SetTreeLeaf$1_$ctor_2B595(SetTreeLeaf$1__get_Key(x2)), SetTreeNode$1__get_Right(x2)], rest);
+                    stack_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x2), new SetTreeLeaf$1_$ctor_2B595(SetTreeLeaf$1__get_Key(x2)), SetTreeNode$1__get_Right(x2)], rest);
                     continue SetTreeModule_collapseLHS;
                 }
                 else {
@@ -823,11 +823,11 @@ export function SetTreeModule_mkIterator(s) {
 }
 
 export function SetTreeModule_notStarted() {
-    throw (new Error("Enumeration not started"));
+    throw new Error("Enumeration not started");
 }
 
 export function SetTreeModule_alreadyFinished() {
-    throw (new Error("Enumeration already started"));
+    throw new Error("Enumeration already started");
 }
 
 export function SetTreeModule_current(i) {
@@ -841,7 +841,7 @@ export function SetTreeModule_current(i) {
             return SetTreeLeaf$1__get_Key(t);
         }
         else {
-            throw (new Error("Please report error: Set iterator, unexpected stack for current"));
+            throw new Error("Please report error: Set iterator, unexpected stack for current");
         }
     }
     else {
@@ -856,7 +856,7 @@ export function SetTreeModule_moveNext(i) {
             if (head(matchValue) != null) {
                 const t = head(matchValue);
                 if (t instanceof SetTreeNode$1) {
-                    throw (new Error("Please report error: Set iterator, unexpected stack for moveNext"));
+                    throw new Error("Please report error: Set iterator, unexpected stack for moveNext");
                 }
                 else {
                     i.stack = SetTreeModule_collapseLHS(tail(matchValue));
@@ -864,7 +864,7 @@ export function SetTreeModule_moveNext(i) {
                 }
             }
             else {
-                throw (new Error("Please report error: Set iterator, unexpected stack for moveNext"));
+                throw new Error("Please report error: Set iterator, unexpected stack for moveNext");
             }
         }
         else {
@@ -963,13 +963,13 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                             case 0: {
                                                 if (x1_4 instanceof SetTreeNode$1) {
                                                     comparer_mut = comparer;
-                                                    l1_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x1_4), SetTreeNode$1_$ctor_Z6E7BE5F7(SetTreeLeaf$1__get_Key(x1_4), SetTreeModule_empty(), SetTreeNode$1__get_Right(x1_4), 0)], t1_6);
+                                                    l1_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x1_4), new SetTreeNode$1_$ctor_5F465FC9(SetTreeLeaf$1__get_Key(x1_4), SetTreeModule_empty(), SetTreeNode$1__get_Right(x1_4), 0)], t1_6);
                                                     l2_mut = l2;
                                                     continue SetTreeModule_compareStacks;
                                                 }
                                                 else {
                                                     comparer_mut = comparer;
-                                                    l1_mut = ofArrayWithTail([SetTreeModule_empty(), SetTreeLeaf$1_$ctor_2B595(SetTreeLeaf$1__get_Key(x1_4))], t1_6);
+                                                    l1_mut = ofArrayWithTail([SetTreeModule_empty(), new SetTreeLeaf$1_$ctor_2B595(SetTreeLeaf$1__get_Key(x1_4))], t1_6);
                                                     l2_mut = l2;
                                                     continue SetTreeModule_compareStacks;
                                                 }
@@ -978,18 +978,18 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                                 if (x2_4 instanceof SetTreeNode$1) {
                                                     comparer_mut = comparer;
                                                     l1_mut = l1;
-                                                    l2_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x2_4), SetTreeNode$1_$ctor_Z6E7BE5F7(SetTreeLeaf$1__get_Key(x2_4), SetTreeModule_empty(), SetTreeNode$1__get_Right(x2_4), 0)], t2_6);
+                                                    l2_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x2_4), new SetTreeNode$1_$ctor_5F465FC9(SetTreeLeaf$1__get_Key(x2_4), SetTreeModule_empty(), SetTreeNode$1__get_Right(x2_4), 0)], t2_6);
                                                     continue SetTreeModule_compareStacks;
                                                 }
                                                 else {
                                                     comparer_mut = comparer;
                                                     l1_mut = l1;
-                                                    l2_mut = ofArrayWithTail([SetTreeModule_empty(), SetTreeLeaf$1_$ctor_2B595(SetTreeLeaf$1__get_Key(x2_4))], t2_6);
+                                                    l2_mut = ofArrayWithTail([SetTreeModule_empty(), new SetTreeLeaf$1_$ctor_2B595(SetTreeLeaf$1__get_Key(x2_4))], t2_6);
                                                     continue SetTreeModule_compareStacks;
                                                 }
                                             }
                                             case 2: {
-                                                throw (new Error("unexpected state in SetTree.compareStacks"));
+                                                throw new Error("unexpected state in SetTree.compareStacks");
                                             }
                                         }
                                     }
@@ -1047,13 +1047,13 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                     case 0: {
                                         if (x1_5 instanceof SetTreeNode$1) {
                                             comparer_mut = comparer;
-                                            l1_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x1_5), SetTreeNode$1_$ctor_Z6E7BE5F7(SetTreeLeaf$1__get_Key(x1_5), SetTreeModule_empty(), SetTreeNode$1__get_Right(x1_5), 0)], t1_7);
+                                            l1_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x1_5), new SetTreeNode$1_$ctor_5F465FC9(SetTreeLeaf$1__get_Key(x1_5), SetTreeModule_empty(), SetTreeNode$1__get_Right(x1_5), 0)], t1_7);
                                             l2_mut = l2;
                                             continue SetTreeModule_compareStacks;
                                         }
                                         else {
                                             comparer_mut = comparer;
-                                            l1_mut = ofArrayWithTail([SetTreeModule_empty(), SetTreeLeaf$1_$ctor_2B595(SetTreeLeaf$1__get_Key(x1_5))], t1_7);
+                                            l1_mut = ofArrayWithTail([SetTreeModule_empty(), new SetTreeLeaf$1_$ctor_2B595(SetTreeLeaf$1__get_Key(x1_5))], t1_7);
                                             l2_mut = l2;
                                             continue SetTreeModule_compareStacks;
                                         }
@@ -1062,18 +1062,18 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                         if (x2_5 instanceof SetTreeNode$1) {
                                             comparer_mut = comparer;
                                             l1_mut = l1;
-                                            l2_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x2_5), SetTreeNode$1_$ctor_Z6E7BE5F7(SetTreeLeaf$1__get_Key(x2_5), SetTreeModule_empty(), SetTreeNode$1__get_Right(x2_5), 0)], t2_7);
+                                            l2_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x2_5), new SetTreeNode$1_$ctor_5F465FC9(SetTreeLeaf$1__get_Key(x2_5), SetTreeModule_empty(), SetTreeNode$1__get_Right(x2_5), 0)], t2_7);
                                             continue SetTreeModule_compareStacks;
                                         }
                                         else {
                                             comparer_mut = comparer;
                                             l1_mut = l1;
-                                            l2_mut = ofArrayWithTail([SetTreeModule_empty(), SetTreeLeaf$1_$ctor_2B595(SetTreeLeaf$1__get_Key(x2_5))], t2_7);
+                                            l2_mut = ofArrayWithTail([SetTreeModule_empty(), new SetTreeLeaf$1_$ctor_2B595(SetTreeLeaf$1__get_Key(x2_5))], t2_7);
                                             continue SetTreeModule_compareStacks;
                                         }
                                     }
                                     case 2: {
-                                        throw (new Error("unexpected state in SetTree.compareStacks"));
+                                        throw new Error("unexpected state in SetTree.compareStacks");
                                     }
                                 }
                             }
@@ -1131,13 +1131,13 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                     case 0: {
                                         if (x1_6 instanceof SetTreeNode$1) {
                                             comparer_mut = comparer;
-                                            l1_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x1_6), SetTreeNode$1_$ctor_Z6E7BE5F7(SetTreeLeaf$1__get_Key(x1_6), SetTreeModule_empty(), SetTreeNode$1__get_Right(x1_6), 0)], t1_8);
+                                            l1_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x1_6), new SetTreeNode$1_$ctor_5F465FC9(SetTreeLeaf$1__get_Key(x1_6), SetTreeModule_empty(), SetTreeNode$1__get_Right(x1_6), 0)], t1_8);
                                             l2_mut = l2;
                                             continue SetTreeModule_compareStacks;
                                         }
                                         else {
                                             comparer_mut = comparer;
-                                            l1_mut = ofArrayWithTail([SetTreeModule_empty(), SetTreeLeaf$1_$ctor_2B595(SetTreeLeaf$1__get_Key(x1_6))], t1_8);
+                                            l1_mut = ofArrayWithTail([SetTreeModule_empty(), new SetTreeLeaf$1_$ctor_2B595(SetTreeLeaf$1__get_Key(x1_6))], t1_8);
                                             l2_mut = l2;
                                             continue SetTreeModule_compareStacks;
                                         }
@@ -1146,18 +1146,18 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                         if (x2_6 instanceof SetTreeNode$1) {
                                             comparer_mut = comparer;
                                             l1_mut = l1;
-                                            l2_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x2_6), SetTreeNode$1_$ctor_Z6E7BE5F7(SetTreeLeaf$1__get_Key(x2_6), SetTreeModule_empty(), SetTreeNode$1__get_Right(x2_6), 0)], t2_8);
+                                            l2_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x2_6), new SetTreeNode$1_$ctor_5F465FC9(SetTreeLeaf$1__get_Key(x2_6), SetTreeModule_empty(), SetTreeNode$1__get_Right(x2_6), 0)], t2_8);
                                             continue SetTreeModule_compareStacks;
                                         }
                                         else {
                                             comparer_mut = comparer;
                                             l1_mut = l1;
-                                            l2_mut = ofArrayWithTail([SetTreeModule_empty(), SetTreeLeaf$1_$ctor_2B595(SetTreeLeaf$1__get_Key(x2_6))], t2_8);
+                                            l2_mut = ofArrayWithTail([SetTreeModule_empty(), new SetTreeLeaf$1_$ctor_2B595(SetTreeLeaf$1__get_Key(x2_6))], t2_8);
                                             continue SetTreeModule_compareStacks;
                                         }
                                     }
                                     case 2: {
-                                        throw (new Error("unexpected state in SetTree.compareStacks"));
+                                        throw new Error("unexpected state in SetTree.compareStacks");
                                     }
                                 }
                             }
@@ -1216,13 +1216,13 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                             case 0: {
                                 if (x1 instanceof SetTreeNode$1) {
                                     comparer_mut = comparer;
-                                    l1_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x1), SetTreeNode$1_$ctor_Z6E7BE5F7(SetTreeLeaf$1__get_Key(x1), SetTreeModule_empty(), SetTreeNode$1__get_Right(x1), 0)], t1_2);
+                                    l1_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x1), new SetTreeNode$1_$ctor_5F465FC9(SetTreeLeaf$1__get_Key(x1), SetTreeModule_empty(), SetTreeNode$1__get_Right(x1), 0)], t1_2);
                                     l2_mut = l2;
                                     continue SetTreeModule_compareStacks;
                                 }
                                 else {
                                     comparer_mut = comparer;
-                                    l1_mut = ofArrayWithTail([SetTreeModule_empty(), SetTreeLeaf$1_$ctor_2B595(SetTreeLeaf$1__get_Key(x1))], t1_2);
+                                    l1_mut = ofArrayWithTail([SetTreeModule_empty(), new SetTreeLeaf$1_$ctor_2B595(SetTreeLeaf$1__get_Key(x1))], t1_2);
                                     l2_mut = l2;
                                     continue SetTreeModule_compareStacks;
                                 }
@@ -1231,18 +1231,18 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                 if (x2_1 instanceof SetTreeNode$1) {
                                     comparer_mut = comparer;
                                     l1_mut = l1;
-                                    l2_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x2_1), SetTreeNode$1_$ctor_Z6E7BE5F7(SetTreeLeaf$1__get_Key(x2_1), SetTreeModule_empty(), SetTreeNode$1__get_Right(x2_1), 0)], t2_2);
+                                    l2_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x2_1), new SetTreeNode$1_$ctor_5F465FC9(SetTreeLeaf$1__get_Key(x2_1), SetTreeModule_empty(), SetTreeNode$1__get_Right(x2_1), 0)], t2_2);
                                     continue SetTreeModule_compareStacks;
                                 }
                                 else {
                                     comparer_mut = comparer;
                                     l1_mut = l1;
-                                    l2_mut = ofArrayWithTail([SetTreeModule_empty(), SetTreeLeaf$1_$ctor_2B595(SetTreeLeaf$1__get_Key(x2_1))], t2_2);
+                                    l2_mut = ofArrayWithTail([SetTreeModule_empty(), new SetTreeLeaf$1_$ctor_2B595(SetTreeLeaf$1__get_Key(x2_1))], t2_2);
                                     continue SetTreeModule_compareStacks;
                                 }
                             }
                             case 2: {
-                                throw (new Error("unexpected state in SetTree.compareStacks"));
+                                throw new Error("unexpected state in SetTree.compareStacks");
                             }
                         }
                     }
@@ -1288,13 +1288,13 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                         case 0: {
                             if (x1_2 instanceof SetTreeNode$1) {
                                 comparer_mut = comparer;
-                                l1_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x1_2), SetTreeNode$1_$ctor_Z6E7BE5F7(SetTreeLeaf$1__get_Key(x1_2), SetTreeModule_empty(), SetTreeNode$1__get_Right(x1_2), 0)], t1_4);
+                                l1_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x1_2), new SetTreeNode$1_$ctor_5F465FC9(SetTreeLeaf$1__get_Key(x1_2), SetTreeModule_empty(), SetTreeNode$1__get_Right(x1_2), 0)], t1_4);
                                 l2_mut = l2;
                                 continue SetTreeModule_compareStacks;
                             }
                             else {
                                 comparer_mut = comparer;
-                                l1_mut = ofArrayWithTail([SetTreeModule_empty(), SetTreeLeaf$1_$ctor_2B595(SetTreeLeaf$1__get_Key(x1_2))], t1_4);
+                                l1_mut = ofArrayWithTail([SetTreeModule_empty(), new SetTreeLeaf$1_$ctor_2B595(SetTreeLeaf$1__get_Key(x1_2))], t1_4);
                                 l2_mut = l2;
                                 continue SetTreeModule_compareStacks;
                             }
@@ -1303,18 +1303,18 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                             if (x2_2 instanceof SetTreeNode$1) {
                                 comparer_mut = comparer;
                                 l1_mut = l1;
-                                l2_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x2_2), SetTreeNode$1_$ctor_Z6E7BE5F7(SetTreeLeaf$1__get_Key(x2_2), SetTreeModule_empty(), SetTreeNode$1__get_Right(x2_2), 0)], t2_4);
+                                l2_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x2_2), new SetTreeNode$1_$ctor_5F465FC9(SetTreeLeaf$1__get_Key(x2_2), SetTreeModule_empty(), SetTreeNode$1__get_Right(x2_2), 0)], t2_4);
                                 continue SetTreeModule_compareStacks;
                             }
                             else {
                                 comparer_mut = comparer;
                                 l1_mut = l1;
-                                l2_mut = ofArrayWithTail([SetTreeModule_empty(), SetTreeLeaf$1_$ctor_2B595(SetTreeLeaf$1__get_Key(x2_2))], t2_4);
+                                l2_mut = ofArrayWithTail([SetTreeModule_empty(), new SetTreeLeaf$1_$ctor_2B595(SetTreeLeaf$1__get_Key(x2_2))], t2_4);
                                 continue SetTreeModule_compareStacks;
                             }
                         }
                         case 2: {
-                            throw (new Error("unexpected state in SetTree.compareStacks"));
+                            throw new Error("unexpected state in SetTree.compareStacks");
                         }
                     }
                 }
@@ -1475,13 +1475,13 @@ export class FSharpSet {
         return SetTreeModule_compare(FSharpSet__get_Comparer(s), FSharpSet__get_Tree(s), FSharpSet__get_Tree(that)) | 0;
     }
     ["System.Collections.Generic.ICollection`1.Add2B595"](x) {
-        throw (new Error("ReadOnlyCollection"));
+        throw new Error("ReadOnlyCollection");
     }
     ["System.Collections.Generic.ICollection`1.Clear"]() {
-        throw (new Error("ReadOnlyCollection"));
+        throw new Error("ReadOnlyCollection");
     }
     ["System.Collections.Generic.ICollection`1.Remove2B595"](x) {
-        throw (new Error("ReadOnlyCollection"));
+        throw new Error("ReadOnlyCollection");
     }
     ["System.Collections.Generic.ICollection`1.Contains2B595"](x) {
         const s = this;
@@ -1519,14 +1519,14 @@ export class FSharpSet {
     }
     add(k) {
         const s = this;
-        throw (new Error("Set cannot be mutated"));
+        throw new Error("Set cannot be mutated");
         return s;
     }
     clear() {
-        throw (new Error("Set cannot be mutated"));
+        throw new Error("Set cannot be mutated");
     }
     delete(k) {
-        throw (new Error("Set cannot be mutated"));
+        throw new Error("Set cannot be mutated");
         return false;
     }
     has(k) {
@@ -1570,15 +1570,15 @@ export function FSharpSet__get_Tree(set$) {
 }
 
 export function FSharpSet_Empty(comparer) {
-    return FSharpSet_$ctor(comparer, SetTreeModule_empty());
+    return new FSharpSet_$ctor(comparer, SetTreeModule_empty());
 }
 
 export function FSharpSet__Add(s, value) {
-    return FSharpSet_$ctor(FSharpSet__get_Comparer(s), SetTreeModule_add(FSharpSet__get_Comparer(s), value, FSharpSet__get_Tree(s)));
+    return new FSharpSet_$ctor(FSharpSet__get_Comparer(s), SetTreeModule_add(FSharpSet__get_Comparer(s), value, FSharpSet__get_Tree(s)));
 }
 
 export function FSharpSet__Remove(s, value) {
-    return FSharpSet_$ctor(FSharpSet__get_Comparer(s), SetTreeModule_remove(FSharpSet__get_Comparer(s), value, FSharpSet__get_Tree(s)));
+    return new FSharpSet_$ctor(FSharpSet__get_Comparer(s), SetTreeModule_remove(FSharpSet__get_Comparer(s), value, FSharpSet__get_Tree(s)));
 }
 
 export function FSharpSet__get_Count(s) {
@@ -1608,7 +1608,7 @@ export function FSharpSet__Partition(s, f) {
     }
     else {
         const patternInput = SetTreeModule_partition(FSharpSet__get_Comparer(s), f, FSharpSet__get_Tree(s));
-        return [FSharpSet_$ctor(FSharpSet__get_Comparer(s), patternInput[0]), FSharpSet_$ctor(FSharpSet__get_Comparer(s), patternInput[1])];
+        return [new FSharpSet_$ctor(FSharpSet__get_Comparer(s), patternInput[0]), new FSharpSet_$ctor(FSharpSet__get_Comparer(s), patternInput[1])];
     }
 }
 
@@ -1617,12 +1617,12 @@ export function FSharpSet__Filter(s, f) {
         return s;
     }
     else {
-        return FSharpSet_$ctor(FSharpSet__get_Comparer(s), SetTreeModule_filter(FSharpSet__get_Comparer(s), f, FSharpSet__get_Tree(s)));
+        return new FSharpSet_$ctor(FSharpSet__get_Comparer(s), SetTreeModule_filter(FSharpSet__get_Comparer(s), f, FSharpSet__get_Tree(s)));
     }
 }
 
 export function FSharpSet__Map(s, f, comparer) {
-    return FSharpSet_$ctor(comparer, SetTreeModule_fold((acc, k) => SetTreeModule_add(comparer, f(k), acc), SetTreeModule_empty(), FSharpSet__get_Tree(s)));
+    return new FSharpSet_$ctor(comparer, SetTreeModule_fold((acc, k) => SetTreeModule_add(comparer, f(k), acc), SetTreeModule_empty(), FSharpSet__get_Tree(s)));
 }
 
 export function FSharpSet__Exists(s, f) {
@@ -1641,7 +1641,7 @@ export function FSharpSet_op_Subtraction(set1, set2) {
         return set1;
     }
     else {
-        return FSharpSet_$ctor(FSharpSet__get_Comparer(set1), SetTreeModule_diff(FSharpSet__get_Comparer(set1), FSharpSet__get_Tree(set1), FSharpSet__get_Tree(set2)));
+        return new FSharpSet_$ctor(FSharpSet__get_Comparer(set1), SetTreeModule_diff(FSharpSet__get_Comparer(set1), FSharpSet__get_Tree(set1), FSharpSet__get_Tree(set2)));
     }
 }
 
@@ -1653,7 +1653,7 @@ export function FSharpSet_op_Addition(set1, set2) {
         return set2;
     }
     else {
-        return FSharpSet_$ctor(FSharpSet__get_Comparer(set1), SetTreeModule_union(FSharpSet__get_Comparer(set1), FSharpSet__get_Tree(set1), FSharpSet__get_Tree(set2)));
+        return new FSharpSet_$ctor(FSharpSet__get_Comparer(set1), SetTreeModule_union(FSharpSet__get_Comparer(set1), FSharpSet__get_Tree(set1), FSharpSet__get_Tree(set2)));
     }
 }
 
@@ -1665,12 +1665,12 @@ export function FSharpSet_Intersection(a, b) {
         return a;
     }
     else {
-        return FSharpSet_$ctor(FSharpSet__get_Comparer(a), SetTreeModule_intersection(FSharpSet__get_Comparer(a), FSharpSet__get_Tree(a), FSharpSet__get_Tree(b)));
+        return new FSharpSet_$ctor(FSharpSet__get_Comparer(a), SetTreeModule_intersection(FSharpSet__get_Comparer(a), FSharpSet__get_Tree(a), FSharpSet__get_Tree(b)));
     }
 }
 
 export function FSharpSet_IntersectionMany(sets) {
-    return reduce((s1, s2) => FSharpSet_Intersection(s1, s2), sets);
+    return reduce(FSharpSet_Intersection, sets);
 }
 
 export function FSharpSet_Equality(a, b) {
@@ -1758,7 +1758,7 @@ export function union(set1, set2) {
 }
 
 export function unionMany(sets, comparer) {
-    return fold_3((s1, s2) => FSharpSet_op_Addition(s1, s2), FSharpSet_Empty(comparer), sets);
+    return fold_3(FSharpSet_op_Addition, FSharpSet_Empty(comparer), sets);
 }
 
 export function intersect(set1, set2) {
@@ -1810,11 +1810,11 @@ export function count(set$) {
 }
 
 export function ofList(elements, comparer) {
-    return FSharpSet_$ctor(comparer, SetTreeModule_ofSeq(comparer, elements));
+    return new FSharpSet_$ctor(comparer, SetTreeModule_ofSeq(comparer, elements));
 }
 
 export function ofArray(array, comparer) {
-    return FSharpSet_$ctor(comparer, SetTreeModule_ofArray(comparer, array));
+    return new FSharpSet_$ctor(comparer, SetTreeModule_ofArray(comparer, array));
 }
 
 export function toList(set$) {
@@ -1830,7 +1830,7 @@ export function toSeq(set$) {
 }
 
 export function ofSeq(elements, comparer) {
-    return FSharpSet_$ctor(comparer, SetTreeModule_ofSeq(comparer, elements));
+    return new FSharpSet_$ctor(comparer, SetTreeModule_ofSeq(comparer, elements));
 }
 
 export function difference(set1, set2) {
@@ -1867,7 +1867,7 @@ export function unionWith(s1, s2) {
 
 export function newMutableSetWith(s1, s2) {
     if (s1 instanceof HashSet) {
-        return HashSet_$ctor_Z6150332D(s2, HashSet__get_Comparer(s1));
+        return new HashSet_$ctor_Z6150332D(s2, HashSet__get_Comparer(s1));
     }
     else {
         return new Set(s2);

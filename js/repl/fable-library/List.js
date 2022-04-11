@@ -125,7 +125,7 @@ export class FSharpList extends Record {
     }
     GetEnumerator() {
         const xs = this;
-        return ListEnumerator$1_$ctor_3002E699(xs);
+        return new ListEnumerator$1_$ctor_3002E699(xs);
     }
     [Symbol.iterator]() {
         return toIterator(this.GetEnumerator());
@@ -222,7 +222,7 @@ export function FSharpList__get_Head(xs) {
         return xs.head;
     }
     else {
-        throw (new Error((SR_inputWasEmpty + "\\nParameter name: ") + "list"));
+        throw new Error((SR_inputWasEmpty + "\\nParameter name: ") + "list");
     }
 }
 
@@ -232,7 +232,7 @@ export function FSharpList__get_Tail(xs) {
         return matchValue;
     }
     else {
-        throw (new Error((SR_inputWasEmpty + "\\nParameter name: ") + "list"));
+        throw new Error((SR_inputWasEmpty + "\\nParameter name: ") + "list");
     }
 }
 
@@ -253,7 +253,7 @@ export function FSharpList__get_Item_Z524259A4(xs, index) {
                 }
             }
             else {
-                throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+                throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
             }
             break;
         }
@@ -322,7 +322,7 @@ export function tryLast(xs_mut) {
 export function last(xs) {
     const matchValue = tryLast(xs);
     if (matchValue == null) {
-        throw (new Error(SR_inputWasEmpty));
+        throw new Error(SR_inputWasEmpty);
     }
     else {
         return value_1(matchValue);
@@ -568,7 +568,8 @@ export function concat(lists) {
 export function scan(folder, state, xs) {
     let t, xs_4, t_2;
     const root = FSharpList_get_Empty();
-    let node = (t = (new FSharpList(state, void 0)), (root.tail = t, t));
+    let node;
+    node = ((t = (new FSharpList(state, void 0)), (root.tail = t, t)));
     let acc = state;
     let xs_3 = xs;
     while (!FSharpList__get_IsEmpty(xs_3)) {
@@ -741,7 +742,7 @@ export function tryPick(f, xs) {
 export function pick(f, xs) {
     const matchValue = tryPick(f, xs);
     if (matchValue == null) {
-        throw (new Error(SR_keyNotFoundAlt));
+        throw new Error(SR_keyNotFoundAlt);
     }
     else {
         return value_1(matchValue);
@@ -755,7 +756,7 @@ export function tryFind(f, xs) {
 export function find(f, xs) {
     const matchValue = tryFind(f, xs);
     if (matchValue == null) {
-        throw (new Error(SR_keyNotFoundAlt));
+        throw new Error(SR_keyNotFoundAlt);
     }
     else {
         return value_1(matchValue);
@@ -769,7 +770,7 @@ export function tryFindBack(f, xs) {
 export function findBack(f, xs) {
     const matchValue = tryFindBack(f, xs);
     if (matchValue == null) {
-        throw (new Error(SR_keyNotFoundAlt));
+        throw new Error(SR_keyNotFoundAlt);
     }
     else {
         return value_1(matchValue);
@@ -801,7 +802,7 @@ export function tryFindIndex(f, xs) {
 export function findIndex(f, xs) {
     const matchValue = tryFindIndex(f, xs);
     if (matchValue == null) {
-        throw (new Error(SR_keyNotFoundAlt));
+        throw new Error(SR_keyNotFoundAlt);
     }
     else {
         return matchValue | 0;
@@ -815,7 +816,7 @@ export function tryFindIndexBack(f, xs) {
 export function findIndexBack(f, xs) {
     const matchValue = tryFindIndexBack(f, xs);
     if (matchValue == null) {
-        throw (new Error(SR_keyNotFoundAlt));
+        throw new Error(SR_keyNotFoundAlt);
     }
     else {
         return matchValue | 0;
@@ -925,7 +926,7 @@ export function replicate(n, x) {
 
 export function reduce(f, xs) {
     if (FSharpList__get_IsEmpty(xs)) {
-        throw (new Error(SR_inputWasEmpty));
+        throw new Error(SR_inputWasEmpty);
     }
     else {
         return fold(f, head(xs), tail(xs));
@@ -934,7 +935,7 @@ export function reduce(f, xs) {
 
 export function reduceBack(f, xs) {
     if (FSharpList__get_IsEmpty(xs)) {
-        throw (new Error(SR_inputWasEmpty));
+        throw new Error(SR_inputWasEmpty);
     }
     else {
         return foldBack(f, tail(xs), head(xs));
@@ -989,7 +990,7 @@ export function exists2(f_mut, xs_mut, ys_mut) {
                 }
             }
             case 2: {
-                throw (new Error((SR_differentLengths + "\\nParameter name: ") + "list2"));
+                throw new Error((SR_differentLengths + "\\nParameter name: ") + "list2");
             }
         }
         break;
@@ -1081,7 +1082,7 @@ export function permute(f, xs) {
 }
 
 export function chunkBySize(chunkSize, xs) {
-    return ofArray(map_1((xs_1) => ofArray(xs_1), chunkBySize_1(chunkSize, toArray(xs))));
+    return ofArray(map_1(ofArray, chunkBySize_1(chunkSize, toArray(xs))));
 }
 
 export function allPairs(xs, ys) {
@@ -1107,7 +1108,7 @@ export function skip(count_mut, xs_mut) {
             return xs;
         }
         else if (FSharpList__get_IsEmpty(xs)) {
-            throw (new Error((SR_notEnoughElements + "\\nParameter name: ") + "list"));
+            throw new Error((SR_notEnoughElements + "\\nParameter name: ") + "list");
         }
         else {
             count_mut = (count - 1);
@@ -1139,7 +1140,7 @@ export function skipWhile(predicate_mut, xs_mut) {
 
 export function take(count, xs) {
     if (count < 0) {
-        throw (new Error((SR_inputMustBeNonNegative + "\\nParameter name: ") + "count"));
+        throw new Error((SR_inputMustBeNonNegative + "\\nParameter name: ") + "count");
     }
     const loop = (i_mut, acc_mut, xs_1_mut) => {
         let t;
@@ -1150,7 +1151,7 @@ export function take(count, xs) {
                 return acc;
             }
             else if (FSharpList__get_IsEmpty(xs_1)) {
-                throw (new Error((SR_notEnoughElements + "\\nParameter name: ") + "list"));
+                throw new Error((SR_notEnoughElements + "\\nParameter name: ") + "list");
             }
             else {
                 i_mut = (i - 1);
@@ -1228,10 +1229,10 @@ export function getSlice(startIndex, endIndex, xs) {
     const startIndex_1 = defaultArg(startIndex, 0) | 0;
     const endIndex_1 = defaultArg(endIndex, len - 1) | 0;
     if (startIndex_1 < 0) {
-        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "startIndex"));
+        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "startIndex");
     }
     else if (endIndex_1 >= len) {
-        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "endIndex"));
+        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "endIndex");
     }
     else if (endIndex_1 < startIndex_1) {
         return FSharpList_get_Empty();
@@ -1243,23 +1244,23 @@ export function getSlice(startIndex, endIndex, xs) {
 
 export function splitAt(index, xs) {
     if (index < 0) {
-        throw (new Error((SR_inputMustBeNonNegative + "\\nParameter name: ") + "index"));
+        throw new Error((SR_inputMustBeNonNegative + "\\nParameter name: ") + "index");
     }
     if (index > FSharpList__get_Length(xs)) {
-        throw (new Error((SR_notEnoughElements + "\\nParameter name: ") + "index"));
+        throw new Error((SR_notEnoughElements + "\\nParameter name: ") + "index");
     }
     return [take(index, xs), skip(index, xs)];
 }
 
 export function exactlyOne(xs) {
     if (FSharpList__get_IsEmpty(xs)) {
-        throw (new Error((SR_inputSequenceEmpty + "\\nParameter name: ") + "list"));
+        throw new Error((SR_inputSequenceEmpty + "\\nParameter name: ") + "list");
     }
     else if (FSharpList__get_IsEmpty(FSharpList__get_Tail(xs))) {
         return FSharpList__get_Head(xs);
     }
     else {
-        throw (new Error((SR_inputSequenceTooLong + "\\nParameter name: ") + "list"));
+        throw new Error((SR_inputSequenceTooLong + "\\nParameter name: ") + "list");
     }
 }
 
@@ -1281,15 +1282,15 @@ export function pairwise(xs) {
 }
 
 export function windowed(windowSize, xs) {
-    return ofArray(map_1((xs_1) => ofArray(xs_1), windowed_1(windowSize, toArray(xs))));
+    return ofArray(map_1(ofArray, windowed_1(windowSize, toArray(xs))));
 }
 
 export function splitInto(chunks, xs) {
-    return ofArray(map_1((xs_1) => ofArray(xs_1), splitInto_1(chunks, toArray(xs))));
+    return ofArray(map_1(ofArray, splitInto_1(chunks, toArray(xs))));
 }
 
 export function transpose(lists) {
-    return ofArray(map_1((xs_1) => ofArray(xs_1), transpose_1(map_1((xs) => toArray(xs), Array.from(lists)))));
+    return ofArray(map_1(ofArray, transpose_1(map_1(toArray, Array.from(lists)))));
 }
 
 export function insertAt(index, y, xs) {
@@ -1306,7 +1307,7 @@ export function insertAt(index, y, xs) {
         }
     }, FSharpList_get_Empty(), xs);
     return reverse(isDone ? result : (((i + 1) === index) ? FSharpList_Cons_305B8EAC(y, result) : (() => {
-        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     })()));
 }
 
@@ -1325,7 +1326,7 @@ export function insertManyAt(index, ys, xs) {
         }
     }, FSharpList_get_Empty(), xs);
     return reverse(isDone ? result : (((i + 1) === index) ? append(ys_1, result) : (() => {
-        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     })()));
 }
 
@@ -1343,7 +1344,7 @@ export function removeAt(index, xs) {
         }
     }, xs);
     if (!isDone) {
-        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
     return ys;
 }
@@ -1372,8 +1373,7 @@ export function removeManyAt(index, count, xs) {
     }, xs);
     const status_1 = (((status === 0) && ((i + 1) === (index + count))) ? 1 : status) | 0;
     if (status_1 < 1) {
-        const arg = (status_1 < 0) ? "index" : "count";
-        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + arg));
+        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + ((status_1 < 0) ? "index" : "count"));
     }
     return ys;
 }
@@ -1390,7 +1390,7 @@ export function updateAt(index, y, xs) {
         }
     }, xs);
     if (!isDone) {
-        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
     return ys;
 }

@@ -29,15 +29,26 @@ export function match(reg, input, startAt = 0) {
     return reg.exec(input);
 }
 export function matches(reg, input, startAt = 0) {
-    reg.lastIndex = startAt;
+    if (input == null) {
+        throw new Error("Input cannot ve null");
+    }
     if (!reg.global) {
         throw new Error("Non-global RegExp"); // Prevent infinite loop
     }
-    let m = reg.exec(input);
+    reg.lastIndex = startAt;
     const matches = [];
-    while (m !== null) {
-        matches.push(m);
-        m = reg.exec(input);
+    let m;
+    let lastMatchIndex = -1;
+    // tslint:disable-next-line:no-conditional-assignment
+    while ((m = reg.exec(input)) != null) {
+        // It can happen even global regex get stuck, see #2845
+        if (m.index === lastMatchIndex) {
+            reg.lastIndex++;
+        }
+        else {
+            lastMatchIndex = m.index;
+            matches.push(m);
+        }
     }
     return matches;
 }

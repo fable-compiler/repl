@@ -22,15 +22,15 @@ export const SR_notEnoughElements = "The input sequence has an insufficient numb
 export const SR_resetNotSupported = "Reset is not supported on this enumerator.";
 
 export function Enumerator_noReset() {
-    throw (new Error(SR_resetNotSupported));
+    throw new Error(SR_resetNotSupported);
 }
 
 export function Enumerator_notStarted() {
-    throw (new Error(SR_enumerationNotStarted));
+    throw new Error(SR_enumerationNotStarted);
 }
 
 export function Enumerator_alreadyFinished() {
-    throw (new Error(SR_enumerationAlreadyFinished));
+    throw new Error(SR_enumerationAlreadyFinished);
 }
 
 export class Enumerator_Seq {
@@ -117,7 +117,7 @@ export function Enumerator_FromFunctions$1_$ctor_58C54629(current, next, dispose
 }
 
 export function Enumerator_cast(e) {
-    return Enumerator_FromFunctions$1_$ctor_58C54629(() => e["System.Collections.IEnumerator.get_Current"](), () => e["System.Collections.IEnumerator.MoveNext"](), () => {
+    return new Enumerator_FromFunctions$1_$ctor_58C54629(() => e["System.Collections.IEnumerator.get_Current"](), () => e["System.Collections.IEnumerator.MoveNext"](), () => {
         if (isDisposable(e)) {
             disposeSafe(e);
         }
@@ -151,7 +151,7 @@ export function Enumerator_concat(sources) {
             }
         }
     };
-    return Enumerator_FromFunctions$1_$ctor_58C54629(() => {
+    return new Enumerator_FromFunctions$1_$ctor_58C54629(() => {
         if (!started) {
             Enumerator_notStarted();
         }
@@ -218,7 +218,7 @@ export function Enumerator_concat(sources) {
 }
 
 export function Enumerator_enumerateThenFinally(f, e) {
-    return Enumerator_FromFunctions$1_$ctor_58C54629(() => e["System.Collections.Generic.IEnumerator`1.get_Current"](), () => e["System.Collections.IEnumerator.MoveNext"](), () => {
+    return new Enumerator_FromFunctions$1_$ctor_58C54629(() => e["System.Collections.Generic.IEnumerator`1.get_Current"](), () => e["System.Collections.IEnumerator.MoveNext"](), () => {
         try {
             disposeSafe(e);
         }
@@ -251,7 +251,7 @@ export function Enumerator_generateWhileSome(openf, compute, closef) {
             curr = (void 0);
         }
     };
-    return Enumerator_FromFunctions$1_$ctor_58C54629(() => {
+    return new Enumerator_FromFunctions$1_$ctor_58C54629(() => {
         if (!started) {
             Enumerator_notStarted();
         }
@@ -293,7 +293,7 @@ export function Enumerator_generateWhileSome(openf, compute, closef) {
 export function Enumerator_unfold(f, state) {
     let curr = void 0;
     let acc = state;
-    return Enumerator_FromFunctions$1_$ctor_58C54629(() => {
+    return new Enumerator_FromFunctions$1_$ctor_58C54629(() => {
         if (curr != null) {
             const x = curr[0];
             const st = curr[1];
@@ -318,7 +318,7 @@ export function Enumerator_unfold(f, state) {
 }
 
 export function indexNotFound() {
-    throw (new Error(SR_keyNotFoundAlt));
+    throw new Error(SR_keyNotFoundAlt);
 }
 
 export function checkNonNull(argName, arg) {
@@ -328,7 +328,7 @@ export function checkNonNull(argName, arg) {
 }
 
 export function mkSeq(f) {
-    return Enumerator_Seq_$ctor_673A07F2(f);
+    return new Enumerator_Seq_$ctor_673A07F2(f);
 }
 
 export function ofSeq(xs) {
@@ -495,7 +495,7 @@ export function enumerateUsing(resource, source) {
     };
     return mkSeq(() => {
         try {
-            return Enumerator_enumerateThenFinally(compensation, ((xs) => ofSeq(xs))(source(resource)));
+            return Enumerator_enumerateThenFinally(compensation, (ofSeq)(source(resource)));
         }
         catch (matchValue_1) {
             compensation();
@@ -559,14 +559,14 @@ export function exactlyOne(xs) {
         if (e["System.Collections.IEnumerator.MoveNext"]()) {
             const v = e["System.Collections.Generic.IEnumerator`1.get_Current"]();
             if (e["System.Collections.IEnumerator.MoveNext"]()) {
-                throw (new Error((SR_inputSequenceTooLong + "\\nParameter name: ") + "source"));
+                throw new Error((SR_inputSequenceTooLong + "\\nParameter name: ") + "source");
             }
             else {
                 return v;
             }
         }
         else {
-            throw (new Error((SR_inputSequenceEmpty + "\\nParameter name: ") + "source"));
+            throw new Error((SR_inputSequenceEmpty + "\\nParameter name: ") + "source");
         }
     }
     finally {
@@ -755,7 +755,7 @@ export function tryHead(xs) {
 export function head(xs) {
     const matchValue = tryHead(xs);
     if (matchValue == null) {
-        throw (new Error((SR_inputSequenceEmpty + "\\nParameter name: ") + "source"));
+        throw new Error((SR_inputSequenceEmpty + "\\nParameter name: ") + "source");
     }
     else {
         return value_1(matchValue);
@@ -826,7 +826,7 @@ export function tryItem(index, xs) {
 export function item(index, xs) {
     const matchValue = tryItem(index, xs);
     if (matchValue == null) {
-        throw (new Error((SR_notEnoughElements + "\\nParameter name: ") + "index"));
+        throw new Error((SR_notEnoughElements + "\\nParameter name: ") + "index");
     }
     else {
         return value_1(matchValue);
@@ -886,7 +886,7 @@ export function tryLast(xs) {
 export function last(xs) {
     const matchValue = tryLast(xs);
     if (matchValue == null) {
-        throw (new Error((SR_notEnoughElements + "\\nParameter name: ") + "source"));
+        throw new Error((SR_notEnoughElements + "\\nParameter name: ") + "source");
     }
     else {
         return value_1(matchValue);
@@ -1025,7 +1025,7 @@ export function cache(source) {
     checkNonNull("source", source);
     const prefix = [];
     let enumeratorR = void 0;
-    return CachedSeq$1_$ctor_Z7A8347D4(() => {
+    return new CachedSeq$1_$ctor_Z7A8347D4(() => {
         Operators_Lock(prefix, () => {
             clear(prefix);
             let pattern_matching_result, e;
@@ -1142,7 +1142,7 @@ export function reduce(folder, xs) {
             return loop(e["System.Collections.Generic.IEnumerator`1.get_Current"]());
         }
         else {
-            throw (new Error(SR_inputSequenceEmpty));
+            throw new Error(SR_inputSequenceEmpty);
         }
     }
     finally {
@@ -1156,7 +1156,7 @@ export function reduceBack(folder, xs) {
         return arr.reduceRight(folder);
     }
     else {
-        throw (new Error(SR_inputSequenceEmpty));
+        throw new Error(SR_inputSequenceEmpty);
     }
 }
 
@@ -1188,7 +1188,7 @@ export function skip(count, source) {
         try {
             for (let _ = 1; _ <= count; _++) {
                 if (!e["System.Collections.IEnumerator.MoveNext"]()) {
-                    throw (new Error((SR_notEnoughElements + "\\nParameter name: ") + "source"));
+                    throw new Error((SR_notEnoughElements + "\\nParameter name: ") + "source");
                 }
             }
             return Enumerator_enumerateThenFinally(() => {
@@ -1224,7 +1224,7 @@ export function take(count, xs) {
                 return some(e["System.Collections.Generic.IEnumerator`1.get_Current"]());
             }
             else {
-                throw (new Error((SR_notEnoughElements + "\\nParameter name: ") + "source"));
+                throw new Error((SR_notEnoughElements + "\\nParameter name: ") + "source");
             }
         }
         else {
@@ -1268,15 +1268,15 @@ export function pairwise(xs) {
 }
 
 export function splitInto(chunks, xs) {
-    return delay(() => ofArray(map_1((arr) => ofArray(arr), splitInto_1(chunks, toArray(xs)))));
+    return delay(() => ofArray(map_1(ofArray, splitInto_1(chunks, toArray(xs)))));
 }
 
 export function windowed(windowSize, xs) {
-    return delay(() => ofArray(map_1((arr) => ofArray(arr), windowed_1(windowSize, toArray(xs)))));
+    return delay(() => ofArray(map_1(ofArray, windowed_1(windowSize, toArray(xs)))));
 }
 
 export function transpose(xss) {
-    return delay(() => ofArray(map_1((arr) => ofArray(arr), transpose_1(map_1((xs_1) => toArray(xs_1), toArray(xss))))));
+    return delay(() => ofArray(map_1(ofArray, transpose_1(map_1(toArray, toArray(xss))))));
 }
 
 export function sortWith(comparer, xs) {
@@ -1334,7 +1334,7 @@ export function average(xs, averager) {
         return averager.Add(acc, x);
     }, averager.GetZero(), xs);
     if (count === 0) {
-        throw (new Error((SR_inputSequenceEmpty + "\\nParameter name: ") + "source"));
+        throw new Error((SR_inputSequenceEmpty + "\\nParameter name: ") + "source");
     }
     else {
         return averager.DivideByInt(total, count);
@@ -1348,7 +1348,7 @@ export function averageBy(f, xs, averager) {
         return averager.Add(acc, f(x));
     }, averager.GetZero(), xs);
     if (count === 0) {
-        throw (new Error((SR_inputSequenceEmpty + "\\nParameter name: ") + "source"));
+        throw new Error((SR_inputSequenceEmpty + "\\nParameter name: ") + "source");
     }
     else {
         return averager.DivideByInt(total, count);
@@ -1360,13 +1360,13 @@ export function permute(f, xs) {
 }
 
 export function chunkBySize(chunkSize, xs) {
-    return delay(() => ofArray(map_1((arr) => ofArray(arr), chunkBySize_1(chunkSize, toArray(xs)))));
+    return delay(() => ofArray(map_1(ofArray, chunkBySize_1(chunkSize, toArray(xs)))));
 }
 
 export function insertAt(index, y, xs) {
     let isDone = false;
     if (index < 0) {
-        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
     return generateIndexed(() => ofSeq(xs), (i, e) => {
         if ((isDone ? true : (i < index)) && e["System.Collections.IEnumerator.MoveNext"]()) {
@@ -1378,7 +1378,7 @@ export function insertAt(index, y, xs) {
         }
         else {
             if (!isDone) {
-                throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+                throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
             }
             return void 0;
         }
@@ -1390,7 +1390,7 @@ export function insertAt(index, y, xs) {
 export function insertManyAt(index, ys, xs) {
     let status = -1;
     if (index < 0) {
-        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
     return generateIndexed(() => [ofSeq(xs), ofSeq(ys)], (i, tupledArg) => {
         const e1 = tupledArg[0];
@@ -1417,7 +1417,7 @@ export function insertManyAt(index, ys, xs) {
             }
             else {
                 if (status < 1) {
-                    throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+                    throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
                 }
                 return void 0;
             }
@@ -1434,7 +1434,7 @@ export function insertManyAt(index, ys, xs) {
 export function removeAt(index, xs) {
     let isDone = false;
     if (index < 0) {
-        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
     return generateIndexed(() => ofSeq(xs), (i, e) => {
         if ((isDone ? true : (i < index)) && e["System.Collections.IEnumerator.MoveNext"]()) {
@@ -1446,7 +1446,7 @@ export function removeAt(index, xs) {
         }
         else {
             if (!isDone) {
-                throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+                throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
             }
             return void 0;
         }
@@ -1457,7 +1457,7 @@ export function removeAt(index, xs) {
 
 export function removeManyAt(index, count, xs) {
     if (index < 0) {
-        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
     return generateIndexed(() => ofSeq(xs), (i, e) => {
         if (i < index) {
@@ -1465,14 +1465,14 @@ export function removeManyAt(index, count, xs) {
                 return some(e["System.Collections.Generic.IEnumerator`1.get_Current"]());
             }
             else {
-                throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+                throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
             }
         }
         else {
             if (i === index) {
                 for (let _ = 1; _ <= count; _++) {
                     if (!e["System.Collections.IEnumerator.MoveNext"]()) {
-                        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "count"));
+                        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "count");
                     }
                 }
             }
@@ -1486,7 +1486,7 @@ export function removeManyAt(index, count, xs) {
 export function updateAt(index, y, xs) {
     let isDone = false;
     if (index < 0) {
-        throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
     return generateIndexed(() => ofSeq(xs), (i, e) => {
         if ((isDone ? true : (i < index)) && e["System.Collections.IEnumerator.MoveNext"]()) {
@@ -1498,7 +1498,7 @@ export function updateAt(index, y, xs) {
         }
         else {
             if (!isDone) {
-                throw (new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index"));
+                throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
             }
             return void 0;
         }

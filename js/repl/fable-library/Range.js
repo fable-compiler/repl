@@ -7,7 +7,7 @@ import { op_Addition as op_Addition_2, fromBits } from "./Long.js";
 export function makeRangeStepFunction(step, stop, zero, add) {
     const stepComparedWithZero = compare(step, zero) | 0;
     if (stepComparedWithZero === 0) {
-        throw (new Error("The step of a range cannot be zero"));
+        throw new Error("The step of a range cannot be zero");
     }
     const stepGreaterThanZero = stepComparedWithZero > 0;
     return (x) => {
@@ -22,11 +22,11 @@ export function integralRangeStep(start, step, stop, zero, add) {
 }
 
 export function rangeBigInt(start, step, stop) {
-    return integralRangeStep(start, step, stop, fromZero(), (x, y) => op_Addition(x, y));
+    return integralRangeStep(start, step, stop, fromZero(), op_Addition);
 }
 
 export function rangeDecimal(start, step, stop) {
-    return integralRangeStep(start, step, stop, fromParts(0, 0, 0, false, 0), (x, y) => op_Addition_1(x, y));
+    return integralRangeStep(start, step, stop, fromParts(0, 0, 0, false, 0), op_Addition_1);
 }
 
 export function rangeDouble(start, step, stop) {
@@ -34,11 +34,11 @@ export function rangeDouble(start, step, stop) {
 }
 
 export function rangeInt64(start, step, stop) {
-    return integralRangeStep(start, step, stop, fromBits(0, 0, false), (x, y) => op_Addition_2(x, y));
+    return integralRangeStep(start, step, stop, fromBits(0, 0, false), op_Addition_2);
 }
 
 export function rangeUInt64(start, step, stop) {
-    return integralRangeStep(start, step, stop, fromBits(0, 0, true), (x, y) => op_Addition_2(x, y));
+    return integralRangeStep(start, step, stop, fromBits(0, 0, true), op_Addition_2);
 }
 
 export function rangeChar(start, stop) {
