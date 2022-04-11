@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.7.9
+
+* Update Fable and metadata
+
 ## 3.7.0
 
 * Update Fable and make repl available (with warning) on mobile
