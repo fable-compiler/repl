@@ -60,15 +60,15 @@ export function fromOne() {
 }
 
 export function fromInt64(i) {
-    return new BigInteger_$ctor_Z524259C1(i);
+    return BigInteger_$ctor_Z524259C1(i);
 }
 
 export function fromInt32(i) {
     if (i > 2147483647) {
-        return new BigInteger_$ctor_Z524259C1(fromInteger(i, false, 6));
+        return BigInteger_$ctor_Z524259C1(fromInteger(i, false, 6));
     }
     else {
-        return new BigInteger_$ctor_Z524259A4(i);
+        return BigInteger_$ctor_Z524259A4(i);
     }
 }
 
@@ -240,7 +240,7 @@ export function toByteArray(value) {
     }
     else {
         const isPositive = compare_1(value, zero) > 0;
-        const value_1 = isPositive ? value : BigInteger_op_Multiply_56F059C0(new BigInteger_$ctor_Z524259A4(-1), value);
+        const value_1 = isPositive ? value : BigInteger_op_Multiply_56F059C0(BigInteger_$ctor_Z524259A4(-1), value);
         const mask32 = fromInt64(fromInteger(4294967295, false, 6));
         const loop = (accumBytes_mut, consumeValue_mut, lowBitFound_mut) => {
             let value_6, value_8, value_9, value_10;
@@ -287,7 +287,7 @@ export function toByteArray(value) {
 
 export function fromByteArray(bytes) {
     if (bytes == null) {
-        throw new Error("bytes");
+        throw (new Error("bytes"));
     }
     if (bytes.length === 0) {
         return zero;
@@ -305,7 +305,7 @@ export function fromByteArray(bytes) {
                         return value_2;
                     }
                     else {
-                        return BigInteger_op_Multiply_56F059C0(new BigInteger_$ctor_Z524259A4(-1), value_2);
+                        return BigInteger_op_Multiply_56F059C0(BigInteger_$ctor_Z524259A4(-1), value_2);
                     }
                 }
                 else {

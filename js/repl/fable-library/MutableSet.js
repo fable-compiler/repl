@@ -11,7 +11,7 @@ export class HashSet {
         this.comparer = comparer;
         this$.contents = this;
         this.hashMap = (new Map([]));
-        this["init@9-2"] = 1;
+        this["init@8-2"] = 1;
         const enumerator = getEnumerator(items);
         try {
             while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {

@@ -181,6 +181,9 @@ export class Exception {
 export function isException(x) {
     return x instanceof Exception || x instanceof Error;
 }
+export function ensureErrorOrException(e) {
+    return isException(e) ? e : new Error(String(e));
+}
 export class FSharpException extends Exception {
     toJSON() { return recordToJSON(this); }
     toString() { return recordToString(this); }

@@ -15,17 +15,19 @@ export class BigInteger extends Record {
     toString() {
         const x = this;
         const matchValue = BigInteger__get_SignInt(x) | 0;
-        if (matchValue === -1) {
-            return BigNatModule_isZero(BigInteger__get_V(x)) ? "0" : ("-" + BigNatModule_toString(BigInteger__get_V(x)));
-        }
-        else if (matchValue === 0) {
-            return "0";
-        }
-        else if (matchValue === 1) {
-            return BigNatModule_toString(BigInteger__get_V(x));
-        }
-        else {
-            throw new Error("signs should be +/- 1 or 0");
+        switch (matchValue) {
+            case -1: {
+                return BigNatModule_isZero(BigInteger__get_V(x)) ? "0" : ("-" + BigNatModule_toString(BigInteger__get_V(x)));
+            }
+            case 0: {
+                return "0";
+            }
+            case 1: {
+                return BigNatModule_toString(BigInteger__get_V(x));
+            }
+            default: {
+                throw (new Error("signs should be +/- 1 or 0"));
+            }
         }
     }
     Equals(obj) {
@@ -46,7 +48,7 @@ export class BigInteger extends Record {
             return BigInteger_compare_56F059C0(this$, obj) | 0;
         }
         else {
-            throw new Error("the objects are not comparable\\nParameter name: obj");
+            throw (new Error("the objects are not comparable\\nParameter name: obj"));
         }
     }
 }
@@ -62,9 +64,9 @@ export function BigInteger_$ctor_Z2BE94A1(signInt, v) {
 (() => {
     BigInteger.smallLim = 4096;
     BigInteger.smallPosTab = initialize(BigInteger.smallLim, BigNatModule_ofInt32);
-    BigInteger.one = (new BigInteger_$ctor_Z524259A4(1));
-    BigInteger.two = (new BigInteger_$ctor_Z524259A4(2));
-    BigInteger.zero = (new BigInteger_$ctor_Z524259A4(0));
+    BigInteger.one = BigInteger_$ctor_Z524259A4(1);
+    BigInteger.two = BigInteger_$ctor_Z524259A4(2);
+    BigInteger.zero = BigInteger_$ctor_Z524259A4(0);
 })();
 
 export function BigInteger_nat_Z67CCE57D(n) {
@@ -77,15 +79,15 @@ export function BigInteger_nat_Z67CCE57D(n) {
 }
 
 export function BigInteger_create_Z2BE94A1(s, n) {
-    return new BigInteger_$ctor_Z2BE94A1(s, BigInteger_nat_Z67CCE57D(n));
+    return BigInteger_$ctor_Z2BE94A1(s, BigInteger_nat_Z67CCE57D(n));
 }
 
 export function BigInteger_posn_Z67CCE57D(n) {
-    return new BigInteger_$ctor_Z2BE94A1(1, BigInteger_nat_Z67CCE57D(n));
+    return BigInteger_$ctor_Z2BE94A1(1, BigInteger_nat_Z67CCE57D(n));
 }
 
 export function BigInteger_negn_Z67CCE57D(n) {
-    return new BigInteger_$ctor_Z2BE94A1(-1, BigInteger_nat_Z67CCE57D(n));
+    return BigInteger_$ctor_Z2BE94A1(-1, BigInteger_nat_Z67CCE57D(n));
 }
 
 export function BigInteger__get_Sign(x) {
@@ -192,7 +194,7 @@ export function BigInteger_op_Equality_56F059C0(x, y) {
             return BigNatModule_isZero(BigInteger__get_V(x));
         }
         case 9: {
-            throw new Error("signs should be +/- 1 or 0\\nParameter name: x");
+            throw (new Error("signs should be +/- 1 or 0\\nParameter name: x"));
         }
     }
 }
@@ -283,7 +285,7 @@ export function BigInteger_op_LessThan_56F059C0(x, y) {
             return !BigNatModule_isZero(BigInteger__get_V(x));
         }
         case 9: {
-            throw new Error("signs should be +/- 1 or 0\\nParameter name: x");
+            throw (new Error("signs should be +/- 1 or 0\\nParameter name: x"));
         }
     }
 }
@@ -370,7 +372,7 @@ export function BigInteger_op_GreaterThan_56F059C0(x, y) {
             return false;
         }
         case 9: {
-            throw new Error("signs should be +/- 1 or 0\\nParameter name: x");
+            throw (new Error("signs should be +/- 1 or 0\\nParameter name: x"));
         }
     }
 }
@@ -402,25 +404,25 @@ export function BigInteger__get_StructuredDisplayString(x) {
 
 export function BigInteger_$ctor_Z524259A4(n) {
     if (n >= 0) {
-        return new BigInteger_$ctor_Z2BE94A1(1, BigInteger_nat_Z67CCE57D(BigNatModule_ofInt32(n)));
+        return BigInteger_$ctor_Z2BE94A1(1, BigInteger_nat_Z67CCE57D(BigNatModule_ofInt32(n)));
     }
     else if (n === -2147483648) {
-        return new BigInteger_$ctor_Z2BE94A1(-1, BigInteger_nat_Z67CCE57D(BigNatModule_ofInt64(op_UnaryNegation(fromInteger(n, false, 2)))));
+        return BigInteger_$ctor_Z2BE94A1(-1, BigInteger_nat_Z67CCE57D(BigNatModule_ofInt64(op_UnaryNegation(fromInteger(n, false, 2)))));
     }
     else {
-        return new BigInteger_$ctor_Z2BE94A1(-1, BigInteger_nat_Z67CCE57D(BigNatModule_ofInt32(op_UnaryNegation_Int32(n))));
+        return BigInteger_$ctor_Z2BE94A1(-1, BigInteger_nat_Z67CCE57D(BigNatModule_ofInt32(op_UnaryNegation_Int32(n))));
     }
 }
 
 export function BigInteger_$ctor_Z524259C1(n) {
     if (compare(n, fromBits(0, 0, false)) >= 0) {
-        return new BigInteger_$ctor_Z2BE94A1(1, BigInteger_nat_Z67CCE57D(BigNatModule_ofInt64(n)));
+        return BigInteger_$ctor_Z2BE94A1(1, BigInteger_nat_Z67CCE57D(BigNatModule_ofInt64(n)));
     }
     else if (equals(n, fromBits(0, 2147483648, false))) {
-        return new BigInteger_$ctor_Z2BE94A1(-1, BigInteger_nat_Z67CCE57D(BigNatModule_add(BigNatModule_ofInt64(fromBits(4294967295, 2147483647, false)), BigNatModule_one)));
+        return BigInteger_$ctor_Z2BE94A1(-1, BigInteger_nat_Z67CCE57D(BigNatModule_add(BigNatModule_ofInt64(fromBits(4294967295, 2147483647, false)), BigNatModule_one)));
     }
     else {
-        return new BigInteger_$ctor_Z2BE94A1(-1, BigInteger_nat_Z67CCE57D(BigNatModule_ofInt64(op_UnaryNegation(n))));
+        return BigInteger_$ctor_Z2BE94A1(-1, BigInteger_nat_Z67CCE57D(BigNatModule_ofInt64(op_UnaryNegation(n))));
     }
 }
 
@@ -538,7 +540,7 @@ export function BigInteger_op_Addition_56F059C0(x, y) {
                 return BigInteger_subnn_6A57060(BigInteger__get_V(y), BigInteger__get_V(x));
             }
             case 4: {
-                throw new Error("signs should be +/- 1\\nParameter name: x");
+                throw (new Error("signs should be +/- 1\\nParameter name: x"));
             }
         }
     }
@@ -593,7 +595,7 @@ export function BigInteger_op_Subtraction_56F059C0(x, y) {
                 return BigInteger_op_UnaryNegation_Z665282C2(BigInteger_addnn_6A57060(BigInteger__get_V(x), BigInteger__get_V(y)));
             }
             case 4: {
-                throw new Error("signs should be +/- 1\\nParameter name: x");
+                throw (new Error("signs should be +/- 1\\nParameter name: x"));
             }
         }
     }
@@ -620,7 +622,7 @@ export function BigInteger_op_Multiply_56F059C0(x, y) {
 
 export function BigInteger_DivRem_56F059C0(x, y) {
     if (BigInteger__get_IsZero(y)) {
-        throw new Error();
+        throw (new Error());
     }
     if (BigInteger__get_IsZero(x)) {
         return [BigInteger_get_Zero(), BigInteger_get_Zero()];
@@ -670,7 +672,7 @@ export function BigInteger_DivRem_56F059C0(x, y) {
                 return [BigInteger_negn_Z67CCE57D(d), BigInteger_negn_Z67CCE57D(r)];
             }
             case 4: {
-                throw new Error("signs should be +/- 1\\nParameter name: x");
+                throw (new Error("signs should be +/- 1\\nParameter name: x"));
             }
         }
     }
@@ -831,7 +833,7 @@ export function BigInteger_op_LessThanOrEqual_56F059C0(x, y) {
             return BigNatModule_isZero(BigInteger__get_V(y));
         }
         case 9: {
-            throw new Error("signs should be +/- 1 or 0\\nParameter name: x");
+            throw (new Error("signs should be +/- 1 or 0\\nParameter name: x"));
         }
     }
 }
@@ -918,14 +920,14 @@ export function BigInteger_op_GreaterThanOrEqual_56F059C0(x, y) {
             return true;
         }
         case 9: {
-            throw new Error("signs should be +/- 1 or 0\\nParameter name: x");
+            throw (new Error("signs should be +/- 1 or 0\\nParameter name: x"));
         }
     }
 }
 
 export function BigInteger_Pow_62E082A2(x, y) {
     if (y < 0) {
-        throw new Error("y");
+        throw (new Error("y"));
     }
     const matchValue = [BigInteger__get_IsZero(x), y];
     if (matchValue[0]) {
@@ -937,7 +939,7 @@ export function BigInteger_Pow_62E082A2(x, y) {
         }
     }
     else {
-        const yval = new BigInteger_$ctor_Z524259A4(y);
+        const yval = BigInteger_$ctor_Z524259A4(y);
         return BigInteger_create_Z2BE94A1(BigNatModule_isZero(BigNatModule_rem(BigInteger__get_V(yval), BigNatModule_two)) ? 1 : BigInteger__get_SignInt(x), BigNatModule_pow(BigInteger__get_V(x), BigInteger__get_V(yval)));
     }
 }
@@ -955,7 +957,7 @@ export function BigInteger__get_ToInt32(x) {
             return -2147483648;
         }
         else {
-            throw new Error();
+            throw (new Error());
         }
     }
 }
@@ -982,7 +984,7 @@ export function BigInteger__get_ToInt64(x) {
             return fromBits(0, 2147483648, false);
         }
         else {
-            throw new Error();
+            throw (new Error());
         }
     }
 }
@@ -998,17 +1000,19 @@ export function BigInteger__get_ToUInt64(x) {
 
 export function BigInteger__get_ToDouble(x) {
     const matchValue = BigInteger__get_SignInt(x) | 0;
-    if (matchValue === -1) {
-        return -BigNatModule_toFloat(BigInteger__get_V(x));
-    }
-    else if (matchValue === 0) {
-        return 0;
-    }
-    else if (matchValue === 1) {
-        return BigNatModule_toFloat(BigInteger__get_V(x));
-    }
-    else {
-        throw new Error("signs should be +/- 1 or 0\\nParameter name: x");
+    switch (matchValue) {
+        case -1: {
+            return -BigNatModule_toFloat(BigInteger__get_V(x));
+        }
+        case 0: {
+            return 0;
+        }
+        case 1: {
+            return BigNatModule_toFloat(BigInteger__get_V(x));
+        }
+        default: {
+            throw (new Error("signs should be +/- 1 or 0\\nParameter name: x"));
+        }
     }
 }
 
@@ -1038,17 +1042,17 @@ export function BigInteger__get_ToDecimal(x) {
 
 export function BigInteger_Parse_Z721C83C5(text) {
     if (text == null) {
-        throw new Error("text");
+        throw (new Error("text"));
     }
     const text_1 = text.trim();
     const len = text_1.length | 0;
     if (len === 0) {
-        throw new Error();
+        throw (new Error());
     }
     const matchValue = [text_1[0], len];
     if (matchValue[0] === "+") {
         if (matchValue[1] === 1) {
-            throw new Error();
+            throw (new Error());
         }
         else {
             return BigInteger_posn_Z67CCE57D(BigNatModule_ofString(text_1.slice(1, (len - 1) + 1)));
@@ -1056,7 +1060,7 @@ export function BigInteger_Parse_Z721C83C5(text) {
     }
     else if (matchValue[0] === "-") {
         if (matchValue[1] === 1) {
-            throw new Error();
+            throw (new Error());
         }
         else {
             return BigInteger_negn_Z67CCE57D(BigNatModule_ofString(text_1.slice(1, (len - 1) + 1)));
@@ -1078,7 +1082,7 @@ export function BigInteger__get_IsSmall(x) {
 
 export function BigInteger_Factorial_Z665282C2(x) {
     if (BigInteger__get_IsNegative(x)) {
-        throw new Error("mustBeNonNegative\\nParameter name: x");
+        throw (new Error("mustBeNonNegative\\nParameter name: x"));
     }
     if (BigInteger__get_IsPositive(x)) {
         return BigInteger_posn_Z67CCE57D(BigNatModule_factorial(BigInteger__get_V(x)));
@@ -1093,10 +1097,10 @@ export function BigInteger_op_UnaryPlus_Z665282C2(n1) {
 }
 
 export function BigInteger_FromInt64_Z524259C1(x) {
-    return new BigInteger_$ctor_Z524259C1(x);
+    return BigInteger_$ctor_Z524259C1(x);
 }
 
 export function BigInteger_FromInt32_Z524259A4(x) {
-    return new BigInteger_$ctor_Z524259A4(x);
+    return BigInteger_$ctor_Z524259A4(x);
 }
 

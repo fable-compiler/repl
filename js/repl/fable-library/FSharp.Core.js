@@ -45,7 +45,7 @@ export function Operators_FailurePattern(exn) {
 }
 
 export function Operators_NullArg(x) {
-    throw new Error(x);
+    throw (new Error(x));
 }
 
 export function Operators_Using(resource, action) {

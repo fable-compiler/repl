@@ -1,3 +1,4 @@
+import { ensureErrorOrException } from './Types.js';
 export class CancellationToken {
     constructor(cancelled = false) {
         this._id = 0;
@@ -61,7 +62,7 @@ export function protectedCont(f) {
                     f(ctx);
                 }
                 catch (err) {
-                    ctx.onError(err);
+                    ctx.onError(ensureErrorOrException(err));
                 }
             });
         }
@@ -70,7 +71,7 @@ export function protectedCont(f) {
                 f(ctx);
             }
             catch (err) {
-                ctx.onError(err);
+                ctx.onError(ensureErrorOrException(err));
             }
         }
     };
@@ -82,8 +83,8 @@ export function protectedBind(computation, binder) {
                 try {
                     binder(x)(ctx);
                 }
-                catch (ex) {
-                    ctx.onError(ex);
+                catch (err) {
+                    ctx.onError(ensureErrorOrException(err));
                 }
             },
             onError: ctx.onError,
@@ -152,8 +153,8 @@ export class AsyncBuilder {
                     try {
                         catchHandler(ex)(ctx);
                     }
-                    catch (ex2) {
-                        ctx.onError(ex2);
+                    catch (err) {
+                        ctx.onError(ensureErrorOrException(err));
                     }
                 },
             });

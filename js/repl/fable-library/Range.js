@@ -7,7 +7,7 @@ import { op_Addition as op_Addition_2, fromBits } from "./Long.js";
 export function makeRangeStepFunction(step, stop, zero, add) {
     const stepComparedWithZero = compare(step, zero) | 0;
     if (stepComparedWithZero === 0) {
-        throw new Error("The step of a range cannot be zero");
+        throw (new Error("The step of a range cannot be zero"));
     }
     const stepGreaterThanZero = stepComparedWithZero > 0;
     return (x) => {

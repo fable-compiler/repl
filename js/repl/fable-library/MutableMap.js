@@ -11,7 +11,7 @@ export class Dictionary {
         this.comparer = comparer;
         this$.contents = this;
         this.hashMap = (new Map([]));
-        this["init@9-1"] = 1;
+        this["init@8-1"] = 1;
         const enumerator = getEnumerator(pairs);
         try {
             while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
@@ -123,7 +123,7 @@ export class Dictionary {
         const this$ = this;
         return Dictionary__Remove_2B595(this$, key);
     }
-    ["System.Collections.Generic.IDictionary`2.TryGetValue6DC89625"](key, value) {
+    ["System.Collections.Generic.IDictionary`2.TryGetValue23A0B95A"](key, value) {
         const this$ = this;
         const matchValue = Dictionary__TryFind_2B595(this$, key);
         if (matchValue != null) {
@@ -260,7 +260,7 @@ export function Dictionary__get_Item_2B595(this$, k) {
         return matchValue[1];
     }
     else {
-        throw new Error("The item was not found in collection");
+        throw (new Error("The item was not found in collection"));
     }
 }
 
@@ -311,7 +311,8 @@ export function Dictionary__Add_5BDDA1(this$, k, v) {
     }
     switch (pattern_matching_result) {
         case 0: {
-            throw new Error(format("An item with the same key has already been added. Key: {0}", k));
+            const msg = format("An item with the same key has already been added. Key: {0}", k);
+            throw (new Error(msg));
             break;
         }
         case 1: {
