@@ -101,7 +101,7 @@ let viewCollapsed (isCompiling : bool) (gistToken : string option) (model: Model
 
             actionButton "Compile and run (Alt+Enter)" StartCompile compileIcon
             actionButton "Refresh the live sample (without compiling)" RefreshIframe [ Fa.i [ Fa.Solid.Redo ] [ ] ]
-            actionButton "Reset the REPL, you will loose your current work" AskReset [ Fa.i [ Fa.Solid.TrashAlt ] [ ] ]
+            actionButton "Reset the REPL, you will lose your current work" AskReset [ Fa.i [ Fa.Solid.TrashAlt ] [ ] ]
             actionButton "Share using the URL" Share [ Fa.i [ Fa.Solid.Share ] [ ] ]
             match gistToken with
             | Some _ ->
