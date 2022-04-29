@@ -566,9 +566,12 @@ export function concat(lists) {
 }
 
 export function scan(folder, state, xs) {
-    let t, xs_4, t_2;
+    let xs_4, t_2;
     const root = FSharpList_get_Empty();
-    let node = (t = (new FSharpList(state, void 0)), (root.tail = t, t));
+    let node;
+    const t = new FSharpList(state, void 0);
+    root.tail = t;
+    node = t;
     let acc = state;
     let xs_3 = xs;
     while (!FSharpList__get_IsEmpty(xs_3)) {
@@ -612,8 +615,9 @@ export function collect(mapping, xs) {
 export function mapIndexed(mapping, xs) {
     const root = FSharpList_get_Empty();
     const node = foldIndexed((i, acc, x) => {
-        let t;
-        return (t = (new FSharpList(mapping(i, x), void 0)), (acc.tail = t, t));
+        const t = new FSharpList(mapping(i, x), void 0);
+        acc.tail = t;
+        return t;
     }, root, xs);
     const t_2 = FSharpList_get_Empty();
     node.tail = t_2;
@@ -623,8 +627,9 @@ export function mapIndexed(mapping, xs) {
 export function map(mapping, xs) {
     const root = FSharpList_get_Empty();
     const node = fold((acc, x) => {
-        let t;
-        return (t = (new FSharpList(mapping(x), void 0)), (acc.tail = t, t));
+        const t = new FSharpList(mapping(x), void 0);
+        acc.tail = t;
+        return t;
     }, root, xs);
     const t_2 = FSharpList_get_Empty();
     node.tail = t_2;
@@ -638,8 +643,9 @@ export function indexed(xs) {
 export function map2(mapping, xs, ys) {
     const root = FSharpList_get_Empty();
     const node = fold2((acc, x, y) => {
-        let t;
-        return (t = (new FSharpList(mapping(x, y), void 0)), (acc.tail = t, t));
+        const t = new FSharpList(mapping(x, y), void 0);
+        acc.tail = t;
+        return t;
     }, root, xs, ys);
     const t_2 = FSharpList_get_Empty();
     node.tail = t_2;

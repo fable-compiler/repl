@@ -759,7 +759,8 @@ export function sort(xs, comparer) {
 
 export function sortBy(projection, xs, comparer) {
     const xs_1 = xs.slice();
-    return (xs_1.sort((x, y) => comparer.Compare(projection(x), projection(y))), xs_1);
+    xs_1.sort((x, y) => comparer.Compare(projection(x), projection(y)));
+    return xs_1;
 }
 
 export function sortDescending(xs, comparer) {
@@ -770,7 +771,8 @@ export function sortDescending(xs, comparer) {
 
 export function sortByDescending(projection, xs, comparer) {
     const xs_1 = xs.slice();
-    return (xs_1.sort((x, y) => (comparer.Compare(projection(x), projection(y)) * -1)), xs_1);
+    xs_1.sort((x, y) => (comparer.Compare(projection(x), projection(y)) * -1));
+    return xs_1;
 }
 
 export function sortWith(comparer, xs) {

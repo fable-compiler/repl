@@ -495,7 +495,7 @@ export function enumerateUsing(resource, source) {
     };
     return mkSeq(() => {
         try {
-            return Enumerator_enumerateThenFinally(compensation, (ofSeq)(source(resource)));
+            return Enumerator_enumerateThenFinally(compensation, ofSeq(source(resource)));
         }
         catch (matchValue_1) {
             compensation();
