@@ -131,7 +131,10 @@ let copyModules = BuildTask.create "CopyModules" [ npmInstall ] {
         Shell.rename (filename + ".txt") filename
     )
 
+    printfn "Copy files from %s to %s" STANDALONE_DIST REPL_OUTPUT
     Shell.copyDir REPL_OUTPUT STANDALONE_DIST (fun _ -> true)
+
+    printfn "Copy files from %s to %s" STANDALONE_SRC "src/Standalone"
     Shell.copyDir "src/Standalone" STANDALONE_SRC (fun f -> f.EndsWith(".fs"))
 }
 

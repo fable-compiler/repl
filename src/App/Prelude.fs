@@ -6,7 +6,7 @@ open Fable.Core
 
 [<RequireQualifiedAccess>]
 module Literals =
-    let [<Literal>] REPL_VERSION = "3.7.10" // Do not edit manually
+    let [<Literal>] REPL_VERSION = "4.0.0-alpha-001" // Do not edit manually
     let [<Literal>] STORAGE_KEY = "fable-repl"
     let [<Literal>] MAX_LOGS_LENGTH = 200
     // let [<Literal>] HOST =
@@ -15,7 +15,7 @@ module Literals =
         // "http://localhost:8080"
         Browser.Dom.window.location.href
 #else
-        "https://fable.io/repl/"
+        "https://fable.io/repl4/"
 #endif
     printfn $"HOST {HOST}"
 

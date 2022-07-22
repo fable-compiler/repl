@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.0.0-alpha-001
+
+* Fable 4 alpha
+* Target language selection
+
 ## 3.7.10
 
 * Update Fable and fix typo
