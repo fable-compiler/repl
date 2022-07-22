@@ -68,7 +68,7 @@ type Model =
         IFrameUrl : string
         OutputTab : OutputTab
         CodeTab : CodeTab
-        CodeES2015: string
+        CompiledCode: string
         FSharpCode : string
         FSharpErrors : Monaco.Editor.IMarkerData[]
         HtmlCode: string
@@ -80,7 +80,7 @@ type Model =
         Logs : ConsolePanel.Log list
     }
 
-type EndCompileStatus = Result<string * Fable.Standalone.Error[], string>
+type EndCompileStatus = Result<string * string * Fable.Standalone.Error[], string>
 
 type Msg =
     | SetFSharpEditor of IEditor
@@ -306,7 +306,7 @@ let update msg (model : Model) =
             FSharpCode = saved.code
             HtmlCode = saved.html
             CssCode = saved.css
-            CodeES2015 = ""
+            CompiledCode = ""
             IFrameUrl = ""
             Logs = []
         }
@@ -370,7 +370,8 @@ let update msg (model : Model) =
                 | Some code -> code
                 | None -> model.FSharpCode
             let opts = model.Sidebar.Options
-            CompileCode(code, opts.ToOtherFSharpOptions) |> model.Worker.Post
+            let language = model.Sidebar.Options.Language
+            CompileCode(code, language, opts.ToOtherFSharpOptions) |> model.Worker.Post
 
             { model with
                 State = Compiling
@@ -379,7 +380,7 @@ let update msg (model : Model) =
 
     | EndCompile result ->
         match result with
-        | Ok(codeES2015, errors) ->
+        | Ok(compiledCode, lang, errors) ->
             let hasCriticalErrors = errors |> Array.exists (fun e -> not e.IsWarning)
             if hasCriticalErrors then
                 let toastCmd =
@@ -397,7 +398,12 @@ let update msg (model : Model) =
                 , toastCmd
 
             else
-                let toastCmd =
+                let cmd1 =
+                    match lang.ToLower() with
+                    | "js" | "javascript" -> Cmd.OfFunc.perform (generateHtmlUrl model) compiledCode SetIFrameUrl
+                    | _ -> Cmd.none
+
+                let cmd2 =
                     Toast.message "Compiled successfuly"
                     |> Toast.position Toast.BottomRight
                     |> Toast.icon Fa.Solid.Check
@@ -405,15 +411,12 @@ let update msg (model : Model) =
                     |> Toast.success
 
                 { model with
-                    CodeES2015 = codeES2015
+                    CompiledCode = compiledCode
                     State = Compiled
                     FSharpErrors = mapErrorToMarker errors
                     Logs = [ ConsolePanel.Log.Separator ]
                 }
-                , Cmd.batch [
-                    Cmd.OfFunc.perform (generateHtmlUrl model) codeES2015 SetIFrameUrl
-                    toastCmd
-                ]
+                , Cmd.batch [ cmd1; cmd2 ]
 
         | Error msg ->
             { model with
@@ -586,7 +589,7 @@ let update msg (model : Model) =
     | RefreshIframe ->
         let jsCode = model.JsEditor.getValue()
         { model with
-            CodeES2015 = jsCode
+            CompiledCode = jsCode
             Logs = [ ConsolePanel.Log.Separator ]
         }
         , Cmd.OfFunc.perform (Generator.generateHtmlBlobUrl model.HtmlCode model.CssCode) jsCode SetIFrameUrl
@@ -614,11 +617,11 @@ let workerCmd (worker : ObservableWorker<_>)=
                 LoadSuccess version |> dispatch
             | LoadFailed -> LoadFail |> dispatch
             | ParsedCode errors -> MarkEditorErrors errors |> dispatch
-            | CompilationFinished (jsCode, errors, stats) ->
-                Ok(jsCode, errors) |> EndCompile |> dispatch
+            | CompilationFinished (code, lang, errors, stats) ->
+                Ok(code, lang, errors) |> EndCompile |> dispatch
                 UpdateStats stats |> dispatch
-            | CompilationsFinished (jsCode, errors, stats) ->
-                Ok(Array.last jsCode, errors) |> EndCompile |> dispatch
+            | CompilationsFinished (code, lang, errors, stats) ->
+                Ok(Array.last code, lang, errors) |> EndCompile |> dispatch
                 UpdateStats stats |> dispatch
             | CompilerCrashed msg -> Error msg |> EndCompile |> dispatch
             // Do nothing, these will be handled by .PostAndAwaitResponse
@@ -654,7 +657,7 @@ let init () =
         IFrameUrl = ""
         OutputTab = OutputTab.Live
         CodeTab = CodeTab.FSharp
-        CodeES2015 = ""
+        CompiledCode = ""
         FSharpCode = saved.code
         FSharpErrors = [||]
         HtmlCode = saved.html
@@ -1034,7 +1037,7 @@ let private viewCodeEditor (model: Model) dispatch =
                         let minimapOptions = jsOptions<Monaco.Editor.IEditorMinimapOptions>(fun oMinimap ->
                             oMinimap.enabled <- Some false
                         )
-                        o.language <- Some "javascript"
+                        // o.language <- Some "javascript"
                         o.fontSize <- Some model.Sidebar.Options.FontSize
                         o.theme <- Some "vs-dark"
                         o.minimap <- Some minimapOptions
@@ -1045,7 +1048,7 @@ let private viewCodeEditor (model: Model) dispatch =
 
     ReactEditor.editor [
         editor.options options
-        editor.value model.CodeES2015
+        editor.value model.CompiledCode
         editor.isHidden (model.OutputTab <> OutputTab.Code)
         editor.customClass (fontSizeClass model.Sidebar.Options.FontSize)
         editor.editorDidMount (onJsEditorDidMount model dispatch)

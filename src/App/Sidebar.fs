@@ -68,12 +68,13 @@ let update msg model =
         , extraMsg
 
     | OptionsMsg msg ->
-        let optionsModel = Widgets.Options.update msg model.Options
+        let optionsModel, extMsg = Widgets.Options.update msg model.Options
+        let extMsg = match extMsg with Widgets.Options.ExtMsg.NoOp -> NoOp | Widgets.Options.ExtMsg.Recompile -> StartCompile
         { model with
             Options = optionsModel
         }
         , Cmd.none
-        , NoOp
+        , extMsg
 
     | GeneralMsg msg ->
         let (generalModel, externalMsg) = Widgets.General.update msg model.General
