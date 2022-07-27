@@ -61,6 +61,7 @@ type Model =
             [ yield "optimize", Encode.bool model.Optimize
               yield "defineDebug", Encode.bool model.DefineDebug
               yield "typedArrays", Encode.bool model.TypedArrays
+              yield "language", Encode.string model.Language
               yield "fontSize", Encode.float model.FontSize
               yield "fontFamily", Encode.string model.FontFamily
               match model.GistToken with

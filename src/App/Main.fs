@@ -22,13 +22,14 @@ type ISavedState =
     abstract code: string
     abstract html: string
     abstract css: string
+    abstract outputCodeActive: bool
 
 let private Worker(): Worker =
     // importDefault "worker-loader!../../../Fable/src/fable-standalone/src/Worker/Worker.fsproj"
     Worker.Create(Literals.WORKER_BUNDLE_URL)
 
 let private loadState(_key: string): ISavedState = importMember "./js/util.js"
-let private saveState(_key: string, _code: string, _html: string, _cssCode : string): unit = importMember "./js/util.js"
+let private saveState(_key: string, _code: string, _html: string, _cssCode : string, _outputCodeActive: bool): unit = importMember "./js/util.js"
 let private updateQuery(_fsharpCode : string, _htmlCode : string, _cssCode : string): unit = importMember "./js/util.js"
 
 type IEditor = Monaco.Editor.IStandaloneCodeEditor
@@ -146,8 +147,11 @@ let private addLog log (model : Model) =
                 model.Logs @ [log]
     }
 
-let private generateHtmlUrl (model: Model) jsCode =
-    saveState(Literals.STORAGE_KEY, model.FSharpCode, model.HtmlCode, model.CssCode)
+let private saveModel (model: Model) =
+    saveState(Literals.STORAGE_KEY, model.FSharpCode, model.HtmlCode, model.CssCode, model.OutputTab = OutputTab.Code)
+
+let private saveModelAndGenerateHtmlUrl (model: Model) jsCode =
+    saveModel model
     Generator.generateHtmlBlobUrl model.HtmlCode model.CssCode jsCode
 
 let private clamp min max value =
@@ -400,8 +404,8 @@ let update msg (model : Model) =
             else
                 let cmd1 =
                     match lang.ToLower() with
-                    | "js" | "javascript" -> Cmd.OfFunc.perform (generateHtmlUrl model) compiledCode SetIFrameUrl
-                    | _ -> Cmd.none
+                    | "js" | "javascript" -> Cmd.OfFunc.perform (saveModelAndGenerateHtmlUrl model) compiledCode SetIFrameUrl
+                    | _ -> [fun _ -> saveModel model]
 
                 let cmd2 =
                     Toast.message "Compiled successfuly"
@@ -655,7 +659,7 @@ let init () =
         JsEditor = Unchecked.defaultof<IEditor>
         Worker = worker
         IFrameUrl = ""
-        OutputTab = OutputTab.Live
+        OutputTab = if saved.outputCodeActive then OutputTab.Code else OutputTab.Live
         CodeTab = CodeTab.FSharp
         CompiledCode = ""
         FSharpCode = saved.code

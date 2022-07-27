@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.0.0-alpha-016
+
+* Fable 4 -alpha-016
+* Save language selection and selected output tab
+
 ## 4.0.0-alpha-001
 
 * Fable 4 alpha

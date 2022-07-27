@@ -50,6 +50,6 @@ export function loadState(key) {
     );
 }
 
-export function saveState(key, code, html, css) {
-    window.localStorage.setItem(key, JSON.stringify({ code, html, css }));
+export function saveState(key, code, html, css, outputCodeActive = false) {
+    window.localStorage.setItem(key, JSON.stringify({ code, html, css, outputCodeActive }));
 }
