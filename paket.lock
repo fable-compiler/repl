@@ -2,7 +2,7 @@ STORAGE: NONE
 RESTRICTION: == netstandard2.0
 NUGET
   remote: https://www.nuget.org/api/v2
-    Fable.AST (3.1.1)
+    Fable.AST (4.0.0-snake-island-alpha-001)
     Fable.Browser.Blob (1.1.4)
       Fable.Core (>= 3.0)
       FSharp.Core (>= 4.7.2)
@@ -88,8 +88,8 @@ NUGET
       Feliz (>= 1.32)
       Feliz.Bulma (>= 2.8.1)
       FSharp.Core (>= 5.0)
-    Feliz.CompilerPlugins (1.6)
-      Fable.AST (>= 3.0)
+    Feliz.CompilerPlugins (2.0.0-prerelease-001)
+      Fable.AST (>= 4.0.0-snake-island-alpha-001)
       FSharp.Core (>= 4.7.2)
     FsCheck (2.16)
       FSharp.Core (>= 4.2.3)
@@ -129,15 +129,15 @@ GITHUB
       SourceLink.Create.CommandLine
       Unquote
   remote: fable-compiler/fable-promise
-    FULLPROJECT (703b555263cafc86f90ce82a1405864443a041cc)
+    FULLPROJECT (14eca483d664dce5aebbe50fb92a536a7c1ffe53)
   remote: alfonsogarciacaro/Feliz.Engine
-    FULLPROJECT (f08a3bd19ea854ace8b308c4eb2290c0c001e916)
+    FULLPROJECT (61152aebd6c0b7878bfc4db05e2e10724b434a3e)
   remote: alfonsogarciacaro/Feliz.Snabbdom
     FULLPROJECT (7b28ccbceebcc9b66a8cb67aab89b7ae9576dbfb)
   remote: davedawkins/Feliz.Engine.Bulma
-    FULLPROJECT (e960f99e842b362f6cc54524d857d12557da520b)
+    FULLPROJECT (0df54855ac3464a432cd207412ab66e650a87d77)
   remote: davedawkins/Sutil
-    FULLPROJECT (98be5f8441787929b14ba460a253f5b33b1c4d5f)
+    FULLPROJECT (343bc31867127638a79afede0dcaa97ca56fa264)
 GROUP netcorebuild
 NUGET
   remote: https://www.nuget.org/api/v2
