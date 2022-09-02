@@ -174,7 +174,7 @@ let buildLib = BuildTask.create "BuildLib" [ copyModules ] {
     )
 }
 
-let buildApp = BuildTask.create "BuildApp" [ updatePreludeREPLVersion.IfNeeded ] {
+let buildApp = BuildTask.create "BuildApp" [ copyModules ] {
     Npm.run "build" id
 }
 
