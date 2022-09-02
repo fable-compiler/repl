@@ -4,12 +4,12 @@ module Tour.UnitsOfMeasure
 // Visit the link above for more information on each topic
 // You can also find more learning resources at https://fsharp.org/
 
-/// Units of measure are a way to annotate primitive numeric types in a type-safe way.
-/// You can then perform type-safe arithmetic on these values.
-///
-/// To learn more, see: https://docs.microsoft.com/dotnet/fsharp/language-reference/units-of-measure
+// Units of measure are a way to annotate primitive numeric types in a type-safe way.
+// You can then perform type-safe arithmetic on these values.
+//
+// To learn more, see: https://docs.microsoft.com/dotnet/fsharp/language-reference/units-of-measure
 
-/// First, open a collection of common unit names
+// First, open a collection of common unit names
 open Microsoft.FSharp.Data.UnitSystems.SI.UnitNames
 
 /// Define a unitized constant

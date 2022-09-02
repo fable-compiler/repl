@@ -11,13 +11,13 @@ function isLessThan(x, y) {
 function cmp(x, y, ic) {
     function isIgnoreCase(i) {
         return i === true ||
-            i === 1 /* CurrentCultureIgnoreCase */ ||
-            i === 3 /* InvariantCultureIgnoreCase */ ||
-            i === 5 /* OrdinalIgnoreCase */;
+            i === 1 /* StringComparison.CurrentCultureIgnoreCase */ ||
+            i === 3 /* StringComparison.InvariantCultureIgnoreCase */ ||
+            i === 5 /* StringComparison.OrdinalIgnoreCase */;
     }
     function isOrdinal(i) {
-        return i === 4 /* Ordinal */ ||
-            i === 5 /* OrdinalIgnoreCase */;
+        return i === 4 /* StringComparison.Ordinal */ ||
+            i === 5 /* StringComparison.OrdinalIgnoreCase */;
     }
     if (x == null) {
         return y == null ? 0 : -1;
@@ -52,10 +52,10 @@ export function compare(...args) {
     }
 }
 export function compareOrdinal(x, y) {
-    return cmp(x, y, 4 /* Ordinal */);
+    return cmp(x, y, 4 /* StringComparison.Ordinal */);
 }
 export function compareTo(x, y) {
-    return cmp(x, y, 0 /* CurrentCulture */);
+    return cmp(x, y, 0 /* StringComparison.CurrentCulture */);
 }
 export function startsWith(str, pattern, ic) {
     if (str.length >= pattern.length) {
@@ -105,10 +105,12 @@ export function interpolate(str, values) {
         const matchIndex = match.index + (match[1] || "").length;
         result += str.substring(strIdx, matchIndex).replace(/%%/g, "%");
         const [, , flags, padLength, precision, format] = match;
-        result += formatReplacement(values[valIdx++], flags, padLength, precision, format);
+        // Save interpolateRegExp.lastIndex before running formatReplacement because the values
+        // may also involve interpolation and make use of interpolateRegExp (see #3078)
         strIdx = interpolateRegExp.lastIndex;
-        // Likewise we need to move interpolateRegExp.lastIndex one char behind to make sure we match the no-escape char next time
-        interpolateRegExp.lastIndex -= 1;
+        result += formatReplacement(values[valIdx++], flags, padLength, precision, format);
+        // Move interpolateRegExp.lastIndex one char behind to make sure we match the no-escape char next time
+        interpolateRegExp.lastIndex = strIdx - 1;
         match = interpolateRegExp.exec(str);
     }
     result += str.substring(strIdx).replace(/%%/g, "%");
@@ -189,11 +191,11 @@ function formatReplacement(rep, flags, padLength, precision, format) {
         const minusFlag = flags.indexOf("-") >= 0; // Right padding
         const ch = minusFlag || !zeroFlag ? " " : "0";
         if (ch === "0") {
-            rep = padLeft(rep, padLength - sign.length, ch, minusFlag);
+            rep = pad(rep, padLength - sign.length, ch, minusFlag);
             rep = sign + rep;
         }
         else {
-            rep = padLeft(sign + rep, padLength, ch, minusFlag);
+            rep = pad(sign + rep, padLength, ch, minusFlag);
         }
     }
     else {
@@ -313,23 +315,30 @@ export function format(str, ...args) {
                                 rep = multiply(rep, -1);
                                 sign = "-";
                             }
-                            const decimalPartLength = decimalPart != null ? decimalPart.length : 0;
-                            rep = toFixed(rep, Math.max(decimalPartLength - 1, 0));
+                            decimalPart = decimalPart == null ? "" : decimalPart.substring(1);
+                            rep = toFixed(rep, Math.max(decimalPart.length, 0));
+                            let [repInt, repDecimal] = rep.split(".");
+                            repDecimal || (repDecimal = "");
+                            const leftZeroes = intPart.replace(/,/g, "").replace(/^#+/, "").length;
+                            repInt = padLeft(repInt, leftZeroes, "0");
+                            const rightZeros = decimalPart.replace(/#+$/, "").length;
+                            if (rightZeros > repDecimal.length) {
+                                repDecimal = padRight(repDecimal, rightZeros, "0");
+                            }
+                            else if (rightZeros < repDecimal.length) {
+                                repDecimal = repDecimal.substring(0, rightZeros) + repDecimal.substring(rightZeros).replace(/0+$/, "");
+                            }
                             // Thousands separator
                             if (intPart.indexOf(",") > 0) {
-                                const [intPart, decimalPart] = rep.split(".");
-                                const i = intPart.length % 3;
-                                const thousandGroups = Math.floor(intPart.length / 3);
-                                let thousands = i > 0 ? intPart.substr(0, i) + (thousandGroups > 0 ? "," : "") : "";
+                                const i = repInt.length % 3;
+                                const thousandGroups = Math.floor(repInt.length / 3);
+                                let thousands = i > 0 ? repInt.substr(0, i) + (thousandGroups > 0 ? "," : "") : "";
                                 for (let j = 0; j < thousandGroups; j++) {
-                                    thousands += intPart.substr(i + j * 3, 3) + (j < thousandGroups - 1 ? "," : "");
+                                    thousands += repInt.substr(i + j * 3, 3) + (j < thousandGroups - 1 ? "," : "");
                                 }
-                                rep = decimalPart ? thousands + "." + decimalPart : thousands;
+                                repInt = thousands;
                             }
-                            // In .NET you can mix 0/# placeholders but for simplicity we only check the left most character
-                            intPart = intPart.replace(/,/g, "");
-                            const intPartLength = intPart.length > 0 && intPart[0] === "0" ? intPart.length : 0;
-                            return padLeft(rep, intPartLength - sign.length + decimalPartLength, "0");
+                            return repDecimal.length > 0 ? repInt + "." + repDecimal : repInt;
                         });
                         rep = sign + rep;
                     }
@@ -343,7 +352,7 @@ export function format(str, ...args) {
         }
         padLength = parseInt((padLength || " ").substring(1), 10);
         if (!isNaN(padLength)) {
-            rep = padLeft(String(rep), Math.abs(padLength), " ", padLength < 0);
+            rep = pad(String(rep), Math.abs(padLength), " ", padLength < 0);
         }
         return rep;
     });
@@ -410,7 +419,7 @@ export function fromBase64String(b64Encoded) {
     }
     return bytes;
 }
-export function padLeft(str, len, ch, isRight) {
+function pad(str, len, ch, isRight) {
     ch = ch || " ";
     len = len - str.length;
     for (let i = 0; i < len; i++) {
@@ -418,8 +427,11 @@ export function padLeft(str, len, ch, isRight) {
     }
     return str;
 }
+export function padLeft(str, len, ch) {
+    return pad(str, len, ch);
+}
 export function padRight(str, len, ch) {
-    return padLeft(str, len, ch, true);
+    return pad(str, len, ch, true);
 }
 export function remove(str, startIndex, count) {
     if (startIndex >= str.length) {

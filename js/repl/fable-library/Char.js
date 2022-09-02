@@ -30,42 +30,42 @@ function getCategoryFunc() {
         return categories[lo];
     };
 }
-const isControlMask = 1 << 14 /* Control */;
-const isDigitMask = 1 << 8 /* DecimalDigitNumber */;
+const isControlMask = 1 << 14 /* UnicodeCategory.Control */;
+const isDigitMask = 1 << 8 /* UnicodeCategory.DecimalDigitNumber */;
 const isLetterMask = 0
-    | 1 << 0 /* UppercaseLetter */
-    | 1 << 1 /* LowercaseLetter */
-    | 1 << 2 /* TitlecaseLetter */
-    | 1 << 3 /* ModifierLetter */
-    | 1 << 4 /* OtherLetter */;
+    | 1 << 0 /* UnicodeCategory.UppercaseLetter */
+    | 1 << 1 /* UnicodeCategory.LowercaseLetter */
+    | 1 << 2 /* UnicodeCategory.TitlecaseLetter */
+    | 1 << 3 /* UnicodeCategory.ModifierLetter */
+    | 1 << 4 /* UnicodeCategory.OtherLetter */;
 const isLetterOrDigitMask = isLetterMask | isDigitMask;
-const isUpperMask = 1 << 0 /* UppercaseLetter */;
-const isLowerMask = 1 << 1 /* LowercaseLetter */;
+const isUpperMask = 1 << 0 /* UnicodeCategory.UppercaseLetter */;
+const isLowerMask = 1 << 1 /* UnicodeCategory.LowercaseLetter */;
 const isNumberMask = 0
-    | 1 << 8 /* DecimalDigitNumber */
-    | 1 << 9 /* LetterNumber */
-    | 1 << 10 /* OtherNumber */;
+    | 1 << 8 /* UnicodeCategory.DecimalDigitNumber */
+    | 1 << 9 /* UnicodeCategory.LetterNumber */
+    | 1 << 10 /* UnicodeCategory.OtherNumber */;
 const isPunctuationMask = 0
-    | 1 << 18 /* ConnectorPunctuation */
-    | 1 << 19 /* DashPunctuation */
-    | 1 << 20 /* OpenPunctuation */
-    | 1 << 21 /* ClosePunctuation */
-    | 1 << 22 /* InitialQuotePunctuation */
-    | 1 << 23 /* FinalQuotePunctuation */
-    | 1 << 24 /* OtherPunctuation */;
+    | 1 << 18 /* UnicodeCategory.ConnectorPunctuation */
+    | 1 << 19 /* UnicodeCategory.DashPunctuation */
+    | 1 << 20 /* UnicodeCategory.OpenPunctuation */
+    | 1 << 21 /* UnicodeCategory.ClosePunctuation */
+    | 1 << 22 /* UnicodeCategory.InitialQuotePunctuation */
+    | 1 << 23 /* UnicodeCategory.FinalQuotePunctuation */
+    | 1 << 24 /* UnicodeCategory.OtherPunctuation */;
 const isSeparatorMask = 0
-    | 1 << 11 /* SpaceSeparator */
-    | 1 << 12 /* LineSeparator */
-    | 1 << 13 /* ParagraphSeparator */;
+    | 1 << 11 /* UnicodeCategory.SpaceSeparator */
+    | 1 << 12 /* UnicodeCategory.LineSeparator */
+    | 1 << 13 /* UnicodeCategory.ParagraphSeparator */;
 const isSymbolMask = 0
-    | 1 << 25 /* MathSymbol */
-    | 1 << 26 /* CurrencySymbol */
-    | 1 << 27 /* ModifierSymbol */
-    | 1 << 28 /* OtherSymbol */;
+    | 1 << 25 /* UnicodeCategory.MathSymbol */
+    | 1 << 26 /* UnicodeCategory.CurrencySymbol */
+    | 1 << 27 /* UnicodeCategory.ModifierSymbol */
+    | 1 << 28 /* UnicodeCategory.OtherSymbol */;
 const isWhiteSpaceMask = 0
-    | 1 << 11 /* SpaceSeparator */
-    | 1 << 12 /* LineSeparator */
-    | 1 << 13 /* ParagraphSeparator */;
+    | 1 << 11 /* UnicodeCategory.SpaceSeparator */
+    | 1 << 12 /* UnicodeCategory.LineSeparator */
+    | 1 << 13 /* UnicodeCategory.ParagraphSeparator */;
 const unicodeCategoryFunc = getCategoryFunc();
 function charCodeAt(s, index) {
     if (index >= 0 && index < s.length) {

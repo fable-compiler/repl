@@ -15,19 +15,17 @@ export class BigInteger extends Record {
     toString() {
         const x = this;
         const matchValue = BigInteger__get_SignInt(x) | 0;
-        switch (matchValue) {
-            case -1: {
-                return BigNatModule_isZero(BigInteger__get_V(x)) ? "0" : ("-" + BigNatModule_toString(BigInteger__get_V(x)));
-            }
-            case 0: {
-                return "0";
-            }
-            case 1: {
-                return BigNatModule_toString(BigInteger__get_V(x));
-            }
-            default: {
-                throw (new Error("signs should be +/- 1 or 0"));
-            }
+        if (matchValue === -1) {
+            return BigNatModule_isZero(BigInteger__get_V(x)) ? "0" : ("-" + BigNatModule_toString(BigInteger__get_V(x)));
+        }
+        else if (matchValue === 0) {
+            return "0";
+        }
+        else if (matchValue === 1) {
+            return BigNatModule_toString(BigInteger__get_V(x));
+        }
+        else {
+            throw new Error("signs should be +/- 1 or 0");
         }
     }
     Equals(obj) {
@@ -48,7 +46,7 @@ export class BigInteger extends Record {
             return BigInteger_compare_56F059C0(this$, obj) | 0;
         }
         else {
-            throw (new Error("the objects are not comparable\\nParameter name: obj"));
+            throw new Error("the objects are not comparable\\nParameter name: obj");
         }
     }
 }
@@ -108,54 +106,55 @@ export function BigInteger__get_V(x) {
 }
 
 export function BigInteger_op_Equality_56F059C0(x, y) {
-    const matchValue = [BigInteger__get_SignInt(x), BigInteger__get_SignInt(y)];
-    let pattern_matching_result;
-    if (matchValue[0] === -1) {
-        if (matchValue[1] === -1) {
-            pattern_matching_result = 1;
+    const matchValue = BigInteger__get_SignInt(x) | 0;
+    const matchValue_1 = BigInteger__get_SignInt(y) | 0;
+    let matchResult;
+    if (matchValue === -1) {
+        if (matchValue_1 === -1) {
+            matchResult = 1;
         }
-        else if (matchValue[1] === 0) {
-            pattern_matching_result = 8;
+        else if (matchValue_1 === 0) {
+            matchResult = 8;
         }
-        else if (matchValue[1] === 1) {
-            pattern_matching_result = 3;
+        else if (matchValue_1 === 1) {
+            matchResult = 3;
         }
         else {
-            pattern_matching_result = 9;
+            matchResult = 9;
         }
     }
-    else if (matchValue[0] === 0) {
-        if (matchValue[1] === -1) {
-            pattern_matching_result = 6;
+    else if (matchValue === 0) {
+        if (matchValue_1 === -1) {
+            matchResult = 6;
         }
-        else if (matchValue[1] === 0) {
-            pattern_matching_result = 4;
+        else if (matchValue_1 === 0) {
+            matchResult = 4;
         }
-        else if (matchValue[1] === 1) {
-            pattern_matching_result = 5;
+        else if (matchValue_1 === 1) {
+            matchResult = 5;
         }
         else {
-            pattern_matching_result = 9;
+            matchResult = 9;
         }
     }
-    else if (matchValue[0] === 1) {
-        if (matchValue[1] === -1) {
-            pattern_matching_result = 2;
+    else if (matchValue === 1) {
+        if (matchValue_1 === -1) {
+            matchResult = 2;
         }
-        else if (matchValue[1] === 0) {
-            pattern_matching_result = 7;
+        else if (matchValue_1 === 0) {
+            matchResult = 7;
         }
-        else if (matchValue[1] === 1) {
-            pattern_matching_result = 0;
+        else if (matchValue_1 === 1) {
+            matchResult = 0;
         }
         else {
-            pattern_matching_result = 9;
+            matchResult = 9;
         }
     }
     else {
-        pattern_matching_result = 9;
+        matchResult = 9;
     }
-    switch (pattern_matching_result) {
+    switch (matchResult) {
         case 0: {
             return BigNatModule_equal(BigInteger__get_V(x), BigInteger__get_V(y));
         }
@@ -194,7 +193,7 @@ export function BigInteger_op_Equality_56F059C0(x, y) {
             return BigNatModule_isZero(BigInteger__get_V(x));
         }
         case 9: {
-            throw (new Error("signs should be +/- 1 or 0\\nParameter name: x"));
+            throw new Error("signs should be +/- 1 or 0\\nParameter name: x");
         }
     }
 }
@@ -204,54 +203,55 @@ export function BigInteger_op_Inequality_56F059C0(x, y) {
 }
 
 export function BigInteger_op_LessThan_56F059C0(x, y) {
-    const matchValue = [BigInteger__get_SignInt(x), BigInteger__get_SignInt(y)];
-    let pattern_matching_result;
-    if (matchValue[0] === -1) {
-        if (matchValue[1] === -1) {
-            pattern_matching_result = 1;
+    const matchValue = BigInteger__get_SignInt(x) | 0;
+    const matchValue_1 = BigInteger__get_SignInt(y) | 0;
+    let matchResult;
+    if (matchValue === -1) {
+        if (matchValue_1 === -1) {
+            matchResult = 1;
         }
-        else if (matchValue[1] === 0) {
-            pattern_matching_result = 8;
+        else if (matchValue_1 === 0) {
+            matchResult = 8;
         }
-        else if (matchValue[1] === 1) {
-            pattern_matching_result = 3;
+        else if (matchValue_1 === 1) {
+            matchResult = 3;
         }
         else {
-            pattern_matching_result = 9;
+            matchResult = 9;
         }
     }
-    else if (matchValue[0] === 0) {
-        if (matchValue[1] === -1) {
-            pattern_matching_result = 6;
+    else if (matchValue === 0) {
+        if (matchValue_1 === -1) {
+            matchResult = 6;
         }
-        else if (matchValue[1] === 0) {
-            pattern_matching_result = 4;
+        else if (matchValue_1 === 0) {
+            matchResult = 4;
         }
-        else if (matchValue[1] === 1) {
-            pattern_matching_result = 5;
+        else if (matchValue_1 === 1) {
+            matchResult = 5;
         }
         else {
-            pattern_matching_result = 9;
+            matchResult = 9;
         }
     }
-    else if (matchValue[0] === 1) {
-        if (matchValue[1] === -1) {
-            pattern_matching_result = 2;
+    else if (matchValue === 1) {
+        if (matchValue_1 === -1) {
+            matchResult = 2;
         }
-        else if (matchValue[1] === 0) {
-            pattern_matching_result = 7;
+        else if (matchValue_1 === 0) {
+            matchResult = 7;
         }
-        else if (matchValue[1] === 1) {
-            pattern_matching_result = 0;
+        else if (matchValue_1 === 1) {
+            matchResult = 0;
         }
         else {
-            pattern_matching_result = 9;
+            matchResult = 9;
         }
     }
     else {
-        pattern_matching_result = 9;
+        matchResult = 9;
     }
-    switch (pattern_matching_result) {
+    switch (matchResult) {
         case 0: {
             return BigNatModule_lt(BigInteger__get_V(x), BigInteger__get_V(y));
         }
@@ -285,60 +285,61 @@ export function BigInteger_op_LessThan_56F059C0(x, y) {
             return !BigNatModule_isZero(BigInteger__get_V(x));
         }
         case 9: {
-            throw (new Error("signs should be +/- 1 or 0\\nParameter name: x"));
+            throw new Error("signs should be +/- 1 or 0\\nParameter name: x");
         }
     }
 }
 
 export function BigInteger_op_GreaterThan_56F059C0(x, y) {
-    const matchValue = [BigInteger__get_SignInt(x), BigInteger__get_SignInt(y)];
-    let pattern_matching_result;
-    if (matchValue[0] === -1) {
-        if (matchValue[1] === -1) {
-            pattern_matching_result = 1;
+    const matchValue = BigInteger__get_SignInt(x) | 0;
+    const matchValue_1 = BigInteger__get_SignInt(y) | 0;
+    let matchResult;
+    if (matchValue === -1) {
+        if (matchValue_1 === -1) {
+            matchResult = 1;
         }
-        else if (matchValue[1] === 0) {
-            pattern_matching_result = 8;
+        else if (matchValue_1 === 0) {
+            matchResult = 8;
         }
-        else if (matchValue[1] === 1) {
-            pattern_matching_result = 3;
+        else if (matchValue_1 === 1) {
+            matchResult = 3;
         }
         else {
-            pattern_matching_result = 9;
+            matchResult = 9;
         }
     }
-    else if (matchValue[0] === 0) {
-        if (matchValue[1] === -1) {
-            pattern_matching_result = 6;
+    else if (matchValue === 0) {
+        if (matchValue_1 === -1) {
+            matchResult = 6;
         }
-        else if (matchValue[1] === 0) {
-            pattern_matching_result = 4;
+        else if (matchValue_1 === 0) {
+            matchResult = 4;
         }
-        else if (matchValue[1] === 1) {
-            pattern_matching_result = 5;
+        else if (matchValue_1 === 1) {
+            matchResult = 5;
         }
         else {
-            pattern_matching_result = 9;
+            matchResult = 9;
         }
     }
-    else if (matchValue[0] === 1) {
-        if (matchValue[1] === -1) {
-            pattern_matching_result = 2;
+    else if (matchValue === 1) {
+        if (matchValue_1 === -1) {
+            matchResult = 2;
         }
-        else if (matchValue[1] === 0) {
-            pattern_matching_result = 7;
+        else if (matchValue_1 === 0) {
+            matchResult = 7;
         }
-        else if (matchValue[1] === 1) {
-            pattern_matching_result = 0;
+        else if (matchValue_1 === 1) {
+            matchResult = 0;
         }
         else {
-            pattern_matching_result = 9;
+            matchResult = 9;
         }
     }
     else {
-        pattern_matching_result = 9;
+        matchResult = 9;
     }
-    switch (pattern_matching_result) {
+    switch (matchResult) {
         case 0: {
             return BigNatModule_gt(BigInteger__get_V(x), BigInteger__get_V(y));
         }
@@ -372,7 +373,7 @@ export function BigInteger_op_GreaterThan_56F059C0(x, y) {
             return false;
         }
         case 9: {
-            throw (new Error("signs should be +/- 1 or 0\\nParameter name: x"));
+            throw new Error("signs should be +/- 1 or 0\\nParameter name: x");
         }
     }
 }
@@ -499,34 +500,35 @@ export function BigInteger_op_Addition_56F059C0(x, y) {
         return y;
     }
     else {
-        const matchValue = [BigInteger__get_SignInt(x), BigInteger__get_SignInt(y)];
-        let pattern_matching_result;
-        if (matchValue[0] === -1) {
-            if (matchValue[1] === -1) {
-                pattern_matching_result = 1;
+        const matchValue = BigInteger__get_SignInt(x) | 0;
+        const matchValue_1 = BigInteger__get_SignInt(y) | 0;
+        let matchResult;
+        if (matchValue === -1) {
+            if (matchValue_1 === -1) {
+                matchResult = 1;
             }
-            else if (matchValue[1] === 1) {
-                pattern_matching_result = 3;
+            else if (matchValue_1 === 1) {
+                matchResult = 3;
             }
             else {
-                pattern_matching_result = 4;
+                matchResult = 4;
             }
         }
-        else if (matchValue[0] === 1) {
-            if (matchValue[1] === -1) {
-                pattern_matching_result = 2;
+        else if (matchValue === 1) {
+            if (matchValue_1 === -1) {
+                matchResult = 2;
             }
-            else if (matchValue[1] === 1) {
-                pattern_matching_result = 0;
+            else if (matchValue_1 === 1) {
+                matchResult = 0;
             }
             else {
-                pattern_matching_result = 4;
+                matchResult = 4;
             }
         }
         else {
-            pattern_matching_result = 4;
+            matchResult = 4;
         }
-        switch (pattern_matching_result) {
+        switch (matchResult) {
             case 0: {
                 return BigInteger_addnn_6A57060(BigInteger__get_V(x), BigInteger__get_V(y));
             }
@@ -540,7 +542,7 @@ export function BigInteger_op_Addition_56F059C0(x, y) {
                 return BigInteger_subnn_6A57060(BigInteger__get_V(y), BigInteger__get_V(x));
             }
             case 4: {
-                throw (new Error("signs should be +/- 1\\nParameter name: x"));
+                throw new Error("signs should be +/- 1\\nParameter name: x");
             }
         }
     }
@@ -554,34 +556,35 @@ export function BigInteger_op_Subtraction_56F059C0(x, y) {
         return BigInteger_op_UnaryNegation_Z665282C2(y);
     }
     else {
-        const matchValue = [BigInteger__get_SignInt(x), BigInteger__get_SignInt(y)];
-        let pattern_matching_result;
-        if (matchValue[0] === -1) {
-            if (matchValue[1] === -1) {
-                pattern_matching_result = 1;
+        const matchValue = BigInteger__get_SignInt(x) | 0;
+        const matchValue_1 = BigInteger__get_SignInt(y) | 0;
+        let matchResult;
+        if (matchValue === -1) {
+            if (matchValue_1 === -1) {
+                matchResult = 1;
             }
-            else if (matchValue[1] === 1) {
-                pattern_matching_result = 3;
+            else if (matchValue_1 === 1) {
+                matchResult = 3;
             }
             else {
-                pattern_matching_result = 4;
+                matchResult = 4;
             }
         }
-        else if (matchValue[0] === 1) {
-            if (matchValue[1] === -1) {
-                pattern_matching_result = 2;
+        else if (matchValue === 1) {
+            if (matchValue_1 === -1) {
+                matchResult = 2;
             }
-            else if (matchValue[1] === 1) {
-                pattern_matching_result = 0;
+            else if (matchValue_1 === 1) {
+                matchResult = 0;
             }
             else {
-                pattern_matching_result = 4;
+                matchResult = 4;
             }
         }
         else {
-            pattern_matching_result = 4;
+            matchResult = 4;
         }
-        switch (pattern_matching_result) {
+        switch (matchResult) {
             case 0: {
                 return BigInteger_subnn_6A57060(BigInteger__get_V(x), BigInteger__get_V(y));
             }
@@ -595,7 +598,7 @@ export function BigInteger_op_Subtraction_56F059C0(x, y) {
                 return BigInteger_op_UnaryNegation_Z665282C2(BigInteger_addnn_6A57060(BigInteger__get_V(x), BigInteger__get_V(y)));
             }
             case 4: {
-                throw (new Error("signs should be +/- 1\\nParameter name: x"));
+                throw new Error("signs should be +/- 1\\nParameter name: x");
             }
         }
     }
@@ -622,7 +625,7 @@ export function BigInteger_op_Multiply_56F059C0(x, y) {
 
 export function BigInteger_DivRem_56F059C0(x, y) {
     if (BigInteger__get_IsZero(y)) {
-        throw (new Error());
+        throw new Error();
     }
     if (BigInteger__get_IsZero(x)) {
         return [BigInteger_get_Zero(), BigInteger_get_Zero()];
@@ -631,34 +634,35 @@ export function BigInteger_DivRem_56F059C0(x, y) {
         const patternInput = BigNatModule_divmod(BigInteger__get_V(x), BigInteger__get_V(y));
         const r = patternInput[1];
         const d = patternInput[0];
-        const matchValue = [BigInteger__get_SignInt(x), BigInteger__get_SignInt(y)];
-        let pattern_matching_result;
-        if (matchValue[0] === -1) {
-            if (matchValue[1] === -1) {
-                pattern_matching_result = 1;
+        const matchValue = BigInteger__get_SignInt(x) | 0;
+        const matchValue_1 = BigInteger__get_SignInt(y) | 0;
+        let matchResult;
+        if (matchValue === -1) {
+            if (matchValue_1 === -1) {
+                matchResult = 1;
             }
-            else if (matchValue[1] === 1) {
-                pattern_matching_result = 3;
+            else if (matchValue_1 === 1) {
+                matchResult = 3;
             }
             else {
-                pattern_matching_result = 4;
+                matchResult = 4;
             }
         }
-        else if (matchValue[0] === 1) {
-            if (matchValue[1] === -1) {
-                pattern_matching_result = 2;
+        else if (matchValue === 1) {
+            if (matchValue_1 === -1) {
+                matchResult = 2;
             }
-            else if (matchValue[1] === 1) {
-                pattern_matching_result = 0;
+            else if (matchValue_1 === 1) {
+                matchResult = 0;
             }
             else {
-                pattern_matching_result = 4;
+                matchResult = 4;
             }
         }
         else {
-            pattern_matching_result = 4;
+            matchResult = 4;
         }
-        switch (pattern_matching_result) {
+        switch (matchResult) {
             case 0: {
                 return [BigInteger_posn_Z67CCE57D(d), BigInteger_posn_Z67CCE57D(r)];
             }
@@ -672,7 +676,7 @@ export function BigInteger_DivRem_56F059C0(x, y) {
                 return [BigInteger_negn_Z67CCE57D(d), BigInteger_negn_Z67CCE57D(r)];
             }
             case 4: {
-                throw (new Error("signs should be +/- 1\\nParameter name: x"));
+                throw new Error("signs should be +/- 1\\nParameter name: x");
             }
         }
     }
@@ -707,16 +711,17 @@ export function BigInteger_op_ExclusiveOr_56F059C0(x, y) {
 }
 
 export function BigInteger_GreatestCommonDivisor_56F059C0(x, y) {
-    const matchValue = [BigInteger__get_SignInt(x), BigInteger__get_SignInt(y)];
-    if (matchValue[0] === 0) {
-        if (matchValue[1] === 0) {
+    const matchValue = BigInteger__get_SignInt(x) | 0;
+    const matchValue_1 = BigInteger__get_SignInt(y) | 0;
+    if (matchValue === 0) {
+        if (matchValue_1 === 0) {
             return BigInteger_get_Zero();
         }
         else {
             return BigInteger_posn_Z67CCE57D(BigInteger__get_V(y));
         }
     }
-    else if (matchValue[1] === 0) {
+    else if (matchValue_1 === 0) {
         return BigInteger_posn_Z67CCE57D(BigInteger__get_V(x));
     }
     else {
@@ -752,54 +757,55 @@ export function BigInteger_Abs_Z665282C2(x) {
 }
 
 export function BigInteger_op_LessThanOrEqual_56F059C0(x, y) {
-    const matchValue = [BigInteger__get_SignInt(x), BigInteger__get_SignInt(y)];
-    let pattern_matching_result;
-    if (matchValue[0] === -1) {
-        if (matchValue[1] === -1) {
-            pattern_matching_result = 1;
+    const matchValue = BigInteger__get_SignInt(x) | 0;
+    const matchValue_1 = BigInteger__get_SignInt(y) | 0;
+    let matchResult;
+    if (matchValue === -1) {
+        if (matchValue_1 === -1) {
+            matchResult = 1;
         }
-        else if (matchValue[1] === 0) {
-            pattern_matching_result = 6;
+        else if (matchValue_1 === 0) {
+            matchResult = 6;
         }
-        else if (matchValue[1] === 1) {
-            pattern_matching_result = 3;
+        else if (matchValue_1 === 1) {
+            matchResult = 3;
         }
         else {
-            pattern_matching_result = 9;
+            matchResult = 9;
         }
     }
-    else if (matchValue[0] === 0) {
-        if (matchValue[1] === -1) {
-            pattern_matching_result = 8;
+    else if (matchValue === 0) {
+        if (matchValue_1 === -1) {
+            matchResult = 8;
         }
-        else if (matchValue[1] === 0) {
-            pattern_matching_result = 4;
+        else if (matchValue_1 === 0) {
+            matchResult = 4;
         }
-        else if (matchValue[1] === 1) {
-            pattern_matching_result = 7;
+        else if (matchValue_1 === 1) {
+            matchResult = 7;
         }
         else {
-            pattern_matching_result = 9;
+            matchResult = 9;
         }
     }
-    else if (matchValue[0] === 1) {
-        if (matchValue[1] === -1) {
-            pattern_matching_result = 2;
+    else if (matchValue === 1) {
+        if (matchValue_1 === -1) {
+            matchResult = 2;
         }
-        else if (matchValue[1] === 0) {
-            pattern_matching_result = 5;
+        else if (matchValue_1 === 0) {
+            matchResult = 5;
         }
-        else if (matchValue[1] === 1) {
-            pattern_matching_result = 0;
+        else if (matchValue_1 === 1) {
+            matchResult = 0;
         }
         else {
-            pattern_matching_result = 9;
+            matchResult = 9;
         }
     }
     else {
-        pattern_matching_result = 9;
+        matchResult = 9;
     }
-    switch (pattern_matching_result) {
+    switch (matchResult) {
         case 0: {
             return BigNatModule_lte(BigInteger__get_V(x), BigInteger__get_V(y));
         }
@@ -833,60 +839,61 @@ export function BigInteger_op_LessThanOrEqual_56F059C0(x, y) {
             return BigNatModule_isZero(BigInteger__get_V(y));
         }
         case 9: {
-            throw (new Error("signs should be +/- 1 or 0\\nParameter name: x"));
+            throw new Error("signs should be +/- 1 or 0\\nParameter name: x");
         }
     }
 }
 
 export function BigInteger_op_GreaterThanOrEqual_56F059C0(x, y) {
-    const matchValue = [BigInteger__get_SignInt(x), BigInteger__get_SignInt(y)];
-    let pattern_matching_result;
-    if (matchValue[0] === -1) {
-        if (matchValue[1] === -1) {
-            pattern_matching_result = 1;
+    const matchValue = BigInteger__get_SignInt(x) | 0;
+    const matchValue_1 = BigInteger__get_SignInt(y) | 0;
+    let matchResult;
+    if (matchValue === -1) {
+        if (matchValue_1 === -1) {
+            matchResult = 1;
         }
-        else if (matchValue[1] === 0) {
-            pattern_matching_result = 6;
+        else if (matchValue_1 === 0) {
+            matchResult = 6;
         }
-        else if (matchValue[1] === 1) {
-            pattern_matching_result = 3;
+        else if (matchValue_1 === 1) {
+            matchResult = 3;
         }
         else {
-            pattern_matching_result = 9;
+            matchResult = 9;
         }
     }
-    else if (matchValue[0] === 0) {
-        if (matchValue[1] === -1) {
-            pattern_matching_result = 8;
+    else if (matchValue === 0) {
+        if (matchValue_1 === -1) {
+            matchResult = 8;
         }
-        else if (matchValue[1] === 0) {
-            pattern_matching_result = 4;
+        else if (matchValue_1 === 0) {
+            matchResult = 4;
         }
-        else if (matchValue[1] === 1) {
-            pattern_matching_result = 7;
+        else if (matchValue_1 === 1) {
+            matchResult = 7;
         }
         else {
-            pattern_matching_result = 9;
+            matchResult = 9;
         }
     }
-    else if (matchValue[0] === 1) {
-        if (matchValue[1] === -1) {
-            pattern_matching_result = 2;
+    else if (matchValue === 1) {
+        if (matchValue_1 === -1) {
+            matchResult = 2;
         }
-        else if (matchValue[1] === 0) {
-            pattern_matching_result = 5;
+        else if (matchValue_1 === 0) {
+            matchResult = 5;
         }
-        else if (matchValue[1] === 1) {
-            pattern_matching_result = 0;
+        else if (matchValue_1 === 1) {
+            matchResult = 0;
         }
         else {
-            pattern_matching_result = 9;
+            matchResult = 9;
         }
     }
     else {
-        pattern_matching_result = 9;
+        matchResult = 9;
     }
-    switch (pattern_matching_result) {
+    switch (matchResult) {
         case 0: {
             return BigNatModule_gte(BigInteger__get_V(x), BigInteger__get_V(y));
         }
@@ -920,18 +927,18 @@ export function BigInteger_op_GreaterThanOrEqual_56F059C0(x, y) {
             return true;
         }
         case 9: {
-            throw (new Error("signs should be +/- 1 or 0\\nParameter name: x"));
+            throw new Error("signs should be +/- 1 or 0\\nParameter name: x");
         }
     }
 }
 
 export function BigInteger_Pow_62E082A2(x, y) {
     if (y < 0) {
-        throw (new Error("y"));
+        throw new Error("y");
     }
-    const matchValue = [BigInteger__get_IsZero(x), y];
-    if (matchValue[0]) {
-        if (matchValue[1] === 0) {
+    const matchValue = BigInteger__get_IsZero(x);
+    if (matchValue) {
+        if (y === 0) {
             return BigInteger_get_One();
         }
         else {
@@ -953,11 +960,11 @@ export function BigInteger__get_ToInt32(x) {
         if (u <= (2147483647 >>> 0)) {
             return (BigInteger__get_SignInt(x) * (~(~u))) | 0;
         }
-        else if ((BigInteger__get_SignInt(x) === -1) && (u === ((2147483647 + 1) >>> 0))) {
+        else if ((BigInteger__get_SignInt(x) === -1) && (u === (-2147483648 >>> 0))) {
             return -2147483648;
         }
         else {
-            throw (new Error());
+            throw new Error();
         }
     }
 }
@@ -984,7 +991,7 @@ export function BigInteger__get_ToInt64(x) {
             return fromBits(0, 2147483648, false);
         }
         else {
-            throw (new Error());
+            throw new Error();
         }
     }
 }
@@ -1000,19 +1007,17 @@ export function BigInteger__get_ToUInt64(x) {
 
 export function BigInteger__get_ToDouble(x) {
     const matchValue = BigInteger__get_SignInt(x) | 0;
-    switch (matchValue) {
-        case -1: {
-            return -BigNatModule_toFloat(BigInteger__get_V(x));
-        }
-        case 0: {
-            return 0;
-        }
-        case 1: {
-            return BigNatModule_toFloat(BigInteger__get_V(x));
-        }
-        default: {
-            throw (new Error("signs should be +/- 1 or 0\\nParameter name: x"));
-        }
+    if (matchValue === -1) {
+        return -BigNatModule_toFloat(BigInteger__get_V(x));
+    }
+    else if (matchValue === 0) {
+        return 0;
+    }
+    else if (matchValue === 1) {
+        return BigNatModule_toFloat(BigInteger__get_V(x));
+    }
+    else {
+        throw new Error("signs should be +/- 1 or 0\\nParameter name: x");
     }
 }
 
@@ -1042,25 +1047,25 @@ export function BigInteger__get_ToDecimal(x) {
 
 export function BigInteger_Parse_Z721C83C5(text) {
     if (text == null) {
-        throw (new Error("text"));
+        throw new Error("text");
     }
     const text_1 = text.trim();
     const len = text_1.length | 0;
     if (len === 0) {
-        throw (new Error());
+        throw new Error();
     }
-    const matchValue = [text_1[0], len];
-    if (matchValue[0] === "+") {
-        if (matchValue[1] === 1) {
-            throw (new Error());
+    const matchValue = text_1[0];
+    if (matchValue === "+") {
+        if (len === 1) {
+            throw new Error();
         }
         else {
             return BigInteger_posn_Z67CCE57D(BigNatModule_ofString(text_1.slice(1, (len - 1) + 1)));
         }
     }
-    else if (matchValue[0] === "-") {
-        if (matchValue[1] === 1) {
-            throw (new Error());
+    else if (matchValue === "-") {
+        if (len === 1) {
+            throw new Error();
         }
         else {
             return BigInteger_negn_Z67CCE57D(BigNatModule_ofString(text_1.slice(1, (len - 1) + 1)));
@@ -1082,7 +1087,7 @@ export function BigInteger__get_IsSmall(x) {
 
 export function BigInteger_Factorial_Z665282C2(x) {
     if (BigInteger__get_IsNegative(x)) {
-        throw (new Error("mustBeNonNegative\\nParameter name: x"));
+        throw new Error("mustBeNonNegative\\nParameter name: x");
     }
     if (BigInteger__get_IsPositive(x)) {
         return BigInteger_posn_Z67CCE57D(BigNatModule_factorial(BigInteger__get_V(x)));

@@ -16,7 +16,7 @@ export function HashIdentity_Structural() {
 }
 
 export function HashIdentity_Reference() {
-    return HashIdentity_FromFunctions(physicalHash, (e1, e2) => (e1 === e2));
+    return HashIdentity_FromFunctions(physicalHash, (e, e_1) => (e === e_1));
 }
 
 export function ComparisonIdentity_FromFunction(comparer) {

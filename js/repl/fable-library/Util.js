@@ -26,7 +26,8 @@ export function disposeSafe(x) {
     }
 }
 export function sameConstructor(x, y) {
-    return Object.getPrototypeOf(x).constructor === Object.getPrototypeOf(y).constructor;
+    var _a, _b;
+    return ((_a = Object.getPrototypeOf(x)) === null || _a === void 0 ? void 0 : _a.constructor) === ((_b = Object.getPrototypeOf(y)) === null || _b === void 0 ? void 0 : _b.constructor);
 }
 export class Enumerator {
     constructor(iter) {
@@ -57,10 +58,9 @@ export function getEnumerator(o) {
 }
 export function toIterator(en) {
     return {
-        [Symbol.iterator]() { return this; },
         next() {
             const hasNext = en["System.Collections.IEnumerator.MoveNext"]();
-            const current = hasNext ? en["System.Collections.IEnumerator.get_Current"]() : undefined;
+            const current = hasNext ? en["System.Collections.Generic.IEnumerator`1.get_Current"]() : undefined;
             return { done: !hasNext, value: current };
         },
     };
@@ -144,7 +144,7 @@ export function dateOffset(date) {
     const date1 = date;
     return typeof date1.offset === "number"
         ? date1.offset
-        : (date.kind === 1 /* UTC */
+        : (date.kind === 1 /* DateKind.UTC */
             ? 0 : date.getTimezoneOffset() * -60000);
 }
 export function int16ToString(i, radix) {
@@ -224,6 +224,7 @@ export function arrayHash(x) {
     return combineHashCodes(hashes);
 }
 export function structuralHash(x) {
+    var _a;
     if (x == null) {
         return 0;
     }
@@ -244,7 +245,7 @@ export function structuralHash(x) {
             else if (x instanceof Date) {
                 return dateHash(x);
             }
-            else if (Object.getPrototypeOf(x).constructor === Object) {
+            else if (((_a = Object.getPrototypeOf(x)) === null || _a === void 0 ? void 0 : _a.constructor) === Object) {
                 // TODO: check call-stack to prevent cyclic objects?
                 const hashes = Object.values(x).map((v) => structuralHash(v));
                 return combineHashCodes(hashes);
@@ -301,6 +302,7 @@ function equalObjects(x, y) {
     return true;
 }
 export function equals(x, y) {
+    var _a;
     if (x === y) {
         return true;
     }
@@ -323,7 +325,7 @@ export function equals(x, y) {
         return (y instanceof Date) && compareDates(x, y) === 0;
     }
     else {
-        return Object.getPrototypeOf(x).constructor === Object && equalObjects(x, y);
+        return ((_a = Object.getPrototypeOf(x)) === null || _a === void 0 ? void 0 : _a.constructor) === Object && equalObjects(x, y);
     }
 }
 export function compareDates(x, y) {
@@ -387,6 +389,7 @@ function compareObjects(x, y) {
     return 0;
 }
 export function compare(x, y) {
+    var _a;
     if (x === y) {
         return 0;
     }
@@ -409,7 +412,7 @@ export function compare(x, y) {
         return y instanceof Date ? compareDates(x, y) : -1;
     }
     else {
-        return Object.getPrototypeOf(x).constructor === Object ? compareObjects(x, y) : -1;
+        return ((_a = Object.getPrototypeOf(x)) === null || _a === void 0 ? void 0 : _a.constructor) === Object ? compareObjects(x, y) : -1;
     }
 }
 export function min(comparer, x, y) {

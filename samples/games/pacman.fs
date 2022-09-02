@@ -69,18 +69,18 @@ module Images =
     direction in which Pacman is going. It keeps a mutable state with current step of Pacman's
     mouth.
     *)
-    let imageAt(x,y,v) =
+    let imageAt(x: _ ref, y: _ ref, v: _ ref) =
       let p1, p2 =
-        match !v with
+        match v.Value with
         | -1,  0 -> pl1Img, pl2Img
         |  1,  0 -> pr1Img, pr2Img
         |  0, -1 -> pu1Img, pu2Img
         |  0,  1 -> pd1Img, pd2Img
-        |  _,  _ -> !lastp, !lastp
-      let x' = int (floor(float (!x/6)))
-      let y' = int (floor(float (!y/6)))
+        |  _,  _ -> lastp.Value, lastp.Value
+      let x' = int (floor(float (x.Value/6)))
+      let y' = int (floor(float (y.Value/6)))
       let p = if (x' + y') % 2 = 0 then p1 else p2
-      lastp := p
+      lastp.Value <- p
       p
 
 module Keyboard =
@@ -93,9 +93,9 @@ module Keyboard =
 
     /// Triggered when key is pressed/released
     let update (e : KeyboardEvent, pressed) =
-      let keyCode = int e.keyCode
+      let key = e.key
       let op =  if pressed then Set.add else Set.remove
-      keysPressed <- op keyCode keysPressed
+      keysPressed <- op key keysPressed
 
     /// Register DOM event handlers
     let init () =
@@ -419,8 +419,8 @@ The following outlines the structure of the function:
       let rec update () =
         logic ()
         render ()
-        if !dotsLeft = 0 then onLevelCompleted()
-        elif !energy <= 0 then onGameOver()
+        if dotsLeft.Value = 0 then onLevelCompleted()
+        elif energy.Value <= 0 then onGameOver()
         else window.setTimeout(update, 1000. / 60.) |> ignore
 
       update()
@@ -457,7 +457,7 @@ let playLevel (onLevelCompleted, onGameOver) =
   ### Define the Pacman state
   Next, we define the game state. Pacman game uses mutable state, so the following uses
   F# reference cells; `ref 0` creates a mutable cell containing `0`. Later, we will access
-  the value by writing `!score` and mutate it by writing `score := !score + 1`.
+  the value by writing `score.Value` and mutate it by writing `score.Value <- score.Value + 1`.
   *)
   let pills = maze |> Array.map (fun line ->
     line.ToCharArray() |> Array.map id)
@@ -479,65 +479,65 @@ let playLevel (onLevelCompleted, onGameOver) =
   let movePacman () =
     // In which directions should pacman go?
     let inputs =
-       [| if Keyboard.isPressed 38 (*up*) then
-            yield canGoUp (!x,!y), (0,-1)
-          if Keyboard.isPressed 40 (*down*) then
-            yield canGoDown (!x,!y), (0,1)
-          if Keyboard.isPressed 37 (*left*) then
-            yield canGoLeft (!x,!y), (-1,0)
-          if Keyboard.isPressed 39 (*right*) then
-            yield canGoRight (!x,!y), (1,0) |]
+       [| if Keyboard.isPressed "ArrowUp" then
+            yield canGoUp (x.Value,y.Value), (0,-1)
+          if Keyboard.isPressed "ArrowDown" then
+            yield canGoDown (x.Value,y.Value), (0,1)
+          if Keyboard.isPressed "ArrowLeft" then
+            yield canGoLeft (x.Value,y.Value), (-1,0)
+          if Keyboard.isPressed "ArrowRight" then
+            yield canGoRight (x.Value,y.Value), (1,0) |]
     // Can we continue in the same direction?
     let canGoForward =
-      match !v with
-      | 0,-1 -> canGoUp(!x,!y)
-      | 0,1  -> canGoDown(!x,!y)
-      | -1,0 -> canGoLeft(!x,!y)
-      | 1, 0 -> canGoRight(!x,!y)
+      match v.Value with
+      | 0,-1 -> canGoUp(x.Value,y.Value)
+      | 0,1  -> canGoDown(x.Value,y.Value)
+      | -1,0 -> canGoLeft(x.Value,y.Value)
+      | 1, 0 -> canGoRight(x.Value,y.Value)
       | _ -> false
     // What new directions can we take?
     let availableDirections =
       inputs
       |> Array.filter fst
       |> Array.map snd
-      |> Array.sortBy (fun v' -> v' = !v)
+      |> Array.sortBy (fun v' -> v' = v.Value)
     if availableDirections.Length > 0 then
       // Choose the first one, prefers no change
-      v := availableDirections.[0]
+      v.Value <- availableDirections.[0]
     elif inputs.Length = 0 || not canGoForward then
       // There are no options - stop
-      v := 0,0
+      v.Value <- 0,0
 
     // Update X and Y accordingly
-    let x',y' = wrap (!x,!y) !v
-    x := x'
-    y := y'
+    let x',y' = wrap (x.Value,y.Value) v.Value
+    x.Value <- x'
+    y.Value <- y'
 
   // Check if Pacman eats a pill at current cell
   let eatPills () =
-    let tx = int (floor(float ((!x+6)/8)))
-    let ty = int (floor(float ((!y+6)/8)))
+    let tx = int (floor(float ((x.Value+6)/8)))
+    let ty = int (floor(float ((y.Value+6)/8)))
     let c = pills.[ty].[tx]
     if c = '.' then
       // Eating a small pill increments the score
       pills.[ty].[tx] <- ' '
       clearCell background (tx,ty)
-      score := !score + 10
-      decr dotsLeft
+      score.Value <- score.Value + 10
+      dotsLeft.Value <- dotsLeft.Value - 1
       Sound.play "Dot5"
     if c = 'o' then
       // Eating a large pill turns on the power mode
       pills.[ty].[tx] <- ' '
       clearCell background (tx,ty)
-      bonus := 0
-      score := !score + 50
-      powerCountdown := 250
-      decr dotsLeft
+      bonus.Value <- 0
+      score.Value <- score.Value + 50
+      powerCountdown.Value <- 250
+      dotsLeft.Value <- dotsLeft.Value - 1
       Sound.play "Powerup"
 
   /// Are there any ghosts that collide with Pacman?
   let touchingGhosts () =
-    let px, py = !x, !y
+    let px, py = x.Value, y.Value
     ghosts |> Array.filter (fun ghost ->
       let x,y = ghost.X, ghost.Y
       ((px >= x && px < x + 13) ||
@@ -552,31 +552,31 @@ The `collisionDetection` function implements the right response to collision wit
   let collisionDetection () =
     let touched = touchingGhosts ()
     if touched.Length > 0 then
-      if !powerCountdown > 0 then
+      if powerCountdown.Value > 0 then
         // Pacman is eating ghosts!
         touched |> Array.iter (fun ghost ->
           if not ghost.IsReturning then
             Sound.play "EatGhost"
             ghost.IsReturning <- true
-            let added = int (2. ** (float !bonus))
-            score := !score + added * 200
-            let image = bonusImages.[!bonus]
-            bonuses := (100, (image, ghost.X, ghost.Y)) :: !bonuses
-            bonus :=  min 3 (!bonus + 1) )
+            let added = int (2. ** (float bonus.Value))
+            score.Value <- score.Value + added * 200
+            let image = bonusImages.[bonus.Value]
+            bonuses.Value <- (100, (image, ghost.X, ghost.Y)) :: bonuses.Value
+            bonus.Value <-  min 3 (bonus.Value + 1) )
       else
         // Pacman loses energy when hitting ghosts
-        decr energy
-        if !flashCountdown = 0 then Sound.play "Hurt"
-        flashCountdown := 30
-    if !flashCountdown > 0 then decr flashCountdown
+        energy.Value <- energy.Value - 1
+        if flashCountdown.Value = 0 then Sound.play "Hurt"
+        flashCountdown.Value <- 30
+    if flashCountdown.Value > 0 then flashCountdown.Value <- flashCountdown.Value - 1
 
   /// Updates bonus points
   let updateBonus () =
     let removals,remainders =
-      !bonuses
+      bonuses.Value
       |> List.map (fun (count,x) -> count-1,x)
       |> List.partition (fst >> (=) 0)
-    bonuses := remainders
+    bonuses.Value <- remainders
 
 (**
 The logic is called from the following single `logic` function that includes all the checks:
@@ -585,7 +585,8 @@ The logic is called from the following single `logic` function that includes all
     moveGhosts()
     movePacman()
     eatPills ()
-    if !powerCountdown > 0 then decr powerCountdown
+    if powerCountdown.Value > 0 then
+        powerCountdown.Value <- powerCountdown.Value - 1
     collisionDetection()
     updateBonus ()
 
@@ -599,12 +600,12 @@ We start with Pacman and remaining energy:
 *)
   let renderPacman () =
     let p = Images.imageAt(x,y,v)
-    if (!flashCountdown >>> 1) % 2 = 0
-    then context.drawImage(!^ p, float !x, float !y)
+    if (flashCountdown.Value >>> 1) % 2 = 0
+    then context.drawImage(!^ p, float x.Value, float y.Value)
 
   let renderEnergy () =
     context.fillStyle <- !^ "yellow"
-    context.fillRect(120., 250., float !energy, 2.)
+    context.fillRect(120., 250., float energy.Value, 2.)
 (**
 The next three functions render ghosts, current score and bonuses:
 *)
@@ -613,19 +614,19 @@ The next three functions render ghosts, current score and bonuses:
       let image =
         if ghost.IsReturning then eyed
         else
-          if !powerCountdown = 0 then ghost.Image
-          elif !powerCountdown > 100 ||
-                ((!powerCountdown >>> 3) % 2) <> 0 then blue
+          if powerCountdown.Value = 0 then ghost.Image
+          elif powerCountdown.Value > 100 ||
+                ((powerCountdown.Value >>> 3) % 2) <> 0 then blue
           else ghost.Image
       context.drawImage(!^ image, float ghost.X, float ghost.Y) )
 
   let renderScore () =
     context.fillStyle <- !^ "white"
     context.font <- "bold 8px";
-    context.fillText("Score " + (!score).ToString(), 0., 255.)
+    context.fillText("Score " + (score.Value).ToString(), 0., 255.)
 
   let renderBonus () =
-    !bonuses |> List.iter (fun (_,(image,x,y)) ->
+    bonuses.Value |> List.iter (fun (_,(image,x,y)) ->
       context.drawImage(!^ image, float x, float y))
 
   let render () =
@@ -639,8 +640,8 @@ The next three functions render ghosts, current score and bonuses:
   let rec update () =
     logic ()
     render ()
-    if !dotsLeft = 0 then onLevelCompleted()
-    elif !energy <= 0 then onGameOver()
+    if dotsLeft.Value = 0 then onLevelCompleted()
+    elif energy.Value <= 0 then onGameOver()
     else window.setTimeout(update, 1000 / 60) |> ignore
 
   update()

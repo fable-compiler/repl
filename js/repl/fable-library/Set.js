@@ -39,7 +39,7 @@ export function SetTreeNode$1$reflection(gen0) {
     return class_type("Set.SetTreeNode`1", [gen0], SetTreeNode$1, SetTreeLeaf$1$reflection(gen0));
 }
 
-export function SetTreeNode$1_$ctor_Z6E7BE5F7(v, left, right, h) {
+export function SetTreeNode$1_$ctor_5F465FC9(v, left, right, h) {
     return new SetTreeNode$1(v, left, right, h);
 }
 
@@ -109,7 +109,7 @@ export function SetTreeModule_mk(l, k, r) {
         return SetTreeLeaf$1_$ctor_2B595(k);
     }
     else {
-        return SetTreeNode$1_$ctor_Z6E7BE5F7(k, l, r, m + 1);
+        return SetTreeNode$1_$ctor_5F465FC9(k, l, r, m + 1);
     }
 }
 
@@ -142,7 +142,7 @@ export function SetTreeModule_rebalance(t1, v, t2) {
                     return SetTreeModule_mk(SetTreeModule_mk(t1, v, SetTreeNode$1__get_Left(matchValue_1)), SetTreeLeaf$1__get_Key(matchValue_1), SetTreeModule_mk(SetTreeNode$1__get_Right(matchValue_1), SetTreeLeaf$1__get_Key(matchValue), SetTreeNode$1__get_Right(matchValue)));
                 }
                 else {
-                    throw (new Error("internal error: Set.rebalance"));
+                    throw new Error("internal error: Set.rebalance");
                 }
             }
             else {
@@ -150,7 +150,7 @@ export function SetTreeModule_rebalance(t1, v, t2) {
             }
         }
         else {
-            throw (new Error("internal error: Set.rebalance"));
+            throw new Error("internal error: Set.rebalance");
         }
     }
     else if (t1h > (t2h + 2)) {
@@ -162,7 +162,7 @@ export function SetTreeModule_rebalance(t1, v, t2) {
                     return SetTreeModule_mk(SetTreeModule_mk(SetTreeNode$1__get_Left(matchValue_2), SetTreeLeaf$1__get_Key(matchValue_2), SetTreeNode$1__get_Left(matchValue_3)), SetTreeLeaf$1__get_Key(matchValue_3), SetTreeModule_mk(SetTreeNode$1__get_Right(matchValue_3), v, t2));
                 }
                 else {
-                    throw (new Error("internal error: Set.rebalance"));
+                    throw new Error("internal error: Set.rebalance");
                 }
             }
             else {
@@ -170,7 +170,7 @@ export function SetTreeModule_rebalance(t1, v, t2) {
             }
         }
         else {
-            throw (new Error("internal error: Set.rebalance"));
+            throw new Error("internal error: Set.rebalance");
         }
     }
     else {
@@ -196,13 +196,13 @@ export function SetTreeModule_add(comparer, k, t) {
         else {
             const c_1 = comparer.Compare(k, SetTreeLeaf$1__get_Key(t2)) | 0;
             if (c_1 < 0) {
-                return SetTreeNode$1_$ctor_Z6E7BE5F7(k, SetTreeModule_empty(), t, 2);
+                return SetTreeNode$1_$ctor_5F465FC9(k, SetTreeModule_empty(), t, 2);
             }
             else if (c_1 === 0) {
                 return t;
             }
             else {
-                return SetTreeNode$1_$ctor_Z6E7BE5F7(k, t, SetTreeModule_empty(), 2);
+                return SetTreeNode$1_$ctor_5F465FC9(k, t, SetTreeModule_empty(), 2);
             }
         }
     }
@@ -297,7 +297,7 @@ export function SetTreeModule_spliceOutSuccessor(t) {
         }
     }
     else {
-        throw (new Error("internal error: Set.spliceOutSuccessor"));
+        throw new Error("internal error: Set.spliceOutSuccessor");
     }
 }
 
@@ -651,21 +651,21 @@ export function SetTreeModule_partition1(comparer, f, k, acc1, acc2) {
     }
 }
 
-export function SetTreeModule_partitionAux(comparer_mut, f_mut, t_mut, acc_0_mut, acc_1_mut) {
+export function SetTreeModule_partitionAux(comparer_mut, f_mut, t_mut, acc__mut, acc__1_mut) {
     SetTreeModule_partitionAux:
     while (true) {
-        const comparer = comparer_mut, f = f_mut, t = t_mut, acc_0 = acc_0_mut, acc_1 = acc_1_mut;
-        const acc = [acc_0, acc_1];
+        const comparer = comparer_mut, f = f_mut, t = t_mut, acc_ = acc__mut, acc__1 = acc__1_mut;
+        const acc = [acc_, acc__1];
         if (t != null) {
             const t2 = t;
             if (t2 instanceof SetTreeNode$1) {
-                const acc_2 = SetTreeModule_partitionAux(comparer, f, SetTreeNode$1__get_Right(t2), acc[0], acc[1]);
-                const acc_3 = SetTreeModule_partition1(comparer, f, SetTreeLeaf$1__get_Key(t2), acc_2[0], acc_2[1]);
+                const acc_1 = SetTreeModule_partitionAux(comparer, f, SetTreeNode$1__get_Right(t2), acc[0], acc[1]);
+                const acc_4 = SetTreeModule_partition1(comparer, f, SetTreeLeaf$1__get_Key(t2), acc_1[0], acc_1[1]);
                 comparer_mut = comparer;
                 f_mut = f;
                 t_mut = SetTreeNode$1__get_Left(t2);
-                acc_0_mut = acc_3[0];
-                acc_1_mut = acc_3[1];
+                acc__mut = acc_4[0];
+                acc__1_mut = acc_4[1];
                 continue SetTreeModule_partitionAux;
             }
             else {
@@ -760,7 +760,7 @@ export function SetTreeModule_maximumElementOpt(t) {
 export function SetTreeModule_minimumElement(s) {
     const matchValue = SetTreeModule_minimumElementOpt(s);
     if (matchValue == null) {
-        throw (new Error("Set contains no elements"));
+        throw new Error("Set contains no elements");
     }
     else {
         return value_1(matchValue);
@@ -770,7 +770,7 @@ export function SetTreeModule_minimumElement(s) {
 export function SetTreeModule_maximumElement(s) {
     const matchValue = SetTreeModule_maximumElementOpt(s);
     if (matchValue == null) {
-        throw (new Error("Set contains no elements"));
+        throw new Error("Set contains no elements");
     }
     else {
         return value_1(matchValue);
@@ -823,11 +823,11 @@ export function SetTreeModule_mkIterator(s) {
 }
 
 export function SetTreeModule_notStarted() {
-    throw (new Error("Enumeration not started"));
+    throw new Error("Enumeration not started");
 }
 
 export function SetTreeModule_alreadyFinished() {
-    throw (new Error("Enumeration already started"));
+    throw new Error("Enumeration already started");
 }
 
 export function SetTreeModule_current(i) {
@@ -841,7 +841,7 @@ export function SetTreeModule_current(i) {
             return SetTreeLeaf$1__get_Key(t);
         }
         else {
-            throw (new Error("Please report error: Set iterator, unexpected stack for current"));
+            throw new Error("Please report error: Set iterator, unexpected stack for current");
         }
     }
     else {
@@ -856,7 +856,7 @@ export function SetTreeModule_moveNext(i) {
             if (head(matchValue) != null) {
                 const t = head(matchValue);
                 if (t instanceof SetTreeNode$1) {
-                    throw (new Error("Please report error: Set iterator, unexpected stack for moveNext"));
+                    throw new Error("Please report error: Set iterator, unexpected stack for moveNext");
                 }
                 else {
                     i.stack = SetTreeModule_collapseLHS(tail(matchValue));
@@ -864,7 +864,7 @@ export function SetTreeModule_moveNext(i) {
                 }
             }
             else {
-                throw (new Error("Please report error: Set iterator, unexpected stack for moveNext"));
+                throw new Error("Please report error: Set iterator, unexpected stack for moveNext");
             }
         }
         else {
@@ -880,16 +880,16 @@ export function SetTreeModule_moveNext(i) {
 export function SetTreeModule_mkIEnumerator(s) {
     let i = SetTreeModule_mkIterator(s);
     return {
-        ["System.Collections.Generic.IEnumerator`1.get_Current"]() {
+        "System.Collections.Generic.IEnumerator`1.get_Current"() {
             return SetTreeModule_current(i);
         },
-        ["System.Collections.IEnumerator.get_Current"]() {
+        "System.Collections.IEnumerator.get_Current"() {
             return SetTreeModule_current(i);
         },
-        ["System.Collections.IEnumerator.MoveNext"]() {
+        "System.Collections.IEnumerator.MoveNext"() {
             return SetTreeModule_moveNext(i);
         },
-        ["System.Collections.IEnumerator.Reset"]() {
+        "System.Collections.IEnumerator.Reset"() {
             i = SetTreeModule_mkIterator(s);
         },
         Dispose() {
@@ -901,13 +901,12 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
     SetTreeModule_compareStacks:
     while (true) {
         const comparer = comparer_mut, l1 = l1_mut, l2 = l2_mut;
-        const matchValue = [l1, l2];
-        if (!isEmpty_1(matchValue[0])) {
-            if (!isEmpty_1(matchValue[1])) {
-                if (head(matchValue[1]) != null) {
-                    if (head(matchValue[0]) != null) {
-                        const x1_3 = head(matchValue[0]);
-                        const x2_3 = head(matchValue[1]);
+        if (!isEmpty_1(l1)) {
+            if (!isEmpty_1(l2)) {
+                if (head(l2) != null) {
+                    if (head(l1) != null) {
+                        const x1_3 = head(l1);
+                        const x2_3 = head(l2);
                         if (x1_3 instanceof SetTreeNode$1) {
                             if (SetTreeNode$1__get_Left(x1_3) == null) {
                                 if (x2_3 instanceof SetTreeNode$1) {
@@ -918,52 +917,51 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                         }
                                         else {
                                             comparer_mut = comparer;
-                                            l1_mut = cons(SetTreeNode$1__get_Right(x1_3), tail(matchValue[0]));
-                                            l2_mut = cons(SetTreeNode$1__get_Right(x2_3), tail(matchValue[1]));
+                                            l1_mut = cons(SetTreeNode$1__get_Right(x1_3), tail(l1));
+                                            l2_mut = cons(SetTreeNode$1__get_Right(x2_3), tail(l2));
                                             continue SetTreeModule_compareStacks;
                                         }
                                     }
                                     else {
-                                        const matchValue_3 = [l1, l2];
-                                        let pattern_matching_result, t1_6, x1_4, t2_6, x2_4;
-                                        if (!isEmpty_1(matchValue_3[0])) {
-                                            if (head(matchValue_3[0]) != null) {
-                                                pattern_matching_result = 0;
-                                                t1_6 = tail(matchValue_3[0]);
-                                                x1_4 = head(matchValue_3[0]);
+                                        let matchResult, t1_6, x1_4, t2_6, x2_4;
+                                        if (!isEmpty_1(l1)) {
+                                            if (head(l1) != null) {
+                                                matchResult = 0;
+                                                t1_6 = tail(l1);
+                                                x1_4 = head(l1);
                                             }
-                                            else if (!isEmpty_1(matchValue_3[1])) {
-                                                if (head(matchValue_3[1]) != null) {
-                                                    pattern_matching_result = 1;
-                                                    t2_6 = tail(matchValue_3[1]);
-                                                    x2_4 = head(matchValue_3[1]);
+                                            else if (!isEmpty_1(l2)) {
+                                                if (head(l2) != null) {
+                                                    matchResult = 1;
+                                                    t2_6 = tail(l2);
+                                                    x2_4 = head(l2);
                                                 }
                                                 else {
-                                                    pattern_matching_result = 2;
+                                                    matchResult = 2;
                                                 }
                                             }
                                             else {
-                                                pattern_matching_result = 2;
+                                                matchResult = 2;
                                             }
                                         }
-                                        else if (!isEmpty_1(matchValue_3[1])) {
-                                            if (head(matchValue_3[1]) != null) {
-                                                pattern_matching_result = 1;
-                                                t2_6 = tail(matchValue_3[1]);
-                                                x2_4 = head(matchValue_3[1]);
+                                        else if (!isEmpty_1(l2)) {
+                                            if (head(l2) != null) {
+                                                matchResult = 1;
+                                                t2_6 = tail(l2);
+                                                x2_4 = head(l2);
                                             }
                                             else {
-                                                pattern_matching_result = 2;
+                                                matchResult = 2;
                                             }
                                         }
                                         else {
-                                            pattern_matching_result = 2;
+                                            matchResult = 2;
                                         }
-                                        switch (pattern_matching_result) {
+                                        switch (matchResult) {
                                             case 0: {
                                                 if (x1_4 instanceof SetTreeNode$1) {
                                                     comparer_mut = comparer;
-                                                    l1_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x1_4), SetTreeNode$1_$ctor_Z6E7BE5F7(SetTreeLeaf$1__get_Key(x1_4), SetTreeModule_empty(), SetTreeNode$1__get_Right(x1_4), 0)], t1_6);
+                                                    l1_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x1_4), SetTreeNode$1_$ctor_5F465FC9(SetTreeLeaf$1__get_Key(x1_4), SetTreeModule_empty(), SetTreeNode$1__get_Right(x1_4), 0)], t1_6);
                                                     l2_mut = l2;
                                                     continue SetTreeModule_compareStacks;
                                                 }
@@ -978,7 +976,7 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                                 if (x2_4 instanceof SetTreeNode$1) {
                                                     comparer_mut = comparer;
                                                     l1_mut = l1;
-                                                    l2_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x2_4), SetTreeNode$1_$ctor_Z6E7BE5F7(SetTreeLeaf$1__get_Key(x2_4), SetTreeModule_empty(), SetTreeNode$1__get_Right(x2_4), 0)], t2_6);
+                                                    l2_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x2_4), SetTreeNode$1_$ctor_5F465FC9(SetTreeLeaf$1__get_Key(x2_4), SetTreeModule_empty(), SetTreeNode$1__get_Right(x2_4), 0)], t2_6);
                                                     continue SetTreeModule_compareStacks;
                                                 }
                                                 else {
@@ -989,7 +987,7 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                                 }
                                             }
                                             case 2: {
-                                                throw (new Error("unexpected state in SetTree.compareStacks"));
+                                                throw new Error("unexpected state in SetTree.compareStacks");
                                             }
                                         }
                                     }
@@ -1001,53 +999,52 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                     }
                                     else {
                                         comparer_mut = comparer;
-                                        l1_mut = cons(SetTreeNode$1__get_Right(x1_3), tail(matchValue[0]));
-                                        l2_mut = cons(SetTreeModule_empty(), tail(matchValue[1]));
+                                        l1_mut = cons(SetTreeNode$1__get_Right(x1_3), tail(l1));
+                                        l2_mut = cons(SetTreeModule_empty(), tail(l2));
                                         continue SetTreeModule_compareStacks;
                                     }
                                 }
                             }
                             else {
-                                const matchValue_4 = [l1, l2];
-                                let pattern_matching_result_1, t1_7, x1_5, t2_7, x2_5;
-                                if (!isEmpty_1(matchValue_4[0])) {
-                                    if (head(matchValue_4[0]) != null) {
-                                        pattern_matching_result_1 = 0;
-                                        t1_7 = tail(matchValue_4[0]);
-                                        x1_5 = head(matchValue_4[0]);
+                                let matchResult_1, t1_7, x1_5, t2_7, x2_5;
+                                if (!isEmpty_1(l1)) {
+                                    if (head(l1) != null) {
+                                        matchResult_1 = 0;
+                                        t1_7 = tail(l1);
+                                        x1_5 = head(l1);
                                     }
-                                    else if (!isEmpty_1(matchValue_4[1])) {
-                                        if (head(matchValue_4[1]) != null) {
-                                            pattern_matching_result_1 = 1;
-                                            t2_7 = tail(matchValue_4[1]);
-                                            x2_5 = head(matchValue_4[1]);
+                                    else if (!isEmpty_1(l2)) {
+                                        if (head(l2) != null) {
+                                            matchResult_1 = 1;
+                                            t2_7 = tail(l2);
+                                            x2_5 = head(l2);
                                         }
                                         else {
-                                            pattern_matching_result_1 = 2;
+                                            matchResult_1 = 2;
                                         }
                                     }
                                     else {
-                                        pattern_matching_result_1 = 2;
+                                        matchResult_1 = 2;
                                     }
                                 }
-                                else if (!isEmpty_1(matchValue_4[1])) {
-                                    if (head(matchValue_4[1]) != null) {
-                                        pattern_matching_result_1 = 1;
-                                        t2_7 = tail(matchValue_4[1]);
-                                        x2_5 = head(matchValue_4[1]);
+                                else if (!isEmpty_1(l2)) {
+                                    if (head(l2) != null) {
+                                        matchResult_1 = 1;
+                                        t2_7 = tail(l2);
+                                        x2_5 = head(l2);
                                     }
                                     else {
-                                        pattern_matching_result_1 = 2;
+                                        matchResult_1 = 2;
                                     }
                                 }
                                 else {
-                                    pattern_matching_result_1 = 2;
+                                    matchResult_1 = 2;
                                 }
-                                switch (pattern_matching_result_1) {
+                                switch (matchResult_1) {
                                     case 0: {
                                         if (x1_5 instanceof SetTreeNode$1) {
                                             comparer_mut = comparer;
-                                            l1_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x1_5), SetTreeNode$1_$ctor_Z6E7BE5F7(SetTreeLeaf$1__get_Key(x1_5), SetTreeModule_empty(), SetTreeNode$1__get_Right(x1_5), 0)], t1_7);
+                                            l1_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x1_5), SetTreeNode$1_$ctor_5F465FC9(SetTreeLeaf$1__get_Key(x1_5), SetTreeModule_empty(), SetTreeNode$1__get_Right(x1_5), 0)], t1_7);
                                             l2_mut = l2;
                                             continue SetTreeModule_compareStacks;
                                         }
@@ -1062,7 +1059,7 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                         if (x2_5 instanceof SetTreeNode$1) {
                                             comparer_mut = comparer;
                                             l1_mut = l1;
-                                            l2_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x2_5), SetTreeNode$1_$ctor_Z6E7BE5F7(SetTreeLeaf$1__get_Key(x2_5), SetTreeModule_empty(), SetTreeNode$1__get_Right(x2_5), 0)], t2_7);
+                                            l2_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x2_5), SetTreeNode$1_$ctor_5F465FC9(SetTreeLeaf$1__get_Key(x2_5), SetTreeModule_empty(), SetTreeNode$1__get_Right(x2_5), 0)], t2_7);
                                             continue SetTreeModule_compareStacks;
                                         }
                                         else {
@@ -1073,7 +1070,7 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                         }
                                     }
                                     case 2: {
-                                        throw (new Error("unexpected state in SetTree.compareStacks"));
+                                        throw new Error("unexpected state in SetTree.compareStacks");
                                     }
                                 }
                             }
@@ -1086,52 +1083,51 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                 }
                                 else {
                                     comparer_mut = comparer;
-                                    l1_mut = cons(SetTreeModule_empty(), tail(matchValue[0]));
-                                    l2_mut = cons(SetTreeNode$1__get_Right(x2_3), tail(matchValue[1]));
+                                    l1_mut = cons(SetTreeModule_empty(), tail(l1));
+                                    l2_mut = cons(SetTreeNode$1__get_Right(x2_3), tail(l2));
                                     continue SetTreeModule_compareStacks;
                                 }
                             }
                             else {
-                                const matchValue_5 = [l1, l2];
-                                let pattern_matching_result_2, t1_8, x1_6, t2_8, x2_6;
-                                if (!isEmpty_1(matchValue_5[0])) {
-                                    if (head(matchValue_5[0]) != null) {
-                                        pattern_matching_result_2 = 0;
-                                        t1_8 = tail(matchValue_5[0]);
-                                        x1_6 = head(matchValue_5[0]);
+                                let matchResult_2, t1_8, x1_6, t2_8, x2_6;
+                                if (!isEmpty_1(l1)) {
+                                    if (head(l1) != null) {
+                                        matchResult_2 = 0;
+                                        t1_8 = tail(l1);
+                                        x1_6 = head(l1);
                                     }
-                                    else if (!isEmpty_1(matchValue_5[1])) {
-                                        if (head(matchValue_5[1]) != null) {
-                                            pattern_matching_result_2 = 1;
-                                            t2_8 = tail(matchValue_5[1]);
-                                            x2_6 = head(matchValue_5[1]);
+                                    else if (!isEmpty_1(l2)) {
+                                        if (head(l2) != null) {
+                                            matchResult_2 = 1;
+                                            t2_8 = tail(l2);
+                                            x2_6 = head(l2);
                                         }
                                         else {
-                                            pattern_matching_result_2 = 2;
+                                            matchResult_2 = 2;
                                         }
                                     }
                                     else {
-                                        pattern_matching_result_2 = 2;
+                                        matchResult_2 = 2;
                                     }
                                 }
-                                else if (!isEmpty_1(matchValue_5[1])) {
-                                    if (head(matchValue_5[1]) != null) {
-                                        pattern_matching_result_2 = 1;
-                                        t2_8 = tail(matchValue_5[1]);
-                                        x2_6 = head(matchValue_5[1]);
+                                else if (!isEmpty_1(l2)) {
+                                    if (head(l2) != null) {
+                                        matchResult_2 = 1;
+                                        t2_8 = tail(l2);
+                                        x2_6 = head(l2);
                                     }
                                     else {
-                                        pattern_matching_result_2 = 2;
+                                        matchResult_2 = 2;
                                     }
                                 }
                                 else {
-                                    pattern_matching_result_2 = 2;
+                                    matchResult_2 = 2;
                                 }
-                                switch (pattern_matching_result_2) {
+                                switch (matchResult_2) {
                                     case 0: {
                                         if (x1_6 instanceof SetTreeNode$1) {
                                             comparer_mut = comparer;
-                                            l1_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x1_6), SetTreeNode$1_$ctor_Z6E7BE5F7(SetTreeLeaf$1__get_Key(x1_6), SetTreeModule_empty(), SetTreeNode$1__get_Right(x1_6), 0)], t1_8);
+                                            l1_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x1_6), SetTreeNode$1_$ctor_5F465FC9(SetTreeLeaf$1__get_Key(x1_6), SetTreeModule_empty(), SetTreeNode$1__get_Right(x1_6), 0)], t1_8);
                                             l2_mut = l2;
                                             continue SetTreeModule_compareStacks;
                                         }
@@ -1146,7 +1142,7 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                         if (x2_6 instanceof SetTreeNode$1) {
                                             comparer_mut = comparer;
                                             l1_mut = l1;
-                                            l2_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x2_6), SetTreeNode$1_$ctor_Z6E7BE5F7(SetTreeLeaf$1__get_Key(x2_6), SetTreeModule_empty(), SetTreeNode$1__get_Right(x2_6), 0)], t2_8);
+                                            l2_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x2_6), SetTreeNode$1_$ctor_5F465FC9(SetTreeLeaf$1__get_Key(x2_6), SetTreeModule_empty(), SetTreeNode$1__get_Right(x2_6), 0)], t2_8);
                                             continue SetTreeModule_compareStacks;
                                         }
                                         else {
@@ -1157,7 +1153,7 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                         }
                                     }
                                     case 2: {
-                                        throw (new Error("unexpected state in SetTree.compareStacks"));
+                                        throw new Error("unexpected state in SetTree.compareStacks");
                                     }
                                 }
                             }
@@ -1169,54 +1165,53 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                             }
                             else {
                                 comparer_mut = comparer;
-                                l1_mut = tail(matchValue[0]);
-                                l2_mut = tail(matchValue[1]);
+                                l1_mut = tail(l1);
+                                l2_mut = tail(l2);
                                 continue SetTreeModule_compareStacks;
                             }
                         }
                     }
                     else {
-                        const x2 = head(matchValue[1]);
-                        const matchValue_1 = [l1, l2];
-                        let pattern_matching_result_3, t1_2, x1, t2_2, x2_1;
-                        if (!isEmpty_1(matchValue_1[0])) {
-                            if (head(matchValue_1[0]) != null) {
-                                pattern_matching_result_3 = 0;
-                                t1_2 = tail(matchValue_1[0]);
-                                x1 = head(matchValue_1[0]);
+                        const x2 = head(l2);
+                        let matchResult_3, t1_2, x1, t2_2, x2_1;
+                        if (!isEmpty_1(l1)) {
+                            if (head(l1) != null) {
+                                matchResult_3 = 0;
+                                t1_2 = tail(l1);
+                                x1 = head(l1);
                             }
-                            else if (!isEmpty_1(matchValue_1[1])) {
-                                if (head(matchValue_1[1]) != null) {
-                                    pattern_matching_result_3 = 1;
-                                    t2_2 = tail(matchValue_1[1]);
-                                    x2_1 = head(matchValue_1[1]);
+                            else if (!isEmpty_1(l2)) {
+                                if (head(l2) != null) {
+                                    matchResult_3 = 1;
+                                    t2_2 = tail(l2);
+                                    x2_1 = head(l2);
                                 }
                                 else {
-                                    pattern_matching_result_3 = 2;
+                                    matchResult_3 = 2;
                                 }
                             }
                             else {
-                                pattern_matching_result_3 = 2;
+                                matchResult_3 = 2;
                             }
                         }
-                        else if (!isEmpty_1(matchValue_1[1])) {
-                            if (head(matchValue_1[1]) != null) {
-                                pattern_matching_result_3 = 1;
-                                t2_2 = tail(matchValue_1[1]);
-                                x2_1 = head(matchValue_1[1]);
+                        else if (!isEmpty_1(l2)) {
+                            if (head(l2) != null) {
+                                matchResult_3 = 1;
+                                t2_2 = tail(l2);
+                                x2_1 = head(l2);
                             }
                             else {
-                                pattern_matching_result_3 = 2;
+                                matchResult_3 = 2;
                             }
                         }
                         else {
-                            pattern_matching_result_3 = 2;
+                            matchResult_3 = 2;
                         }
-                        switch (pattern_matching_result_3) {
+                        switch (matchResult_3) {
                             case 0: {
                                 if (x1 instanceof SetTreeNode$1) {
                                     comparer_mut = comparer;
-                                    l1_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x1), SetTreeNode$1_$ctor_Z6E7BE5F7(SetTreeLeaf$1__get_Key(x1), SetTreeModule_empty(), SetTreeNode$1__get_Right(x1), 0)], t1_2);
+                                    l1_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x1), SetTreeNode$1_$ctor_5F465FC9(SetTreeLeaf$1__get_Key(x1), SetTreeModule_empty(), SetTreeNode$1__get_Right(x1), 0)], t1_2);
                                     l2_mut = l2;
                                     continue SetTreeModule_compareStacks;
                                 }
@@ -1231,7 +1226,7 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                 if (x2_1 instanceof SetTreeNode$1) {
                                     comparer_mut = comparer;
                                     l1_mut = l1;
-                                    l2_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x2_1), SetTreeNode$1_$ctor_Z6E7BE5F7(SetTreeLeaf$1__get_Key(x2_1), SetTreeModule_empty(), SetTreeNode$1__get_Right(x2_1), 0)], t2_2);
+                                    l2_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x2_1), SetTreeNode$1_$ctor_5F465FC9(SetTreeLeaf$1__get_Key(x2_1), SetTreeModule_empty(), SetTreeNode$1__get_Right(x2_1), 0)], t2_2);
                                     continue SetTreeModule_compareStacks;
                                 }
                                 else {
@@ -1242,53 +1237,52 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                 }
                             }
                             case 2: {
-                                throw (new Error("unexpected state in SetTree.compareStacks"));
+                                throw new Error("unexpected state in SetTree.compareStacks");
                             }
                         }
                     }
                 }
-                else if (head(matchValue[0]) != null) {
-                    const x1_1 = head(matchValue[0]);
-                    const matchValue_2 = [l1, l2];
-                    let pattern_matching_result_4, t1_4, x1_2, t2_4, x2_2;
-                    if (!isEmpty_1(matchValue_2[0])) {
-                        if (head(matchValue_2[0]) != null) {
-                            pattern_matching_result_4 = 0;
-                            t1_4 = tail(matchValue_2[0]);
-                            x1_2 = head(matchValue_2[0]);
+                else if (head(l1) != null) {
+                    const x1_1 = head(l1);
+                    let matchResult_4, t1_4, x1_2, t2_4, x2_2;
+                    if (!isEmpty_1(l1)) {
+                        if (head(l1) != null) {
+                            matchResult_4 = 0;
+                            t1_4 = tail(l1);
+                            x1_2 = head(l1);
                         }
-                        else if (!isEmpty_1(matchValue_2[1])) {
-                            if (head(matchValue_2[1]) != null) {
-                                pattern_matching_result_4 = 1;
-                                t2_4 = tail(matchValue_2[1]);
-                                x2_2 = head(matchValue_2[1]);
+                        else if (!isEmpty_1(l2)) {
+                            if (head(l2) != null) {
+                                matchResult_4 = 1;
+                                t2_4 = tail(l2);
+                                x2_2 = head(l2);
                             }
                             else {
-                                pattern_matching_result_4 = 2;
+                                matchResult_4 = 2;
                             }
                         }
                         else {
-                            pattern_matching_result_4 = 2;
+                            matchResult_4 = 2;
                         }
                     }
-                    else if (!isEmpty_1(matchValue_2[1])) {
-                        if (head(matchValue_2[1]) != null) {
-                            pattern_matching_result_4 = 1;
-                            t2_4 = tail(matchValue_2[1]);
-                            x2_2 = head(matchValue_2[1]);
+                    else if (!isEmpty_1(l2)) {
+                        if (head(l2) != null) {
+                            matchResult_4 = 1;
+                            t2_4 = tail(l2);
+                            x2_2 = head(l2);
                         }
                         else {
-                            pattern_matching_result_4 = 2;
+                            matchResult_4 = 2;
                         }
                     }
                     else {
-                        pattern_matching_result_4 = 2;
+                        matchResult_4 = 2;
                     }
-                    switch (pattern_matching_result_4) {
+                    switch (matchResult_4) {
                         case 0: {
                             if (x1_2 instanceof SetTreeNode$1) {
                                 comparer_mut = comparer;
-                                l1_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x1_2), SetTreeNode$1_$ctor_Z6E7BE5F7(SetTreeLeaf$1__get_Key(x1_2), SetTreeModule_empty(), SetTreeNode$1__get_Right(x1_2), 0)], t1_4);
+                                l1_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x1_2), SetTreeNode$1_$ctor_5F465FC9(SetTreeLeaf$1__get_Key(x1_2), SetTreeModule_empty(), SetTreeNode$1__get_Right(x1_2), 0)], t1_4);
                                 l2_mut = l2;
                                 continue SetTreeModule_compareStacks;
                             }
@@ -1303,7 +1297,7 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                             if (x2_2 instanceof SetTreeNode$1) {
                                 comparer_mut = comparer;
                                 l1_mut = l1;
-                                l2_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x2_2), SetTreeNode$1_$ctor_Z6E7BE5F7(SetTreeLeaf$1__get_Key(x2_2), SetTreeModule_empty(), SetTreeNode$1__get_Right(x2_2), 0)], t2_4);
+                                l2_mut = ofArrayWithTail([SetTreeNode$1__get_Left(x2_2), SetTreeNode$1_$ctor_5F465FC9(SetTreeLeaf$1__get_Key(x2_2), SetTreeModule_empty(), SetTreeNode$1__get_Right(x2_2), 0)], t2_4);
                                 continue SetTreeModule_compareStacks;
                             }
                             else {
@@ -1314,14 +1308,14 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                             }
                         }
                         case 2: {
-                            throw (new Error("unexpected state in SetTree.compareStacks"));
+                            throw new Error("unexpected state in SetTree.compareStacks");
                         }
                     }
                 }
                 else {
                     comparer_mut = comparer;
-                    l1_mut = tail(matchValue[0]);
-                    l2_mut = tail(matchValue[1]);
+                    l1_mut = tail(l1);
+                    l2_mut = tail(l2);
                     continue SetTreeModule_compareStacks;
                 }
             }
@@ -1329,7 +1323,7 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                 return 1;
             }
         }
-        else if (isEmpty_1(matchValue[1])) {
+        else if (isEmpty_1(l2)) {
             return 0;
         }
         else {
@@ -1474,31 +1468,31 @@ export class FSharpSet {
         const s = this;
         return SetTreeModule_compare(FSharpSet__get_Comparer(s), FSharpSet__get_Tree(s), FSharpSet__get_Tree(that)) | 0;
     }
-    ["System.Collections.Generic.ICollection`1.Add2B595"](x) {
-        throw (new Error("ReadOnlyCollection"));
+    "System.Collections.Generic.ICollection`1.Add2B595"(x) {
+        throw new Error("ReadOnlyCollection");
     }
-    ["System.Collections.Generic.ICollection`1.Clear"]() {
-        throw (new Error("ReadOnlyCollection"));
+    "System.Collections.Generic.ICollection`1.Clear"() {
+        throw new Error("ReadOnlyCollection");
     }
-    ["System.Collections.Generic.ICollection`1.Remove2B595"](x) {
-        throw (new Error("ReadOnlyCollection"));
+    "System.Collections.Generic.ICollection`1.Remove2B595"(x) {
+        throw new Error("ReadOnlyCollection");
     }
-    ["System.Collections.Generic.ICollection`1.Contains2B595"](x) {
+    "System.Collections.Generic.ICollection`1.Contains2B595"(x) {
         const s = this;
         return SetTreeModule_mem(FSharpSet__get_Comparer(s), x, FSharpSet__get_Tree(s));
     }
-    ["System.Collections.Generic.ICollection`1.CopyToZ2E171D71"](arr, i) {
+    "System.Collections.Generic.ICollection`1.CopyToZ3B4C077E"(arr, i) {
         const s = this;
         SetTreeModule_copyToArray(FSharpSet__get_Tree(s), arr, i);
     }
-    ["System.Collections.Generic.ICollection`1.get_IsReadOnly"]() {
+    "System.Collections.Generic.ICollection`1.get_IsReadOnly"() {
         return true;
     }
-    ["System.Collections.Generic.ICollection`1.get_Count"]() {
+    "System.Collections.Generic.ICollection`1.get_Count"() {
         const s = this;
         return FSharpSet__get_Count(s) | 0;
     }
-    ["System.Collections.Generic.IReadOnlyCollection`1.get_Count"]() {
+    "System.Collections.Generic.IReadOnlyCollection`1.get_Count"() {
         const s = this;
         return FSharpSet__get_Count(s) | 0;
     }
@@ -1509,7 +1503,7 @@ export class FSharpSet {
     [Symbol.iterator]() {
         return toIterator(this.GetEnumerator());
     }
-    ["System.Collections.IEnumerable.GetEnumerator"]() {
+    "System.Collections.IEnumerable.GetEnumerator"() {
         const s = this;
         return SetTreeModule_mkIEnumerator(FSharpSet__get_Tree(s));
     }
@@ -1519,14 +1513,14 @@ export class FSharpSet {
     }
     add(k) {
         const s = this;
-        throw (new Error("Set cannot be mutated"));
+        throw new Error("Set cannot be mutated");
         return s;
     }
     clear() {
-        throw (new Error("Set cannot be mutated"));
+        throw new Error("Set cannot be mutated");
     }
     delete(k) {
-        throw (new Error("Set cannot be mutated"));
+        throw new Error("Set cannot be mutated");
         return false;
     }
     has(k) {
@@ -1718,13 +1712,13 @@ export function FSharpSet__ToArray(x) {
 }
 
 export function FSharpSet__ComputeHashCode(this$) {
-    let y;
+    const combineHash = (x, y) => (((x << 1) + y) + 631);
     let res = 0;
     const enumerator = getEnumerator(this$);
     try {
         while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
             const x_1 = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
-            res = (((y = (structuralHash(x_1) | 0), ((res << 1) + y) + 631)) | 0);
+            res = (combineHash(res, structuralHash(x_1)) | 0);
         }
     }
     finally {
@@ -1891,17 +1885,17 @@ export function exceptWith(s1, s2) {
 
 export function isSubsetOf(s1, s2) {
     const s2_1 = newMutableSetWith(s1, s2);
-    return forAll_1((arg00) => s2_1.has(arg00), s1.values());
+    return forAll_1((arg) => s2_1.has(arg), s1.values());
 }
 
 export function isSupersetOf(s1, s2) {
-    return forAll_1((arg00) => s1.has(arg00), s2);
+    return forAll_1((arg) => s1.has(arg), s2);
 }
 
 export function isProperSubsetOf(s1, s2) {
     const s2_1 = newMutableSetWith(s1, s2);
     if (s2_1.size > s1.size) {
-        return forAll_1((arg00) => s2_1.has(arg00), s1.values());
+        return forAll_1((arg) => s2_1.has(arg), s1.values());
     }
     else {
         return false;
@@ -1910,8 +1904,8 @@ export function isProperSubsetOf(s1, s2) {
 
 export function isProperSupersetOf(s1, s2) {
     const s2_1 = cache(s2);
-    if (exists_1((arg) => (!s1.has(arg)), s2_1)) {
-        return forAll_1((arg00_1) => s1.has(arg00_1), s2_1);
+    if (exists_1((arg_1) => (!s1.has(arg_1)), s2_1)) {
+        return forAll_1((arg_2) => s1.has(arg_2), s2_1);
     }
     else {
         return false;

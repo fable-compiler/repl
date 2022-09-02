@@ -29,6 +29,11 @@ export class CancellationToken {
         const id = this.addListener(state == null ? f : () => f(state));
         return { Dispose() { $.removeListener(id); } };
     }
+    Dispose() {
+        // Implement IDisposable for compatibility but do nothing
+        // According to docs, calling Dispose does not trigger cancellation
+        // https://docs.microsoft.com/en-us/dotnet/api/system.threading.cancellationtokensource.dispose?view=net-6.0
+    }
 }
 export class OperationCanceledError extends Error {
     constructor() {

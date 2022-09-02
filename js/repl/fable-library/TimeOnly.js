@@ -20,7 +20,7 @@ export function fromTimeSpan(timeSpan) {
     return timeSpan;
 }
 export function fromDateTime(d) {
-    return d.kind === 1 /* UTC */
+    return d.kind === 1 /* DateKind.UTC */
         ? create(d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds())
         : create(d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds());
 }

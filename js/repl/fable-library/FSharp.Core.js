@@ -3,19 +3,19 @@ import { HashIdentity_Structural, ComparisonIdentity_Structural } from "./FSharp
 import { StringBuilder__Append_Z721C83C5 } from "./System.Text.js";
 
 export const LanguagePrimitives_GenericEqualityComparer = {
-    ["System.Collections.IEqualityComparer.Equals541DA560"](x, y) {
+    "System.Collections.IEqualityComparer.Equals541DA560"(x, y) {
         return equals(x, y);
     },
-    ["System.Collections.IEqualityComparer.GetHashCode4E60E31B"](x_1) {
+    "System.Collections.IEqualityComparer.GetHashCode4E60E31B"(x_1) {
         return structuralHash(x_1);
     },
 };
 
 export const LanguagePrimitives_GenericEqualityERComparer = {
-    ["System.Collections.IEqualityComparer.Equals541DA560"](x, y) {
+    "System.Collections.IEqualityComparer.Equals541DA560"(x, y) {
         return equals(x, y);
     },
-    ["System.Collections.IEqualityComparer.GetHashCode4E60E31B"](x_1) {
+    "System.Collections.IEqualityComparer.GetHashCode4E60E31B"(x_1) {
         return structuralHash(x_1);
     },
 };
@@ -45,7 +45,7 @@ export function Operators_FailurePattern(exn) {
 }
 
 export function Operators_NullArg(x) {
-    throw (new Error(x));
+    throw new Error(x);
 }
 
 export function Operators_Using(resource, action) {
@@ -70,10 +70,11 @@ export function ExtraTopLevelOperators_LazyPattern(input) {
 }
 
 export function PrintfModule_PrintFormatToStringBuilderThen(continuation, builder, format) {
-    return format.cont((s) => {
+    const append = (s) => {
         StringBuilder__Append_Z721C83C5(builder, s);
         return continuation();
-    });
+    };
+    return format.cont(append);
 }
 
 export function PrintfModule_PrintFormatToStringBuilder(builder, format) {

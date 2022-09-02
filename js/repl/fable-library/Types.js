@@ -18,6 +18,7 @@ export function seqToString(self) {
     return str + "]";
 }
 export function toString(x, callStack = 0) {
+    var _a, _b;
     if (x != null && typeof x === "object") {
         if (typeof x.toString === "function") {
             return x.toString();
@@ -26,11 +27,11 @@ export function toString(x, callStack = 0) {
             return seqToString(x);
         }
         else { // TODO: Date?
-            const cons = Object.getPrototypeOf(x).constructor;
+            const cons = (_a = Object.getPrototypeOf(x)) === null || _a === void 0 ? void 0 : _a.constructor;
             return cons === Object && callStack < 10
                 // Same format as recordToString
                 ? "{ " + Object.entries(x).map(([k, v]) => k + " = " + toString(v, callStack + 1)).join("\n  ") + " }"
-                : cons.name;
+                : (_b = cons === null || cons === void 0 ? void 0 : cons.name) !== null && _b !== void 0 ? _b : "";
         }
     }
     return String(x);

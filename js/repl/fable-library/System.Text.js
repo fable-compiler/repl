@@ -1,4 +1,4 @@
-import { substring, format, isNullOrEmpty, join } from "./String.js";
+import { format, substring, isNullOrEmpty, join } from "./String.js";
 import { class_type } from "./Reflection.js";
 import { clear, int32ToString } from "./Util.js";
 import { toString } from "./Types.js";
@@ -41,6 +41,11 @@ export function StringBuilder__Append_Z721C83C5(x, s) {
     return x;
 }
 
+export function StringBuilder__Append_487EF8FB(x, s, startIndex, count) {
+    void (x.buf.push(substring(s, startIndex, count)));
+    return x;
+}
+
 export function StringBuilder__Append_244C7CD6(x, c) {
     void (x.buf.push(c));
     return x;
@@ -66,7 +71,7 @@ export function StringBuilder__Append_4E60E31B(x, o) {
     return x;
 }
 
-export function StringBuilder__Append_695F1130(x, cs) {
+export function StringBuilder__Append_Z372E4D23(x, cs) {
     void (x.buf.push(cs.join('')));
     return x;
 }
@@ -78,6 +83,11 @@ export function StringBuilder__Append_43A65C09(x, s) {
 
 export function StringBuilder__AppendFormat_433E080(x, fmt, o) {
     void (x.buf.push(format(fmt, o)));
+    return x;
+}
+
+export function StringBuilder__AppendFormat_Z696D8D1B(x, provider, fmt, o) {
+    void (x.buf.push(format(provider, fmt, o)));
     return x;
 }
 

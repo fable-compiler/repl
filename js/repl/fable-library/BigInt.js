@@ -25,20 +25,20 @@ export function divRem(x, y, remainder) {
     return patternInput[0];
 }
 
-export function parse(arg00) {
-    return BigInteger_Parse_Z721C83C5(arg00);
+export function parse(arg) {
+    return BigInteger_Parse_Z721C83C5(arg);
 }
 
-export function greatestCommonDivisor(arg00, arg01) {
-    return BigInteger_GreatestCommonDivisor_56F059C0(arg00, arg01);
+export function greatestCommonDivisor(arg, arg_1) {
+    return BigInteger_GreatestCommonDivisor_56F059C0(arg, arg_1);
 }
 
-export function pow(arg00, arg01) {
-    return BigInteger_Pow_62E082A2(arg00, arg01);
+export function pow(arg, arg_1) {
+    return BigInteger_Pow_62E082A2(arg, arg_1);
 }
 
-export function abs(arg00) {
-    return BigInteger_Abs_Z665282C2(arg00);
+export function abs(arg) {
+    return BigInteger_Abs_Z665282C2(arg);
 }
 
 export const zero = BigInteger_get_Zero();
@@ -148,85 +148,84 @@ export const get_Zero = BigInteger_get_Zero();
 
 export const get_One = BigInteger_get_One();
 
-export function op_Addition(arg00, arg01) {
-    return BigInteger_op_Addition_56F059C0(arg00, arg01);
+export function op_Addition(arg, arg_1) {
+    return BigInteger_op_Addition_56F059C0(arg, arg_1);
 }
 
-export function op_Subtraction(arg00, arg01) {
-    return BigInteger_op_Subtraction_56F059C0(arg00, arg01);
+export function op_Subtraction(arg, arg_1) {
+    return BigInteger_op_Subtraction_56F059C0(arg, arg_1);
 }
 
-export function op_Multiply(arg00, arg01) {
-    return BigInteger_op_Multiply_56F059C0(arg00, arg01);
+export function op_Multiply(arg, arg_1) {
+    return BigInteger_op_Multiply_56F059C0(arg, arg_1);
 }
 
-export function op_Division(arg00, arg01) {
-    return BigInteger_op_Division_56F059C0(arg00, arg01);
+export function op_Division(arg, arg_1) {
+    return BigInteger_op_Division_56F059C0(arg, arg_1);
 }
 
-export function op_Modulus(arg00, arg01) {
-    return BigInteger_op_Modulus_56F059C0(arg00, arg01);
+export function op_Modulus(arg, arg_1) {
+    return BigInteger_op_Modulus_56F059C0(arg, arg_1);
 }
 
-export function op_UnaryNegation(arg00) {
-    return BigInteger_op_UnaryNegation_Z665282C2(arg00);
+export function op_UnaryNegation(arg) {
+    return BigInteger_op_UnaryNegation_Z665282C2(arg);
 }
 
-export function op_UnaryPlus(arg00) {
-    return BigInteger_op_UnaryPlus_Z665282C2(arg00);
+export function op_UnaryPlus(arg) {
+    return BigInteger_op_UnaryPlus_Z665282C2(arg);
 }
 
-export function op_RightShift(arg00, arg01) {
-    return BigInteger_op_RightShift_62E082A2(arg00, arg01);
+export function op_RightShift(arg, arg_1) {
+    return BigInteger_op_RightShift_62E082A2(arg, arg_1);
 }
 
-export function op_LeftShift(arg00, arg01) {
-    return BigInteger_op_LeftShift_62E082A2(arg00, arg01);
+export function op_LeftShift(arg, arg_1) {
+    return BigInteger_op_LeftShift_62E082A2(arg, arg_1);
 }
 
-export function op_BitwiseAnd(arg00, arg01) {
-    return BigInteger_op_BitwiseAnd_56F059C0(arg00, arg01);
+export function op_BitwiseAnd(arg, arg_1) {
+    return BigInteger_op_BitwiseAnd_56F059C0(arg, arg_1);
 }
 
-export function op_BitwiseOr(arg00, arg01) {
-    return BigInteger_op_BitwiseOr_56F059C0(arg00, arg01);
+export function op_BitwiseOr(arg, arg_1) {
+    return BigInteger_op_BitwiseOr_56F059C0(arg, arg_1);
 }
 
-export function op_ExclusiveOr(arg00, arg01) {
-    return BigInteger_op_ExclusiveOr_56F059C0(arg00, arg01);
+export function op_ExclusiveOr(arg, arg_1) {
+    return BigInteger_op_ExclusiveOr_56F059C0(arg, arg_1);
 }
 
-export function op_LessThan(arg00, arg01) {
-    return BigInteger_op_LessThan_56F059C0(arg00, arg01);
+export function op_LessThan(arg, arg_1) {
+    return BigInteger_op_LessThan_56F059C0(arg, arg_1);
 }
 
-export function op_LessThanOrEqual(arg00, arg01) {
-    return BigInteger_op_LessThanOrEqual_56F059C0(arg00, arg01);
+export function op_LessThanOrEqual(arg, arg_1) {
+    return BigInteger_op_LessThanOrEqual_56F059C0(arg, arg_1);
 }
 
-export function op_GreaterThan(arg00, arg01) {
-    return BigInteger_op_GreaterThan_56F059C0(arg00, arg01);
+export function op_GreaterThan(arg, arg_1) {
+    return BigInteger_op_GreaterThan_56F059C0(arg, arg_1);
 }
 
-export function op_GreaterThanOrEqual(arg00, arg01) {
-    return BigInteger_op_GreaterThanOrEqual_56F059C0(arg00, arg01);
+export function op_GreaterThanOrEqual(arg, arg_1) {
+    return BigInteger_op_GreaterThanOrEqual_56F059C0(arg, arg_1);
 }
 
-export function op_Equality(arg00, arg01) {
-    return BigInteger_op_Equality_56F059C0(arg00, arg01);
+export function op_Equality(arg, arg_1) {
+    return BigInteger_op_Equality_56F059C0(arg, arg_1);
 }
 
-export function op_Inequality(arg00, arg01) {
-    return BigInteger_op_Inequality_56F059C0(arg00, arg01);
+export function op_Inequality(arg, arg_1) {
+    return BigInteger_op_Inequality_56F059C0(arg, arg_1);
 }
 
 function flipTwosComplement(currByte, lowBitFound) {
     let array;
-    const matchValue = [currByte, lowBitFound];
-    if (matchValue[1]) {
+    if (lowBitFound) {
         return [(currByte ^ 255) & 255, true];
     }
-    else if (matchValue[0] === 0) {
+    else if (currByte === 0) {
         return [0, false];
     }
     else {
@@ -287,7 +286,7 @@ export function toByteArray(value) {
 
 export function fromByteArray(bytes) {
     if (bytes == null) {
-        throw (new Error("bytes"));
+        throw new Error("bytes");
     }
     if (bytes.length === 0) {
         return zero;

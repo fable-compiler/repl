@@ -34,19 +34,19 @@ function checkOffsetInRange(offset) {
 export function fromDate(date, offset) {
     let offset2 = 0;
     switch (date.kind) {
-        case 1 /* UTC */:
+        case 1 /* DateKind.UTC */:
             if (offset != null && offset !== 0) {
                 throw new Error("The UTC Offset for Utc DateTime instances must be 0.");
             }
             offset2 = 0;
             break;
-        case 2 /* Local */:
+        case 2 /* DateKind.Local */:
             offset2 = date.getTimezoneOffset() * -60000;
             if (offset != null && offset !== offset2) {
                 throw new Error("The UTC Offset of the local dateTime parameter does not match the offset argument.");
             }
             break;
-        case 0 /* Unspecified */:
+        case 0 /* DateKind.Unspecified */:
         default:
             if (offset == null) {
                 offset2 = date.getTimezoneOffset() * -60000;

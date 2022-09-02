@@ -2,7 +2,7 @@ import { DateTime, getTicks, dayOfYear as Date_dayOfYear, year as Date_year, mon
 import { padWithZeros } from "./Util.js";
 import { toInt, fromNumber, op_Division as Long_op_Division, op_Multiply as Long_op_Multiply, ticksToUnixEpochMilliseconds } from "./Long.js";
 export function fromUnixMilliseconds(value) {
-    return DateTime(value, 1 /* UTC */);
+    return DateTime(value, 1 /* DateKind.UTC */);
 }
 export function create(year, month, day) {
     const d = fromUnixMilliseconds(Date.UTC(year, month - 1, day));
@@ -44,8 +44,8 @@ export function dayOfWeek(d) {
 export function dayOfYear(d) {
     return Date_dayOfYear(d);
 }
-export function toDateTime(d, time, kind = 0 /* Unspecified */) {
-    return DateTime(d.getTime() + time + (kind !== 1 /* UTC */ ? d.getTimezoneOffset() : 0) * 60000, kind);
+export function toDateTime(d, time, kind = 0 /* DateKind.Unspecified */) {
+    return DateTime(d.getTime() + time + (kind !== 1 /* DateKind.UTC */ ? d.getTimezoneOffset() : 0) * 60000, kind);
 }
 export function toString(d, format = "d", _provider) {
     if (["d", "o", "O"].indexOf(format) === -1) {

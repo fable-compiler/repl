@@ -62,6 +62,12 @@ export function defaultArg(opt, defaultValue) {
 export function defaultArgWith(opt, defThunk) {
     return (opt != null) ? value(opt) : defThunk();
 }
+export function orElse(opt, ifNone) {
+    return opt == null ? ifNone : opt;
+}
+export function orElseWith(opt, ifNoneThunk) {
+    return opt == null ? ifNoneThunk() : opt;
+}
 export function filter(predicate, opt) {
     return (opt != null) ? (predicate(value(opt)) ? opt : undefined) : opt;
 }

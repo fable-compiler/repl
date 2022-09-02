@@ -63,10 +63,10 @@ export class Stack$1 {
         this.count = (initialCount | 0);
     }
     GetEnumerator() {
-        const this$ = this;
+        const _ = this;
         return getEnumerator(delay(() => {
-            let index = this$.count - 1;
-            return enumerateWhile(() => (index >= 0), delay(() => append(singleton(this$.contents[index]), delay(() => {
+            let index = _.count - 1;
+            return enumerateWhile(() => (index >= 0), delay(() => append(singleton(_.contents[index]), delay(() => {
                 index = ((index - 1) | 0);
                 return empty();
             }))));
@@ -75,7 +75,7 @@ export class Stack$1 {
     [Symbol.iterator]() {
         return toIterator(this.GetEnumerator());
     }
-    ["System.Collections.IEnumerable.GetEnumerator"]() {
+    "System.Collections.IEnumerable.GetEnumerator"() {
         const this$ = this;
         return getEnumerator(this$);
     }
@@ -85,12 +85,12 @@ export function Stack$1$reflection(gen0) {
     return class_type("System.Collections.Generic.Stack`1", [gen0], Stack$1);
 }
 
-function Stack$1_$ctor_Z2E171D71(initialContents, initialCount) {
+function Stack$1_$ctor_Z3B4C077E(initialContents, initialCount) {
     return new Stack$1(initialContents, initialCount);
 }
 
 export function Stack$1_$ctor_Z524259A4(initialCapacity) {
-    return Stack$1_$ctor_Z2E171D71(fill(new Array(initialCapacity), 0, initialCapacity, null), 0);
+    return Stack$1_$ctor_Z3B4C077E(fill(new Array(initialCapacity), 0, initialCapacity, null), 0);
 }
 
 export function Stack$1_$ctor() {
@@ -99,36 +99,36 @@ export function Stack$1_$ctor() {
 
 export function Stack$1_$ctor_BB573A(xs) {
     const arr = Array.from(xs);
-    return Stack$1_$ctor_Z2E171D71(arr, arr.length);
+    return Stack$1_$ctor_Z3B4C077E(arr, arr.length);
 }
 
-export function Stack$1__Ensure_Z524259A4(this$, newSize) {
-    const oldSize = this$.contents.length | 0;
+export function Stack$1__Ensure_Z524259A4(_, newSize) {
+    const oldSize = _.contents.length | 0;
     if (newSize > oldSize) {
-        const old = this$.contents;
-        this$.contents = fill(new Array(max(comparePrimitives, newSize, oldSize * 2)), 0, max(comparePrimitives, newSize, oldSize * 2), null);
-        copyTo(old, 0, this$.contents, 0, this$.count);
+        const old = _.contents;
+        _.contents = fill(new Array(max(comparePrimitives, newSize, oldSize * 2)), 0, max(comparePrimitives, newSize, oldSize * 2), null);
+        copyTo(old, 0, _.contents, 0, _.count);
     }
 }
 
-export function Stack$1__get_Count(this$) {
-    return this$.count;
+export function Stack$1__get_Count(_) {
+    return _.count;
 }
 
-export function Stack$1__Pop(this$) {
-    this$.count = ((this$.count - 1) | 0);
-    return this$.contents[this$.count];
+export function Stack$1__Pop(_) {
+    _.count = ((_.count - 1) | 0);
+    return _.contents[_.count];
 }
 
-export function Stack$1__Peek(this$) {
-    return this$.contents[this$.count - 1];
+export function Stack$1__Peek(_) {
+    return _.contents[_.count - 1];
 }
 
-export function Stack$1__Contains_2B595(this$, x) {
+export function Stack$1__Contains_2B595(_, x) {
     let found = false;
     let i = 0;
-    while ((i < this$.count) && (!found)) {
-        if (equals(x, this$.contents[i])) {
+    while ((i < _.count) && (!found)) {
+        if (equals(x, _.contents[i])) {
             found = true;
         }
         else {
@@ -138,7 +138,7 @@ export function Stack$1__Contains_2B595(this$, x) {
     return found;
 }
 
-export function Stack$1__TryPeek_404CD8EE(this$, result) {
+export function Stack$1__TryPeek_1F3DB691(this$, result) {
     if (this$.count > 0) {
         result.contents = Stack$1__Peek(this$);
         return true;
@@ -148,7 +148,7 @@ export function Stack$1__TryPeek_404CD8EE(this$, result) {
     }
 }
 
-export function Stack$1__TryPop_404CD8EE(this$, result) {
+export function Stack$1__TryPop_1F3DB691(this$, result) {
     if (this$.count > 0) {
         result.contents = Stack$1__Pop(this$);
         return true;
@@ -164,9 +164,9 @@ export function Stack$1__Push_2B595(this$, x) {
     this$.count = ((this$.count + 1) | 0);
 }
 
-export function Stack$1__Clear(this$) {
-    this$.count = 0;
-    fill(this$.contents, 0, this$.contents.length, null);
+export function Stack$1__Clear(_) {
+    _.count = 0;
+    fill(_.contents, 0, _.contents.length, null);
 }
 
 export function Stack$1__TrimExcess(this$) {
@@ -175,8 +175,8 @@ export function Stack$1__TrimExcess(this$) {
     }
 }
 
-export function Stack$1__ToArray(this$) {
-    return initialize(this$.count, (i) => this$.contents[(this$.count - 1) - i]);
+export function Stack$1__ToArray(_) {
+    return initialize(_.count, (i) => _.contents[(_.count - 1) - i]);
 }
 
 export class Queue$1 {
@@ -187,13 +187,13 @@ export class Queue$1 {
         this.tail = (initialCount | 0);
     }
     GetEnumerator() {
-        const this$ = this;
-        return getEnumerator(Queue$1__toSeq(this$));
+        const _ = this;
+        return getEnumerator(Queue$1__toSeq(_));
     }
     [Symbol.iterator]() {
         return toIterator(this.GetEnumerator());
     }
-    ["System.Collections.IEnumerable.GetEnumerator"]() {
+    "System.Collections.IEnumerable.GetEnumerator"() {
         const this$ = this;
         return getEnumerator(this$);
     }
@@ -203,15 +203,15 @@ export function Queue$1$reflection(gen0) {
     return class_type("System.Collections.Generic.Queue`1", [gen0], Queue$1);
 }
 
-function Queue$1_$ctor_Z2E171D71(initialContents, initialCount) {
+function Queue$1_$ctor_Z3B4C077E(initialContents, initialCount) {
     return new Queue$1(initialContents, initialCount);
 }
 
 export function Queue$1_$ctor_Z524259A4(initialCapacity) {
     if (initialCapacity < 0) {
-        throw (new Error("capacity is less than 0"));
+        throw new Error("capacity is less than 0");
     }
-    return Queue$1_$ctor_Z2E171D71(fill(new Array(initialCapacity), 0, initialCapacity, null), 0);
+    return Queue$1_$ctor_Z3B4C077E(fill(new Array(initialCapacity), 0, initialCapacity, null), 0);
 }
 
 export function Queue$1_$ctor() {
@@ -220,7 +220,7 @@ export function Queue$1_$ctor() {
 
 export function Queue$1_$ctor_BB573A(xs) {
     const arr = Array.from(xs);
-    return Queue$1_$ctor_Z2E171D71(arr, arr.length);
+    return Queue$1_$ctor_Z3B4C077E(arr, arr.length);
 }
 
 export function Queue$1__get_Count(_) {
@@ -238,7 +238,7 @@ export function Queue$1__Enqueue_2B595(_, value) {
 
 export function Queue$1__Dequeue(_) {
     if (_.count === 0) {
-        throw (new Error("Queue is empty"));
+        throw new Error("Queue is empty");
     }
     const value = _.contents[_.head];
     _.head = (((_.head + 1) % Queue$1__size(_)) | 0);
@@ -248,12 +248,12 @@ export function Queue$1__Dequeue(_) {
 
 export function Queue$1__Peek(_) {
     if (_.count === 0) {
-        throw (new Error("Queue is empty"));
+        throw new Error("Queue is empty");
     }
     return _.contents[_.head];
 }
 
-export function Queue$1__TryDequeue_404CD8EE(this$, result) {
+export function Queue$1__TryDequeue_1F3DB691(this$, result) {
     if (this$.count === 0) {
         return false;
     }
@@ -263,7 +263,7 @@ export function Queue$1__TryDequeue_404CD8EE(this$, result) {
     }
 }
 
-export function Queue$1__TryPeek_404CD8EE(this$, result) {
+export function Queue$1__TryPeek_1F3DB691(this$, result) {
     if (this$.count === 0) {
         return false;
     }
@@ -273,11 +273,11 @@ export function Queue$1__TryPeek_404CD8EE(this$, result) {
     }
 }
 
-export function Queue$1__Contains_2B595(this$, x) {
+export function Queue$1__Contains_2B595(_, x) {
     let found = false;
     let i = 0;
-    while ((i < this$.count) && (!found)) {
-        if (equals(x, this$.contents[Queue$1__toIndex_Z524259A4(this$, i)])) {
+    while ((i < _.count) && (!found)) {
+        if (equals(x, _.contents[Queue$1__toIndex_Z524259A4(_, i)])) {
             found = true;
         }
         else {
@@ -287,26 +287,26 @@ export function Queue$1__Contains_2B595(this$, x) {
     return found;
 }
 
-export function Queue$1__Clear(this$) {
-    this$.count = 0;
-    this$.head = 0;
-    this$.tail = 0;
-    fill(this$.contents, 0, Queue$1__size(this$), null);
+export function Queue$1__Clear(_) {
+    _.count = 0;
+    _.head = 0;
+    _.tail = 0;
+    fill(_.contents, 0, Queue$1__size(_), null);
 }
 
-export function Queue$1__TrimExcess(this$) {
-    if ((this$.count / this$.contents.length) > 0.9) {
-        Queue$1__ensure_Z524259A4(this$, this$.count);
+export function Queue$1__TrimExcess(_) {
+    if ((_.count / _.contents.length) > 0.9) {
+        Queue$1__ensure_Z524259A4(_, _.count);
     }
 }
 
-export function Queue$1__ToArray(this$) {
-    return toArray(Queue$1__toSeq(this$));
+export function Queue$1__ToArray(_) {
+    return toArray(Queue$1__toSeq(_));
 }
 
-export function Queue$1__CopyTo_Z2E171D71(this$, target, start) {
+export function Queue$1__CopyTo_Z3B4C077E(_, target, start) {
     let i = start;
-    const enumerator = getEnumerator(Queue$1__toSeq(this$));
+    const enumerator = getEnumerator(Queue$1__toSeq(_));
     try {
         while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
             const item = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
@@ -319,15 +319,15 @@ export function Queue$1__CopyTo_Z2E171D71(this$, target, start) {
     }
 }
 
-function Queue$1__size(this$) {
+export function Queue$1__size(this$) {
     return this$.contents.length;
 }
 
-function Queue$1__toIndex_Z524259A4(this$, i) {
+export function Queue$1__toIndex_Z524259A4(this$, i) {
     return (this$.head + i) % Queue$1__size(this$);
 }
 
-function Queue$1__ensure_Z524259A4(this$, requiredSize) {
+export function Queue$1__ensure_Z524259A4(this$, requiredSize) {
     const newBuffer = fill(new Array(requiredSize), 0, requiredSize, null);
     if (this$.head < this$.tail) {
         copyTo(this$.contents, this$.head, newBuffer, 0, this$.count);
@@ -341,7 +341,7 @@ function Queue$1__ensure_Z524259A4(this$, requiredSize) {
     this$.contents = newBuffer;
 }
 
-function Queue$1__toSeq(this$) {
+export function Queue$1__toSeq(this$) {
     return delay(() => {
         let i = 0;
         return enumerateWhile(() => (i < this$.count), delay(() => append(singleton(this$.contents[Queue$1__toIndex_Z524259A4(this$, i)]), delay(() => {
