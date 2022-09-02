@@ -592,19 +592,19 @@ let formatRemaining remaining =
 
 let maxCycles = 1000
 let world = ref (buildWorldInitialWorld())
-let foodToWin = int <| double (Map.fold (fun s k v -> s + v.Food) 0 !world) * percentFoodToWin
+let foodToWin = int <| double (Map.fold (fun s k v -> s + v.Food) 0 world.Value) * percentFoodToWin
 let cycles = ref 0
 
 let blackAI = new HardishAI.TestAntBehavior() :> IAntBehavior
 let redAI = new AntsEverywhereExmampleAI.TestAntBehavior() :> IAntBehavior
 
 let render (w,h) =
-    cycles := !cycles + 1
+    cycles.Value <- cycles.Value + 1
 
-    let bScore = BlackAntNest.CountFood !world
-    let rScore = RedAntNest.CountFood !world
+    let bScore = BlackAntNest.CountFood world.Value
+    let rScore = RedAntNest.CountFood world.Value
 
-    let remainig = maxCycles - !cycles
+    let remainig = maxCycles - cycles.Value
 
     let scoreString = formatScoreCard blackAI.Name bScore redAI.Name rScore
     updateInput "score" scoreString |> ignore
@@ -614,10 +614,10 @@ let render (w,h) =
 
 
     (0., 0., w, h) |> filled (rgb 200 200 200)
-    drawUpdates (w,h) !world
-    world := worldCycle blackAI redAI !world
+    drawUpdates (w,h) world.Value
+    world.Value <- worldCycle blackAI redAI world.Value
 
-    if bScore > foodToWin || rScore > foodToWin || !cycles > maxCycles then
+    if bScore > foodToWin || rScore > foodToWin || cycles.Value > maxCycles then
         if bScore > rScore then Some blackAI.Name
         elif rScore > bScore then Some redAI.Name
         else None

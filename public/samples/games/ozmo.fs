@@ -15,12 +15,13 @@ module Keyboard =
 
     let code x = if keysPressed.Contains(x) then 1 else 0
 
-    let arrows () = (code 39 - code 37, code 38 - code 40)
+    let arrows () =
+        (code "ArrowRight" - code "ArrowLeft", code "ArrowUp" - code "ArrowDown")
 
     let update (e : KeyboardEvent, pressed) =
-        let keyCode = int e.keyCode
+        let key = e.key
         let op = if pressed then Set.add else Set.remove
-        keysPressed <- op keyCode keysPressed
+        keysPressed <- op key keysPressed
 
     let init () =
         window.addEventListener("keydown", fun e -> update(e :?> _, true))
@@ -28,14 +29,17 @@ module Keyboard =
 
 // Main
 
+/// Scale to make it fit in a 1920*1080 screen
+let scale = 0.8
+
 /// The width of the canvas
-let width = 900.
+let width = 900. * scale
 /// The height of the canvas
-let height = 668.
+let height = 668. * scale
 /// Height of the floor - the bottom black part
-let floorHeight = 100.
+let floorHeight = 100. * scale
 /// Height of the atmosphere - the yellow gradient
-let atmosHeight = 300.
+let atmosHeight = 300. * scale
 
 Keyboard.init()
 
@@ -43,7 +47,6 @@ let canvas = document.getElementsByTagName("canvas").[0] :?> HTMLCanvasElement
 let ctx = canvas.getContext_2d()
 canvas.width <- width
 canvas.height <- height
-
 
 /// Draw gradient between two Y offsets and two colours
 let drawGrd (ctx:CanvasRenderingContext2D)

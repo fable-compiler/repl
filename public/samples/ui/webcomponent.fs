@@ -4,6 +4,9 @@ module WebComponent
 // Check the custom tag in the HTML tab and read this thread for more info:
 // https://twitter.com/OnurGumusDev/status/1329019698667790337
 
+// For a more high-level library to create Web Components, try Fable.Lit:
+// https://fable.io/Fable.Lit/docs/web-components.html
+
 open Fable.Core
 open Browser
 open Browser.Types
