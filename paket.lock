@@ -2,7 +2,7 @@ STORAGE: NONE
 RESTRICTION: == netstandard2.0
 NUGET
   remote: https://www.nuget.org/api/v2
-    Fable.AST (4.0.0-snake-island-alpha-001)
+    Fable.AST (4.0)
     Fable.Browser.Blob (1.1.4)
       Fable.Core (>= 3.0)
       FSharp.Core (>= 4.7.2)
@@ -76,10 +76,10 @@ NUGET
       Fable.Browser.Dom (>= 2.4.4)
       Fable.Core (>= 3.2.7)
       FSharp.Core (>= 4.7.2)
-    Feliz (1.51)
+    Feliz (2.0.0-prerelease-002)
       Fable.Core (>= 3.1.5)
       Fable.React (>= 7.4)
-      Feliz.CompilerPlugins (>= 1.6)
+      Feliz.CompilerPlugins (>= 2.0.0-prerelease-002)
       FSharp.Core (>= 4.7.2)
     Feliz.Bulma (2.17)
       Feliz (>= 1.32)
@@ -88,8 +88,8 @@ NUGET
       Feliz (>= 1.32)
       Feliz.Bulma (>= 2.8.1)
       FSharp.Core (>= 5.0)
-    Feliz.CompilerPlugins (2.0.0-prerelease-001)
-      Fable.AST (>= 4.0.0-snake-island-alpha-001)
+    Feliz.CompilerPlugins (2.0.0-prerelease-002)
+      Fable.AST (>= 4.0)
       FSharp.Core (>= 4.7.2)
     FsCheck (2.16)
       FSharp.Core (>= 4.2.3)
