@@ -37,7 +37,10 @@ let METADATA_LIB, STANDALONE_DIST, STANDALONE_SRC =
     | Some _ ->
         printfn "Using local packages..."
         "../Fable/src/fable-metadata/lib", "../Fable/src/fable-standalone/dist", "../Fable/src/fable-standalone/src"
-    | None -> "node_modules/fable-metadata/lib", "node_modules/fable-standalone/dist", "node_modules/fable-standalone/src"
+    | None ->
+        printfn "Using fable-metadata/fable-standalone packages from node_modules..."
+        printfn "To use local pacakges, set LOCAL_PKG env var and run `./build.sh standalone` in sibling Fable repository\n"
+        "node_modules/fable-metadata/lib", "node_modules/fable-standalone/dist", "node_modules/fable-standalone/src"
 
 module Util =
 
@@ -128,7 +131,10 @@ let copyModules = BuildTask.create "CopyModules" [ npmInstall ] {
         Shell.rename (filename + ".txt") filename
     )
 
+    printfn "Copy files from %s to %s" STANDALONE_DIST REPL_OUTPUT
     Shell.copyDir REPL_OUTPUT STANDALONE_DIST (fun _ -> true)
+
+    printfn "Copy files from %s to %s" STANDALONE_SRC "src/Standalone"
     Shell.copyDir "src/Standalone" STANDALONE_SRC (fun f -> f.EndsWith(".fs"))
 }
 
@@ -168,11 +174,11 @@ let buildLib = BuildTask.create "BuildLib" [ copyModules ] {
     )
 }
 
-let buildApp = BuildTask.create "BuildApp" [ updatePreludeREPLVersion.IfNeeded; buildLib ] {
+let buildApp = BuildTask.create "BuildApp" [ updatePreludeREPLVersion.IfNeeded ] {
     Npm.run "build" id
 }
 
-let watchApp = BuildTask.create "WatchApp" [ ] {
+let watchApp = BuildTask.create "WatchApp" [ copyModules ] {
     Npm.run "start" id
 }
 

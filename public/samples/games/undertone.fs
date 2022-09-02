@@ -237,7 +237,7 @@ module NoteSequencer =
         seq { use e = source.GetEnumerator()
               let count = ref 0
               while e.MoveNext() && count.Value < wanted do
-                count.Value <- count.Value + 1 
+                count.Value <- count.Value + 1
                 yield e.Current }
 
     // function that does a function the describes how a note should be played and list of chords

@@ -80,7 +80,7 @@ module Arrays =
     /// Sub-arrays are extracted using slicing notation.
     let evenNumbersSlice = evenNumbers.[0..500]
 
-    /// You can loop over arrays and lists using 'for' loops.
+    // You can loop over arrays and lists using 'for' loops.
     for word in array4 do
         printfn "word: %s" word
 
@@ -134,4 +134,3 @@ module Sequences =
         |> Seq.toList
 
     printfn "First 100 elements of a random walk: %A" first100ValuesOfRandomWalk
-

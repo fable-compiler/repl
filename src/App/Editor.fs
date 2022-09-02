@@ -33,6 +33,7 @@ let convertGlyph glyph =
     | Glyph.Field -> Monaco.Languages.CompletionItemKind.Field
     | Glyph.Function -> Monaco.Languages.CompletionItemKind.Function
     | Glyph.Error | Glyph.Event -> Monaco.Languages.CompletionItemKind.Text
+    | Glyph.TypeParameter -> Monaco.Languages.CompletionItemKind.TypeParameter
 
 
 let inline completionList suggestions =

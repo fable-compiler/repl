@@ -2553,25 +2553,32 @@ module Languages =
         abstract provideCodeActions: model: Editor.ITextModel * range: Range * context: CodeActionContext * token: CancellationToken -> U2<array<U2<Command, CodeAction>>, Promise<array<U2<Command, CodeAction>>>>
 
     type [<RequireQualifiedAccess>] CompletionItemKind =
-        | Text = 0
-        | Method = 1
-        | Function = 2
-        | Constructor = 3
-        | Field = 4
-        | Variable = 5
-        | Class = 6
+        | Method = 0
+        | Function = 1
+        | Constructor = 2
+        | Field = 3
+        | Variable = 4
+        | Class = 5
+        | Struct = 6
         | Interface = 7
         | Module = 8
         | Property = 9
-        | Unit = 10
-        | Value = 11
-        | Enum = 12
-        | Keyword = 13
-        | Snippet = 14
-        | Color = 15
-        | File = 16
-        | Reference = 17
-        | Folder = 18
+        | Event = 10
+        | Operator = 11
+        | Unit = 12
+        | Value = 13
+        | Constant = 14
+        | Enum = 15
+        | EnumMember = 16
+        | Keyword = 17
+        | Text = 18
+        | Color = 19
+        | File = 20
+        | Reference = 21
+        | Customcolor = 22
+        | Folder = 23
+        | TypeParameter = 24
+        | Snippet = 25
 
     /// A snippet string is a template which allows to insert text
     /// and to control the editor cursor when insertion happens.

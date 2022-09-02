@@ -347,7 +347,12 @@ type Movement =
 
 type Direction = Up | Down | Left | Right
 
-let KeyDirection : Map<float,Direction> = Map.ofList [ (37.0, Left); (38.0, Up); (39.0, Right); (40.0, Down) ]
+let KeyDirection : Map<string, Direction> = Map.ofList [
+  ("ArrowLeft", Left)
+  ("ArrowUp", Up)
+  ("ArrowRight", Right)
+  ("ArrowDown", Down)
+]
 
 // ----------------------------------------------------------------------------
 // EVENT HANDLING
@@ -370,7 +375,7 @@ let update msg state =
 // ----------------------------------------------------------------------------
 
 let getDirection (ke: Browser.Types.KeyboardEvent) : Option<Direction> =
-    Map.tryFind ke.keyCode KeyDirection
+    Map.tryFind ke.key KeyDirection
 
 let getPosition ((col, row): Position) (direction: Direction) : Position =
     match direction with

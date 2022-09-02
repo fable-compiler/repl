@@ -13,7 +13,7 @@ nuget Thoth.Json
 nuget Thoth.Elmish.Toast ~> 2
 nuget Fable.Fetch
 nuget Fable.FontAwesome.Free
-nuget Feliz
+nuget Feliz prerelease
 nuget Feliz.Bulma
 nuget Feliz.Bulma.Tooltip
 nuget Fable.Browser.Css
