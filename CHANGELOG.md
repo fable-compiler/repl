@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.0.0-theta-009
+
+* Update Fable
+
 ## 4.0.0-alpha-024
 
 * Fable 4 alpha-24
