@@ -3,9 +3,9 @@ import { union_type } from "./Reflection.js";
 import { some } from "./Option.js";
 
 export class FSharpResult$2 extends Union {
-    constructor(tag, ...fields) {
+    constructor(tag, fields) {
         super();
-        this.tag = (tag | 0);
+        this.tag = tag;
         this.fields = fields;
     }
     cases() {
@@ -19,19 +19,19 @@ export function FSharpResult$2$reflection(gen0, gen1) {
 
 export function Result_Map(mapping, result) {
     if (result.tag === 0) {
-        return new FSharpResult$2(0, mapping(result.fields[0]));
+        return new FSharpResult$2(0, [mapping(result.fields[0])]);
     }
     else {
-        return new FSharpResult$2(1, result.fields[0]);
+        return new FSharpResult$2(1, [result.fields[0]]);
     }
 }
 
 export function Result_MapError(mapping, result) {
     if (result.tag === 0) {
-        return new FSharpResult$2(0, result.fields[0]);
+        return new FSharpResult$2(0, [result.fields[0]]);
     }
     else {
-        return new FSharpResult$2(1, mapping(result.fields[0]));
+        return new FSharpResult$2(1, [mapping(result.fields[0])]);
     }
 }
 
@@ -40,14 +40,14 @@ export function Result_Bind(binder, result) {
         return binder(result.fields[0]);
     }
     else {
-        return new FSharpResult$2(1, result.fields[0]);
+        return new FSharpResult$2(1, [result.fields[0]]);
     }
 }
 
 export class FSharpChoice$2 extends Union {
-    constructor(tag, ...fields) {
+    constructor(tag, fields) {
         super();
-        this.tag = (tag | 0);
+        this.tag = tag;
         this.fields = fields;
     }
     cases() {
@@ -60,9 +60,9 @@ export function FSharpChoice$2$reflection(gen0, gen1) {
 }
 
 export class FSharpChoice$3 extends Union {
-    constructor(tag, ...fields) {
+    constructor(tag, fields) {
         super();
-        this.tag = (tag | 0);
+        this.tag = tag;
         this.fields = fields;
     }
     cases() {
@@ -75,9 +75,9 @@ export function FSharpChoice$3$reflection(gen0, gen1, gen2) {
 }
 
 export class FSharpChoice$4 extends Union {
-    constructor(tag, ...fields) {
+    constructor(tag, fields) {
         super();
-        this.tag = (tag | 0);
+        this.tag = tag;
         this.fields = fields;
     }
     cases() {
@@ -90,9 +90,9 @@ export function FSharpChoice$4$reflection(gen0, gen1, gen2, gen3) {
 }
 
 export class FSharpChoice$5 extends Union {
-    constructor(tag, ...fields) {
+    constructor(tag, fields) {
         super();
-        this.tag = (tag | 0);
+        this.tag = tag;
         this.fields = fields;
     }
     cases() {
@@ -105,9 +105,9 @@ export function FSharpChoice$5$reflection(gen0, gen1, gen2, gen3, gen4) {
 }
 
 export class FSharpChoice$6 extends Union {
-    constructor(tag, ...fields) {
+    constructor(tag, fields) {
         super();
-        this.tag = (tag | 0);
+        this.tag = tag;
         this.fields = fields;
     }
     cases() {
@@ -120,9 +120,9 @@ export function FSharpChoice$6$reflection(gen0, gen1, gen2, gen3, gen4, gen5) {
 }
 
 export class FSharpChoice$7 extends Union {
-    constructor(tag, ...fields) {
+    constructor(tag, fields) {
         super();
-        this.tag = (tag | 0);
+        this.tag = tag;
         this.fields = fields;
     }
     cases() {
@@ -135,11 +135,11 @@ export function FSharpChoice$7$reflection(gen0, gen1, gen2, gen3, gen4, gen5, ge
 }
 
 export function Choice_makeChoice1Of2(x) {
-    return new FSharpChoice$2(0, x);
+    return new FSharpChoice$2(0, [x]);
 }
 
 export function Choice_makeChoice2Of2(x) {
-    return new FSharpChoice$2(1, x);
+    return new FSharpChoice$2(1, [x]);
 }
 
 export function Choice_tryValueIfChoice1Of2(x) {

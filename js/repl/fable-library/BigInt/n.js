@@ -836,7 +836,7 @@ export const BigNatModule_bitmask = initialize(BigNatModule_baseBits, (i) => (Bi
 
 export const BigNatModule_twopowers = initialize(BigNatModule_baseBits, (i) => BigNatModule_pow32(2, i), Int32Array);
 
-export const BigNatModule_twopowersI64 = initialize(BigNatModule_baseBits, (i) => BigNatModule_pow64(fromBits(2, 0, false), i));
+export const BigNatModule_twopowersI64 = initialize(BigNatModule_baseBits, (i) => BigNatModule_pow64(fromBits(2, 0, false), i), null);
 
 export function BigNatModule_wordBits(word) {
     const hi = (k_mut) => {
@@ -1099,7 +1099,7 @@ export function BigNatModule_divmod(b, a) {
         let p = BigNatModule_degree(b);
         const m = BigNatModule_degree(a) | 0;
         let n = p - m;
-        const Invariant = (tupledArg) => {
+        const Invariant = (_arg) => {
         };
         let finished = false;
         while (!finished) {
@@ -1342,27 +1342,27 @@ export function BigNatModule_toString(n) {
             break;
         }
     };
-    const collect = (isLeading_mut, digits_mut, n_1_mut, _arg_mut) => {
+    const collect = (isLeading_mut, digits_mut, n_1_mut, arg_mut) => {
         collect:
         while (true) {
-            const isLeading = isLeading_mut, digits = digits_mut, n_1 = n_1_mut, _arg = _arg_mut;
-            if (!isEmpty(_arg)) {
-                const prior_1 = tail(_arg);
-                const patternInput = BigNatModule_divmod(n_1, head(_arg)[1]);
+            const isLeading = isLeading_mut, digits = digits_mut, n_1 = n_1_mut, arg = arg_mut;
+            if (!isEmpty(arg)) {
+                const prior_1 = tail(arg);
+                const patternInput = BigNatModule_divmod(n_1, head(arg)[1]);
                 const nL = patternInput[1];
                 const nH = patternInput[0];
                 if (isLeading && BigNatModule_isZero(nH)) {
                     isLeading_mut = isLeading;
                     digits_mut = digits;
                     n_1_mut = nL;
-                    _arg_mut = prior_1;
+                    arg_mut = prior_1;
                     continue collect;
                 }
                 else {
                     isLeading_mut = isLeading;
                     digits_mut = collect(false, digits, nL, prior_1);
                     n_1_mut = nH;
-                    _arg_mut = prior_1;
+                    arg_mut = prior_1;
                     continue collect;
                 }
             }

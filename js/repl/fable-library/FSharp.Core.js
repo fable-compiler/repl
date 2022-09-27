@@ -1,4 +1,4 @@
-import { disposeSafe, structuralHash, equals } from "./Util.js";
+import { disposeSafe, defaultOf, structuralHash, equals } from "./Util.js";
 import { HashIdentity_Structural, ComparisonIdentity_Structural } from "./FSharp.Collections.js";
 import { StringBuilder__Append_Z721C83C5 } from "./System.Text.js";
 
@@ -53,7 +53,7 @@ export function Operators_Using(resource, action) {
         return action(resource);
     }
     finally {
-        if (equals(resource, null)) {
+        if (equals(resource, defaultOf())) {
         }
         else {
             disposeSafe(resource);

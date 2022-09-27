@@ -2,7 +2,7 @@ import { toList, toArray, map, filter, delay } from "./Seq.js";
 import { HashSet } from "./MutableSet.js";
 import { addToDict, getItemFromDict, tryGetValue, addToSet } from "./MapUtil.js";
 import { Dictionary } from "./MutableMap.js";
-import { disposeSafe, getEnumerator } from "./Util.js";
+import { defaultOf, disposeSafe, getEnumerator } from "./Util.js";
 import { FSharpRef } from "./Types.js";
 
 export function distinct(xs, comparer) {
@@ -65,7 +65,7 @@ export function groupBy(projection, xs, comparer) {
                 const x = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
                 const key = projection(x);
                 let matchValue;
-                let outArg = null;
+                let outArg = defaultOf();
                 matchValue = [tryGetValue(dict, key, new FSharpRef(() => outArg, (v) => {
                     outArg = v;
                 })), outArg];

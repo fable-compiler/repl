@@ -1,4 +1,4 @@
-import { disposeSafe, comparePrimitives, max, toIterator, getEnumerator, structuralHash, equals, compare } from "./Util.js";
+import { disposeSafe, defaultOf, comparePrimitives, max, toIterator, getEnumerator, structuralHash, equals, compare } from "./Util.js";
 import { class_type } from "./Reflection.js";
 import { toArray, empty, singleton, append, enumerateWhile, delay } from "./Seq.js";
 import { initialize, copyTo, fill } from "./Array.js";
@@ -166,7 +166,7 @@ export function Stack$1__Push_2B595(this$, x) {
 
 export function Stack$1__Clear(_) {
     _.count = 0;
-    fill(_.contents, 0, _.contents.length, null);
+    fill(_.contents, 0, _.contents.length, defaultOf());
 }
 
 export function Stack$1__TrimExcess(this$) {
@@ -176,7 +176,7 @@ export function Stack$1__TrimExcess(this$) {
 }
 
 export function Stack$1__ToArray(_) {
-    return initialize(_.count, (i) => _.contents[(_.count - 1) - i]);
+    return initialize(_.count, (i) => _.contents[(_.count - 1) - i], null);
 }
 
 export class Queue$1 {
@@ -291,7 +291,7 @@ export function Queue$1__Clear(_) {
     _.count = 0;
     _.head = 0;
     _.tail = 0;
-    fill(_.contents, 0, Queue$1__size(_), null);
+    fill(_.contents, 0, Queue$1__size(_), defaultOf());
 }
 
 export function Queue$1__TrimExcess(_) {

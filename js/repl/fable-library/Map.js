@@ -1044,7 +1044,7 @@ export class FSharpMap {
     get [Symbol.toStringTag]() {
         return "FSharpMap";
     }
-    toJSON(_key) {
+    toJSON() {
         const this$ = this;
         return Array.from(this$);
     }
@@ -1245,11 +1245,11 @@ export function FSharpMap__TryGetValue(_, key, value) {
 }
 
 export function FSharpMap__get_Keys(__) {
-    return map_2((kvp) => kvp[0], MapTreeModule_toArray(__.tree));
+    return map_2((kvp) => kvp[0], MapTreeModule_toArray(__.tree), null);
 }
 
 export function FSharpMap__get_Values(__) {
-    return map_2((kvp) => kvp[1], MapTreeModule_toArray(__.tree));
+    return map_2((kvp) => kvp[1], MapTreeModule_toArray(__.tree), null);
 }
 
 export function FSharpMap__TryFind(m, key) {

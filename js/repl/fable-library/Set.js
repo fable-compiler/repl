@@ -1460,7 +1460,7 @@ export class FSharpSet {
     get [Symbol.toStringTag]() {
         return "FSharpSet";
     }
-    toJSON(_key) {
+    toJSON() {
         const this$ = this;
         return Array.from(this$);
     }

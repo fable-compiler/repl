@@ -1,6 +1,6 @@
 import { Helpers_allocateArrayFromCons } from "./Native.js";
 import { value as value_2, map as map_1, defaultArg, some } from "./Option.js";
-import { min as min_1, equals as equals_1, disposeSafe, getEnumerator, comparePrimitives, max as max_1 } from "./Util.js";
+import { min as min_1, equals as equals_1, disposeSafe, getEnumerator, copyToArray, defaultOf, comparePrimitives, max as max_1 } from "./Util.js";
 import { SR_indexOutOfBounds } from "./Global.js";
 
 function indexNotFound() {
@@ -194,7 +194,7 @@ export function concat(arrays, cons) {
 }
 
 export function collect(mapping, array, cons) {
-    return concat(map(mapping, array, null), cons);
+    return concat(map(mapping, array, defaultOf()), cons);
 }
 
 export function where(predicate, array) {
@@ -276,6 +276,10 @@ export function replicate(count, initial, cons) {
 
 export function copy(array) {
     return array.slice();
+}
+
+export function copyTo(source, sourceIndex, target, targetIndex, count) {
+    copyToArray(source, sourceIndex, target, targetIndex, count);
 }
 
 export function reverse(array) {
@@ -416,22 +420,6 @@ export function removeAllInPlace(predicate, array) {
     return countRemoveAll(0) | 0;
 }
 
-export function copyTo(source, sourceIndex, target, targetIndex, count) {
-    const diff = (targetIndex - sourceIndex) | 0;
-    for (let i = sourceIndex; i <= ((sourceIndex + count) - 1); i++) {
-        target[i + diff] = source[i];
-    }
-}
-
-export function copyToTypedArray(source, sourceIndex, target, targetIndex, count) {
-    try {
-        target.set(source.subarray(sourceIndex, sourceIndex + count), targetIndex);
-    }
-    catch (matchValue) {
-        copyTo(source, sourceIndex, target, targetIndex, count);
-    }
-}
-
 export function partition(f, source, cons) {
     const len = source.length | 0;
     const res1 = Helpers_allocateArrayFromCons(cons, len);
@@ -471,7 +459,8 @@ export function findIndex(predicate, array) {
         return matchValue | 0;
     }
     else {
-        return indexNotFound() | 0;
+        indexNotFound();
+        return -1;
     }
 }
 
@@ -602,7 +591,8 @@ export function findIndexBack(predicate, array) {
         while (true) {
             const i = i_mut;
             if (i < 0) {
-                return indexNotFound() | 0;
+                indexNotFound();
+                return -1;
             }
             else if (predicate(array[i])) {
                 return i | 0;
@@ -647,7 +637,7 @@ export function choose(chooser, array, cons) {
             res.push(y);
         }
     }
-    if (equals_1(cons, null)) {
+    if (equals_1(cons, defaultOf())) {
         return res;
     }
     else {
@@ -1259,12 +1249,12 @@ export function transpose(arrays, cons) {
     }
 }
 
-export function insertAt(index, y, xs) {
+export function insertAt(index, y, xs, cons) {
     const len = xs.length | 0;
     if ((index < 0) ? true : (index > len)) {
         throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
-    const target = new xs.constructor(len + 1);
+    const target = Helpers_allocateArrayFromCons(cons, len + 1);
     for (let i = 0; i <= (index - 1); i++) {
         target[i] = xs[i];
     }
@@ -1275,14 +1265,14 @@ export function insertAt(index, y, xs) {
     return target;
 }
 
-export function insertManyAt(index, ys, xs) {
+export function insertManyAt(index, ys, xs, cons) {
     const len = xs.length | 0;
     if ((index < 0) ? true : (index > len)) {
         throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
     const ys_1 = Array.from(ys);
     const len2 = ys_1.length | 0;
-    const target = new xs.constructor(len + len2);
+    const target = Helpers_allocateArrayFromCons(cons, len + len2);
     for (let i = 0; i <= (index - 1); i++) {
         target[i] = xs[i];
     }
@@ -1335,12 +1325,12 @@ export function removeManyAt(index, count, xs) {
     return ys;
 }
 
-export function updateAt(index, y, xs) {
+export function updateAt(index, y, xs, cons) {
     const len = xs.length | 0;
     if ((index < 0) ? true : (index >= len)) {
         throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
-    const target = new xs.constructor(len);
+    const target = Helpers_allocateArrayFromCons(cons, len);
     for (let i = 0; i <= (len - 1); i++) {
         target[i] = ((i === index) ? y : xs[i]);
     }

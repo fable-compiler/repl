@@ -41,7 +41,7 @@ export function unionToString(name, fields) {
         return name;
     }
     else {
-        let fieldStr = "";
+        let fieldStr;
         let withParens = true;
         if (fields.length === 1) {
             fieldStr = toString(fields[0]);

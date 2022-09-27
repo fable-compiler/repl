@@ -2,8 +2,8 @@ import { BigInteger_op_Inequality_56F059C0, BigInteger_op_Equality_56F059C0, Big
 import { fromInteger } from "./Long.js";
 import { comparePrimitives, min, compare as compare_1, equals as equals_1, safeHash } from "./Util.js";
 import { toString as toString_1 } from "./Types.js";
+import { fill, reverse, find } from "./Array.js";
 import { fold, empty, ofArrayWithTail, cons, toArray, head, skipWhile } from "./List.js";
-import { fill, reverse } from "./Array.js";
 
 export function isBigInt(x) {
     return x instanceof BigInteger;
@@ -221,7 +221,6 @@ export function op_Inequality(arg, arg_1) {
 }
 
 function flipTwosComplement(currByte, lowBitFound) {
-    let array;
     if (lowBitFound) {
         return [(currByte ^ 255) & 255, true];
     }
@@ -229,7 +228,7 @@ function flipTwosComplement(currByte, lowBitFound) {
         return [0, false];
     }
     else {
-        return [(currByte ^ (254 << ((array = (new Int32Array([0, 1, 2, 3, 4, 5, 6, 7])), array.find((i) => ((currByte & (1 << i)) > 0)))))) & 255, true];
+        return [(currByte ^ (254 << find((i) => ((currByte & (1 << i)) > 0), new Int32Array([0, 1, 2, 3, 4, 5, 6, 7])))) & 255, true];
     }
 }
 

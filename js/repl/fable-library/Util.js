@@ -1,21 +1,24 @@
 // tslint:disable:ban-types
-export function isIterable(x) {
-    return x != null && typeof x === "object" && Symbol.iterator in x;
-}
 export function isArrayLike(x) {
     return Array.isArray(x) || ArrayBuffer.isView(x);
 }
-function isComparer(x) {
-    return typeof x.Compare === "function";
+export function isIterable(x) {
+    return x != null && typeof x === "object" && Symbol.iterator in x;
 }
-function isComparable(x) {
-    return typeof x.CompareTo === "function";
+export function isEnumerable(x) {
+    return x != null && typeof x.GetEnumerator === "function";
 }
-function isEquatable(x) {
-    return typeof x.Equals === "function";
+export function isComparer(x) {
+    return x != null && typeof x.Compare === "function";
 }
-function isHashable(x) {
-    return typeof x.GetHashCode === "function";
+export function isComparable(x) {
+    return x != null && typeof x.CompareTo === "function";
+}
+export function isEquatable(x) {
+    return x != null && typeof x.Equals === "function";
+}
+export function isHashable(x) {
+    return x != null && typeof x.GetHashCode === "function";
 }
 export function isDisposable(x) {
     return x != null && typeof x.Dispose === "function";
@@ -25,13 +28,31 @@ export function disposeSafe(x) {
         x.Dispose();
     }
 }
+export function defaultOf() {
+    return null;
+}
 export function sameConstructor(x, y) {
     var _a, _b;
     return ((_a = Object.getPrototypeOf(x)) === null || _a === void 0 ? void 0 : _a.constructor) === ((_b = Object.getPrototypeOf(y)) === null || _b === void 0 ? void 0 : _b.constructor);
 }
+export class Enumerable {
+    constructor(en) {
+        this.en = en;
+    }
+    GetEnumerator() { return this.en; }
+    [Symbol.iterator]() {
+        return this;
+    }
+    next() {
+        const hasNext = this.en["System.Collections.IEnumerator.MoveNext"]();
+        const current = hasNext ? this.en["System.Collections.Generic.IEnumerator`1.get_Current"]() : undefined;
+        return { done: !hasNext, value: current };
+    }
+}
 export class Enumerator {
     constructor(iter) {
         this.iter = iter;
+        this.current = defaultOf();
     }
     ["System.Collections.Generic.IEnumerator`1.get_Current"]() {
         return this.current;
@@ -51,19 +72,36 @@ export class Enumerator {
         return;
     }
 }
-export function getEnumerator(o) {
-    return typeof o.GetEnumerator === "function"
-        ? o.GetEnumerator()
-        : new Enumerator(o[Symbol.iterator]());
+export function toEnumerable(e) {
+    if (isEnumerable(e)) {
+        return e;
+    }
+    else {
+        return new Enumerable(new Enumerator(e[Symbol.iterator]()));
+    }
+}
+export function getEnumerator(e) {
+    if (isEnumerable(e)) {
+        return e.GetEnumerator();
+    }
+    else {
+        return new Enumerator(e[Symbol.iterator]());
+    }
 }
 export function toIterator(en) {
     return {
+        [Symbol.iterator]() {
+            return this;
+        },
         next() {
             const hasNext = en["System.Collections.IEnumerator.MoveNext"]();
             const current = hasNext ? en["System.Collections.Generic.IEnumerator`1.get_Current"]() : undefined;
             return { done: !hasNext, value: current };
         },
     };
+}
+export function enumerableToIterator(e) {
+    return toIterator(toEnumerable(e).GetEnumerator());
 }
 export class Comparer {
     constructor(f) {
@@ -202,10 +240,7 @@ export function physicalHash(x) {
     }
 }
 export function identityHash(x) {
-    if (x == null) {
-        return 0;
-    }
-    else if (isHashable(x)) {
+    if (isHashable(x)) {
         return x.GetHashCode();
     }
     else {
@@ -264,7 +299,8 @@ export function fastStructuralHash(x) {
 }
 // Intended for declared types that may or may not implement GetHashCode
 export function safeHash(x) {
-    return x == null ? 0 : isHashable(x) ? x.GetHashCode() : numberHash(ObjectRef.id(x));
+    // return x == null ? 0 : isHashable(x) ? x.GetHashCode() : numberHash(ObjectRef.id(x));
+    return identityHash(x);
 }
 export function equalArraysWith(x, y, eq) {
     if (x == null) {
@@ -312,14 +348,14 @@ export function equals(x, y) {
     else if (y == null) {
         return false;
     }
-    else if (typeof x !== "object") {
-        return false;
-    }
     else if (isEquatable(x)) {
         return x.Equals(y);
     }
     else if (isArrayLike(x)) {
         return isArrayLike(y) && equalArrays(x, y);
+    }
+    else if (typeof x !== "object") {
+        return false;
     }
     else if (x instanceof Date) {
         return (y instanceof Date) && compareDates(x, y) === 0;
@@ -399,14 +435,14 @@ export function compare(x, y) {
     else if (y == null) {
         return 1;
     }
-    else if (typeof x !== "object") {
-        return x < y ? -1 : 1;
-    }
     else if (isComparable(x)) {
         return x.CompareTo(y);
     }
     else if (isArrayLike(x)) {
         return isArrayLike(y) ? compareArrays(x, y) : -1;
+    }
+    else if (typeof x !== "object") {
+        return x < y ? -1 : 1;
     }
     else if (x instanceof Date) {
         return y instanceof Date ? compareDates(x, y) : -1;
@@ -572,4 +608,15 @@ export function mapCurriedArgs(fn, mappings) {
         }
     }
     return (arg) => mapArg(fn, arg, mappings, 0);
+}
+// More performant method to copy arrays, see #2352
+export function copyToArray(source, sourceIndex, target, targetIndex, count) {
+    if (ArrayBuffer.isView(source) && ArrayBuffer.isView(target)) {
+        target.set(source.subarray(sourceIndex, sourceIndex + count), targetIndex);
+    }
+    else {
+        for (let i = 0; i < count; ++i) {
+            target[targetIndex + i] = source[sourceIndex + i];
+        }
+    }
 }

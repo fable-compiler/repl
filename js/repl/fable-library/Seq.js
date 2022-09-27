@@ -1,4 +1,4 @@
-import { clear, equals, isArrayLike, isDisposable, toIterator, disposeSafe, getEnumerator } from "./Util.js";
+import { clear, defaultOf, equals, isDisposable, isArrayLike, toIterator, disposeSafe, getEnumerator } from "./Util.js";
 import { toString } from "./Types.js";
 import { class_type } from "./Reflection.js";
 import { some, value as value_1 } from "./Option.js";
@@ -117,12 +117,10 @@ export function Enumerator_FromFunctions$1_$ctor_58C54629(current, next, dispose
 }
 
 export function Enumerator_cast(e) {
-    const current = () => e["System.Collections.IEnumerator.get_Current"]();
+    const current = () => e["System.Collections.Generic.IEnumerator`1.get_Current"]();
     const next = () => e["System.Collections.IEnumerator.MoveNext"]();
     const dispose = () => {
-        if (isDisposable(e)) {
-            disposeSafe(e);
-        }
+        disposeSafe(e);
     };
     return Enumerator_FromFunctions$1_$ctor_58C54629(current, next, dispose);
 }
@@ -169,7 +167,6 @@ export function Enumerator_concat(sources) {
         }
     };
     const loop = () => {
-        let copyOfStruct;
         let res = void 0;
         while (res == null) {
             const outerOpt_1 = outerOpt;
@@ -194,7 +191,7 @@ export function Enumerator_concat(sources) {
                     const outer_1 = outerOpt_1;
                     if (outer_1["System.Collections.IEnumerator.MoveNext"]()) {
                         const ie = outer_1["System.Collections.Generic.IEnumerator`1.get_Current"]();
-                        innerOpt = ((copyOfStruct = ie, getEnumerator(copyOfStruct)));
+                        innerOpt = getEnumerator(ie);
                     }
                     else {
                         finish();
@@ -371,7 +368,7 @@ export function empty() {
 }
 
 export function singleton(x) {
-    return delay(() => singleton_1(x));
+    return delay(() => singleton_1(x, null));
 }
 
 export function ofArray(arr) {
@@ -504,7 +501,7 @@ export function enumerateThenFinally(source, compensation) {
 
 export function enumerateUsing(resource, source) {
     const compensation = () => {
-        if (equals(resource, null)) {
+        if (equals(resource, defaultOf())) {
         }
         else {
             let copyOfStruct = resource;
@@ -681,7 +678,8 @@ export function tryFindIndex(predicate, xs) {
 export function findIndex(predicate, xs) {
     const matchValue = tryFindIndex(predicate, xs);
     if (matchValue == null) {
-        return indexNotFound() | 0;
+        indexNotFound();
+        return -1;
     }
     else {
         return matchValue | 0;
@@ -695,7 +693,8 @@ export function tryFindIndexBack(predicate, xs) {
 export function findIndexBack(predicate, xs) {
     const matchValue = tryFindIndexBack(predicate, xs);
     if (matchValue == null) {
-        return indexNotFound() | 0;
+        indexNotFound();
+        return -1;
     }
     else {
         return matchValue | 0;
@@ -1113,12 +1112,12 @@ export function allPairs(xs, ys) {
 }
 
 export function mapFold(mapping, state, xs) {
-    const patternInput = mapFold_1(mapping, state, toArray(xs));
+    const patternInput = mapFold_1(mapping, state, toArray(xs), null);
     return [readOnly(patternInput[0]), patternInput[1]];
 }
 
 export function mapFoldBack(mapping, xs, state) {
-    const patternInput = mapFoldBack_1(mapping, toArray(xs), state);
+    const patternInput = mapFoldBack_1(mapping, toArray(xs), state, null);
     return [readOnly(patternInput[0]), patternInput[1]];
 }
 
@@ -1204,7 +1203,7 @@ export function scan(folder, state, xs) {
 }
 
 export function scanBack(folder, xs, state) {
-    return delay(() => ofArray(scanBack_1(folder, toArray(xs), state)));
+    return delay(() => ofArray(scanBack_1(folder, toArray(xs), state, null)));
 }
 
 export function skip(count, source) {
@@ -1294,15 +1293,15 @@ export function pairwise(xs) {
 }
 
 export function splitInto(chunks, xs) {
-    return delay(() => ofArray(map_1(ofArray, splitInto_1(chunks, toArray(xs)))));
+    return delay(() => ofArray(map_1(ofArray, splitInto_1(chunks, toArray(xs)), null)));
 }
 
 export function windowed(windowSize, xs) {
-    return delay(() => ofArray(map_1(ofArray, windowed_1(windowSize, toArray(xs)))));
+    return delay(() => ofArray(map_1(ofArray, windowed_1(windowSize, toArray(xs)), null)));
 }
 
 export function transpose(xss) {
-    return delay(() => ofArray(map_1(ofArray, transpose_1(map_1(toArray, toArray(xss))))));
+    return delay(() => ofArray(map_1(ofArray, transpose_1(map_1(toArray, toArray(xss), null), null), null)));
 }
 
 export function sortWith(comparer, xs) {
@@ -1387,7 +1386,7 @@ export function permute(f, xs) {
 }
 
 export function chunkBySize(chunkSize, xs) {
-    return delay(() => ofArray(map_1(ofArray, chunkBySize_1(chunkSize, toArray(xs)))));
+    return delay(() => ofArray(map_1(ofArray, chunkBySize_1(chunkSize, toArray(xs)), null)));
 }
 
 export function insertAt(index, y, xs) {

@@ -1,4 +1,4 @@
-import { disposeSafe, equals, toIterator, getEnumerator } from "./Util.js";
+import { disposeSafe, defaultOf, equals, toIterator, getEnumerator } from "./Util.js";
 import { iterate, map, delay, toArray, iterateIndexed, concat } from "./Seq.js";
 import { FSharpRef } from "./Types.js";
 import { class_type } from "./Reflection.js";
@@ -7,11 +7,11 @@ import { format } from "./String.js";
 
 export class Dictionary {
     constructor(pairs, comparer) {
-        const this$ = new FSharpRef(null);
+        const this$ = new FSharpRef(defaultOf());
         this.comparer = comparer;
         this$.contents = this;
         this.hashMap = (new Map([]));
-        this["init@9-1"] = 1;
+        this["init@9"] = 1;
         const enumerator = getEnumerator(pairs);
         try {
             while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
@@ -26,7 +26,7 @@ export class Dictionary {
     get [Symbol.toStringTag]() {
         return "Dictionary";
     }
-    toJSON(_key) {
+    toJSON() {
         const this$ = this;
         return Array.from(this$);
     }
@@ -195,7 +195,7 @@ export function Dictionary_$ctor_6623D9B3(pairs, comparer) {
 function Dictionary__TryFindIndex_2B595(this$, k) {
     const h = this$.comparer.GetHashCode(k) | 0;
     let matchValue;
-    let outArg = null;
+    let outArg = defaultOf();
     matchValue = [tryGetValue(this$.hashMap, h, new FSharpRef(() => outArg, (v) => {
         outArg = v;
     })), outArg];

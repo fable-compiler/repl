@@ -100,7 +100,7 @@ export function create(year, month, day, h, m, s, ms, offset) {
     if (offset === 0) {
         date = new Date(Date.UTC(year, month - 1, day, h, m, s, ms));
         if (year <= 99) {
-            date.setFullYear(year, month - 1, day);
+            date.setUTCFullYear(year, month - 1, day);
         }
     }
     else {

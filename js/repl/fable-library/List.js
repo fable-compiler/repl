@@ -1,5 +1,5 @@
 import { join } from "./String.js";
-import { disposeSafe, isArrayLike, getEnumerator, toIterator, compare, structuralHash, equals } from "./Util.js";
+import { disposeSafe, isArrayLike, defaultOf, getEnumerator, toIterator, compare, structuralHash, equals } from "./Util.js";
 import { Record } from "./Types.js";
 import { class_type, record_type, option_type } from "./Reflection.js";
 import { SR_inputSequenceTooLong, SR_inputSequenceEmpty, SR_inputMustBeNonNegative, SR_notEnoughElements, SR_differentLengths, SR_keyNotFoundAlt, SR_indexOutOfBounds, SR_inputWasEmpty } from "./Global.js";
@@ -84,7 +84,7 @@ export class FSharpList extends Record {
         };
         return loop(0, 0, xs) | 0;
     }
-    toJSON(_key) {
+    toJSON() {
         const this$ = this;
         return Array.from(this$);
     }
@@ -146,7 +146,7 @@ export class ListEnumerator$1 {
     constructor(xs) {
         this.xs = xs;
         this.it = this.xs;
-        this.current = null;
+        this.current = defaultOf();
     }
     "System.Collections.Generic.IEnumerator`1.get_Current"() {
         const _ = this;
@@ -172,7 +172,7 @@ export class ListEnumerator$1 {
     "System.Collections.IEnumerator.Reset"() {
         const _ = this;
         _.it = _.xs;
-        _.current = null;
+        _.current = defaultOf();
     }
     Dispose() {
     }
@@ -187,7 +187,7 @@ export function ListEnumerator$1_$ctor_3002E699(xs) {
 }
 
 export function FSharpList_get_Empty() {
-    return new FSharpList(null, void 0);
+    return new FSharpList(defaultOf(), void 0);
 }
 
 export function FSharpList_Cons_305B8EAC(x, xs) {
@@ -261,6 +261,10 @@ export function FSharpList__get_Item_Z524259A4(xs, index) {
         }
     };
     return loop(0, xs);
+}
+
+export function indexNotFound() {
+    throw new Error(SR_keyNotFoundAlt);
 }
 
 export function empty() {
@@ -589,7 +593,7 @@ export function scan(folder, state, xs) {
 }
 
 export function scanBack(folder, xs, state) {
-    return ofArray(scanBack_1(folder, toArray(xs), state));
+    return ofArray(scanBack_1(folder, toArray(xs), state, null));
 }
 
 export function append(xs, ys) {
@@ -754,7 +758,7 @@ export function tryPick(f, xs) {
 export function pick(f, xs) {
     const matchValue = tryPick(f, xs);
     if (matchValue == null) {
-        throw new Error(SR_keyNotFoundAlt);
+        return indexNotFound();
     }
     else {
         return value_1(matchValue);
@@ -768,7 +772,7 @@ export function tryFind(f, xs) {
 export function find(f, xs) {
     const matchValue = tryFind(f, xs);
     if (matchValue == null) {
-        throw new Error(SR_keyNotFoundAlt);
+        return indexNotFound();
     }
     else {
         return value_1(matchValue);
@@ -782,7 +786,7 @@ export function tryFindBack(f, xs) {
 export function findBack(f, xs) {
     const matchValue = tryFindBack(f, xs);
     if (matchValue == null) {
-        throw new Error(SR_keyNotFoundAlt);
+        return indexNotFound();
     }
     else {
         return value_1(matchValue);
@@ -814,7 +818,8 @@ export function tryFindIndex(f, xs) {
 export function findIndex(f, xs) {
     const matchValue = tryFindIndex(f, xs);
     if (matchValue == null) {
-        throw new Error(SR_keyNotFoundAlt);
+        indexNotFound();
+        return -1;
     }
     else {
         return matchValue | 0;
@@ -828,7 +833,8 @@ export function tryFindIndexBack(f, xs) {
 export function findIndexBack(f, xs) {
     const matchValue = tryFindIndexBack(f, xs);
     if (matchValue == null) {
-        throw new Error(SR_keyNotFoundAlt);
+        indexNotFound();
+        return -1;
     }
     else {
         return matchValue | 0;
@@ -1102,7 +1108,7 @@ export function permute(f, xs) {
 }
 
 export function chunkBySize(chunkSize, xs) {
-    return ofArray(map_1(ofArray, chunkBySize_1(chunkSize, toArray(xs))));
+    return ofArray(map_1(ofArray, chunkBySize_1(chunkSize, toArray(xs)), null));
 }
 
 export function allPairs(xs, ys) {
@@ -1302,15 +1308,15 @@ export function pairwise(xs) {
 }
 
 export function windowed(windowSize, xs) {
-    return ofArray(map_1(ofArray, windowed_1(windowSize, toArray(xs))));
+    return ofArray(map_1(ofArray, windowed_1(windowSize, toArray(xs)), null));
 }
 
 export function splitInto(chunks, xs) {
-    return ofArray(map_1(ofArray, splitInto_1(chunks, toArray(xs))));
+    return ofArray(map_1(ofArray, splitInto_1(chunks, toArray(xs)), null));
 }
 
 export function transpose(lists) {
-    return ofArray(map_1(ofArray, transpose_1(map_1(toArray, Array.from(lists)))));
+    return ofArray(map_1(ofArray, transpose_1(map_1(toArray, Array.from(lists), null), null), null));
 }
 
 export function insertAt(index, y, xs) {

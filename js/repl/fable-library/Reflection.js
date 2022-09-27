@@ -367,7 +367,7 @@ export function makeUnion(uci, values) {
         throw new Error(`Expected an array of length ${expectedLength} but got ${values.length}`);
     }
     return uci.declaringType.construct != null
-        ? new uci.declaringType.construct(uci.tag, ...values)
+        ? new uci.declaringType.construct(uci.tag, values)
         : {};
 }
 export function makeRecord(t, values) {

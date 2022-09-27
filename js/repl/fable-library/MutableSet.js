@@ -1,4 +1,4 @@
-import { disposeSafe, toIterator, getEnumerator } from "./Util.js";
+import { disposeSafe, defaultOf, toIterator, getEnumerator } from "./Util.js";
 import { iterate, map, iterateIndexed, concat } from "./Seq.js";
 import { FSharpRef } from "./Types.js";
 import { class_type } from "./Reflection.js";
@@ -7,11 +7,11 @@ import { some } from "./Option.js";
 
 export class HashSet {
     constructor(items, comparer) {
-        const this$ = new FSharpRef(null);
+        const this$ = new FSharpRef(defaultOf());
         this.comparer = comparer;
         this$.contents = this;
         this.hashMap = (new Map([]));
-        this["init@9-2"] = 1;
+        this["init@9"] = 1;
         const enumerator = getEnumerator(items);
         try {
             while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
@@ -26,7 +26,7 @@ export class HashSet {
     get [Symbol.toStringTag]() {
         return "HashSet";
     }
-    toJSON(_key) {
+    toJSON() {
         const this$ = this;
         return Array.from(this$);
     }
@@ -122,7 +122,7 @@ export function HashSet_$ctor_Z6150332D(items, comparer) {
 function HashSet__TryFindIndex_2B595(this$, k) {
     const h = this$.comparer.GetHashCode(k) | 0;
     let matchValue;
-    let outArg = null;
+    let outArg = defaultOf();
     matchValue = [tryGetValue(this$.hashMap, h, new FSharpRef(() => outArg, (v) => {
         outArg = v;
     })), outArg];

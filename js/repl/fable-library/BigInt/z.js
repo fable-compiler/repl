@@ -36,7 +36,7 @@ export class BigInteger extends Record {
         const x = this;
         return BigInteger_hash_Z665282C2(x) | 0;
     }
-    toJSON(_key) {
+    toJSON() {
         const this$ = this;
         return toString(this$);
     }
@@ -61,7 +61,7 @@ export function BigInteger_$ctor_Z2BE94A1(signInt, v) {
 
 (() => {
     BigInteger.smallLim = 4096;
-    BigInteger.smallPosTab = initialize(BigInteger.smallLim, BigNatModule_ofInt32);
+    BigInteger.smallPosTab = initialize(BigInteger.smallLim, BigNatModule_ofInt32, null);
     BigInteger.one = BigInteger_$ctor_Z524259A4(1);
     BigInteger.two = BigInteger_$ctor_Z524259A4(2);
     BigInteger.zero = BigInteger_$ctor_Z524259A4(0);
