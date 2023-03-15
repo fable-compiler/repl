@@ -55,7 +55,7 @@ module Immutability =
 
     // When mutating a value, use '<-' to assign a new value.
     //
-    // Note that '=' is not the same as this.  '=' is used to test equality.
+    // Note that '=' is not the same as '<-'.  '=' is used to test equality.
     otherNumber <- otherNumber + 1
 
     printfn "'otherNumber' changed to be %d" otherNumber
