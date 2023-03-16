@@ -59,7 +59,7 @@ module Lists =
 
 module Arrays =
 
-    /// This is The empty array.  Note that the syntax is similar to that of Lists, but uses `[| ... |]` instead.
+    /// This is the empty array.  Note that the syntax is similar to that of Lists, but uses `[| ... |]` instead.
     let array1 = [| |]
 
     /// Arrays are specified using the same range of constructs as lists.
