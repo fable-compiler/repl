@@ -4,7 +4,7 @@ import { toArray, empty, singleton, append, enumerateWhile, delay } from "./Seq.
 import { initialize, copyTo, fill } from "./Array.js";
 
 export class Comparer$1 {
-    constructor() {
+    "constructor"() {
     }
     Compare(x, y) {
         return compare(x, y);
@@ -28,7 +28,7 @@ export function Comparer$1_get_Default() {
 }
 
 export class EqualityComparer$1 {
-    constructor() {
+    "constructor"() {
     }
     Equals(x, y) {
         return equals(x, y);
@@ -58,7 +58,7 @@ export function EqualityComparer$1_get_Default() {
 }
 
 export class Stack$1 {
-    constructor(initialContents, initialCount) {
+    "constructor"(initialContents, initialCount) {
         this.contents = initialContents;
         this.count = (initialCount | 0);
     }
@@ -180,7 +180,7 @@ export function Stack$1__ToArray(_) {
 }
 
 export class Queue$1 {
-    constructor(initialContents, initialCount) {
+    "constructor"(initialContents, initialCount) {
         this.contents = initialContents;
         this.count = (initialCount | 0);
         this.head = 0;

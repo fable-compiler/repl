@@ -462,13 +462,12 @@ export function clamp(comparer, value, min, max) {
 }
 export function createAtom(value) {
     let atom = value;
-    return (value, isSetter) => {
-        if (!isSetter) {
+    return (...args) => {
+        if (args.length === 0) {
             return atom;
         }
         else {
-            atom = value;
-            return void 0;
+            atom = args[0];
         }
     };
 }

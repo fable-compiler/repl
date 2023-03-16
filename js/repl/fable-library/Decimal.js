@@ -53,6 +53,9 @@ export function op_UnaryNegation(x) {
     x2.s = -x2.s || 0;
     return x2;
 }
+export function op_UnaryPlus(x) {
+    return x;
+}
 export const add = op_Addition;
 export const subtract = op_Subtraction;
 export const multiply = op_Multiply;

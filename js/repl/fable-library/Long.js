@@ -9,6 +9,7 @@ export const op_Multiply = LongLib.multiply;
 export const op_Division = LongLib.divide;
 export const op_Modulus = LongLib.modulo;
 export const op_UnaryNegation = LongLib.negate;
+export function op_UnaryPlus(x) { return x; }
 export const op_LeftShift = LongLib.shiftLeft;
 export const op_RightShift = LongLib.shiftRight;
 export const op_RightShiftUnsigned = LongLib.shiftRightUnsigned;
@@ -123,30 +124,14 @@ export function unixEpochMillisecondsToTicks(ms, offset) {
 export function ticksToUnixEpochMilliseconds(ticks) {
     return LongLib.toNumber(op_Subtraction(op_Division(ticks, 10000), 62135596800000));
 }
-// export function makeRangeStepFunction(step: Long, last: Long, unsigned: boolean) {
-//   const stepComparedWithZero = LongLib.compare(step, unsigned ? LongLib.UZERO : LongLib.ZERO);
-//   if (stepComparedWithZero === 0) {
-//     throw new Error("The step of a range cannot be zero");
-//   }
-//   const stepGreaterThanZero = stepComparedWithZero > 0;
-//   return (x: Long) => {
-//     const comparedWithLast = LongLib.compare(x, last);
-//     if ((stepGreaterThanZero && comparedWithLast <= 0)
-//       || (!stepGreaterThanZero && comparedWithLast >= 0)) {
-//       return [x, op_Addition(x, step)];
-//     } else {
-//       return undefined;
-//     }
-//   };
-// }
 export function divRem(x, y, out) {
     const div = op_Division(x, y);
     const rem = op_Modulus(x, y);
-    if (out != null) {
-        out.contents = rem;
-        return div;
+    if (out === void 0) {
+        return [div, rem];
     }
     else {
-        return [div, rem];
+        out.contents = rem;
+        return div;
     }
 }

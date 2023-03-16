@@ -1,4 +1,4 @@
-import { disposeSafe, defaultOf, toIterator, getEnumerator } from "./Util.js";
+import { disposeSafe, defaultOf, partialApply, toIterator, getEnumerator } from "./Util.js";
 import { iterate, map, iterateIndexed, concat } from "./Seq.js";
 import { FSharpRef } from "./Types.js";
 import { class_type } from "./Reflection.js";
@@ -6,7 +6,7 @@ import { getItemFromDict, tryGetValue } from "./MapUtil.js";
 import { some } from "./Option.js";
 
 export class HashSet {
-    constructor(items, comparer) {
+    "constructor"(items, comparer) {
         const this$ = new FSharpRef(defaultOf());
         this.comparer = comparer;
         this$.contents = this;
@@ -106,7 +106,9 @@ export class HashSet {
     forEach(f, thisArg) {
         const this$ = this;
         iterate((x) => {
-            f(x, x, this$);
+            const clo = partialApply(2, f, [x]);
+            const clo_1 = clo(x);
+            clo_1(this$);
         }, this$);
     }
 }

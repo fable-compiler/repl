@@ -7,7 +7,7 @@ import { int32ToString } from "../Util.js";
 import { isNullOrEmpty, join } from "../String.js";
 
 export class BigNat extends Record {
-    constructor(bound, digits) {
+    "constructor"(bound, digits) {
         super();
         this.bound = (bound | 0);
         this.digits = digits;
@@ -781,7 +781,7 @@ export function BigNatModule_mulSchoolBook(p, q) {
 }
 
 export class BigNatModule_encoding extends Record {
-    constructor(bigL, twoToBigL, k, bigK, bigN, split, splits) {
+    "constructor"(bigL, twoToBigL, k, bigK, bigN, split, splits) {
         super();
         this.bigL = (bigL | 0);
         this.twoToBigL = (twoToBigL | 0);
@@ -983,16 +983,15 @@ export function BigNatModule_mul(p, q) {
 }
 
 export function BigNatModule_scaleSubInPlace(x, f, a, n) {
-    const patternInput = [x.digits, BigNatModule_degree(x)];
-    const x_1 = patternInput[0];
-    const patternInput_1 = [a.digits, BigNatModule_degree(a)];
-    const ad = patternInput_1[1] | 0;
-    const a_1 = patternInput_1[0];
+    const matchValue_1 = BigNatModule_degree(x) | 0;
+    const x_1 = x.digits;
+    const ad = BigNatModule_degree(a) | 0;
+    const a_1 = a.digits;
     const f_1 = fromInteger(f, false, 2);
     let j = 0;
     let z = op_Multiply(f_1, fromInteger(a_1[0], false, 2));
     while ((compare(z, fromBits(0, 0, false)) > 0) ? true : (j < ad)) {
-        if (j > patternInput[1]) {
+        if (j > matchValue_1) {
             throw new Error("scaleSubInPlace: pre-condition did not apply, result would be -ve");
         }
         let zLo = ~(~toInt(op_BitwiseAnd(z, BigNatModule_baseMaski64)));
@@ -1022,16 +1021,15 @@ export function BigNatModule_scaleSub(x, f, a, n) {
 }
 
 export function BigNatModule_scaleAddInPlace(x, f, a, n) {
-    const patternInput = [x.digits, BigNatModule_degree(x)];
-    const x_1 = patternInput[0];
-    const patternInput_1 = [a.digits, BigNatModule_degree(a)];
-    const ad = patternInput_1[1] | 0;
-    const a_1 = patternInput_1[0];
+    const matchValue_1 = BigNatModule_degree(x) | 0;
+    const x_1 = x.digits;
+    const ad = BigNatModule_degree(a) | 0;
+    const a_1 = a.digits;
     const f_1 = fromInteger(f, false, 2);
     let j = 0;
     let z = op_Multiply(f_1, fromInteger(a_1[0], false, 2));
     while ((compare(z, fromBits(0, 0, false)) > 0) ? true : (j < ad)) {
-        if (j > patternInput[1]) {
+        if (j > matchValue_1) {
             throw new Error("scaleSubInPlace: pre-condition did not apply, result would be -ve");
         }
         let zLo = ~(~toInt(op_BitwiseAnd(z, BigNatModule_baseMaski64)));
@@ -1061,16 +1059,15 @@ export function BigNatModule_scaleAdd(x, f, a, n) {
 }
 
 export function BigNatModule_removeFactor(x, a, n) {
-    const patternInput = [BigNatModule_degree(a), BigNatModule_degree(x)];
-    const degx = patternInput[1] | 0;
-    const dega = patternInput[0] | 0;
+    const matchValue = BigNatModule_degree(a) | 0;
+    const degx = BigNatModule_degree(x) | 0;
+    const dega = matchValue | 0;
     if (degx < (dega + n)) {
         return 0;
     }
     else {
-        const patternInput_1 = [a.digits, x.digits];
-        const xa = patternInput_1[1];
-        const aa = patternInput_1[0];
+        const xa = x.digits;
+        const aa = a.digits;
         const f = ((dega === 0) ? ((degx === n) ? (~(~(xa[n] / aa[0]))) : (~(~toInt(op_Division(op_Addition(op_Multiply(fromInteger(xa[degx], false, 2), BigNatModule_baseNi64), fromInteger(xa[degx - 1], false, 2)), fromInteger(aa[0], false, 2)))))) : ((degx === (dega + n)) ? (~(~(xa[degx] / (aa[dega] + 1)))) : (~(~toInt(op_Division(op_Addition(op_Multiply(fromInteger(xa[degx], false, 2), BigNatModule_baseNi64), fromInteger(xa[degx - 1], false, 2)), op_Addition(fromInteger(aa[dega], false, 2), fromBits(1, 0, false)))))))) | 0;
         if (f === 0) {
             if (BigNatModule_shiftCompare(a, n, x, 0) !== 1) {
@@ -1287,12 +1284,12 @@ export function BigNatModule_toUInt32(n) {
         return value >>> 0;
     }
     else if (matchValue === 2) {
-        const patternInput = [n.digits[0], n.digits[1]];
-        const xB = patternInput[1] | 0;
+        const matchValue_1 = n.digits[0] | 0;
+        const xB = n.digits[1] | 0;
         if (xB > BigNatModule_baseMask32B) {
             throw new Error();
         }
-        return ((patternInput[0] & BigNatModule_baseMask32A) >>> 0) + ((((xB & BigNatModule_baseMask32B) >>> 0) << BigNatModule_baseShift32B) >>> 0);
+        return ((matchValue_1 & BigNatModule_baseMask32A) >>> 0) + ((((xB & BigNatModule_baseMask32B) >>> 0) << BigNatModule_baseShift32B) >>> 0);
     }
     else {
         throw new Error();
@@ -1308,16 +1305,18 @@ export function BigNatModule_toUInt64(n) {
         return fromInteger(n.digits[0], true, 2);
     }
     else if (matchValue === 2) {
-        const patternInput = [n.digits[0], n.digits[1]];
-        return op_Addition(fromInteger(patternInput[0] & BigNatModule_baseMask64A, true, 2), op_LeftShift(fromInteger(patternInput[1] & BigNatModule_baseMask64B, true, 2), BigNatModule_baseShift64B));
+        const matchValue_1 = n.digits[0] | 0;
+        const matchValue_2 = n.digits[1] | 0;
+        return op_Addition(fromInteger(matchValue_1 & BigNatModule_baseMask64A, true, 2), op_LeftShift(fromInteger(matchValue_2 & BigNatModule_baseMask64B, true, 2), BigNatModule_baseShift64B));
     }
     else if (matchValue === 3) {
-        const patternInput_1 = [n.digits[0], n.digits[1], n.digits[2]];
-        const xC = patternInput_1[2] | 0;
+        const matchValue_3 = n.digits[0] | 0;
+        const matchValue_4 = n.digits[1] | 0;
+        const xC = n.digits[2] | 0;
         if (xC > BigNatModule_baseMask64C) {
             throw new Error();
         }
-        return op_Addition(op_Addition(fromInteger(patternInput_1[0] & BigNatModule_baseMask64A, true, 2), op_LeftShift(fromInteger(patternInput_1[1] & BigNatModule_baseMask64B, true, 2), BigNatModule_baseShift64B)), op_LeftShift(fromInteger(xC & BigNatModule_baseMask64C, true, 2), BigNatModule_baseShift64C));
+        return op_Addition(op_Addition(fromInteger(matchValue_3 & BigNatModule_baseMask64A, true, 2), op_LeftShift(fromInteger(matchValue_4 & BigNatModule_baseMask64B, true, 2), BigNatModule_baseShift64B)), op_LeftShift(fromInteger(xC & BigNatModule_baseMask64C, true, 2), BigNatModule_baseShift64C));
     }
     else {
         throw new Error();

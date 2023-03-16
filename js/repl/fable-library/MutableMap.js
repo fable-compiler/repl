@@ -1,4 +1,4 @@
-import { disposeSafe, defaultOf, equals, toIterator, getEnumerator } from "./Util.js";
+import { disposeSafe, defaultOf, partialApply, equals, toIterator, getEnumerator } from "./Util.js";
 import { iterate, map, delay, toArray, iterateIndexed, concat } from "./Seq.js";
 import { FSharpRef } from "./Types.js";
 import { class_type } from "./Reflection.js";
@@ -6,7 +6,7 @@ import { getItemFromDict, tryGetValue } from "./MapUtil.js";
 import { format } from "./String.js";
 
 export class Dictionary {
-    constructor(pairs, comparer) {
+    "constructor"(pairs, comparer) {
         const this$ = new FSharpRef(defaultOf());
         this.comparer = comparer;
         this$.contents = this;
@@ -179,7 +179,9 @@ export class Dictionary {
     forEach(f, thisArg) {
         const this$ = this;
         iterate((p) => {
-            f(p[1], p[0], this$);
+            const clo = partialApply(2, f, [p[1]]);
+            const clo_1 = clo(p[0]);
+            clo_1(this$);
         }, this$);
     }
 }

@@ -116,12 +116,15 @@ export const int32_type = new TypeInfo("System.Int32");
 export const uint32_type = new TypeInfo("System.UInt32");
 export const int64_type = new TypeInfo("System.Int64");
 export const uint64_type = new TypeInfo("System.UInt64");
-export const bigint_type = new TypeInfo("System.Numerics.BigInteger");
+export const int128_type = new TypeInfo("System.Int128");
+export const uint128_type = new TypeInfo("System.UInt128");
 export const nativeint_type = new TypeInfo("System.IntPtr");
 export const unativeint_type = new TypeInfo("System.UIntPtr");
+export const float16_type = new TypeInfo("System.Half");
 export const float32_type = new TypeInfo("System.Single");
 export const float64_type = new TypeInfo("System.Double");
 export const decimal_type = new TypeInfo("System.Decimal");
+export const bigint_type = new TypeInfo("System.Numerics.BigInteger");
 export function name(info) {
     if (Array.isArray(info)) {
         return info[0];

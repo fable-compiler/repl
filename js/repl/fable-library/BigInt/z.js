@@ -7,7 +7,7 @@ import { op_UnaryNegation_Int32 } from "../Int32.js";
 import Decimal from "../Decimal.js";
 
 export class BigInteger extends Record {
-    constructor(signInt, v) {
+    "constructor"(signInt, v) {
         super();
         this.signInt = (signInt | 0);
         this.v = v;

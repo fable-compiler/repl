@@ -6,8 +6,7 @@ function Native_random() {
 }
 
 function Native_randomNext(min, max) {
-    
-        if (max < min) {
+            if (max < min) {
             throw new Error("minValue must be less than maxValue");
         }
         return Math.floor(Math.random() * (max - min)) + min
@@ -15,8 +14,7 @@ function Native_randomNext(min, max) {
 }
 
 function Native_randomBytes(buffer) {
-    
-        if (buffer == null) {
+            if (buffer == null) {
             throw new Error("Buffer cannot be null");
         }
         for (let i = 0; i < buffer.length; i += 6) {
@@ -32,7 +30,7 @@ function Native_randomBytes(buffer) {
 }
 
 export class NonSeeded {
-    constructor() {
+    "constructor"() {
     }
     Next0() {
         return Native_randomNext(0, 2147483647);
@@ -60,7 +58,7 @@ export function NonSeeded_$ctor() {
 }
 
 export class Seeded {
-    constructor(seed) {
+    "constructor"(seed) {
         this.MBIG = 2147483647;
         this.inext = 0;
         this.inextp = 0;

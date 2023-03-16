@@ -2,13 +2,13 @@ import { record_type, bool_type, list_type, option_type, class_type } from "./Re
 import { some, value as value_1 } from "./Option.js";
 import { singleton, ofArrayWithTail, head, tail, isEmpty as isEmpty_1, FSharpList, fold as fold_1, empty as empty_1, cons } from "./List.js";
 import { map as map_2, fill } from "./Array.js";
-import { structuralHash, compare, toIterator, equals, disposeSafe, getEnumerator, isArrayLike } from "./Util.js";
+import { structuralHash, partialApply, compare, toIterator, equals, disposeSafe, getEnumerator, isArrayLike } from "./Util.js";
 import { Record } from "./Types.js";
 import { tryPick as tryPick_1, pick as pick_1, iterate as iterate_1, compareWith, map as map_1, unfold } from "./Seq.js";
 import { format, join } from "./String.js";
 
 export class MapTreeLeaf$2 {
-    constructor(k, v) {
+    "constructor"(k, v) {
         this.k = k;
         this.v = v;
     }
@@ -31,7 +31,7 @@ export function MapTreeLeaf$2__get_Value(_) {
 }
 
 export class MapTreeNode$2 extends MapTreeLeaf$2 {
-    constructor(k, v, left, right, h) {
+    "constructor"(k, v, left, right, h) {
         super(k, v);
         this.left = left;
         this.right = right;
@@ -849,7 +849,7 @@ export function MapTreeModule_ofSeq(comparer, c) {
 }
 
 export class MapTreeModule_MapIterator$2 extends Record {
-    constructor(stack, started) {
+    "constructor"(stack, started) {
         super();
         this.stack = stack;
         this.started = started;
@@ -987,7 +987,7 @@ export function MapTreeModule_toSeq(s) {
 }
 
 export class FSharpMap {
-    constructor(comparer, tree) {
+    "constructor"(comparer, tree) {
         this.comparer = comparer;
         this.tree = tree;
     }
@@ -1138,7 +1138,9 @@ export class FSharpMap {
     forEach(f, thisArg) {
         const m = this;
         iterate_1((p) => {
-            f(p[1], p[0], m);
+            const clo = partialApply(2, f, [p[1]]);
+            const clo_1 = clo(p[0]);
+            clo_1(m);
         }, m);
     }
 }
@@ -1244,12 +1246,12 @@ export function FSharpMap__TryGetValue(_, key, value) {
     }
 }
 
-export function FSharpMap__get_Keys(__) {
-    return map_2((kvp) => kvp[0], MapTreeModule_toArray(__.tree), null);
+export function FSharpMap__get_Keys(_) {
+    return map_2((kvp) => kvp[0], MapTreeModule_toArray(_.tree), null);
 }
 
-export function FSharpMap__get_Values(__) {
-    return map_2((kvp) => kvp[1], MapTreeModule_toArray(__.tree), null);
+export function FSharpMap__get_Values(_) {
+    return map_2((kvp) => kvp[1], MapTreeModule_toArray(_.tree), null);
 }
 
 export function FSharpMap__TryFind(m, key) {

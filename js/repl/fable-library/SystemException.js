@@ -2,7 +2,7 @@ import { Exception } from "./Types.js";
 import { class_type } from "./Reflection.js";
 
 export class SystemException extends Exception {
-    constructor() {
+    "constructor"() {
         super();
     }
 }
@@ -16,7 +16,7 @@ export function SystemException_$ctor() {
 }
 
 export class TimeoutException extends SystemException {
-    constructor() {
+    "constructor"() {
         super();
     }
 }

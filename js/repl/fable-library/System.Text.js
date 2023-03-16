@@ -1,18 +1,18 @@
-import { format, substring, isNullOrEmpty, join } from "./String.js";
+import { replace, format, substring, isNullOrEmpty, join } from "./String.js";
 import { class_type } from "./Reflection.js";
 import { clear, int32ToString } from "./Util.js";
 import { toString } from "./Types.js";
 
 export class StringBuilder {
-    constructor(value, capacity) {
+    "constructor"(value, capacity) {
         this.buf = [];
         if (!isNullOrEmpty(value)) {
             void (this.buf.push(value));
         }
     }
     toString() {
-        const __ = this;
-        return join("", __.buf);
+        const _ = this;
+        return join("", _.buf);
     }
 }
 
@@ -99,6 +99,20 @@ export function StringBuilder__AppendLine(x) {
 export function StringBuilder__AppendLine_Z721C83C5(x, s) {
     void (x.buf.push(s));
     void (x.buf.push("\n"));
+    return x;
+}
+
+export function StringBuilder__Replace_Z766F94C0(x, oldValue, newValue) {
+    for (let i = x.buf.length - 1; i >= 0; i--) {
+        x.buf[i] = replace(x.buf[i], oldValue, newValue);
+    }
+    return x;
+}
+
+export function StringBuilder__Replace_Z384F8060(x, oldValue, newValue) {
+    for (let i = x.buf.length - 1; i >= 0; i--) {
+        x.buf[i] = replace(x.buf[i], oldValue, newValue);
+    }
     return x;
 }
 

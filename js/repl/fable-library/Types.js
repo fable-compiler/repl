@@ -155,6 +155,12 @@ export class Record {
     CompareTo(other) { return recordCompareTo(this, other); }
 }
 export class FSharpRef {
+    get contents() {
+        return this.getter();
+    }
+    set contents(v) {
+        this.setter(v);
+    }
     constructor(contentsOrGetter, setter) {
         if (typeof setter === "function") {
             this.getter = contentsOrGetter;
@@ -164,12 +170,6 @@ export class FSharpRef {
             this.getter = () => contentsOrGetter;
             this.setter = (v) => { contentsOrGetter = v; };
         }
-    }
-    get contents() {
-        return this.getter();
-    }
-    set contents(v) {
-        this.setter(v);
     }
 }
 // EXCEPTIONS
@@ -182,8 +182,12 @@ export class Exception {
 export function isException(x) {
     return x instanceof Exception || x instanceof Error;
 }
+export function isPromise(x) {
+    return x instanceof Promise;
+}
 export function ensureErrorOrException(e) {
-    return isException(e) ? e : new Error(String(e));
+    // Exceptionally admitting promises as errors for compatibility with React.suspense (see #3298)
+    return (isException(e) || isPromise(e)) ? e : new Error(String(e));
 }
 export class FSharpException extends Exception {
     toJSON() { return recordToJSON(this); }

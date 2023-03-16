@@ -42,11 +42,11 @@ export class OperationCanceledError extends Error {
     }
 }
 export class Trampoline {
-    constructor() {
-        this.callCount = 0;
-    }
     static get maxTrampolineCallCount() {
         return 2000;
+    }
+    constructor() {
+        this.callCount = 0;
     }
     incrementAndCheck() {
         return this.callCount++ > Trampoline.maxTrampolineCallCount;

@@ -3,7 +3,7 @@ import { union_type } from "./Reflection.js";
 import { some } from "./Option.js";
 
 export class FSharpResult$2 extends Union {
-    constructor(tag, fields) {
+    "constructor"(tag, fields) {
         super();
         this.tag = tag;
         this.fields = fields;
@@ -45,7 +45,7 @@ export function Result_Bind(binder, result) {
 }
 
 export class FSharpChoice$2 extends Union {
-    constructor(tag, fields) {
+    "constructor"(tag, fields) {
         super();
         this.tag = tag;
         this.fields = fields;
@@ -60,7 +60,7 @@ export function FSharpChoice$2$reflection(gen0, gen1) {
 }
 
 export class FSharpChoice$3 extends Union {
-    constructor(tag, fields) {
+    "constructor"(tag, fields) {
         super();
         this.tag = tag;
         this.fields = fields;
@@ -75,7 +75,7 @@ export function FSharpChoice$3$reflection(gen0, gen1, gen2) {
 }
 
 export class FSharpChoice$4 extends Union {
-    constructor(tag, fields) {
+    "constructor"(tag, fields) {
         super();
         this.tag = tag;
         this.fields = fields;
@@ -90,7 +90,7 @@ export function FSharpChoice$4$reflection(gen0, gen1, gen2, gen3) {
 }
 
 export class FSharpChoice$5 extends Union {
-    constructor(tag, fields) {
+    "constructor"(tag, fields) {
         super();
         this.tag = tag;
         this.fields = fields;
@@ -105,7 +105,7 @@ export function FSharpChoice$5$reflection(gen0, gen1, gen2, gen3, gen4) {
 }
 
 export class FSharpChoice$6 extends Union {
-    constructor(tag, fields) {
+    "constructor"(tag, fields) {
         super();
         this.tag = tag;
         this.fields = fields;
@@ -120,7 +120,7 @@ export function FSharpChoice$6$reflection(gen0, gen1, gen2, gen3, gen4, gen5) {
 }
 
 export class FSharpChoice$7 extends Union {
-    constructor(tag, fields) {
+    "constructor"(tag, fields) {
         super();
         this.tag = tag;
         this.fields = fields;

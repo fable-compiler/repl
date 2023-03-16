@@ -203,7 +203,10 @@ export function where(predicate, array) {
 
 export function indexOf(array, item_1, start, count, eq) {
     const start_1 = defaultArg(start, 0) | 0;
-    const end$0027 = defaultArg(map_1((c) => (start_1 + c), count), array.length) | 0;
+    let end$0027;
+    const option_1 = map_1((c) => (start_1 + c), count);
+    const value = array.length | 0;
+    end$0027 = defaultArg(option_1, value);
     const loop = (i_mut) => {
         loop:
         while (true) {

@@ -3,13 +3,13 @@ import { some, value as value_1 } from "./Option.js";
 import { toString, Record } from "./Types.js";
 import { FSharpList, fold as fold_2, cons, singleton as singleton_1, empty as empty_1, ofArrayWithTail, tail, head, isEmpty as isEmpty_1 } from "./List.js";
 import { fold as fold_1, fill } from "./Array.js";
-import { structuralHash, toIterator, disposeSafe, getEnumerator, isArrayLike } from "./Util.js";
+import { structuralHash, partialApply, toIterator, disposeSafe, getEnumerator, isArrayLike } from "./Util.js";
 import { join } from "./String.js";
 import { exists as exists_1, cache, forAll as forAll_1, fold as fold_3, reduce, iterate as iterate_1, map as map_1 } from "./Seq.js";
 import { HashSet__get_Comparer, HashSet_$ctor_Z6150332D, HashSet } from "./MutableSet.js";
 
 export class SetTreeLeaf$1 {
-    constructor(k) {
+    "constructor"(k) {
         this.k = k;
     }
 }
@@ -27,7 +27,7 @@ export function SetTreeLeaf$1__get_Key(_) {
 }
 
 export class SetTreeNode$1 extends SetTreeLeaf$1 {
-    constructor(v, left, right, h) {
+    "constructor"(v, left, right, h) {
         super(v);
         this.left = left;
         this.right = right;
@@ -778,7 +778,7 @@ export function SetTreeModule_maximumElement(s) {
 }
 
 export class SetTreeModule_SetIterator$1 extends Record {
-    constructor(stack, started) {
+    "constructor"(stack, started) {
         super();
         this.stack = stack;
         this.started = started;
@@ -1438,7 +1438,7 @@ export function SetTreeModule_ofSeq(comparer, c) {
 }
 
 export class FSharpSet {
-    constructor(comparer, tree) {
+    "constructor"(comparer, tree) {
         this.comparer = comparer;
         this.tree = tree;
     }
@@ -1542,7 +1542,9 @@ export class FSharpSet {
     forEach(f, thisArg) {
         const s = this;
         iterate_1((x) => {
-            f(x, x, s);
+            const clo = partialApply(2, f, [x]);
+            const clo_1 = clo(x);
+            clo_1(s);
         }, s);
     }
 }
@@ -1712,13 +1714,12 @@ export function FSharpSet__ToArray(x) {
 }
 
 export function FSharpSet__ComputeHashCode(this$) {
-    const combineHash = (x, y) => (((x << 1) + y) + 631);
     let res = 0;
     const enumerator = getEnumerator(this$);
     try {
         while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
             const x_1 = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
-            res = (combineHash(res, structuralHash(x_1)) | 0);
+            res = ((((res << 1) + structuralHash(x_1)) + 631) | 0);
         }
     }
     finally {

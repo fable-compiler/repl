@@ -117,11 +117,11 @@ export function op_UnaryNegation_Int32(x) {
 export function divRem(x, y, out) {
     const div = ~~(x / y);
     const rem = x % y;
-    if (out != null) {
-        out.contents = rem;
-        return div;
+    if (out === void 0) {
+        return [div, rem];
     }
     else {
-        return [div, rem];
+        out.contents = rem;
+        return div;
     }
 }

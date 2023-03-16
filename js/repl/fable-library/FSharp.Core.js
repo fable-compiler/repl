@@ -70,11 +70,10 @@ export function ExtraTopLevelOperators_LazyPattern(input) {
 }
 
 export function PrintfModule_PrintFormatToStringBuilderThen(continuation, builder, format) {
-    const append = (s) => {
+    return format.cont((s) => {
         StringBuilder__Append_Z721C83C5(builder, s);
         return continuation();
-    };
-    return format.cont(append);
+    });
 }
 
 export function PrintfModule_PrintFormatToStringBuilder(builder, format) {

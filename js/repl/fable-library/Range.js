@@ -43,14 +43,13 @@ export function rangeUInt64(start, step, stop) {
 
 export function rangeChar(start, stop) {
     const intStop = stop.charCodeAt(0) | 0;
-    const stepFn = (c) => {
+    return delay(() => unfold((c) => {
         if (c <= intStop) {
             return [String.fromCharCode(c), c + 1];
         }
         else {
             return void 0;
         }
-    };
-    return delay(() => unfold(stepFn, start.charCodeAt(0)));
+    }, start.charCodeAt(0)));
 }
 
