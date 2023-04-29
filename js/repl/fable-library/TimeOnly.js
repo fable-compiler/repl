@@ -1,18 +1,13 @@
-import { op_Division as Long_op_Division, toNumber as Long_toNumber } from "./Long.js";
 import { hours, minutes, seconds, milliseconds } from "./TimeSpan.js";
 import { padWithZeros } from "./Util.js";
 const millisecondsPerDay = 86400000;
 export function create(h = 0, m = 0, s = 0, ms = 0) {
     if (h < 0 || m < 0 || s < 0 || ms < 0)
         throw new Error("The parameters describe an unrepresentable TimeOnly.");
-    if (arguments.length === 1)
-        // ticks
-        return fromTicks(arguments[0]);
-    else
-        return h * 3600000 + m * 60000 + s * 1000 + ms;
+    return h * 3600000 + m * 60000 + s * 1000 + ms;
 }
 export function fromTicks(ticks) {
-    return Long_toNumber(Long_op_Division(ticks, 10000));
+    return Number(BigInt(ticks) / 10000n);
 }
 export function fromTimeSpan(timeSpan) {
     if (timeSpan < 0 || timeSpan >= millisecondsPerDay)
@@ -118,7 +113,7 @@ export function tryParse(v, defValue) {
         defValue.contents = parse(v);
         return true;
     }
-    catch (_a) {
+    catch {
         return false;
     }
 }

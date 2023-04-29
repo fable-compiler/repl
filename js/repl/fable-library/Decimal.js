@@ -1,5 +1,26 @@
 import Decimal from "./lib/big.js";
+import { symbol } from "./Numeric.js";
 import { FSharpRef } from "./Types.js";
+import { combineHashCodes } from "./Util.js";
+Decimal.prototype.GetHashCode = function () {
+    return combineHashCodes([this.s, this.e].concat(this.c));
+};
+Decimal.prototype.Equals = function (x) {
+    return !this.cmp(x);
+};
+Decimal.prototype.CompareTo = function (x) {
+    return this.cmp(x);
+};
+Decimal.prototype[symbol] = function () {
+    const _this = this;
+    return {
+        multiply: (y) => _this.mul(y),
+        toPrecision: (sd) => _this.toPrecision(sd),
+        toExponential: (dp) => _this.toExponential(dp),
+        toFixed: (dp) => _this.toFixed(dp),
+        toHex: () => (Number(_this) >>> 0).toString(16),
+    };
+};
 export default Decimal;
 export const get_Zero = new Decimal(0);
 export const get_One = new Decimal(1);
@@ -12,8 +33,14 @@ export function compare(x, y) {
 export function equals(x, y) {
     return !x.cmp(y);
 }
-export function abs(x) {
-    return x.abs();
+export function abs(x) { return x.abs(); }
+export function sign(x) { return x < get_Zero ? -1 : x > get_Zero ? 1 : 0; }
+export function max(x, y) { return x > y ? x : y; }
+export function min(x, y) { return x < y ? x : y; }
+export function maxMagnitude(x, y) { return abs(x) > abs(y) ? x : y; }
+export function minMagnitude(x, y) { return abs(x) < abs(y) ? x : y; }
+export function clamp(x, min, max) {
+    return x < min ? min : x > max ? max : x;
 }
 export function round(x, digits = 0) {
     return x.round(digits, 2 /* ROUND_HALF_EVEN */);
@@ -70,7 +97,7 @@ export function tryParse(str, defValue) {
         defValue.contents = new Decimal(str.trim());
         return true;
     }
-    catch (_a) {
+    catch {
         return false;
     }
 }

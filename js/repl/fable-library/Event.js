@@ -1,61 +1,32 @@
-import { Observer } from "./Observable.js";
+import { subscribe } from "./Observable.js";
 import { some, value } from "./Option.js";
 import { Choice_tryValueIfChoice1Of2, Choice_tryValueIfChoice2Of2 } from "./Choice.js";
-export class Event {
+export class Event$2 {
     constructor() {
         this.delegates = [];
     }
-    Add(f) {
-        this._addHandler(f);
+    _add(d) {
+        this.delegates.push(d);
     }
-    get Publish() {
-        return this;
-    }
-    Trigger(senderOrValue, valueOrUndefined) {
-        let sender;
-        let value;
-        if (valueOrUndefined === undefined) {
-            sender = null;
-            value = senderOrValue;
-        }
-        else {
-            sender = senderOrValue;
-            value = valueOrUndefined;
-        }
-        this.delegates.forEach((f) => f.length === 1 ? f(value) : f(sender, value));
-    }
-    // IDelegateEvent<T> methods
-    AddHandler(handler) {
-        this._addHandler(handler);
-    }
-    RemoveHandler(handler) {
-        this._removeHandler(handler);
-    }
-    // IObservable<T> methods
-    Subscribe(arg) {
-        const callback = typeof arg === "function"
-            ? arg
-            : arg.OnNext;
-        this._addHandler(callback);
-        return { Dispose: () => { this._removeHandler(callback); } };
-    }
-    _addHandler(f) {
-        this.delegates.push(f);
-    }
-    _removeHandler(f) {
-        const index = this.delegates.indexOf(f);
+    _remove(d) {
+        const index = this.delegates.indexOf(d);
         if (index > -1) {
             this.delegates.splice(index, 1);
         }
     }
+    get Publish() {
+        return createEvent(h => { this._add(h); }, h => { this._remove(h); });
+    }
+    Trigger(senderOrValue, valueOrUndefined) {
+        let sender = null;
+        const value = valueOrUndefined === undefined ? senderOrValue : (sender = senderOrValue, valueOrUndefined);
+        this.delegates.forEach(f => { f(sender, value); });
+    }
+}
+export class Event extends Event$2 {
 }
 export function add(callback, sourceEvent) {
-    if (sourceEvent instanceof Event) {
-        sourceEvent.Add(callback);
-    }
-    else {
-        sourceEvent.Subscribe(new Observer(callback));
-    }
+    subscribe(callback, sourceEvent);
 }
 export function choose(chooser, sourceEvent) {
     const ev = new Event();
@@ -65,7 +36,7 @@ export function choose(chooser, sourceEvent) {
             ev.Trigger(value(u));
         }
     }, sourceEvent);
-    return ev;
+    return ev.Publish;
 }
 export function filter(predicate, sourceEvent) {
     return choose((x) => predicate(x) ? some(x) : undefined, sourceEvent);
@@ -73,14 +44,14 @@ export function filter(predicate, sourceEvent) {
 export function map(mapping, sourceEvent) {
     const ev = new Event();
     add((t) => ev.Trigger(mapping(t)), sourceEvent);
-    return ev;
+    return ev.Publish;
 }
 export function merge(event1, event2) {
     const ev = new Event();
     const fn = (x) => ev.Trigger(x);
     add(fn, event1);
     add(fn, event2);
-    return ev;
+    return ev.Publish;
 }
 export function pairwise(sourceEvent) {
     const ev = new Event();
@@ -93,7 +64,7 @@ export function pairwise(sourceEvent) {
         last = next;
         haveLast = true;
     }, sourceEvent);
-    return ev;
+    return ev.Publish;
 }
 export function partition(predicate, sourceEvent) {
     return [filter(predicate, sourceEvent), filter((x) => !predicate(x), sourceEvent)];
@@ -112,7 +83,7 @@ export function createEvent(addHandler, removeHandler) {
         AddHandler(h) { addHandler(h); },
         RemoveHandler(h) { removeHandler(h); },
         Subscribe(r) {
-            const h = (_, args) => r.OnNext(args);
+            const h = ((_, args) => r.OnNext(args));
             addHandler(h);
             return {
                 Dispose() { removeHandler(h); }
@@ -120,4 +91,3 @@ export function createEvent(addHandler, removeHandler) {
         }
     };
 }
-export default Event;

@@ -1,4 +1,3 @@
-// export type decimal = Decimal;
 export var NumberStyles;
 (function (NumberStyles) {
     // None = 0x00000000,
@@ -50,7 +49,16 @@ function getInvalidDigits(radix) {
             throw new Error("Invalid Base.");
     }
 }
-function getRadix(prefix, style) {
+export function getPrefix(radix) {
+    switch (radix) {
+        case 2: return "0b";
+        case 8: return "0o";
+        case 10: return "";
+        case 16: return "0x";
+        default: return "";
+    }
+}
+export function getRadix(prefix, style) {
     if (style & NumberStyles.AllowHexSpecifier) {
         return 16;
     }
@@ -101,7 +109,7 @@ export function tryParse(str, style, unsigned, bitsize, defValue) {
         defValue.contents = parse(str, style, unsigned, bitsize);
         return true;
     }
-    catch (_a) {
+    catch {
         return false;
     }
 }

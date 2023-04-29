@@ -3,7 +3,7 @@
  *
  * Note: DateOffset instances are always DateObjects in local
  * timezone (because JS dates are all kinds of messed up).
- * A local date returns UTC epoc when `.getTime()` is called.
+ * A local date returns UTC epoch when `.getTime()` is called.
  *
  * However, this means that in order to construct an UTC date
  * from a DateOffset with offset of +5 hours, you first need
@@ -12,14 +12,17 @@
  *
  * Basically; invariant: date.getTime() always return UTC time.
  */
-import { create as createDate, dateOffsetToString, daysInMonth, parseRaw } from "./Date.js";
-import { fromValue, ticksToUnixEpochMilliseconds, unixEpochMillisecondsToTicks } from "./Long.js";
+import { fromFloat64, toFloat64 } from "./BigInt.js";
+import { create as createDate, dateOffsetToString, daysInMonth, parseRaw, ticksToUnixEpochMilliseconds, unixEpochMillisecondsToTicks } from "./Date.js";
 import { compareDates, padWithZeros } from "./Util.js";
 export default function DateTimeOffset(value, offset) {
     checkOffsetInRange(offset);
     const d = new Date(value);
     d.offset = offset != null ? offset : new Date().getTimezoneOffset() * -60000;
     return d;
+}
+export function offset(value) {
+    return value.offset || 0;
 }
 function checkOffsetInRange(offset) {
     if (offset != null && offset !== 0) {
@@ -59,9 +62,14 @@ export function fromDate(date, offset) {
     return DateTimeOffset(date.getTime(), offset2);
 }
 export function fromTicks(ticks, offset) {
-    ticks = fromValue(ticks);
-    const epoc = ticksToUnixEpochMilliseconds(ticks) - offset;
-    return DateTimeOffset(epoc, offset);
+    const ms = ticksToUnixEpochMilliseconds(ticks) - offset;
+    return DateTimeOffset(ms, offset);
+}
+export function fromUnixTimeMilliseconds(ms) {
+    return DateTimeOffset(toFloat64(ms), 0);
+}
+export function fromUnixTimeSeconds(seconds) {
+    return DateTimeOffset(toFloat64(seconds * 1000n), 0);
 }
 export function getUtcTicks(date) {
     return unixEpochMillisecondsToTicks(date.getTime(), 0);
@@ -136,53 +144,42 @@ export function toLocalTime(date) {
     return DateTimeOffset(date.getTime(), date.getTimezoneOffset() * -60000);
 }
 export function timeOfDay(d) {
-    var _a;
-    const d2 = new Date(d.getTime() + ((_a = d.offset) !== null && _a !== void 0 ? _a : 0));
+    const d2 = new Date(d.getTime() + (d.offset ?? 0));
     return d2.getUTCHours() * 3600000
         + d2.getUTCMinutes() * 60000
         + d2.getUTCSeconds() * 1000
         + d2.getUTCMilliseconds();
 }
 export function date(d) {
-    var _a;
-    const d2 = new Date(d.getTime() + ((_a = d.offset) !== null && _a !== void 0 ? _a : 0));
+    const d2 = new Date(d.getTime() + (d.offset ?? 0));
     return createDate(d2.getUTCFullYear(), d2.getUTCMonth() + 1, d2.getUTCDate(), 0, 0, 0, 0);
 }
 export function day(d) {
-    var _a;
-    return new Date(d.getTime() + ((_a = d.offset) !== null && _a !== void 0 ? _a : 0)).getUTCDate();
+    return new Date(d.getTime() + (d.offset ?? 0)).getUTCDate();
 }
 export function hour(d) {
-    var _a;
-    return new Date(d.getTime() + ((_a = d.offset) !== null && _a !== void 0 ? _a : 0)).getUTCHours();
+    return new Date(d.getTime() + (d.offset ?? 0)).getUTCHours();
 }
 export function millisecond(d) {
-    var _a;
-    return new Date(d.getTime() + ((_a = d.offset) !== null && _a !== void 0 ? _a : 0)).getUTCMilliseconds();
+    return new Date(d.getTime() + (d.offset ?? 0)).getUTCMilliseconds();
 }
 export function minute(d) {
-    var _a;
-    return new Date(d.getTime() + ((_a = d.offset) !== null && _a !== void 0 ? _a : 0)).getUTCMinutes();
+    return new Date(d.getTime() + (d.offset ?? 0)).getUTCMinutes();
 }
 export function month(d) {
-    var _a;
-    return new Date(d.getTime() + ((_a = d.offset) !== null && _a !== void 0 ? _a : 0)).getUTCMonth() + 1;
+    return new Date(d.getTime() + (d.offset ?? 0)).getUTCMonth() + 1;
 }
 export function second(d) {
-    var _a;
-    return new Date(d.getTime() + ((_a = d.offset) !== null && _a !== void 0 ? _a : 0)).getUTCSeconds();
+    return new Date(d.getTime() + (d.offset ?? 0)).getUTCSeconds();
 }
 export function year(d) {
-    var _a;
-    return new Date(d.getTime() + ((_a = d.offset) !== null && _a !== void 0 ? _a : 0)).getUTCFullYear();
+    return new Date(d.getTime() + (d.offset ?? 0)).getUTCFullYear();
 }
 export function dayOfWeek(d) {
-    var _a;
-    return new Date(d.getTime() + ((_a = d.offset) !== null && _a !== void 0 ? _a : 0)).getUTCDay();
+    return new Date(d.getTime() + (d.offset ?? 0)).getUTCDay();
 }
 export function dayOfYear(d) {
-    var _a;
-    const d2 = new Date(d.getTime() + ((_a = d.offset) !== null && _a !== void 0 ? _a : 0));
+    const d2 = new Date(d.getTime() + (d.offset ?? 0));
     const _year = d2.getUTCFullYear();
     const _month = d2.getUTCMonth() + 1;
     let _day = d2.getUTCDate();
@@ -192,40 +189,35 @@ export function dayOfYear(d) {
     return _day;
 }
 export function add(d, ts) {
-    var _a;
-    return DateTimeOffset(d.getTime() + ts, ((_a = d.offset) !== null && _a !== void 0 ? _a : 0));
+    return DateTimeOffset(d.getTime() + ts, (d.offset ?? 0));
 }
 export function addDays(d, v) {
-    var _a;
-    return DateTimeOffset(d.getTime() + v * 86400000, ((_a = d.offset) !== null && _a !== void 0 ? _a : 0));
+    return add(d, v * 86400000);
 }
 export function addHours(d, v) {
-    var _a;
-    return DateTimeOffset(d.getTime() + v * 3600000, ((_a = d.offset) !== null && _a !== void 0 ? _a : 0));
+    return add(d, v * 3600000);
 }
 export function addMinutes(d, v) {
-    var _a;
-    return DateTimeOffset(d.getTime() + v * 60000, ((_a = d.offset) !== null && _a !== void 0 ? _a : 0));
+    return add(d, v * 60000);
 }
 export function addSeconds(d, v) {
-    var _a;
-    return DateTimeOffset(d.getTime() + v * 1000, ((_a = d.offset) !== null && _a !== void 0 ? _a : 0));
+    return add(d, v * 1000);
 }
 export function addMilliseconds(d, v) {
-    var _a;
-    return DateTimeOffset(d.getTime() + v, ((_a = d.offset) !== null && _a !== void 0 ? _a : 0));
+    return add(d, v);
+}
+export function addTicks(d, v) {
+    return add(d, toFloat64(v / 10000n));
 }
 export function addYears(d, v) {
-    var _a;
     const newMonth = d.getUTCMonth() + 1;
     const newYear = d.getUTCFullYear() + v;
     const _daysInMonth = daysInMonth(newYear, newMonth);
     const newDay = Math.min(_daysInMonth, d.getUTCDate());
-    return create(newYear, newMonth, newDay, d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds(), ((_a = d.offset) !== null && _a !== void 0 ? _a : 0));
+    return create(newYear, newMonth, newDay, d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds(), (d.offset ?? 0));
 }
 export function addMonths(d, v) {
-    var _a, _b;
-    const d2 = new Date(d.getTime() + ((_a = d.offset) !== null && _a !== void 0 ? _a : 0));
+    const d2 = new Date(d.getTime() + (d.offset ?? 0));
     let newMonth = d2.getUTCMonth() + 1 + v;
     let newMonth_ = 0;
     let yearOffset = 0;
@@ -242,12 +234,11 @@ export function addMonths(d, v) {
     const newYear = d2.getUTCFullYear() + yearOffset;
     const _daysInMonth = daysInMonth(newYear, newMonth);
     const newDay = Math.min(_daysInMonth, d2.getUTCDate());
-    return create(newYear, newMonth, newDay, d2.getUTCHours(), d2.getUTCMinutes(), d2.getUTCSeconds(), d2.getUTCMilliseconds(), ((_b = d.offset) !== null && _b !== void 0 ? _b : 0));
+    return create(newYear, newMonth, newDay, d2.getUTCHours(), d2.getUTCMinutes(), d2.getUTCSeconds(), d2.getUTCMilliseconds(), (d.offset ?? 0));
 }
 export function subtract(d, that) {
-    var _a;
     return typeof that === "number"
-        ? DateTimeOffset(d.getTime() - that, ((_a = d.offset) !== null && _a !== void 0 ? _a : 0))
+        ? DateTimeOffset(d.getTime() - that, (d.offset ?? 0))
         : d.getTime() - that.getTime();
 }
 export function equals(d1, d2) {
@@ -268,4 +259,10 @@ export function op_Subtraction(x, y) {
 }
 export function toOffset(d, offset) {
     return DateTimeOffset(d.getTime(), offset);
+}
+export function toUnixTimeMilliseconds(d) {
+    return fromFloat64(d.getTime());
+}
+export function toUnixTimeSeconds(d) {
+    return fromFloat64(d.getTime() / 1000.0);
 }

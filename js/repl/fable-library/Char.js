@@ -2,8 +2,8 @@ import * as Unicode from "./Unicode.13.0.0.js";
 function getCategoryFunc() {
     // unpack Unicode codepoint ranges (delta encoded) and general categories
     const offset = 35; // offsets unprintable characters
-    const a1 = [...Unicode.rangeDeltas].map((ch) => { var _a; return ((_a = ch.codePointAt(0)) !== null && _a !== void 0 ? _a : 0) - offset; });
-    const a2 = [...Unicode.categories].map((ch) => { var _a; return ((_a = ch.codePointAt(0)) !== null && _a !== void 0 ? _a : 0) - offset; });
+    const a1 = [...Unicode.rangeDeltas].map((ch) => (ch.codePointAt(0) ?? 0) - offset);
+    const a2 = [...Unicode.categories].map((ch) => (ch.codePointAt(0) ?? 0) - offset);
     const codepoints = new Uint32Array(a1);
     const categories = new Uint8Array(a2);
     for (let i = 1; i < codepoints.length; ++i) {

@@ -1,7 +1,5 @@
-// tslint:disable:max-line-length
-import { fromNumber as Long_fromNumber, op_Division as Long_op_Division, op_Multiply as Long_op_Multiply, toNumber as Long_toNumber } from "./Long.js";
 import { comparePrimitives, padLeftAndRightWithZeros, padWithZeros } from "./Util.js";
-// TimeSpan in runtime just becomes a number representing milliseconds
+import { toInt64 } from "./BigInt.js";
 /**
  * Calls:
  * - `Math.ceil` if the `value` is **negative**
@@ -27,7 +25,7 @@ export function create(d = 0, h = 0, m = 0, s = 0, ms = 0) {
     return d * 86400000 + h * 3600000 + m * 60000 + s * 1000 + ms;
 }
 export function fromTicks(ticks) {
-    return Long_toNumber(Long_op_Division(ticks, 10000));
+    return Number(BigInt(ticks) / 10000n);
 }
 export function fromDays(d) {
     return create(d, 0, 0, 0);
@@ -57,7 +55,7 @@ export function milliseconds(ts) {
     return signedRound(ts % 1000);
 }
 export function ticks(ts) {
-    return Long_op_Multiply(Long_fromNumber(ts), 10000);
+    return toInt64(BigInt(ts) * 10000n);
 }
 export function totalDays(ts) {
     return ts / 86400000;
@@ -173,7 +171,7 @@ export function tryParse(v, defValue) {
         defValue.contents = parse(v);
         return true;
     }
-    catch (_a) {
+    catch {
         return false;
     }
 }

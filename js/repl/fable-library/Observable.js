@@ -12,7 +12,7 @@ class Observable {
         this.Subscribe = subscribe;
     }
 }
-export function protect(f, succeed, fail) {
+function protect(f, succeed, fail) {
     try {
         return succeed(f());
     }
@@ -29,7 +29,7 @@ export function choose(chooser, source) {
     } }, observer.OnError), observer.OnError, observer.OnCompleted)));
 }
 export function filter(predicate, source) {
-    return choose((x) => predicate(x) ? x : null, source);
+    return choose((x) => predicate(x) ? x : void 0, source);
 }
 export function map(mapping, source) {
     return new Observable((observer) => source.Subscribe(new Observer((t) => {

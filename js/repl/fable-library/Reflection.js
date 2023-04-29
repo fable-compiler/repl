@@ -1,7 +1,6 @@
 import { Record, Union } from "./Types.js";
 import { combineHashCodes, equalArraysWith, stringHash } from "./Util.js";
 import Decimal from "./Decimal.js";
-import { fromInt as int64FromInt } from "./Long.js";
 export class CaseInfo {
     constructor(declaringType, tag, name, fields) {
         this.declaringType = declaringType;
@@ -169,8 +168,7 @@ export function isArray(t) {
     return getElementType(t) != null;
 }
 export function getElementType(t) {
-    var _a;
-    return t.fullname === "[]" && ((_a = t.generics) === null || _a === void 0 ? void 0 : _a.length) === 1 ? t.generics[0] : undefined;
+    return t.fullname === "[]" && t.generics?.length === 1 ? t.generics[0] : undefined;
 }
 export function isGenericType(t) {
     return t.generics != null && t.generics.length > 0;
@@ -192,8 +190,20 @@ function isErasedToNumber(t) {
         uint16_type.fullname,
         int32_type.fullname,
         uint32_type.fullname,
+        float16_type.fullname,
         float32_type.fullname,
         float64_type.fullname,
+    ].includes(t.fullname);
+}
+function isErasedToBigInt(t) {
+    return isEnum(t) || [
+        int64_type.fullname,
+        uint64_type.fullname,
+        int128_type.fullname,
+        uint128_type.fullname,
+        nativeint_type.fullname,
+        unativeint_type.fullname,
+        bigint_type.fullname,
     ].includes(t.fullname);
 }
 export function isInstanceOfType(t, o) {
@@ -208,6 +218,8 @@ export function isInstanceOfType(t, o) {
             return isFunction(t);
         case "number":
             return isErasedToNumber(t);
+        case "bigint":
+            return isErasedToBigInt(t);
         default:
             return t.construct != null && o instanceof t.construct;
     }
@@ -220,8 +232,7 @@ export function getGenericTypeDefinition(t) {
     return t.generics == null ? t : new TypeInfo(t.fullname, t.generics.map(() => obj_type));
 }
 export function getEnumUnderlyingType(t) {
-    var _a;
-    return (_a = t.generics) === null || _a === void 0 ? void 0 : _a[0];
+    return t.generics?.[0];
 }
 export function getEnumValues(t) {
     if (isEnum(t) && t.enumCases != null) {
@@ -273,7 +284,7 @@ export function tryParseEnum(t, str, defValue) {
         defValue.contents = parseEnum(t, str);
         return true;
     }
-    catch (_a) {
+    catch {
         return false;
     }
 }
@@ -285,7 +296,7 @@ export function isEnumDefined(t, v) {
         const kv = getEnumCase(t, v);
         return kv[0] != null && kv[0] !== "";
     }
-    catch (_a) {
+    catch {
         // supress error
     }
     return false;
@@ -369,9 +380,17 @@ export function makeUnion(uci, values) {
     if (values.length !== expectedLength) {
         throw new Error(`Expected an array of length ${expectedLength} but got ${values.length}`);
     }
-    return uci.declaringType.construct != null
-        ? new uci.declaringType.construct(uci.tag, values)
-        : {};
+    const construct = uci.declaringType.construct;
+    if (construct == null) {
+        return {};
+    }
+    const isSingleCase = uci.declaringType.cases ? uci.declaringType.cases().length == 1 : false;
+    if (isSingleCase) {
+        return new construct(...values);
+    }
+    else {
+        return new construct(uci.tag, values);
+    }
 }
 export function makeRecord(t, values) {
     const fields = getRecordElements(t);
@@ -395,10 +414,13 @@ export function createInstance(t, consArgs) {
     // TODO: Check if consArgs length is same as t.construct?
     // (Arg types can still be different)
     if (typeof t.construct === "function") {
-        return new t.construct(...(consArgs !== null && consArgs !== void 0 ? consArgs : []));
+        return new t.construct(...(consArgs ?? []));
     }
     else if (isErasedToNumber(t)) {
         return 0;
+    }
+    else if (isErasedToBigInt(t)) {
+        return 0n;
     }
     else {
         switch (t.fullname) {
@@ -406,11 +428,6 @@ export function createInstance(t, consArgs) {
                 return {};
             case bool_type.fullname:
                 return false;
-            case "System.Int64":
-            case "System.UInt64":
-                // typeof<int64> and typeof<uint64> get transformed to class_type("System.Int64")
-                // and class_type("System.UInt64") respectively. Test for the name of the primitive type.
-                return int64FromInt(0);
             case decimal_type.fullname:
                 return new Decimal(0);
             case char_type.fullname:

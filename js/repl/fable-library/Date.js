@@ -3,12 +3,21 @@
  *
  * Note: Date instances are always DateObjects in local
  * timezone (because JS dates are all kinds of messed up).
- * A local date returns UTC epoc when `.getTime()` is called.
+ * A local date returns UTC epoch when `.getTime()` is called.
  *
  * Basically; invariant: date.getTime() always return UTC time.
  */
-import { fromValue, ticksToUnixEpochMilliseconds, unixEpochMillisecondsToTicks } from "./Long.js";
+import { toInt64, toFloat64 } from "./BigInt.js";
 import { compareDates, dateOffset, padWithZeros } from "./Util.js";
+export function kind(value) {
+    return value.kind || 0;
+}
+export function unixEpochMillisecondsToTicks(ms, offset) {
+    return toInt64(((BigInt(ms) + 62135596800000n) + BigInt(offset)) * 10000n);
+}
+export function ticksToUnixEpochMilliseconds(ticks) {
+    return Number(((BigInt(ticks) / 10000n) - 62135596800000n));
+}
 export function dateOffsetToString(offset) {
     const isMinus = offset < 0;
     offset = Math.abs(offset);
@@ -85,10 +94,9 @@ function dateToStringWithCustomFormat(date, format, utc) {
     });
 }
 function dateToStringWithOffset(date, format) {
-    var _a, _b, _c;
-    const d = new Date(date.getTime() + ((_a = date.offset) !== null && _a !== void 0 ? _a : 0));
+    const d = new Date(date.getTime() + (date.offset ?? 0));
     if (typeof format !== "string") {
-        return d.toISOString().replace(/\.\d+/, "").replace(/[A-Z]|\.\d+/g, " ") + dateOffsetToString(((_b = date.offset) !== null && _b !== void 0 ? _b : 0));
+        return d.toISOString().replace(/\.\d+/, "").replace(/[A-Z]|\.\d+/g, " ") + dateOffsetToString((date.offset ?? 0));
     }
     else if (format.length === 1) {
         switch (format) {
@@ -97,7 +105,7 @@ function dateToStringWithOffset(date, format) {
             case "T":
             case "t": return dateToHalfUTCString(d, "second");
             case "O":
-            case "o": return dateToISOStringWithOffset(d, ((_c = date.offset) !== null && _c !== void 0 ? _c : 0));
+            case "o": return dateToISOStringWithOffset(d, (date.offset ?? 0));
             default: throw new Error("Unrecognized Date print format");
         }
     }
@@ -140,7 +148,6 @@ export function DateTime(value, kind) {
     return d;
 }
 export function fromTicks(ticks, kind) {
-    ticks = fromValue(ticks);
     kind = kind != null ? kind : 2 /* DateKind.Local */; // better default than Unspecified
     let date = DateTime(ticksToUnixEpochMilliseconds(ticks), kind);
     // Ticks are local to offset (in this case, either UTC or Local/Unknown).
@@ -152,12 +159,11 @@ export function fromTicks(ticks, kind) {
     return date;
 }
 export function fromDateTimeOffset(date, kind) {
-    var _a;
     switch (kind) {
         case 1 /* DateKind.UTC */: return DateTime(date.getTime(), 1 /* DateKind.UTC */);
         case 2 /* DateKind.Local */: return DateTime(date.getTime(), 2 /* DateKind.Local */);
         default:
-            const d = DateTime(date.getTime() + ((_a = date.offset) !== null && _a !== void 0 ? _a : 0), kind);
+            const d = DateTime(date.getTime() + (date.offset ?? 0), kind);
             return DateTime(d.getTime() - dateOffset(d), kind);
     }
 }
@@ -376,6 +382,9 @@ export function addSeconds(d, v) {
 }
 export function addMilliseconds(d, v) {
     return add(d, v);
+}
+export function addTicks(d, v) {
+    return add(d, toFloat64(v / 10000n));
 }
 export function addYears(d, v) {
     const newMonth = month(d);

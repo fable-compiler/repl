@@ -75,10 +75,10 @@ export function indexOfAny(str, anyOf, ...args) {
     if (length < 0) {
         throw new Error("Length cannot be negative");
     }
-    if (length > str.length - startIndex) {
+    if (startIndex + length > str.length) {
         throw new Error("Invalid startIndex and length");
     }
-    str = str.substr(startIndex, length);
+    str = str.substring(startIndex, startIndex + length);
     for (const c of anyOf) {
         const index = str.indexOf(c);
         if (index > -1) {

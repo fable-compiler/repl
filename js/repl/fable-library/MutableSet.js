@@ -1,12 +1,11 @@
-import { disposeSafe, defaultOf, partialApply, toIterator, getEnumerator } from "./Util.js";
+import { disposeSafe, defaultOf, toIterator, getEnumerator } from "./Util.js";
 import { iterate, map, iterateIndexed, concat } from "./Seq.js";
+import { some } from "./Option.js";
 import { FSharpRef } from "./Types.js";
 import { class_type } from "./Reflection.js";
 import { getItemFromDict, tryGetValue } from "./MapUtil.js";
-import { some } from "./Option.js";
-
 export class HashSet {
-    "constructor"(items, comparer) {
+    constructor(items, comparer) {
         const this$ = new FSharpRef(defaultOf());
         this.comparer = comparer;
         this$.contents = this;
@@ -39,7 +38,7 @@ export class HashSet {
         return getEnumerator(concat(this$.hashMap.values()));
     }
     [Symbol.iterator]() {
-        return toIterator(this.GetEnumerator());
+        return toIterator(getEnumerator(this));
     }
     "System.Collections.Generic.ICollection`1.Add2B595"(item) {
         const this$ = this;
@@ -106,28 +105,23 @@ export class HashSet {
     forEach(f, thisArg) {
         const this$ = this;
         iterate((x) => {
-            const clo = partialApply(2, f, [x]);
-            const clo_1 = clo(x);
-            clo_1(this$);
+            f(x, x, this$);
         }, this$);
     }
 }
-
-export function HashSet$reflection(gen0) {
+export function HashSet_$reflection(gen0) {
     return class_type("Fable.Collections.HashSet", [gen0], HashSet);
 }
-
 export function HashSet_$ctor_Z6150332D(items, comparer) {
     return new HashSet(items, comparer);
 }
-
 function HashSet__TryFindIndex_2B595(this$, k) {
     const h = this$.comparer.GetHashCode(k) | 0;
     let matchValue;
     let outArg = defaultOf();
     matchValue = [tryGetValue(this$.hashMap, h, new FSharpRef(() => outArg, (v) => {
-        outArg = v;
-    })), outArg];
+            outArg = v;
+        })), outArg];
     if (matchValue[0]) {
         return [true, h, matchValue[1].findIndex((v_1) => this$.comparer.Equals(k, v_1))];
     }
@@ -135,7 +129,6 @@ function HashSet__TryFindIndex_2B595(this$, k) {
         return [false, h, -1];
     }
 }
-
 function HashSet__TryFind_2B595(this$, k) {
     const matchValue = HashSet__TryFindIndex_2B595(this$, k);
     let matchResult;
@@ -151,23 +144,18 @@ function HashSet__TryFind_2B595(this$, k) {
         matchResult = 1;
     }
     switch (matchResult) {
-        case 0: {
+        case 0:
             return some(getItemFromDict(this$.hashMap, matchValue[1])[matchValue[2]]);
-        }
-        case 1: {
+        default:
             return void 0;
-        }
     }
 }
-
 export function HashSet__get_Comparer(this$) {
     return this$.comparer;
 }
-
 export function HashSet__Clear(this$) {
     this$.hashMap.clear();
 }
-
 export function HashSet__get_Count(this$) {
     let count = 0;
     let enumerator = getEnumerator(this$.hashMap.values());
@@ -182,7 +170,6 @@ export function HashSet__get_Count(this$) {
     }
     return count | 0;
 }
-
 export function HashSet__Add_2B595(this$, k) {
     const matchValue = HashSet__TryFindIndex_2B595(this$, k);
     if (matchValue[0]) {
@@ -199,7 +186,6 @@ export function HashSet__Add_2B595(this$, k) {
         return true;
     }
 }
-
 export function HashSet__Contains_2B595(this$, k) {
     const matchValue = HashSet__TryFindIndex_2B595(this$, k);
     let matchResult;
@@ -215,15 +201,12 @@ export function HashSet__Contains_2B595(this$, k) {
         matchResult = 1;
     }
     switch (matchResult) {
-        case 0: {
+        case 0:
             return true;
-        }
-        case 1: {
+        default:
             return false;
-        }
     }
 }
-
 export function HashSet__Remove_2B595(this$, k) {
     const matchValue = HashSet__TryFindIndex_2B595(this$, k);
     let matchResult;
@@ -243,9 +226,7 @@ export function HashSet__Remove_2B595(this$, k) {
             getItemFromDict(this$.hashMap, matchValue[1]).splice(matchValue[2], 1);
             return true;
         }
-        case 1: {
+        default:
             return false;
-        }
     }
 }
-

@@ -1,4 +1,4 @@
-import Event from "./Event.js";
+import { Event } from "./Event.js";
 export class Timer {
     constructor(interval) {
         this._enabled = false;
@@ -10,7 +10,7 @@ export class Timer {
         this._elapsed = new Event();
     }
     Elapsed() {
-        return this._elapsed;
+        return this._elapsed.Publish;
     }
     get Enabled() {
         return this._enabled;

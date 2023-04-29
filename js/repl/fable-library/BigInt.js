@@ -1,341 +1,282 @@
-import { BigInteger_op_Inequality_56F059C0, BigInteger_op_Equality_56F059C0, BigInteger_op_GreaterThanOrEqual_56F059C0, BigInteger_op_GreaterThan_56F059C0, BigInteger_op_LessThanOrEqual_56F059C0, BigInteger_op_LessThan_56F059C0, BigInteger_op_ExclusiveOr_56F059C0, BigInteger_op_BitwiseOr_56F059C0, BigInteger_op_BitwiseAnd_56F059C0, BigInteger_op_LeftShift_62E082A2, BigInteger_op_RightShift_62E082A2, BigInteger_op_UnaryPlus_Z665282C2, BigInteger_op_UnaryNegation_Z665282C2, BigInteger_op_Modulus_56F059C0, BigInteger_op_Division_56F059C0, BigInteger_op_Multiply_56F059C0, BigInteger_op_Subtraction_56F059C0, BigInteger_op_Addition_56F059C0, BigInteger__get_IsOne, BigInteger__get_IsZero, BigInteger__get_Sign, BigInteger__get_ToDecimal, BigInteger__get_ToDouble, BigInteger__get_ToSingle, BigInteger__get_ToUInt64, BigInteger__get_ToInt64, BigInteger__get_ToUInt32, BigInteger__get_ToInt32, BigInteger__get_ToUInt16, BigInteger__get_ToInt16, BigInteger__get_ToByte, BigInteger__get_ToSByte, BigInteger_$ctor_Z524259A4, BigInteger_$ctor_Z524259C1, BigInteger_get_Two, BigInteger_get_One, BigInteger_get_Zero, BigInteger_Abs_Z665282C2, BigInteger_Pow_62E082A2, BigInteger_GreatestCommonDivisor_56F059C0, BigInteger_DivRem_56F059C0, BigInteger_Parse_Z721C83C5, BigInteger } from "./BigInt/z.js";
-import { fromInteger } from "./Long.js";
-import { comparePrimitives, min, compare as compare_1, equals as equals_1, safeHash } from "./Util.js";
-import { toString as toString_1 } from "./Types.js";
-import { fill, reverse, find } from "./Array.js";
-import { fold, empty, ofArrayWithTail, cons, toArray, head, skipWhile } from "./List.js";
-
+import { fromParts, truncate } from "./Decimal.js";
+import { bigintHash } from "./Util.js";
+const isBigEndian = false;
+BigInt.prototype.toJSON = function () {
+    return `${this.toString()}`;
+};
+const zero = 0n;
+const one = 1n;
+const two = 2n;
+const minusOne = -1n;
 export function isBigInt(x) {
-    return x instanceof BigInteger;
+    return typeof x === "bigint";
 }
-
-export function tryParse(str, res) {
+export function hash(x) {
+    return bigintHash(x);
+}
+export function equals(x, y) {
+    return x === y;
+}
+export function compare(x, y) {
+    return x < y ? -1 : x > y ? 1 : 0;
+}
+export function abs(x) { return x < zero ? -x : x; }
+export function sign(x) { return x < zero ? -1 : x > zero ? 1 : 0; }
+export function max(x, y) { return x > y ? x : y; }
+export function min(x, y) { return x < y ? x : y; }
+export function maxMagnitude(x, y) { return abs(x) > abs(y) ? x : y; }
+export function minMagnitude(x, y) { return abs(x) < abs(y) ? x : y; }
+export function clamp(x, min, max) {
+    return x < min ? min : x > max ? max : x;
+}
+export function add(x, y) { return x + y; }
+export function subtract(x, y) { return x - y; }
+export function multiply(x, y) { return x * y; }
+export function divide(x, y) { return x / y; }
+export function remainder(x, y) { return x % y; }
+export function negate(x) { return -x; }
+export function op_UnaryNegation(x) { return -x; }
+export function op_LogicalNot(x) { return ~x; }
+export function op_UnaryPlus(x) { return x; }
+export function op_Addition(x, y) { return x + y; }
+export function op_Subtraction(x, y) { return x - y; }
+export function op_Multiply(x, y) { return x * y; }
+export function op_Division(x, y) { return x / y; }
+export function op_Modulus(x, y) { return x % y; }
+export function op_RightShift(x, n) { return x >> BigInt(n); }
+export function op_LeftShift(x, n) { return x << BigInt(n); }
+export function op_BitwiseAnd(x, y) { return x & y; }
+export function op_BitwiseOr(x, y) { return x | y; }
+export function op_ExclusiveOr(x, y) { return x ^ y; }
+export function op_LessThan(x, y) { return x < y; }
+export function op_LessThanOrEqual(x, y) { return x <= y; }
+export function op_GreaterThan(x, y) { return x > y; }
+export function op_GreaterThanOrEqual(x, y) { return x >= y; }
+export function op_Equality(x, y) { return x === y; }
+export function op_Inequality(x, y) { return x !== y; }
+export function get_Zero() { return zero; }
+export function get_One() { return one; }
+export function get_MinusOne() { return minusOne; }
+export function get_IsZero(x) { return x === zero; }
+export function get_IsOne(x) { return x === one; }
+export function get_IsEven(x) { return isEvenInteger(x); }
+export function get_IsPowerOfTwo(x) { return isPow2(x); }
+export function get_Sign(x) { return sign(x); }
+export function isNegative(x) { return x < zero; }
+export function isPositive(x) { return x > zero; }
+export function isEvenInteger(x) { return (x % two) === zero; }
+export function isOddInteger(x) { return (x % two) !== zero; }
+export function isPow2(x) { return (x & (x - one)) === zero; }
+export function fromZero() { return zero; }
+export function fromOne() { return one; }
+export function fromInt8(n) { return BigInt(n); }
+export function fromUInt8(n) { return BigInt(n); }
+export function fromInt16(n) { return BigInt(n); }
+export function fromUInt16(n) { return BigInt(n); }
+export function fromInt32(n) { return BigInt(n); }
+export function fromUInt32(n) { return BigInt(n); }
+export function fromInt64(n) { return n; }
+export function fromUInt64(n) { return n; }
+export function fromInt128(n) { return n; }
+export function fromUInt128(n) { return n; }
+export function fromNativeInt(n) { return n; }
+export function fromUNativeInt(n) { return n; }
+export function fromFloat16(n) { return BigInt(Math.trunc(n)); }
+export function fromFloat32(n) { return BigInt(Math.trunc(n)); }
+export function fromFloat64(n) { return BigInt(Math.trunc(n)); }
+export function fromDecimal(d) { return BigInt(truncate(d).toString()); }
+export function fromBigInt(x) { return x; }
+export function fromBoolean(b) { return BigInt(b); }
+export function fromChar(c) { return BigInt(c.charCodeAt(0)); }
+export function fromString(s) { return BigInt(s); }
+export function fromByteArray(bytes) {
+    return fromSignedBytes(bytes, isBigEndian);
+}
+export function toByteArray(value) {
+    return toSignedBytes(value, isBigEndian);
+}
+export function toInt8(x) { return Number(BigInt.asIntN(8, x)); }
+export function toUInt8(x) { return Number(BigInt.asUintN(8, x)); }
+export function toInt16(x) { return Number(BigInt.asIntN(16, x)); }
+export function toUInt16(x) { return Number(BigInt.asUintN(16, x)); }
+export function toInt32(x) { return Number(BigInt.asIntN(32, x)); }
+export function toUInt32(x) { return Number(BigInt.asUintN(32, x)); }
+export function toInt64(x) { return BigInt.asIntN(64, x); }
+export function toUInt64(x) { return BigInt.asUintN(64, x); }
+export function toInt128(x) { return BigInt.asIntN(128, x); }
+export function toUInt128(x) { return BigInt.asUintN(128, x); }
+export function toNativeInt(x) { return BigInt.asIntN(64, x); }
+export function toUNativeInt(x) { return BigInt.asUintN(64, x); }
+export function toFloat16(x) { return Number(x); }
+export function toFloat32(x) { return Number(x); }
+export function toFloat64(x) { return Number(x); }
+export function toDecimal(x) {
+    const low = Number(BigInt.asUintN(32, x));
+    const mid = Number(BigInt.asUintN(32, x >> 32n));
+    const high = Number(BigInt.asUintN(32, x >> 64n));
+    const isNegative = x < zero;
+    const scale = 0;
+    return fromParts(low, mid, high, isNegative, scale);
+}
+export function toBigInt(x) { return x; }
+export function toBoolean(x) { return x !== zero; }
+export function toChar(x) {
+    return String.fromCharCode(toUInt16(x));
+}
+export function toString(x) { return x.toString(); }
+export function tryParse(s, res) {
     try {
-        res.contents = BigInteger_Parse_Z721C83C5(str);
+        res.contents = BigInt(s);
         return true;
     }
-    catch (matchValue) {
+    catch (err) {
         return false;
     }
 }
-
-export function divRem(x, y, remainder) {
-    const patternInput = BigInteger_DivRem_56F059C0(x, y);
-    remainder.contents = patternInput[1];
-    return patternInput[0];
+export function parse(s) {
+    return BigInt(s);
 }
-
-export function parse(arg) {
-    return BigInteger_Parse_Z721C83C5(arg);
+export function pow(x, n) {
+    return x ** BigInt(n);
 }
-
-export function greatestCommonDivisor(arg, arg_1) {
-    return BigInteger_GreatestCommonDivisor_56F059C0(arg, arg_1);
+export function modPow(x, e, m) {
+    return (x ** e) % m;
 }
-
-export function pow(arg, arg_1) {
-    return BigInteger_Pow_62E082A2(arg, arg_1);
-}
-
-export function abs(arg) {
-    return BigInteger_Abs_Z665282C2(arg);
-}
-
-export const zero = BigInteger_get_Zero();
-
-export const one = BigInteger_get_One();
-
-export const two = BigInteger_get_Two();
-
-export function fromString(s) {
-    return BigInteger_Parse_Z721C83C5(s);
-}
-
-export function fromZero() {
-    return BigInteger_get_Zero();
-}
-
-export function fromOne() {
-    return BigInteger_get_One();
-}
-
-export function fromInt64(i) {
-    return BigInteger_$ctor_Z524259C1(i);
-}
-
-export function fromInt32(i) {
-    if (i > 2147483647) {
-        return BigInteger_$ctor_Z524259C1(fromInteger(i, false, 6));
+export function divRem(x, y, out) {
+    const div = x / y;
+    const rem = x % y;
+    if (out === void 0) {
+        return [div, rem];
     }
     else {
-        return BigInteger_$ctor_Z524259A4(i);
+        out.contents = rem;
+        return div;
     }
 }
-
-export function toSByte(x) {
-    return BigInteger__get_ToSByte(x);
-}
-
-export function toByte(x) {
-    return BigInteger__get_ToByte(x);
-}
-
-export function toInt16(x) {
-    return BigInteger__get_ToInt16(x);
-}
-
-export function toUInt16(x) {
-    return BigInteger__get_ToUInt16(x);
-}
-
-export function toInt32(x) {
-    return BigInteger__get_ToInt32(x);
-}
-
-export function toUInt32(x) {
-    return BigInteger__get_ToUInt32(x);
-}
-
-export function toInt64(x) {
-    return BigInteger__get_ToInt64(x);
-}
-
-export function toUInt64(x) {
-    return BigInteger__get_ToUInt64(x);
-}
-
-export function toSingle(x) {
-    return BigInteger__get_ToSingle(x);
-}
-
-export function toDouble(x) {
-    return BigInteger__get_ToDouble(x);
-}
-
-export function toDecimal(x) {
-    return BigInteger__get_ToDecimal(x);
-}
-
-export function sign(x) {
-    return BigInteger__get_Sign(x);
-}
-
-export function isZero(x) {
-    return BigInteger__get_IsZero(x);
-}
-
-export function isOne(x) {
-    return BigInteger__get_IsOne(x);
-}
-
-export function hash(x) {
-    return safeHash(x);
-}
-
-export function compare(x, y) {
-    return x.CompareTo(y);
-}
-
-export function equals(x, y) {
-    return equals_1(x, y);
-}
-
-export function toString(x) {
-    return toString_1(x);
-}
-
-export const get_Zero = BigInteger_get_Zero();
-
-export const get_One = BigInteger_get_One();
-
-export function op_Addition(arg, arg_1) {
-    return BigInteger_op_Addition_56F059C0(arg, arg_1);
-}
-
-export function op_Subtraction(arg, arg_1) {
-    return BigInteger_op_Subtraction_56F059C0(arg, arg_1);
-}
-
-export function op_Multiply(arg, arg_1) {
-    return BigInteger_op_Multiply_56F059C0(arg, arg_1);
-}
-
-export function op_Division(arg, arg_1) {
-    return BigInteger_op_Division_56F059C0(arg, arg_1);
-}
-
-export function op_Modulus(arg, arg_1) {
-    return BigInteger_op_Modulus_56F059C0(arg, arg_1);
-}
-
-export function op_UnaryNegation(arg) {
-    return BigInteger_op_UnaryNegation_Z665282C2(arg);
-}
-
-export function op_UnaryPlus(arg) {
-    return BigInteger_op_UnaryPlus_Z665282C2(arg);
-}
-
-export function op_RightShift(arg, arg_1) {
-    return BigInteger_op_RightShift_62E082A2(arg, arg_1);
-}
-
-export function op_LeftShift(arg, arg_1) {
-    return BigInteger_op_LeftShift_62E082A2(arg, arg_1);
-}
-
-export function op_BitwiseAnd(arg, arg_1) {
-    return BigInteger_op_BitwiseAnd_56F059C0(arg, arg_1);
-}
-
-export function op_BitwiseOr(arg, arg_1) {
-    return BigInteger_op_BitwiseOr_56F059C0(arg, arg_1);
-}
-
-export function op_ExclusiveOr(arg, arg_1) {
-    return BigInteger_op_ExclusiveOr_56F059C0(arg, arg_1);
-}
-
-export function op_LessThan(arg, arg_1) {
-    return BigInteger_op_LessThan_56F059C0(arg, arg_1);
-}
-
-export function op_LessThanOrEqual(arg, arg_1) {
-    return BigInteger_op_LessThanOrEqual_56F059C0(arg, arg_1);
-}
-
-export function op_GreaterThan(arg, arg_1) {
-    return BigInteger_op_GreaterThan_56F059C0(arg, arg_1);
-}
-
-export function op_GreaterThanOrEqual(arg, arg_1) {
-    return BigInteger_op_GreaterThanOrEqual_56F059C0(arg, arg_1);
-}
-
-export function op_Equality(arg, arg_1) {
-    return BigInteger_op_Equality_56F059C0(arg, arg_1);
-}
-
-export function op_Inequality(arg, arg_1) {
-    return BigInteger_op_Inequality_56F059C0(arg, arg_1);
-}
-
-function flipTwosComplement(currByte, lowBitFound) {
-    if (lowBitFound) {
-        return [(currByte ^ 255) & 255, true];
+export function greatestCommonDivisor(x, y) {
+    while (y > zero) {
+        const q = x / y;
+        const r = x - q * y;
+        x = y;
+        y = r;
     }
-    else if (currByte === 0) {
-        return [0, false];
-    }
-    else {
-        return [(currByte ^ (254 << find((i) => ((currByte & (1 << i)) > 0), new Int32Array([0, 1, 2, 3, 4, 5, 6, 7])))) & 255, true];
-    }
+    return x;
 }
-
-export function toByteArray(value) {
-    if (equals_1(value, zero)) {
-        return new Uint8Array([0]);
-    }
-    else {
-        const isPositive = compare_1(value, zero) > 0;
-        const value_1 = isPositive ? value : BigInteger_op_Multiply_56F059C0(BigInteger_$ctor_Z524259A4(-1), value);
-        const mask32 = fromInt64(fromInteger(4294967295, false, 6));
-        const loop = (accumBytes_mut, consumeValue_mut, lowBitFound_mut) => {
-            let value_6, value_8, value_9, value_10;
-            loop:
-            while (true) {
-                const accumBytes = accumBytes_mut, consumeValue = consumeValue_mut, lowBitFound = lowBitFound_mut;
-                if (compare_1(consumeValue, zero) <= 0) {
-                    const accumBytes_1 = isPositive ? skipWhile((b) => (b === 0), accumBytes) : skipWhile((b_1) => (b_1 === 255), accumBytes);
-                    const isHighBitOne = (head(accumBytes_1) & 128) !== 0;
-                    return reverse(toArray((isPositive && isHighBitOne) ? cons(0, accumBytes_1) : (((!isPositive) && (!isHighBitOne)) ? cons(255, accumBytes_1) : accumBytes_1)));
-                }
-                else {
-                    const currValue = toUInt32(BigInteger_op_BitwiseAnd_56F059C0(consumeValue, mask32));
-                    if (isPositive) {
-                        const b0 = currValue & 0xFF;
-                        let b1;
-                        const value_4 = currValue >>> 8;
-                        b1 = (value_4 & 0xFF);
-                        let b2;
-                        const value_5 = currValue >>> 16;
-                        b2 = (value_5 & 0xFF);
-                        accumBytes_mut = ofArrayWithTail([(value_6 = (currValue >>> 24), value_6 & 0xFF), b2, b1, b0], accumBytes);
-                        consumeValue_mut = BigInteger_op_RightShift_62E082A2(consumeValue, 32);
-                        lowBitFound_mut = false;
-                        continue loop;
-                    }
-                    else {
-                        const patternInput = flipTwosComplement(currValue & 0xFF, lowBitFound);
-                        const patternInput_1 = flipTwosComplement((value_8 = (currValue >>> 8), value_8 & 0xFF), patternInput[1]);
-                        const patternInput_2 = flipTwosComplement((value_9 = (currValue >>> 16), value_9 & 0xFF), patternInput_1[1]);
-                        const patternInput_3 = flipTwosComplement((value_10 = (currValue >>> 24), value_10 & 0xFF), patternInput_2[1]);
-                        accumBytes_mut = ofArrayWithTail([patternInput_3[0], patternInput_2[0], patternInput_1[0], patternInput[0]], accumBytes);
-                        consumeValue_mut = BigInteger_op_RightShift_62E082A2(consumeValue, 32);
-                        lowBitFound_mut = patternInput_3[1];
-                        continue loop;
-                    }
-                }
-                break;
-            }
-        };
-        return loop(empty(), value_1, false);
-    }
+export function getBitLength(x) {
+    return fromFloat64(x === zero ? 1 : log2(abs(x)) + 1);
 }
-
-export function fromByteArray(bytes) {
+export function log2(x) {
+    const n = Number(x);
+    if (Number.isFinite(n))
+        return Math.log2(n); // fast path
+    if (x < zero)
+        return Number.NaN;
+    let shift = one;
+    while (x >= (one << shift)) {
+        shift = shift << one;
+    }
+    let log = zero;
+    while (shift > one) {
+        shift = shift >> one;
+        if (x >= (one << shift)) {
+            log = log + shift;
+            x = x >> shift;
+        }
+    }
+    return Number(log);
+}
+export function log10(x) {
+    return log2(x) * Math.log10(2);
+}
+export function ln(x) {
+    return log2(x) * Math.log(2);
+}
+export function log(x, base) {
+    return log2(x) / Math.log2(base);
+}
+export function ilog2(x) {
+    return BigInt(log2(x));
+}
+// export function copySign
+// export function createChecked
+// export function createSaturating
+// export function createTruncating
+// export function getByteCount
+// export function leadingZeroCount
+// export function popCount
+// export function rotateLeft
+// export function rotateRight
+// export function trailingZeroCount
+// export function tryFormat
+// export function tryWriteBytes
+// -------------------------------------------------
+// Binary serialization
+// -------------------------------------------------
+const hexCodes = new Uint8Array([48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 97, 98, 99, 100, 101, 102]);
+function fromHexCode(code) {
+    if (48 <= code && code <= 57)
+        return code - 48;
+    if (97 <= code && code <= 102)
+        return code - 97 + 10;
+    if (65 <= code && code <= 70)
+        return code - 65 + 10;
+    throw Error(`Invalid hex code: ${code}`);
+}
+function toSignedBytes(x, isBigEndian) {
+    const isNeg = x < 0n;
+    if (isNeg) {
+        const len = log2(-x);
+        const bits = len + (8 - len % 8);
+        const pow2 = (1n << BigInt(bits));
+        x = x + pow2; // two's complement
+    }
+    const hex = x.toString(16);
+    const len = hex.length;
+    const odd = len % 2;
+    const first = hex.charCodeAt(0);
+    const isLow = 48 <= first && first <= 55; // 0..7
+    const start = (isNeg && isLow) || (!isNeg && !isLow) ? 1 : 0;
+    const bytes = new Uint8Array(start + (len + odd) / 2);
+    const inc = isBigEndian ? 1 : -1;
+    let pos = isBigEndian ? 0 : bytes.length - 1;
+    if (start > 0) {
+        bytes[pos] = isNeg ? 255 : 0;
+        pos += inc;
+    }
+    if (odd > 0) {
+        bytes[pos] = fromHexCode(first);
+        pos += inc;
+    }
+    for (let i = odd; i < len; i += 2, pos += inc) {
+        const a = fromHexCode(hex.charCodeAt(i));
+        const b = fromHexCode(hex.charCodeAt(i + 1));
+        bytes[pos] = (a << 4) | b;
+    }
+    return bytes;
+}
+function fromSignedBytes(bytes, isBigEndian) {
     if (bytes == null) {
-        throw new Error("bytes");
+        throw new Error("bytes is null");
     }
-    if (bytes.length === 0) {
-        return zero;
+    const len = bytes.length;
+    const first = isBigEndian ? 0 : len - 1;
+    const isNeg = bytes[first] > 127;
+    const codes = new Uint16Array(len * 2 + 2);
+    codes[0] = 48; // 0
+    codes[1] = 120; // x
+    const inc = isBigEndian ? 1 : -1;
+    let pos = isBigEndian ? 0 : len - 1;
+    for (let i = 0; i < bytes.length; i++, pos += inc) {
+        const byte = bytes[pos];
+        codes[2 * i + 2] = hexCodes[byte >> 4];
+        codes[2 * i + 3] = hexCodes[byte & 15];
     }
-    else {
-        const isPositive = (bytes[bytes.length - 1] & 128) === 0;
-        const buffer = fill(new Uint8Array(4), 0, 4, 0);
-        const loop = (accumUInt32_mut, currIndex_mut, bytesRemaining_mut, lowBitFound_mut) => {
-            loop:
-            while (true) {
-                const accumUInt32 = accumUInt32_mut, currIndex = currIndex_mut, bytesRemaining = bytesRemaining_mut, lowBitFound = lowBitFound_mut;
-                if (bytesRemaining === 0) {
-                    const value_2 = fold((acc, value) => BigInteger_op_Addition_56F059C0(BigInteger_op_LeftShift_62E082A2(acc, 32), fromInt64(fromInteger(value, false, 6))), zero, accumUInt32);
-                    if (isPositive) {
-                        return value_2;
-                    }
-                    else {
-                        return BigInteger_op_Multiply_56F059C0(BigInteger_$ctor_Z524259A4(-1), value_2);
-                    }
-                }
-                else {
-                    const bytesToProcess = min(comparePrimitives, bytesRemaining, 4) | 0;
-                    for (let i_1 = 0; i_1 <= (bytesToProcess - 1); i_1++) {
-                        buffer[i_1] = bytes[currIndex + i_1];
-                    }
-                    if (isPositive) {
-                        fill(buffer, bytesToProcess, 4 - bytesToProcess, 0);
-                        accumUInt32_mut = cons((((((buffer[0] | ((buffer[1] << 8) >>> 0)) >>> 0) | ((buffer[2] << 16) >>> 0)) >>> 0) | ((buffer[3] << 24) >>> 0)) >>> 0, accumUInt32);
-                        currIndex_mut = (currIndex + bytesToProcess);
-                        bytesRemaining_mut = (bytesRemaining - bytesToProcess);
-                        lowBitFound_mut = false;
-                        continue loop;
-                    }
-                    else {
-                        fill(buffer, bytesToProcess, 4 - bytesToProcess, 255);
-                        const patternInput = flipTwosComplement(buffer[0], lowBitFound);
-                        const patternInput_1 = flipTwosComplement(buffer[1], patternInput[1]);
-                        const patternInput_2 = flipTwosComplement(buffer[2], patternInput_1[1]);
-                        const patternInput_3 = flipTwosComplement(buffer[3], patternInput_2[1]);
-                        accumUInt32_mut = cons((((((patternInput[0] | ((patternInput_1[0] << 8) >>> 0)) >>> 0) | ((patternInput_2[0] << 16) >>> 0)) >>> 0) | ((patternInput_3[0] << 24) >>> 0)) >>> 0, accumUInt32);
-                        currIndex_mut = (currIndex + bytesToProcess);
-                        bytesRemaining_mut = (bytesRemaining - bytesToProcess);
-                        lowBitFound_mut = patternInput_3[1];
-                        continue loop;
-                    }
-                }
-                break;
-            }
-        };
-        return loop(empty(), 0, bytes.length, false);
+    const str = String.fromCharCode.apply(null, codes);
+    let x = BigInt(str);
+    if (isNeg) {
+        const bits = len * 8;
+        const pow2 = (1n << BigInt(bits));
+        x = x - pow2; // two's complement
     }
+    return x;
 }
-

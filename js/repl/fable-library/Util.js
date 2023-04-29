@@ -32,14 +32,14 @@ export function defaultOf() {
     return null;
 }
 export function sameConstructor(x, y) {
-    var _a, _b;
-    return ((_a = Object.getPrototypeOf(x)) === null || _a === void 0 ? void 0 : _a.constructor) === ((_b = Object.getPrototypeOf(y)) === null || _b === void 0 ? void 0 : _b.constructor);
+    return Object.getPrototypeOf(x)?.constructor === Object.getPrototypeOf(y)?.constructor;
 }
 export class Enumerable {
     constructor(en) {
         this.en = en;
     }
     GetEnumerator() { return this.en; }
+    "System.Collections.IEnumerable.GetEnumerator"() { return this.en; }
     [Symbol.iterator]() {
         return this;
     }
@@ -90,9 +90,6 @@ export function getEnumerator(e) {
 }
 export function toIterator(en) {
     return {
-        [Symbol.iterator]() {
-            return this;
-        },
         next() {
             const hasNext = en["System.Collections.IEnumerator.MoveNext"]();
             const current = hasNext ? en["System.Collections.Generic.IEnumerator`1.get_Current"]() : undefined;
@@ -193,7 +190,11 @@ export function int32ToString(i, radix) {
     i = i < 0 && radix != null && radix !== 10 ? 0xFFFFFFFF + i + 1 : i;
     return i.toString(radix);
 }
-export class ObjectRef {
+export function int64ToString(i, radix) {
+    i = i < 0 && radix != null && radix !== 10 ? 0xffffffffffffffffn + i + 1n : i;
+    return i.toString(radix);
+}
+class ObjectRef {
     static id(o) {
         if (!ObjectRef.idMap.has(o)) {
             ObjectRef.idMap.set(o, ++ObjectRef.count);
@@ -203,6 +204,7 @@ export class ObjectRef {
 }
 ObjectRef.idMap = new WeakMap();
 ObjectRef.count = 0;
+export { ObjectRef };
 export function stringHash(s) {
     let i = 0;
     let h = 5381;
@@ -215,14 +217,18 @@ export function stringHash(s) {
 export function numberHash(x) {
     return x * 2654435761 | 0;
 }
+export function bigintHash(x) {
+    return stringHash(x.toString(32));
+}
 // From https://stackoverflow.com/a/37449594
 export function combineHashCodes(hashes) {
-    if (hashes.length === 0) {
-        return 0;
+    let h1 = 0;
+    const len = hashes.length;
+    for (let i = 0; i < len; i++) {
+        const h2 = hashes[i];
+        h1 = ((h1 << 5) + h1) ^ h2;
     }
-    return hashes.reduce((h1, h2) => {
-        return ((h1 << 5) + h1) ^ h2;
-    });
+    return h1;
 }
 export function physicalHash(x) {
     if (x == null) {
@@ -233,6 +239,8 @@ export function physicalHash(x) {
             return x ? 1 : 0;
         case "number":
             return numberHash(x);
+        case "bigint":
+            return bigintHash(x);
         case "string":
             return stringHash(x);
         default:
@@ -259,7 +267,6 @@ export function arrayHash(x) {
     return combineHashCodes(hashes);
 }
 export function structuralHash(x) {
-    var _a;
     if (x == null) {
         return 0;
     }
@@ -268,6 +275,8 @@ export function structuralHash(x) {
             return x ? 1 : 0;
         case "number":
             return numberHash(x);
+        case "bigint":
+            return bigintHash(x);
         case "string":
             return stringHash(x);
         default: {
@@ -280,7 +289,7 @@ export function structuralHash(x) {
             else if (x instanceof Date) {
                 return dateHash(x);
             }
-            else if (((_a = Object.getPrototypeOf(x)) === null || _a === void 0 ? void 0 : _a.constructor) === Object) {
+            else if (Object.getPrototypeOf(x)?.constructor === Object) {
                 // TODO: check call-stack to prevent cyclic objects?
                 const hashes = Object.values(x).map((v) => structuralHash(v));
                 return combineHashCodes(hashes);
@@ -337,8 +346,10 @@ function equalObjects(x, y) {
     }
     return true;
 }
+export function physicalEquality(x, y) {
+    return x === y;
+}
 export function equals(x, y) {
-    var _a;
     if (x === y) {
         return true;
     }
@@ -361,7 +372,7 @@ export function equals(x, y) {
         return (y instanceof Date) && compareDates(x, y) === 0;
     }
     else {
-        return ((_a = Object.getPrototypeOf(x)) === null || _a === void 0 ? void 0 : _a.constructor) === Object && equalObjects(x, y);
+        return Object.getPrototypeOf(x)?.constructor === Object && equalObjects(x, y);
     }
 }
 export function compareDates(x, y) {
@@ -425,7 +436,6 @@ function compareObjects(x, y) {
     return 0;
 }
 export function compare(x, y) {
-    var _a;
     if (x === y) {
         return 0;
     }
@@ -448,7 +458,7 @@ export function compare(x, y) {
         return y instanceof Date ? compareDates(x, y) : -1;
     }
     else {
-        return ((_a = Object.getPrototypeOf(x)) === null || _a === void 0 ? void 0 : _a.constructor) === Object ? compareObjects(x, y) : -1;
+        return Object.getPrototypeOf(x)?.constructor === Object ? compareObjects(x, y) : -1;
     }
 }
 export function min(comparer, x, y) {
@@ -531,82 +541,113 @@ export function clear(col) {
         col.clear();
     }
 }
-const CURRIED = Symbol("curried");
-export function uncurry(arity, f) {
-    // f may be a function option with None value
-    if (f == null || f.length > 1) {
-        return f;
-    }
-    const uncurried = (...args) => {
-        let res = f;
-        for (let i = 0; i < arity; i++) {
-            res = res(args[i]);
-        }
-        return res;
-    };
-    uncurried[CURRIED] = f;
-    return uncurried;
-}
-function _curry(args, arity, f) {
-    return (arg) => arity === 1
-        ? f(...args.concat([arg]))
-        // Note it's important to generate a new args array every time
-        // because a partially applied function can be run multiple times
-        : _curry(args.concat([arg]), arity - 1, f);
-}
-export function curry(arity, f) {
-    if (f == null || f.length === 1) {
-        return f;
-    }
-    else if (CURRIED in f) {
-        return f[CURRIED];
-    }
-    else {
-        return _curry([], arity, f);
-    }
-}
-export function checkArity(arity, f) {
-    return f.length > arity
-        ? (...args1) => (...args2) => f.apply(undefined, args1.concat(args2))
-        : f;
-}
-export function partialApply(arity, f, args) {
+const curried = new WeakMap();
+export function uncurry2(f) {
     if (f == null) {
-        return undefined;
+        return null;
     }
-    else if (CURRIED in f) {
-        f = f[CURRIED];
-        for (let i = 0; i < args.length; i++) {
-            f = f(args[i]);
-        }
-        return f;
-    }
-    else {
-        return _curry(args, arity, f);
-    }
+    const f2 = (a1, a2) => f(a1)(a2);
+    curried.set(f2, f);
+    return f2;
 }
-export function mapCurriedArgs(fn, mappings) {
-    function mapArg(fn, arg, mappings, idx) {
-        const mapping = mappings[idx];
-        if (mapping !== 0) {
-            const expectedArity = mapping[0];
-            const actualArity = mapping[1];
-            if (expectedArity > 1) {
-                arg = curry(expectedArity, arg);
-            }
-            if (actualArity > 1) {
-                arg = uncurry(actualArity, arg);
-            }
-        }
-        const res = fn(arg);
-        if (idx + 1 === mappings.length) {
-            return res;
-        }
-        else {
-            return (arg) => mapArg(res, arg, mappings, idx + 1);
-        }
+export function curry2(f) {
+    return curried.get(f) ?? ((a1) => (a2) => f(a1, a2));
+}
+export function uncurry3(f) {
+    if (f == null) {
+        return null;
     }
-    return (arg) => mapArg(fn, arg, mappings, 0);
+    const f2 = (a1, a2, a3) => f(a1)(a2)(a3);
+    curried.set(f2, f);
+    return f2;
+}
+export function curry3(f) {
+    return curried.get(f)
+        ?? ((a1) => (a2) => (a3) => f(a1, a2, a3));
+}
+export function uncurry4(f) {
+    if (f == null) {
+        return null;
+    }
+    const f2 = (a1, a2, a3, a4) => f(a1)(a2)(a3)(a4);
+    curried.set(f2, f);
+    return f2;
+}
+export function curry4(f) {
+    return curried.get(f)
+        ?? ((a1) => (a2) => (a3) => (a4) => f(a1, a2, a3, a4));
+}
+export function uncurry5(f) {
+    if (f == null) {
+        return null;
+    }
+    const f2 = (a1, a2, a3, a4, a5) => f(a1)(a2)(a3)(a4)(a5);
+    curried.set(f2, f);
+    return f2;
+}
+export function curry5(f) {
+    return curried.get(f)
+        ?? ((a1) => (a2) => (a3) => (a4) => (a5) => f(a1, a2, a3, a4, a5));
+}
+export function uncurry6(f) {
+    if (f == null) {
+        return null;
+    }
+    const f2 = (a1, a2, a3, a4, a5, a6) => f(a1)(a2)(a3)(a4)(a5)(a6);
+    curried.set(f2, f);
+    return f2;
+}
+export function curry6(f) {
+    return curried.get(f)
+        ?? ((a1) => (a2) => (a3) => (a4) => (a5) => (a6) => f(a1, a2, a3, a4, a5, a6));
+}
+export function uncurry7(f) {
+    if (f == null) {
+        return null;
+    }
+    const f2 = (a1, a2, a3, a4, a5, a6, a7) => f(a1)(a2)(a3)(a4)(a5)(a6)(a7);
+    curried.set(f2, f);
+    return f2;
+}
+export function curry7(f) {
+    return curried.get(f)
+        ?? ((a1) => (a2) => (a3) => (a4) => (a5) => (a6) => (a7) => f(a1, a2, a3, a4, a5, a6, a7));
+}
+export function uncurry8(f) {
+    if (f == null) {
+        return null;
+    }
+    const f2 = (a1, a2, a3, a4, a5, a6, a7, a8) => f(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8);
+    curried.set(f2, f);
+    return f2;
+}
+export function curry8(f) {
+    return curried.get(f)
+        ?? ((a1) => (a2) => (a3) => (a4) => (a5) => (a6) => (a7) => (a8) => f(a1, a2, a3, a4, a5, a6, a7, a8));
+}
+export function uncurry9(f) {
+    if (f == null) {
+        return null;
+    }
+    const f2 = (a1, a2, a3, a4, a5, a6, a7, a8, a9) => f(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8)(a9);
+    curried.set(f2, f);
+    return f2;
+}
+export function curry9(f) {
+    return curried.get(f)
+        ?? ((a1) => (a2) => (a3) => (a4) => (a5) => (a6) => (a7) => (a8) => (a9) => f(a1, a2, a3, a4, a5, a6, a7, a8, a9));
+}
+export function uncurry10(f) {
+    if (f == null) {
+        return null;
+    }
+    const f2 = (a1, a2, a3, a4, a5, a6, a7, a8, a9, a10) => f(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8)(a9)(a10);
+    curried.set(f2, f);
+    return f2;
+}
+export function curry10(f) {
+    return curried.get(f)
+        ?? ((a1) => (a2) => (a3) => (a4) => (a5) => (a6) => (a7) => (a8) => (a9) => (a10) => f(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10));
 }
 // More performant method to copy arrays, see #2352
 export function copyToArray(source, sourceIndex, target, targetIndex, count) {

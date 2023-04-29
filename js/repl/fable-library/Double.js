@@ -29,3 +29,18 @@ export function isNegativeInfinity(x) {
 export function isInfinity(x) {
     return x === Number.POSITIVE_INFINITY || x === Number.NEGATIVE_INFINITY;
 }
+export function max(x, y) {
+    return x > y ? x : y;
+}
+export function min(x, y) {
+    return x < y ? x : y;
+}
+export function maxMagnitude(x, y) {
+    return Math.abs(x) > Math.abs(y) ? x : y;
+}
+export function minMagnitude(x, y) {
+    return Math.abs(x) < Math.abs(y) ? x : y;
+}
+export function clamp(x, min, max) {
+    return x < min ? min : x > max ? max : x;
+}

@@ -1,4 +1,3 @@
-
 export function Helpers_allocateArrayFromCons(cons, len) {
     if ((typeof cons) === "function") {
         return new cons(len);
@@ -7,4 +6,3 @@ export function Helpers_allocateArrayFromCons(cons, len) {
         return new Array(len);
     }
 }
-

@@ -7,7 +7,7 @@ const guidRegexNoHyphen = /^([0-9a-f]{8})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})
 const guidRegexHex = /^\{0x[0-9a-f]{8},(0x[0-9a-f]{4},){2}\{(0x[0-9a-f]{2},){7}0x[0-9a-f]{2}\}\}$/;
 const guidHexCaptures = /^([0-9a-f]{8})-(([0-9a-f]{4})-)(([0-9a-f]{4})-)([0-9a-f]{2})([0-9a-f]{2})-([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/;
 export function toString(str, format, _provider) {
-    if (format && (format === null || format === void 0 ? void 0 : format.length) > 0) {
+    if (format && format?.length > 0) {
         switch (format) {
             case "N":
                 return str.replace(/-/g, '');
@@ -51,7 +51,7 @@ export function tryParse(str, defValue) {
         defValue.contents = parse(str);
         return true;
     }
-    catch (_a) {
+    catch {
         return false;
     }
 }

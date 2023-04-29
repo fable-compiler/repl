@@ -13,7 +13,7 @@ export class Uri {
             new URL(uri);
             return true;
         }
-        catch (_a) {
+        catch {
             return false;
         }
     }

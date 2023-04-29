@@ -1,13 +1,12 @@
 import { join } from "./String.js";
-import { disposeSafe, isArrayLike, defaultOf, getEnumerator, toIterator, compare, structuralHash, equals } from "./Util.js";
+import { defaultArg, some, value as value_1 } from "./Option.js";
+import { disposeSafe, isArrayLike, defaultOf, toIterator, getEnumerator, compare, structuralHash, equals } from "./Util.js";
 import { Record } from "./Types.js";
 import { class_type, record_type, option_type } from "./Reflection.js";
 import { SR_inputSequenceTooLong, SR_inputSequenceEmpty, SR_inputMustBeNonNegative, SR_notEnoughElements, SR_differentLengths, SR_keyNotFoundAlt, SR_indexOutOfBounds, SR_inputWasEmpty } from "./Global.js";
-import { defaultArg, value as value_1, some } from "./Option.js";
 import { transpose as transpose_1, splitInto as splitInto_1, windowed as windowed_1, pairwise as pairwise_1, chunkBySize as chunkBySize_1, map as map_1, permute as permute_1, tryFindIndexBack as tryFindIndexBack_1, tryFindBack as tryFindBack_1, scanBack as scanBack_1, foldBack2 as foldBack2_1, foldBack as foldBack_1, fill } from "./Array.js";
-
 export class FSharpList extends Record {
-    "constructor"(head, tail) {
+    constructor(head, tail) {
         super();
         this.head = head;
         this.tail = tail;
@@ -23,15 +22,14 @@ export class FSharpList extends Record {
         }
         else {
             const loop = (xs_1_mut, ys_1_mut) => {
-                loop:
-                while (true) {
+                loop: while (true) {
                     const xs_1 = xs_1_mut, ys_1 = ys_1_mut;
                     const matchValue = xs_1.tail;
                     const matchValue_1 = ys_1.tail;
                     if (matchValue != null) {
                         if (matchValue_1 != null) {
-                            const xt = matchValue;
-                            const yt = matchValue_1;
+                            const xt = value_1(matchValue);
+                            const yt = value_1(matchValue_1);
                             if (equals(xs_1.head, ys_1.head)) {
                                 xs_1_mut = xt;
                                 ys_1_mut = yt;
@@ -60,12 +58,11 @@ export class FSharpList extends Record {
     GetHashCode() {
         const xs = this;
         const loop = (i_mut, h_mut, xs_1_mut) => {
-            loop:
-            while (true) {
+            loop: while (true) {
                 const i = i_mut, h = h_mut, xs_1 = xs_1_mut;
                 const matchValue = xs_1.tail;
                 if (matchValue != null) {
-                    const t = matchValue;
+                    const t = value_1(matchValue);
                     if (i > 18) {
                         return h | 0;
                     }
@@ -91,15 +88,14 @@ export class FSharpList extends Record {
     CompareTo(other) {
         const xs = this;
         const loop = (xs_1_mut, ys_1_mut) => {
-            loop:
-            while (true) {
+            loop: while (true) {
                 const xs_1 = xs_1_mut, ys_1 = ys_1_mut;
                 const matchValue = xs_1.tail;
                 const matchValue_1 = ys_1.tail;
                 if (matchValue != null) {
                     if (matchValue_1 != null) {
-                        const xt = matchValue;
-                        const yt = matchValue_1;
+                        const xt = value_1(matchValue);
+                        const yt = value_1(matchValue_1);
                         const c = compare(xs_1.head, ys_1.head) | 0;
                         if (c === 0) {
                             xs_1_mut = xt;
@@ -130,20 +126,18 @@ export class FSharpList extends Record {
         return ListEnumerator$1_$ctor_3002E699(xs);
     }
     [Symbol.iterator]() {
-        return toIterator(this.GetEnumerator());
+        return toIterator(getEnumerator(this));
     }
     "System.Collections.IEnumerable.GetEnumerator"() {
         const xs = this;
         return getEnumerator(xs);
     }
 }
-
-export function FSharpList$reflection(gen0) {
-    return record_type("ListModule.FSharpList", [gen0], FSharpList, () => [["head", gen0], ["tail", option_type(FSharpList$reflection(gen0))]]);
+export function FSharpList_$reflection(gen0) {
+    return record_type("ListModule.FSharpList", [gen0], FSharpList, () => [["head", gen0], ["tail", option_type(FSharpList_$reflection(gen0))]]);
 }
-
 export class ListEnumerator$1 {
-    "constructor"(xs) {
+    constructor(xs) {
         this.xs = xs;
         this.it = this.xs;
         this.current = defaultOf();
@@ -160,7 +154,7 @@ export class ListEnumerator$1 {
         const _ = this;
         const matchValue = _.it.tail;
         if (matchValue != null) {
-            const t = matchValue;
+            const t = value_1(matchValue);
             _.current = _.it.head;
             _.it = t;
             return true;
@@ -177,36 +171,29 @@ export class ListEnumerator$1 {
     Dispose() {
     }
 }
-
-export function ListEnumerator$1$reflection(gen0) {
+export function ListEnumerator$1_$reflection(gen0) {
     return class_type("ListModule.ListEnumerator`1", [gen0], ListEnumerator$1);
 }
-
 export function ListEnumerator$1_$ctor_3002E699(xs) {
     return new ListEnumerator$1(xs);
 }
-
 export function FSharpList_get_Empty() {
     return new FSharpList(defaultOf(), void 0);
 }
-
 export function FSharpList_Cons_305B8EAC(x, xs) {
     return new FSharpList(x, xs);
 }
-
 export function FSharpList__get_IsEmpty(xs) {
     return xs.tail == null;
 }
-
 export function FSharpList__get_Length(xs) {
     const loop = (i_mut, xs_1_mut) => {
-        loop:
-        while (true) {
+        loop: while (true) {
             const i = i_mut, xs_1 = xs_1_mut;
             const matchValue = xs_1.tail;
             if (matchValue != null) {
                 i_mut = (i + 1);
-                xs_1_mut = matchValue;
+                xs_1_mut = value_1(matchValue);
                 continue loop;
             }
             else {
@@ -217,7 +204,6 @@ export function FSharpList__get_Length(xs) {
     };
     return loop(0, xs) | 0;
 }
-
 export function FSharpList__get_Head(xs) {
     const matchValue = xs.tail;
     if (matchValue != null) {
@@ -227,21 +213,18 @@ export function FSharpList__get_Head(xs) {
         throw new Error((SR_inputWasEmpty + "\\nParameter name: ") + "list");
     }
 }
-
 export function FSharpList__get_Tail(xs) {
     const matchValue = xs.tail;
     if (matchValue != null) {
-        return matchValue;
+        return value_1(matchValue);
     }
     else {
         throw new Error((SR_inputWasEmpty + "\\nParameter name: ") + "list");
     }
 }
-
 export function FSharpList__get_Item_Z524259A4(xs, index) {
     const loop = (i_mut, xs_1_mut) => {
-        loop:
-        while (true) {
+        loop: while (true) {
             const i = i_mut, xs_1 = xs_1_mut;
             const matchValue = xs_1.tail;
             if (matchValue != null) {
@@ -250,7 +233,7 @@ export function FSharpList__get_Item_Z524259A4(xs, index) {
                 }
                 else {
                     i_mut = (i + 1);
-                    xs_1_mut = matchValue;
+                    xs_1_mut = value_1(matchValue);
                     continue loop;
                 }
             }
@@ -262,35 +245,27 @@ export function FSharpList__get_Item_Z524259A4(xs, index) {
     };
     return loop(0, xs);
 }
-
 export function indexNotFound() {
     throw new Error(SR_keyNotFoundAlt);
 }
-
 export function empty() {
     return FSharpList_get_Empty();
 }
-
 export function cons(x, xs) {
     return FSharpList_Cons_305B8EAC(x, xs);
 }
-
 export function singleton(x) {
     return FSharpList_Cons_305B8EAC(x, FSharpList_get_Empty());
 }
-
 export function isEmpty(xs) {
     return FSharpList__get_IsEmpty(xs);
 }
-
 export function length(xs) {
     return FSharpList__get_Length(xs);
 }
-
 export function head(xs) {
     return FSharpList__get_Head(xs);
 }
-
 export function tryHead(xs) {
     if (FSharpList__get_IsEmpty(xs)) {
         return void 0;
@@ -299,14 +274,11 @@ export function tryHead(xs) {
         return some(FSharpList__get_Head(xs));
     }
 }
-
 export function tail(xs) {
     return FSharpList__get_Tail(xs);
 }
-
 export function tryLast(xs_mut) {
-    tryLast:
-    while (true) {
+    tryLast: while (true) {
         const xs = xs_mut;
         if (FSharpList__get_IsEmpty(xs)) {
             return void 0;
@@ -324,7 +296,6 @@ export function tryLast(xs_mut) {
         break;
     }
 }
-
 export function last(xs) {
     const matchValue = tryLast(xs);
     if (matchValue == null) {
@@ -334,11 +305,9 @@ export function last(xs) {
         return value_1(matchValue);
     }
 }
-
 export function compareWith(comparer, xs, ys) {
     const loop = (xs_1_mut, ys_1_mut) => {
-        loop:
-        while (true) {
+        loop: while (true) {
             const xs_1 = xs_1_mut, ys_1 = ys_1_mut;
             const matchValue = FSharpList__get_IsEmpty(xs_1);
             const matchValue_1 = FSharpList__get_IsEmpty(ys_1);
@@ -369,13 +338,11 @@ export function compareWith(comparer, xs, ys) {
     };
     return loop(xs, ys) | 0;
 }
-
 export function toArray(xs) {
     const len = FSharpList__get_Length(xs) | 0;
     const res = fill(new Array(len), 0, len, null);
     const loop = (i_mut, xs_1_mut) => {
-        loop:
-        while (true) {
+        loop: while (true) {
             const i = i_mut, xs_1 = xs_1_mut;
             if (!FSharpList__get_IsEmpty(xs_1)) {
                 res[i] = FSharpList__get_Head(xs_1);
@@ -389,7 +356,6 @@ export function toArray(xs) {
     loop(0, xs);
     return res;
 }
-
 export function fold(folder, state, xs) {
     let acc = state;
     let xs_1 = xs;
@@ -399,19 +365,15 @@ export function fold(folder, state, xs) {
     }
     return acc;
 }
-
 export function reverse(xs) {
     return fold((acc, x) => FSharpList_Cons_305B8EAC(x, acc), FSharpList_get_Empty(), xs);
 }
-
 export function foldBack(folder, xs, state) {
     return foldBack_1(folder, toArray(xs), state);
 }
-
 export function foldIndexed(folder, state, xs) {
     const loop = (i_mut, acc_mut, xs_1_mut) => {
-        loop:
-        while (true) {
+        loop: while (true) {
             const i = i_mut, acc = acc_mut, xs_1 = xs_1_mut;
             if (FSharpList__get_IsEmpty(xs_1)) {
                 return acc;
@@ -427,33 +389,29 @@ export function foldIndexed(folder, state, xs) {
     };
     return loop(0, state, xs);
 }
-
 export function fold2(folder, state, xs, ys) {
     let acc = state;
     let xs_1 = xs;
     let ys_1 = ys;
-    while ((!FSharpList__get_IsEmpty(xs_1)) && (!FSharpList__get_IsEmpty(ys_1))) {
+    while (!FSharpList__get_IsEmpty(xs_1) && !FSharpList__get_IsEmpty(ys_1)) {
         acc = folder(acc, FSharpList__get_Head(xs_1), FSharpList__get_Head(ys_1));
         xs_1 = FSharpList__get_Tail(xs_1);
         ys_1 = FSharpList__get_Tail(ys_1);
     }
     return acc;
 }
-
 export function foldBack2(folder, xs, ys, state) {
     return foldBack2_1(folder, toArray(xs), toArray(ys), state);
 }
-
 export function unfold(gen, state) {
     const loop = (acc_mut, node_mut) => {
         let t;
-        loop:
-        while (true) {
+        loop: while (true) {
             const acc = acc_mut, node = node_mut;
             const matchValue = gen(acc);
             if (matchValue != null) {
-                acc_mut = matchValue[1];
-                node_mut = ((t = (new FSharpList(matchValue[0], void 0)), (node.tail = t, t)));
+                acc_mut = value_1(matchValue)[1];
+                node_mut = ((t = (new FSharpList(value_1(matchValue)[0], void 0)), (node.tail = t, t)));
                 continue loop;
             }
             else {
@@ -468,37 +426,31 @@ export function unfold(gen, state) {
     node_1.tail = t_2;
     return FSharpList__get_Tail(root);
 }
-
 export function iterate(action, xs) {
     fold((unitVar, x) => {
         action(x);
     }, void 0, xs);
 }
-
 export function iterate2(action, xs, ys) {
     fold2((unitVar, x, y) => {
         action(x, y);
     }, void 0, xs, ys);
 }
-
 export function iterateIndexed(action, xs) {
     fold((i, x) => {
         action(i, x);
         return (i + 1) | 0;
     }, 0, xs);
 }
-
 export function iterateIndexed2(action, xs, ys) {
     fold2((i, x, y) => {
         action(i, x, y);
         return (i + 1) | 0;
     }, 0, xs, ys);
 }
-
 export function toSeq(xs) {
     return xs;
 }
-
 export function ofArrayWithTail(xs, tail_1) {
     let res = tail_1;
     for (let i = xs.length - 1; i >= 0; i--) {
@@ -506,11 +458,9 @@ export function ofArrayWithTail(xs, tail_1) {
     }
     return res;
 }
-
 export function ofArray(xs) {
     return ofArrayWithTail(xs, FSharpList_get_Empty());
 }
-
 export function ofSeq(xs) {
     let xs_3, t;
     if (isArrayLike(xs)) {
@@ -538,7 +488,6 @@ export function ofSeq(xs) {
         return FSharpList__get_Tail(root);
     }
 }
-
 export function concat(lists) {
     const root = FSharpList_get_Empty();
     let node = root;
@@ -550,7 +499,8 @@ export function concat(lists) {
         }, node, xs);
     };
     if (isArrayLike(lists)) {
-        lists.forEach(action);
+        const xs_3 = lists;
+        xs_3.forEach(action);
     }
     else if (lists instanceof FSharpList) {
         iterate(action, lists);
@@ -571,7 +521,6 @@ export function concat(lists) {
     xs_6.tail = t_2;
     return FSharpList__get_Tail(root);
 }
-
 export function scan(folder, state, xs) {
     let xs_4, t_2;
     const root = FSharpList_get_Empty();
@@ -591,15 +540,12 @@ export function scan(folder, state, xs) {
     xs_6.tail = t_4;
     return FSharpList__get_Tail(root);
 }
-
 export function scanBack(folder, xs, state) {
-    return ofArray(scanBack_1(folder, toArray(xs), state, null));
+    return ofArray(scanBack_1(folder, toArray(xs), state));
 }
-
 export function append(xs, ys) {
     return fold((acc, x) => FSharpList_Cons_305B8EAC(x, acc), ys, reverse(xs));
 }
-
 export function collect(mapping, xs) {
     let xs_1, t;
     const root = FSharpList_get_Empty();
@@ -618,7 +564,6 @@ export function collect(mapping, xs) {
     xs_3.tail = t_2;
     return FSharpList__get_Tail(root);
 }
-
 export function mapIndexed(mapping, xs) {
     const root = FSharpList_get_Empty();
     const node = foldIndexed((i, acc, x) => {
@@ -630,7 +575,6 @@ export function mapIndexed(mapping, xs) {
     node.tail = t_2;
     return FSharpList__get_Tail(root);
 }
-
 export function map(mapping, xs) {
     const root = FSharpList_get_Empty();
     const node = fold((acc, x) => {
@@ -642,11 +586,9 @@ export function map(mapping, xs) {
     node.tail = t_2;
     return FSharpList__get_Tail(root);
 }
-
 export function indexed(xs) {
     return mapIndexed((i, x) => [i, x], xs);
 }
-
 export function map2(mapping, xs, ys) {
     const root = FSharpList_get_Empty();
     const node = fold2((acc, x, y) => {
@@ -658,12 +600,10 @@ export function map2(mapping, xs, ys) {
     node.tail = t_2;
     return FSharpList__get_Tail(root);
 }
-
 export function mapIndexed2(mapping, xs, ys) {
     const loop = (i_mut, acc_mut, xs_1_mut, ys_1_mut) => {
         let t;
-        loop:
-        while (true) {
+        loop: while (true) {
             const i = i_mut, acc = acc_mut, xs_1 = xs_1_mut, ys_1 = ys_1_mut;
             if (FSharpList__get_IsEmpty(xs_1) ? true : FSharpList__get_IsEmpty(ys_1)) {
                 return acc;
@@ -684,12 +624,10 @@ export function mapIndexed2(mapping, xs, ys) {
     node_1.tail = t_2;
     return FSharpList__get_Tail(root);
 }
-
 export function map3(mapping, xs, ys, zs) {
     const loop = (acc_mut, xs_1_mut, ys_1_mut, zs_1_mut) => {
         let t;
-        loop:
-        while (true) {
+        loop: while (true) {
             const acc = acc_mut, xs_1 = xs_1_mut, ys_1 = ys_1_mut, zs_1 = zs_1_mut;
             if ((FSharpList__get_IsEmpty(xs_1) ? true : FSharpList__get_IsEmpty(ys_1)) ? true : FSharpList__get_IsEmpty(zs_1)) {
                 return acc;
@@ -710,7 +648,6 @@ export function map3(mapping, xs, ys, zs) {
     node_1.tail = t_2;
     return FSharpList__get_Tail(root);
 }
-
 export function mapFold(mapping, state, xs) {
     const root = FSharpList_get_Empty();
     const patternInput_1 = fold((tupledArg, x) => {
@@ -722,15 +659,12 @@ export function mapFold(mapping, state, xs) {
     patternInput_1[0].tail = t_2;
     return [FSharpList__get_Tail(root), patternInput_1[1]];
 }
-
 export function mapFoldBack(mapping, xs, state) {
     return mapFold((acc, x) => mapping(x, acc), state, reverse(xs));
 }
-
 export function tryPick(f, xs) {
     const loop = (xs_1_mut) => {
-        loop:
-        while (true) {
+        loop: while (true) {
             const xs_1 = xs_1_mut;
             if (FSharpList__get_IsEmpty(xs_1)) {
                 return void 0;
@@ -750,7 +684,6 @@ export function tryPick(f, xs) {
     };
     return loop(xs);
 }
-
 export function pick(f, xs) {
     const matchValue = tryPick(f, xs);
     if (matchValue == null) {
@@ -760,11 +693,9 @@ export function pick(f, xs) {
         return value_1(matchValue);
     }
 }
-
 export function tryFind(f, xs) {
-    return tryPick((x) => (f(x) ? some(x) : (void 0)), xs);
+    return tryPick((x) => (f(x) ? some(x) : void 0), xs);
 }
-
 export function find(f, xs) {
     const matchValue = tryFind(f, xs);
     if (matchValue == null) {
@@ -774,11 +705,9 @@ export function find(f, xs) {
         return value_1(matchValue);
     }
 }
-
 export function tryFindBack(f, xs) {
     return tryFindBack_1(f, toArray(xs));
 }
-
 export function findBack(f, xs) {
     const matchValue = tryFindBack(f, xs);
     if (matchValue == null) {
@@ -788,11 +717,9 @@ export function findBack(f, xs) {
         return value_1(matchValue);
     }
 }
-
 export function tryFindIndex(f, xs) {
     const loop = (i_mut, xs_1_mut) => {
-        loop:
-        while (true) {
+        loop: while (true) {
             const i = i_mut, xs_1 = xs_1_mut;
             if (FSharpList__get_IsEmpty(xs_1)) {
                 return void 0;
@@ -810,7 +737,6 @@ export function tryFindIndex(f, xs) {
     };
     return loop(0, xs);
 }
-
 export function findIndex(f, xs) {
     const matchValue = tryFindIndex(f, xs);
     if (matchValue == null) {
@@ -818,14 +744,12 @@ export function findIndex(f, xs) {
         return -1;
     }
     else {
-        return matchValue | 0;
+        return value_1(matchValue) | 0;
     }
 }
-
 export function tryFindIndexBack(f, xs) {
     return tryFindIndexBack_1(f, toArray(xs));
 }
-
 export function findIndexBack(f, xs) {
     const matchValue = tryFindIndexBack(f, xs);
     if (matchValue == null) {
@@ -833,14 +757,12 @@ export function findIndexBack(f, xs) {
         return -1;
     }
     else {
-        return matchValue | 0;
+        return value_1(matchValue) | 0;
     }
 }
-
 export function tryItem(n, xs) {
     const loop = (i_mut, xs_1_mut) => {
-        loop:
-        while (true) {
+        loop: while (true) {
             const i = i_mut, xs_1 = xs_1_mut;
             if (FSharpList__get_IsEmpty(xs_1)) {
                 return void 0;
@@ -858,11 +780,9 @@ export function tryItem(n, xs) {
     };
     return loop(0, xs);
 }
-
 export function item(n, xs) {
     return FSharpList__get_Item_Z524259A4(xs, n);
 }
-
 export function filter(f, xs) {
     const root = FSharpList_get_Empty();
     const node = fold((acc, x) => {
@@ -879,7 +799,6 @@ export function filter(f, xs) {
     node.tail = t_2;
     return FSharpList__get_Tail(root);
 }
-
 export function partition(f, xs) {
     const matchValue = FSharpList_get_Empty();
     const root2 = FSharpList_get_Empty();
@@ -901,7 +820,6 @@ export function partition(f, xs) {
     patternInput_1[1].tail = t_5;
     return [FSharpList__get_Tail(root1), FSharpList__get_Tail(root2)];
 }
-
 export function choose(f, xs) {
     const root = FSharpList_get_Empty();
     const node = fold((acc, x) => {
@@ -919,11 +837,9 @@ export function choose(f, xs) {
     node.tail = t_2;
     return FSharpList__get_Tail(root);
 }
-
 export function contains(value, xs, eq) {
     return tryFindIndex((v) => eq.Equals(value, v), xs) != null;
 }
-
 export function initialize(n, f) {
     let xs, t;
     const root = FSharpList_get_Empty();
@@ -936,11 +852,9 @@ export function initialize(n, f) {
     xs_2.tail = t_2;
     return FSharpList__get_Tail(root);
 }
-
 export function replicate(n, x) {
     return initialize(n, (_arg) => x);
 }
-
 export function reduce(f, xs) {
     if (FSharpList__get_IsEmpty(xs)) {
         throw new Error(SR_inputWasEmpty);
@@ -949,7 +863,6 @@ export function reduce(f, xs) {
         return fold(f, head(xs), tail(xs));
     }
 }
-
 export function reduceBack(f, xs) {
     if (FSharpList__get_IsEmpty(xs)) {
         throw new Error(SR_inputWasEmpty);
@@ -958,22 +871,17 @@ export function reduceBack(f, xs) {
         return foldBack(f, tail(xs), head(xs));
     }
 }
-
 export function forAll(f, xs) {
     return fold((acc, x) => (acc && f(x)), true, xs);
 }
-
 export function forAll2(f, xs, ys) {
     return fold2((acc, x, y) => (acc && f(x, y)), true, xs, ys);
 }
-
 export function exists(f, xs) {
     return tryFindIndex(f, xs) != null;
 }
-
 export function exists2(f_mut, xs_mut, ys_mut) {
-    exists2:
-    while (true) {
+    exists2: while (true) {
         const f = f_mut, xs = xs_mut, ys = ys_mut;
         const matchValue = FSharpList__get_IsEmpty(xs);
         const matchValue_1 = FSharpList__get_IsEmpty(ys);
@@ -993,10 +901,9 @@ export function exists2(f_mut, xs_mut, ys_mut) {
             matchResult = 1;
         }
         switch (matchResult) {
-            case 0: {
+            case 0:
                 return false;
-            }
-            case 1: {
+            case 1:
                 if (f(FSharpList__get_Head(xs), FSharpList__get_Head(ys))) {
                     return true;
                 }
@@ -1006,77 +913,59 @@ export function exists2(f_mut, xs_mut, ys_mut) {
                     ys_mut = FSharpList__get_Tail(ys);
                     continue exists2;
                 }
-            }
-            case 2: {
+            default:
                 throw new Error((SR_differentLengths + "\\nParameter name: ") + "list2");
-            }
         }
         break;
     }
 }
-
 export function unzip(xs) {
     return foldBack((tupledArg, tupledArg_1) => [FSharpList_Cons_305B8EAC(tupledArg[0], tupledArg_1[0]), FSharpList_Cons_305B8EAC(tupledArg[1], tupledArg_1[1])], xs, [FSharpList_get_Empty(), FSharpList_get_Empty()]);
 }
-
 export function unzip3(xs) {
     return foldBack((tupledArg, tupledArg_1) => [FSharpList_Cons_305B8EAC(tupledArg[0], tupledArg_1[0]), FSharpList_Cons_305B8EAC(tupledArg[1], tupledArg_1[1]), FSharpList_Cons_305B8EAC(tupledArg[2], tupledArg_1[2])], xs, [FSharpList_get_Empty(), FSharpList_get_Empty(), FSharpList_get_Empty()]);
 }
-
 export function zip(xs, ys) {
     return map2((x, y) => [x, y], xs, ys);
 }
-
 export function zip3(xs, ys, zs) {
     return map3((x, y, z) => [x, y, z], xs, ys, zs);
 }
-
 export function sortWith(comparer, xs) {
     const arr = toArray(xs);
     arr.sort(comparer);
     return ofArray(arr);
 }
-
 export function sort(xs, comparer) {
     return sortWith((x, y) => comparer.Compare(x, y), xs);
 }
-
 export function sortBy(projection, xs, comparer) {
     return sortWith((x, y) => comparer.Compare(projection(x), projection(y)), xs);
 }
-
 export function sortDescending(xs, comparer) {
     return sortWith((x, y) => (comparer.Compare(x, y) * -1), xs);
 }
-
 export function sortByDescending(projection, xs, comparer) {
     return sortWith((x, y) => (comparer.Compare(projection(x), projection(y)) * -1), xs);
 }
-
 export function sum(xs, adder) {
     return fold((acc, x) => adder.Add(acc, x), adder.GetZero(), xs);
 }
-
 export function sumBy(f, xs, adder) {
     return fold((acc, x) => adder.Add(acc, f(x)), adder.GetZero(), xs);
 }
-
 export function maxBy(projection, xs, comparer) {
     return reduce((x, y) => ((comparer.Compare(projection(y), projection(x)) > 0) ? y : x), xs);
 }
-
 export function max(xs, comparer) {
     return reduce((x, y) => ((comparer.Compare(y, x) > 0) ? y : x), xs);
 }
-
 export function minBy(projection, xs, comparer) {
     return reduce((x, y) => ((comparer.Compare(projection(y), projection(x)) > 0) ? x : y), xs);
 }
-
 export function min(xs, comparer) {
     return reduce((x, y) => ((comparer.Compare(y, x) > 0) ? x : y), xs);
 }
-
 export function average(xs, averager) {
     let count = 0;
     const total = fold((acc, x) => {
@@ -1085,7 +974,6 @@ export function average(xs, averager) {
     }, averager.GetZero(), xs);
     return averager.DivideByInt(total, count);
 }
-
 export function averageBy(f, xs, averager) {
     let count = 0;
     const total = fold((acc, x) => {
@@ -1094,15 +982,12 @@ export function averageBy(f, xs, averager) {
     }, averager.GetZero(), xs);
     return averager.DivideByInt(total, count);
 }
-
 export function permute(f, xs) {
     return ofArray(permute_1(f, toArray(xs)));
 }
-
 export function chunkBySize(chunkSize, xs) {
-    return ofArray(map_1(ofArray, chunkBySize_1(chunkSize, toArray(xs)), null));
+    return ofArray(map_1(ofArray, chunkBySize_1(chunkSize, toArray(xs))));
 }
-
 export function allPairs(xs, ys) {
     const root = FSharpList_get_Empty();
     let node = root;
@@ -1117,10 +1002,8 @@ export function allPairs(xs, ys) {
     xs_3.tail = t_2;
     return FSharpList__get_Tail(root);
 }
-
 export function skip(count_mut, xs_mut) {
-    skip:
-    while (true) {
+    skip: while (true) {
         const count = count_mut, xs = xs_mut;
         if (count <= 0) {
             return xs;
@@ -1136,10 +1019,8 @@ export function skip(count_mut, xs_mut) {
         break;
     }
 }
-
 export function skipWhile(predicate_mut, xs_mut) {
-    skipWhile:
-    while (true) {
+    skipWhile: while (true) {
         const predicate = predicate_mut, xs = xs_mut;
         if (FSharpList__get_IsEmpty(xs)) {
             return xs;
@@ -1155,15 +1036,13 @@ export function skipWhile(predicate_mut, xs_mut) {
         break;
     }
 }
-
 export function take(count, xs) {
     if (count < 0) {
         throw new Error((SR_inputMustBeNonNegative + "\\nParameter name: ") + "count");
     }
     const loop = (i_mut, acc_mut, xs_1_mut) => {
         let t;
-        loop:
-        while (true) {
+        loop: while (true) {
             const i = i_mut, acc = acc_mut, xs_1 = xs_1_mut;
             if (i <= 0) {
                 return acc;
@@ -1186,12 +1065,10 @@ export function take(count, xs) {
     node.tail = t_2;
     return FSharpList__get_Tail(root);
 }
-
 export function takeWhile(predicate, xs) {
     const loop = (acc_mut, xs_1_mut) => {
         let t;
-        loop:
-        while (true) {
+        loop: while (true) {
             const acc = acc_mut, xs_1 = xs_1_mut;
             if (FSharpList__get_IsEmpty(xs_1)) {
                 return acc;
@@ -1213,12 +1090,10 @@ export function takeWhile(predicate, xs) {
     node.tail = t_2;
     return FSharpList__get_Tail(root);
 }
-
 export function truncate(count, xs) {
     const loop = (i_mut, acc_mut, xs_1_mut) => {
         let t;
-        loop:
-        while (true) {
+        loop: while (true) {
             const i = i_mut, acc = acc_mut, xs_1 = xs_1_mut;
             if (i <= 0) {
                 return acc;
@@ -1241,7 +1116,6 @@ export function truncate(count, xs) {
     node.tail = t_2;
     return FSharpList__get_Tail(root);
 }
-
 export function getSlice(startIndex, endIndex, xs) {
     const len = length(xs) | 0;
     let startIndex_1;
@@ -1254,11 +1128,9 @@ export function getSlice(startIndex, endIndex, xs) {
         return FSharpList_get_Empty();
     }
     else {
-        const count = ((endIndex_1 - startIndex_1) + 1) | 0;
-        return take(count, skip(startIndex_1, xs));
+        return take((endIndex_1 - startIndex_1) + 1, skip(startIndex_1, xs));
     }
 }
-
 export function splitAt(index, xs) {
     if (index < 0) {
         throw new Error((SR_inputMustBeNonNegative + "\\nParameter name: ") + "index");
@@ -1268,7 +1140,6 @@ export function splitAt(index, xs) {
     }
     return [take(index, xs), skip(index, xs)];
 }
-
 export function exactlyOne(xs) {
     if (FSharpList__get_IsEmpty(xs)) {
         throw new Error((SR_inputSequenceEmpty + "\\nParameter name: ") + "list");
@@ -1280,36 +1151,29 @@ export function exactlyOne(xs) {
         throw new Error((SR_inputSequenceTooLong + "\\nParameter name: ") + "list");
     }
 }
-
 export function tryExactlyOne(xs) {
-    if ((!FSharpList__get_IsEmpty(xs)) && FSharpList__get_IsEmpty(FSharpList__get_Tail(xs))) {
+    if (!FSharpList__get_IsEmpty(xs) && FSharpList__get_IsEmpty(FSharpList__get_Tail(xs))) {
         return some(FSharpList__get_Head(xs));
     }
     else {
         return void 0;
     }
 }
-
 export function where(predicate, xs) {
     return filter(predicate, xs);
 }
-
 export function pairwise(xs) {
     return ofArray(pairwise_1(toArray(xs)));
 }
-
 export function windowed(windowSize, xs) {
-    return ofArray(map_1(ofArray, windowed_1(windowSize, toArray(xs)), null));
+    return ofArray(map_1(ofArray, windowed_1(windowSize, toArray(xs))));
 }
-
 export function splitInto(chunks, xs) {
-    return ofArray(map_1(ofArray, splitInto_1(chunks, toArray(xs)), null));
+    return ofArray(map_1(ofArray, splitInto_1(chunks, toArray(xs))));
 }
-
 export function transpose(lists) {
-    return ofArray(map_1(ofArray, transpose_1(map_1(toArray, Array.from(lists), null), null), null));
+    return ofArray(map_1(ofArray, transpose_1(map_1(toArray, Array.from(lists)))));
 }
-
 export function insertAt(index, y, xs) {
     let i = -1;
     let isDone = false;
@@ -1327,7 +1191,6 @@ export function insertAt(index, y, xs) {
         throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     })()));
 }
-
 export function insertManyAt(index, ys, xs) {
     let i = -1;
     let isDone = false;
@@ -1346,7 +1209,6 @@ export function insertManyAt(index, ys, xs) {
         throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     })()));
 }
-
 export function removeAt(index, xs) {
     let i = -1;
     let isDone = false;
@@ -1365,7 +1227,6 @@ export function removeAt(index, xs) {
     }
     return ys;
 }
-
 export function removeManyAt(index, count, xs) {
     let i = -1;
     let status = -1;
@@ -1394,7 +1255,6 @@ export function removeManyAt(index, count, xs) {
     }
     return ys;
 }
-
 export function updateAt(index, y, xs) {
     let isDone = false;
     const ys = mapIndexed((i, x) => {
@@ -1411,4 +1271,3 @@ export function updateAt(index, y, xs) {
     }
     return ys;
 }
-

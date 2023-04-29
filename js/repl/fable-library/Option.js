@@ -1,4 +1,4 @@
-import { compare, equals, structuralHash } from "./Util.js";
+import { structuralHash, equals, compare } from "./Util.js";
 // Using a class here for better compatibility with TS files importing Some
 export class Some {
     constructor(value) {
@@ -31,9 +31,6 @@ export class Some {
         }
     }
 }
-export function some(x) {
-    return x == null || x instanceof Some ? new Some(x) : x;
-}
 export function value(x) {
     if (x == null) {
         throw new Error("Option has no value");
@@ -41,6 +38,12 @@ export function value(x) {
     else {
         return x instanceof Some ? x.value : x;
     }
+}
+export function unwrap(opt) {
+    return opt instanceof Some ? opt.value : opt;
+}
+export function some(x) {
+    return x == null || x instanceof Some ? new Some(x) : x;
 }
 export function ofNullable(x) {
     // This will fail with unit probably, an alternative would be:
@@ -87,7 +90,7 @@ export function tryOp(op, arg) {
     try {
         return some(op(arg));
     }
-    catch (_a) {
+    catch {
         return undefined;
     }
 }
