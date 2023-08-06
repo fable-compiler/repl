@@ -6,7 +6,7 @@
 
 To develop the REPL locally:
 
-1. `./fake.sh build -t WatchApp` or `fake.cmd build -t WatchApp` depending on your OS
+1. `dotnet fsi build.fsx -p WatchApp`
 2. Open `localhost:8080` in your browser
 
 ## How to add a sample
@@ -78,6 +78,6 @@ The first step is the most complicated as it requires using a custom build of th
 
 The second step can be run with the `BuildLib` FAKE target.
 
-> If you want to use fable-standalone (and base metadata) from a local Fable repo in a sibling folder enable the `LOCAL_PKG` env var as in `LOCAL_PKG=1 dotnet fake build -t BuildLib`
+> If you want to use fable-standalone (and base metadata) from a local Fable repo in a sibling folder enable the `LOCAL_PKG` env var as in `LOCAL_PKG=1 dotnet fsi build.fsx -p BuildLib`
 
 One important thing to remember is **public inlined functions won't work** with precompiled libs so please refrain from using them in Fable.Repl.Lib source.

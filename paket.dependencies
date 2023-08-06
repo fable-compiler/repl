@@ -10,7 +10,7 @@ nuget Fable.Elmish
 nuget Fable.Elmish.React
 nuget Fable.Elmish.HMR
 nuget Thoth.Json
-nuget Thoth.Elmish.Toast ~> 2
+nuget Thoth.Elmish.Toast
 nuget Fable.Fetch
 nuget Fable.FontAwesome.Free
 nuget Feliz prerelease
@@ -37,16 +37,3 @@ github alfonsogarciacaro/Feliz.Engine:main
 github alfonsogarciacaro/Feliz.Snabbdom:main
 github davedawkins/Feliz.Engine.Bulma:main
 github davedawkins/Sutil:main
-
-group netcorebuild
-    source https://www.nuget.org/api/v2
-
-    nuget Fake.DotNet.Cli
-    nuget Fake.Core.Target
-    nuget Fake.Core.Process
-    nuget Fake.Core.String
-    nuget Fake.IO.FileSystem
-    nuget Fake.JavaScript.Npm
-    nuget BlackFox.Fake.BuildTask
-    nuget Fake.Api.GitHub
-    nuget Fake.Tools.Git

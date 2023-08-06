@@ -1,10 +1,6 @@
 {
   "private": true,
   "scripts": {
-    "build-lib": "dotnet fable src/Fable.Repl.Lib -o public/js/repl/fable-repl-lib --rootModule false --fableLib public/js/repl/fable-library",
-    "build": "dotnet fable src/App --run webpack",
-    "start": "dotnet fable watch src/App --run webpack-dev-server",
-    "deploy": "gh-pages -d deploy"
   },
   "dependencies": {
     "@babel/core": "^7.10.4",
