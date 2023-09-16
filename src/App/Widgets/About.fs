@@ -17,7 +17,7 @@ let view fableVersion =
                     prop.style [
                         style.textDecoration.underline
                     ]
-                    prop.text "Found a bug ?"
+                    prop.text Translations.msg_found_a_bug
                 ]
             ]
         ]

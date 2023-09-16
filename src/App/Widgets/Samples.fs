@@ -301,7 +301,7 @@ let view model dispatch =
 
                                 prop.onClick fetchSamplesMsg
                                 prop.children [
-                                    Html.span "Refresh samples"
+                                    Html.span Translations.msg_samples_refresh_samples
                                 ]
                             ]
                         ]

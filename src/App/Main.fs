@@ -171,7 +171,7 @@ let private postToGist =
             let data =
               Encode.object [
                 "public", Encode.bool true
-                "description", Encode.string "Created with Fable REPL"
+                "description", Encode.string Translations.msg_gist_description
                 "files", Encode.object [
                     yield "fable-repl.fs", toContent code
                     yield "fable-repl.html", toContent html
@@ -218,7 +218,7 @@ let private loadGist =
 
 let private showGlobalErrorToast msg =
     Toast.message msg
-    |> Toast.title "Failed to compile"
+    |> Toast.title Translations.msg_compilation_failed
     |> Toast.position Toast.BottomRight
     |> Toast.icon Fa.Solid.Exclamation
     |> Toast.noTimeout
@@ -271,7 +271,7 @@ let update msg (model : Model) =
         ]
 
     | LoadFail ->
-        let msg = "Assemblies couldn't be loaded. Some firewalls prevent download of binary files, please check."
+        let msg = Translations.msg_assemblies_load_failed
         { model with
             State = Idle
         }
@@ -337,14 +337,14 @@ let update msg (model : Model) =
         JS.console.error exn
 
         model
-        , Toast.message "An error occured when creating the gist. Is the token valid?"
+        , Toast.message Translations.msg_gist_token_invalid
             |> Toast.icon Fa.Solid.ExclamationTriangle
             |> Toast.position Toast.BottomRight
             |> Toast.warning
 
     | NoToken ->
         model
-        , Toast.message "You need to register your GitHub API token before sharing to Gist"
+        , Toast.message Translations.msg_gist_token_missing
             |> Toast.icon Fa.Solid.ExclamationTriangle
             |> Toast.position Toast.BottomRight
             |> Toast.warning
@@ -390,7 +390,7 @@ let update msg (model : Model) =
             let hasCriticalErrors = errors |> Array.exists (fun e -> not e.IsWarning)
             if hasCriticalErrors then
                 let toastCmd =
-                    Toast.message "Failed to compile"
+                    Toast.message Translations.msg_compilation_failed
                     |> Toast.position Toast.BottomRight
                     |> Toast.icon Fa.Solid.Exclamation
                     |> Toast.dismissOnClick
@@ -410,7 +410,7 @@ let update msg (model : Model) =
                     | _ -> [fun _ -> saveModel model]
 
                 let cmd2 =
-                    Toast.message "Compiled successfuly"
+                    Toast.message Translations.msg_compilation_successful
                     |> Toast.position Toast.BottomRight
                     |> Toast.icon Fa.Solid.Check
                     |> Toast.dismissOnClick
@@ -565,8 +565,8 @@ let update msg (model : Model) =
 
     | ShareableUrlReady () ->
         model
-        , Toast.message "Copy it from the address bar"
-            |> Toast.title "Shareable link is ready"
+        , Toast.message Translations.msg_shareable_url_ready_text
+            |> Toast.title Translations.msg_shareable_url_ready_title
             |> Toast.position Toast.BottomRight
             |> Toast.icon Fa.Solid.InfoCircle
             |> Toast.timeout (System.TimeSpan.FromSeconds 5.)
@@ -575,7 +575,7 @@ let update msg (model : Model) =
     | LoadGistError exn ->
         JS.console.error exn
         model
-        , Toast.message "An error occured when loading the gist"
+        , Toast.message Translations.msg_load_gist_error
             |> Toast.icon Fa.Solid.ExclamationTriangle
             |> Toast.position Toast.BottomRight
             |> Toast.warning
@@ -583,7 +583,7 @@ let update msg (model : Model) =
     | UpdateQueryFailed exn ->
         JS.console.error exn
         model
-        , Toast.message "An error occured when updating the URL"
+        , Toast.message Translations.msg_update_url_failed
             |> Toast.icon Fa.Solid.ExclamationTriangle
             |> Toast.position Toast.BottomRight
             |> Toast.warning
@@ -757,12 +757,12 @@ let private problemsPanel (isExpanded : bool) (errors : Monaco.Editor.IMarkerDat
     let title =
         if errors.Length = 0 then
             Html.span [
-                prop.text "Problems"
+                prop.text Translations.msg_problems
             ]
         else
             Html.span [
                 prop.children [
-                    Html.text  "Problems: "
+                    Html.text Translations.msg_problems_info
                     Html.span [
                         prop.style [
                             style.marginLeft (length.em 0.5)
@@ -815,7 +815,7 @@ let private problemsPanel (isExpanded : bool) (errors : Monaco.Editor.IMarkerDat
                                 match error.severity with
                                 | Monaco.MarkerSeverity.Error -> Fa.Solid.TimesCircle, color.isDanger, "is-danger"
                                 | Monaco.MarkerSeverity.Warning -> Fa.Solid.ExclamationTriangle, color.isWarning, "is-warning"
-                                | _ -> failwith "Should not happen", color.isDanger, ""
+                                | _ -> failwith Translations.msg_fatal_error, color.isDanger, ""
 
                             Html.div [
                                 prop.className ("scrollable-panel-body-row " + colorClass)
@@ -984,7 +984,7 @@ let private outputTabs (activeTab : OutputTab) dispatch =
                     )
                     prop.children [
                         Html.a [
-                            prop.text "Live sample"
+                            prop.text Translations.msg_live_sample_text
                         ]
                     ]
                 ]
@@ -997,7 +997,7 @@ let private outputTabs (activeTab : OutputTab) dispatch =
                     )
                     prop.children [
                         Html.a [
-                            prop.text "Code"
+                            prop.text Translations.msg_code_text
                         ]
                     ]
                 ]

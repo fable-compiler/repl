@@ -66,7 +66,7 @@ let init (result: Option<Router.Page>) =
 let private view (model: Model) dispatch =
     match model with
     | Initializing ->
-        Html.text "Initializing"
+        Html.text Translations.msg_initializing
 
     | Running model ->
         Main.view model (MainMsg >> dispatch)
@@ -91,19 +91,19 @@ let private view (model: Model) dispatch =
 
                             Bulma.title.h3 [
                                 text.hasTextCentered
-                                prop.text "Fable REPL"
+                                prop.text Translations.msg_repl_name
                             ]
 
                             Bulma.subtitle.h5 [
                                 text.hasTextCentered
-                                prop.text "For best experience we recommend running the REPL on a desktop"
+                                prop.text Translations.msg_desktop_experience
                             ]
 
                             Bulma.level [
                                 Bulma.levelItem [
                                     Bulma.button.a [
                                         prop.onClick (fun _ -> Initialize p |> dispatch)
-                                        prop.text "Continue"
+                                        prop.text Translations.btn_continue
                                     ]
                                 ]
                             ]

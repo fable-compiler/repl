@@ -52,7 +52,7 @@ let renderShowSeparator =
         prop.style [
             style.justifyContent.center
         ]
-        prop.text "Iframe loaded"
+        prop.text Translations.msg_iframe_loaded
     ]
 
 let renderBody (isExpanded : bool) (logs : Log list) (setConsoleEnd : HTMLElement -> unit) onContainerScroll =
@@ -134,7 +134,7 @@ let consolePanel =
 
                         Html.div [
                             prop.className "scrollable-panel-header-title"
-                            prop.text "Console"
+                            prop.text Translations.win_header_console
                         ]
 
                         Html.div [
