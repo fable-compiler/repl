@@ -185,7 +185,7 @@ module TranslationsSupport =
            msg_problems = "Проблеми";
            msg_problems_info = "Проблеми = ";
            msg_invalid_iframe_error = "Невідоме значення `%A` для повідомлення від iframe";
-           msg_collapse_sidebar = "Collapse sidebar";
+           msg_collapse_sidebar = "Згорнути бічну панель";
            msg_widget_general = "Загальний";
            msg_widget_samples = "Приклади";
            msg_widget_options = "Опції";
