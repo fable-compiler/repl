@@ -206,17 +206,11 @@ module Stages =
                         reg.Replace(
                             line,
                             fun m ->
-                                let previousVersion = m.Groups.[1].Value
-
-                                if previousVersion = newVersion then
-                                    failwith
-                                        "You need to update the version in the CHANGELOG.md before publishing a new version of the REPL"
-                                else
-                                    m.Groups.[0].Value
-                                        .Replace(
-                                            m.Groups.[1].Value,
-                                            newVersion
-                                        )
+                                m.Groups.[0].Value
+                                    .Replace(
+                                        m.Groups.[1].Value,
+                                        newVersion
+                                    )
                         )
                     )
                     |> Seq.toArray
@@ -313,7 +307,7 @@ pipeline "Release" {
     whenEnvVar "GITHUB_TOKEN"
     whenBranch "main"
 
-    Stages.checkIfNewReleaseIsNeeded
+    // Stages.checkIfNewReleaseIsNeeded
     Stages.clean
     Stages.donetRestore
     Stages.autoUpdateFableNpmPackages
@@ -329,8 +323,10 @@ pipeline "Release" {
             let changelogVersion = Changelog.getLastVersion ()
             let dateVersion = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")
 
-            // The release version include the date, because the REPL
-            // is auto-released, when a new version of `fable-standalone` is released
+            // The release version include the date, because we don't want to update
+            // the REPL version each time a new fable-standalone version is released
+            // This avoid doing dummy changelog entries, also for the user the
+            // Fable version is available in the REPL website so it should be fine
             let releaseVersion =
                 changelogVersion
                 + "-"
