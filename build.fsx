@@ -304,7 +304,7 @@ pipeline "BuildApp" {
 
 pipeline "Release" {
 
-    whenEnvVar "GITHUB_TOKEN"
+    whenEnvVar "GITHUB_TOKEN_FABLE_ORG"
     whenBranch "main"
 
     // Stages.checkIfNewReleaseIsNeeded
@@ -318,7 +318,7 @@ pipeline "Release" {
 
     stage "Release GITHUB" {
         run (fun ctx ->
-            let token = ctx.GetEnvVar "GITHUB_TOKEN"
+            let token = ctx.GetEnvVar "GITHUB_TOKEN_FABLE_ORG"
 
             let changelogVersion = Changelog.getLastVersion ()
             let dateVersion = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")
