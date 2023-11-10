@@ -350,7 +350,7 @@ pipeline "Release" {
 
             githubClient.Repository.Release.Create(
                 "fable-compiler",
-                "Fable",
+                "repl",
                 newRelease
             )
             |> Async.AwaitTask
