@@ -69,6 +69,7 @@ class Editor extends React.Component {
             <div className={className} style={{ height: '100%', overflow: 'hidden', display: display }}>
                 <ReactResizeDetector handleWidth handleHeight onResize={this.onResize} />
                 <MonacoEditor
+                    language={this.props.language}
                     value={this.props.value}
                     options={this.props.options}
                     onChange={this.onChange}
@@ -90,7 +91,8 @@ Editor.propTypes = {
     errors: PropTypes.array,
     eventId: PropTypes.string,
     isHidden: PropTypes.bool,
-    customClass: PropTypes.string
+    customClass: PropTypes.string,
+    language: PropTypes.string
 };
 
 Editor.defaultProps = {
@@ -101,7 +103,8 @@ Editor.defaultProps = {
     errors: [],
     eventId: null,
     isHidden: false,
-    customClass: ""
+    customClass: "",
+    language: "fsharp"
 };
 
 export default Editor;

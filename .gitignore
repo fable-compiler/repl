@@ -1,7 +1,7 @@
 *.fs.js
-public/js
-public/libs
-public/metadata
+src/App/public/js
+src/App/public/libs
+src/App/public/metadata
 src/Standalone/
 deploy/
 temp/
@@ -32,13 +32,14 @@ build
 .fake/
 paket-files/
 packages/
-public/js/
-public/libs/
+src/App/public/js/
+src/App/public/libs/
 
-public/*.eot
-public/*.svg
-public/*.woff2
-public/*.ttf
-public/*.woff
+src/App/public/*.eot
+src/App/public/*.svg
+src/App/public/*.woff2
+src/App/public/*.ttf
+src/App/public/*.woff
 
 *.DS_Store
+src/App/dist

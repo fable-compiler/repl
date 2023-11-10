@@ -28,6 +28,8 @@ let private Worker(): Worker =
     // importDefault "worker-loader!../../../Fable/src/fable-standalone/src/Worker/Worker.fsproj"
     Worker.Create(Literals.WORKER_BUNDLE_URL)
 
+importSideEffects "./userWorker.js"
+
 let private loadState(_key: string): ISavedState = importMember "./js/util.js"
 let private saveState(_key: string, _code: string, _html: string, _cssCode : string, _outputCodeActive: bool): unit = importMember "./js/util.js"
 let private updateQuery(_fsharpCode : string, _htmlCode : string, _cssCode : string): unit = importMember "./js/util.js"
@@ -684,39 +686,13 @@ let private fontSizeClass =
         | 17. -> "is-large"
         | _ -> "is-medium"
 
-let private htmlEditorOptions (fontSize : float) (fontFamily : string): Monaco.Editor.IEditorConstructionOptions =
+let private editorOptions (fontSize : float) (fontFamily : string): Monaco.Editor.IEditorConstructionOptions =
     jsOptions(fun o ->
         o.language <- Some "html"
         o.fontSize <- Some fontSize
         o.theme <- Some "vs-dark"
         o.minimap <- Some (jsOptions(fun oMinimap ->
             oMinimap.enabled <- Some false))
-        o.fontFamily <- Some fontFamily
-        o.fontLigatures <- Some (fontFamily = "Fira Code")
-    )
-
-let private cssEditorOptions (fontSize : float) (fontFamily : string) =
-    jsOptions<Monaco.Editor.IEditorConstructionOptions>(fun o ->
-        let minimapOptions =  jsOptions<Monaco.Editor.IEditorMinimapOptions>(fun oMinimap ->
-            oMinimap.enabled <- Some false
-        )
-        o.language <- Some "css"
-        o.fontSize <- Some fontSize
-        o.theme <- Some "vs-dark"
-        o.minimap <- Some minimapOptions
-        o.fontFamily <- Some fontFamily
-        o.fontLigatures <- Some (fontFamily = "Fira Code")
-    )
-
-let private fsharpEditorOptions (fontSize : float) (fontFamily : string) =
-    jsOptions<Monaco.Editor.IEditorConstructionOptions>(fun o ->
-        let minimapOptions = jsOptions<Monaco.Editor.IEditorMinimapOptions>(fun oMinimap ->
-            oMinimap.enabled <- Some false
-        )
-        o.language <- Some "fsharp"
-        o.fontSize <- Some fontSize
-        o.theme <- Some "vs-dark"
-        o.minimap <- Some minimapOptions
         o.fontFamily <- Some fontFamily
         o.fontLigatures <- Some (fontFamily = "Fira Code")
         o.fixedOverflowWidgets <- Some true
@@ -958,25 +934,27 @@ let private editorArea model dispatch =
             editorTabs model.CodeTab dispatch
             // Html editor
             ReactEditor.editor [
-                editor.options (htmlEditorOptions model.Sidebar.Options.FontSize model.Sidebar.Options.FontFamily)
+                editor.options (editorOptions model.Sidebar.Options.FontSize model.Sidebar.Options.FontFamily)
                 editor.value model.HtmlCode
                 editor.isHidden (model.CodeTab <> CodeTab.Html)
                 editor.customClass (fontSizeClass model.Sidebar.Options.FontSize)
                 editor.onChange (ChangeHtmlCode >> dispatch)
                 editor.editorDidMount (registerCompileCommand dispatch)
+                editor.language "html"
             ]
             // Css editor
             ReactEditor.editor [
-                editor.options (cssEditorOptions model.Sidebar.Options.FontSize model.Sidebar.Options.FontFamily)
+                editor.options (editorOptions model.Sidebar.Options.FontSize model.Sidebar.Options.FontFamily)
                 editor.value model.CssCode
                 editor.isHidden (model.CodeTab <> CodeTab.Css)
                 editor.customClass (fontSizeClass model.Sidebar.Options.FontSize)
                 editor.onChange (ChangeCssCode >> dispatch)
                 editor.editorDidMount (registerCompileCommand dispatch)
+                editor.language "css"
             ]
             // F# editor
             ReactEditor.editor [
-                editor.options (fsharpEditorOptions model.Sidebar.Options.FontSize model.Sidebar.Options.FontFamily)
+                editor.options (editorOptions model.Sidebar.Options.FontSize model.Sidebar.Options.FontFamily)
                 editor.value model.FSharpCode
                 editor.isHidden (model.CodeTab <> CodeTab.FSharp)
                 editor.onChange (ChangeFsharpCode >> dispatch)
@@ -984,6 +962,7 @@ let private editorArea model dispatch =
                 editor.eventId "fsharp_cursor_jump"
                 editor.customClass (fontSizeClass model.Sidebar.Options.FontSize)
                 editor.editorDidMount (onFSharpEditorDidMount model dispatch)
+                editor.language "fsharp"
             ]
             problemsPanel model.IsProblemsPanelExpanded model.FSharpErrors model.CodeTab dispatch
         ]
@@ -1041,11 +1020,10 @@ let private viewCodeEditor (model: Model) dispatch =
                         let minimapOptions = jsOptions<Monaco.Editor.IEditorMinimapOptions>(fun oMinimap ->
                             oMinimap.enabled <- Some false
                         )
-                        // o.language <- Some "javascript"
                         o.fontSize <- Some model.Sidebar.Options.FontSize
                         o.theme <- Some "vs-dark"
                         o.minimap <- Some minimapOptions
-                        // o.readOnly <- Some true
+                        o.readOnly <- Some true
                         o.fontFamily <- Some fontFamily
                         o.fontLigatures <- Some (fontFamily = "Fira Code")
                     )
@@ -1056,6 +1034,7 @@ let private viewCodeEditor (model: Model) dispatch =
         editor.isHidden (model.OutputTab <> OutputTab.Code)
         editor.customClass (fontSizeClass model.Sidebar.Options.FontSize)
         editor.editorDidMount (onJsEditorDidMount model dispatch)
+        editor.language (model.Sidebar.Options.Language.ToLower())
     ]
 
 let private outputArea model dispatch =

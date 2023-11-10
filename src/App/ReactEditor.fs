@@ -9,13 +9,14 @@ open Browser
 [<Erase>]
 type editor =
     /// <summary>Triggered when the value of the Editor changed</summary>
-    static member inline onChange (f : string -> unit) = Interop.mkAttr "onChange" f 
+    static member inline onChange (f : string -> unit) = Interop.mkAttr "onChange" f
     /// <summary>Set the value of the Editor</summary>
     static member inline value (value : string) = Interop.mkAttr "value" value
     /// <summary>Triggered when the Editor has been mounted</summary>
     static member inline editorDidMount (f : System.Func<Monaco.Editor.IStandaloneCodeEditor, Monaco.IExports, unit>) = Interop.mkAttr "editorDidMount" f
     /// <summary>Option to pass to the Editor</summary>
     static member inline options (options : Monaco.Editor.IEditorConstructionOptions) = Interop.mkAttr "options" options
+    static member inline language (language : string) = Interop.mkAttr "language" language
     /// <summary>Errors to set into the editor
     /// <para>Currently only used for the F# editor</para>
     /// </summary>
@@ -33,7 +34,7 @@ type editor =
 [<Erase>]
 type ReactEditor =
     static member inline editor (properties : IReactProperty list) =
-        Interop.reactApi.createElement(import "default" "./js/react-editor.js", createObj !!properties)
+        Interop.reactApi.createElement(import "default" "./js/react-editor.jsx", createObj !!properties)
 
 
 // /// Override style of the div container

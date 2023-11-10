@@ -17,7 +17,6 @@ module Literals =
 #else
         "https://fable.io/repl/"
 #endif
-    printfn $"HOST {HOST}"
 
     let (*[<Literal>]*) SAMPLES_JSON_URL = HOST + "samples/samples.json"
     let (*[<Literal>]*) REPL_LIB_MAP_JSON_URL = HOST + "repl-lib-map.json"

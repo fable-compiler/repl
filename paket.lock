@@ -135,7 +135,7 @@ GITHUB
       SourceLink.Create.CommandLine
       Unquote
   remote: fable-compiler/fable-promise
-    FULLPROJECT (dac50fcf2ed27d1f0b1ed0fab5a3e721fc2efefc)
+    FULLPROJECT (28ca5a0b62c9fb94fa9ea861eb8abf6cef59e800)
   remote: alfonsogarciacaro/Feliz.Engine
     FULLPROJECT (61152aebd6c0b7878bfc4db05e2e10724b434a3e)
   remote: alfonsogarciacaro/Feliz.Snabbdom
@@ -143,4 +143,4 @@ GITHUB
   remote: davedawkins/Feliz.Engine.Bulma
     FULLPROJECT (9504b9d5a43f5c3ef84086815076ebed1948b162)
   remote: davedawkins/Sutil
-    FULLPROJECT (57de4163fdced6cbace5f032a6c56872cdc4e80a)
+    FULLPROJECT (cba867e22cb7862d64bf363acf81357c1ffc384d)

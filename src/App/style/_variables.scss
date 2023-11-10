@@ -6,7 +6,7 @@ $dark: #252526;
 $gray-darker: #383838;
 $text-color: #d4d4d4;
 
-@import '~bulma/sass/utilities/_all.sass';
+@import '../../../node_modules/bulma/sass/utilities/_all.sass';
 
 $body-size: 14px;
 $body-background-color: $dark;

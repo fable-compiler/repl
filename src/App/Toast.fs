@@ -16,21 +16,6 @@ let renderToastWithFulma =
             Bulma.delete [
                 prop.onClick onClick
             ]
-        member __.InputArea children =
-            Bulma.columns [
-                columns.isGapless
-                text.hasTextCentered
-                prop.className "toast-inputs-area"
-                prop.children children
-            ]
-        member __.Input (txt : string) (callback : (unit -> unit)) =
-            Bulma.columns [
-                Bulma.button.a [
-                    prop.onClick (fun _ -> callback ())
-                    prop.className "is-text"
-                    prop.text txt
-                ]
-            ]
         member __.Title txt =
             Bulma.title.h5 [
                 prop.text txt
@@ -49,7 +34,7 @@ let renderToastWithFulma =
             ]
         member __.Message txt =
             Html.span [
-                prop.text txt 
+                prop.text txt
             ]
         member __.SplittedLayout iconView title message =
             Bulma.columns [
@@ -67,7 +52,7 @@ let renderToastWithFulma =
                     ]
                 ]
             ]
-            
+
         member __.StatusToColor status =
             match status with
             | Toast.Success -> "is-success"
