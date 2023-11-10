@@ -337,25 +337,25 @@ pipeline "Release" {
             Git.Commit.exec Folders.CWD commitMsg
             Git.Branches.push Folders.CWD
 
-            let githubClient = GitHubClient(ProductHeaderValue("fable-release-tool"))
-            githubClient.Credentials <- Credentials(token)
+            // let githubClient = GitHubClient(ProductHeaderValue("fable-release-tool"))
+            // githubClient.Credentials <- Credentials(token)
 
-            let newRelease = NewRelease(changelogVersion)
-            newRelease.Name <- changelogVersion
-            newRelease.Body <-
-                Changelog.getNotes changelogVersion
-                |> String.concat "\n"
-            newRelease.Draft <- false
-            newRelease.Prerelease <- false // TODO: Detect if this is a prerelease
+            // let newRelease = NewRelease(changelogVersion)
+            // newRelease.Name <- changelogVersion
+            // newRelease.Body <-
+            //     Changelog.getNotes changelogVersion
+            //     |> String.concat "\n"
+            // newRelease.Draft <- false
+            // newRelease.Prerelease <- false // TODO: Detect if this is a prerelease
 
-            githubClient.Repository.Release.Create(
-                "fable-compiler",
-                "repl",
-                newRelease
-            )
-            |> Async.AwaitTask
-            |> Async.RunSynchronously
-            |> ignore
+            // githubClient.Repository.Release.Create(
+            //     "fable-compiler",
+            //     "repl",
+            //     newRelease
+            // )
+            // |> Async.AwaitTask
+            // |> Async.RunSynchronously
+            // |> ignore
         )
 
         run "npx gh-pages -d src/App/dist"
