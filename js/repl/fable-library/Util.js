@@ -194,7 +194,7 @@ export function int64ToString(i, radix) {
     i = i < 0 && radix != null && radix !== 10 ? 0xffffffffffffffffn + i + 1n : i;
     return i.toString(radix);
 }
-class ObjectRef {
+export class ObjectRef {
     static id(o) {
         if (!ObjectRef.idMap.has(o)) {
             ObjectRef.idMap.set(o, ++ObjectRef.count);
@@ -204,7 +204,6 @@ class ObjectRef {
 }
 ObjectRef.idMap = new WeakMap();
 ObjectRef.count = 0;
-export { ObjectRef };
 export function stringHash(s) {
     let i = 0;
     let h = 5381;
@@ -648,6 +647,126 @@ export function uncurry10(f) {
 export function curry10(f) {
     return curried.get(f)
         ?? ((a1) => (a2) => (a3) => (a4) => (a5) => (a6) => (a7) => (a8) => (a9) => (a10) => f(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10));
+}
+export function uncurry11(f) {
+    if (f == null) {
+        return null;
+    }
+    const f2 = (a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11) => f(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8)(a9)(a10)(a11);
+    curried.set(f2, f);
+    return f2;
+}
+export function curry11(f) {
+    return curried.get(f)
+        ?? ((a1) => (a2) => (a3) => (a4) => (a5) => (a6) => (a7) => (a8) => (a9) => (a10) => (a11) => f(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11));
+}
+export function uncurry12(f) {
+    if (f == null) {
+        return null;
+    }
+    const f2 = (a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12) => f(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8)(a9)(a10)(a11)(a12);
+    curried.set(f2, f);
+    return f2;
+}
+export function curry12(f) {
+    return curried.get(f)
+        ?? ((a1) => (a2) => (a3) => (a4) => (a5) => (a6) => (a7) => (a8) => (a9) => (a10) => (a11) => (a12) => f(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12));
+}
+export function uncurry13(f) {
+    if (f == null) {
+        return null;
+    }
+    const f2 = (a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13) => f(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8)(a9)(a10)(a11)(a12)(a13);
+    curried.set(f2, f);
+    return f2;
+}
+export function curry13(f) {
+    return curried.get(f)
+        ?? ((a1) => (a2) => (a3) => (a4) => (a5) => (a6) => (a7) => (a8) => (a9) => (a10) => (a11) => (a12) => (a13) => f(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13));
+}
+export function uncurry14(f) {
+    if (f == null) {
+        return null;
+    }
+    const f2 = (a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14) => f(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8)(a9)(a10)(a11)(a12)(a13)(a14);
+    curried.set(f2, f);
+    return f2;
+}
+export function curry14(f) {
+    return curried.get(f)
+        ?? ((a1) => (a2) => (a3) => (a4) => (a5) => (a6) => (a7) => (a8) => (a9) => (a10) => (a11) => (a12) => (a13) => (a14) => f(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14));
+}
+export function uncurry15(f) {
+    if (f == null) {
+        return null;
+    }
+    const f2 = (a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15) => f(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8)(a9)(a10)(a11)(a12)(a13)(a14)(a15);
+    curried.set(f2, f);
+    return f2;
+}
+export function curry15(f) {
+    return curried.get(f)
+        ?? ((a1) => (a2) => (a3) => (a4) => (a5) => (a6) => (a7) => (a8) => (a9) => (a10) => (a11) => (a12) => (a13) => (a14) => (a15) => f(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15));
+}
+export function uncurry16(f) {
+    if (f == null) {
+        return null;
+    }
+    const f2 = (a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16) => f(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8)(a9)(a10)(a11)(a12)(a13)(a14)(a15)(a16);
+    curried.set(f2, f);
+    return f2;
+}
+export function curry16(f) {
+    return curried.get(f)
+        ?? ((a1) => (a2) => (a3) => (a4) => (a5) => (a6) => (a7) => (a8) => (a9) => (a10) => (a11) => (a12) => (a13) => (a14) => (a15) => (a16) => f(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16));
+}
+export function uncurry17(f) {
+    if (f == null) {
+        return null;
+    }
+    const f2 = (a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17) => f(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8)(a9)(a10)(a11)(a12)(a13)(a14)(a15)(a16)(a17);
+    curried.set(f2, f);
+    return f2;
+}
+export function curry17(f) {
+    return curried.get(f)
+        ?? ((a1) => (a2) => (a3) => (a4) => (a5) => (a6) => (a7) => (a8) => (a9) => (a10) => (a11) => (a12) => (a13) => (a14) => (a15) => (a16) => (a17) => f(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17));
+}
+export function uncurry18(f) {
+    if (f == null) {
+        return null;
+    }
+    const f2 = (a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18) => f(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8)(a9)(a10)(a11)(a12)(a13)(a14)(a15)(a16)(a17)(a18);
+    curried.set(f2, f);
+    return f2;
+}
+export function curry18(f) {
+    return curried.get(f)
+        ?? ((a1) => (a2) => (a3) => (a4) => (a5) => (a6) => (a7) => (a8) => (a9) => (a10) => (a11) => (a12) => (a13) => (a14) => (a15) => (a16) => (a17) => (a18) => f(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18));
+}
+export function uncurry19(f) {
+    if (f == null) {
+        return null;
+    }
+    const f2 = (a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19) => f(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8)(a9)(a10)(a11)(a12)(a13)(a14)(a15)(a16)(a17)(a18)(a19);
+    curried.set(f2, f);
+    return f2;
+}
+export function curry19(f) {
+    return curried.get(f)
+        ?? ((a1) => (a2) => (a3) => (a4) => (a5) => (a6) => (a7) => (a8) => (a9) => (a10) => (a11) => (a12) => (a13) => (a14) => (a15) => (a16) => (a17) => (a18) => (a19) => f(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19));
+}
+export function uncurry20(f) {
+    if (f == null) {
+        return null;
+    }
+    const f2 = (a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20) => f(a1)(a2)(a3)(a4)(a5)(a6)(a7)(a8)(a9)(a10)(a11)(a12)(a13)(a14)(a15)(a16)(a17)(a18)(a19)(a20);
+    curried.set(f2, f);
+    return f2;
+}
+export function curry20(f) {
+    return curried.get(f)
+        ?? ((a1) => (a2) => (a3) => (a4) => (a5) => (a6) => (a7) => (a8) => (a9) => (a10) => (a11) => (a12) => (a13) => (a14) => (a15) => (a16) => (a17) => (a18) => (a19) => (a20) => f(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20));
 }
 // More performant method to copy arrays, see #2352
 export function copyToArray(source, sourceIndex, target, targetIndex, count) {

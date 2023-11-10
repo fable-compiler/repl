@@ -1,5 +1,5 @@
 import { record_type, bool_type, list_type, option_type, class_type } from "./Reflection.js";
-import { some, value as value_1 } from "./Option.js";
+import { some, value as value_3 } from "./Option.js";
 import { structuralHash, toIterator, disposeSafe, getEnumerator, isArrayLike } from "./Util.js";
 import { toString, Record } from "./Types.js";
 import { fold as fold_2, cons, singleton as singleton_1, empty as empty_1, ofArrayWithTail, tail, head, isEmpty as isEmpty_1, FSharpList } from "./List.js";
@@ -51,7 +51,7 @@ export function SetTreeModule_countAux(t_mut, acc_mut) {
     SetTreeModule_countAux: while (true) {
         const t = t_mut, acc = acc_mut;
         if (t != null) {
-            const t2 = value_1(t);
+            const t2 = value_3(t);
             if (t2 instanceof SetTreeNode$1) {
                 const tn = t2;
                 t_mut = SetTreeNode$1__get_Left(tn);
@@ -76,7 +76,7 @@ export function SetTreeModule_mk(l, k, r) {
     let hl;
     const t = l;
     if (t != null) {
-        const t2 = value_1(t);
+        const t2 = value_3(t);
         hl = ((t2 instanceof SetTreeNode$1) ? ((tn = t2, SetTreeNode$1__get_Height(tn))) : 1);
     }
     else {
@@ -85,7 +85,7 @@ export function SetTreeModule_mk(l, k, r) {
     let hr;
     const t_1 = r;
     if (t_1 != null) {
-        const t2_1 = value_1(t_1);
+        const t2_1 = value_3(t_1);
         hr = ((t2_1 instanceof SetTreeNode$1) ? ((tn_1 = t2_1, SetTreeNode$1__get_Height(tn_1))) : 1);
     }
     else {
@@ -104,7 +104,7 @@ export function SetTreeModule_rebalance(t1, v, t2) {
     let t1h;
     const t = t1;
     if (t != null) {
-        const t2_1 = value_1(t);
+        const t2_1 = value_3(t);
         t1h = ((t2_1 instanceof SetTreeNode$1) ? ((tn = t2_1, SetTreeNode$1__get_Height(tn))) : 1);
     }
     else {
@@ -113,18 +113,18 @@ export function SetTreeModule_rebalance(t1, v, t2) {
     let t2h;
     const t_1 = t2;
     if (t_1 != null) {
-        const t2_2 = value_1(t_1);
+        const t2_2 = value_3(t_1);
         t2h = ((t2_2 instanceof SetTreeNode$1) ? ((tn_1 = t2_2, SetTreeNode$1__get_Height(tn_1))) : 1);
     }
     else {
         t2h = 0;
     }
     if (t2h > (t1h + 2)) {
-        const matchValue = value_1(t2);
+        const matchValue = value_3(t2);
         if (matchValue instanceof SetTreeNode$1) {
             const t2$0027 = matchValue;
-            if (((t_2 = SetTreeNode$1__get_Left(t2$0027), (t_2 != null) ? ((t2_3 = value_1(t_2), (t2_3 instanceof SetTreeNode$1) ? ((tn_2 = t2_3, SetTreeNode$1__get_Height(tn_2))) : 1)) : 0)) > (t1h + 1)) {
-                const matchValue_1 = value_1(SetTreeNode$1__get_Left(t2$0027));
+            if (((t_2 = SetTreeNode$1__get_Left(t2$0027), (t_2 != null) ? ((t2_3 = value_3(t_2), (t2_3 instanceof SetTreeNode$1) ? ((tn_2 = t2_3, SetTreeNode$1__get_Height(tn_2))) : 1)) : 0)) > (t1h + 1)) {
+                const matchValue_1 = value_3(SetTreeNode$1__get_Left(t2$0027));
                 if (matchValue_1 instanceof SetTreeNode$1) {
                     const t2l = matchValue_1;
                     return SetTreeModule_mk(SetTreeModule_mk(t1, v, SetTreeNode$1__get_Left(t2l)), SetTreeLeaf$1__get_Key(t2l), SetTreeModule_mk(SetTreeNode$1__get_Right(t2l), SetTreeLeaf$1__get_Key(t2$0027), SetTreeNode$1__get_Right(t2$0027)));
@@ -142,11 +142,11 @@ export function SetTreeModule_rebalance(t1, v, t2) {
         }
     }
     else if (t1h > (t2h + 2)) {
-        const matchValue_2 = value_1(t1);
+        const matchValue_2 = value_3(t1);
         if (matchValue_2 instanceof SetTreeNode$1) {
             const t1$0027 = matchValue_2;
-            if (((t_3 = SetTreeNode$1__get_Right(t1$0027), (t_3 != null) ? ((t2_4 = value_1(t_3), (t2_4 instanceof SetTreeNode$1) ? ((tn_3 = t2_4, SetTreeNode$1__get_Height(tn_3))) : 1)) : 0)) > (t2h + 1)) {
-                const matchValue_3 = value_1(SetTreeNode$1__get_Right(t1$0027));
+            if (((t_3 = SetTreeNode$1__get_Right(t1$0027), (t_3 != null) ? ((t2_4 = value_3(t_3), (t2_4 instanceof SetTreeNode$1) ? ((tn_3 = t2_4, SetTreeNode$1__get_Height(tn_3))) : 1)) : 0)) > (t2h + 1)) {
+                const matchValue_3 = value_3(SetTreeNode$1__get_Right(t1$0027));
                 if (matchValue_3 instanceof SetTreeNode$1) {
                     const t1r = matchValue_3;
                     return SetTreeModule_mk(SetTreeModule_mk(SetTreeNode$1__get_Left(t1$0027), SetTreeLeaf$1__get_Key(t1$0027), SetTreeNode$1__get_Left(t1r)), SetTreeLeaf$1__get_Key(t1r), SetTreeModule_mk(SetTreeNode$1__get_Right(t1r), v, t2));
@@ -169,7 +169,7 @@ export function SetTreeModule_rebalance(t1, v, t2) {
 }
 export function SetTreeModule_add(comparer, k, t) {
     if (t != null) {
-        const t2 = value_1(t);
+        const t2 = value_3(t);
         const c = comparer.Compare(k, SetTreeLeaf$1__get_Key(t2)) | 0;
         if (t2 instanceof SetTreeNode$1) {
             const tn = t2;
@@ -202,9 +202,9 @@ export function SetTreeModule_add(comparer, k, t) {
 }
 export function SetTreeModule_balance(comparer, t1, k, t2) {
     if (t1 != null) {
-        const t1$0027 = value_1(t1);
+        const t1$0027 = value_3(t1);
         if (t2 != null) {
-            const t2$0027 = value_1(t2);
+            const t2$0027 = value_3(t2);
             if (t1$0027 instanceof SetTreeNode$1) {
                 const t1n = t1$0027;
                 if (t2$0027 instanceof SetTreeNode$1) {
@@ -237,7 +237,7 @@ export function SetTreeModule_balance(comparer, t1, k, t2) {
 }
 export function SetTreeModule_split(comparer, pivot, t) {
     if (t != null) {
-        const t2 = value_1(t);
+        const t2 = value_3(t);
         if (t2 instanceof SetTreeNode$1) {
             const tn = t2;
             const c = comparer.Compare(pivot, SetTreeLeaf$1__get_Key(tn)) | 0;
@@ -272,7 +272,7 @@ export function SetTreeModule_split(comparer, pivot, t) {
 }
 export function SetTreeModule_spliceOutSuccessor(t) {
     if (t != null) {
-        const t2 = value_1(t);
+        const t2 = value_3(t);
         if (t2 instanceof SetTreeNode$1) {
             const tn = t2;
             if (SetTreeNode$1__get_Left(tn) == null) {
@@ -293,7 +293,7 @@ export function SetTreeModule_spliceOutSuccessor(t) {
 }
 export function SetTreeModule_remove(comparer, k, t) {
     if (t != null) {
-        const t2 = value_1(t);
+        const t2 = value_3(t);
         const c = comparer.Compare(k, SetTreeLeaf$1__get_Key(t2)) | 0;
         if (t2 instanceof SetTreeNode$1) {
             const tn = t2;
@@ -331,7 +331,7 @@ export function SetTreeModule_mem(comparer_mut, k_mut, t_mut) {
     SetTreeModule_mem: while (true) {
         const comparer = comparer_mut, k = k_mut, t = t_mut;
         if (t != null) {
-            const t2 = value_1(t);
+            const t2 = value_3(t);
             const c = comparer.Compare(k, SetTreeLeaf$1__get_Key(t2)) | 0;
             if (t2 instanceof SetTreeNode$1) {
                 const tn = t2;
@@ -365,7 +365,7 @@ export function SetTreeModule_iter(f_mut, t_mut) {
     SetTreeModule_iter: while (true) {
         const f = f_mut, t = t_mut;
         if (t != null) {
-            const t2 = value_1(t);
+            const t2 = value_3(t);
             if (t2 instanceof SetTreeNode$1) {
                 const tn = t2;
                 SetTreeModule_iter(f, SetTreeNode$1__get_Left(tn));
@@ -385,7 +385,7 @@ export function SetTreeModule_foldBackOpt(f_mut, t_mut, x_mut) {
     SetTreeModule_foldBackOpt: while (true) {
         const f = f_mut, t = t_mut, x = x_mut;
         if (t != null) {
-            const t2 = value_1(t);
+            const t2 = value_3(t);
             if (t2 instanceof SetTreeNode$1) {
                 const tn = t2;
                 f_mut = f;
@@ -410,7 +410,7 @@ export function SetTreeModule_foldOpt(f_mut, x_mut, t_mut) {
     SetTreeModule_foldOpt: while (true) {
         const f = f_mut, x = x_mut, t = t_mut;
         if (t != null) {
-            const t2 = value_1(t);
+            const t2 = value_3(t);
             if (t2 instanceof SetTreeNode$1) {
                 const tn = t2;
                 f_mut = f;
@@ -435,7 +435,7 @@ export function SetTreeModule_forall(f_mut, t_mut) {
     SetTreeModule_forall: while (true) {
         const f = f_mut, t = t_mut;
         if (t != null) {
-            const t2 = value_1(t);
+            const t2 = value_3(t);
             if (t2 instanceof SetTreeNode$1) {
                 const tn = t2;
                 if (f(SetTreeLeaf$1__get_Key(tn)) && SetTreeModule_forall(f, SetTreeNode$1__get_Left(tn))) {
@@ -461,7 +461,7 @@ export function SetTreeModule_exists(f_mut, t_mut) {
     SetTreeModule_exists: while (true) {
         const f = f_mut, t = t_mut;
         if (t != null) {
-            const t2 = value_1(t);
+            const t2 = value_3(t);
             if (t2 instanceof SetTreeNode$1) {
                 const tn = t2;
                 if (f(SetTreeLeaf$1__get_Key(tn)) ? true : SetTreeModule_exists(f, SetTreeNode$1__get_Left(tn))) {
@@ -498,7 +498,7 @@ export function SetTreeModule_filterAux(comparer_mut, f_mut, t_mut, acc_mut) {
     SetTreeModule_filterAux: while (true) {
         const comparer = comparer_mut, f = f_mut, t = t_mut, acc = acc_mut;
         if (t != null) {
-            const t2 = value_1(t);
+            const t2 = value_3(t);
             if (t2 instanceof SetTreeNode$1) {
                 const tn = t2;
                 const acc_1 = f(SetTreeLeaf$1__get_Key(tn)) ? SetTreeModule_add(comparer, SetTreeLeaf$1__get_Key(tn), acc) : acc;
@@ -531,7 +531,7 @@ export function SetTreeModule_diffAux(comparer_mut, t_mut, acc_mut) {
             return acc;
         }
         else if (t != null) {
-            const t2 = value_1(t);
+            const t2 = value_3(t);
             if (t2 instanceof SetTreeNode$1) {
                 const tn = t2;
                 comparer_mut = comparer;
@@ -554,9 +554,9 @@ export function SetTreeModule_diff(comparer, a, b) {
 }
 export function SetTreeModule_union(comparer, t1, t2) {
     if (t1 != null) {
-        const t1$0027 = value_1(t1);
+        const t1$0027 = value_3(t1);
         if (t2 != null) {
-            const t2$0027 = value_1(t2);
+            const t2$0027 = value_3(t2);
             if (t1$0027 instanceof SetTreeNode$1) {
                 const t1n = t1$0027;
                 if (t2$0027 instanceof SetTreeNode$1) {
@@ -590,7 +590,7 @@ export function SetTreeModule_intersectionAux(comparer_mut, b_mut, t_mut, acc_mu
     SetTreeModule_intersectionAux: while (true) {
         const comparer = comparer_mut, b = b_mut, t = t_mut, acc = acc_mut;
         if (t != null) {
-            const t2 = value_1(t);
+            const t2 = value_3(t);
             if (t2 instanceof SetTreeNode$1) {
                 const tn = t2;
                 const acc_1 = SetTreeModule_intersectionAux(comparer, b, SetTreeNode$1__get_Right(tn), acc);
@@ -630,7 +630,7 @@ export function SetTreeModule_partitionAux(comparer_mut, f_mut, t_mut, acc__mut,
         const comparer = comparer_mut, f = f_mut, t = t_mut, acc_ = acc__mut, acc__1 = acc__1_mut;
         const acc = [acc_, acc__1];
         if (t != null) {
-            const t2 = value_1(t);
+            const t2 = value_3(t);
             if (t2 instanceof SetTreeNode$1) {
                 const tn = t2;
                 const acc_1 = SetTreeModule_partitionAux(comparer, f, SetTreeNode$1__get_Right(tn), acc[0], acc[1]);
@@ -659,7 +659,7 @@ export function SetTreeModule_minimumElementAux(t_mut, n_mut) {
     SetTreeModule_minimumElementAux: while (true) {
         const t = t_mut, n = n_mut;
         if (t != null) {
-            const t2 = value_1(t);
+            const t2 = value_3(t);
             if (t2 instanceof SetTreeNode$1) {
                 const tn = t2;
                 t_mut = SetTreeNode$1__get_Left(tn);
@@ -678,7 +678,7 @@ export function SetTreeModule_minimumElementAux(t_mut, n_mut) {
 }
 export function SetTreeModule_minimumElementOpt(t) {
     if (t != null) {
-        const t2 = value_1(t);
+        const t2 = value_3(t);
         if (t2 instanceof SetTreeNode$1) {
             const tn = t2;
             return some(SetTreeModule_minimumElementAux(SetTreeNode$1__get_Left(tn), SetTreeLeaf$1__get_Key(tn)));
@@ -695,7 +695,7 @@ export function SetTreeModule_maximumElementAux(t_mut, n_mut) {
     SetTreeModule_maximumElementAux: while (true) {
         const t = t_mut, n = n_mut;
         if (t != null) {
-            const t2 = value_1(t);
+            const t2 = value_3(t);
             if (t2 instanceof SetTreeNode$1) {
                 const tn = t2;
                 t_mut = SetTreeNode$1__get_Right(tn);
@@ -714,7 +714,7 @@ export function SetTreeModule_maximumElementAux(t_mut, n_mut) {
 }
 export function SetTreeModule_maximumElementOpt(t) {
     if (t != null) {
-        const t2 = value_1(t);
+        const t2 = value_3(t);
         if (t2 instanceof SetTreeNode$1) {
             const tn = t2;
             return some(SetTreeModule_maximumElementAux(SetTreeNode$1__get_Right(tn), SetTreeLeaf$1__get_Key(tn)));
@@ -733,7 +733,7 @@ export function SetTreeModule_minimumElement(s) {
         throw new Error("Set contains no elements");
     }
     else {
-        return value_1(matchValue);
+        return value_3(matchValue);
     }
 }
 export function SetTreeModule_maximumElement(s) {
@@ -742,7 +742,7 @@ export function SetTreeModule_maximumElement(s) {
         throw new Error("Set contains no elements");
     }
     else {
-        return value_1(matchValue);
+        return value_3(matchValue);
     }
 }
 export class SetTreeModule_SetIterator$1 extends Record {
@@ -762,7 +762,7 @@ export function SetTreeModule_collapseLHS(stack_mut) {
             const x = head(stack);
             const rest = tail(stack);
             if (x != null) {
-                const x2 = value_1(x);
+                const x2 = value_3(x);
                 if (x2 instanceof SetTreeNode$1) {
                     const xn = x2;
                     stack_mut = ofArrayWithTail([SetTreeNode$1__get_Left(xn), SetTreeLeaf$1_$ctor_2B595(SetTreeLeaf$1__get_Key(xn)), SetTreeNode$1__get_Right(xn)], rest);
@@ -799,7 +799,7 @@ export function SetTreeModule_current(i) {
             return SetTreeModule_alreadyFinished();
         }
         else if (head(matchValue) != null) {
-            const t = value_1(head(matchValue));
+            const t = value_3(head(matchValue));
             return SetTreeLeaf$1__get_Key(t);
         }
         else {
@@ -815,7 +815,7 @@ export function SetTreeModule_moveNext(i) {
         const matchValue = i.stack;
         if (!isEmpty_1(matchValue)) {
             if (head(matchValue) != null) {
-                const t = value_1(head(matchValue));
+                const t = value_3(head(matchValue));
                 if (t instanceof SetTreeNode$1) {
                     throw new Error("Please report error: Set iterator, unexpected stack for moveNext");
                 }
@@ -866,8 +866,8 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
             if (!isEmpty_1(l2)) {
                 if (head(l2) != null) {
                     if (head(l1) != null) {
-                        const x1_3 = value_1(head(l1));
-                        const x2_3 = value_1(head(l2));
+                        const x1_3 = value_3(head(l1));
+                        const x2_3 = value_3(head(l2));
                         if (x1_3 instanceof SetTreeNode$1) {
                             const x1n_2 = x1_3;
                             if (SetTreeNode$1__get_Left(x1n_2) == null) {
@@ -891,13 +891,13 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                             if (head(l1) != null) {
                                                 matchResult = 0;
                                                 t1_6 = tail(l1);
-                                                x1_4 = value_1(head(l1));
+                                                x1_4 = value_3(head(l1));
                                             }
                                             else if (!isEmpty_1(l2)) {
                                                 if (head(l2) != null) {
                                                     matchResult = 1;
                                                     t2_6 = tail(l2);
-                                                    x2_4 = value_1(head(l2));
+                                                    x2_4 = value_3(head(l2));
                                                 }
                                                 else {
                                                     matchResult = 2;
@@ -911,7 +911,7 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                             if (head(l2) != null) {
                                                 matchResult = 1;
                                                 t2_6 = tail(l2);
-                                                x2_4 = value_1(head(l2));
+                                                x2_4 = value_3(head(l2));
                                             }
                                             else {
                                                 matchResult = 2;
@@ -973,13 +973,13 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                     if (head(l1) != null) {
                                         matchResult_1 = 0;
                                         t1_7 = tail(l1);
-                                        x1_5 = value_1(head(l1));
+                                        x1_5 = value_3(head(l1));
                                     }
                                     else if (!isEmpty_1(l2)) {
                                         if (head(l2) != null) {
                                             matchResult_1 = 1;
                                             t2_7 = tail(l2);
-                                            x2_5 = value_1(head(l2));
+                                            x2_5 = value_3(head(l2));
                                         }
                                         else {
                                             matchResult_1 = 2;
@@ -993,7 +993,7 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                     if (head(l2) != null) {
                                         matchResult_1 = 1;
                                         t2_7 = tail(l2);
-                                        x2_5 = value_1(head(l2));
+                                        x2_5 = value_3(head(l2));
                                     }
                                     else {
                                         matchResult_1 = 2;
@@ -1056,13 +1056,13 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                     if (head(l1) != null) {
                                         matchResult_2 = 0;
                                         t1_8 = tail(l1);
-                                        x1_6 = value_1(head(l1));
+                                        x1_6 = value_3(head(l1));
                                     }
                                     else if (!isEmpty_1(l2)) {
                                         if (head(l2) != null) {
                                             matchResult_2 = 1;
                                             t2_8 = tail(l2);
-                                            x2_6 = value_1(head(l2));
+                                            x2_6 = value_3(head(l2));
                                         }
                                         else {
                                             matchResult_2 = 2;
@@ -1076,7 +1076,7 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                                     if (head(l2) != null) {
                                         matchResult_2 = 1;
                                         t2_8 = tail(l2);
-                                        x2_6 = value_1(head(l2));
+                                        x2_6 = value_3(head(l2));
                                     }
                                     else {
                                         matchResult_2 = 2;
@@ -1133,19 +1133,19 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                         }
                     }
                     else {
-                        const x2 = value_1(head(l2));
+                        const x2 = value_3(head(l2));
                         let matchResult_3, t1_2, x1, t2_2, x2_1;
                         if (!isEmpty_1(l1)) {
                             if (head(l1) != null) {
                                 matchResult_3 = 0;
                                 t1_2 = tail(l1);
-                                x1 = value_1(head(l1));
+                                x1 = value_3(head(l1));
                             }
                             else if (!isEmpty_1(l2)) {
                                 if (head(l2) != null) {
                                     matchResult_3 = 1;
                                     t2_2 = tail(l2);
-                                    x2_1 = value_1(head(l2));
+                                    x2_1 = value_3(head(l2));
                                 }
                                 else {
                                     matchResult_3 = 2;
@@ -1159,7 +1159,7 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                             if (head(l2) != null) {
                                 matchResult_3 = 1;
                                 t2_2 = tail(l2);
-                                x2_1 = value_1(head(l2));
+                                x2_1 = value_3(head(l2));
                             }
                             else {
                                 matchResult_3 = 2;
@@ -1203,19 +1203,19 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                     }
                 }
                 else if (head(l1) != null) {
-                    const x1_1 = value_1(head(l1));
+                    const x1_1 = value_3(head(l1));
                     let matchResult_4, t1_4, x1_2, t2_4, x2_2;
                     if (!isEmpty_1(l1)) {
                         if (head(l1) != null) {
                             matchResult_4 = 0;
                             t1_4 = tail(l1);
-                            x1_2 = value_1(head(l1));
+                            x1_2 = value_3(head(l1));
                         }
                         else if (!isEmpty_1(l2)) {
                             if (head(l2) != null) {
                                 matchResult_4 = 1;
                                 t2_4 = tail(l2);
-                                x2_2 = value_1(head(l2));
+                                x2_2 = value_3(head(l2));
                             }
                             else {
                                 matchResult_4 = 2;
@@ -1229,7 +1229,7 @@ export function SetTreeModule_compareStacks(comparer_mut, l1_mut, l2_mut) {
                         if (head(l2) != null) {
                             matchResult_4 = 1;
                             t2_4 = tail(l2);
-                            x2_2 = value_1(head(l2));
+                            x2_2 = value_3(head(l2));
                         }
                         else {
                             matchResult_4 = 2;
@@ -1315,7 +1315,7 @@ export function SetTreeModule_toList(t) {
         loop: while (true) {
             const t$0027 = t$0027_mut, acc = acc_mut;
             if (t$0027 != null) {
-                const t2 = value_1(t$0027);
+                const t2 = value_3(t$0027);
                 if (t2 instanceof SetTreeNode$1) {
                     const tn = t2;
                     t$0027_mut = SetTreeNode$1__get_Left(tn);
@@ -1764,15 +1764,15 @@ export function exceptWith(s1, s2) {
 }
 export function isSubsetOf(s1, s2) {
     const s2_1 = newMutableSetWith(s1, s2);
-    return forAll_1((arg) => s2_1.has(arg), s1.values());
+    return forAll_1((value) => s2_1.has(value), s1.values());
 }
 export function isSupersetOf(s1, s2) {
-    return forAll_1((arg) => s1.has(arg), s2);
+    return forAll_1((value) => s1.has(value), s2);
 }
 export function isProperSubsetOf(s1, s2) {
     const s2_1 = newMutableSetWith(s1, s2);
     if (s2_1.size > s1.size) {
-        return forAll_1((arg) => s2_1.has(arg), s1.values());
+        return forAll_1((value) => s2_1.has(value), s1.values());
     }
     else {
         return false;
@@ -1780,8 +1780,8 @@ export function isProperSubsetOf(s1, s2) {
 }
 export function isProperSupersetOf(s1, s2) {
     const s2_1 = cache(s2);
-    if (exists_1((arg_1) => !s1.has(arg_1), s2_1)) {
-        return forAll_1((arg_2) => s1.has(arg_2), s2_1);
+    if (exists_1((arg) => !s1.has(arg), s2_1)) {
+        return forAll_1((value_2) => s1.has(value_2), s2_1);
     }
     else {
         return false;

@@ -102,7 +102,7 @@ export function parse(str, style, unsigned, bitsize, radix) {
             }
         }
     }
-    throw new Error("Input string was not in a correct format.");
+    throw new Error(`The input string ${str} was not in a correct format.`);
 }
 export function tryParse(str, style, unsigned, bitsize, defValue) {
     try {

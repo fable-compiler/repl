@@ -107,7 +107,7 @@ export function parse(str) {
         return defValue.contents;
     }
     else {
-        throw new Error("Input string was not in a correct format.");
+        throw new Error(`The input string ${str} was not in a correct format.`);
     }
 }
 export function toNumber(x) {

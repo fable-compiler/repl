@@ -13,7 +13,7 @@
  * Basically; invariant: date.getTime() always return UTC time.
  */
 import { fromFloat64, toFloat64 } from "./BigInt.js";
-import { create as createDate, dateOffsetToString, daysInMonth, parseRaw, ticksToUnixEpochMilliseconds, unixEpochMillisecondsToTicks } from "./Date.js";
+import DateTime, { create as createDate, dateOffsetToString, daysInMonth, parseRaw, ticksToUnixEpochMilliseconds, unixEpochMillisecondsToTicks } from "./Date.js";
 import { compareDates, padWithZeros } from "./Util.js";
 export default function DateTimeOffset(value, offset) {
     checkOffsetInRange(offset);
@@ -138,10 +138,10 @@ export function utcNow() {
     return DateTimeOffset(date.getTime(), 0);
 }
 export function toUniversalTime(date) {
-    return DateTimeOffset(date.getTime(), 0);
+    return DateTime(date.getTime(), 1 /* DateKind.UTC */);
 }
 export function toLocalTime(date) {
-    return DateTimeOffset(date.getTime(), date.getTimezoneOffset() * -60000);
+    return DateTime(date.getTime(), 2 /* DateKind.Local */);
 }
 export function timeOfDay(d) {
     const d2 = new Date(d.getTime() + (d.offset ?? 0));

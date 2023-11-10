@@ -29,8 +29,8 @@ export declare function tryParse(v: string, defValue: FSharpRef<IDateTimeOffset>
 export declare function create(year: number, month: number, day: number, h: number, m: number, s: number, ms: number, offset?: number): IDateTimeOffset;
 export declare function now(): IDateTimeOffset;
 export declare function utcNow(): IDateTimeOffset;
-export declare function toUniversalTime(date: IDateTimeOffset): IDateTimeOffset;
-export declare function toLocalTime(date: Date): IDateTimeOffset;
+export declare function toUniversalTime(date: IDateTimeOffset): Date;
+export declare function toLocalTime(date: IDateTimeOffset): Date;
 export declare function timeOfDay(d: IDateTimeOffset): number;
 export declare function date(d: IDateTimeOffset): IDateTime;
 export declare function day(d: IDateTimeOffset): number;

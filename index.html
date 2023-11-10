@@ -1,7 +1,26 @@
-<!doctype html><html><head><title>Fable REPL</title><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta http-equiv="Content-Type" content="text/html;charset=utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="shortcut icon" href="img/fable.ico"><link href="app.css" rel="stylesheet"></head><body><div id="app-container"></div><script>if(window.navigator && navigator.serviceWorker) {
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fable REPL</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="img/fable.ico">
+    
+  <script type="module" crossorigin src="/assets/index-7cb4dbb8.js"></script>
+  <link rel="stylesheet" href="/assets/index-463414e8.css">
+</head>
+<body>
+    <div id="app-container"></div>
+    <script>
+if(window.navigator && navigator.serviceWorker) {
   navigator.serviceWorker.getRegistrations().then(function(registrations) {
     for(let registration of registrations) {
       registration.unregister();
     }
   });
-}</script><script src="app.40599b7471cdc45f56df.js"></script></body></html>
+}
+    </script>
+    
+</body>
+</html>
