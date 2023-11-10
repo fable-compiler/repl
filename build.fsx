@@ -311,6 +311,7 @@ pipeline "BuildApp" {
 pipeline "Release" {
 
     whenEnvVar "GITHUB_TOKEN"
+    whenBranch "main"
 
     Stages.checkIfNewReleaseIsNeeded
     Stages.clean
