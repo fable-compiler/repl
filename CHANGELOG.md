@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.2.0
+
+### Fixed
+
+* Fix build by replacing webpack with vite
+
+### Changed
+
+* Set output code editor language based on target language
+* Set output code editor as readonly again
+
 ## 4.1.3
 
 * Fable 4.1.3

@@ -2,10 +2,10 @@
 #r "nuget: Fake.IO.FileSystem, 5.23.1"
 #r "nuget: Fake.Core.Environment, 5.23.1"
 #r "nuget: Fake.Tools.Git, 5.23.1"
-#r "nuget: Fake.Api.GitHub, 5.23.1"
 #r "nuget: SimpleExec, 11.0.0"
 #r "nuget: BlackFox.CommandLine, 1.0.0"
 #r "nuget: FsToolkit.ErrorHandling, 4.10.0"
+#r "nuget: Octokit, 9.0.0"
 
 open Fun.Build
 open Fake.Core
@@ -13,13 +13,13 @@ open Fake.IO
 open Fake.IO.FileSystemOperators
 open Fake.IO.Globbing.Operators
 open Fake.Tools
-open Fake.Api
 open System
 open System.IO
 open System.Text.RegularExpressions
 open BlackFox.CommandLine
 open FsToolkit.ErrorHandling
 open Fun.Build.Internal
+open Octokit
 
 module Glob =
 
@@ -337,16 +337,25 @@ pipeline "Release" {
             Git.Commit.exec Folders.CWD commitMsg
             Git.Branches.push Folders.CWD
 
-            GitHub.createClientWithToken token
-            |> GitHub.draftNewRelease
-                "fable-compiler"
-                "repl"
-                releaseVersion
-                (Changelog.isPreRelease changelogVersion)
-                (Changelog.getNotes changelogVersion)
-            // |> GitHub.uploadFile nupkg
-            |> GitHub.publishDraft
+            let githubClient = GitHubClient(ProductHeaderValue("fable-release-tool"))
+            githubClient.Credentials <- Credentials(token)
+
+            let newRelease = NewRelease(changelogVersion)
+            newRelease.Name <- changelogVersion
+            newRelease.Body <-
+                Changelog.getNotes changelogVersion
+                |> String.concat "\n"
+            newRelease.Draft <- false
+            newRelease.Prerelease <- false // TODO: Detect if this is a prerelease
+
+            githubClient.Repository.Release.Create(
+                "fable-compiler",
+                "Fable",
+                newRelease
+            )
+            |> Async.AwaitTask
             |> Async.RunSynchronously
+            |> ignore
         )
 
         run "npx gh-pages -d src/App/dist"
