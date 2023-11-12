@@ -9,6 +9,12 @@ To develop the REPL locally:
 1. `dotnet fsi build.fsx -p WatchApp`
 2. Open `localhost:8080` in your browser
 
+## Release
+
+To release a new version of the REPL you can use `dotnet fsi build.fsx -t Release`. This will create a new tag and push it to Github.
+
+Tip: If you want to release after a Fable update, you can run `dotnet fsi build.fsx -t Release --auto-update`. This automatically update `fable-standalone` and `fable-metadata` to the latest version before releasing a new version.
+
 ## How to add a sample
 
 To add a sample, you need to add an .fs file to the `public/samples/Samples.fsproj` project (and a corresponding .html file if necessary), then update `public/samples/samples.json`. This file is used to generate the samples menu in the browser. [This commit](https://github.com/fable-compiler/repl/commit/860243166459e10e47919815dffcc94ddbbd73b7) is a good example of adding a sample (pun intended).

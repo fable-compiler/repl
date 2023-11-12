@@ -260,6 +260,10 @@ module Stages =
 
     let autoUpdateFableNpmPackages =
         stage "Auto update Fable npm packages" {
+            whenCmd {
+                name "--auto-update"
+                description "Auto update Fable npm packages"
+            }
 
             run (
                 CmdLine.empty
