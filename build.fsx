@@ -344,7 +344,7 @@ pipeline "Release" {
                 do! ctx.RunCommand("git config --global user.name 'Continuous Integration'")
                 do! ctx.RunCommand("git config --global user.email 'username@users.noreply.github.com'")
                 let commitMsg = $"Release version {releaseVersion}"
-                do! ctx.RunCommand(sprintf "git commit -a -m '%s'" commitMsg)
+                do! ctx.RunCommand($"git commit -a -m \"{commitMsg}\"")
                 do! ctx.RunCommand("git push")
             }
         )
