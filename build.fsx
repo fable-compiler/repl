@@ -343,7 +343,7 @@ pipeline "Release" {
 
             $"git remote set-url origin {url}"
         )
-        run "npx gh-pages -d src/App/dist -u 'github-actions-bot <support+actions@github.com>'"
+        run "npx gh-pages -d src/App/dist -u \"github-actions-bot <support+actions@github.com>\""
     }
 
     runIfOnlySpecified
