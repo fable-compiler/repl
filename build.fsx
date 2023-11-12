@@ -326,29 +326,7 @@ pipeline "Release" {
     Stages.buildApp
     Stages.updatePreludeREPLVersion
 
-    stage "Release GITHUB" {
-        run (fun ctx ->
-            asyncResult {
-                let changelogVersion = Changelog.getLastVersion ()
-                let dateVersion = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")
-
-                // The release version include the date, because we don't want to update
-                // the REPL version each time a new fable-standalone version is released
-                // This avoid doing dummy changelog entries, also for the user the
-                // Fable version is available in the REPL website so it should be fine
-                let releaseVersion =
-                    changelogVersion
-                    + "-"
-                    + dateVersion
-
-                do! ctx.RunCommand("git config --global user.name 'Continuous Integration'")
-                do! ctx.RunCommand("git config --global user.email 'username@users.noreply.github.com'")
-                let commitMsg = $"Release version {releaseVersion}"
-                do! ctx.RunCommand($"git commit -a -m \"{commitMsg}\"")
-                do! ctx.RunCommand("git push")
-            }
-        )
-
+    stage "Push to gh-pages" {
         run "npx gh-pages -d src/App/dist"
     }
 
