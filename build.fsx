@@ -258,25 +258,6 @@ module Stages =
             )
         }
 
-    let autoUpdateFableNpmPackages =
-        stage "Auto update Fable npm packages" {
-            whenCmd {
-                name "--auto-update"
-                description "Auto update Fable npm packages"
-            }
-
-            run (
-                CmdLine.empty
-                |> CmdLine.appendRaw "npx"
-                |> CmdLine.appendRaw "npm-check-updates"
-                |> CmdLine.appendRaw "-u"
-                |> CmdLine.appendRaw "fable-standalone"
-                |> CmdLine.appendRaw "fable-metadata"
-                |> CmdLine.toString
-            )
-
-        }
-
 pipeline "WatchApp" {
     Stages.clean
     Stages.donetRestore
@@ -306,15 +287,40 @@ pipeline "BuildApp" {
     runIfOnlySpecified
 }
 
+pipeline "AutoUpdate" {
+    stage "Auto update Fable npm packages" {
+        run (
+            CmdLine.empty
+            |> CmdLine.appendRaw "npx"
+            |> CmdLine.appendRaw "npm-check-updates"
+            |> CmdLine.appendRaw "-u"
+            |> CmdLine.appendRaw "fable-standalone"
+            |> CmdLine.appendRaw "fable-metadata"
+            |> CmdLine.toString
+        )
+        run "npm install"
+    }
+
+    stage "Commit and push on CI" {
+        whenEnvVar "CI"
+        run "git config --global user.name 'Continuous Integration'"
+        run "git config --global user.email 'username@users.noreply.github.com'"
+        run (fun _ ->
+            let now = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")
+            let msg = $"Auto update Fable npm packages {now}"
+            $"git commit -a -m '{msg}'"
+        )
+        run "git push"
+    }
+}
+
 pipeline "Release" {
 
     whenEnvVar "GITHUB_TOKEN_FABLE_ORG"
     whenBranch "main"
 
-    // Stages.checkIfNewReleaseIsNeeded
     Stages.clean
     Stages.donetRestore
-    Stages.autoUpdateFableNpmPackages
     Stages.npmInstall
     Stages.copyModules
     Stages.buildApp

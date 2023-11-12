@@ -4,7 +4,7 @@ on: workflow_dispatch
 
 jobs:
   # Separate build job for JavaScript
-  release:
+  update-fable-packages:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,6 +22,5 @@ jobs:
       run: dotnet tool restore
 
     - name: Run release pipeline with auto-update option
-      run: dotnet fsi build.fsx -p Release --auto-update
-      env:
-        GITHUB_TOKEN_FABLE_ORG: ${{ github.token }}
+      run: |
+        dotnet fsi build.fsx -p AutoUpdate
