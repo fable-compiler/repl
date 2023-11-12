@@ -4,7 +4,7 @@ on: workflow_dispatch
 
 jobs:
   # Separate build job for JavaScript
-  build-javascript:
+  release:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,6 +17,9 @@ jobs:
 
     - name: Setup Node.js environment
       uses: actions/setup-node@v2.4.1
+
+    - name: Install dependencies
+      run: dotnet tool restore
 
     - name: Run release pipeline with auto-update option
       run: dotnet fsi build.fsx -p Release --auto-update
