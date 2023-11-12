@@ -13,7 +13,9 @@ To develop the REPL locally:
 
 To release a new version of the REPL you can use `dotnet fsi build.fsx -t Release`. This will create a new tag and push it to Github.
 
-Tip: If you want to release after a Fable update, you can run `dotnet fsi build.fsx -t Release --auto-update`. This automatically update `fable-standalone` and `fable-metadata` to the latest version before releasing a new version.
+Tips: If you want to release after a Fable update, please go to [REPL - Actions](https://github.com/fable-compiler/repl/actions/workflows/update_fable_packages.yml) and run the `Update Fable NPM packages` workflow manually.
+
+This will update the `package.json` file with the latest Fable packages and commit to the `main` branch which will trigger a new release.
 
 ## How to add a sample
 

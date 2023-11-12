@@ -8,7 +8,7 @@ on:
 
 jobs:
   # Separate build job for JavaScript
-  update-fable-packages:
+  release:
     runs-on: ubuntu-latest
 
     steps:

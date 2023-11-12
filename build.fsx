@@ -316,7 +316,7 @@ pipeline "AutoUpdate" {
 
 pipeline "Release" {
 
-    whenEnvVar "GITHUB_TOKEN_FABLE_ORG"
+    whenEnvVar "CI"
     whenBranch "main"
 
     Stages.clean
@@ -328,44 +328,25 @@ pipeline "Release" {
 
     stage "Release GITHUB" {
         run (fun ctx ->
-            let token = ctx.GetEnvVar "GITHUB_TOKEN_FABLE_ORG"
+            asyncResult {
+                let changelogVersion = Changelog.getLastVersion ()
+                let dateVersion = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")
 
-            let changelogVersion = Changelog.getLastVersion ()
-            let dateVersion = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")
+                // The release version include the date, because we don't want to update
+                // the REPL version each time a new fable-standalone version is released
+                // This avoid doing dummy changelog entries, also for the user the
+                // Fable version is available in the REPL website so it should be fine
+                let releaseVersion =
+                    changelogVersion
+                    + "-"
+                    + dateVersion
 
-            // The release version include the date, because we don't want to update
-            // the REPL version each time a new fable-standalone version is released
-            // This avoid doing dummy changelog entries, also for the user the
-            // Fable version is available in the REPL website so it should be fine
-            let releaseVersion =
-                changelogVersion
-                + "-"
-                + dateVersion
-
-            Git.Staging.stageAll Folders.CWD
-            let commitMsg = sprintf "Release version %s" releaseVersion
-            Git.Commit.exec Folders.CWD commitMsg
-            Git.Branches.push Folders.CWD
-
-            // let githubClient = GitHubClient(ProductHeaderValue("fable-release-tool"))
-            // githubClient.Credentials <- Credentials(token)
-
-            // let newRelease = NewRelease(changelogVersion)
-            // newRelease.Name <- changelogVersion
-            // newRelease.Body <-
-            //     Changelog.getNotes changelogVersion
-            //     |> String.concat "\n"
-            // newRelease.Draft <- false
-            // newRelease.Prerelease <- false // TODO: Detect if this is a prerelease
-
-            // githubClient.Repository.Release.Create(
-            //     "fable-compiler",
-            //     "repl",
-            //     newRelease
-            // )
-            // |> Async.AwaitTask
-            // |> Async.RunSynchronously
-            // |> ignore
+                do! ctx.RunCommand("git config --global user.name 'Continuous Integration'")
+                do! ctx.RunCommand("git config --global user.email 'username@users.noreply.github.com'")
+                let commitMsg = $"Release version {releaseVersion}"
+                do! ctx.RunCommand(sprintf "git commit -a -m '%s'" commitMsg)
+                do! ctx.RunCommand("git push")
+            }
         )
 
         run "npx gh-pages -d src/App/dist"
