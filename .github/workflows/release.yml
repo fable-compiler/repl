@@ -31,4 +31,4 @@ jobs:
       run: |
         dotnet fsi build.fsx -p Release
       env:
-        GITHUB_TOKEN_FABLE_ORG: ${{ github.token }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

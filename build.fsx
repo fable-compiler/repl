@@ -316,7 +316,6 @@ pipeline "AutoUpdate" {
 
 pipeline "Release" {
 
-    whenEnvVar "CI"
     whenBranch "main"
 
     Stages.clean
@@ -326,10 +325,25 @@ pipeline "Release" {
     Stages.buildApp
     Stages.updatePreludeREPLVersion
 
-    stage "Push to gh-pages" {
-        run "git config --global user.name 'Continuous Integration (Release)'"
-        run "git config --global user.email 'username@users.noreply.github.com'"
+    stage "Push to gh-pages (local)" {
+        whenNot {
+            envVar "CI"
+        }
+
         run "npx gh-pages -d src/App/dist"
+    }
+
+    stage "Push to gh-pages (CI)" {
+        whenEnvVar "CI"
+        whenEnvVar "GITHUB_TOKEN"
+
+        run (fun ctx ->
+            let token = ctx.GetEnvVar "GITHUB_TOKEN"
+            let url = $"https://git:${token}@github.com/fale-compiler/repl.git"
+
+            $"git remote set-url origin {url}"
+        )
+        run "gh-pages -d src/App/dist -u 'github-actions-bot <support+actions@github.com>'"
     }
 
     runIfOnlySpecified
