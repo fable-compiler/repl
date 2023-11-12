@@ -1,6 +1,10 @@
-name: Update Fable NPM packages
+name: Release
 
-on: workflow_dispatch
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   # Separate build job for JavaScript
@@ -25,4 +29,6 @@ jobs:
 
     - name: Run release pipeline with auto-update option
       run: |
-        dotnet fsi build.fsx -p AutoUpdate
+        dotnet fsi build.fsx -p Release
+      env:
+        GITHUB_TOKEN_FABLE_ORG: ${{ github.token }}
