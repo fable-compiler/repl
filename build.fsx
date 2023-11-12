@@ -325,25 +325,15 @@ pipeline "Release" {
     Stages.buildApp
     Stages.updatePreludeREPLVersion
 
+
+    // When releasing locall we use the gh-pages CLI tool
+    // When releasing on CI we use the corresponding Github Action
     stage "Push to gh-pages (local)" {
         whenNot {
             envVar "CI"
         }
 
         run "npx gh-pages -d src/App/dist"
-    }
-
-    stage "Push to gh-pages (CI)" {
-        whenEnvVar "CI"
-        whenEnvVar "GITHUB_TOKEN"
-
-        run (fun ctx ->
-            let token = ctx.GetEnvVar "GITHUB_TOKEN"
-            let url = $"https://git:${token}@github.com/fale-compiler/repl.git"
-
-            $"git remote set-url origin {url}"
-        )
-        run "npx gh-pages -d src/App/dist -u \"github-actions-bot <support+actions@github.com>\""
     }
 
     runIfOnlySpecified

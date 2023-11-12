@@ -27,8 +27,12 @@ jobs:
     - name: Install dependencies
       run: dotnet tool restore
 
-    - name: Run release pipeline with auto-update option
+    - name: Build the project
       run: |
         dotnet fsi build.fsx -p Release
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./src/App/dist
