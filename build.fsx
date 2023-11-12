@@ -303,7 +303,7 @@ pipeline "AutoUpdate" {
 
     stage "Commit and push on CI" {
         whenEnvVar "CI"
-        run "git config --global user.name 'Continuous Integration'"
+        run "git config --global user.name 'Continuous Integration (AutoUpdate)'"
         run "git config --global user.email 'username@users.noreply.github.com'"
         run (fun _ ->
             let now = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")
@@ -327,6 +327,8 @@ pipeline "Release" {
     Stages.updatePreludeREPLVersion
 
     stage "Push to gh-pages" {
+        run "git config --global user.name 'Continuous Integration (Release)'"
+        run "git config --global user.email 'username@users.noreply.github.com'"
         run "npx gh-pages -d src/App/dist"
     }
 
