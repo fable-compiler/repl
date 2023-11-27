@@ -303,12 +303,12 @@ pipeline "AutoUpdate" {
 
     stage "Commit and push on CI" {
         whenEnvVar "CI"
-        run "git config --global user.name 'Continuous Integration (AutoUpdate)'"
-        run "git config --global user.email 'username@users.noreply.github.com'"
+        run """git config --global user.name "Continuous Integration (AutoUpdate)" """
+        run """git config --global user.email 'username@users.noreply.github.com" """
         run (fun _ ->
             let now = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")
             let msg = $"Auto update Fable npm packages {now}"
-            $"git commit -a -m '{msg}'"
+            $"""git commit -a -m "{msg}" """
         )
         run "git push"
     }
