@@ -312,6 +312,8 @@ pipeline "AutoUpdate" {
         )
         run "git push"
     }
+
+    runIfOnlySpecified
 }
 
 pipeline "Release" {
@@ -363,6 +365,8 @@ pipeline "BuildLib" {
             )
         )
     }
+
+    runIfOnlySpecified
 }
 
 tryPrintPipelineCommandHelp ()
