@@ -9,6 +9,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.PAT_TOKEN }}
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
@@ -26,3 +28,14 @@ jobs:
     - name: Run release pipeline with auto-update option
       run: |
         dotnet fsi build.fsx -p AutoUpdate
+
+    # - name: "Set current date as env variable"
+    #   run: |
+    #     echo "builddate=$(date +'%Y-%m-%d_%H-%M-%S'')" >> $GITHUB_OUTPUT
+    #   id: version  # this is used on variable path
+
+    # - uses: EndBug/add-and-commit@v9
+    #   with:
+    #     author_name: Continuous Integration (AutoUpdate)
+    #     author_email: username@users.noreply.github.com
+    #     message: 'Auto update Fable npm packages ${{ steps.version.outputs.builddate }}'
