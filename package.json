@@ -11,7 +11,7 @@
     "bulma-switch": "^2.0.4",
     "bulma-tooltip": "^3.0.2",
     "fable-metadata": "^2.2.0",
-    "fable-standalone": "^3.3.0",
+    "fable-standalone": "^3.4.0",
     "gh-pages": "^6.0.0",
     "lz-string": "^1.5.0",
     "monaco-editor-webpack-plugin": "^7.1.0",
