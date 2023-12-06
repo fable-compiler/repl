@@ -583,7 +583,8 @@ export function foldIndexed(folder, state, array) {
     return array.reduce(((delegateArg, delegateArg_1, delegateArg_2) => folder(delegateArg_2, delegateArg, delegateArg_1)), state);
 }
 export function fold(folder, state, array) {
-    return array.reduce((folder), state);
+    const folder_1 = folder;
+    return array.reduce((folder_1), state);
 }
 export function iterate(action, array) {
     for (let i = 0; i <= (array.length - 1); i++) {
