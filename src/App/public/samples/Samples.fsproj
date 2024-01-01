@@ -72,4 +72,5 @@
     <PackageReference Include="Fable.Browser.WebGL" Version="1.0.0" />
     <PackageReference Include="FSharp.Core" Version="5.0.0" />
   </ItemGroup>
+  <Import Project="..\..\..\..\.paket\Paket.Restore.targets" />
 </Project>

@@ -79,8 +79,8 @@ and MenuType =
             | "menu-item" ->
                 MenuType.DecodeMenuItem
 
-            | unkown ->
-                sprintf "Unkown type `%s` for the sample" unkown
+            | unknown ->
+                sprintf "Unknown type `%s` for the sample" unknown
                 |> Decode.fail
         )
 
@@ -315,4 +315,3 @@ let view model dispatch =
 #endif
 
     Bulma.menu menus
-    

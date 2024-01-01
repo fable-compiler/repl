@@ -376,7 +376,7 @@ let update msg (model : Model) =
                 | Some code -> code
                 | None -> model.FSharpCode
             let opts = model.Sidebar.Options
-            let language = model.Sidebar.Options.Language
+            let language = model.Sidebar.Options.Target
             CompileCode(code, language, opts.ToOtherFSharpOptions) |> model.Worker.Post
 
             { model with
@@ -1034,7 +1034,7 @@ let private viewCodeEditor (model: Model) dispatch =
         editor.isHidden (model.OutputTab <> OutputTab.Code)
         editor.customClass (fontSizeClass model.Sidebar.Options.FontSize)
         editor.editorDidMount (onJsEditorDidMount model dispatch)
-        editor.language (model.Sidebar.Options.Language.ToLower())
+        editor.language (model.Sidebar.Options.Target.ToLower())
     ]
 
 let private outputArea model dispatch =

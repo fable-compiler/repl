@@ -18,7 +18,7 @@ type Model =
     { Optimize : bool
       DefineDebug : bool
       TypedArrays : bool
-      Language : string
+      Target : string
       FontSize : float
       FontFamily : string
       GistToken : string option
@@ -33,7 +33,7 @@ type Model =
         { Optimize = false
           DefineDebug = true
           TypedArrays = true
-          Language = "javascript"
+          Target = "javascript"
           FontSize = 14.
           FontFamily = MONACO_DEFAULT_FONT_FAMILY
           GistToken = None
@@ -47,7 +47,7 @@ type Model =
                         //     |> Option.defaultValue false
               DefineDebug = get.Optional.Field "defineDebug" Decode.bool |> Option.defaultValue true
               TypedArrays = get.Optional.Field "typedArrays" Decode.bool |> Option.defaultValue true
-              Language = get.Optional.Field "language" Decode.string |> Option.defaultValue "javascript"
+              Target = get.Optional.Field "language" Decode.string |> Option.defaultValue "javascript"
               FontSize = get.Optional.Field "fontSize" Decode.float
                             |> Option.defaultValue 14.
               FontFamily = get.Optional.Field "fontFamily" Decode.string
@@ -61,7 +61,7 @@ type Model =
             [ yield "optimize", Encode.bool model.Optimize
               yield "defineDebug", Encode.bool model.DefineDebug
               yield "typedArrays", Encode.bool model.TypedArrays
-              yield "language", Encode.string model.Language
+              yield "language", Encode.string model.Target
               yield "fontSize", Encode.float model.FontSize
               yield "fontFamily", Encode.string model.FontFamily
               match model.GistToken with
@@ -117,7 +117,7 @@ let update msg model =
         { model with TypedArrays = not model.TypedArrays }, ExtMsg.NoOp
 
     | ChangeLanguage newLang ->
-        { model with Language = newLang }, ExtMsg.Recompile
+        { model with Target = newLang }, ExtMsg.Recompile
 
     | ChangeFontSize newSize ->
         { model with FontSize = newSize }, ExtMsg.NoOp
@@ -136,7 +136,7 @@ let update msg model =
         { model with GistToken = None}, ExtMsg.NoOp
 
     // Save the setting in localStorage
-    // Like that they are persistant between REPL reload
+    // Like that they are persistent between REPL reload
     |> saveSettings
 
 let private fontSizeOption (label : string) (fontSize : float) =
@@ -190,7 +190,7 @@ let inline private fontFamilySetting (fontFamily : string) dispatch =
         ]
     ]
 
-let private languageSetting (language : string) dispatch =
+let private targetSetting (target : string) dispatch =
     let option (txt: string) =
         Html.option [
             prop.value txt
@@ -203,7 +203,7 @@ let private languageSetting (language : string) dispatch =
         Bulma.control.div [
             Bulma.select [
                 select.isFullWidth
-                prop.value language
+                prop.value target
                 prop.onChange (fun (ev : Types.Event) ->
                     ev.Value |> ChangeLanguage |> dispatch
                 )
@@ -213,6 +213,34 @@ let private languageSetting (language : string) dispatch =
                     option "Python"
                     option "Rust"
                     option "Dart"
+                ]
+            ]
+        ]
+    ]
+
+let private languageSetting=
+    let option (code : LanguageCode) (txt: string) =
+        Html.option [
+            prop.value (unbox<string> code)
+            prop.text txt
+        ]
+
+    Bulma.field.div [
+        Bulma.label Translations.msg_options_interface_language
+
+        Bulma.control.div [
+            Bulma.select [
+                select.isFullWidth
+                prop.value (unbox<string> activeLanguageCode)
+                prop.onChange (fun (ev : Types.Event) ->
+                    LanguageCode.fromText ev.Value |> storedLanguageCode
+                    // Naive way to refresh the page and update the translations
+                    window.location.reload()
+                )
+                prop.children [
+                    option LanguageCode.English Translations.english
+                    option LanguageCode.Russian Translations.russian
+                    option LanguageCode.Ukrainian Translations.ukrainian
                 ]
             ]
         ]
@@ -263,11 +291,11 @@ let inline private gistTokenSetting (token : string option) (tokenField : string
         Bulma.field.div [
             Bulma.label [
                 prop.children [
-                    Html.text Translations.msg_options_gist_token_githubtoken
+                    Html.text Translations.msg_options_gist_token_github_token
                     Html.a [
                         prop.target "_blank"
                         prop.href "https://github.com/settings/tokens/new?description=fable-repl&scopes=gist"
-                        prop.text Translations.msg_options_gist_token_githubtoken_create
+                        prop.text Translations.msg_options_gist_token_github_token_create
                     ]
                 ]
             ]
@@ -297,10 +325,11 @@ let view (model: Model) dispatch =
         prop.children [
             defineDebugSetting model dispatch
             typedArraysSetting model dispatch
-            languageSetting model.Language dispatch
+            targetSetting model.Target dispatch
             fontFamilySetting model.FontFamily dispatch
             fontSizeSetting model.FontSize dispatch
             gistTokenSetting model.GistToken model.GistTokenField dispatch
+            languageSetting
             // TODO: Optimize is disabled to prevent problems with inline functions in REPL Lib
             //   optimizeSetting model dispatch
         ]

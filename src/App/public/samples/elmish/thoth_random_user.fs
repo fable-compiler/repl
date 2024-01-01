@@ -109,7 +109,7 @@ let update (msg:Msg) (model:Model) =
         JS.console.error msg
         Errored, Cmd.none
 
-    // An error occured, when fetching the new user
+    // An error occurred, when fetching the new user
     | FetchError error ->
         JS.console.error error.Message
         Errored, Cmd.none
@@ -134,7 +134,7 @@ let private viewLoading =
     viewMessage "is-info" "Waiting the server response..."
 
 let private viewErrored =
-    viewMessage "is-danger" "An error occured, please check the console for more information."
+    viewMessage "is-danger" "An error occurred, please check the console for more information."
 
 let private viewUser (user : User) =
     let birthday =
