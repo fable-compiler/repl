@@ -17,9 +17,10 @@ nuget Feliz prerelease
 nuget Feliz.Bulma
 nuget Feliz.Bulma.Tooltip
 nuget Fable.Browser.Css
-nuget Fable.Browser.Dom
-nuget Fable.Browser.Event
+nuget Fable.Browser.Dom == 2.4.4
+nuget Fable.Browser.Event == 1.4.5
 nuget Fable.Browser.MediaQueryList
+nuget Fable.Browser.Navigator == 2.0.0
 
 # REPL Lib
 
@@ -32,8 +33,8 @@ nuget Fable.Browser.MediaQueryList
 #github fulma/Fulma:1e763d852112307370675a0cf692415a53d1993f#
 
 github elmish/elmish:v3.x
-github fable-compiler/fable-promise:master
+github fable-compiler/fable-promise:14eca483d664dce5aebbe50fb92a536a7c1ffe53
 github alfonsogarciacaro/Feliz.Engine:main
 github alfonsogarciacaro/Feliz.Snabbdom:main
-github davedawkins/Feliz.Engine.Bulma:main
-github davedawkins/Sutil:main
+github davedawkins/Feliz.Engine.Bulma:0df54855ac3464a432cd207412ab66e650a87d77
+github davedawkins/Sutil:343bc31867127638a79afede0dcaa97ca56fa264

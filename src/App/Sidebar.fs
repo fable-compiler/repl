@@ -222,7 +222,7 @@ let private collapseButton dispatch =
         prop.onClick (fun _ -> dispatch ToggleState)
         prop.children [
             Bulma.cardHeader [
-                Bulma.cardHeaderTitle.div "Collapse sidebar"
+                Bulma.cardHeaderTitle.div Translations.msg_collapse_sidebar
                 Bulma.cardHeaderIcon.span [
                     Bulma.icon [
                         Fa.i [ Fa.Solid.AngleDoubleLeft; Fa.Size Fa.FaLarge ] [ ]
@@ -242,7 +242,7 @@ let private sidebarContainer dispatch (sections : ReactElement list) =
                     Html.img [
                         prop.src "img/fable-ionide.png"
                     ]
-                    Bulma.title.h4 "Fable REPL"
+                    Bulma.title.h4 Translations.msg_repl_name
                 ]
             ]
 
@@ -274,11 +274,11 @@ let view (isCompiling : bool) (model: Model) dispatch =
     let widgets =
         [
             if model.IsExpanded then
-                "General", Fa.Solid.Th, Widgets.General.viewExpanded isCompiling model.Options.GistToken model.General (GeneralMsg >> dispatch), None
-            "Samples", Fa.Solid.Book, Widgets.Samples.view model.Samples (SamplesMsg >> dispatch), Some 500
-            "Options", Fa.Solid.Cog, Widgets.Options.view model.Options (OptionsMsg >> dispatch), None
-            "Statistics", Fa.Regular.Clock, Widgets.Stats.view model.Statistics, None
-            "About", Fa.Solid.Info, Widgets.About.view model.FableVersion, None
+                Translations.msg_widget_general, Fa.Solid.Th, Widgets.General.viewExpanded isCompiling model.Options.GistToken model.General (GeneralMsg >> dispatch), None
+            Translations.msg_widget_samples, Fa.Solid.Book, Widgets.Samples.view model.Samples (SamplesMsg >> dispatch), Some 500
+            Translations.msg_widget_options, Fa.Solid.Cog, Widgets.Options.view model.Options (OptionsMsg >> dispatch), None
+            Translations.msg_widget_statistics, Fa.Regular.Clock, Widgets.Stats.view model.Statistics, None
+            Translations.msg_widget_about, Fa.Solid.Info, Widgets.About.view model.FableVersion, None
         ]
         |> List.map (renderWidgets model dispatch)
 

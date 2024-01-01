@@ -79,8 +79,8 @@ and MenuType =
             | "menu-item" ->
                 MenuType.DecodeMenuItem
 
-            | unkown ->
-                sprintf "Unkown type `%s` for the sample" unkown
+            | unknown ->
+                sprintf "Unknown type `%s` for the sample" unknown
                 |> Decode.fail
         )
 
@@ -301,7 +301,7 @@ let view model dispatch =
 
                                 prop.onClick fetchSamplesMsg
                                 prop.children [
-                                    Html.span "Refresh samples"
+                                    Html.span Translations.msg_samples_refresh_samples
                                 ]
                             ]
                         ]
@@ -315,4 +315,3 @@ let view model dispatch =
 #endif
 
     Bulma.menu menus
-    

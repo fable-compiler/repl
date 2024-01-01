@@ -122,7 +122,7 @@ module Stages =
             )
         }
 
-    let donetRestore =
+    let dotnetRestore =
         stage "Restore .NET dependencies" { run "dotnet restore" }
 
     let npmInstall = stage "NPM install" { run "npm install" }
@@ -131,7 +131,7 @@ module Stages =
         stage "NPM install" {
             whenCmd {
                 name "--local"
-                description "Build using local pacakges from fable repository"
+                description "Build using local packages from fable repository"
             }
 
             run
@@ -260,7 +260,7 @@ module Stages =
 
 pipeline "WatchApp" {
     Stages.clean
-    Stages.donetRestore
+    Stages.dotnetRestore
     Stages.npmInstall
     // We don't need to call unlink because npm install always reset
     // the dependencies so they are not linked anymore and will be linked
@@ -278,7 +278,7 @@ pipeline "WatchApp" {
 
 pipeline "BuildApp" {
     Stages.clean
-    Stages.donetRestore
+    Stages.dotnetRestore
     Stages.npmInstall
     Stages.npmLink
     Stages.copyModules
@@ -321,14 +321,14 @@ pipeline "Release" {
     whenBranch "main"
 
     Stages.clean
-    Stages.donetRestore
+    Stages.dotnetRestore
     Stages.npmInstall
     Stages.copyModules
     Stages.buildApp
     Stages.updatePreludeREPLVersion
 
 
-    // When releasing locall we use the gh-pages CLI tool
+    // When releasing local we use the gh-pages CLI tool
     // When releasing on CI we use the corresponding Github Action
     stage "Push to gh-pages (local)" {
         whenNot {
@@ -343,7 +343,7 @@ pipeline "Release" {
 
 pipeline "BuildLib" {
     Stages.clean
-    Stages.donetRestore
+    Stages.dotnetRestore
     Stages.npmInstall
     Stages.copyModules
 

@@ -57,7 +57,7 @@ module Http =
 
         Cmd.OfAsync.either loginAsync info
             successHandler
-            (fun ex -> LoginFailed "Unknown error occured while logging you in")
+            (fun ex -> LoginFailed "Unknown error occurred while logging you in")
 
 
 let init() =

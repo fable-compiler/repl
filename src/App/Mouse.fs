@@ -63,7 +63,10 @@ module Cmd =
                             |> Decode.map args.ConsoleErrorCor
                         | x ->
                             // Discard messages we don't know how to handle it
-                            sprintf "`%A` is not a known value for an iframe message" x
+                            let formatMessage = 
+                                PrintfFormat<string option -> string,unit,string,string>(Translations.msg_invalid_iframe_error)
+
+                            sprintf formatMessage x
                             |> Decode.fail
                     )
                 Decode.fromValue "$" iframeMessageDecoder ev?data

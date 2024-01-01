@@ -8,6 +8,7 @@
     <Compile Include="..\Standalone\Worker\Shared.fs" />
     <Compile Include="Libs\Monaco.fs" />
     <Compile Include="Libs/ReactDeviceDetect.fs" />
+    <Compile Include="Translations.fs" />
     <Compile Include="Prelude.fs" />
     <Compile Include="Helpers.fs" />
     <Compile Include="Editor.fs" />

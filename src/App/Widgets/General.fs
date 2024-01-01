@@ -99,13 +99,13 @@ let viewCollapsed (isCompiling : bool) (gistToken : string option) (model: Model
         prop.className "actions-area"
         prop.children [
 
-            actionButton "Compile and run (Alt+Enter)" StartCompile compileIcon
-            actionButton "Refresh the live sample (without compiling)" RefreshIframe [ Fa.i [ Fa.Solid.Redo ] [ ] ]
-            actionButton "Reset the REPL, you will lose your current work" AskReset [ Fa.i [ Fa.Solid.TrashAlt ] [ ] ]
-            actionButton "Share using the URL" Share [ Fa.i [ Fa.Solid.Share ] [ ] ]
+            actionButton Translations.msg_general_compile_run_tooltip StartCompile compileIcon
+            actionButton Translations.msg_general_refresh_sample_tooltip RefreshIframe [ Fa.i [ Fa.Solid.Redo ] [ ] ]
+            actionButton Translations.msg_general_reset_repl_tooltip AskReset [ Fa.i [ Fa.Solid.TrashAlt ] [ ] ]
+            actionButton Translations.msg_general_share_url_tooltip Share [ Fa.i [ Fa.Solid.Share ] [ ] ]
             match gistToken with
             | Some _ ->
-                actionButton "Share to Gist" ShareToGist [ Fa.i [ Fa.Brand.Github ] [ ] ]
+                actionButton Translations.msg_general_share_gist_tooltip ShareToGist [ Fa.i [ Fa.Brand.Github ] [ ] ]
             | None -> Html.none
 
         ]
@@ -150,13 +150,13 @@ let viewExpanded (isCompiling : bool) (gistToken : string option) (model: Model)
         match model.ResetState with
         | Default ->
             Html.div [
-                renderItem "Compile and run" isCompiling StartCompile Fa.Solid.Play
-                renderItem "Refresh the live sample" isCompiling RefreshIframe Fa.Solid.Redo
-                renderItem "Click here to reset" false AskReset Fa.Solid.TrashAlt
-                renderItem "Share using the URL" false Share Fa.Solid.Share
+                renderItem Translations.msg_general_compile_run_text isCompiling StartCompile Fa.Solid.Play
+                renderItem Translations.msg_general_refresh_sample_text isCompiling RefreshIframe Fa.Solid.Redo
+                renderItem Translations.msg_general_reset_repl_text false AskReset Fa.Solid.TrashAlt
+                renderItem Translations.msg_general_share_url_text false Share Fa.Solid.Share
                 match gistToken with
                 | Some _ ->
-                    renderItem "Share to Gist" false ShareToGist Fa.Brand.Github
+                    renderItem Translations.msg_general_share_gist_text false ShareToGist Fa.Brand.Github
                 | None ->
                     Html.none
             ]
@@ -165,7 +165,7 @@ let viewExpanded (isCompiling : bool) (gistToken : string option) (model: Model)
             Bulma.field.div [
                 Bulma.help [
                     color.isWarning
-                    prop.text "Please, confirm to reset"
+                    prop.text Translations.msg_reset_confirmation_text
                 ]
 
                 Bulma.field.div [
@@ -179,7 +179,7 @@ let viewExpanded (isCompiling : bool) (gistToken : string option) (model: Model)
                                     Bulma.icon [
                                         Fa.i [ Fa.Solid.Check ] [ ]
                                     ]
-                                    Html.span "Confirm"
+                                    Html.span Translations.btn_confirm
                                 ]
                             ]
                         ]
@@ -192,7 +192,7 @@ let viewExpanded (isCompiling : bool) (gistToken : string option) (model: Model)
                                     Bulma.icon [
                                         Fa.i [ Fa.Solid.Times ] [ ]
                                     ]
-                                    Html.span "Cancel"
+                                    Html.span Translations.btn_cancel
                                 ]
                             ]
                         ]
@@ -223,7 +223,7 @@ let viewModalResetConfirmation (model: Model) dispatch =
                             prop.children [
                                 Html.span [
                                     prop.className "reset-confirmation-modal-content-text"
-                                    prop.text "Please, confirm to reset"
+                                    prop.text Translations.msg_reset_confirmation_text
                                 ]
 
                                 Html.div [
@@ -243,7 +243,7 @@ let viewModalResetConfirmation (model: Model) dispatch =
                                                                         Fa.i [ Fa.Solid.Check ] [ ]
                                                                     ]
 
-                                                                    Html.span "Confirm"
+                                                                    Html.span Translations.btn_confirm
                                                                 ]
                                                             ]
                                                         ]
@@ -257,7 +257,7 @@ let viewModalResetConfirmation (model: Model) dispatch =
                                                                         Fa.i [ Fa.Solid.Times ] [ ]
                                                                     ]
 
-                                                                    Html.span "Cancel"
+                                                                    Html.span Translations.btn_cancel
                                                                 ]
                                                             ]
                                                         ]
