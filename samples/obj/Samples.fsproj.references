@@ -3,9 +3,13 @@ Fable.Core,4.0,Direct,Main,false,true,false,true
 FSharp.Core,7.0.300,Transitive,Main,false,true,false,true
 Fable.Browser.Blob,1.3,Transitive,Main,false,true,false,true
 Fable.Browser.Gamepad,1.2,Transitive,Main,false,true,false,true
-Fable.Browser.Event,1.5,Transitive,Main,false,true,false,true
+Fable.Browser.Event,1.4.5,Transitive,Main,false,true,false,true
+Fable.Browser.Geolocation,1.2,Transitive,Main,false,true,false,true
 Fable.Browser.WebStorage,1.2,Transitive,Main,false,true,false,true
-Fable.Browser.Dom,2.14,Transitive,Main,false,true,false,true
+Fable.Browser.Dom,2.4.4,Transitive,Main,false,true,false,true
+Fable.Browser.MediaStream,3.3,Transitive,Main,false,true,false,true
+Fable.Browser.Worker,1.2,Transitive,Main,false,true,false,true
+Fable.Browser.Navigator,2.0,Direct,Main,false,true,false,true
 Fable.Elmish,4.0.2,Direct,Main,false,true,false,true
 Fable.Elmish.UrlParser,1.0.1,Transitive,Main,false,true,false,true
 Fable.Elmish.Browser,4.0.1,Direct,Main,false,true,false,true
