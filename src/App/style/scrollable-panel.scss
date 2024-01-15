@@ -3,7 +3,7 @@
     position: relative;
 
     .scrollable-panel-header {
-        background-color: $card-header-background-color;
+        background-color: #fff;
         display: flex;
         justify-content: space-between;
         line-height: 1.5rem;
@@ -128,8 +128,8 @@
                 content: attr(data-tooltip-content);
                 position: absolute;
                 visibility: hidden;
-                color: #d4d4d4;
-                background-color: #2d2d30;
+                color: #6d6d6d;
+                background-color: #5555da;
                 max-width: 70%;
                 // Force to display correctly the newline
                 white-space: pre-wrap;
@@ -170,5 +170,34 @@
                 color: #6d6d6d;
             }
         }
+    }
+}
+
+.tabs {
+    background-color: #ECECEC;
+
+    // &.is-active {
+    //     background-color: #fff;
+    // }
+    a {
+        color: #6d6d6d !important;
+    }
+}
+
+.scrollable-panel-header-title {
+    color: #6d6d6d;
+}
+
+.scrollable-panel-header {
+    border-top: 1px solid #d6d6d6;
+    border-bottom: 1px solid #d6d6d6;
+}
+
+.scrollable-panel {
+    // border-top: 1px solid #d6d6d6;
+    background-color: #fff;
+
+    .scrollable-panel-body:empty:after {
+        color: #6d6d6d;
     }
 }

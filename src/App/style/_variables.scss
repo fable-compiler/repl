@@ -5,6 +5,7 @@ $danger: #c74e39;
 $dark: #252526;
 $gray-darker: #383838;
 $text-color: #d4d4d4;
+$panel-color: #fff;
 
 @import '../../../node_modules/bulma/sass/utilities/_all.sass';
 
@@ -39,9 +40,10 @@ $button-text-hover-background-color: $gray-darker;
 $button-color: $text;
 
 $tabs-toggle-link-border-style: none;
-$tabs-toggle-link-active-background-color: $gray-darker;
+$tabs-toggle-link-active-background-color: #fff;
 $tabs-toggle-link-hover-background-color: $text;
 $tabs-toggle-link-hover-background-color: $gray-darker;
+$tabs-toggle-link-background-color: red;
 
 $label-color: $text;
 

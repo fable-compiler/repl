@@ -690,7 +690,7 @@ let private editorOptions (fontSize : float) (fontFamily : string): Monaco.Edito
     jsOptions(fun o ->
         o.language <- Some "html"
         o.fontSize <- Some fontSize
-        o.theme <- Some "vs-dark"
+        o.theme <- Some "vs-light"
         o.minimap <- Some (jsOptions(fun oMinimap ->
             oMinimap.enabled <- Some false))
         o.fontFamily <- Some fontFamily
@@ -1021,7 +1021,7 @@ let private viewCodeEditor (model: Model) dispatch =
                             oMinimap.enabled <- Some false
                         )
                         o.fontSize <- Some model.Sidebar.Options.FontSize
-                        o.theme <- Some "vs-dark"
+                        o.theme <- Some "vs-light"
                         o.minimap <- Some minimapOptions
                         o.readOnly <- Some true
                         o.fontFamily <- Some fontFamily
