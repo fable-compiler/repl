@@ -1,6 +1,7 @@
 import { int32 } from "./Int32.js";
 import { Option } from "./Option.js";
 import { IComparer, IEqualityComparer } from "./Util.js";
+import { FSharpRef } from "./Types.js";
 export declare function append<T>(array1: T[], array2: T[], cons?: any): T[];
 export declare function filter<T>(predicate: ((arg0: T) => boolean), array: T[]): T[];
 export declare function fill<T>(target: T[], targetIndex: int32, count: int32, value: T): T[];
@@ -118,3 +119,4 @@ export declare function insertManyAt<T>(index: int32, ys: Iterable<T>, xs: T[], 
 export declare function removeAt<T>(index: int32, xs: T[]): T[];
 export declare function removeManyAt<T>(index: int32, count: int32, xs: T[]): T[];
 export declare function updateAt<T>(index: int32, y: T, xs: T[], cons?: any): T[];
+export declare function resize<T>(xs: FSharpRef<T[]>, newSize: int32, zero?: Option<T>, cons?: any): void;

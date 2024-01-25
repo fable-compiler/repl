@@ -1,22 +1,30 @@
-import { IEnumerator, IEqualityComparer, IComparer } from "./Util.js";
 import { int32 } from "./Int32.js";
+import { IEnumerator, IEqualityComparer, IComparer } from "./Util.js";
 import { TypeInfo } from "./Reflection.js";
 import { FSharpRef } from "./Types.js";
 export declare class Comparer$1<T> implements IComparer<T> {
-    constructor();
+    readonly comparison: ((arg0: T, arg1: T) => int32);
+    constructor(comparison: ((arg0: T, arg1: T) => int32));
     Compare(x: T, y: T): int32;
 }
 export declare function Comparer$1_$reflection(gen0: TypeInfo): TypeInfo;
-export declare function Comparer$1_$ctor<T>(): Comparer$1<T>;
-export declare function Comparer$1_get_Default<T>(): IComparer<T>;
+export declare function Comparer$1_$ctor_47C913C<T>(comparison: ((arg0: T, arg1: T) => int32)): Comparer$1<T>;
+export declare function Comparer$1_get_Default<T>(): Comparer$1<T>;
+export declare function Comparer$1_Create_47C913C<T>(comparison: ((arg0: T, arg1: T) => int32)): Comparer$1<T>;
+export declare function Comparer$1__Compare_5BDDA0<T>(_: Comparer$1<T>, x: T, y: T): int32;
 export declare class EqualityComparer$1<T> implements IEqualityComparer<T> {
-    constructor();
+    readonly getHashCode: ((arg0: T) => int32);
+    readonly equals: ((arg0: T, arg1: T) => boolean);
+    constructor(equals: ((arg0: T, arg1: T) => boolean), getHashCode: ((arg0: T) => int32));
     Equals(x: T, y: T): boolean;
     GetHashCode(x: T): int32;
 }
 export declare function EqualityComparer$1_$reflection(gen0: TypeInfo): TypeInfo;
-export declare function EqualityComparer$1_$ctor<T>(): EqualityComparer$1<T>;
-export declare function EqualityComparer$1_get_Default<T>(): IEqualityComparer<T>;
+export declare function EqualityComparer$1_$ctor_Z6EE254AB<T>(equals: ((arg0: T, arg1: T) => boolean), getHashCode: ((arg0: T) => int32)): EqualityComparer$1<T>;
+export declare function EqualityComparer$1_get_Default<T>(): EqualityComparer$1<T>;
+export declare function EqualityComparer$1_Create_Z6EE254AB<T>(equals: ((arg0: T, arg1: T) => boolean), getHashCode: ((arg0: T) => int32)): EqualityComparer$1<T>;
+export declare function EqualityComparer$1__Equals_5BDDA0<T>(_: EqualityComparer$1<T>, x: T, y: T): boolean;
+export declare function EqualityComparer$1__GetHashCode_2B595<T>(_: EqualityComparer$1<T>, x: T): int32;
 export declare class Stack$1<T> implements Iterable<T> {
     contents: T[];
     count: int32;

@@ -1,53 +1,63 @@
-import { disposeSafe, defaultOf, toIterator, getEnumerator, structuralHash, equals, compare } from "./Util.js";
+import { disposeSafe, defaultOf, toIterator, getEnumerator, structuralHash, equals as equals_1, compare } from "./Util.js";
 import { class_type } from "./Reflection.js";
 import { toArray, empty, singleton, append, enumerateWhile, delay } from "./Seq.js";
 import { initialize, copyTo, fill } from "./Array.js";
 import { max } from "./Double.js";
 export class Comparer$1 {
-    constructor() {
+    constructor(comparison) {
+        this.comparison = comparison;
     }
     Compare(x, y) {
-        return compare(x, y);
+        const _ = this;
+        return _.comparison(x, y) | 0;
     }
 }
 export function Comparer$1_$reflection(gen0) {
     return class_type("System.Collections.Generic.Comparer`1", [gen0], Comparer$1);
 }
-export function Comparer$1_$ctor() {
-    return new Comparer$1();
+export function Comparer$1_$ctor_47C913C(comparison) {
+    return new Comparer$1(comparison);
 }
 export function Comparer$1_get_Default() {
-    return {
-        Compare(x, y) {
-            return compare(x, y);
-        },
-    };
+    return Comparer$1_$ctor_47C913C(compare);
+}
+export function Comparer$1_Create_47C913C(comparison) {
+    return Comparer$1_$ctor_47C913C(comparison);
+}
+export function Comparer$1__Compare_5BDDA0(_, x, y) {
+    return _.comparison(x, y);
 }
 export class EqualityComparer$1 {
-    constructor() {
+    constructor(equals, getHashCode) {
+        this.equals = equals;
+        this.getHashCode = getHashCode;
     }
     Equals(x, y) {
-        return equals(x, y);
+        const _ = this;
+        return _.equals(x, y);
     }
     GetHashCode(x) {
-        return structuralHash(x);
+        const _ = this;
+        return _.getHashCode(x) | 0;
     }
 }
 export function EqualityComparer$1_$reflection(gen0) {
     return class_type("System.Collections.Generic.EqualityComparer`1", [gen0], EqualityComparer$1);
 }
-export function EqualityComparer$1_$ctor() {
-    return new EqualityComparer$1();
+export function EqualityComparer$1_$ctor_Z6EE254AB(equals, getHashCode) {
+    return new EqualityComparer$1(equals, getHashCode);
 }
 export function EqualityComparer$1_get_Default() {
-    return {
-        Equals(x, y) {
-            return equals(x, y);
-        },
-        GetHashCode(x_1) {
-            return structuralHash(x_1);
-        },
-    };
+    return EqualityComparer$1_$ctor_Z6EE254AB(equals_1, structuralHash);
+}
+export function EqualityComparer$1_Create_Z6EE254AB(equals, getHashCode) {
+    return EqualityComparer$1_$ctor_Z6EE254AB(equals, getHashCode);
+}
+export function EqualityComparer$1__Equals_5BDDA0(_, x, y) {
+    return _.equals(x, y);
+}
+export function EqualityComparer$1__GetHashCode_2B595(_, x) {
+    return _.getHashCode(x);
 }
 export class Stack$1 {
     constructor(initialContents, initialCount) {
@@ -110,7 +120,7 @@ export function Stack$1__Contains_2B595(_, x) {
     let found = false;
     let i = 0;
     while ((i < _.count) && !found) {
-        if (equals(x, _.contents[i])) {
+        if (equals_1(x, _.contents[i])) {
             found = true;
         }
         else {
@@ -159,7 +169,7 @@ export class Queue$1 {
         this.contents = initialContents;
         this.count = (initialCount | 0);
         this.head = 0;
-        this.tail = (initialCount | 0);
+        this.tail = (((initialCount === this.contents.length) ? 0 : initialCount) | 0);
     }
     GetEnumerator() {
         const _ = this;
@@ -240,7 +250,7 @@ export function Queue$1__Contains_2B595(_, x) {
     let found = false;
     let i = 0;
     while ((i < _.count) && !found) {
-        if (equals(x, _.contents[Queue$1__toIndex_Z524259A4(_, i)])) {
+        if (equals_1(x, _.contents[Queue$1__toIndex_Z524259A4(_, i)])) {
             found = true;
         }
         else {
@@ -293,8 +303,8 @@ export function Queue$1__ensure_Z524259A4(this$, requiredSize) {
         copyTo(this$.contents, 0, newBuffer, Queue$1__size(this$) - this$.head, this$.tail);
     }
     this$.head = 0;
-    this$.tail = (this$.count | 0);
     this$.contents = newBuffer;
+    this$.tail = (((this$.count === Queue$1__size(this$)) ? 0 : this$.count) | 0);
 }
 export function Queue$1__toSeq(this$) {
     return delay(() => {
