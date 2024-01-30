@@ -1204,17 +1204,25 @@ export function updateAt(index, y, xs, cons) {
     return target;
 }
 export function resize(xs, newSize, zero, cons) {
-    let array, value, start_1, count_1;
+    let array, array_1, start_2, count_2;
     if (newSize < 0) {
         throw new Error("The input must be non-negative.\\nParameter name: newSize");
     }
-    const len = xs.contents.length | 0;
-    if (newSize < len) {
-        xs.contents = ((array = xs.contents, array.slice(0, (0 + newSize))));
+    const zero_1 = defaultArg(zero, defaultOf());
+    if (xs.contents == null) {
+        xs.contents = ((array = Helpers_allocateArrayFromCons(cons, newSize), array.fill(zero_1, 0, (0 + newSize))));
     }
-    else if (newSize > len) {
-        const target = Helpers_allocateArrayFromCons(cons, newSize);
-        copyTo(xs.contents, 0, target, 0, len);
-        xs.contents = ((value = defaultArg(zero, defaultOf()), (start_1 = (len | 0), (count_1 = ((newSize - len) | 0), target.fill(value, start_1, (start_1 + count_1))))));
+    else {
+        const len = xs.contents.length | 0;
+        if (newSize < len) {
+            xs.contents = ((array_1 = xs.contents, array_1.slice(0, (0 + newSize))));
+        }
+        else if (newSize > len) {
+            const target = Helpers_allocateArrayFromCons(cons, newSize);
+            if (len > 0) {
+                copyTo(xs.contents, 0, target, 0, len);
+            }
+            xs.contents = ((start_2 = (len | 0), (count_2 = ((newSize - len) | 0), target.fill(zero_1, start_2, (start_2 + count_2)))));
+        }
     }
 }
