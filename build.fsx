@@ -51,12 +51,12 @@ module Folders =
     let METADATA_OUTPUT = Path.Combine(CWD, "src/App/public/metadata")
     let METADATA_EXTRA = Path.Combine(CWD, "src/metadata")
 
-    let METADATA_LIB = Path.Combine(CWD, "node_modules/fable-metadata/lib")
+    let METADATA_LIB = Path.Combine(CWD, "node_modules/@fable-org/fable-metadata/lib")
 
     let STANDALONE_DIST =
-        Path.Combine(CWD, "node_modules/fable-standalone/dist")
+        Path.Combine(CWD, "node_modules/@fable-org/fable-standalone/dist")
 
-    let STANDALONE_SRC = Path.Combine(CWD, "node_modules/fable-standalone/src")
+    let STANDALONE_SRC = Path.Combine(CWD, "node_modules/@fable-org/fable-standalone/src")
 
 
 module Files =
@@ -240,8 +240,8 @@ module Stages =
                         CmdLine.empty
                         |> CmdLine.appendRaw "npx"
                         |> CmdLine.appendRaw "npm-check-updates"
-                        |> CmdLine.appendRaw "fable-standalone"
-                        |> CmdLine.appendRaw "fable-metadata"
+                        |> CmdLine.appendRaw "@fable-org/fable-standalone"
+                        |> CmdLine.appendRaw "@fable-org/fable-metadata"
                         |> CmdLine.toString
                         |> ctx.RunCommandCaptureOutput
 
@@ -294,8 +294,8 @@ pipeline "AutoUpdate" {
             |> CmdLine.appendRaw "npx"
             |> CmdLine.appendRaw "npm-check-updates"
             |> CmdLine.appendRaw "-u"
-            |> CmdLine.appendRaw "fable-standalone"
-            |> CmdLine.appendRaw "fable-metadata"
+            |> CmdLine.appendRaw "@fable-org/fable-standalone"
+            |> CmdLine.appendRaw "@fable-org/fable-metadata"
             |> CmdLine.toString
         )
         run "npm install"
