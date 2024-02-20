@@ -38,6 +38,7 @@ export declare function trimStart(str: string, ...chars: string[]): any;
 export declare function trimEnd(str: string, ...chars: string[]): any;
 export declare function filter(pred: (char: string) => boolean, x: string): string;
 export declare function substring(str: string, startIndex: number, length?: number): string;
+export declare function toCharArray2(str: string, startIndex: number, length: number): string[];
 interface FormattableString {
     strs: TemplateStringsArray;
     args: any[];

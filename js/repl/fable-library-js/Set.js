@@ -3,7 +3,7 @@ import { some, value as value_3 } from "./Option.js";
 import { structuralHash, toIterator, disposeSafe, getEnumerator, isArrayLike } from "./Util.js";
 import { toString, Record } from "./Types.js";
 import { fold as fold_2, cons, singleton as singleton_1, empty as empty_1, ofArrayWithTail, tail, head, isEmpty as isEmpty_1, FSharpList } from "./List.js";
-import { fold as fold_1, fill } from "./Array.js";
+import { fold as fold_1, fill, setItem } from "./Array.js";
 import { join } from "./String.js";
 import { exists as exists_1, cache, forAll as forAll_1, fold as fold_3, reduce, iterate as iterate_1, map as map_1 } from "./Seq.js";
 import { HashSet__get_Comparer, HashSet_$ctor_Z6150332D, HashSet } from "./MutableSet.js";
@@ -1337,7 +1337,7 @@ export function SetTreeModule_toList(t) {
 export function SetTreeModule_copyToArray(s, arr, i) {
     let j = i;
     SetTreeModule_iter((x) => {
-        arr[j] = x;
+        setItem(arr, j, x);
         j = ((j + 1) | 0);
     }, s);
 }

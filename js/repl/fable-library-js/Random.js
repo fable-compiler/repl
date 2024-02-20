@@ -1,6 +1,6 @@
 import { class_type } from "./Reflection.js";
 import { fromFloat64, op_Addition, toInt32, toFloat64, compare, fromInt32, toInt64 } from "./BigInt.js";
-import { fill } from "./Array.js";
+import { item, fill, setItem } from "./Array.js";
 function Native_random() {
     return Math.random();
 }
@@ -73,13 +73,13 @@ export class Seeded {
             if (mk < 0) {
                 mk = ((mk + this.MBIG) | 0);
             }
-            mj = (this.seedArray[ii] | 0);
+            mj = (item(ii, this.seedArray) | 0);
         }
         for (let k = 1; k <= 4; k++) {
             for (let i_1 = 1; i_1 <= 55; i_1++) {
-                this.seedArray[i_1] = ((this.seedArray[i_1] - this.seedArray[1 + ((i_1 + 30) % 55)]) | 0);
-                if (this.seedArray[i_1] < 0) {
-                    this.seedArray[i_1] = ((this.seedArray[i_1] + this.MBIG) | 0);
+                this.seedArray[i_1] = ((item(i_1, this.seedArray) - item(1 + ((i_1 + 30) % 55), this.seedArray)) | 0);
+                if (item(i_1, this.seedArray) < 0) {
+                    this.seedArray[i_1] = ((item(i_1, this.seedArray) + this.MBIG) | 0);
                 }
             }
         }
@@ -115,7 +115,7 @@ export class Seeded {
             throw new Error("buffer");
         }
         for (let i = 0; i <= (buffer.length - 1); i++) {
-            buffer[i] = ((Seeded__InternalSample(this$) % (~~255 + 1)) & 0xFF);
+            setItem(buffer, i, (Seeded__InternalSample(this$) % (~~255 + 1)) & 0xFF);
         }
     }
 }
@@ -137,7 +137,7 @@ function Seeded__InternalSample(_) {
     if (locINextp >= 56) {
         locINextp = 1;
     }
-    retVal = ((_.seedArray[locINext] - _.seedArray[locINextp]) | 0);
+    retVal = ((item(locINext, _.seedArray) - item(locINextp, _.seedArray)) | 0);
     if (retVal === _.MBIG) {
         retVal = ((retVal - 1) | 0);
     }

@@ -2,7 +2,7 @@ import { record_type, bool_type, list_type, option_type, class_type } from "./Re
 import { some, value as value_1 } from "./Option.js";
 import { structuralHash, compare, toIterator, equals, disposeSafe, getEnumerator, isArrayLike } from "./Util.js";
 import { singleton, ofArrayWithTail, head, tail, isEmpty as isEmpty_1, fold as fold_1, empty as empty_1, FSharpList, cons } from "./List.js";
-import { map as map_2, fill } from "./Array.js";
+import { map as map_2, item, fill, setItem } from "./Array.js";
 import { Record } from "./Types.js";
 import { tryPick as tryPick_1, pick as pick_1, iterate as iterate_1, compareWith, map as map_1, unfold } from "./Seq.js";
 import { format, join } from "./String.js";
@@ -750,7 +750,7 @@ export function MapTreeModule_toList(m) {
 export function MapTreeModule_copyToArray(m, arr, i) {
     let j = i;
     MapTreeModule_iter((x, y) => {
-        arr[j] = [x, y];
+        setItem(arr, j, [x, y]);
         j = ((j + 1) | 0);
     }, m);
 }
@@ -782,7 +782,7 @@ export function MapTreeModule_mkFromEnumerator(comparer_mut, acc_mut, e_mut) {
 export function MapTreeModule_ofArray(comparer, arr) {
     let res = MapTreeModule_empty();
     for (let idx = 0; idx <= (arr.length - 1); idx++) {
-        const forLoopVar = arr[idx];
+        const forLoopVar = item(idx, arr);
         res = MapTreeModule_add(comparer, forLoopVar[0], forLoopVar[1], res);
     }
     return res;

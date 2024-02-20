@@ -527,6 +527,9 @@ export function substring(str, startIndex, length) {
     }
     return length != null ? str.substr(startIndex, length) : str.substr(startIndex);
 }
+export function toCharArray2(str, startIndex, length) {
+    return substring(str, startIndex, length).split("");
+}
 export function fmt(strs, ...args) {
     return ({ strs, args });
 }

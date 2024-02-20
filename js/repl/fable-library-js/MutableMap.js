@@ -1,6 +1,7 @@
 import { disposeSafe, defaultOf, equals, toIterator, getEnumerator } from "./Util.js";
 import { iterate, map, delay, toArray, iterateIndexed, concat } from "./Seq.js";
 import { value as value_1 } from "./Option.js";
+import { setItem } from "./Array.js";
 import { FSharpRef } from "./Types.js";
 import { class_type } from "./Reflection.js";
 import { getItemFromDict, tryGetValue } from "./MapUtil.js";
@@ -75,7 +76,7 @@ export class Dictionary {
     "System.Collections.Generic.ICollection`1.CopyToZ3B4C077E"(array, arrayIndex) {
         const this$ = this;
         iterateIndexed((i, e) => {
-            array[arrayIndex + i] = e;
+            setItem(array, arrayIndex + i, e);
         }, this$);
     }
     "System.Collections.Generic.ICollection`1.get_Count"() {

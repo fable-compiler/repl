@@ -1,5 +1,6 @@
 import { disposeSafe, defaultOf, toIterator, getEnumerator } from "./Util.js";
 import { iterate, map, iterateIndexed, concat } from "./Seq.js";
+import { setItem } from "./Array.js";
 import { some } from "./Option.js";
 import { FSharpRef } from "./Types.js";
 import { class_type } from "./Reflection.js";
@@ -55,7 +56,7 @@ export class HashSet {
     "System.Collections.Generic.ICollection`1.CopyToZ3B4C077E"(array, arrayIndex) {
         const this$ = this;
         iterateIndexed((i, e) => {
-            array[arrayIndex + i] = e;
+            setItem(array, arrayIndex + i, e);
         }, this$);
     }
     "System.Collections.Generic.ICollection`1.get_Count"() {

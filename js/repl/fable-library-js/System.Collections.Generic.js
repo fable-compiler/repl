@@ -1,7 +1,7 @@
 import { disposeSafe, defaultOf, toIterator, getEnumerator, structuralHash, equals as equals_1, compare } from "./Util.js";
 import { class_type } from "./Reflection.js";
 import { toArray, empty, singleton, append, enumerateWhile, delay } from "./Seq.js";
-import { initialize, copyTo, fill } from "./Array.js";
+import { setItem, initialize, copyTo, fill, item as item_1 } from "./Array.js";
 import { max } from "./Double.js";
 export class Comparer$1 {
     constructor(comparison) {
@@ -68,7 +68,7 @@ export class Stack$1 {
         const _ = this;
         return getEnumerator(delay(() => {
             let index = _.count - 1;
-            return enumerateWhile(() => (index >= 0), delay(() => append(singleton(_.contents[index]), delay(() => {
+            return enumerateWhile(() => (index >= 0), delay(() => append(singleton(item_1(index, _.contents)), delay(() => {
                 index = ((index - 1) | 0);
                 return empty();
             }))));
@@ -111,16 +111,16 @@ export function Stack$1__get_Count(_) {
 }
 export function Stack$1__Pop(_) {
     _.count = ((_.count - 1) | 0);
-    return _.contents[_.count];
+    return item_1(_.count, _.contents);
 }
 export function Stack$1__Peek(_) {
-    return _.contents[_.count - 1];
+    return item_1(_.count - 1, _.contents);
 }
 export function Stack$1__Contains_2B595(_, x) {
     let found = false;
     let i = 0;
     while ((i < _.count) && !found) {
-        if (equals_1(x, _.contents[i])) {
+        if (equals_1(x, item_1(i, _.contents))) {
             found = true;
         }
         else {
@@ -162,7 +162,7 @@ export function Stack$1__TrimExcess(this$) {
     }
 }
 export function Stack$1__ToArray(_) {
-    return initialize(_.count, (i) => _.contents[(_.count - 1) - i]);
+    return initialize(_.count, (i) => item_1((_.count - 1) - i, _.contents));
 }
 export class Queue$1 {
     constructor(initialContents, initialCount) {
@@ -217,7 +217,7 @@ export function Queue$1__Dequeue(_) {
     if (_.count === 0) {
         throw new Error("Queue is empty");
     }
-    const value = _.contents[_.head];
+    const value = item_1(_.head, _.contents);
     _.head = (((_.head + 1) % Queue$1__size(_)) | 0);
     _.count = ((_.count - 1) | 0);
     return value;
@@ -226,7 +226,7 @@ export function Queue$1__Peek(_) {
     if (_.count === 0) {
         throw new Error("Queue is empty");
     }
-    return _.contents[_.head];
+    return item_1(_.head, _.contents);
 }
 export function Queue$1__TryDequeue_1F3DB691(this$, result) {
     if (this$.count === 0) {
@@ -250,7 +250,7 @@ export function Queue$1__Contains_2B595(_, x) {
     let found = false;
     let i = 0;
     while ((i < _.count) && !found) {
-        if (equals_1(x, _.contents[Queue$1__toIndex_Z524259A4(_, i)])) {
+        if (equals_1(x, item_1(Queue$1__toIndex_Z524259A4(_, i), _.contents))) {
             found = true;
         }
         else {
@@ -279,7 +279,7 @@ export function Queue$1__CopyTo_Z3B4C077E(_, target, start) {
     try {
         while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
             const item = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
-            target[i] = item;
+            setItem(target, i, item);
             i = ((i + 1) | 0);
         }
     }
@@ -309,7 +309,7 @@ export function Queue$1__ensure_Z524259A4(this$, requiredSize) {
 export function Queue$1__toSeq(this$) {
     return delay(() => {
         let i = 0;
-        return enumerateWhile(() => (i < this$.count), delay(() => append(singleton(this$.contents[Queue$1__toIndex_Z524259A4(this$, i)]), delay(() => {
+        return enumerateWhile(() => (i < this$.count), delay(() => append(singleton(item_1(Queue$1__toIndex_Z524259A4(this$, i), this$.contents)), delay(() => {
             i = ((i + 1) | 0);
             return empty();
         }))));

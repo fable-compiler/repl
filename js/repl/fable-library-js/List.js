@@ -4,7 +4,7 @@ import { disposeSafe, isArrayLike, defaultOf, toIterator, getEnumerator, compare
 import { Record } from "./Types.js";
 import { class_type, record_type, option_type } from "./Reflection.js";
 import { SR_inputSequenceTooLong, SR_inputSequenceEmpty, SR_inputMustBeNonNegative, SR_notEnoughElements, SR_differentLengths, SR_keyNotFoundAlt, SR_indexOutOfBounds, SR_inputWasEmpty } from "./Global.js";
-import { transpose as transpose_1, splitInto as splitInto_1, windowed as windowed_1, pairwise as pairwise_1, chunkBySize as chunkBySize_1, map as map_1, permute as permute_1, tryFindIndexBack as tryFindIndexBack_1, tryFindBack as tryFindBack_1, scanBack as scanBack_1, foldBack2 as foldBack2_1, foldBack as foldBack_1, fill } from "./Array.js";
+import { transpose as transpose_1, splitInto as splitInto_1, windowed as windowed_1, pairwise as pairwise_1, chunkBySize as chunkBySize_1, map as map_1, permute as permute_1, tryFindIndexBack as tryFindIndexBack_1, tryFindBack as tryFindBack_1, scanBack as scanBack_1, item as item_1, foldBack2 as foldBack2_1, foldBack as foldBack_1, setItem, fill } from "./Array.js";
 export class FSharpList extends Record {
     constructor(head, tail) {
         super();
@@ -345,7 +345,7 @@ export function toArray(xs) {
         loop: while (true) {
             const i = i_mut, xs_1 = xs_1_mut;
             if (!FSharpList__get_IsEmpty(xs_1)) {
-                res[i] = FSharpList__get_Head(xs_1);
+                setItem(res, i, FSharpList__get_Head(xs_1));
                 i_mut = (i + 1);
                 xs_1_mut = FSharpList__get_Tail(xs_1);
                 continue loop;
@@ -454,7 +454,7 @@ export function toSeq(xs) {
 export function ofArrayWithTail(xs, tail_1) {
     let res = tail_1;
     for (let i = xs.length - 1; i >= 0; i--) {
-        res = FSharpList_Cons_305B8EAC(xs[i], res);
+        res = FSharpList_Cons_305B8EAC(item_1(i, xs), res);
     }
     return res;
 }
