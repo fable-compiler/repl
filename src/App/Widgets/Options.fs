@@ -241,6 +241,7 @@ let private languageSetting=
                     option LanguageCode.English Translations.english
                     option LanguageCode.Russian Translations.russian
                     option LanguageCode.Ukrainian Translations.ukrainian
+                    option LanguageCode.Kazakh Translations.kazakh
                 ]
             ]
         ]
