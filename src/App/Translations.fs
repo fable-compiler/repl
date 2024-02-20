@@ -9,7 +9,6 @@ let enTranslations =
         english = "English"
         russian = "Russian"
         ukrainian = "Ukrainian"
-        kazakh = "Kazakh"
         msg_iframe_loaded = "Iframe loaded"
         win_header_console = "Console"
         msg_initializing = "Initializing"
@@ -84,7 +83,6 @@ let ukTranslations =
         english = "Англійська"
         russian = "Російський"
         ukrainian = "Українська"
-        kazakh = "Казахський"
         msg_iframe_loaded = "Iframe завантажено"
         win_header_console = "Консоль"
         msg_initializing = "Ініціалізуємо"
@@ -162,8 +160,7 @@ let ruTranslations =
     {|
         english = "Английский"
         russian = "Русский"
-        ukrainian = "Украинcкий"
-        kazakh = "Казахский"
+        ukrainian = "Украинец"
         msg_iframe_loaded = "Iframe загружен"
         win_header_console = "Консоль"
         msg_initializing = "Инициализируем"
@@ -237,98 +234,18 @@ let ruTranslations =
         msg_stats_milliseconds_short = "мс"
     |}
 
-let kzTranslations =
-    {|
-        english = "Ағылшынша"
-        russian = "Орысша"
-        ukrainian = "Украинша"
-        kazakh = "Қазақша"
-        msg_iframe_loaded = "Iframe жүктелді"
-        win_header_console = "Консоль"
-        msg_initializing = "Орнатып жатырмыз"
-        msg_repl_name = "Fable REPL"
-        msg_desktop_experience =
-            "REPL жақсы жұмыс істесін десеңіз, десктоп арқылы кіріңіз"
-        btn_continue = "Жалғастыру"
-        msg_gist_description = "REPL-мен жасалынды"
-        msg_compilation_failed = "Компиляцияланбады"
-        msg_assemblies_load_failed =
-            "Бағдарлама жүктелмеді. Кей файруол бинар файл жүктеткізбейді."
-        msg_gist_token_invalid =
-            "Gist-ті жасау кезінде белгісіз қате болды. Төкен дұрыстығын тексеріңіз."
-        msg_gist_token_missing =
-            "Gist-пен таратпай тұрып GitHub API төкенін тіркеу керек."
-        msg_compilation_successful = "Компиляцияланды"
-        msg_shareable_url_ready_text = "Сілтемені браузерден көшіріп алыңыз"
-        msg_shareable_url_ready_title =
-            "Тарататын сілтеме дайын"
-        msg_load_gist_error = "Gist жүктегенде қате болды"
-        msg_update_url_failed =
-            "URL-ды жаңартқанда қате болды"
-        msg_fatal_error = "Бұлай болмау керек"
-        msg_live_sample_text = "Интерактив мысал"
-        msg_code_text = "Код"
-        msg_problems = "Ақуал"
-        msg_problems_info = "Ақуал = "
-        msg_invalid_iframe_error =
-            "`%A` iframe мәніне ұқсамайды"
-        msg_collapse_sidebar = "Сайдбарды жию"
-        msg_widget_general = "Жалпы"
-        msg_widget_samples = "Мысал"
-        msg_widget_options = "Баптау"
-        msg_widget_statistics = "Статистика"
-        msg_widget_about = "REPL жайлы"
-        msg_found_a_bug = "Қате таптыңыз ба?"
-        msg_general_compile_run_tooltip =
-            "Компиляциялап орындау (Alt+Enter)"
-        msg_general_compile_run_text = "Компиляциялап орындау"
-        msg_general_refresh_sample_tooltip =
-           "Интерактив мысалды жаңарту (компиляцияламай)"
-        msg_general_refresh_sample_text = "Интерактив мысалды жаңарту"
-        msg_general_reset_repl_tooltip =
-            "REPL-ді өшірсеңіз, бар жұмысыңыз жойылады"
-        msg_general_reset_repl_text =
-            "REPL-ді өшірсеңіз, бар жұмысыңыз жойылады"
-        msg_general_share_url_tooltip = "URL-ды тарат"
-        msg_general_share_url_text = "URL-ды тарат"
-        msg_general_share_gist_tooltip = "Gist-пен тарат"
-        msg_general_share_gist_text = "Gist-пен тарат"
-        msg_reset_confirmation_text = "Өшіру үшін рұқсат беру"
-        btn_confirm = "Рұқсат беру"
-        btn_cancel = "Болдырмау"
-        btn_save = "Сақтау"
-        msg_options_editor_font_size = "Мәтін өңдер қаріпінің өлшемін өзрегту"
-        msg_options_editor_font_family = "Мәтін өңдер қаріпінің түрі"
-        msg_options_size_small = "Кішкене"
-        msg_options_size_medium = "Орташа"
-        msg_options_size_large = "Үлкен"
-        msg_options_programming_language = "Бағдарламалау тілі"
-        msg_options_interface_language = "Интерфейс тілі"
-        msg_options_settings_optimize = "Оңтайлау (сынақ деңгейінде)"
-        msg_options_settings_debug = "DEBUG-ті түсіндір"
-        msg_options_settings_typed_arrays = "Түрленген массивтер"
-        msg_options_gist_token_delete = "Gist төкенін жою"
-        msg_options_gist_token_github_token = "Github төкені"
-        msg_options_gist_token_github_token_create = "Gist төкенін жасау"
-        msg_options_gist_token_gist_scope = "Gist төкені"
-        msg_samples_refresh_samples = "Мысалдарды жаңарт"
-        msg_stats_steps = "Қадам"
-        msg_stats_milliseconds_short = "мс"
-    |}
-
 [<RequireQualifiedAccess>]
 [<StringEnum>]
 type LanguageCode =
     | [<CompiledName("en")>] English
     | [<CompiledName("uk")>] Ukrainian
     | [<CompiledName("ru")>] Russian
-    | [<CompiledName("kz")>] Kazakh
 
 module LanguageCode =
 
     let isValidText (code : string) =
         match code with
-        | "en" | "uk" | "ru" | "kz" -> true
+        | "en" | "uk" | "ru" -> true
         | _ -> false
 
     let fromText (code : string) =
@@ -336,7 +253,6 @@ module LanguageCode =
         | "en" -> LanguageCode.English
         | "uk" -> LanguageCode.Ukrainian
         | "ru" -> LanguageCode.Russian
-        | "kz" -> LanguageCode.Kazakh
         | _ -> LanguageCode.English
 
 let translations =
@@ -345,7 +261,6 @@ let translations =
             LanguageCode.English, enTranslations
             LanguageCode.Ukrainian, ukTranslations
             LanguageCode.Russian, ruTranslations
-            LanguageCode.Kazakh, kzTranslations
         ]
 
 [<Literal>]
