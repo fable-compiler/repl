@@ -3,7 +3,7 @@
   "scripts": {},
   "dependencies": {
     "@fable-org/fable-metadata": "^1.0.0",
-    "@fable-org/fable-standalone": "^1.0.0",
+    "@fable-org/fable-standalone": "^1.1.0",
     "@fortawesome/fontawesome-free": "^6.4.2",
     "@types/lz-string": "^1.3.34",
     "autoprefixer": "^10.4.16",
