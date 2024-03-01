@@ -159,21 +159,10 @@ export function lazyFromValue(v) {
     return new Lazy(() => v);
 }
 export function padWithZeros(i, length) {
-    let str = i.toString(10);
-    while (str.length < length) {
-        str = "0" + str;
-    }
-    return str;
+    return i.toString(10).padStart(length, "0");
 }
 export function padLeftAndRightWithZeros(i, lengthLeft, lengthRight) {
-    let str = i.toString(10);
-    while (str.length < lengthLeft) {
-        str = "0" + str;
-    }
-    while (str.length < lengthRight) {
-        str = str + "0";
-    }
-    return str;
+    return i.toString(10).padStart(lengthLeft, "0").padEnd(lengthRight, "0");
 }
 export function dateOffset(date) {
     const date1 = date;
