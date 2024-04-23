@@ -152,7 +152,7 @@ export function Result_ToOption(result) {
         return some(result.fields[0]);
     }
     else {
-        return void 0;
+        return undefined;
     }
 }
 export function Result_ToValueOption(result) {
@@ -160,6 +160,6 @@ export function Result_ToValueOption(result) {
         return some(result.fields[0]);
     }
     else {
-        return void 0;
+        return undefined;
     }
 }

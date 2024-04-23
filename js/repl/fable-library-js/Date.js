@@ -82,10 +82,10 @@ function dateToStringWithCustomFormat(date, format, utc) {
                 cursorPos += tokenLength;
                 switch (tokenLength) {
                     case 1:
-                        result += localizedDate.getDate();
+                        result += day(localizedDate);
                         break;
                     case 2:
-                        result += padWithZeros(localizedDate.getDate(), 2);
+                        result += padWithZeros(day(localizedDate), 2);
                         break;
                     case 3:
                         result += shortDays[dayOfWeek(localizedDate)];
@@ -655,7 +655,7 @@ export function dayOfYear(d) {
 }
 export function add(d, ts) {
     const newDate = DateTime(d.getTime() + ts, d.kind);
-    if (d.kind === 2 /* DateKind.Local */) {
+    if (d.kind !== 1 /* DateKind.UTC */) {
         const oldTzOffset = d.getTimezoneOffset();
         const newTzOffset = newDate.getTimezoneOffset();
         return oldTzOffset !== newTzOffset

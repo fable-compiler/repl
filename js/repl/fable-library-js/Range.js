@@ -10,7 +10,7 @@ export function makeRangeStepFunction(step, stop, zero, add) {
     const stepGreaterThanZero = stepComparedWithZero > 0;
     return (x) => {
         const comparedWithLast = compare(x, stop) | 0;
-        return ((stepGreaterThanZero && (comparedWithLast <= 0)) ? true : (!stepGreaterThanZero && (comparedWithLast >= 0))) ? [x, add(x, step)] : void 0;
+        return ((stepGreaterThanZero && (comparedWithLast <= 0)) ? true : (!stepGreaterThanZero && (comparedWithLast >= 0))) ? [x, add(x, step)] : undefined;
     };
 }
 export function integralRangeStep(start, step, stop, zero, add) {
@@ -39,7 +39,7 @@ export function rangeChar(start, stop) {
             return [String.fromCharCode(c), c + 1];
         }
         else {
-            return void 0;
+            return undefined;
         }
     }, start.charCodeAt(0)));
 }

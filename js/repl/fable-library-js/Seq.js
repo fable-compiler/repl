@@ -100,16 +100,15 @@ export function Enumerator_FromFunctions$1_$ctor_58C54629(current, next, dispose
 }
 export function Enumerator_cast(e) {
     return Enumerator_FromFunctions$1_$ctor_58C54629(() => e["System.Collections.Generic.IEnumerator`1.get_Current"](), () => e["System.Collections.IEnumerator.MoveNext"](), () => {
-        const e_1 = e;
-        disposeSafe(e_1);
+        disposeSafe(e);
     });
 }
 export function Enumerator_concat(sources) {
-    let outerOpt = void 0;
-    let innerOpt = void 0;
+    let outerOpt = undefined;
+    let innerOpt = undefined;
     let started = false;
     let finished = false;
-    let curr = void 0;
+    let curr = undefined;
     const finish = () => {
         finished = true;
         if (innerOpt != null) {
@@ -118,7 +117,7 @@ export function Enumerator_concat(sources) {
                 disposeSafe(inner);
             }
             finally {
-                innerOpt = void 0;
+                innerOpt = undefined;
             }
         }
         if (outerOpt != null) {
@@ -127,7 +126,7 @@ export function Enumerator_concat(sources) {
                 disposeSafe(outer);
             }
             finally {
-                outerOpt = void 0;
+                outerOpt = undefined;
             }
         }
     };
@@ -153,7 +152,7 @@ export function Enumerator_concat(sources) {
             return false;
         }
         else {
-            let res = void 0;
+            let res = undefined;
             while (res == null) {
                 const outerOpt_1 = outerOpt;
                 const innerOpt_1 = innerOpt;
@@ -169,7 +168,7 @@ export function Enumerator_concat(sources) {
                                 disposeSafe(inner_1);
                             }
                             finally {
-                                innerOpt = void 0;
+                                innerOpt = undefined;
                             }
                         }
                     }
@@ -209,7 +208,7 @@ export function Enumerator_enumerateThenFinally(f, e) {
 }
 export function Enumerator_generateWhileSome(openf, compute, closef) {
     let started = false;
-    let curr = void 0;
+    let curr = undefined;
     let state = some(openf());
     const dispose = () => {
         if (state != null) {
@@ -218,7 +217,7 @@ export function Enumerator_generateWhileSome(openf, compute, closef) {
                 closef(x_1);
             }
             finally {
-                state = void 0;
+                state = undefined;
             }
         }
     };
@@ -227,7 +226,7 @@ export function Enumerator_generateWhileSome(openf, compute, closef) {
             dispose();
         }
         finally {
-            curr = void 0;
+            curr = undefined;
         }
     };
     return Enumerator_FromFunctions$1_$ctor_58C54629(() => {
@@ -269,7 +268,7 @@ export function Enumerator_generateWhileSome(openf, compute, closef) {
     }, dispose);
 }
 export function Enumerator_unfold(f, state) {
-    let curr = void 0;
+    let curr = undefined;
     let acc = state;
     return Enumerator_FromFunctions$1_$ctor_58C54629(() => {
         if (curr != null) {
@@ -373,7 +372,7 @@ export function cast(xs) {
 }
 export function choose(chooser, xs) {
     return generate(() => ofSeq(xs), (e) => {
-        let curr = void 0;
+        let curr = undefined;
         while ((curr == null) && e["System.Collections.IEnumerator.MoveNext"]()) {
             curr = chooser(e["System.Collections.Generic.IEnumerator`1.get_Current"]());
         }
@@ -421,7 +420,7 @@ export function contains(value, xs, comparer) {
     }
 }
 export function enumerateFromFunctions(create, moveNext, current) {
-    return generate(create, (x) => (moveNext(x) ? some(current(x)) : void 0), (x_1) => {
+    return generate(create, (x) => (moveNext(x) ? some(current(x)) : undefined), (x_1) => {
         const matchValue = x_1;
         if (isDisposable(matchValue)) {
             const id = matchValue;
@@ -461,7 +460,7 @@ export function enumerateUsing(resource, source) {
     });
 }
 export function enumerateWhile(guard, xs) {
-    return concat(unfold((i) => (guard() ? [xs, i + 1] : void 0), 0));
+    return concat(unfold((i) => (guard() ? [xs, i + 1] : undefined), 0));
 }
 export function filter(f, xs) {
     return choose((x) => {
@@ -469,7 +468,7 @@ export function filter(f, xs) {
             return some(x);
         }
         else {
-            return void 0;
+            return undefined;
         }
     }, xs);
 }
@@ -530,10 +529,10 @@ export function tryExactlyOne(xs) {
     try {
         if (e["System.Collections.IEnumerator.MoveNext"]()) {
             const v = e["System.Collections.Generic.IEnumerator`1.get_Current"]();
-            return e["System.Collections.IEnumerator.MoveNext"]() ? void 0 : some(v);
+            return e["System.Collections.IEnumerator.MoveNext"]() ? undefined : some(v);
         }
         else {
-            return void 0;
+            return undefined;
         }
     }
     finally {
@@ -543,7 +542,7 @@ export function tryExactlyOne(xs) {
 export function tryFind(predicate, xs) {
     const e = ofSeq(xs);
     try {
-        let res = void 0;
+        let res = undefined;
         while ((res == null) && e["System.Collections.IEnumerator.MoveNext"]()) {
             const c = e["System.Collections.Generic.IEnumerator`1.get_Current"]();
             if (predicate(c)) {
@@ -593,7 +592,7 @@ export function tryFindIndex(predicate, xs) {
                     }
                 }
                 else {
-                    return void 0;
+                    return undefined;
                 }
                 break;
             }
@@ -681,7 +680,7 @@ export function tryHead(xs) {
     else {
         const e = ofSeq(xs);
         try {
-            return e["System.Collections.IEnumerator.MoveNext"]() ? some(e["System.Collections.Generic.IEnumerator`1.get_Current"]()) : void 0;
+            return e["System.Collections.IEnumerator.MoveNext"]() ? some(e["System.Collections.Generic.IEnumerator`1.get_Current"]()) : undefined;
         }
         finally {
             disposeSafe(e);
@@ -698,7 +697,7 @@ export function head(xs) {
     }
 }
 export function initialize(count, f) {
-    return unfold((i) => ((i < count) ? [f(i), i + 1] : void 0), 0);
+    return unfold((i) => ((i < count) ? [f(i), i + 1] : undefined), 0);
 }
 export function initializeInfinite(f) {
     return initialize(2147483647, f);
@@ -735,7 +734,7 @@ export function tryItem(index, xs) {
                 loop: while (true) {
                     const index_1 = index_1_mut;
                     if (!e["System.Collections.IEnumerator.MoveNext"]()) {
-                        return void 0;
+                        return undefined;
                     }
                     else if (index_1 === 0) {
                         return some(e["System.Collections.Generic.IEnumerator`1.get_Current"]());
@@ -766,12 +765,12 @@ export function item(index, xs) {
 export function iterate(action, xs) {
     fold((unitVar, x) => {
         action(x);
-    }, void 0, xs);
+    }, undefined, xs);
 }
 export function iterate2(action, xs, ys) {
     fold2((unitVar, x, y) => {
         action(x, y);
-    }, void 0, xs, ys);
+    }, undefined, xs, ys);
 }
 export function iterateIndexed(action, xs) {
     fold((i, x) => {
@@ -801,7 +800,7 @@ export function tryLast(xs) {
                 break;
             }
         };
-        return e["System.Collections.IEnumerator.MoveNext"]() ? some(loop(e["System.Collections.Generic.IEnumerator`1.get_Current"]())) : void 0;
+        return e["System.Collections.IEnumerator.MoveNext"]() ? some(loop(e["System.Collections.Generic.IEnumerator`1.get_Current"]())) : undefined;
     }
     finally {
         disposeSafe(e);
@@ -839,12 +838,12 @@ export function length(xs) {
     }
 }
 export function map(mapping, xs) {
-    return generate(() => ofSeq(xs), (e) => (e["System.Collections.IEnumerator.MoveNext"]() ? some(mapping(e["System.Collections.Generic.IEnumerator`1.get_Current"]())) : void 0), (e_1) => {
+    return generate(() => ofSeq(xs), (e) => (e["System.Collections.IEnumerator.MoveNext"]() ? some(mapping(e["System.Collections.Generic.IEnumerator`1.get_Current"]())) : undefined), (e_1) => {
         disposeSafe(e_1);
     });
 }
 export function mapIndexed(mapping, xs) {
-    return generateIndexed(() => ofSeq(xs), (i, e) => (e["System.Collections.IEnumerator.MoveNext"]() ? some(mapping(i, e["System.Collections.Generic.IEnumerator`1.get_Current"]())) : void 0), (e_1) => {
+    return generateIndexed(() => ofSeq(xs), (i, e) => (e["System.Collections.IEnumerator.MoveNext"]() ? some(mapping(i, e["System.Collections.Generic.IEnumerator`1.get_Current"]())) : undefined), (e_1) => {
         disposeSafe(e_1);
     });
 }
@@ -855,7 +854,7 @@ export function map2(mapping, xs, ys) {
     return generate(() => [ofSeq(xs), ofSeq(ys)], (tupledArg) => {
         const e1 = tupledArg[0];
         const e2 = tupledArg[1];
-        return (e1["System.Collections.IEnumerator.MoveNext"]() && e2["System.Collections.IEnumerator.MoveNext"]()) ? some(mapping(e1["System.Collections.Generic.IEnumerator`1.get_Current"](), e2["System.Collections.Generic.IEnumerator`1.get_Current"]())) : void 0;
+        return (e1["System.Collections.IEnumerator.MoveNext"]() && e2["System.Collections.IEnumerator.MoveNext"]()) ? some(mapping(e1["System.Collections.Generic.IEnumerator`1.get_Current"](), e2["System.Collections.Generic.IEnumerator`1.get_Current"]())) : undefined;
     }, (tupledArg_1) => {
         try {
             disposeSafe(tupledArg_1[0]);
@@ -869,7 +868,7 @@ export function mapIndexed2(mapping, xs, ys) {
     return generateIndexed(() => [ofSeq(xs), ofSeq(ys)], (i, tupledArg) => {
         const e1 = tupledArg[0];
         const e2 = tupledArg[1];
-        return (e1["System.Collections.IEnumerator.MoveNext"]() && e2["System.Collections.IEnumerator.MoveNext"]()) ? some(mapping(i, e1["System.Collections.Generic.IEnumerator`1.get_Current"](), e2["System.Collections.Generic.IEnumerator`1.get_Current"]())) : void 0;
+        return (e1["System.Collections.IEnumerator.MoveNext"]() && e2["System.Collections.IEnumerator.MoveNext"]()) ? some(mapping(i, e1["System.Collections.Generic.IEnumerator`1.get_Current"](), e2["System.Collections.Generic.IEnumerator`1.get_Current"]())) : undefined;
     }, (tupledArg_1) => {
         try {
             disposeSafe(tupledArg_1[0]);
@@ -884,7 +883,7 @@ export function map3(mapping, xs, ys, zs) {
         const e1 = tupledArg[0];
         const e2 = tupledArg[1];
         const e3 = tupledArg[2];
-        return ((e1["System.Collections.IEnumerator.MoveNext"]() && e2["System.Collections.IEnumerator.MoveNext"]()) && e3["System.Collections.IEnumerator.MoveNext"]()) ? some(mapping(e1["System.Collections.Generic.IEnumerator`1.get_Current"](), e2["System.Collections.Generic.IEnumerator`1.get_Current"](), e3["System.Collections.Generic.IEnumerator`1.get_Current"]())) : void 0;
+        return ((e1["System.Collections.IEnumerator.MoveNext"]() && e2["System.Collections.IEnumerator.MoveNext"]()) && e3["System.Collections.IEnumerator.MoveNext"]()) ? some(mapping(e1["System.Collections.Generic.IEnumerator`1.get_Current"](), e2["System.Collections.Generic.IEnumerator`1.get_Current"](), e3["System.Collections.Generic.IEnumerator`1.get_Current"]())) : undefined;
     }, (tupledArg_1) => {
         try {
             disposeSafe(tupledArg_1[0]);
@@ -936,7 +935,7 @@ export function CachedSeq$1__Clear(_) {
 export function cache(source) {
     checkNonNull("source", source);
     const prefix = [];
-    let enumeratorR = void 0;
+    let enumeratorR = undefined;
     return CachedSeq$1_$ctor_Z7A8347D4(() => {
         Operators_Lock(prefix, () => {
             clear(prefix);
@@ -959,7 +958,7 @@ export function cache(source) {
                     break;
                 }
             }
-            enumeratorR = void 0;
+            enumeratorR = undefined;
         });
     }, unfold((i_1) => Operators_Lock(prefix, () => {
         if (i_1 < prefix.length) {
@@ -985,7 +984,7 @@ export function cache(source) {
                     }
                     else {
                         disposeSafe(enumerator);
-                        enumeratorR = some(void 0);
+                        enumeratorR = some(undefined);
                     }
                 }
             }
@@ -993,7 +992,7 @@ export function cache(source) {
                 return [prefix[i_1], i_1 + 1];
             }
             else {
-                return void 0;
+                return undefined;
             }
         }
     }), 0));
@@ -1013,7 +1012,7 @@ export function mapFoldBack(mapping, xs, state) {
 export function tryPick(chooser, xs) {
     const e = ofSeq(xs);
     try {
-        let res = void 0;
+        let res = undefined;
         while ((res == null) && e["System.Collections.IEnumerator.MoveNext"]()) {
             res = chooser(e["System.Collections.Generic.IEnumerator`1.get_Current"]());
         }
@@ -1129,19 +1128,19 @@ export function take(count, xs) {
             }
         }
         else {
-            return void 0;
+            return undefined;
         }
     }, (e_1) => {
         disposeSafe(e_1);
     });
 }
 export function takeWhile(predicate, xs) {
-    return generate(() => ofSeq(xs), (e) => ((e["System.Collections.IEnumerator.MoveNext"]() && predicate(e["System.Collections.Generic.IEnumerator`1.get_Current"]())) ? some(e["System.Collections.Generic.IEnumerator`1.get_Current"]()) : void 0), (e_1) => {
+    return generate(() => ofSeq(xs), (e) => ((e["System.Collections.IEnumerator.MoveNext"]() && predicate(e["System.Collections.Generic.IEnumerator`1.get_Current"]())) ? some(e["System.Collections.Generic.IEnumerator`1.get_Current"]()) : undefined), (e_1) => {
         disposeSafe(e_1);
     });
 }
 export function truncate(count, xs) {
-    return generateIndexed(() => ofSeq(xs), (i, e) => (((i < count) && e["System.Collections.IEnumerator.MoveNext"]()) ? some(e["System.Collections.Generic.IEnumerator`1.get_Current"]()) : void 0), (e_1) => {
+    return generateIndexed(() => ofSeq(xs), (i, e) => (((i < count) && e["System.Collections.IEnumerator.MoveNext"]()) ? some(e["System.Collections.Generic.IEnumerator`1.get_Current"]()) : undefined), (e_1) => {
         disposeSafe(e_1);
     });
 }
@@ -1255,7 +1254,7 @@ export function insertAt(index, y, xs) {
             if (!isDone) {
                 throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
             }
-            return void 0;
+            return undefined;
         }
     }, (e_1) => {
         disposeSafe(e_1);
@@ -1279,11 +1278,11 @@ export function insertManyAt(index, ys, xs) {
             }
             else {
                 status = 1;
-                inserted = void 0;
+                inserted = undefined;
             }
         }
         else {
-            inserted = void 0;
+            inserted = undefined;
         }
         if (inserted == null) {
             if (e1["System.Collections.IEnumerator.MoveNext"]()) {
@@ -1293,7 +1292,7 @@ export function insertManyAt(index, ys, xs) {
                 if (status < 1) {
                     throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
                 }
-                return void 0;
+                return undefined;
             }
         }
         else {
@@ -1315,13 +1314,13 @@ export function removeAt(index, xs) {
         }
         else if ((i === index) && e["System.Collections.IEnumerator.MoveNext"]()) {
             isDone = true;
-            return e["System.Collections.IEnumerator.MoveNext"]() ? some(e["System.Collections.Generic.IEnumerator`1.get_Current"]()) : void 0;
+            return e["System.Collections.IEnumerator.MoveNext"]() ? some(e["System.Collections.Generic.IEnumerator`1.get_Current"]()) : undefined;
         }
         else {
             if (!isDone) {
                 throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
             }
-            return void 0;
+            return undefined;
         }
     }, (e_1) => {
         disposeSafe(e_1);
@@ -1348,7 +1347,7 @@ export function removeManyAt(index, count, xs) {
                     }
                 }
             }
-            return e["System.Collections.IEnumerator.MoveNext"]() ? some(e["System.Collections.Generic.IEnumerator`1.get_Current"]()) : void 0;
+            return e["System.Collections.IEnumerator.MoveNext"]() ? some(e["System.Collections.Generic.IEnumerator`1.get_Current"]()) : undefined;
         }
     }, (e_1) => {
         disposeSafe(e_1);
@@ -1371,7 +1370,7 @@ export function updateAt(index, y, xs) {
             if (!isDone) {
                 throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
             }
-            return void 0;
+            return undefined;
         }
     }, (e_1) => {
         disposeSafe(e_1);

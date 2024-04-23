@@ -15,7 +15,7 @@ export class StringBuilder {
     }
 }
 export function StringBuilder_$reflection() {
-    return class_type("System.Text.StringBuilder", void 0, StringBuilder);
+    return class_type("System.Text.StringBuilder", undefined, StringBuilder);
 }
 export function StringBuilder_$ctor_Z18115A39(value, capacity) {
     return new StringBuilder(value, capacity);

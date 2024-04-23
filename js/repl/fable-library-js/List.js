@@ -178,7 +178,7 @@ export function ListEnumerator$1_$ctor_3002E699(xs) {
     return new ListEnumerator$1(xs);
 }
 export function FSharpList_get_Empty() {
-    return new FSharpList(defaultOf(), void 0);
+    return new FSharpList(defaultOf(), undefined);
 }
 export function FSharpList_Cons_305B8EAC(x, xs) {
     return new FSharpList(x, xs);
@@ -268,7 +268,7 @@ export function head(xs) {
 }
 export function tryHead(xs) {
     if (FSharpList__get_IsEmpty(xs)) {
-        return void 0;
+        return undefined;
     }
     else {
         return some(FSharpList__get_Head(xs));
@@ -281,7 +281,7 @@ export function tryLast(xs_mut) {
     tryLast: while (true) {
         const xs = xs_mut;
         if (FSharpList__get_IsEmpty(xs)) {
-            return void 0;
+            return undefined;
         }
         else {
             const t = FSharpList__get_Tail(xs);
@@ -411,7 +411,7 @@ export function unfold(gen, state) {
             const matchValue = gen(acc);
             if (matchValue != null) {
                 acc_mut = value_1(matchValue)[1];
-                node_mut = ((t = (new FSharpList(value_1(matchValue)[0], void 0)), (node.tail = t, t)));
+                node_mut = ((t = (new FSharpList(value_1(matchValue)[0], undefined)), (node.tail = t, t)));
                 continue loop;
             }
             else {
@@ -429,12 +429,12 @@ export function unfold(gen, state) {
 export function iterate(action, xs) {
     fold((unitVar, x) => {
         action(x);
-    }, void 0, xs);
+    }, undefined, xs);
 }
 export function iterate2(action, xs, ys) {
     fold2((unitVar, x, y) => {
         action(x, y);
-    }, void 0, xs, ys);
+    }, undefined, xs, ys);
 }
 export function iterateIndexed(action, xs) {
     fold((i, x) => {
@@ -476,7 +476,7 @@ export function ofSeq(xs) {
         try {
             while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
                 const x = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
-                node = ((xs_3 = node, (t = (new FSharpList(x, void 0)), (xs_3.tail = t, t))));
+                node = ((xs_3 = node, (t = (new FSharpList(x, undefined)), (xs_3.tail = t, t))));
             }
         }
         finally {
@@ -493,7 +493,7 @@ export function concat(lists) {
     let node = root;
     const action = (xs) => {
         node = fold((acc, x) => {
-            const t = new FSharpList(x, void 0);
+            const t = new FSharpList(x, undefined);
             acc.tail = t;
             return t;
         }, node, xs);
@@ -525,14 +525,14 @@ export function scan(folder, state, xs) {
     let xs_4, t_2;
     const root = FSharpList_get_Empty();
     let node;
-    const t = new FSharpList(state, void 0);
+    const t = new FSharpList(state, undefined);
     root.tail = t;
     node = t;
     let acc = state;
     let xs_3 = xs;
     while (!FSharpList__get_IsEmpty(xs_3)) {
         acc = folder(acc, FSharpList__get_Head(xs_3));
-        node = ((xs_4 = node, (t_2 = (new FSharpList(acc, void 0)), (xs_4.tail = t_2, t_2))));
+        node = ((xs_4 = node, (t_2 = (new FSharpList(acc, undefined)), (xs_4.tail = t_2, t_2))));
         xs_3 = FSharpList__get_Tail(xs_3);
     }
     const xs_6 = node;
@@ -554,7 +554,7 @@ export function collect(mapping, xs) {
     while (!FSharpList__get_IsEmpty(ys)) {
         let zs = mapping(FSharpList__get_Head(ys));
         while (!FSharpList__get_IsEmpty(zs)) {
-            node = ((xs_1 = node, (t = (new FSharpList(FSharpList__get_Head(zs), void 0)), (xs_1.tail = t, t))));
+            node = ((xs_1 = node, (t = (new FSharpList(FSharpList__get_Head(zs), undefined)), (xs_1.tail = t, t))));
             zs = FSharpList__get_Tail(zs);
         }
         ys = FSharpList__get_Tail(ys);
@@ -567,7 +567,7 @@ export function collect(mapping, xs) {
 export function mapIndexed(mapping, xs) {
     const root = FSharpList_get_Empty();
     const node = foldIndexed((i, acc, x) => {
-        const t = new FSharpList(mapping(i, x), void 0);
+        const t = new FSharpList(mapping(i, x), undefined);
         acc.tail = t;
         return t;
     }, root, xs);
@@ -578,7 +578,7 @@ export function mapIndexed(mapping, xs) {
 export function map(mapping, xs) {
     const root = FSharpList_get_Empty();
     const node = fold((acc, x) => {
-        const t = new FSharpList(mapping(x), void 0);
+        const t = new FSharpList(mapping(x), undefined);
         acc.tail = t;
         return t;
     }, root, xs);
@@ -592,7 +592,7 @@ export function indexed(xs) {
 export function map2(mapping, xs, ys) {
     const root = FSharpList_get_Empty();
     const node = fold2((acc, x, y) => {
-        const t = new FSharpList(mapping(x, y), void 0);
+        const t = new FSharpList(mapping(x, y), undefined);
         acc.tail = t;
         return t;
     }, root, xs, ys);
@@ -610,7 +610,7 @@ export function mapIndexed2(mapping, xs, ys) {
             }
             else {
                 i_mut = (i + 1);
-                acc_mut = ((t = (new FSharpList(mapping(i, FSharpList__get_Head(xs_1), FSharpList__get_Head(ys_1)), void 0)), (acc.tail = t, t)));
+                acc_mut = ((t = (new FSharpList(mapping(i, FSharpList__get_Head(xs_1), FSharpList__get_Head(ys_1)), undefined)), (acc.tail = t, t)));
                 xs_1_mut = FSharpList__get_Tail(xs_1);
                 ys_1_mut = FSharpList__get_Tail(ys_1);
                 continue loop;
@@ -633,7 +633,7 @@ export function map3(mapping, xs, ys, zs) {
                 return acc;
             }
             else {
-                acc_mut = ((t = (new FSharpList(mapping(FSharpList__get_Head(xs_1), FSharpList__get_Head(ys_1), FSharpList__get_Head(zs_1)), void 0)), (acc.tail = t, t)));
+                acc_mut = ((t = (new FSharpList(mapping(FSharpList__get_Head(xs_1), FSharpList__get_Head(ys_1), FSharpList__get_Head(zs_1)), undefined)), (acc.tail = t, t)));
                 xs_1_mut = FSharpList__get_Tail(xs_1);
                 ys_1_mut = FSharpList__get_Tail(ys_1);
                 zs_1_mut = FSharpList__get_Tail(zs_1);
@@ -653,7 +653,7 @@ export function mapFold(mapping, state, xs) {
     const patternInput_1 = fold((tupledArg, x) => {
         let t;
         const patternInput = mapping(tupledArg[1], x);
-        return [(t = (new FSharpList(patternInput[0], void 0)), (tupledArg[0].tail = t, t)), patternInput[1]];
+        return [(t = (new FSharpList(patternInput[0], undefined)), (tupledArg[0].tail = t, t)), patternInput[1]];
     }, [root, state], xs);
     const t_2 = FSharpList_get_Empty();
     patternInput_1[0].tail = t_2;
@@ -667,7 +667,7 @@ export function tryPick(f, xs) {
         loop: while (true) {
             const xs_1 = xs_1_mut;
             if (FSharpList__get_IsEmpty(xs_1)) {
-                return void 0;
+                return undefined;
             }
             else {
                 const matchValue = f(FSharpList__get_Head(xs_1));
@@ -694,7 +694,7 @@ export function pick(f, xs) {
     }
 }
 export function tryFind(f, xs) {
-    return tryPick((x) => (f(x) ? some(x) : void 0), xs);
+    return tryPick((x) => (f(x) ? some(x) : undefined), xs);
 }
 export function find(f, xs) {
     const matchValue = tryFind(f, xs);
@@ -722,7 +722,7 @@ export function tryFindIndex(f, xs) {
         loop: while (true) {
             const i = i_mut, xs_1 = xs_1_mut;
             if (FSharpList__get_IsEmpty(xs_1)) {
-                return void 0;
+                return undefined;
             }
             else if (f(FSharpList__get_Head(xs_1))) {
                 return i;
@@ -765,7 +765,7 @@ export function tryItem(n, xs) {
         loop: while (true) {
             const i = i_mut, xs_1 = xs_1_mut;
             if (FSharpList__get_IsEmpty(xs_1)) {
-                return void 0;
+                return undefined;
             }
             else if (i === n) {
                 return some(FSharpList__get_Head(xs_1));
@@ -787,7 +787,7 @@ export function filter(f, xs) {
     const root = FSharpList_get_Empty();
     const node = fold((acc, x) => {
         if (f(x)) {
-            const t = new FSharpList(x, void 0);
+            const t = new FSharpList(x, undefined);
             acc.tail = t;
             return t;
         }
@@ -808,10 +808,10 @@ export function partition(f, xs) {
         const lacc = tupledArg[0];
         const racc = tupledArg[1];
         if (f(x)) {
-            return [(t = (new FSharpList(x, void 0)), (lacc.tail = t, t)), racc];
+            return [(t = (new FSharpList(x, undefined)), (lacc.tail = t, t)), racc];
         }
         else {
-            return [lacc, (t_2 = (new FSharpList(x, void 0)), (racc.tail = t_2, t_2))];
+            return [lacc, (t_2 = (new FSharpList(x, undefined)), (racc.tail = t_2, t_2))];
         }
     }, [root1, root2], xs);
     const t_4 = FSharpList_get_Empty();
@@ -828,7 +828,7 @@ export function choose(f, xs) {
             return acc;
         }
         else {
-            const t = new FSharpList(value_1(matchValue), void 0);
+            const t = new FSharpList(value_1(matchValue), undefined);
             acc.tail = t;
             return t;
         }
@@ -845,7 +845,7 @@ export function initialize(n, f) {
     const root = FSharpList_get_Empty();
     let node = root;
     for (let i = 0; i <= (n - 1); i++) {
-        node = ((xs = node, (t = (new FSharpList(f(i), void 0)), (xs.tail = t, t))));
+        node = ((xs = node, (t = (new FSharpList(f(i), undefined)), (xs.tail = t, t))));
     }
     const xs_2 = node;
     const t_2 = FSharpList_get_Empty();
@@ -994,7 +994,7 @@ export function allPairs(xs, ys) {
     iterate((x) => {
         iterate((y) => {
             let xs_1, t;
-            node = ((xs_1 = node, (t = (new FSharpList([x, y], void 0)), (xs_1.tail = t, t))));
+            node = ((xs_1 = node, (t = (new FSharpList([x, y], undefined)), (xs_1.tail = t, t))));
         }, ys);
     }, xs);
     const xs_3 = node;
@@ -1052,7 +1052,7 @@ export function take(count, xs) {
             }
             else {
                 i_mut = (i - 1);
-                acc_mut = ((t = (new FSharpList(FSharpList__get_Head(xs_1), void 0)), (acc.tail = t, t)));
+                acc_mut = ((t = (new FSharpList(FSharpList__get_Head(xs_1), undefined)), (acc.tail = t, t)));
                 xs_1_mut = FSharpList__get_Tail(xs_1);
                 continue loop;
             }
@@ -1077,7 +1077,7 @@ export function takeWhile(predicate, xs) {
                 return acc;
             }
             else {
-                acc_mut = ((t = (new FSharpList(FSharpList__get_Head(xs_1), void 0)), (acc.tail = t, t)));
+                acc_mut = ((t = (new FSharpList(FSharpList__get_Head(xs_1), undefined)), (acc.tail = t, t)));
                 xs_1_mut = FSharpList__get_Tail(xs_1);
                 continue loop;
             }
@@ -1103,7 +1103,7 @@ export function truncate(count, xs) {
             }
             else {
                 i_mut = (i - 1);
-                acc_mut = ((t = (new FSharpList(FSharpList__get_Head(xs_1), void 0)), (acc.tail = t, t)));
+                acc_mut = ((t = (new FSharpList(FSharpList__get_Head(xs_1), undefined)), (acc.tail = t, t)));
                 xs_1_mut = FSharpList__get_Tail(xs_1);
                 continue loop;
             }
@@ -1156,7 +1156,7 @@ export function tryExactlyOne(xs) {
         return some(FSharpList__get_Head(xs));
     }
     else {
-        return void 0;
+        return undefined;
     }
 }
 export function where(predicate, xs) {

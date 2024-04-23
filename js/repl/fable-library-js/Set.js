@@ -45,7 +45,7 @@ export function SetTreeNode$1__get_Height(_) {
     return _.h;
 }
 export function SetTreeModule_empty() {
-    return void 0;
+    return undefined;
 }
 export function SetTreeModule_countAux(t_mut, acc_mut) {
     SetTreeModule_countAux: while (true) {
@@ -688,7 +688,7 @@ export function SetTreeModule_minimumElementOpt(t) {
         }
     }
     else {
-        return void 0;
+        return undefined;
     }
 }
 export function SetTreeModule_maximumElementAux(t_mut, n_mut) {
@@ -724,7 +724,7 @@ export function SetTreeModule_maximumElementOpt(t) {
         }
     }
     else {
-        return void 0;
+        return undefined;
     }
 }
 export function SetTreeModule_minimumElement(s) {

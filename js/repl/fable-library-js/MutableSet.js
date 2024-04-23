@@ -148,7 +148,7 @@ function HashSet__TryFind_2B595(this$, k) {
         case 0:
             return some(getItemFromDict(this$.hashMap, matchValue[1])[matchValue[2]]);
         default:
-            return void 0;
+            return undefined;
     }
 }
 export function HashSet__get_Comparer(this$) {

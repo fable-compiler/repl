@@ -96,6 +96,13 @@ export function addToSet(v, set) {
     set.add(v);
     return true;
 }
+export function tryAddToDict(dict, k, v) {
+    if (dict.has(k)) {
+        return false;
+    }
+    dict.set(k, v);
+    return true;
+}
 export function addToDict(dict, k, v) {
     if (dict.has(k)) {
         throw new Error("An item with the same key has already been added. Key: " + k);
@@ -109,4 +116,12 @@ export function getItemFromDict(map, key) {
     else {
         throw new Error(`The given key '${key}' was not present in the dictionary.`);
     }
+}
+export function getItemFromDictOrCreate(map, key, createValue) {
+    if (map.has(key)) {
+        return map.get(key);
+    }
+    const value = createValue(key);
+    map.set(key, value);
+    return value;
 }

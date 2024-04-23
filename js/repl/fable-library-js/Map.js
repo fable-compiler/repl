@@ -48,7 +48,7 @@ export function MapTreeNode$2__get_Height(_) {
     return _.h;
 }
 export function MapTreeModule_empty() {
-    return void 0;
+    return undefined;
 }
 export function MapTreeModule_sizeAux(acc_mut, m_mut) {
     MapTreeModule_sizeAux: while (true) {
@@ -217,11 +217,11 @@ export function MapTreeModule_tryFind(comparer_mut, k_mut, m_mut) {
                 continue MapTreeModule_tryFind;
             }
             else {
-                return void 0;
+                return undefined;
             }
         }
         else {
-            return void 0;
+            return undefined;
         }
         break;
     }
@@ -398,7 +398,7 @@ export function MapTreeModule_change(comparer, k, u, m) {
         else {
             const c_1 = comparer.Compare(k, MapTreeLeaf$2__get_Key(m2)) | 0;
             if (c_1 < 0) {
-                const matchValue_2 = u(void 0);
+                const matchValue_2 = u(undefined);
                 if (matchValue_2 != null) {
                     return MapTreeNode$2_$ctor_Z39DE9543(k, value_1(matchValue_2), MapTreeModule_empty(), m, 2);
                 }
@@ -416,7 +416,7 @@ export function MapTreeModule_change(comparer, k, u, m) {
                 }
             }
             else {
-                const matchValue_4 = u(void 0);
+                const matchValue_4 = u(undefined);
                 if (matchValue_4 != null) {
                     return MapTreeNode$2_$ctor_Z39DE9543(k, value_1(matchValue_4), m, MapTreeModule_empty(), 2);
                 }
@@ -427,7 +427,7 @@ export function MapTreeModule_change(comparer, k, u, m) {
         }
     }
     else {
-        const matchValue = u(void 0);
+        const matchValue = u(undefined);
         if (matchValue != null) {
             return MapTreeLeaf$2_$ctor_5BDDA1(k, value_1(matchValue));
         }
@@ -521,7 +521,7 @@ export function MapTreeModule_tryPickOpt(f_mut, m_mut) {
             }
         }
         else {
-            return void 0;
+            return undefined;
         }
         break;
     }
@@ -928,7 +928,7 @@ export function MapTreeModule_toSeq(s) {
             return [en_1["System.Collections.Generic.IEnumerator`1.get_Current"](), en_1];
         }
         else {
-            return void 0;
+            return undefined;
         }
     }, MapTreeModule_mkIEnumerator(s));
 }
@@ -1346,7 +1346,7 @@ export function findKey(predicate, table) {
             return some(k);
         }
         else {
-            return void 0;
+            return undefined;
         }
     }, table);
 }
@@ -1357,7 +1357,7 @@ export function tryFindKey(predicate, table) {
             return some(k);
         }
         else {
-            return void 0;
+            return undefined;
         }
     }, table);
 }

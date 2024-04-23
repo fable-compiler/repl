@@ -171,7 +171,7 @@ export function Choice_tryValueIfChoice1Of2(x) {
         return some(x.fields[0]);
     }
     else {
-        return void 0;
+        return undefined;
     }
 }
 export function Choice_tryValueIfChoice2Of2(x) {
@@ -179,6 +179,6 @@ export function Choice_tryValueIfChoice2Of2(x) {
         return some(x.fields[0]);
     }
     else {
-        return void 0;
+        return undefined;
     }
 }

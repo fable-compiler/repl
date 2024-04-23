@@ -41,7 +41,7 @@ export function last(array) {
 }
 export function tryLast(array) {
     if (array.length === 0) {
-        return void 0;
+        return undefined;
     }
     else {
         return some(item_2(array.length - 1, array));
@@ -202,7 +202,7 @@ export function indexOf(array, item_1, start, count, eq) {
     return loop(start_1) | 0;
 }
 export function contains(value, array, eq) {
-    return indexOf(array, value, void 0, void 0, eq) >= 0;
+    return indexOf(array, value, undefined, undefined, eq) >= 0;
 }
 export function empty(cons) {
     return Helpers_allocateArrayFromCons(cons, 0);
@@ -353,7 +353,7 @@ export function insertRangeInPlace(index, range, array) {
     }
 }
 export function removeInPlace(item_1, array, eq) {
-    const i = indexOf(array, item_1, void 0, void 0, eq) | 0;
+    const i = indexOf(array, item_1, undefined, undefined, eq) | 0;
     if (i > -1) {
         array.splice(i, 1);
         return true;
@@ -421,7 +421,7 @@ export function tryFindIndex(predicate, array) {
         return matchValue;
     }
     else {
-        return void 0;
+        return undefined;
     }
 }
 export function pick(chooser, array) {
@@ -451,7 +451,7 @@ export function tryPick(chooser, array) {
         loop: while (true) {
             const i = i_mut;
             if (i >= array.length) {
-                return void 0;
+                return undefined;
             }
             else {
                 const matchValue = chooser(item_2(i, array));
@@ -492,7 +492,7 @@ export function tryFindBack(predicate, array) {
         loop: while (true) {
             const i = i_mut;
             if (i < 0) {
-                return void 0;
+                return undefined;
             }
             else if (predicate(item_2(i, array))) {
                 return some(item_2(i, array));
@@ -550,7 +550,7 @@ export function tryFindIndexBack(predicate, array) {
         loop: while (true) {
             const i = i_mut;
             if (i < 0) {
-                return void 0;
+                return undefined;
             }
             else if (predicate(item_2(i, array))) {
                 return i;
@@ -887,7 +887,7 @@ export function tryExactlyOne(array) {
         return some(item_2(0, array));
     }
     else {
-        return void 0;
+        return undefined;
     }
 }
 export function head(array) {
@@ -900,7 +900,7 @@ export function head(array) {
 }
 export function tryHead(array) {
     if (array.length === 0) {
-        return void 0;
+        return undefined;
     }
     else {
         return some(item_2(0, array));
@@ -930,7 +930,7 @@ export function setItem(array, index, value) {
 }
 export function tryItem(index, array) {
     if ((index < 0) ? true : (index >= array.length)) {
-        return void 0;
+        return undefined;
     }
     else {
         return some(array[index]);

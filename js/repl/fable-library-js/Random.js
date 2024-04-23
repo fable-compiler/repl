@@ -48,7 +48,7 @@ export class NonSeeded {
     }
 }
 export function NonSeeded_$reflection() {
-    return class_type("Random.NonSeeded", void 0, NonSeeded);
+    return class_type("Random.NonSeeded", undefined, NonSeeded);
 }
 export function NonSeeded_$ctor() {
     return new NonSeeded();
@@ -120,7 +120,7 @@ export class Seeded {
     }
 }
 export function Seeded_$reflection() {
-    return class_type("Random.Seeded", void 0, Seeded);
+    return class_type("Random.Seeded", undefined, Seeded);
 }
 export function Seeded_$ctor_Z524259A4(seed) {
     return new Seeded(seed);
