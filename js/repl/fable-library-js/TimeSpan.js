@@ -1,5 +1,5 @@
 import { comparePrimitives, padLeftAndRightWithZeros, padWithZeros } from "./Util.js";
-import { toInt64 } from "./BigInt.js";
+import { toInt64, fromFloat64 } from "./BigInt.js";
 /**
  * Calls:
  * - `Math.ceil` if the `value` is **negative**
@@ -55,7 +55,7 @@ export function milliseconds(ts) {
     return signedRound(ts % 1000);
 }
 export function ticks(ts) {
-    return toInt64(BigInt(ts) * 10000n);
+    return toInt64(fromFloat64(ts * 10000));
 }
 export function totalDays(ts) {
     return ts / 86400000;

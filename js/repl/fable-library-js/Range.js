@@ -33,7 +33,7 @@ export function rangeUInt64(start, step, stop) {
     return integralRangeStep(start, step, stop, 0n, (x, y) => toUInt64(op_Addition(x, y)));
 }
 export function rangeChar(start, stop) {
-    const intStop = stop.charCodeAt(0) | 0;
+    const intStop = ~~stop.charCodeAt(0) | 0;
     return delay(() => unfold((c) => {
         if (c <= intStop) {
             return [String.fromCharCode(c), c + 1];
@@ -41,5 +41,5 @@ export function rangeChar(start, stop) {
         else {
             return undefined;
         }
-    }, start.charCodeAt(0)));
+    }, ~~start.charCodeAt(0)));
 }
