@@ -24,11 +24,22 @@ type Model =
       GistToken : string option
       GistTokenField : string }
     member this.ToOtherFSharpOptions =
-        [| yield "--define:FABLE_COMPILER"
-           yield "--langversion:preview"
-           if this.DefineDebug then yield "--define:DEBUG"
-           yield "--optimize" + (if this.Optimize then "+" else "-")
-           if this.TypedArrays then yield "--typedArrays" |]
+        [|
+            "--define:FABLE_COMPILER"
+            "--define:FABLE_COMPILER_4"
+            "--langversion:preview"
+            if this.DefineDebug then "--define:DEBUG"
+            match this.Target.ToLowerInvariant() with
+            | "javascript" -> "--define:FABLE_COMPILER_JAVASCRIPT"
+            | "typescript" -> "--define:FABLE_COMPILER_TYPESCRIPT"
+            | "python" -> "--define:FABLE_COMPILER_PYTHON"
+            | "rust" -> "--define:FABLE_COMPILER_RUST"
+            | "dart" -> "--define:FABLE_COMPILER_DART"
+            | _ -> ()
+            "--optimize"
+            if this.Optimize then "+" else "-"
+            if this.TypedArrays then "--typedArrays"
+        |]
     static member Default =
         { Optimize = false
           DefineDebug = true
