@@ -7,7 +7,7 @@
 To develop the REPL locally:
 
 1. `dotnet fsi build.fsx -p WatchApp`
-2. Open `localhost:8080` in your browser
+2. Open `http://localhost:5173/` in your browser
 
 ## Release
 
