@@ -1,4 +1,3 @@
-// tslint:disable:ban-types
 export function isArrayLike(x) {
     return Array.isArray(x) || ArrayBuffer.isView(x);
 }

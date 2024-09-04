@@ -65,7 +65,7 @@ export declare class Enumerable<T> implements IEnumerable<T> {
     GetEnumerator(): IEnumerator<T>;
     "System.Collections.IEnumerable.GetEnumerator"(): IEnumerator<any>;
     [Symbol.iterator](): this;
-    next(): IteratorResult<T, any>;
+    next(): IteratorResult<T>;
 }
 export declare class Enumerator<T> implements IEnumerator<T> {
     private iter;

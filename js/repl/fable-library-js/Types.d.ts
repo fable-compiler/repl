@@ -38,8 +38,8 @@ export declare class Exception {
     message?: string | undefined;
     constructor(message?: string | undefined);
 }
-export declare function isException(x: any): boolean;
-export declare function isPromise(x: any): boolean;
+export declare function isException(x: any): x is Error | Exception;
+export declare function isPromise(x: any): x is Promise<any>;
 export declare function ensureErrorOrException(e: any): any;
 export declare abstract class FSharpException extends Exception implements IEquatable<FSharpException>, IComparable<FSharpException> {
     toJSON(): any;

@@ -34,13 +34,13 @@ export function equals(x, y) {
     return !x.cmp(y);
 }
 export function abs(x) { return x.abs(); }
-export function sign(x) { return x < get_Zero ? -1 : x > get_Zero ? 1 : 0; }
-export function max(x, y) { return x > y ? x : y; }
-export function min(x, y) { return x < y ? x : y; }
-export function maxMagnitude(x, y) { return abs(x) > abs(y) ? x : y; }
-export function minMagnitude(x, y) { return abs(x) < abs(y) ? x : y; }
+export function sign(x) { return x.lt(get_Zero) ? -1 : x.gt(get_Zero) ? 1 : 0; }
+export function max(x, y) { return x.gt(y) ? x : y; }
+export function min(x, y) { return x.lt(y) ? x : y; }
+export function maxMagnitude(x, y) { return abs(x).gt(abs(y)) ? x : y; }
+export function minMagnitude(x, y) { return abs(x).lt(abs(y)) ? x : y; }
 export function clamp(x, min, max) {
-    return x < min ? min : x > max ? max : x;
+    return x.lt(min) ? min : x.gt(max) ? max : x;
 }
 export function round(x, digits = 0) {
     return x.round(digits, 2 /* ROUND_HALF_EVEN */);

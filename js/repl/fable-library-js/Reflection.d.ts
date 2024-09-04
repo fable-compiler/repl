@@ -78,7 +78,7 @@ export declare function namespace(t: TypeInfo): string;
 export declare function isArray(t: TypeInfo): boolean;
 export declare function getElementType(t: TypeInfo): TypeInfo | undefined;
 export declare function isGenericType(t: TypeInfo): boolean;
-export declare function isGenericParameter(t: TypeInfo): boolean;
+export declare function isGenericParameter(t: TypeInfo): t is GenericParameter;
 export declare function isEnum(t: TypeInfo): boolean;
 export declare function isSubclassOf(t1: TypeInfo, t2: TypeInfo): boolean;
 export declare function isInstanceOfType(t: TypeInfo, o: any): boolean;
