@@ -1,13 +1,8 @@
 import { OperationCanceledError, Trampoline } from "./AsyncBuilder.js";
 import { CancellationToken } from "./AsyncBuilder.js";
-import { protectedCont } from "./AsyncBuilder.js";
-import { protectedBind } from "./AsyncBuilder.js";
-import { protectedReturn } from "./AsyncBuilder.js";
+import { protectedCont, protectedBind, protectedReturn } from "./AsyncBuilder.js";
 import { Choice_makeChoice1Of2, Choice_makeChoice2Of2 } from "./Choice.js";
 import { TimeoutException } from "./SystemException.js";
-// Implemented just for type references
-export class Async {
-}
 function emptyContinuation(_x) {
     // NOP
 }
@@ -155,4 +150,3 @@ export function startWithContinuations(computation, continuation, exceptionConti
 export function startAsPromise(computation, cancellationToken) {
     return new Promise((resolve, reject) => startWithContinuations(computation, resolve, reject, reject, cancellationToken ? cancellationToken : defaultCancellationToken));
 }
-export default Async;

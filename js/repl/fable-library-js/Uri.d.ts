@@ -22,6 +22,8 @@ export declare class Uri {
     get host(): string;
     get absolutePath(): string;
     get query(): string;
+    get isDefaultPort(): boolean;
+    get port(): number;
     get pathAndQuery(): string;
     get fragment(): string;
     get originalString(): string;

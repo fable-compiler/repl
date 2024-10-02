@@ -1,4 +1,4 @@
-import { IAsync } from "./AsyncBuilder.js";
+import { Async } from "./AsyncBuilder.js";
 import { Continuation } from "./AsyncBuilder.js";
 import { CancellationToken } from "./AsyncBuilder.js";
 declare class MailboxQueue<Msg> {
@@ -6,7 +6,7 @@ declare class MailboxQueue<Msg> {
     add(message: Msg): void;
     tryGet(): Msg | undefined;
 }
-export type MailboxBody<Msg> = (m: MailboxProcessor<Msg>) => IAsync<void>;
+export type MailboxBody<Msg> = (m: MailboxProcessor<Msg>) => Async<void>;
 export interface AsyncReplyChannel<Reply> {
     reply: (r: Reply) => void;
 }

@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 1.6.0 - 2024-10-02
+
+### Removed
+
+* Remove `Async` (from `Async.ts`) class (by @MangelMaxime)
+
+### Changed
+
+* Renamed `IAsync` to `Async` in `AsyncBuilder.ts` (#3906) (by @ncave)
+
+## 1.5.0 - 2024-09-19
+
+### Added
+
+* [JS/TS] Add support for `OrdinalIgnoreCase` overload for `String.EndsWith` (#3892) (by @goswinr)
+* [JS/TS] Add `uri.Port`, `uri.IsDefaultPort` (by @MangelMaxime)
+
+### Fixed
+
+* [JS/TS] Fix escaping of `{` and `}` in FormattableString (#3890) (by @roboz0r)
+* [JS/TS] Fix `uri.Host` to return the host name without the port (by @MangelMaxime)
+* [JS/TS] Fix TypeScript compilation by resolving type of `jsOptions` (#3894) (by @ManngelMaxime)
+
 ## 1.4.3 - 2024-09-04
 
 * [JS/TS] Fixed Decimal comparisons (#3884) (by @ncave)

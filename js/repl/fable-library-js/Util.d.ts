@@ -161,7 +161,7 @@ export declare function max<T>(comparer: (x: T, y: T) => number, x: T, y: T): T;
 export declare function clamp<T>(comparer: (x: T, y: T) => number, value: T, min: T, max: T): T;
 export declare function createAtom<T>(value: T): (<Args extends [] | [T]>(...args: Args) => Args extends [] ? T : void);
 export declare function createObj(fields: Iterable<[string, any]>): any;
-export declare function jsOptions(mutator: (x: object) => void): object;
+export declare function jsOptions<T>(mutator: (x: T) => void): T;
 export declare function round(value: number, digits?: number): number;
 export declare function sign(x: number): number;
 export declare function unescapeDataString(s: string): string;

@@ -119,13 +119,31 @@ export class Uri {
         return protocol.slice(0, protocol.length - 1);
     }
     get host() {
-        return this.asUrl().host;
+        const host = this.asUrl().host;
+        if (host.includes(":")) {
+            return host.split(":")[0];
+        }
+        else {
+            return host;
+        }
     }
     get absolutePath() {
         return this.asUrl().pathname;
     }
     get query() {
         return this.asUrl().search;
+    }
+    get isDefaultPort() {
+        return this.port === 80;
+    }
+    get port() {
+        const port = this.asUrl().port;
+        if (port === "") {
+            return 80;
+        }
+        else {
+            return parseInt(port);
+        }
     }
     get pathAndQuery() {
         const url = this.asUrl();

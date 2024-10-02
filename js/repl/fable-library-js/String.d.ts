@@ -2,6 +2,7 @@ export declare function compare(...args: any[]): number;
 export declare function compareOrdinal(x: string, y: string): number;
 export declare function compareTo(x: string, y: string): number;
 export declare function startsWith(str: string, pattern: string, ic: number): boolean;
+export declare function endsWith(str: string, pattern: string, ic: number): boolean;
 export declare function indexOfAny(str: string, anyOf: string[], ...args: number[]): number;
 export type IPrintfFormatContinuation = (f: (x: string) => any) => any;
 export interface IPrintfFormat {
@@ -16,7 +17,6 @@ export declare function toText(arg: IPrintfFormat | string): any;
 export declare function toFail(arg: IPrintfFormat | string): any;
 export declare function fsFormat(str: string): (cont: (...args: any[]) => any) => any;
 export declare function format(str: string | object, ...args: any[]): string;
-export declare function endsWith(str: string, search: string): boolean;
 export declare function initialize(n: number, f: (i: number) => string): string;
 export declare function insert(str: string, startIndex: number, value: string): string;
 export declare function isNullOrEmpty(str: string | any): boolean;

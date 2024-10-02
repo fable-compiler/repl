@@ -58,8 +58,20 @@ export function compareTo(x, y) {
     return cmp(x, y, 0 /* StringComparison.CurrentCulture */);
 }
 export function startsWith(str, pattern, ic) {
+    if (ic === 4 /* StringComparison.Ordinal */) { // to avoid substring allocation
+        return str.startsWith(pattern);
+    }
     if (str.length >= pattern.length) {
         return cmp(str.substr(0, pattern.length), pattern, ic) === 0;
+    }
+    return false;
+}
+export function endsWith(str, pattern, ic) {
+    if (ic === 4 /* StringComparison.Ordinal */) { // to avoid substring allocation
+        return str.endsWith(pattern);
+    }
+    if (str.length >= pattern.length) {
+        return cmp(str.substr(str.length - pattern.length, pattern.length), pattern, ic) === 0;
     }
     return false;
 }
@@ -361,10 +373,6 @@ export function format(str, ...args) {
         return rep;
     });
 }
-export function endsWith(str, search) {
-    const idx = str.lastIndexOf(search);
-    return idx >= 0 && idx === str.length - search.length;
-}
 export function initialize(n, f) {
     if (n < 0) {
         throw new Error("String length must be non-negative");
@@ -537,7 +545,10 @@ export function fmtWith(fmts) {
     return (strs, ...args) => ({ strs, args, fmts });
 }
 export function getFormat(s) {
+    const strs = s.strs.map((value) => value.replace(/{/g, '{{').replace(/}/g, '}}'));
     return s.fmts
-        ? s.strs.reduce((acc, newPart, index) => acc + `{${String(index - 1) + s.fmts[index - 1]}}` + newPart)
-        : s.strs.reduce((acc, newPart, index) => acc + `{${index - 1}}` + newPart);
+        ? strs
+            .reduce((acc, newPart, index) => acc + `{${String(index - 1) + s.fmts[index - 1]}}` + newPart)
+        : strs
+            .reduce((acc, newPart, index) => acc + `{${index - 1}}` + newPart);
 }
