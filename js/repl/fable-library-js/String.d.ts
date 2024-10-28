@@ -1,8 +1,16 @@
+declare const enum StringComparison {
+    CurrentCulture = 0,
+    CurrentCultureIgnoreCase = 1,
+    InvariantCulture = 2,
+    InvariantCultureIgnoreCase = 3,
+    Ordinal = 4,
+    OrdinalIgnoreCase = 5
+}
 export declare function compare(...args: any[]): number;
 export declare function compareOrdinal(x: string, y: string): number;
 export declare function compareTo(x: string, y: string): number;
-export declare function startsWith(str: string, pattern: string, ic: number): boolean;
-export declare function endsWith(str: string, pattern: string, ic: number): boolean;
+export declare function startsWith(str: string, pattern: string, ic: boolean | StringComparison): boolean;
+export declare function endsWith(str: string, pattern: string, ic: boolean | StringComparison): boolean;
 export declare function indexOfAny(str: string, anyOf: string[], ...args: number[]): number;
 export type IPrintfFormatContinuation = (f: (x: string) => any) => any;
 export interface IPrintfFormat {
