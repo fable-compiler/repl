@@ -1,35 +1,42 @@
 open System.IO
 open System.Collections.Generic
 open FSharp.Compiler.CodeAnalysis
+open Ionide.ProjInfo
 
 let readRefs (folder : string) (projectFile: string) =
-    let runProcess (workingDir: string) (exePath: string) (args: string) =
-        let psi = System.Diagnostics.ProcessStartInfo()
-        psi.FileName <- exePath
-        psi.WorkingDirectory <- workingDir
-        psi.RedirectStandardOutput <- false
-        psi.RedirectStandardError <- false
-        psi.Arguments <- args
-        psi.CreateNoWindow <- true
-        psi.UseShellExecute <- false
+    let projectDirectory: DirectoryInfo = DirectoryInfo folder
+    let fsProjPath = __SOURCE_DIRECTORY__ + "/" + projectFile
+    let toolsPath = Init.init projectDirectory None
+    let defaultLoader: IWorkspaceLoader = WorkspaceLoader.Create(toolsPath, [])
 
-        use p = new System.Diagnostics.Process()
-        p.StartInfo <- psi
-        p.Start() |> ignore
-        p.WaitForExit()
+    let mutable isReady = false
+    let mutable refs = []
 
-        let exitCode = p.ExitCode
-        exitCode, ()
+    let subscription: System.IDisposable = defaultLoader.Notifications.Subscribe(fun msg ->
+        match msg with
+        | Types.WorkspaceProjectState.Loaded (proj, _, _) ->
+            printfn "Project loaded"
 
-    let runCmd exePath args = runProcess folder exePath (args |> String.concat " ")
-    let msbuildExec = Dotnet.ProjInfo.Inspect.dotnetMsbuild runCmd
-    let result = Dotnet.ProjInfo.Inspect.getProjectInfo ignore msbuildExec Dotnet.ProjInfo.Inspect.getFscArgs projectFile
-    match result with
-    | Ok(Dotnet.ProjInfo.Inspect.GetResult.FscArgs x) ->
-        x
-        |> List.filter (fun s -> s.StartsWith("-r:"))
-        |> List.map (fun s -> s.Replace("-r:", ""))
-    | _ -> []
+            refs <-
+                proj.OtherOptions
+                |> List.filter (fun s -> s.StartsWith("-r:"))
+                |> List.map (fun s -> s.Replace("-r:", ""))
+            isReady <- true
+
+        | Types.WorkspaceProjectState.Failed (projectFilePath,  errors) ->
+            printfn "Errors: %A" errors
+            failwithf "Failed to load project: %s" projectFilePath
+        | Types.WorkspaceProjectState.Loading (projectFilePath) ->
+            printfn "Loading project: %s" projectFilePath
+    )
+
+    let projectOptions = defaultLoader.LoadProjects([ fsProjPath ]) |> Seq.toArray
+
+    // This is ugly, but I don't know how to transform an Observable to Async or Syncronous operation
+    while not isReady do
+        System.Threading.Thread.Sleep(100)
+
+    refs
 
 let mkStandardProjectReferences () =
     let file = "fcs-export.fsproj"
