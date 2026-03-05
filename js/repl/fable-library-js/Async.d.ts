@@ -20,8 +20,7 @@ export declare function ignore<T>(computation: Async<T>): (ctx: IAsyncContext<un
 export declare function parallel<T>(computations: Iterable<Async<T>>): (ctx: IAsyncContext<Awaited<T>[]>) => void;
 export declare function sequential<T>(computations: Iterable<Async<T>>): (ctx: IAsyncContext<T[]>) => void;
 export declare function sleep(millisecondsDueTime: number): (ctx: IAsyncContext<void>) => void;
-export declare function runSynchronously(): never;
 export declare function start<T>(computation: Async<T>, cancellationToken?: CancellationToken): void;
 export declare function startImmediate<T>(computation: Async<T>, cancellationToken?: CancellationToken): void;
-export declare function startWithContinuations<T>(computation: Async<T>, continuation?: Continuation<T> | CancellationToken, exceptionContinuation?: Continuation<any>, cancellationContinuation?: Continuation<any>, cancelToken?: CancellationToken): void;
+export declare function startWithContinuations<T>(computation: Async<T>, continuation: Continuation<T>, exceptionContinuation: Continuation<any>, cancellationContinuation: Continuation<any>, cancelToken?: CancellationToken): void;
 export declare function startAsPromise<T>(computation: Async<T>, cancellationToken?: CancellationToken): Promise<T>;

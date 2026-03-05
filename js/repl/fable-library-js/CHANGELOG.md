@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 1.11.0- 2025-04-26
+
+### Fixed
+
+* [JS/TS] Propagate non-captured exception when running `Async.Start` or `Async.StartImmediate` (by @MangelMaxime)
+* [JS/TS] Remove `Async.RunSynchronously` (by @MangelMaxime)
+* [JS/TS] Change signature of `startWithContinuations` to always require all its arguments (by @MangelMaxime)
+
+## 1.7.0 - 2024-11-19
+
+### Fixed
+
+* [JS/TS] Added missing IReadOnlyCollection helpers (#3953)
+
 ## 1.6.0 - 2024-10-02
 
 ### Removed

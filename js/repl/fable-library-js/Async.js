@@ -124,25 +124,18 @@ export function sleep(millisecondsDueTime) {
         });
     });
 }
-export function runSynchronously() {
-    throw new Error("Asynchronous code cannot be run synchronously in JS");
-}
 export function start(computation, cancellationToken) {
-    return startWithContinuations(computation, cancellationToken);
+    return startWithContinuations(computation, emptyContinuation, function (err) { throw err; }, emptyContinuation, cancellationToken);
 }
 export function startImmediate(computation, cancellationToken) {
     return start(computation, cancellationToken);
 }
 export function startWithContinuations(computation, continuation, exceptionContinuation, cancellationContinuation, cancelToken) {
-    if (typeof continuation !== "function") {
-        cancelToken = continuation;
-        continuation = undefined;
-    }
     const trampoline = new Trampoline();
     computation({
         onSuccess: continuation ? continuation : emptyContinuation,
-        onError: exceptionContinuation ? exceptionContinuation : emptyContinuation,
-        onCancel: cancellationContinuation ? cancellationContinuation : emptyContinuation,
+        onError: exceptionContinuation,
+        onCancel: cancellationContinuation,
         cancelToken: cancelToken ? cancelToken : defaultCancellationToken,
         trampoline,
     });
