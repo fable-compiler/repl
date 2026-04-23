@@ -2,8 +2,8 @@
   "private": true,
   "scripts": {},
   "dependencies": {
-    "@fable-org/fable-metadata": "^1.1.0",
-    "@fable-org/fable-standalone": "^1.14.0",
+    "@fable-org/fable-metadata": "^2.0.0",
+    "@fable-org/fable-standalone": "^2.0.0",
     "@fortawesome/fontawesome-free": "^6.4.2",
     "autoprefixer": "^10.4.27",
     "babel-loader": "^10.0.0",
