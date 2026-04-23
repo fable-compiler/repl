@@ -1,7 +1,7 @@
 import { DateTime, getTicks, dayOfYear as Date_dayOfYear, year as Date_year, month as Date_month, day as Date_day, daysInMonth as Date_daysInMonth, ticksToUnixEpochMilliseconds } from "./Date.js";
-import { padWithZeros } from "./Util.js";
+import { Exception, DateTimeKind, padWithZeros } from "./Util.js";
 export function fromUnixMilliseconds(value) {
-    return DateTime(value, 1 /* DateKind.UTC */);
+    return DateTime(value, DateTimeKind.Utc);
 }
 export function create(year, month, day) {
     const d = fromUnixMilliseconds(Date.UTC(year, month - 1, day));
@@ -43,12 +43,12 @@ export function dayOfWeek(d) {
 export function dayOfYear(d) {
     return Date_dayOfYear(d);
 }
-export function toDateTime(d, time, kind = 0 /* DateKind.Unspecified */) {
-    return DateTime(d.getTime() + time + (kind !== 1 /* DateKind.UTC */ ? d.getTimezoneOffset() : 0) * 60000, kind);
+export function toDateTime(d, time, kind = DateTimeKind.Unspecified) {
+    return DateTime(d.getTime() + time + (kind !== DateTimeKind.Utc ? d.getTimezoneOffset() : 0) * 60000, kind);
 }
 export function toString(d, format = "d", _provider) {
     if (["d", "o", "O"].indexOf(format) === -1) {
-        throw new Error("Custom formats are not supported");
+        throw new Exception("Custom formats are not supported");
     }
     const y = padWithZeros(year(d), 4);
     const m = padWithZeros(month(d), 2);
@@ -57,7 +57,7 @@ export function toString(d, format = "d", _provider) {
 }
 export function parse(str) {
     function fail() {
-        throw new Error(`String '${str}' was not recognized as a valid DateOnly.`);
+        throw new Exception(`String '${str}' was not recognized as a valid DateOnly.`);
     }
     // Allowed separators: . , / -
     // TODO whitespace alone as the separator

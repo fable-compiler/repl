@@ -1,4 +1,4 @@
-import { ensureErrorOrException } from './Types.js';
+import { Exception, ensureErrorOrException } from "./Util.js";
 export class CancellationToken {
     constructor(cancelled = false) {
         this._id = 0;
@@ -35,10 +35,10 @@ export class CancellationToken {
         // https://docs.microsoft.com/en-us/dotnet/api/system.threading.cancellationtokensource.dispose?view=net-6.0
     }
 }
-export class OperationCanceledError extends Error {
-    constructor() {
-        super("The operation was canceled");
-        Object.setPrototypeOf(this, OperationCanceledError.prototype);
+export class OperationCanceledException extends Exception {
+    constructor(msg) {
+        super(msg ?? "The operation was canceled");
+        // Object.setPrototypeOf(this, OperationCanceledException.prototype);
     }
 }
 export class Trampoline {
@@ -59,7 +59,7 @@ export class Trampoline {
 export function protectedCont(f) {
     return (ctx) => {
         if (ctx.cancelToken.isCancelled) {
-            ctx.onCancel(new OperationCanceledError());
+            ctx.onCancel(new OperationCanceledException());
         }
         else if (ctx.trampoline.incrementAndCheck()) {
             ctx.trampoline.hijack(() => {

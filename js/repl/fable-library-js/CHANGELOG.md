@@ -7,13 +7,111 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-## 1.11.0- 2025-04-26
+## 2.0.0 - 2026-04-21
 
 ### Fixed
 
+* [JS/TS] Fix `ResizeArray` (`System.Collections.Generic.List`) equality to use reference equality instead of structural equality (fixes #3718)
+* [JS/TS] Fix `String.Contains` ignoring `StringComparison` argument (second argument was silently discarded)
+
+## 2.0.0-rc.6 - 2026-04-07
+
+### Fixed
+
+* [JS/TS] Fix `Async.StartChild` with timeout always timing out even when the computation finishes before the deadline (fixes #4481) (by @MangelMaxime)
+
+## 2.0.0-rc.5 - 2026-03-31
+
+### Fixed
+
+* [JS/TS] Improve `Regex.Escape` and `Regex.Unescape` handling (by @MangelMaxime)
+* [JS/TS] Fixed quotation for union string cases (by @MangelMaxime)
+
+## 2.0.0-rc.4 - 2026-03-19
+
+### Fixed
+
+* [JS/TS] Fix `Unchecked.defaultof<char>` being emitted as `null` instead of `'\0'` (by @MangelMaxime)
+
+## 2.0.0-rc.3 - 2026-03-10
+
+### Fixed
+
+* [TS] Expose optional `stack` property on `Exception` (by @MangelMaxime)
+
+## 2.0.0-rc.2 - 2026-03-03
+
+### Fixed
+
+* [JS/TS] Allows compiling `fable-library-ts` for Browser environment (by @goswinr)
+
+## 2.0.0-rc.1 - 2026-02-26
+
+## 2.0.0-beta.7 - 2026-02-03
+
+* [JS/TS] Fix `StringBuilder.Chars` getter and setter (by @MangelMaxime)
+
+## 2.0.0-beta.6 - 2025-12-26
+
+### Fixed
+
+* [JS/TS] Fix #4305 `DateTimeOffset.Now` returns wrong time (by @ncave)
+
+## 2.0.0-beta.5 - 2025-11-19
+
+### Changed
+
+* [JS/TS] Replace the deprecated `substr` method with `slice` (by @Thorium)
+
+## 2.0.0-beta.4 - 2025-07-25
+
+### Added
+
+* [JS/TS] Initial support for Nullable Reference Types (by @ncave)
+
+## 2.0.0-beta.3 - 2025-03-14
+
+### Fixed
+
+* [JS/TS] Make `nullArgCheck` report the same error message as on .NET (by @MangelMaxime)
+
+## 2.0.0-beta.2 - 2025-03-03
+
+* [JS/TS] Fix #4049: decimal/bigint to integer conversion checks (by @ncave)
+* [JS/TS] Fix `decimal` to `char` conversion checks (by @ManngelMaxime)
 * [JS/TS] Propagate non-captured exception when running `Async.Start` or `Async.StartImmediate` (by @MangelMaxime)
 * [JS/TS] Remove `Async.RunSynchronously` (by @MangelMaxime)
 * [JS/TS] Change signature of `startWithContinuations` to always require all its arguments (by @MangelMaxime)
+* [JS/TS] Fix short `DateTime` and `DateTimeOffset` short format strings (by @MangelMaxime)
+* [JS/TS] Add `C` and `c` format for numeric types (by @MangelMaxime)
+* [JS/TS] Add `B` and `b` format for numeric types (by @MangelMaxime)
+* [JS/TS] Add `n` format for numeric types (by @MangelMaxime)
+* [JS/TS] Fix numeric formats (by @MangelMaxime)
+
+## 2.0.0-beta.1 - 2025-02-16
+
+* Compiled with Fable 5.0.0-alpha.10
+
+## 1.10.0 - 2025-01-23
+
+### Added
+
+* [JS/TS] Add `StringBuiler.Append(c: char, repeatCount: int)` overload (by @roboz0r)
+
+## 1.9.0 - 2025-01-09
+
+### Added
+
+* [JS/TS] Add new `TimSpane` overload support coming from .NET 9 (by @MangelMaxime)
+
+### Fixed
+
+* [JS/TS] Fix `DateTimeOffset.ToLocalTime` (by @MangelMaxime)
+
+## 1.8.0 - 2024-11-19
+
+* [JS/TS] Fix `h` in `DateTime.ToString` (@MangelMaxime)
+* [JS/TS] Fix `hh` in `DateTime.ToString` (@MangelMaxime)
 
 ## 1.7.0 - 2024-11-19
 
@@ -42,7 +140,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * [JS/TS] Fix escaping of `{` and `}` in FormattableString (#3890) (by @roboz0r)
 * [JS/TS] Fix `uri.Host` to return the host name without the port (by @MangelMaxime)
-* [JS/TS] Fix TypeScript compilation by resolving type of `jsOptions` (#3894) (by @ManngelMaxime)
+* [JS/TS] Fix TypeScript compilation by resolving type of `jsOptions` (#3894) (by @MangelMaxime)
 
 ## 1.4.3 - 2024-09-04
 

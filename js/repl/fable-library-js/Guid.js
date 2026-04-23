@@ -1,4 +1,5 @@
 import { trim } from "./String.js";
+import { Exception } from "./Util.js";
 // RFC 4122 compliant. From https://stackoverflow.com/a/13653180/3922220
 // const guidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 // Relax GUID parsing, see #1637
@@ -20,7 +21,7 @@ export function toString(str, format, _provider) {
             case "X":
                 return str.replace(guidHexCaptures, "{0x$1,0x$3,0x$5,{0x$6,0x$7,0x$8,0x$9,0x$10,0x$11,0x$12,0x$13}}");
             default:
-                throw new Error("Unrecognized Guid print format");
+                throw new Exception("Unrecognized Guid print format");
         }
     }
     else {
@@ -43,7 +44,7 @@ export function parse(str) {
         return hyphenateGuid(wsTrimAndLowered.replace(/[\{\},]|0x/g, ''));
     }
     else {
-        throw new Error("Guid should contain 32 digits with 4 dashes: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx");
+        throw new Exception("Guid should contain 32 digits with 4 dashes: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx");
     }
 }
 export function tryParse(str, defValue) {
@@ -55,15 +56,33 @@ export function tryParse(str, defValue) {
         return false;
     }
 }
-// From https://gist.github.com/LeverOne/1308368
 export function newGuid() {
-    let b = "";
-    for (let a = 0; a++ < 36;) {
-        b += a * 51 & 52
-            ? (a ^ 15 ? 8 ^ Math.random() * (a ^ 20 ? 16 : 4) : 4).toString(16)
-            : "-";
-    }
-    return b;
+    const bytes = new Uint8Array(16);
+    crypto.getRandomValues(bytes);
+    bytes[6] = (bytes[6] & 0x0f) | 0x40; // version 4
+    bytes[8] = (bytes[8] & 0x3f) | 0x80; // variant 1
+    const hex = Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
+    return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+}
+// RFC 9562 UUID v7
+export function createVersion7(timestamp) {
+    const ms = timestamp != null ? timestamp.getTime() : Date.now();
+    // 48-bit timestamp as hex
+    const msHex = Math.floor(ms).toString(16).padStart(12, "0");
+    // random bits
+    const bytes = new Uint8Array(10);
+    crypto.getRandomValues(bytes);
+    const view = new DataView(bytes.buffer);
+    const randA = view.getUint16(0) & 0x0fff; // 12 bits
+    const randB1 = view.getUint16(2) & 0x3fff; // 14 bits
+    const randB2 = view.getUint32(4); // 32 bits
+    const randB3 = view.getUint16(8); // 16 bits
+    const timeLow = msHex.slice(0, 8);
+    const timeMid = msHex.slice(8, 12);
+    const ver = (0x7000 | randA).toString(16).padStart(4, "0");
+    const variantAndRandB = (0x8000 | randB1).toString(16).padStart(4, "0");
+    const node = randB2.toString(16).padStart(8, "0") + randB3.toString(16).padStart(4, "0");
+    return `${timeLow}-${timeMid}-${ver}-${variantAndRandB}-${node}`;
 }
 // Maps for number <-> hex string conversion
 let _convertMapsInitialized = false;
@@ -73,7 +92,7 @@ function initConvertMaps() {
     _byteToHex = new Array(256);
     _hexToByte = {};
     for (let i = 0; i < 256; i++) {
-        _byteToHex[i] = (i + 0x100).toString(16).substr(1);
+        _byteToHex[i] = i.toString(16).padStart(2, '0');
         _hexToByte[_byteToHex[i]] = i;
     }
     _convertMapsInitialized = true;
@@ -125,7 +144,7 @@ export function guidToArray(s) {
 /** Convert UUID byte array into a string */
 export function arrayToGuid(buf) {
     if (buf.length !== 16) {
-        throw new Error("Byte array for GUID must be exactly 16 bytes long");
+        throw new Exception("Byte array for GUID must be exactly 16 bytes long");
     }
     if (!_convertMapsInitialized) {
         initConvertMaps();

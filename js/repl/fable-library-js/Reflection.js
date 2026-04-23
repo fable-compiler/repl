@@ -1,5 +1,5 @@
 import { Record, Union } from "./Types.js";
-import { combineHashCodes, equalArraysWith, stringHash } from "./Util.js";
+import { Exception, combineHashCodes, equalArraysWith, stringHash } from "./Util.js";
 import Decimal from "./Decimal.js";
 export class CaseInfo {
     constructor(declaringType, tag, name, fields) {
@@ -135,7 +135,7 @@ export function name(info) {
         }
         else {
             const i = info.fullname.lastIndexOf(".");
-            return i === -1 ? info.fullname : info.fullname.substr(i + 1);
+            return i === -1 ? info.fullname : info.fullname.slice(i + 1);
         }
     }
     else {
@@ -161,7 +161,7 @@ export function namespace(t) {
     }
     else {
         const i = t.fullname.lastIndexOf(".");
-        return i === -1 ? "" : t.fullname.substr(0, i);
+        return i === -1 ? "" : t.fullname.slice(0, i);
     }
 }
 export function isArray(t) {
@@ -239,7 +239,7 @@ export function getEnumValues(t) {
         return t.enumCases.map((kv) => kv[1]);
     }
     else {
-        throw new Error(`${t.fullname} is not an enum type`);
+        throw new Exception(`${t.fullname} is not an enum type`);
     }
 }
 export function getEnumNames(t) {
@@ -247,7 +247,7 @@ export function getEnumNames(t) {
         return t.enumCases.map((kv) => kv[0]);
     }
     else {
-        throw new Error(`${t.fullname} is not an enum type`);
+        throw new Exception(`${t.fullname} is not an enum type`);
     }
 }
 function getEnumCase(t, v) {
@@ -258,7 +258,7 @@ function getEnumCase(t, v) {
                     return kv;
                 }
             }
-            throw new Error(`'${v}' was not found in ${t.fullname}`);
+            throw new Exception(`'${v}' was not found in ${t.fullname}`);
         }
         else {
             for (const kv of t.enumCases) {
@@ -271,7 +271,7 @@ function getEnumCase(t, v) {
         }
     }
     else {
-        throw new Error(`${t.fullname} is not an enum type`);
+        throw new Exception(`${t.fullname} is not an enum type`);
     }
 }
 export function parseEnum(t, str) {
@@ -307,7 +307,7 @@ export function getUnionCases(t) {
         return t.cases();
     }
     else {
-        throw new Error(`${t.fullname} is not an F# union type`);
+        throw new Exception(`${t.fullname} is not an F# union type`);
     }
 }
 export function getRecordElements(t) {
@@ -315,7 +315,7 @@ export function getRecordElements(t) {
         return t.fields();
     }
     else {
-        throw new Error(`${t.fullname} is not an F# record type`);
+        throw new Exception(`${t.fullname} is not an F# record type`);
     }
 }
 export function getTupleElements(t) {
@@ -323,7 +323,7 @@ export function getTupleElements(t) {
         return t.generics;
     }
     else {
-        throw new Error(`${t.fullname} is not a tuple type`);
+        throw new Exception(`${t.fullname} is not a tuple type`);
     }
 }
 export function getFunctionElements(t) {
@@ -332,7 +332,7 @@ export function getFunctionElements(t) {
         return [gen[0], gen[1]];
     }
     else {
-        throw new Error(`${t.fullname} is not an F# function type`);
+        throw new Exception(`${t.fullname} is not an F# function type`);
     }
 }
 export function isUnion(t) {
@@ -353,7 +353,7 @@ export function getUnionFields(v, t) {
     const cases = getUnionCases(t);
     const case_ = cases[v.tag];
     if (case_ == null) {
-        throw new Error(`Cannot find case ${v.name} in union type`);
+        throw new Exception(`Cannot find case ${v.name} in union type`);
     }
     return [case_, v.fields];
 }
@@ -378,7 +378,7 @@ export function getTupleField(v, i) {
 export function makeUnion(uci, values) {
     const expectedLength = (uci.fields || []).length;
     if (values.length !== expectedLength) {
-        throw new Error(`Expected an array of length ${expectedLength} but got ${values.length}`);
+        throw new Exception(`Expected an array of length ${expectedLength} but got ${values.length}`);
     }
     const construct = uci.declaringType.construct;
     if (construct == null) {
@@ -395,7 +395,7 @@ export function makeUnion(uci, values) {
 export function makeRecord(t, values) {
     const fields = getRecordElements(t);
     if (fields.length !== values.length) {
-        throw new Error(`Expected an array of length ${fields.length} but got ${values.length}`);
+        throw new Exception(`Expected an array of length ${fields.length} but got ${values.length}`);
     }
     return t.construct != null
         ? new t.construct(...values)
@@ -431,10 +431,9 @@ export function createInstance(t, consArgs) {
             case decimal_type.fullname:
                 return new Decimal(0);
             case char_type.fullname:
-                // Even though char is a value type, it's erased to string, and Unchecked.defaultof<char> is null
-                return null;
+                return "\0";
             default:
-                throw new Error(`Cannot access constructor of ${t.fullname}`);
+                throw new Exception(`Cannot access constructor of ${t.fullname}`);
         }
     }
 }
@@ -444,7 +443,7 @@ export function getValue(propertyInfo, v) {
 // Fable.Core.Reflection
 function assertUnion(x) {
     if (!(x instanceof Union)) {
-        throw new Error(`Value is not an F# union type`);
+        throw new Exception(`Value is not an F# union type`);
     }
 }
 export function getCaseTag(x) {

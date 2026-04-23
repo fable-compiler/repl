@@ -6,7 +6,7 @@ import { some } from "./Option.js";
 export function FSharpResult$2_Ok(ResultValue) {
     return new FSharpResult$2(0, [ResultValue]);
 }
-export function FSharpResult$2_Error(ErrorValue) {
+export function FSharpResult$2_Error$(ErrorValue) {
     return new FSharpResult$2(1, [ErrorValue]);
 }
 export class FSharpResult$2 extends Union {
@@ -27,7 +27,7 @@ export function Result_Map(mapping, result) {
         return FSharpResult$2_Ok(mapping(result.fields[0]));
     }
     else {
-        return FSharpResult$2_Error(result.fields[0]);
+        return FSharpResult$2_Error$(result.fields[0]);
     }
 }
 export function Result_MapError(mapping, result) {
@@ -35,7 +35,7 @@ export function Result_MapError(mapping, result) {
         return FSharpResult$2_Ok(result.fields[0]);
     }
     else {
-        return FSharpResult$2_Error(mapping(result.fields[0]));
+        return FSharpResult$2_Error$(mapping(result.fields[0]));
     }
 }
 export function Result_Bind(binder, result) {
@@ -43,7 +43,7 @@ export function Result_Bind(binder, result) {
         return binder(result.fields[0]);
     }
     else {
-        return FSharpResult$2_Error(result.fields[0]);
+        return FSharpResult$2_Error$(result.fields[0]);
     }
 }
 export function Result_IsOk(result) {

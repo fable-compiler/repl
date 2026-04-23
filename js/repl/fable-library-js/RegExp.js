@@ -1,3 +1,4 @@
+import { Exception } from "./Util.js";
 export function create(pattern, options = 0) {
     // Supported RegexOptions
     // * IgnoreCase:  0x0001
@@ -6,7 +7,7 @@ export function create(pattern, options = 0) {
     // * Singleline:  0x0010
     // * ECMAScript:  0x0100 (ignored)
     if ((options & ~(1 ^ 2 ^ 8 ^ 16 ^ 256)) !== 0) {
-        throw new Error("RegexOptions only supports: IgnoreCase, Multiline, Compiled, Singleline and ECMAScript");
+        throw new Exception("RegexOptions only supports: IgnoreCase, Multiline, Compiled, Singleline and ECMAScript");
     }
     // Set always global and unicode flags for compatibility with dotnet, see #2925
     let flags = "gu";
@@ -17,10 +18,19 @@ export function create(pattern, options = 0) {
 }
 // From http://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
 export function escape(str) {
-    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+    // Matches the characters escaped by .NET's Regex.Escape.
+    // Note:
+    //
+    //  .NET also escapes space and # (relevant for IgnorePatternWhitespace mode),
+    //  but JS unicode-mode regex rejects \  and \# as invalid escapes, and we don't
+    //  support IgnorePatternWhitespace, so we omit them.
+    //
+    //  .NET does not escape ] and } but JS unicode-mode regex rejects bare ] and }
+    //  as invalid, so we escape them too for compatibility.
+    return str.replace(/[$()*+.?[\\\^{|}\]]/g, "\\$&");
 }
 export function unescape(str) {
-    return str.replace(/\\([\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|])/g, "$1");
+    return str.replace(/\\([$()*+.?[\\\^{|}\]])/g, "$1");
 }
 export function isMatch(reg, input, startAt = 0) {
     reg.lastIndex = startAt;
@@ -32,10 +42,10 @@ export function match(reg, input, startAt = 0) {
 }
 export function matches(reg, input, startAt = 0) {
     if (input == null) {
-        throw new Error("Input cannot ve null");
+        throw new Exception("Input cannot ve null");
     }
     if (!reg.global) {
-        throw new Error("Non-global RegExp"); // Prevent infinite loop
+        throw new Exception("Non-global RegExp"); // Prevent infinite loop
     }
     reg.lastIndex = startAt;
     const matches = [];

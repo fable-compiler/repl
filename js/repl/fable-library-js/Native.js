@@ -1,8 +1,14 @@
 export function Helpers_allocateArrayFromCons(cons, len) {
-    if ((typeof cons) === "function") {
-        return new cons(len);
+    if (cons == null) {
+        return new Array(len);
     }
     else {
-        return new Array(len);
+        const cons_1 = cons;
+        if ((typeof cons_1) === "function") {
+            return new cons_1(len);
+        }
+        else {
+            return new Array(len);
+        }
     }
 }

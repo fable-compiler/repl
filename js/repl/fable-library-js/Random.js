@@ -1,18 +1,20 @@
+import { ArgumentNullException_$ctor_Z721C83C5, ArgumentOutOfRangeException_$ctor_Z721C83C5 } from "./System.js";
+import { Operators_IsNull } from "./FSharp.Core.js";
 import { class_type } from "./Reflection.js";
-import { fromFloat64, op_Addition, toInt32, toFloat64, compare, fromInt32, toInt64 } from "./BigInt.js";
-import { item, fill, setItem } from "./Array.js";
+import { fromFloat64, op_Addition, toInt32_unchecked, toFloat64, compare, fromInt32, toInt64_unchecked } from "./BigInt.js";
+import { item, setItem } from "./Array.js";
 function Native_random() {
     return Math.random();
 }
-function Native_randomNext(min, max) {
-    if (max < min) {
-        throw new Error("minValue must be less than maxValue");
+function Native_randomNext(minValue, maxValue) {
+    if (maxValue < minValue) {
+        throw ArgumentOutOfRangeException_$ctor_Z721C83C5("minValue must be less than maxValue");
     }
-    return Math.floor(Math.random() * (max - min)) + min;
+    return Math.floor(Math.random() * (maxValue - minValue)) + minValue;
 }
 function Native_randomBytes(buffer) {
-    if (buffer == null) {
-        throw new Error("Buffer cannot be null");
+    if (Operators_IsNull(buffer)) {
+        throw ArgumentNullException_$ctor_Z721C83C5("buffer");
     }
     for (let i = 0; i < buffer.length; i += 6) {
         // Pick random 48-bit number. Fill buffer in 2 24-bit chunks to avoid bitwise truncation.
@@ -32,13 +34,13 @@ export class NonSeeded {
     constructor() {
     }
     Next0() {
-        return Native_randomNext(0, 2147483647);
+        return Native_randomNext(0, 2147483647) | 0;
     }
     Next1(maxValue) {
-        return Native_randomNext(0, maxValue);
+        return Native_randomNext(0, maxValue) | 0;
     }
     Next2(minValue, maxValue) {
-        return Native_randomNext(minValue, maxValue);
+        return Native_randomNext(minValue, maxValue) | 0;
     }
     NextDouble() {
         return Native_random();
@@ -58,7 +60,7 @@ export class Seeded {
         this.MBIG = 2147483647;
         this.inext = 0;
         this.inextp = 0;
-        this.seedArray = fill(new Array(56), 0, 56, 0);
+        this.seedArray = (new Int32Array(56));
         let ii = 0;
         let mj = 0;
         let mk = 0;
@@ -93,17 +95,17 @@ export class Seeded {
     Next1(maxValue) {
         const this$ = this;
         if (maxValue < 0) {
-            throw new Error("maxValue must be positive");
+            throw ArgumentOutOfRangeException_$ctor_Z721C83C5("maxValue must be positive");
         }
         return ~~(Seeded__Sample(this$) * maxValue) | 0;
     }
     Next2(minValue, maxValue) {
         const this$ = this;
         if (minValue > maxValue) {
-            throw new Error("minValue must be less than maxValue");
+            throw ArgumentOutOfRangeException_$ctor_Z721C83C5("minValue must be less than maxValue");
         }
-        const range = toInt64(fromInt32(maxValue - minValue));
-        return ((compare(range, toInt64(fromInt32(2147483647))) <= 0) ? (~~(Seeded__Sample(this$) * toFloat64(range)) + minValue) : ~~toInt32(toInt64(op_Addition(toInt64(fromFloat64(Seeded__GetSampleForLargeRange(this$) * toFloat64(range))), toInt64(fromInt32(minValue)))))) | 0;
+        const range = toInt64_unchecked(fromInt32(maxValue - minValue));
+        return ((compare(range, toInt64_unchecked(fromInt32(2147483647))) <= 0) ? (~~(Seeded__Sample(this$) * toFloat64(range)) + minValue) : ~~toInt32_unchecked(toInt64_unchecked(op_Addition(toInt64_unchecked(fromFloat64(Seeded__GetSampleForLargeRange(this$) * toFloat64(range))), toInt64_unchecked(fromInt32(minValue)))))) | 0;
     }
     NextDouble() {
         const this$ = this;
@@ -111,8 +113,8 @@ export class Seeded {
     }
     NextBytes(buffer) {
         const this$ = this;
-        if (buffer == null) {
-            throw new Error("buffer");
+        if (Operators_IsNull(buffer)) {
+            throw ArgumentNullException_$ctor_Z721C83C5("buffer");
         }
         for (let i = 0; i <= (buffer.length - 1); i++) {
             setItem(buffer, i, (Seeded__InternalSample(this$) % (~~255 + 1)) & 0xFF);

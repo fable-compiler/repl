@@ -1,4 +1,4 @@
-import { equals, isArrayLike } from "./Util.js";
+import { Exception, equals, isArrayLike } from "./Util.js";
 export function count(col) {
     if (typeof col["System.Collections.Generic.ICollection`1.get_Count"] === "function") {
         return col["System.Collections.Generic.ICollection`1.get_Count"](); // collection
@@ -32,7 +32,7 @@ export function isReadOnly(col) {
     }
     else {
         if (isArrayLike(col)) {
-            return ArrayBuffer.isView(col); // true for typed arrays, false for other arrays
+            return false; // array, resize array
         }
         else {
             if (typeof col.size === "number") {
@@ -105,7 +105,7 @@ export function add(col, item) {
                         col.set(item[0], item[1]); // map
                     }
                     else {
-                        throw new Error("An item with the same key has already been added. Key: " + item[0]);
+                        throw new Exception("An item with the same key has already been added. Key: " + item[0]);
                     }
                 }
                 else {

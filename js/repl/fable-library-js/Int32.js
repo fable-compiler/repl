@@ -1,16 +1,16 @@
-export var NumberStyles;
-(function (NumberStyles) {
-    // None = 0x00000000,
-    // AllowLeadingWhite = 0x00000001,
-    // AllowTrailingWhite = 0x00000002,
-    // AllowLeadingSign = 0x00000004,
-    // AllowTrailingSign = 0x00000008,
-    // AllowParentheses = 0x00000010,
-    // AllowDecimalPoint = 0x00000020,
-    // AllowThousands = 0x00000040,
-    // AllowExponent = 0x00000080,
-    // AllowCurrencySymbol = 0x00000100,
-    NumberStyles[NumberStyles["AllowHexSpecifier"] = 512] = "AllowHexSpecifier";
+import { Exception } from "./Util.js";
+export const NumberStyles = {
+    // None: 0x00000000,
+    // AllowLeadingWhite: 0x00000001,
+    // AllowTrailingWhite: 0x00000002,
+    // AllowLeadingSign: 0x00000004,
+    // AllowTrailingSign: 0x00000008,
+    // AllowParentheses: 0x00000010,
+    // AllowDecimalPoint: 0x00000020,
+    // AllowThousands: 0x00000040,
+    // AllowExponent: 0x00000080,
+    // AllowCurrencySymbol: 0x00000100,
+    AllowHexSpecifier: 0x00000200,
     // Integer = AllowLeadingWhite | AllowTrailingWhite | AllowLeadingSign,
     // HexNumber = AllowLeadingWhite | AllowTrailingWhite | AllowHexSpecifier,
     // Number = AllowLeadingWhite | AllowTrailingWhite | AllowLeadingSign |
@@ -21,7 +21,7 @@ export var NumberStyles;
     //            AllowParentheses | AllowDecimalPoint | AllowThousands | AllowCurrencySymbol,
     // Any = AllowLeadingWhite | AllowTrailingWhite | AllowLeadingSign | AllowTrailingSign |
     //       AllowParentheses | AllowDecimalPoint | AllowThousands | AllowCurrencySymbol | AllowExponent,
-})(NumberStyles || (NumberStyles = {}));
+};
 function validResponse(regexMatch, radix) {
     const [/*all*/ , sign, prefix, digits] = regexMatch;
     return {
@@ -36,7 +36,7 @@ function getRange(unsigned, bitsize) {
         case 8: return unsigned ? [0, 255] : [-128, 127];
         case 16: return unsigned ? [0, 65535] : [-32768, 32767];
         case 32: return unsigned ? [0, 4294967295] : [-2147483648, 2147483647];
-        default: throw new Error("Invalid bit size.");
+        default: throw new Exception("Invalid bit size.");
     }
 }
 function getInvalidDigits(radix) {
@@ -46,7 +46,7 @@ function getInvalidDigits(radix) {
         case 10: return /[^0-9]/;
         case 16: return /[^0-9a-fA-F]/;
         default:
-            throw new Error("Invalid Base.");
+            throw new Exception("Invalid Base.");
     }
 }
 export function getPrefix(radix) {
@@ -102,7 +102,7 @@ export function parse(str, style, unsigned, bitsize, radix) {
             }
         }
     }
-    throw new Error(`The input string ${str} was not in a correct format.`);
+    throw new Exception(`The input string ${str} was not in a correct format.`);
 }
 export function tryParse(str, style, unsigned, bitsize, defValue) {
     try {

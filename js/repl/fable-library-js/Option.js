@@ -1,4 +1,4 @@
-import { structuralHash, equals, compare } from "./Util.js";
+import { Exception, structuralHash, equals, compare } from "./Util.js";
 // Using a class here for better compatibility with TS files importing Some
 export class Some {
     constructor(value) {
@@ -31,9 +31,17 @@ export class Some {
         }
     }
 }
+export function nonNullValue(x) {
+    if (x == null) {
+        throw new Exception("Nullable has no value");
+    }
+    else {
+        return x;
+    }
+}
 export function value(x) {
     if (x == null) {
-        throw new Error("Option has no value");
+        throw new Exception("Option has no value");
     }
     else {
         return x instanceof Some ? x.value : x;

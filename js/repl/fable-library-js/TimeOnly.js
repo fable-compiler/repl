@@ -1,9 +1,9 @@
 import { hours, minutes, seconds, milliseconds } from "./TimeSpan.js";
-import { padWithZeros } from "./Util.js";
+import { Exception, DateTimeKind, padWithZeros } from "./Util.js";
 const millisecondsPerDay = 86400000;
 export function create(h = 0, m = 0, s = 0, ms = 0) {
     if (h < 0 || m < 0 || s < 0 || ms < 0)
-        throw new Error("The parameters describe an unrepresentable TimeOnly.");
+        throw new Exception("The parameters describe an unrepresentable TimeOnly.");
     return h * 3600000 + m * 60000 + s * 1000 + ms;
 }
 export function fromTicks(ticks) {
@@ -11,11 +11,11 @@ export function fromTicks(ticks) {
 }
 export function fromTimeSpan(timeSpan) {
     if (timeSpan < 0 || timeSpan >= millisecondsPerDay)
-        throw new Error("The TimeSpan describes an unrepresentable TimeOnly.");
+        throw new Exception("The TimeSpan describes an unrepresentable TimeOnly.");
     return timeSpan;
 }
 export function fromDateTime(d) {
-    return d.kind === 1 /* DateKind.UTC */
+    return d.kind === DateTimeKind.Utc
         ? create(d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds())
         : create(d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds());
 }
@@ -55,7 +55,7 @@ export function isBetween(t, start, end) {
 }
 export function toString(t, format = "t", _provider) {
     if (["r", "R", "o", "O", "t", "T"].indexOf(format) === -1) {
-        throw new Error("Custom formats are not supported");
+        throw new Exception("Custom formats are not supported");
     }
     const base = `${padWithZeros(hours(t), 2)}:${padWithZeros(minutes(t), 2)}`;
     if (format === "t")
@@ -106,7 +106,7 @@ export function parse(str) {
         }
         return create(h, m, s, Math.trunc(ms));
     }
-    throw new Error(`String '${str}' was not recognized as a valid TimeOnly.`);
+    throw new Exception(`String '${str}' was not recognized as a valid TimeOnly.`);
 }
 export function tryParse(v, defValue) {
     try {

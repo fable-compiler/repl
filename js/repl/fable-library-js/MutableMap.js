@@ -1,10 +1,12 @@
 import { disposeSafe, defaultOf, equals, toIterator, getEnumerator } from "./Util.js";
 import { iterate, map, delay, toArray, iterateIndexed, concat } from "./Seq.js";
 import { value as value_1 } from "./Option.js";
-import { setItem } from "./Array.js";
+import { item as item_1, setItem } from "./Array.js";
 import { FSharpRef } from "./Types.js";
 import { class_type } from "./Reflection.js";
 import { getItemFromDict, tryGetValue } from "./MapUtil.js";
+import { KeyNotFoundException_$ctor_Z721C83C5 } from "./System.Collections.Generic.js";
+import { ArgumentException_$ctor_Z721C83C5 } from "./System.js";
 import { format } from "./String.js";
 export class Dictionary {
     constructor(pairs, comparer) {
@@ -53,11 +55,11 @@ export class Dictionary {
     "System.Collections.Generic.ICollection`1.Contains2B595"(item) {
         const this$ = this;
         const matchValue = Dictionary__TryFind_2B595(this$, item[0]);
-        let matchResult, p_1;
+        let matchResult = undefined, pair_1 = undefined;
         if (matchValue != null) {
             if (equals(value_1(matchValue)[1], item[1])) {
                 matchResult = 0;
-                p_1 = value_1(matchValue);
+                pair_1 = value_1(matchValue);
             }
             else {
                 matchResult = 1;
@@ -89,14 +91,24 @@ export class Dictionary {
     "System.Collections.Generic.ICollection`1.Remove2B595"(item) {
         const this$ = this;
         const matchValue = Dictionary__TryFind_2B595(this$, item[0]);
+        let matchResult = undefined, pair_1 = undefined;
         if (matchValue != null) {
             if (equals(value_1(matchValue)[1], item[1])) {
-                Dictionary__Remove_2B595(this$, item[0]);
+                matchResult = 0;
+                pair_1 = value_1(matchValue);
             }
-            return true;
+            else {
+                matchResult = 1;
+            }
         }
         else {
-            return false;
+            matchResult = 1;
+        }
+        switch (matchResult) {
+            case 0:
+                return Dictionary__Remove_2B595(this$, item[0]);
+            default:
+                return false;
         }
     }
     "System.Collections.Generic.IDictionary`2.Add5BDDA1"(key, value) {
@@ -205,7 +217,7 @@ function Dictionary__TryFindIndex_2B595(this$, k) {
 }
 export function Dictionary__TryFind_2B595(this$, k) {
     const matchValue = Dictionary__TryFindIndex_2B595(this$, k);
-    let matchResult;
+    let matchResult = undefined;
     if (matchValue[0]) {
         if (matchValue[2] > -1) {
             matchResult = 0;
@@ -219,7 +231,7 @@ export function Dictionary__TryFind_2B595(this$, k) {
     }
     switch (matchResult) {
         case 0:
-            return getItemFromDict(this$.hashMap, matchValue[1])[matchValue[2]];
+            return item_1(matchValue[2], getItemFromDict(this$.hashMap, matchValue[1]));
         default:
             return undefined;
     }
@@ -250,14 +262,14 @@ export function Dictionary__get_Item_2B595(this$, k) {
         return value_1(matchValue)[1];
     }
     else {
-        throw new Error("The item was not found in collection");
+        throw KeyNotFoundException_$ctor_Z721C83C5("The item was not found in collection");
     }
 }
 export function Dictionary__set_Item_5BDDA1(this$, k, v) {
     const matchValue = Dictionary__TryFindIndex_2B595(this$, k);
     if (matchValue[0]) {
         if (matchValue[2] > -1) {
-            getItemFromDict(this$.hashMap, matchValue[1])[matchValue[2]] = [k, v];
+            setItem(getItemFromDict(this$.hashMap, matchValue[1]), matchValue[2], [k, v]);
         }
         else {
             const value = void (getItemFromDict(this$.hashMap, matchValue[1]).push([k, v]));
@@ -271,7 +283,7 @@ export function Dictionary__Add_5BDDA1(this$, k, v) {
     const matchValue = Dictionary__TryFindIndex_2B595(this$, k);
     if (matchValue[0]) {
         if (matchValue[2] > -1) {
-            throw new Error(format("An item with the same key has already been added. Key: {0}", k));
+            throw ArgumentException_$ctor_Z721C83C5(format("An item with the same key has already been added. Key: {0}", k));
         }
         else {
             const value = void (getItemFromDict(this$.hashMap, matchValue[1]).push([k, v]));
@@ -283,7 +295,7 @@ export function Dictionary__Add_5BDDA1(this$, k, v) {
 }
 export function Dictionary__ContainsKey_2B595(this$, k) {
     const matchValue = Dictionary__TryFindIndex_2B595(this$, k);
-    let matchResult;
+    let matchResult = undefined;
     if (matchValue[0]) {
         if (matchValue[2] > -1) {
             matchResult = 0;
@@ -304,7 +316,7 @@ export function Dictionary__ContainsKey_2B595(this$, k) {
 }
 export function Dictionary__Remove_2B595(this$, k) {
     const matchValue = Dictionary__TryFindIndex_2B595(this$, k);
-    let matchResult;
+    let matchResult = undefined;
     if (matchValue[0]) {
         if (matchValue[2] > -1) {
             matchResult = 0;

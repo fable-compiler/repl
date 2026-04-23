@@ -1,4 +1,5 @@
 import * as Unicode from "./Unicode.13.0.0.js";
+import { Exception } from "./Util.js";
 function getCategoryFunc() {
     // unpack Unicode codepoint ranges (delta encoded) and general categories
     const offset = 35; // offsets unprintable characters
@@ -30,49 +31,81 @@ function getCategoryFunc() {
         return categories[lo];
     };
 }
-const isControlMask = 1 << 14 /* UnicodeCategory.Control */;
-const isDigitMask = 1 << 8 /* UnicodeCategory.DecimalDigitNumber */;
+export const UnicodeCategory = {
+    UppercaseLetter: 0,
+    LowercaseLetter: 1,
+    TitlecaseLetter: 2,
+    ModifierLetter: 3,
+    OtherLetter: 4,
+    NonSpacingMark: 5,
+    SpacingCombiningMark: 6,
+    EnclosingMark: 7,
+    DecimalDigitNumber: 8,
+    LetterNumber: 9,
+    OtherNumber: 10,
+    SpaceSeparator: 11,
+    LineSeparator: 12,
+    ParagraphSeparator: 13,
+    Control: 14,
+    Format: 15,
+    Surrogate: 16,
+    PrivateUse: 17,
+    ConnectorPunctuation: 18,
+    DashPunctuation: 19,
+    OpenPunctuation: 20,
+    ClosePunctuation: 21,
+    InitialQuotePunctuation: 22,
+    FinalQuotePunctuation: 23,
+    OtherPunctuation: 24,
+    MathSymbol: 25,
+    CurrencySymbol: 26,
+    ModifierSymbol: 27,
+    OtherSymbol: 28,
+    OtherNotAssigned: 29,
+};
+const isControlMask = 1 << UnicodeCategory.Control;
+const isDigitMask = 1 << UnicodeCategory.DecimalDigitNumber;
 const isLetterMask = 0
-    | 1 << 0 /* UnicodeCategory.UppercaseLetter */
-    | 1 << 1 /* UnicodeCategory.LowercaseLetter */
-    | 1 << 2 /* UnicodeCategory.TitlecaseLetter */
-    | 1 << 3 /* UnicodeCategory.ModifierLetter */
-    | 1 << 4 /* UnicodeCategory.OtherLetter */;
+    | 1 << UnicodeCategory.UppercaseLetter
+    | 1 << UnicodeCategory.LowercaseLetter
+    | 1 << UnicodeCategory.TitlecaseLetter
+    | 1 << UnicodeCategory.ModifierLetter
+    | 1 << UnicodeCategory.OtherLetter;
 const isLetterOrDigitMask = isLetterMask | isDigitMask;
-const isUpperMask = 1 << 0 /* UnicodeCategory.UppercaseLetter */;
-const isLowerMask = 1 << 1 /* UnicodeCategory.LowercaseLetter */;
+const isUpperMask = 1 << UnicodeCategory.UppercaseLetter;
+const isLowerMask = 1 << UnicodeCategory.LowercaseLetter;
 const isNumberMask = 0
-    | 1 << 8 /* UnicodeCategory.DecimalDigitNumber */
-    | 1 << 9 /* UnicodeCategory.LetterNumber */
-    | 1 << 10 /* UnicodeCategory.OtherNumber */;
+    | 1 << UnicodeCategory.DecimalDigitNumber
+    | 1 << UnicodeCategory.LetterNumber
+    | 1 << UnicodeCategory.OtherNumber;
 const isPunctuationMask = 0
-    | 1 << 18 /* UnicodeCategory.ConnectorPunctuation */
-    | 1 << 19 /* UnicodeCategory.DashPunctuation */
-    | 1 << 20 /* UnicodeCategory.OpenPunctuation */
-    | 1 << 21 /* UnicodeCategory.ClosePunctuation */
-    | 1 << 22 /* UnicodeCategory.InitialQuotePunctuation */
-    | 1 << 23 /* UnicodeCategory.FinalQuotePunctuation */
-    | 1 << 24 /* UnicodeCategory.OtherPunctuation */;
+    | 1 << UnicodeCategory.ConnectorPunctuation
+    | 1 << UnicodeCategory.DashPunctuation
+    | 1 << UnicodeCategory.OpenPunctuation
+    | 1 << UnicodeCategory.ClosePunctuation
+    | 1 << UnicodeCategory.InitialQuotePunctuation
+    | 1 << UnicodeCategory.FinalQuotePunctuation
+    | 1 << UnicodeCategory.OtherPunctuation;
 const isSeparatorMask = 0
-    | 1 << 11 /* UnicodeCategory.SpaceSeparator */
-    | 1 << 12 /* UnicodeCategory.LineSeparator */
-    | 1 << 13 /* UnicodeCategory.ParagraphSeparator */;
+    | 1 << UnicodeCategory.SpaceSeparator
+    | 1 << UnicodeCategory.LineSeparator
+    | 1 << UnicodeCategory.ParagraphSeparator;
 const isSymbolMask = 0
-    | 1 << 25 /* UnicodeCategory.MathSymbol */
-    | 1 << 26 /* UnicodeCategory.CurrencySymbol */
-    | 1 << 27 /* UnicodeCategory.ModifierSymbol */
-    | 1 << 28 /* UnicodeCategory.OtherSymbol */;
+    | 1 << UnicodeCategory.MathSymbol
+    | 1 << UnicodeCategory.CurrencySymbol
+    | 1 << UnicodeCategory.ModifierSymbol
+    | 1 << UnicodeCategory.OtherSymbol;
 const isWhiteSpaceMask = 0
-    | 1 << 11 /* UnicodeCategory.SpaceSeparator */
-    | 1 << 12 /* UnicodeCategory.LineSeparator */
-    | 1 << 13 /* UnicodeCategory.ParagraphSeparator */;
+    | 1 << UnicodeCategory.SpaceSeparator
+    | 1 << UnicodeCategory.LineSeparator
+    | 1 << UnicodeCategory.ParagraphSeparator;
 const unicodeCategoryFunc = getCategoryFunc();
 function charCodeAt(s, index) {
     if (index >= 0 && index < s.length) {
         return s.charCodeAt(index);
     }
     else {
-        throw new Error("Index out of range.");
+        throw new Exception("Index out of range.");
     }
 }
 export const getUnicodeCategory = (s) => getUnicodeCategory2(s, 0);
@@ -164,6 +197,6 @@ export function parse(input) {
         return input[0];
     }
     else {
-        throw new Error("String must be exactly one character long.");
+        throw new Exception("String must be exactly one character long.");
     }
 }

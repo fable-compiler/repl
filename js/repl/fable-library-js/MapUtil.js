@@ -1,4 +1,4 @@
-import { equals } from "./Util.js";
+import { Exception, equals } from "./Util.js";
 import { Union } from "./Types.js";
 const CaseRules = {
     None: 0,
@@ -6,6 +6,7 @@ const CaseRules = {
     SnakeCase: 2,
     SnakeCaseAllCaps: 3,
     KebabCase: 4,
+    LowerAll: 5,
 };
 function dashify(str, separator) {
     return str.replace(/[a-z]?[A-Z]/g, (m) => m.length === 1
@@ -22,6 +23,8 @@ function changeCase(str, caseRule) {
             return dashify(str, "_").toUpperCase();
         case CaseRules.KebabCase:
             return dashify(str, "-");
+        case CaseRules.LowerAll:
+            return str.toLowerCase();
         case CaseRules.None:
         default:
             return str;
@@ -31,7 +34,7 @@ export function keyValueList(fields, caseRule = CaseRules.None) {
     const obj = {};
     const definedCaseRule = caseRule;
     function fail(kvPair) {
-        throw new Error("Cannot infer key and value of " + String(kvPair));
+        throw new Exception("Cannot infer key and value of " + String(kvPair));
     }
     function assign(key, caseRule, value) {
         key = changeCase(key, caseRule);
@@ -105,7 +108,7 @@ export function tryAddToDict(dict, k, v) {
 }
 export function addToDict(dict, k, v) {
     if (dict.has(k)) {
-        throw new Error("An item with the same key has already been added. Key: " + k);
+        throw new Exception("An item with the same key has already been added. Key: " + k);
     }
     dict.set(k, v);
 }
@@ -114,7 +117,7 @@ export function getItemFromDict(map, key) {
         return map.get(key);
     }
     else {
-        throw new Error(`The given key '${key}' was not present in the dictionary.`);
+        throw new Exception(`The given key '${key}' was not present in the dictionary.`);
     }
 }
 export function getItemFromDictOrCreate(map, key, createValue) {

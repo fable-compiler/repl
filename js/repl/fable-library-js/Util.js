@@ -1,4 +1,29 @@
+// Don't change, this corresponds to DateTimeKind.Kind enum values in .NET
+export const DateTimeKind = {
+    Unspecified: 0,
+    Utc: 1,
+    Local: 2,
+};
+// Exception is intentionally not derived from Error, for performance reasons (see #2160)
+export class Exception {
+    constructor(msg) {
+        this.message = msg ?? "";
+    }
+}
+export function isException(x) {
+    return x instanceof Exception || x instanceof Error;
+}
+export function isPromise(x) {
+    return x instanceof Promise;
+}
+export function ensureErrorOrException(e) {
+    // Exceptionally admitting promises as errors for compatibility with React.suspense (see #3298)
+    return (isException(e) || isPromise(e)) ? e : new Exception(String(e));
+}
 export function isArrayLike(x) {
+    return Array.isArray(x) || ArrayBuffer.isView(x);
+}
+export function isMutableArray(x) {
     return Array.isArray(x) || ArrayBuffer.isView(x);
 }
 export function isIterable(x) {
@@ -34,9 +59,7 @@ export function sameConstructor(x, y) {
     return Object.getPrototypeOf(x)?.constructor === Object.getPrototypeOf(y)?.constructor;
 }
 export class Enumerable {
-    constructor(en) {
-        this.en = en;
-    }
+    constructor(en) { this.en = en; }
     GetEnumerator() { return this.en; }
     "System.Collections.IEnumerable.GetEnumerator"() { return this.en; }
     [Symbol.iterator]() {
@@ -50,8 +73,8 @@ export class Enumerable {
 }
 export class Enumerator {
     constructor(iter) {
-        this.iter = iter;
         this.current = defaultOf();
+        this.iter = iter;
     }
     ["System.Collections.Generic.IEnumerator`1.get_Current"]() {
         return this.current;
@@ -65,7 +88,7 @@ export class Enumerator {
         return !cur.done;
     }
     ["System.Collections.IEnumerator.Reset"]() {
-        throw new Error("JS iterators cannot be reset");
+        throw new Exception("JS iterators cannot be reset");
     }
     Dispose() {
         return;
@@ -124,7 +147,7 @@ export function comparerFromEqualityComparer(comparer) {
 }
 export function assertEqual(actual, expected, msg) {
     if (!equals(actual, expected)) {
-        throw Object.assign(new Error(msg || `Expected: ${expected} - Actual: ${actual}`), {
+        throw Object.assign(new Exception(msg || `Expected: ${expected} - Actual: ${actual}`), {
             actual,
             expected,
         });
@@ -132,7 +155,7 @@ export function assertEqual(actual, expected, msg) {
 }
 export function assertNotEqual(actual, expected, msg) {
     if (equals(actual, expected)) {
-        throw Object.assign(new Error(msg || `Expected: ${expected} - Actual: ${actual}`), {
+        throw Object.assign(new Exception(msg || `Expected: ${expected} - Actual: ${actual}`), {
             actual,
             expected,
         });
@@ -167,7 +190,7 @@ export function dateOffset(date) {
     const date1 = date;
     return typeof date1.offset === "number"
         ? date1.offset
-        : (date.kind === 1 /* DateKind.UTC */
+        : (date.kind === DateTimeKind.Utc
             ? 0 : date.getTimezoneOffset() * -60000);
 }
 export function int16ToString(i, radix) {
@@ -333,7 +356,7 @@ function equalObjects(x, y) {
     }
     return true;
 }
-export function physicalEquality(x, y) {
+export function physicalEquals(x, y) {
     return x === y;
 }
 export function equals(x, y) {

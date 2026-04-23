@@ -1,15 +1,31 @@
-import { disposeSafe, defaultOf, toIterator, getEnumerator, structuralHash, equals as equals_1, compare } from "./Util.js";
+import { disposeSafe, defaultOf, toIterator, getEnumerator, structuralHash, equals as equals_1, compare, Exception } from "./Util.js";
 import { class_type } from "./Reflection.js";
+import { SR_Arg_KeyNotFound } from "./Global.js";
 import { toArray, empty, singleton, append, enumerateWhile, delay } from "./Seq.js";
 import { setItem, initialize, copyTo, fill, item as item_1 } from "./Array.js";
 import { max } from "./Double.js";
+import { ArgumentOutOfRangeException_$ctor_Z721C83C5 } from "./System.js";
+export class KeyNotFoundException extends Exception {
+    constructor(message) {
+        super(message);
+    }
+}
+export function KeyNotFoundException_$reflection() {
+    return class_type("System.Collections.Generic.KeyNotFoundException", undefined, KeyNotFoundException, class_type("System.Exception"));
+}
+export function KeyNotFoundException_$ctor_Z721C83C5(message) {
+    return new KeyNotFoundException(message);
+}
+export function KeyNotFoundException_$ctor() {
+    return KeyNotFoundException_$ctor_Z721C83C5(SR_Arg_KeyNotFound);
+}
 export class Comparer$1 {
     constructor(comparison) {
         this.comparison = comparison;
     }
     Compare(x, y) {
         const _ = this;
-        return _.comparison(x, y) | 0;
+        return ((x == null) ? ((y == null) ? 0 : -1) : ((y == null) ? 1 : _.comparison(x, y))) | 0;
     }
 }
 export function Comparer$1_$reflection(gen0) {
@@ -19,13 +35,13 @@ export function Comparer$1_$ctor_47C913C(comparison) {
     return new Comparer$1(comparison);
 }
 export function Comparer$1_get_Default() {
-    return Comparer$1_$ctor_47C913C(compare);
+    return Comparer$1_$ctor_47C913C((e, e_1) => (compare(e, e_1) | 0));
 }
 export function Comparer$1_Create_47C913C(comparison) {
     return Comparer$1_$ctor_47C913C(comparison);
 }
 export function Comparer$1__Compare_5BDDA0(_, x, y) {
-    return _.comparison(x, y);
+    return _.comparison(x, y) | 0;
 }
 export class EqualityComparer$1 {
     constructor(equals, getHashCode) {
@@ -34,7 +50,7 @@ export class EqualityComparer$1 {
     }
     Equals(x, y) {
         const _ = this;
-        return _.equals(x, y);
+        return (x == null) ? (y == null) : ((y == null) ? false : _.equals(x, y));
     }
     GetHashCode(x) {
         const _ = this;
@@ -48,7 +64,7 @@ export function EqualityComparer$1_$ctor_Z6EE254AB(equals, getHashCode) {
     return new EqualityComparer$1(equals, getHashCode);
 }
 export function EqualityComparer$1_get_Default() {
-    return EqualityComparer$1_$ctor_Z6EE254AB(equals_1, structuralHash);
+    return EqualityComparer$1_$ctor_Z6EE254AB(equals_1, (obj) => (structuralHash(obj) | 0));
 }
 export function EqualityComparer$1_Create_Z6EE254AB(equals, getHashCode) {
     return EqualityComparer$1_$ctor_Z6EE254AB(equals, getHashCode);
@@ -57,7 +73,7 @@ export function EqualityComparer$1__Equals_5BDDA0(_, x, y) {
     return _.equals(x, y);
 }
 export function EqualityComparer$1__GetHashCode_2B595(_, x) {
-    return _.getHashCode(x);
+    return _.getHashCode(x) | 0;
 }
 export class Stack$1 {
     constructor(initialContents, initialCount) {
@@ -107,7 +123,7 @@ export function Stack$1__Ensure_Z524259A4(_, newSize) {
     }
 }
 export function Stack$1__get_Count(_) {
-    return _.count;
+    return _.count | 0;
 }
 export function Stack$1__Pop(_) {
     _.count = ((_.count - 1) | 0);
@@ -191,7 +207,7 @@ function Queue$1_$ctor_Z3B4C077E(initialContents, initialCount) {
 }
 export function Queue$1_$ctor_Z524259A4(initialCapacity) {
     if (initialCapacity < 0) {
-        throw new Error("capacity is less than 0");
+        throw ArgumentOutOfRangeException_$ctor_Z721C83C5("capacity is less than 0");
     }
     return Queue$1_$ctor_Z3B4C077E(fill(new Array(initialCapacity), 0, initialCapacity, null), 0);
 }
@@ -203,7 +219,7 @@ export function Queue$1_$ctor_BB573A(xs) {
     return Queue$1_$ctor_Z3B4C077E(arr, arr.length);
 }
 export function Queue$1__get_Count(_) {
-    return _.count;
+    return _.count | 0;
 }
 export function Queue$1__Enqueue_2B595(_, value) {
     if (_.count === Queue$1__size(_)) {
@@ -215,7 +231,7 @@ export function Queue$1__Enqueue_2B595(_, value) {
 }
 export function Queue$1__Dequeue(_) {
     if (_.count === 0) {
-        throw new Error("Queue is empty");
+        throw new Exception("Queue is empty");
     }
     const value = item_1(_.head, _.contents);
     _.head = (((_.head + 1) % Queue$1__size(_)) | 0);
@@ -224,7 +240,7 @@ export function Queue$1__Dequeue(_) {
 }
 export function Queue$1__Peek(_) {
     if (_.count === 0) {
-        throw new Error("Queue is empty");
+        throw new Exception("Queue is empty");
     }
     return item_1(_.head, _.contents);
 }
@@ -288,10 +304,10 @@ export function Queue$1__CopyTo_Z3B4C077E(_, target, start) {
     }
 }
 export function Queue$1__size(this$) {
-    return this$.contents.length;
+    return this$.contents.length | 0;
 }
 export function Queue$1__toIndex_Z524259A4(this$, i) {
-    return (this$.head + i) % Queue$1__size(this$);
+    return ((this$.head + i) % Queue$1__size(this$)) | 0;
 }
 export function Queue$1__ensure_Z524259A4(this$, requiredSize) {
     const newBuffer = fill(new Array(requiredSize), 0, requiredSize, null);

@@ -1,6 +1,7 @@
 import { defaultCancellationToken } from "./Async.js";
 import { fromContinuations } from "./Async.js";
 import { startImmediate } from "./Async.js";
+import { Exception } from "./Util.js";
 class QueueCell {
     constructor(message) {
         this.value = message;
@@ -54,7 +55,7 @@ export function startInstance($this) {
 export function receive($this) {
     return fromContinuations((conts) => {
         if ($this.continuation) {
-            throw new Error("Receive can only be called once!");
+            throw new Exception("Receive can only be called once!");
         }
         $this.continuation = conts[0];
         __processEvents($this);

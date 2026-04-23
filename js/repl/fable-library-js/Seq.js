@@ -1,11 +1,15 @@
-import { clear, defaultOf, equals, isDisposable, isArrayLike, toIterator, disposeSafe, getEnumerator } from "./Util.js";
+import { InvalidOperationException_$ctor_Z721C83C5, NotSupportedException_$ctor_Z721C83C5 } from "./System.js";
+import { clear, Exception, isDisposable, isArrayLike, toIterator, disposeSafe, getEnumerator } from "./Util.js";
 import { toString } from "./Types.js";
 import { class_type } from "./Reflection.js";
 import { some, value as value_1 } from "./Option.js";
-import { Operators_Lock, Operators_NullArg } from "./FSharp.Core.js";
-import { chunkBySize as chunkBySize_1, permute as permute_1, transpose as transpose_1, map as map_1, windowed as windowed_1, splitInto as splitInto_1, pairwise as pairwise_1, scanBack as scanBack_1, reverse as reverse_1, mapFoldBack as mapFoldBack_1, mapFold as mapFold_1, tryItem as tryItem_1, tryHead as tryHead_1, foldBack2 as foldBack2_1, foldBack as foldBack_1, tryFindIndexBack as tryFindIndexBack_1, tryFindBack as tryFindBack_1, singleton as singleton_1 } from "./Array.js";
+import { KeyNotFoundException_$ctor_Z721C83C5 } from "./System.Collections.Generic.js";
+import { Operators_Lock, Operators_NullArgCheck } from "./FSharp.Core.js";
+import { randomSampleBy as randomSampleBy_1, randomChoicesBy as randomChoicesBy_1, randomChoice as randomChoice_1, randomChoiceWith as randomChoiceWith_1, randomChoiceBy as randomChoiceBy_1, randomShuffleInPlaceBy, chunkBySize as chunkBySize_1, permute as permute_1, transpose as transpose_1, map as map_1, windowed as windowed_1, splitInto as splitInto_1, pairwise as pairwise_1, scanBack as scanBack_1, reverse as reverse_1, mapFoldBack as mapFoldBack_1, mapFold as mapFold_1, tryItem as tryItem_1, tryHead as tryHead_1, item as item_1, foldBack as foldBack_1, tryFindIndexBack as tryFindIndexBack_1, tryFindBack as tryFindBack_1, singleton as singleton_1 } from "./Array.js";
 import { length as length_1, tryItem as tryItem_2, isEmpty as isEmpty_1, tryHead as tryHead_2, ofSeq as ofSeq_1, ofArray as ofArray_1, toArray as toArray_1, FSharpList } from "./List.js";
+import { min as min_1 } from "./Double.js";
 import { SR_indexOutOfBounds } from "./Global.js";
+import { nonSeeded } from "./Random.js";
 export const SR_enumerationAlreadyFinished = "Enumeration already finished.";
 export const SR_enumerationNotStarted = "Enumeration has not started. Call MoveNext.";
 export const SR_inputSequenceEmpty = "The input sequence was empty.";
@@ -14,13 +18,13 @@ export const SR_keyNotFoundAlt = "An index satisfying the predicate was not foun
 export const SR_notEnoughElements = "The input sequence has an insufficient number of elements.";
 export const SR_resetNotSupported = "Reset is not supported on this enumerator.";
 export function Enumerator_noReset() {
-    throw new Error(SR_resetNotSupported);
+    throw NotSupportedException_$ctor_Z721C83C5(SR_resetNotSupported);
 }
 export function Enumerator_notStarted() {
-    throw new Error(SR_enumerationNotStarted);
+    throw InvalidOperationException_$ctor_Z721C83C5(SR_enumerationNotStarted);
 }
 export function Enumerator_alreadyFinished() {
-    throw new Error(SR_enumerationAlreadyFinished);
+    throw InvalidOperationException_$ctor_Z721C83C5(SR_enumerationAlreadyFinished);
 }
 export class Enumerator_Seq {
     constructor(f) {
@@ -144,7 +148,6 @@ export function Enumerator_concat(sources) {
             return Enumerator_alreadyFinished();
         }
     }, () => {
-        let copyOfStruct;
         if (!started) {
             started = true;
         }
@@ -154,6 +157,7 @@ export function Enumerator_concat(sources) {
         else {
             let res = undefined;
             while (res == null) {
+                let copyOfStruct = undefined;
                 const outerOpt_1 = outerOpt;
                 const innerOpt_1 = innerOpt;
                 if (outerOpt_1 != null) {
@@ -294,19 +298,13 @@ export function Enumerator_unfold(f, state) {
     });
 }
 export function indexNotFound() {
-    throw new Error(SR_keyNotFoundAlt);
-}
-export function checkNonNull(argName, arg) {
-    if (arg == null) {
-        Operators_NullArg(argName);
-    }
+    throw KeyNotFoundException_$ctor_Z721C83C5(SR_keyNotFoundAlt);
 }
 export function mkSeq(f) {
     return Enumerator_Seq_$ctor_673A07F2(f);
 }
 export function ofSeq(xs) {
-    checkNonNull("source", xs);
-    return getEnumerator(xs);
+    return getEnumerator(Operators_NullArgCheck("source", xs));
 }
 export function delay(generator) {
     return mkSeq(() => getEnumerator(generator()));
@@ -365,10 +363,7 @@ export function append(xs, ys) {
     return concat([xs, ys]);
 }
 export function cast(xs) {
-    return mkSeq(() => {
-        checkNonNull("source", xs);
-        return Enumerator_cast(getEnumerator(xs));
-    });
+    return mkSeq(() => Enumerator_cast(getEnumerator(Operators_NullArgCheck("source", xs))));
 }
 export function choose(chooser, xs) {
     return generate(() => ofSeq(xs), (e) => {
@@ -442,7 +437,7 @@ export function enumerateThenFinally(source, compensation) {
 }
 export function enumerateUsing(resource, source) {
     const compensation = () => {
-        if (equals(resource, defaultOf())) {
+        if (resource == null) {
         }
         else {
             let copyOfStruct = resource;
@@ -510,14 +505,14 @@ export function exactlyOne(xs) {
         if (e["System.Collections.IEnumerator.MoveNext"]()) {
             const v = e["System.Collections.Generic.IEnumerator`1.get_Current"]();
             if (e["System.Collections.IEnumerator.MoveNext"]()) {
-                throw new Error((SR_inputSequenceTooLong + "\\nParameter name: ") + "source");
+                throw new Exception((SR_inputSequenceTooLong + "\\nParameter name: ") + "source");
             }
             else {
                 return v;
             }
         }
         else {
-            throw new Error((SR_inputSequenceEmpty + "\\nParameter name: ") + "source");
+            throw new Exception((SR_inputSequenceEmpty + "\\nParameter name: ") + "source");
         }
     }
     finally {
@@ -662,7 +657,14 @@ export function fold2(folder, state, xs, ys) {
     }
 }
 export function foldBack2(folder, xs, ys, state) {
-    return foldBack2_1(folder, toArray(xs), toArray(ys), state);
+    const xs_1 = toArray(xs);
+    const ys_1 = toArray(ys);
+    const len = min_1(xs_1.length, ys_1.length) | 0;
+    let acc = state;
+    for (let i = len - 1; i >= 0; i--) {
+        acc = folder(item_1(i, xs_1), item_1(i, ys_1), acc);
+    }
+    return acc;
 }
 export function forAll(predicate, xs) {
     return !exists((x) => !predicate(x), xs);
@@ -690,7 +692,7 @@ export function tryHead(xs) {
 export function head(xs) {
     const matchValue = tryHead(xs);
     if (matchValue == null) {
-        throw new Error((SR_inputSequenceEmpty + "\\nParameter name: ") + "source");
+        throw new Exception((SR_inputSequenceEmpty + "\\nParameter name: ") + "source");
     }
     else {
         return value_1(matchValue);
@@ -756,7 +758,7 @@ export function tryItem(index, xs) {
 export function item(index, xs) {
     const matchValue = tryItem(index, xs);
     if (matchValue == null) {
-        throw new Error((SR_notEnoughElements + "\\nParameter name: ") + "index");
+        throw new Exception((SR_notEnoughElements + "\\nParameter name: ") + "index");
     }
     else {
         return value_1(matchValue);
@@ -809,7 +811,7 @@ export function tryLast(xs) {
 export function last(xs) {
     const matchValue = tryLast(xs);
     if (matchValue == null) {
-        throw new Error((SR_notEnoughElements + "\\nParameter name: ") + "source");
+        throw new Exception((SR_notEnoughElements + "\\nParameter name: ") + "source");
     }
     else {
         return value_1(matchValue);
@@ -899,8 +901,7 @@ export function map3(mapping, xs, ys, zs) {
     });
 }
 export function readOnly(xs) {
-    checkNonNull("source", xs);
-    return map((x) => x, xs);
+    return map((x) => x, Operators_NullArgCheck("source", xs));
 }
 export class CachedSeq$1 {
     constructor(cleanup, res) {
@@ -933,13 +934,13 @@ export function CachedSeq$1__Clear(_) {
     _.cleanup();
 }
 export function cache(source) {
-    checkNonNull("source", source);
+    const source_1 = Operators_NullArgCheck("source", source);
     const prefix = [];
     let enumeratorR = undefined;
     return CachedSeq$1_$ctor_Z7A8347D4(() => {
         Operators_Lock(prefix, () => {
             clear(prefix);
-            let matchResult, e;
+            let matchResult = undefined, e = undefined;
             if (enumeratorR != null) {
                 if (value_1(enumeratorR) != null) {
                     matchResult = 0;
@@ -962,7 +963,7 @@ export function cache(source) {
         });
     }, unfold((i_1) => Operators_Lock(prefix, () => {
         if (i_1 < prefix.length) {
-            return [prefix[i_1], i_1 + 1];
+            return [item_1(i_1, prefix), i_1 + 1];
         }
         else {
             if (i_1 >= prefix.length) {
@@ -971,7 +972,7 @@ export function cache(source) {
                     optEnumerator_2 = value_1(enumeratorR);
                 }
                 else {
-                    const optEnumerator = getEnumerator(source);
+                    const optEnumerator = getEnumerator(source_1);
                     enumeratorR = some(optEnumerator);
                     optEnumerator_2 = optEnumerator;
                 }
@@ -989,7 +990,7 @@ export function cache(source) {
                 }
             }
             if (i_1 < prefix.length) {
-                return [prefix[i_1], i_1 + 1];
+                return [item_1(i_1, prefix), i_1 + 1];
             }
             else {
                 return undefined;
@@ -1051,7 +1052,7 @@ export function reduce(folder, xs) {
             return loop(e["System.Collections.Generic.IEnumerator`1.get_Current"]());
         }
         else {
-            throw new Error(SR_inputSequenceEmpty);
+            throw new Exception(SR_inputSequenceEmpty);
         }
     }
     finally {
@@ -1064,7 +1065,7 @@ export function reduceBack(folder, xs) {
         return arr.reduceRight(folder);
     }
     else {
-        throw new Error(SR_inputSequenceEmpty);
+        throw new Exception(SR_inputSequenceEmpty);
     }
 }
 export function replicate(n, x) {
@@ -1091,7 +1092,7 @@ export function skip(count, source) {
         try {
             for (let _ = 1; _ <= count; _++) {
                 if (!e["System.Collections.IEnumerator.MoveNext"]()) {
-                    throw new Error((SR_notEnoughElements + "\\nParameter name: ") + "source");
+                    throw new Exception((SR_notEnoughElements + "\\nParameter name: ") + "source");
                 }
             }
             return Enumerator_enumerateThenFinally(() => {
@@ -1124,7 +1125,7 @@ export function take(count, xs) {
                 return some(e["System.Collections.Generic.IEnumerator`1.get_Current"]());
             }
             else {
-                throw new Error((SR_notEnoughElements + "\\nParameter name: ") + "source");
+                throw new Exception((SR_notEnoughElements + "\\nParameter name: ") + "source");
             }
         }
         else {
@@ -1176,16 +1177,16 @@ export function sortWith(comparer, xs) {
     });
 }
 export function sort(xs, comparer) {
-    return sortWith((x, y) => comparer.Compare(x, y), xs);
+    return sortWith((x, y) => (comparer.Compare(x, y) | 0), xs);
 }
 export function sortBy(projection, xs, comparer) {
-    return sortWith((x, y) => comparer.Compare(projection(x), projection(y)), xs);
+    return sortWith((x, y) => (comparer.Compare(projection(x), projection(y)) | 0), xs);
 }
 export function sortDescending(xs, comparer) {
-    return sortWith((x, y) => (comparer.Compare(x, y) * -1), xs);
+    return sortWith((x, y) => ((comparer.Compare(x, y) * -1) | 0), xs);
 }
 export function sortByDescending(projection, xs, comparer) {
-    return sortWith((x, y) => (comparer.Compare(projection(x), projection(y)) * -1), xs);
+    return sortWith((x, y) => ((comparer.Compare(projection(x), projection(y)) * -1) | 0), xs);
 }
 export function sum(xs, adder) {
     return fold((acc, x) => adder.Add(acc, x), adder.GetZero(), xs);
@@ -1212,7 +1213,7 @@ export function average(xs, averager) {
         return averager.Add(acc, x);
     }, averager.GetZero(), xs);
     if (count === 0) {
-        throw new Error((SR_inputSequenceEmpty + "\\nParameter name: ") + "source");
+        throw new Exception((SR_inputSequenceEmpty + "\\nParameter name: ") + "source");
     }
     else {
         return averager.DivideByInt(total, count);
@@ -1225,7 +1226,7 @@ export function averageBy(f, xs, averager) {
         return averager.Add(acc, f(x));
     }, averager.GetZero(), xs);
     if (count === 0) {
-        throw new Error((SR_inputSequenceEmpty + "\\nParameter name: ") + "source");
+        throw new Exception((SR_inputSequenceEmpty + "\\nParameter name: ") + "source");
     }
     else {
         return averager.DivideByInt(total, count);
@@ -1240,7 +1241,7 @@ export function chunkBySize(chunkSize, xs) {
 export function insertAt(index, y, xs) {
     let isDone = false;
     if (index < 0) {
-        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+        throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
     return generateIndexed(() => ofSeq(xs), (i, e) => {
         if ((isDone ? true : (i < index)) && e["System.Collections.IEnumerator.MoveNext"]()) {
@@ -1252,7 +1253,7 @@ export function insertAt(index, y, xs) {
         }
         else {
             if (!isDone) {
-                throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+                throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
             }
             return undefined;
         }
@@ -1263,7 +1264,7 @@ export function insertAt(index, y, xs) {
 export function insertManyAt(index, ys, xs) {
     let status = -1;
     if (index < 0) {
-        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+        throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
     return generateIndexed(() => [ofSeq(xs), ofSeq(ys)], (i, tupledArg) => {
         const e1 = tupledArg[0];
@@ -1290,7 +1291,7 @@ export function insertManyAt(index, ys, xs) {
             }
             else {
                 if (status < 1) {
-                    throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+                    throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
                 }
                 return undefined;
             }
@@ -1306,7 +1307,7 @@ export function insertManyAt(index, ys, xs) {
 export function removeAt(index, xs) {
     let isDone = false;
     if (index < 0) {
-        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+        throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
     return generateIndexed(() => ofSeq(xs), (i, e) => {
         if ((isDone ? true : (i < index)) && e["System.Collections.IEnumerator.MoveNext"]()) {
@@ -1318,7 +1319,7 @@ export function removeAt(index, xs) {
         }
         else {
             if (!isDone) {
-                throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+                throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
             }
             return undefined;
         }
@@ -1328,7 +1329,7 @@ export function removeAt(index, xs) {
 }
 export function removeManyAt(index, count, xs) {
     if (index < 0) {
-        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+        throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
     return generateIndexed(() => ofSeq(xs), (i, e) => {
         if (i < index) {
@@ -1336,14 +1337,14 @@ export function removeManyAt(index, count, xs) {
                 return some(e["System.Collections.Generic.IEnumerator`1.get_Current"]());
             }
             else {
-                throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+                throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
             }
         }
         else {
             if (i === index) {
                 for (let _ = 1; _ <= count; _++) {
                     if (!e["System.Collections.IEnumerator.MoveNext"]()) {
-                        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "count");
+                        throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "count");
                     }
                 }
             }
@@ -1356,7 +1357,7 @@ export function removeManyAt(index, count, xs) {
 export function updateAt(index, y, xs) {
     let isDone = false;
     if (index < 0) {
-        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+        throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
     return generateIndexed(() => ofSeq(xs), (i, e) => {
         if ((isDone ? true : (i < index)) && e["System.Collections.IEnumerator.MoveNext"]()) {
@@ -1368,11 +1369,49 @@ export function updateAt(index, y, xs) {
         }
         else {
             if (!isDone) {
-                throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+                throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
             }
             return undefined;
         }
     }, (e_1) => {
         disposeSafe(e_1);
     });
+}
+export function randomShuffleBy(randomizer, xs) {
+    const arr = toArray(xs);
+    randomShuffleInPlaceBy(randomizer, arr);
+    return ofArray(arr);
+}
+export function randomShuffleWith(random, xs) {
+    return randomShuffleBy(() => random.NextDouble(), xs);
+}
+export function randomShuffle(xs) {
+    return randomShuffleWith(nonSeeded(), xs);
+}
+export function randomChoiceBy(randomizer, xs) {
+    return randomChoiceBy_1(randomizer, toArray(xs));
+}
+export function randomChoiceWith(random, xs) {
+    return randomChoiceWith_1(random, toArray(xs));
+}
+export function randomChoice(xs) {
+    return randomChoice_1(toArray(xs));
+}
+export function randomChoicesBy(randomizer, count, xs) {
+    return ofArray(randomChoicesBy_1(randomizer, count, toArray(xs)));
+}
+export function randomChoicesWith(random, count, xs) {
+    return randomChoicesBy(() => random.NextDouble(), count, xs);
+}
+export function randomChoices(count, xs) {
+    return randomChoicesWith(nonSeeded(), count, xs);
+}
+export function randomSampleBy(randomizer, count, xs) {
+    return ofArray(randomSampleBy_1(randomizer, count, toArray(xs)));
+}
+export function randomSampleWith(random, count, xs) {
+    return randomSampleBy(() => random.NextDouble(), count, xs);
+}
+export function randomSample(count, xs) {
+    return randomSampleWith(nonSeeded(), count, xs);
 }

@@ -1,4 +1,5 @@
 import { FSharpRef } from "./Types.js";
+import { Exception } from "./Util.js";
 export function tryParse(str, defValue) {
     // TODO: test if value is valid and in range
     if (str != null && /\S/.test(str)) {
@@ -16,7 +17,7 @@ export function parse(str) {
         return defValue.contents;
     }
     else {
-        throw new Error(`The input string ${str} was not in a correct format.`);
+        throw new Exception(`The input string ${str} was not in a correct format.`);
     }
 }
 // JS Number.isFinite function evals false for NaN

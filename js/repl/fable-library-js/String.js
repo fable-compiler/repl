@@ -1,23 +1,32 @@
 import { toString as dateToString } from "./Date.js";
-import { compare as numericCompare, isNumeric, multiply, toExponential, toFixed, toHex, toPrecision } from "./Numeric.js";
+import { compare as numericCompare, isNumeric, isIntegral, multiply, toExponential, toFixed, toHex, toPrecision } from "./Numeric.js";
 import { escape } from "./RegExp.js";
 import { toString } from "./Types.js";
+import { Exception } from "./Util.js";
 const fsFormatRegExp = /(^|[^%])%([0+\- ]*)(\*|\d+)?(?:\.(\d+))?(\w)/g;
 const interpolateRegExp = /(?:(^|[^%])%([0+\- ]*)(\d+)?(?:\.(\d+))?(\w))?%P\(\)/g;
 const formatRegExp = /\{(\d+)(,-?\d+)?(?:\:([a-zA-Z])(\d{0,2})|\:(.+?))?\}/g;
 function isLessThan(x, y) {
     return numericCompare(x, y) < 0;
 }
+export const StringComparison = {
+    CurrentCulture: 0,
+    CurrentCultureIgnoreCase: 1,
+    InvariantCulture: 2,
+    InvariantCultureIgnoreCase: 3,
+    Ordinal: 4,
+    OrdinalIgnoreCase: 5,
+};
 function cmp(x, y, ic) {
     function isIgnoreCase(i) {
         return i === true ||
-            i === 1 /* StringComparison.CurrentCultureIgnoreCase */ ||
-            i === 3 /* StringComparison.InvariantCultureIgnoreCase */ ||
-            i === 5 /* StringComparison.OrdinalIgnoreCase */;
+            i === StringComparison.CurrentCultureIgnoreCase ||
+            i === StringComparison.InvariantCultureIgnoreCase ||
+            i === StringComparison.OrdinalIgnoreCase;
     }
     function isOrdinal(i) {
-        return i === 4 /* StringComparison.Ordinal */ ||
-            i === 5 /* StringComparison.OrdinalIgnoreCase */;
+        return i === StringComparison.Ordinal ||
+            i === StringComparison.OrdinalIgnoreCase;
     }
     if (x == null) {
         return y == null ? 0 : -1;
@@ -45,33 +54,45 @@ export function compare(...args) {
         case 2: return cmp(args[0], args[1], false);
         case 3: return cmp(args[0], args[1], args[2]);
         case 4: return cmp(args[0], args[1], args[2] === true);
-        case 5: return cmp(args[0].substr(args[1], args[4]), args[2].substr(args[3], args[4]), false);
-        case 6: return cmp(args[0].substr(args[1], args[4]), args[2].substr(args[3], args[4]), args[5]);
-        case 7: return cmp(args[0].substr(args[1], args[4]), args[2].substr(args[3], args[4]), args[5] === true);
-        default: throw new Error("String.compare: Unsupported number of parameters");
+        case 5: return cmp(args[0].slice(args[1], args[1] + args[4]), args[2].slice(args[3], args[3] + args[4]), false);
+        case 6: return cmp(args[0].slice(args[1], args[1] + args[4]), args[2].slice(args[3], args[3] + args[4]), args[5]);
+        case 7: return cmp(args[0].slice(args[1], args[1] + args[4]), args[2].slice(args[3], args[3] + args[4]), args[5] === true);
+        default: throw new Exception("String.compare: Unsupported number of parameters");
     }
 }
 export function compareOrdinal(x, y) {
-    return cmp(x, y, 4 /* StringComparison.Ordinal */);
+    return cmp(x, y, StringComparison.Ordinal);
 }
 export function compareTo(x, y) {
-    return cmp(x, y, 0 /* StringComparison.CurrentCulture */);
+    return cmp(x, y, StringComparison.CurrentCulture);
 }
 export function startsWith(str, pattern, ic) {
-    if (ic === 4 /* StringComparison.Ordinal */) { // to avoid substring allocation
+    if (ic === StringComparison.Ordinal) { // to avoid substring allocation
         return str.startsWith(pattern);
     }
     if (str.length >= pattern.length) {
-        return cmp(str.substr(0, pattern.length), pattern, ic) === 0;
+        return cmp(str.slice(0, pattern.length), pattern, ic) === 0;
     }
     return false;
 }
 export function endsWith(str, pattern, ic) {
-    if (ic === 4 /* StringComparison.Ordinal */) { // to avoid substring allocation
+    if (ic === StringComparison.Ordinal) { // to avoid substring allocation
         return str.endsWith(pattern);
     }
     if (str.length >= pattern.length) {
-        return cmp(str.substr(str.length - pattern.length, pattern.length), pattern, ic) === 0;
+        return cmp(str.slice(-pattern.length), pattern, ic) === 0;
+    }
+    return false;
+}
+export function contains(str, pattern, ic) {
+    if (ic === StringComparison.Ordinal) { // fast path
+        return str.includes(pattern);
+    }
+    const len = pattern.length;
+    for (let i = 0; i <= str.length - len; i++) {
+        if (cmp(str.slice(i, i + len), pattern, ic) === 0) {
+            return true;
+        }
     }
     return false;
 }
@@ -81,14 +102,14 @@ export function indexOfAny(str, anyOf, ...args) {
     }
     const startIndex = (args.length > 0) ? args[0] : 0;
     if (startIndex < 0) {
-        throw new Error("Start index cannot be negative");
+        throw new Exception("Start index cannot be negative");
     }
     const length = (args.length > 1) ? args[1] : str.length - startIndex;
     if (length < 0) {
-        throw new Error("Length cannot be negative");
+        throw new Exception("Length cannot be negative");
     }
     if (startIndex + length > str.length) {
-        throw new Error("Invalid startIndex and length");
+        throw new Exception("Invalid startIndex and length");
     }
     const endIndex = startIndex + length;
     const anyOfAsStr = "".concat.apply("", anyOf);
@@ -143,7 +164,7 @@ export function toText(arg) {
 }
 export function toFail(arg) {
     return continuePrint((x) => {
-        throw new Error(x);
+        throw new Exception(x);
     }, arg);
 }
 function formatReplacement(rep, flags, padLength, precision, format) {
@@ -230,7 +251,7 @@ function createPrinter(cont, _strParts, _matches, _result = "", padArg = -1) {
             }
             else if (padLength === "*") {
                 if (arg < 0) {
-                    throw new Error("Non-negative number required");
+                    throw new Exception("Non-negative number required");
                 }
                 padArg = arg;
                 continue;
@@ -276,6 +297,17 @@ export function fsFormat(str) {
         }
     };
 }
+function splitIntAndDecimalPart(value) {
+    let [repInt, repDecimal] = value.split(".");
+    repDecimal === undefined && (repDecimal = "");
+    return {
+        integral: repInt,
+        decimal: repDecimal
+    };
+}
+function thousandSeparate(value) {
+    return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 export function format(str, ...args) {
     let str2;
     if (typeof str === "object") {
@@ -288,42 +320,117 @@ export function format(str, ...args) {
     }
     return str2.replace(formatRegExp, (_, idx, padLength, format, precision, pattern) => {
         if (idx < 0 || idx >= args.length) {
-            throw new Error("Index must be greater or equal to zero and less than the arguments' length.");
+            throw new Exception("Index must be greater or equal to zero and less than the arguments' length.");
         }
         let rep = args[idx];
+        let parts;
         if (isNumeric(rep)) {
-            precision = precision == null ? null : parseInt(precision, 10);
+            precision = precision == "" ? null : parseInt(precision, 10);
             switch (format) {
-                case "f":
-                case "F":
-                    precision = precision != null ? precision : 2;
-                    rep = toFixed(rep, precision);
+                case "b":
+                case "B":
+                    if (!isIntegral(rep)) {
+                        throw new Exception("Format specifier was invalid.");
+                    }
+                    rep = (rep >>> 0).toString(2).replace(/^0+/, "").padStart(precision || 1, "0");
                     break;
-                case "g":
-                case "G":
-                    rep = precision != null ? toPrecision(rep, precision) : toPrecision(rep);
+                case "c":
+                case "C":
+                    const isNegative = isLessThan(rep, 0);
+                    if (isLessThan(rep, 0)) {
+                        rep = multiply(rep, -1);
+                    }
+                    precision = precision == null ? 2 : precision;
+                    rep = toFixed(rep, precision);
+                    parts = splitIntAndDecimalPart(rep);
+                    if (precision > 0) {
+                        rep = "¤" + thousandSeparate(parts.integral) + "." + padRight(parts.decimal, precision, "0");
+                    }
+                    else {
+                        rep = "¤" + thousandSeparate(parts.integral);
+                    }
+                    if (isNegative) {
+                        rep = "(" + rep + ")";
+                    }
+                    break;
+                case "d":
+                case "D":
+                    if (!isIntegral(rep)) {
+                        throw new Exception("Format specifier was invalid.");
+                    }
+                    rep = String(rep);
+                    if (precision != null) {
+                        if (rep.startsWith("-")) {
+                            rep = "-" + padLeft(rep.substring(1), precision, "0");
+                        }
+                        else {
+                            rep = padLeft(rep, precision, "0");
+                        }
+                    }
                     break;
                 case "e":
                 case "E":
                     rep = precision != null ? toExponential(rep, precision) : toExponential(rep);
                     break;
+                case "f":
+                case "F":
+                    precision = precision != null ? precision : 2;
+                    rep = toFixed(rep, precision);
+                    if (precision > 0) {
+                        parts = splitIntAndDecimalPart(rep);
+                        rep = parts.integral + "." + padRight(parts.decimal, precision, "0");
+                    }
+                    break;
+                case "g":
+                case "G":
+                    rep = precision != null ? toPrecision(rep, precision) : toPrecision(rep);
+                    // TODO: Check why some numbers are formatted with decimal part
+                    rep = trimEnd(trimEnd(rep, "0"), ".");
+                    break;
+                case "n":
+                case "N":
+                    precision = precision != null ? precision : 2;
+                    rep = toFixed(rep, precision);
+                    parts = splitIntAndDecimalPart(rep);
+                    if (precision > 0) {
+                        rep = thousandSeparate(parts.integral) + "." + padRight(parts.decimal, precision, "0");
+                    }
+                    else {
+                        rep = thousandSeparate(parts.integral);
+                    }
+                    break;
                 case "p":
                 case "P":
                     precision = precision != null ? precision : 2;
-                    rep = toFixed(multiply(rep, 100), precision) + " %";
+                    rep = toFixed(multiply(rep, 100), precision);
+                    parts = splitIntAndDecimalPart(rep);
+                    if (precision > 0) {
+                        rep = thousandSeparate(parts.integral) + "." + padRight(parts.decimal, precision, "0") + " %";
+                    }
+                    else {
+                        rep = thousandSeparate(parts.integral) + " %";
+                    }
                     break;
-                case "d":
-                case "D":
-                    rep = precision != null ? padLeft(String(rep), precision, "0") : String(rep);
-                    break;
+                case "r":
+                case "R":
+                    throw new Exception("The round-trip format is not supported by Fable");
                 case "x":
                 case "X":
-                    rep = precision != null ? padLeft(toHex(rep), precision, "0") : toHex(rep);
+                    if (!isIntegral(rep)) {
+                        throw new Exception("Format specifier was invalid.");
+                    }
+                    precision = precision != null ? precision : 2;
+                    rep = padLeft(toHex(rep), precision, "0");
                     if (format === "X") {
                         rep = rep.toUpperCase();
                     }
                     break;
                 default:
+                    // If we have format and were not able to handle it throw
+                    // See: https://learn.microsoft.com/en-us/dotnet/standard/base-types/standard-numeric-format-strings#standard-format-specifiers
+                    if (format) {
+                        throw new Exception("Format specifier was invalid.");
+                    }
                     if (pattern) {
                         let sign = "";
                         rep = pattern.replace(/([0#,]+)(\.[0#]+)?/, (_, intPart, decimalPart) => {
@@ -375,7 +482,7 @@ export function format(str, ...args) {
 }
 export function initialize(n, f) {
     if (n < 0) {
-        throw new Error("String length must be non-negative");
+        throw new Exception("String length must be non-negative");
     }
     const xs = new Array(n);
     for (let i = 0; i < n; i++) {
@@ -385,7 +492,7 @@ export function initialize(n, f) {
 }
 export function insert(str, startIndex, value) {
     if (startIndex < 0 || startIndex > str.length) {
-        throw new Error("startIndex is negative or greater than the length of this instance.");
+        throw new Exception("startIndex is negative or greater than the length of this instance.");
     }
     return str.substring(0, startIndex) + value + str.substring(startIndex);
 }
@@ -409,12 +516,12 @@ export function join(delimiter, xs) {
 export function joinWithIndices(delimiter, xs, startIndex, count) {
     const endIndexPlusOne = startIndex + count;
     if (endIndexPlusOne > xs.length) {
-        throw new Error("Index and count must refer to a location within the buffer.");
+        throw new Exception("Index and count must refer to a location within the buffer.");
     }
     return xs.slice(startIndex, endIndexPlusOne).join(delimiter);
 }
 function notSupported(name) {
-    throw new Error("The environment doesn't support '" + name + "', please use a polyfill.");
+    throw new Exception("The environment doesn't support '" + name + "', please use a polyfill.");
 }
 export function toBase64String(inArray) {
     let str = "";
@@ -447,10 +554,10 @@ export function padRight(str, len, ch) {
 }
 export function remove(str, startIndex, count) {
     if (startIndex >= str.length) {
-        throw new Error("startIndex must be less than length of string");
+        throw new Exception("startIndex must be less than length of string");
     }
     if (typeof count === "number" && (startIndex + count) > str.length) {
-        throw new Error("Index and count must refer to a location within the string.");
+        throw new Exception("Index and count must refer to a location within the string.");
     }
     return str.slice(0, startIndex) + (typeof count === "number" ? str.substr(startIndex + count) : "");
 }
@@ -462,7 +569,7 @@ export function replicate(n, x) {
 }
 export function getCharAtIndex(input, index) {
     if (index < 0 || index >= input.length) {
-        throw new Error("Index was outside the bounds of the array.");
+        throw new Exception("Index was outside the bounds of the array.");
     }
     return input[index];
 }
@@ -470,7 +577,7 @@ export function split(str, splitters, count, options) {
     count = typeof count === "number" ? count : undefined;
     options = typeof options === "number" ? options : 0;
     if (count && count < 0) {
-        throw new Error("Count cannot be less than zero");
+        throw new Exception("Count cannot be less than zero");
     }
     if (count === 0) {
         return [];
@@ -531,7 +638,7 @@ export function filter(pred, x) {
 }
 export function substring(str, startIndex, length) {
     if ((startIndex + (length || 0) > str.length)) {
-        throw new Error("Invalid startIndex and/or length");
+        throw new Exception("Invalid startIndex and/or length");
     }
     return length != null ? str.substr(startIndex, length) : str.substr(startIndex);
 }

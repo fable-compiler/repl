@@ -1,4 +1,4 @@
-import { comparePrimitives, padLeftAndRightWithZeros, padWithZeros } from "./Util.js";
+import { Exception, comparePrimitives, padLeftAndRightWithZeros, padWithZeros } from "./Util.js";
 import { toInt64, fromFloat64 } from "./BigInt.js";
 /**
  * Calls:
@@ -27,17 +27,20 @@ export function create(d = 0, h = 0, m = 0, s = 0, ms = 0) {
 export function fromTicks(ticks) {
     return Number(BigInt(ticks) / 10000n);
 }
-export function fromDays(d) {
-    return create(d, 0, 0, 0);
+export function fromDays(d, h = 0, m = 0n, s = 0n, ms = 0n) {
+    return create(d, h, Number(m), Number(s), Number(ms));
 }
-export function fromHours(h) {
-    return create(h, 0, 0);
+export function fromHours(h, m = 0n, s = 0n, ms = 0n) {
+    return create(0, h, Number(m), Number(s), Number(ms));
 }
-export function fromMinutes(m) {
-    return create(0, m, 0);
+export function fromMinutes(m, s = 0n, ms = 0n) {
+    return create(0, 0, Number(m), Number(s), Number(ms));
 }
-export function fromSeconds(s) {
-    return create(0, 0, s);
+export function fromSeconds(s, ms = 0n) {
+    return create(0, 0, 0, Number(s), Number(ms));
+}
+export function fromMilliseconds(ms) {
+    return Number(ms);
 }
 export function days(ts) {
     return signedRound(ts / 86400000);
@@ -95,7 +98,7 @@ export function duration(x) {
 }
 export function toString(ts, format = "c", _provider) {
     if (["c", "g", "G"].indexOf(format) === -1) {
-        throw new Error("Custom formats are not supported");
+        throw new Exception("Custom formats are not supported");
     }
     const d = Math.abs(days(ts));
     const h = Math.abs(hours(ts));
@@ -111,7 +114,7 @@ export function parse(str) {
     if (firstDot === -1 && firstColon === -1) { // There is only a day ex: 4
         const d = parseInt(str, 0);
         if (isNaN(d)) {
-            throw new Error(`String '${str}' was not recognized as a valid TimeSpan.`);
+            throw new Exception(`String '${str}' was not recognized as a valid TimeSpan.`);
         }
         else {
             return create(d, 0, 0, 0, 0);
@@ -158,13 +161,13 @@ export function parse(str) {
                         ms = +r[8] / 10000;
                         break;
                     default:
-                        throw new Error(`String '${str}' was not recognized as a valid TimeSpan.`);
+                        throw new Exception(`String '${str}' was not recognized as a valid TimeSpan.`);
                 }
             }
             return sign * create(d, h, m, s, ms);
         }
     }
-    throw new Error(`String '${str}' was not recognized as a valid TimeSpan.`);
+    throw new Exception(`String '${str}' was not recognized as a valid TimeSpan.`);
 }
 export function tryParse(v, defValue) {
     try {

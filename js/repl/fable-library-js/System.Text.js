@@ -1,7 +1,8 @@
-import { replace, format, substring, isNullOrEmpty, join } from "./String.js";
+import { replace, format, replicate, substring, isNullOrEmpty, join } from "./String.js";
 import { class_type } from "./Reflection.js";
-import { clear, int32ToString } from "./Util.js";
 import { toString } from "./Types.js";
+import { Exception, clear, int32ToString } from "./Util.js";
+import { setItem, item } from "./Array.js";
 export class StringBuilder {
     constructor(value, capacity) {
         this.buf = [];
@@ -30,15 +31,20 @@ export function StringBuilder_$ctor() {
     return StringBuilder_$ctor_Z18115A39("", 16);
 }
 export function StringBuilder__Append_Z721C83C5(x, s) {
-    void (x.buf.push(s));
+    void (x.buf.push(toString(s)));
     return x;
 }
 export function StringBuilder__Append_487EF8FB(x, s, startIndex, count) {
-    void (x.buf.push(substring(s, startIndex, count)));
+    void (x.buf.push(substring(toString(s), startIndex, count)));
     return x;
 }
 export function StringBuilder__Append_244C7CD6(x, c) {
     void (x.buf.push(c));
+    return x;
+}
+export function StringBuilder__Append_61B1CA(x, c, repeatCount) {
+    const s = replicate(repeatCount, c);
+    void (x.buf.push(s));
     return x;
 }
 export function StringBuilder__Append_Z524259A4(x, o) {
@@ -62,7 +68,7 @@ export function StringBuilder__Append_Z372E4D23(x, cs) {
     return x;
 }
 export function StringBuilder__Append_43A65C09(x, s) {
-    void (x.buf.push(toString(s)));
+    void (x.buf.push(s.toString()));
     return x;
 }
 export function StringBuilder__AppendFormat_433E080(x, fmt, o) {
@@ -112,51 +118,51 @@ export function StringBuilder__Clear(x) {
 }
 export function StringBuilder__get_Chars_Z524259A4(x, index) {
     let len = 0;
-    let i = -1;
-    while (((i + 1) < x.buf.length) && (len < index)) {
+    let i = 0;
+    while ((i < x.buf.length) && ((len + item(i, x.buf).length) <= index)) {
+        len = ((len + item(i, x.buf).length) | 0);
         i = ((i + 1) | 0);
-        len = ((len + x.buf[i].length) | 0);
     }
-    if (((index < 0) ? true : (i < 0)) ? true : (i >= x.buf.length)) {
-        throw new Error("Index was outside the bounds of the array");
+    if ((index < 0) ? true : (i >= x.buf.length)) {
+        throw new Exception("Index was outside the bounds of the array");
     }
     else {
-        const pos = ((len - index) - 1) | 0;
-        return x.buf[i][pos];
+        const pos = (index - len) | 0;
+        return item(i, x.buf)[pos];
     }
 }
 export function StringBuilder__set_Chars_413E0D0A(x, index, value) {
     let len = 0;
-    let i = -1;
-    while (((i + 1) < x.buf.length) && (len < index)) {
+    let i = 0;
+    while ((i < x.buf.length) && ((len + item(i, x.buf).length) <= index)) {
+        len = ((len + item(i, x.buf).length) | 0);
         i = ((i + 1) | 0);
-        len = ((len + x.buf[i].length) | 0);
     }
-    if (((index < 0) ? true : (i < 0)) ? true : (i >= x.buf.length)) {
-        throw new Error("Index was outside the bounds of the array");
+    if ((index < 0) ? true : (i >= x.buf.length)) {
+        throw new Exception("Index was outside the bounds of the array");
     }
     else {
-        const pos = ((len - index) - 1) | 0;
-        x.buf[i] = ((x.buf[i].slice(0, (pos - 1) + 1) + value) + x.buf[i].slice(pos + 1, x.buf[i].length));
+        const pos = (index - len) | 0;
+        setItem(x.buf, i, (item(i, x.buf).slice(0, (pos - 1) + 1) + value) + item(i, x.buf).slice(pos + 1, item(i, x.buf).length));
     }
 }
 export function StringBuilder__Replace_Z766F94C0(x, oldValue, newValue) {
     for (let i = x.buf.length - 1; i >= 0; i--) {
-        x.buf[i] = replace(x.buf[i], oldValue, newValue);
+        setItem(x.buf, i, replace(item(i, x.buf), oldValue, newValue));
     }
     return x;
 }
 export function StringBuilder__Replace_Z384F8060(x, oldValue, newValue) {
-    const str = replace(toString(x), oldValue, newValue);
+    const str = replace(x.toString(), oldValue, newValue);
     return StringBuilder__Append_Z721C83C5(StringBuilder__Clear(x), str);
 }
 export function StringBuilder__get_Length(x) {
     let len = 0;
     for (let i = x.buf.length - 1; i >= 0; i--) {
-        len = ((len + x.buf[i].length) | 0);
+        len = ((len + item(i, x.buf).length) | 0);
     }
     return len | 0;
 }
 export function StringBuilder__ToString_Z37302880(x, firstIndex, length) {
-    return substring(toString(x), firstIndex, length);
+    return substring(x.toString(), firstIndex, length);
 }

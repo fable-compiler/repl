@@ -1,7 +1,9 @@
 import Decimal from "./lib/big.js";
 import { symbol } from "./Numeric.js";
 import { FSharpRef } from "./Types.js";
-import { combineHashCodes } from "./Util.js";
+import { Exception, combineHashCodes } from "./Util.js";
+import { fromDecimal } from "./BigInt.js";
+import * as bigInt from "./BigInt.js";
 Decimal.prototype.GetHashCode = function () {
     return combineHashCodes([this.s, this.e].concat(this.c));
 };
@@ -107,12 +109,34 @@ export function parse(str) {
         return defValue.contents;
     }
     else {
-        throw new Error(`The input string ${str} was not in a correct format.`);
+        throw new Exception(`The input string ${str} was not in a correct format.`);
     }
 }
 export function toNumber(x) {
     return +x;
 }
+export function toChar(x) {
+    const n = toNumber(x);
+    if (n < 0 || n > 65535 || isNaN(n)) {
+        throw new Exception("Value was either too large or too small for a character.");
+    }
+    return String.fromCharCode(n);
+}
+export function toInt8(x) { return bigInt.toInt8(fromDecimal(x)); }
+export function toUInt8(x) { return bigInt.toUInt8(fromDecimal(x)); }
+export function toInt16(x) { return bigInt.toInt16(fromDecimal(x)); }
+export function toUInt16(x) { return bigInt.toUInt16(fromDecimal(x)); }
+export function toInt32(x) { return bigInt.toInt32(fromDecimal(x)); }
+export function toUInt32(x) { return bigInt.toUInt32(fromDecimal(x)); }
+export function toInt64(x) { return bigInt.toInt64(fromDecimal(x)); }
+export function toUInt64(x) { return bigInt.toUInt64(fromDecimal(x)); }
+export function toInt128(x) { return bigInt.toInt128(fromDecimal(x)); }
+export function toUInt128(x) { return bigInt.toUInt128(fromDecimal(x)); }
+export function toNativeInt(x) { return bigInt.toNativeInt(fromDecimal(x)); }
+export function toUNativeInt(x) { return bigInt.toUNativeInt(fromDecimal(x)); }
+export function toFloat16(x) { return toNumber(x); }
+export function toFloat32(x) { return toNumber(x); }
+export function toFloat64(x) { return toNumber(x); }
 function decimalToHex(dec, bitSize) {
     const hex = new Uint8Array(bitSize / 4 | 0);
     let hexCount = 1;
@@ -197,7 +221,7 @@ export function getBits(d) {
 // export function makeRangeStepFunction(step: Decimal, last: Decimal) {
 //   const stepComparedWithZero = step.cmp(get_Zero);
 //   if (stepComparedWithZero === 0) {
-//     throw new Error("The step of a range cannot be zero");
+//     throw new Exception("The step of a range cannot be zero");
 //   }
 //   const stepGreaterThanZero = stepComparedWithZero > 0;
 //   return (x: Decimal) => {

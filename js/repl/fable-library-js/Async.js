@@ -1,8 +1,9 @@
-import { OperationCanceledError, Trampoline } from "./AsyncBuilder.js";
+import { OperationCanceledException, Trampoline } from "./AsyncBuilder.js";
 import { CancellationToken } from "./AsyncBuilder.js";
 import { protectedCont, protectedBind, protectedReturn } from "./AsyncBuilder.js";
 import { Choice_makeChoice1Of2, Choice_makeChoice2Of2 } from "./Choice.js";
-import { TimeoutException } from "./SystemException.js";
+import { TimeoutException_$ctor } from "./System.js";
+import { Exception } from "./Util.js";
 function emptyContinuation(_x) {
     // NOP
 }
@@ -44,34 +45,25 @@ export function isCancellationRequested(token) {
 }
 export function throwIfCancellationRequested(token) {
     if (token != null && token.isCancelled) {
-        throw new Error("Operation is cancelled");
+        throw new Exception("Operation is cancelled");
     }
-}
-function throwAfter(millisecondsDueTime) {
-    return protectedCont((ctx) => {
-        let tokenId;
-        const timeoutId = setTimeout(() => {
-            ctx.cancelToken.removeListener(tokenId);
-            ctx.onError(new TimeoutException());
-        }, millisecondsDueTime);
-        tokenId = ctx.cancelToken.addListener(() => {
-            clearTimeout(timeoutId);
-            ctx.onCancel(new OperationCanceledError());
-        });
-    });
 }
 export function startChild(computation, ms) {
-    if (ms) {
-        const computationWithTimeout = protectedBind(parallel2(computation, throwAfter(ms)), xs => protectedReturn(xs[0]));
-        return startChild(computationWithTimeout);
-    }
     const promise = startAsPromise(computation);
+    let promiseToRun = promise;
+    if (ms) {
+        // Race the computation against a timeout: whichever settles first wins.
+        promiseToRun = new Promise((resolve, reject) => {
+            const timeoutId = setTimeout(() => reject(TimeoutException_$ctor()), ms);
+            promise.then(value => { clearTimeout(timeoutId); resolve(value); }, error => { clearTimeout(timeoutId); reject(error); });
+        });
+    }
     // JS Promises are hot, computation has already started
     // but we delay returning the result
-    return protectedCont((ctx) => protectedReturn(awaitPromise(promise))(ctx));
+    return protectedCont((ctx) => protectedReturn(awaitPromise(promiseToRun))(ctx));
 }
 export function awaitPromise(p) {
-    return fromContinuations((conts) => p.then(conts[0]).catch((err) => (err instanceof OperationCanceledError
+    return fromContinuations((conts) => p.then(conts[0]).catch((err) => (err instanceof OperationCanceledException
         ? conts[2] : conts[1])(err)));
 }
 export function cancellationToken() {
@@ -98,9 +90,6 @@ export function ignore(computation) {
 export function parallel(computations) {
     return delay(() => awaitPromise(Promise.all(Array.from(computations, (w) => startAsPromise(w)))));
 }
-function parallel2(a, b) {
-    return delay(() => awaitPromise(Promise.all([startAsPromise(a), startAsPromise(b)])));
-}
 export function sequential(computations) {
     function _sequential(computations) {
         let pr = Promise.resolve([]);
@@ -120,7 +109,7 @@ export function sleep(millisecondsDueTime) {
         }, millisecondsDueTime);
         tokenId = ctx.cancelToken.addListener(() => {
             clearTimeout(timeoutId);
-            ctx.onCancel(new OperationCanceledError());
+            ctx.onCancel(new OperationCanceledException());
         });
     });
 }

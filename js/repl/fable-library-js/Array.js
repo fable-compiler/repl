@@ -1,14 +1,16 @@
+import { disposeSafe, getEnumerator, copyToArray, defaultOf, Exception } from "./Util.js";
 import { Helpers_allocateArrayFromCons } from "./Native.js";
 import { setItem as setItem_1, item as item_2 } from "./Array.js";
 import { value as value_2, map as map_1, defaultArg, some } from "./Option.js";
 import { min as min_1, max as max_1 } from "./Double.js";
-import { equals as equals_1, disposeSafe, getEnumerator, copyToArray, defaultOf } from "./Util.js";
-import { SR_indexOutOfBounds } from "./Global.js";
+import { SR_notEnoughElements, SR_inputMustBeNonNegative, SR_inputSequenceEmpty, SR_Arg_ArgumentOutOfRangeException, SR_indexOutOfBounds } from "./Global.js";
+import { Operators_IsNull } from "./FSharp.Core.js";
+import { nonSeeded } from "./Random.js";
 function indexNotFound() {
-    throw new Error("An index satisfying the predicate was not found in the collection.");
+    throw new Exception("An index satisfying the predicate was not found in the collection.");
 }
 function differentLengths() {
-    throw new Error("Arrays had different lengths");
+    throw new Exception("Arrays had different lengths");
 }
 export function append(array1, array2, cons) {
     const len1 = array1.length | 0;
@@ -35,7 +37,7 @@ export function getSubArray(array, start, count) {
 }
 export function last(array) {
     if (array.length === 0) {
-        throw new Error("The input array was empty\\nParameter name: array");
+        throw new Exception("The input array was empty\\nParameter name: array");
     }
     return item_2(array.length - 1, array);
 }
@@ -65,7 +67,7 @@ export function map(f, source, cons) {
 }
 export function mapIndexed2(f, source1, source2, cons) {
     if (source1.length !== source2.length) {
-        throw new Error("Arrays had different lengths");
+        throw new Exception("Arrays had different lengths");
     }
     const result = Helpers_allocateArrayFromCons(cons, source1.length);
     for (let i = 0; i <= (source1.length - 1); i++) {
@@ -75,7 +77,7 @@ export function mapIndexed2(f, source1, source2, cons) {
 }
 export function map2(f, source1, source2, cons) {
     if (source1.length !== source2.length) {
-        throw new Error("Arrays had different lengths");
+        throw new Exception("Arrays had different lengths");
     }
     const result = Helpers_allocateArrayFromCons(cons, source1.length);
     for (let i = 0; i <= (source1.length - 1); i++) {
@@ -85,7 +87,7 @@ export function map2(f, source1, source2, cons) {
 }
 export function mapIndexed3(f, source1, source2, source3, cons) {
     if ((source1.length !== source2.length) ? true : (source2.length !== source3.length)) {
-        throw new Error("Arrays had different lengths");
+        throw new Exception("Arrays had different lengths");
     }
     const result = Helpers_allocateArrayFromCons(cons, source1.length);
     for (let i = 0; i <= (source1.length - 1); i++) {
@@ -95,7 +97,7 @@ export function mapIndexed3(f, source1, source2, source3, cons) {
 }
 export function map3(f, source1, source2, source3, cons) {
     if ((source1.length !== source2.length) ? true : (source2.length !== source3.length)) {
-        throw new Error("Arrays had different lengths");
+        throw new Exception("Arrays had different lengths");
     }
     const result = Helpers_allocateArrayFromCons(cons, source1.length);
     for (let i = 0; i <= (source1.length - 1); i++) {
@@ -182,7 +184,7 @@ export function where(predicate, array) {
 }
 export function indexOf(array, item_1, start, count, eq) {
     const start_1 = defaultArg(start, 0) | 0;
-    const end$0027 = defaultArg(map_1((c) => (start_1 + c), count), array.length) | 0;
+    const end$0027 = defaultArg(map_1((c) => ((start_1 + c) | 0), count), array.length) | 0;
     const loop = (i_mut) => {
         loop: while (true) {
             const i = i_mut;
@@ -214,7 +216,7 @@ export function singleton(value, cons) {
 }
 export function initialize(count, initializer, cons) {
     if (count < 0) {
-        throw new Error("The input must be non-negative\\nParameter name: count");
+        throw new Exception("The input must be non-negative\\nParameter name: count");
     }
     const result = Helpers_allocateArrayFromCons(cons, count);
     for (let i = 0; i <= (count - 1); i++) {
@@ -237,7 +239,7 @@ export function pairwise(array) {
 }
 export function replicate(count, initial, cons) {
     if (count < 0) {
-        throw new Error("The input must be non-negative\\nParameter name: count");
+        throw new Exception("The input must be non-negative\\nParameter name: count");
     }
     const result = Helpers_allocateArrayFromCons(cons, count);
     for (let i = 0; i <= (result.length - 1); i++) {
@@ -273,7 +275,7 @@ export function scanBack(folder, array, state, cons) {
 }
 export function skip(count, array, cons) {
     if (count > array.length) {
-        throw new Error("count is greater than array length\\nParameter name: count");
+        throw new Exception("count is greater than array length\\nParameter name: count");
     }
     if (count === array.length) {
         return Helpers_allocateArrayFromCons(cons, 0);
@@ -298,10 +300,10 @@ export function skipWhile(predicate, array, cons) {
 }
 export function take(count, array, cons) {
     if (count < 0) {
-        throw new Error("The input must be non-negative\\nParameter name: count");
+        throw new Exception("The input must be non-negative\\nParameter name: count");
     }
     if (count > array.length) {
-        throw new Error("count is greater than array length\\nParameter name: count");
+        throw new Exception("count is greater than array length\\nParameter name: count");
     }
     if (count === 0) {
         return Helpers_allocateArrayFromCons(cons, 0);
@@ -323,6 +325,13 @@ export function takeWhile(predicate, array, cons) {
         return array.slice(0, (0 + count_1));
     }
 }
+export function findAll(predicate, array) {
+    return array.filter(predicate);
+}
+export function getRange(array, start, count) {
+    const start_1 = start | 0;
+    return array.slice(start_1, (start_1 + count));
+}
 export function addInPlace(x, array) {
     array.push(x);
 }
@@ -338,11 +347,11 @@ export function addRangeInPlace(range, array) {
     }
 }
 export function insertRangeInPlace(index, range, array) {
-    let index_1;
     let i = index;
     const enumerator = getEnumerator(range);
     try {
         while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
+            let index_1 = undefined;
             const x = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
             (index_1 = (i | 0), array.splice(index_1, 0, x));
             i = ((i + 1) | 0);
@@ -364,7 +373,9 @@ export function removeInPlace(item_1, array, eq) {
 }
 export function removeAllInPlace(predicate, array) {
     const countRemoveAll = (count) => {
-        const i = (array.findIndex(predicate)) | 0;
+        let i;
+        const array_1 = array;
+        i = (array_1.findIndex(predicate));
         if (i > -1) {
             array.splice(i, 1);
             return (countRemoveAll(count) + 1) | 0;
@@ -573,7 +584,7 @@ export function choose(chooser, array, cons) {
             res.push(y);
         }
     }
-    if (equals_1(cons, defaultOf())) {
+    if (cons == null) {
         return res;
     }
     else {
@@ -626,13 +637,13 @@ export function permute(f, array) {
     iterateIndexed((i, x) => {
         const j = f(i) | 0;
         if ((j < 0) ? true : (j >= size)) {
-            throw new Error("Not a valid permutation");
+            throw new Exception("Not a valid permutation");
         }
         setItem_1(res, j, x);
         setItem_1(checkFlags, j, 1);
     }, array);
     if (!(checkFlags.every((y) => (1 === y)))) {
-        throw new Error("Not a valid permutation");
+        throw new Exception("Not a valid permutation");
     }
     return res;
 }
@@ -645,29 +656,29 @@ export function setSlice(target, lower, upper, source) {
     }
 }
 export function sortInPlaceBy(projection, xs, comparer) {
-    xs.sort((x, y) => comparer.Compare(projection(x), projection(y)));
+    xs.sort((x, y) => (comparer.Compare(projection(x), projection(y)) | 0));
 }
 export function sortInPlace(xs, comparer) {
-    xs.sort((x, y) => comparer.Compare(x, y));
+    xs.sort((x, y) => (comparer.Compare(x, y) | 0));
 }
 export function sort(xs, comparer) {
     const xs_1 = xs.slice();
-    xs_1.sort((x, y) => comparer.Compare(x, y));
+    xs_1.sort((x, y) => (comparer.Compare(x, y) | 0));
     return xs_1;
 }
 export function sortBy(projection, xs, comparer) {
     const xs_1 = xs.slice();
-    xs_1.sort((x, y) => comparer.Compare(projection(x), projection(y)));
+    xs_1.sort((x, y) => (comparer.Compare(projection(x), projection(y)) | 0));
     return xs_1;
 }
 export function sortDescending(xs, comparer) {
     const xs_1 = xs.slice();
-    xs_1.sort((x, y) => (comparer.Compare(x, y) * -1));
+    xs_1.sort((x, y) => ((comparer.Compare(x, y) * -1) | 0));
     return xs_1;
 }
 export function sortByDescending(projection, xs, comparer) {
     const xs_1 = xs.slice();
-    xs_1.sort((x, y) => (comparer.Compare(projection(x), projection(y)) * -1));
+    xs_1.sort((x, y) => ((comparer.Compare(projection(x), projection(y)) * -1) | 0));
     return xs_1;
 }
 export function sortWith(comparer, xs) {
@@ -750,38 +761,36 @@ export function zip3(array1, array2, array3) {
 }
 export function chunkBySize(chunkSize, array) {
     if (chunkSize < 1) {
-        throw new Error("The input must be positive.\\nParameter name: size");
+        throw new Exception("The input must be positive.\\nParameter name: size");
     }
-    if (array.length === 0) {
-        return [[]];
-    }
-    else {
-        const result = [];
-        for (let x = 0; x <= (~~Math.ceil(array.length / chunkSize) - 1); x++) {
+    const result = [];
+    if (array.length > 0) {
+        const chunks = ~~Math.ceil(array.length / chunkSize) | 0;
+        for (let x = 0; x <= (chunks - 1); x++) {
             let slice;
             const start_1 = (x * chunkSize) | 0;
             slice = (array.slice(start_1, (start_1 + chunkSize)));
             result.push(slice);
         }
-        return result;
     }
+    return result;
 }
 export function splitAt(index, array) {
     if ((index < 0) ? true : (index > array.length)) {
-        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+        throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
     return [array.slice(0, (0 + index)), array.slice(index)];
 }
 export function compareWith(comparer, source1, source2) {
-    if (source1 == null) {
-        if (source2 == null) {
+    if (Operators_IsNull(source1)) {
+        if (Operators_IsNull(source2)) {
             return 0;
         }
         else {
             return -1;
         }
     }
-    else if (source2 == null) {
+    else if (Operators_IsNull(source2)) {
         return 1;
     }
     else {
@@ -809,15 +818,15 @@ export function compareWith(comparer, source1, source2) {
     }
 }
 export function compareTo(comparer, source1, source2) {
-    if (source1 == null) {
-        if (source2 == null) {
+    if (Operators_IsNull(source1)) {
+        if (Operators_IsNull(source2)) {
             return 0;
         }
         else {
             return -1;
         }
     }
-    else if (source2 == null) {
+    else if (Operators_IsNull(source2)) {
         return 1;
     }
     else {
@@ -840,23 +849,23 @@ export function compareTo(comparer, source1, source2) {
         }
     }
 }
-export function equalsWith(equals, array1, array2) {
-    if (array1 == null) {
-        if (array2 == null) {
+export function equalsWith(equals, source1, source2) {
+    if (Operators_IsNull(source1)) {
+        if (Operators_IsNull(source2)) {
             return true;
         }
         else {
             return false;
         }
     }
-    else if (array2 == null) {
+    else if (Operators_IsNull(source2)) {
         return false;
     }
     else {
         let i = 0;
         let result = true;
-        const length1 = array1.length | 0;
-        const length2 = array2.length | 0;
+        const length1 = source1.length | 0;
+        const length2 = source2.length | 0;
         if (length1 > length2) {
             return false;
         }
@@ -865,7 +874,7 @@ export function equalsWith(equals, array1, array2) {
         }
         else {
             while ((i < length1) && result) {
-                result = equals(item_2(i, array1), item_2(i, array2));
+                result = equals(item_2(i, source1), item_2(i, source2));
                 i = ((i + 1) | 0);
             }
             return result;
@@ -877,9 +886,9 @@ export function exactlyOne(array) {
         case 1:
             return item_2(0, array);
         case 0:
-            throw new Error("The input sequence was empty\\nParameter name: array");
+            throw new Exception("The input sequence was empty\\nParameter name: array");
         default:
-            throw new Error("Input array too long\\nParameter name: array");
+            throw new Exception("Input array too long\\nParameter name: array");
     }
 }
 export function tryExactlyOne(array) {
@@ -892,7 +901,7 @@ export function tryExactlyOne(array) {
 }
 export function head(array) {
     if (array.length === 0) {
-        throw new Error("The input array was empty\\nParameter name: array");
+        throw new Exception("The input array was empty\\nParameter name: array");
     }
     else {
         return item_2(0, array);
@@ -908,13 +917,13 @@ export function tryHead(array) {
 }
 export function tail(array) {
     if (array.length === 0) {
-        throw new Error("Not enough elements\\nParameter name: array");
+        throw new Exception("Not enough elements\\nParameter name: array");
     }
     return array.slice(1);
 }
 export function item(index, array) {
     if ((index < 0) ? true : (index >= array.length)) {
-        throw new Error("Index was outside the bounds of the array.\\nParameter name: index");
+        throw new Exception("Index was outside the bounds of the array.\\nParameter name: index");
     }
     else {
         return array[index];
@@ -922,7 +931,7 @@ export function item(index, array) {
 }
 export function setItem(array, index, value) {
     if ((index < 0) ? true : (index >= array.length)) {
-        throw new Error("Index was outside the bounds of the array.\\nParameter name: index");
+        throw new Exception("Index was outside the bounds of the array.\\nParameter name: index");
     }
     else {
         array[index] = value;
@@ -945,7 +954,7 @@ export function foldBack(folder, array, state) {
 export function foldIndexed2(folder, state, array1, array2) {
     let acc = state;
     if (array1.length !== array2.length) {
-        throw new Error("Arrays have different lengths");
+        throw new Exception("Arrays have different lengths");
     }
     for (let i = 0; i <= (array1.length - 1); i++) {
         acc = folder(i, acc, item_2(i, array1), item_2(i, array2));
@@ -971,14 +980,14 @@ export function foldBack2(f, array1, array2, state) {
 }
 export function reduce(reduction, array) {
     if (array.length === 0) {
-        throw new Error("The input array was empty");
+        throw new Exception("The input array was empty");
     }
     const reduction_1 = reduction;
     return array.reduce(reduction_1);
 }
 export function reduceBack(reduction, array) {
     if (array.length === 0) {
-        throw new Error("The input array was empty");
+        throw new Exception("The input array was empty");
     }
     const reduction_1 = reduction;
     return array.reduceRight(reduction_1);
@@ -1060,7 +1069,7 @@ export function min(xs, comparer) {
 }
 export function average(array, averager) {
     if (array.length === 0) {
-        throw new Error("The input array was empty\\nParameter name: array");
+        throw new Exception("The input array was empty\\nParameter name: array");
     }
     let total = averager.GetZero();
     for (let i = 0; i <= (array.length - 1); i++) {
@@ -1070,7 +1079,7 @@ export function average(array, averager) {
 }
 export function averageBy(projection, array, averager) {
     if (array.length === 0) {
-        throw new Error("The input array was empty\\nParameter name: array");
+        throw new Exception("The input array was empty\\nParameter name: array");
     }
     let total = averager.GetZero();
     for (let i = 0; i <= (array.length - 1); i++) {
@@ -1080,7 +1089,7 @@ export function averageBy(projection, array, averager) {
 }
 export function windowed(windowSize, source) {
     if (windowSize <= 0) {
-        throw new Error("windowSize must be positive");
+        throw new Exception("windowSize must be positive");
     }
     let res;
     const len = max_1(0, (source.length - windowSize) + 1) | 0;
@@ -1092,13 +1101,10 @@ export function windowed(windowSize, source) {
 }
 export function splitInto(chunks, array) {
     if (chunks < 1) {
-        throw new Error("The input must be positive.\\nParameter name: chunks");
+        throw new Exception("The input must be positive.\\nParameter name: chunks");
     }
-    if (array.length === 0) {
-        return [[]];
-    }
-    else {
-        const result = [];
+    const result = [];
+    if (array.length > 0) {
         const chunks_1 = min_1(chunks, array.length) | 0;
         const minChunkSize = ~~(array.length / chunks_1) | 0;
         const chunksWithExtraItem = (array.length % chunks_1) | 0;
@@ -1109,8 +1115,8 @@ export function splitInto(chunks, array) {
             slice = (array.slice(start_1, (start_1 + chunkSize)));
             result.push(slice);
         }
-        return result;
     }
+    return result;
 }
 export function transpose(arrays, cons) {
     const arrays_1 = Array.isArray(arrays) ? arrays : (Array.from(arrays));
@@ -1137,7 +1143,7 @@ export function transpose(arrays, cons) {
 export function insertAt(index, y, xs, cons) {
     const len = xs.length | 0;
     if ((index < 0) ? true : (index > len)) {
-        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+        throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
     const target = Helpers_allocateArrayFromCons(cons, len + 1);
     for (let i = 0; i <= (index - 1); i++) {
@@ -1152,7 +1158,7 @@ export function insertAt(index, y, xs, cons) {
 export function insertManyAt(index, ys, xs, cons) {
     const len = xs.length | 0;
     if ((index < 0) ? true : (index > len)) {
-        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+        throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
     const ys_1 = Array.from(ys);
     const len2 = ys_1.length | 0;
@@ -1168,9 +1174,108 @@ export function insertManyAt(index, ys, xs, cons) {
     }
     return target;
 }
+export function randomShuffleInPlaceBy(randomizer, xs) {
+    const len = xs.length | 0;
+    for (let i = len - 1; i >= 1; i--) {
+        const r = randomizer();
+        if ((r < 0) ? true : (r >= 1)) {
+            throw new Exception((SR_Arg_ArgumentOutOfRangeException + "\\nParameter name: ") + "randomizer");
+        }
+        const j = ~~(r * (i + 1)) | 0;
+        const tmp = item_2(i, xs);
+        setItem_1(xs, i, item_2(j, xs));
+        setItem_1(xs, j, tmp);
+    }
+}
+export function randomShuffleInPlaceWith(random, xs) {
+    randomShuffleInPlaceBy(() => random.NextDouble(), xs);
+}
+export function randomShuffleInPlace(xs) {
+    randomShuffleInPlaceWith(nonSeeded(), xs);
+}
+export function randomShuffleBy(randomizer, xs) {
+    const arr = copy(xs);
+    randomShuffleInPlaceBy(randomizer, arr);
+    return arr;
+}
+export function randomShuffleWith(random, xs) {
+    return randomShuffleBy(() => random.NextDouble(), xs);
+}
+export function randomShuffle(xs) {
+    return randomShuffleWith(nonSeeded(), xs);
+}
+export function randomChoiceBy(randomizer, xs) {
+    if (isEmpty(xs)) {
+        throw new Exception((SR_inputSequenceEmpty + "\\nParameter name: ") + "source");
+    }
+    const len = xs.length | 0;
+    const r = randomizer();
+    if ((r < 0) ? true : (r >= 1)) {
+        throw new Exception((SR_Arg_ArgumentOutOfRangeException + "\\nParameter name: ") + "randomizer");
+    }
+    return item_2(~~(r * len), xs);
+}
+export function randomChoiceWith(random, xs) {
+    return randomChoiceBy(() => random.NextDouble(), xs);
+}
+export function randomChoice(xs) {
+    return randomChoiceWith(nonSeeded(), xs);
+}
+export function randomChoicesBy(randomizer, count, xs, cons) {
+    if (count < 0) {
+        throw new Exception((SR_inputMustBeNonNegative + "\\nParameter name: ") + "count");
+    }
+    if ((count > 0) && isEmpty(xs)) {
+        throw new Exception((SR_inputSequenceEmpty + "\\nParameter name: ") + "source");
+    }
+    const len = xs.length | 0;
+    return initialize(count, (_arg) => {
+        const r = randomizer();
+        if ((r < 0) ? true : (r >= 1)) {
+            throw new Exception((SR_Arg_ArgumentOutOfRangeException + "\\nParameter name: ") + "randomizer");
+        }
+        return item_2(~~(r * len), xs);
+    }, cons);
+}
+export function randomChoicesWith(random, count, xs, cons) {
+    return randomChoicesBy(() => random.NextDouble(), count, xs, cons);
+}
+export function randomChoices(count, xs, cons) {
+    return randomChoicesWith(nonSeeded(), count, xs, cons);
+}
+export function randomSampleBy(randomizer, count, xs) {
+    if (count < 0) {
+        throw new Exception((SR_inputMustBeNonNegative + "\\nParameter name: ") + "count");
+    }
+    const arr = copy(xs);
+    const len = arr.length | 0;
+    if ((len === 0) && (count > 0)) {
+        throw new Exception((SR_inputSequenceEmpty + "\\nParameter name: ") + "source");
+    }
+    if (count > len) {
+        throw new Exception((SR_notEnoughElements + "\\nParameter name: ") + "count");
+    }
+    for (let i = 0; i <= (count - 1); i++) {
+        const r = randomizer();
+        if ((r < 0) ? true : (r >= 1)) {
+            throw new Exception((SR_Arg_ArgumentOutOfRangeException + "\\nParameter name: ") + "randomizer");
+        }
+        const j = (i + ~~(r * (len - i))) | 0;
+        const tmp = item_2(i, arr);
+        setItem_1(arr, i, item_2(j, arr));
+        setItem_1(arr, j, tmp);
+    }
+    return getSubArray(arr, 0, count);
+}
+export function randomSampleWith(random, count, xs) {
+    return randomSampleBy(() => random.NextDouble(), count, xs);
+}
+export function randomSample(count, xs) {
+    return randomSampleWith(nonSeeded(), count, xs);
+}
 export function removeAt(index, xs) {
     if ((index < 0) ? true : (index >= xs.length)) {
-        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+        throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
     let i = -1;
     return filter((_arg) => {
@@ -1202,14 +1307,14 @@ export function removeManyAt(index, count, xs) {
     }, xs);
     const status_1 = (((status === 0) && ((i + 1) === (index + count))) ? 1 : status) | 0;
     if (status_1 < 1) {
-        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + ((status_1 < 0) ? "index" : "count"));
+        throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + ((status_1 < 0) ? "index" : "count"));
     }
     return ys;
 }
 export function updateAt(index, y, xs, cons) {
     const len = xs.length | 0;
     if ((index < 0) ? true : (index >= len)) {
-        throw new Error((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+        throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
     }
     const target = Helpers_allocateArrayFromCons(cons, len);
     for (let i = 0; i <= (len - 1); i++) {
@@ -1218,12 +1323,12 @@ export function updateAt(index, y, xs, cons) {
     return target;
 }
 export function resize(xs, newSize, zero, cons) {
-    let array, array_1, start_2, count_2;
+    let array = undefined, array_1 = undefined, start_2 = undefined, count_2 = undefined;
     if (newSize < 0) {
-        throw new Error("The input must be non-negative.\\nParameter name: newSize");
+        throw new Exception("The input must be non-negative.\\nParameter name: newSize");
     }
     const zero_1 = defaultArg(zero, defaultOf());
-    if (xs.contents == null) {
+    if (Operators_IsNull(xs.contents)) {
         xs.contents = ((array = Helpers_allocateArrayFromCons(cons, newSize), array.fill(zero_1, 0, (0 + newSize))));
     }
     else {

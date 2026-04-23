@@ -1,6 +1,6 @@
 import { disposeSafe, defaultOf, toIterator, getEnumerator } from "./Util.js";
 import { iterate, map, iterateIndexed, concat } from "./Seq.js";
-import { setItem } from "./Array.js";
+import { item as item_1, setItem } from "./Array.js";
 import { some } from "./Option.js";
 import { FSharpRef } from "./Types.js";
 import { class_type } from "./Reflection.js";
@@ -132,7 +132,7 @@ function HashSet__TryFindIndex_2B595(this$, k) {
 }
 function HashSet__TryFind_2B595(this$, k) {
     const matchValue = HashSet__TryFindIndex_2B595(this$, k);
-    let matchResult;
+    let matchResult = undefined;
     if (matchValue[0]) {
         if (matchValue[2] > -1) {
             matchResult = 0;
@@ -146,7 +146,7 @@ function HashSet__TryFind_2B595(this$, k) {
     }
     switch (matchResult) {
         case 0:
-            return some(getItemFromDict(this$.hashMap, matchValue[1])[matchValue[2]]);
+            return some(item_1(matchValue[2], getItemFromDict(this$.hashMap, matchValue[1])));
         default:
             return undefined;
     }
@@ -189,7 +189,7 @@ export function HashSet__Add_2B595(this$, k) {
 }
 export function HashSet__Contains_2B595(this$, k) {
     const matchValue = HashSet__TryFindIndex_2B595(this$, k);
-    let matchResult;
+    let matchResult = undefined;
     if (matchValue[0]) {
         if (matchValue[2] > -1) {
             matchResult = 0;
@@ -210,7 +210,7 @@ export function HashSet__Contains_2B595(this$, k) {
 }
 export function HashSet__Remove_2B595(this$, k) {
     const matchValue = HashSet__TryFindIndex_2B595(this$, k);
-    let matchResult;
+    let matchResult = undefined;
     if (matchValue[0]) {
         if (matchValue[2] > -1) {
             matchResult = 0;

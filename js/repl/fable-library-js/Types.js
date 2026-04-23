@@ -1,4 +1,4 @@
-import { combineHashCodes, compare, compareArrays, equalArrays, equals, sameConstructor, numberHash, structuralHash } from "./Util.js";
+import { Exception, combineHashCodes, compare, compareArrays, equalArrays, equals, sameConstructor, numberHash, structuralHash } from "./Util.js";
 export function seqToString(self) {
     let count = 0;
     let str = "[";
@@ -19,7 +19,7 @@ export function seqToString(self) {
 }
 export function toString(x, callStack = 0) {
     if (x != null && typeof x === "object") {
-        if (typeof x.toString === "function") {
+        if (typeof x.toString === "function" && x.toString !== Object.prototype.toString) {
             return x.toString();
         }
         else if (Symbol.iterator in x) {
@@ -36,6 +36,12 @@ export function toString(x, callStack = 0) {
     return String(x);
 }
 export function unionToString(name, fields) {
+    function unionFieldToString(x) {
+        if (typeof x === "string") {
+            return '"' + x + '"';
+        }
+        return toString(x);
+    }
     if (fields.length === 0) {
         return name;
     }
@@ -43,11 +49,11 @@ export function unionToString(name, fields) {
         let fieldStr;
         let withParens = true;
         if (fields.length === 1) {
-            fieldStr = toString(fields[0]);
+            fieldStr = unionFieldToString(fields[0]);
             withParens = fieldStr.indexOf(" ") >= 0;
         }
         else {
-            fieldStr = fields.map((x) => toString(x)).join(", ");
+            fieldStr = fields.map((x) => unionFieldToString(x)).join(", ");
         }
         return name + (withParens ? " (" : " ") + fieldStr + (withParens ? ")" : "");
     }
@@ -172,22 +178,6 @@ export class FSharpRef {
     }
 }
 // EXCEPTIONS
-// Exception is intentionally not derived from Error, for performance reasons (see #2160)
-export class Exception {
-    constructor(message) {
-        this.message = message;
-    }
-}
-export function isException(x) {
-    return x instanceof Exception || x instanceof Error;
-}
-export function isPromise(x) {
-    return x instanceof Promise;
-}
-export function ensureErrorOrException(e) {
-    // Exceptionally admitting promises as errors for compatibility with React.suspense (see #3298)
-    return (isException(e) || isPromise(e)) ? e : new Error(String(e));
-}
 export class FSharpException extends Exception {
     toJSON() { return recordToJSON(this); }
     toString() { return recordToString(this); }

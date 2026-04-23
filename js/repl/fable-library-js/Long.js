@@ -1,5 +1,6 @@
 import { getPrefix, isValid } from "./Int32.js";
 import { fromString } from "./BigInt.js";
+import { Exception } from "./Util.js";
 function getMaxValue(unsigned, radix, isNegative) {
     switch (radix) {
         case 2: return unsigned ?
@@ -15,7 +16,7 @@ function getMaxValue(unsigned, radix, isNegative) {
         case 16: return unsigned ?
             "FFFFFFFFFFFFFFFF" :
             (isNegative ? "8000000000000000" : "7FFFFFFFFFFFFFFF");
-        default: throw new Error("Invalid radix.");
+        default: throw new Exception("Invalid radix.");
     }
 }
 export function parse(str, style, unsigned, _bitsize, radix) {
@@ -33,7 +34,7 @@ export function parse(str, style, unsigned, _bitsize, radix) {
             return fromString(str);
         }
     }
-    throw new Error(`The input string ${str} was not in a correct format.`);
+    throw new Exception(`The input string ${str} was not in a correct format.`);
 }
 export function tryParse(str, style, unsigned, bitsize, defValue) {
     try {

@@ -32,7 +32,7 @@ export function countBy(projection, xs, comparer) {
                 const key = projection(enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]());
                 let matchValue;
                 let outArg = 0;
-                matchValue = [tryGetValue(dict, key, new FSharpRef(() => outArg, (v) => {
+                matchValue = [tryGetValue(dict, key, new FSharpRef(() => (outArg | 0), (v) => {
                         outArg = (v | 0);
                     })), outArg];
                 if (matchValue[0]) {
