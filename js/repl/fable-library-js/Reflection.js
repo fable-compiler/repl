@@ -1,6 +1,7 @@
 import { Record, Union } from "./Types.js";
 import { Exception, combineHashCodes, equalArraysWith, stringHash } from "./Util.js";
 import Decimal from "./Decimal.js";
+import { Some, some } from "./Option.js";
 export class CaseInfo {
     constructor(declaringType, tag, name, fields) {
         this.declaringType = declaringType;
@@ -85,7 +86,11 @@ export function lambda_type(argType, returnType) {
     return new TypeInfo("Microsoft.FSharp.Core.FSharpFunc`2", [argType, returnType]);
 }
 export function option_type(generic) {
-    return new TypeInfo("Microsoft.FSharp.Core.FSharpOption`1", [generic]);
+    const t = new TypeInfo("Microsoft.FSharp.Core.FSharpOption`1", [generic], undefined, undefined, undefined, () => [
+        new CaseInfo(t, 0, "None"),
+        new CaseInfo(t, 1, "Some", [["value", generic]])
+    ]);
+    return t;
 }
 export function list_type(generic) {
     return new TypeInfo("Microsoft.FSharp.Collections.FSharpList`1", [generic]);
@@ -351,6 +356,16 @@ export function isFunction(t) {
 // FSharpValue
 export function getUnionFields(v, t) {
     const cases = getUnionCases(t);
+    // Special handling for option types (None is undefined, Some is the value or a Some wrapper)
+    if (t.fullname === "Microsoft.FSharp.Core.FSharpOption`1") {
+        if (v == null) {
+            return [cases[0], []]; // None case
+        }
+        else {
+            const innerValue = v instanceof Some ? v.value : v;
+            return [cases[1], [innerValue]]; // Some case
+        }
+    }
     const case_ = cases[v.tag];
     if (case_ == null) {
         throw new Exception(`Cannot find case ${v.name} in union type`);
@@ -379,6 +394,10 @@ export function makeUnion(uci, values) {
     const expectedLength = (uci.fields || []).length;
     if (values.length !== expectedLength) {
         throw new Exception(`Expected an array of length ${expectedLength} but got ${values.length}`);
+    }
+    // Special handling for option types
+    if (uci.declaringType.fullname === "Microsoft.FSharp.Core.FSharpOption`1") {
+        return uci.tag === 0 ? undefined : some(values[0]);
     }
     const construct = uci.declaringType.construct;
     if (construct == null) {

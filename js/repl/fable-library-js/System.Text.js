@@ -1,7 +1,7 @@
 import { replace, format, replicate, substring, isNullOrEmpty, join } from "./String.js";
 import { class_type } from "./Reflection.js";
 import { toString } from "./Types.js";
-import { Exception, clear, int32ToString } from "./Util.js";
+import { Exception, clear, int64ToString, int32ToString, int16ToString } from "./Util.js";
 import { setItem, item } from "./Array.js";
 export class StringBuilder {
     constructor(value, capacity) {
@@ -47,8 +47,40 @@ export function StringBuilder__Append_61B1CA(x, c, repeatCount) {
     void (x.buf.push(s));
     return x;
 }
+export function StringBuilder__Append_Z510FF069(x, o) {
+    void (x.buf.push(o.toString()));
+    return x;
+}
+export function StringBuilder__Append_244D3E44(x, o) {
+    void (x.buf.push(o.toString()));
+    return x;
+}
+export function StringBuilder__Append_Z524259E6(x, o) {
+    void (x.buf.push(int16ToString(o)));
+    return x;
+}
+export function StringBuilder__Append_Z6EF82811(x, o) {
+    void (x.buf.push(o.toString()));
+    return x;
+}
 export function StringBuilder__Append_Z524259A4(x, o) {
     void (x.buf.push(int32ToString(o)));
+    return x;
+}
+export function StringBuilder__Append_Z6EF827D7(x, o) {
+    void (x.buf.push(o.toString()));
+    return x;
+}
+export function StringBuilder__Append_Z524259C1(x, o) {
+    void (x.buf.push(int64ToString(o)));
+    return x;
+}
+export function StringBuilder__Append_Z6EF827B6(x, o) {
+    void (x.buf.push(o.toString()));
+    return x;
+}
+export function StringBuilder__Append_Z7138B98C(x, o) {
+    void (x.buf.push(o.toString()));
     return x;
 }
 export function StringBuilder__Append_5E38073B(x, o) {

@@ -505,14 +505,14 @@ export function exactlyOne(xs) {
         if (e["System.Collections.IEnumerator.MoveNext"]()) {
             const v = e["System.Collections.Generic.IEnumerator`1.get_Current"]();
             if (e["System.Collections.IEnumerator.MoveNext"]()) {
-                throw new Exception((SR_inputSequenceTooLong + "\\nParameter name: ") + "source");
+                throw new Exception(SR_inputSequenceTooLong + " (Parameter \'source\')");
             }
             else {
                 return v;
             }
         }
         else {
-            throw new Exception((SR_inputSequenceEmpty + "\\nParameter name: ") + "source");
+            throw new Exception(SR_inputSequenceEmpty + " (Parameter \'source\')");
         }
     }
     finally {
@@ -692,7 +692,7 @@ export function tryHead(xs) {
 export function head(xs) {
     const matchValue = tryHead(xs);
     if (matchValue == null) {
-        throw new Exception((SR_inputSequenceEmpty + "\\nParameter name: ") + "source");
+        throw new Exception(SR_inputSequenceEmpty + " (Parameter \'source\')");
     }
     else {
         return value_1(matchValue);
@@ -758,7 +758,7 @@ export function tryItem(index, xs) {
 export function item(index, xs) {
     const matchValue = tryItem(index, xs);
     if (matchValue == null) {
-        throw new Exception((SR_notEnoughElements + "\\nParameter name: ") + "index");
+        throw new Exception(SR_notEnoughElements + " (Parameter \'index\')");
     }
     else {
         return value_1(matchValue);
@@ -811,7 +811,7 @@ export function tryLast(xs) {
 export function last(xs) {
     const matchValue = tryLast(xs);
     if (matchValue == null) {
-        throw new Exception((SR_notEnoughElements + "\\nParameter name: ") + "source");
+        throw new Exception(SR_notEnoughElements + " (Parameter \'source\')");
     }
     else {
         return value_1(matchValue);
@@ -1092,7 +1092,7 @@ export function skip(count, source) {
         try {
             for (let _ = 1; _ <= count; _++) {
                 if (!e["System.Collections.IEnumerator.MoveNext"]()) {
-                    throw new Exception((SR_notEnoughElements + "\\nParameter name: ") + "source");
+                    throw new Exception(SR_notEnoughElements + " (Parameter \'source\')");
                 }
             }
             return Enumerator_enumerateThenFinally(() => {
@@ -1125,7 +1125,7 @@ export function take(count, xs) {
                 return some(e["System.Collections.Generic.IEnumerator`1.get_Current"]());
             }
             else {
-                throw new Exception((SR_notEnoughElements + "\\nParameter name: ") + "source");
+                throw new Exception(SR_notEnoughElements + " (Parameter \'source\')");
             }
         }
         else {
@@ -1213,7 +1213,7 @@ export function average(xs, averager) {
         return averager.Add(acc, x);
     }, averager.GetZero(), xs);
     if (count === 0) {
-        throw new Exception((SR_inputSequenceEmpty + "\\nParameter name: ") + "source");
+        throw new Exception(SR_inputSequenceEmpty + " (Parameter \'source\')");
     }
     else {
         return averager.DivideByInt(total, count);
@@ -1226,7 +1226,7 @@ export function averageBy(f, xs, averager) {
         return averager.Add(acc, f(x));
     }, averager.GetZero(), xs);
     if (count === 0) {
-        throw new Exception((SR_inputSequenceEmpty + "\\nParameter name: ") + "source");
+        throw new Exception(SR_inputSequenceEmpty + " (Parameter \'source\')");
     }
     else {
         return averager.DivideByInt(total, count);
@@ -1241,7 +1241,7 @@ export function chunkBySize(chunkSize, xs) {
 export function insertAt(index, y, xs) {
     let isDone = false;
     if (index < 0) {
-        throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+        throw new Exception(SR_indexOutOfBounds + " (Parameter \'index\')");
     }
     return generateIndexed(() => ofSeq(xs), (i, e) => {
         if ((isDone ? true : (i < index)) && e["System.Collections.IEnumerator.MoveNext"]()) {
@@ -1253,7 +1253,7 @@ export function insertAt(index, y, xs) {
         }
         else {
             if (!isDone) {
-                throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+                throw new Exception(SR_indexOutOfBounds + " (Parameter \'index\')");
             }
             return undefined;
         }
@@ -1264,7 +1264,7 @@ export function insertAt(index, y, xs) {
 export function insertManyAt(index, ys, xs) {
     let status = -1;
     if (index < 0) {
-        throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+        throw new Exception(SR_indexOutOfBounds + " (Parameter \'index\')");
     }
     return generateIndexed(() => [ofSeq(xs), ofSeq(ys)], (i, tupledArg) => {
         const e1 = tupledArg[0];
@@ -1291,7 +1291,7 @@ export function insertManyAt(index, ys, xs) {
             }
             else {
                 if (status < 1) {
-                    throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+                    throw new Exception(SR_indexOutOfBounds + " (Parameter \'index\')");
                 }
                 return undefined;
             }
@@ -1307,7 +1307,7 @@ export function insertManyAt(index, ys, xs) {
 export function removeAt(index, xs) {
     let isDone = false;
     if (index < 0) {
-        throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+        throw new Exception(SR_indexOutOfBounds + " (Parameter \'index\')");
     }
     return generateIndexed(() => ofSeq(xs), (i, e) => {
         if ((isDone ? true : (i < index)) && e["System.Collections.IEnumerator.MoveNext"]()) {
@@ -1319,7 +1319,7 @@ export function removeAt(index, xs) {
         }
         else {
             if (!isDone) {
-                throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+                throw new Exception(SR_indexOutOfBounds + " (Parameter \'index\')");
             }
             return undefined;
         }
@@ -1329,7 +1329,7 @@ export function removeAt(index, xs) {
 }
 export function removeManyAt(index, count, xs) {
     if (index < 0) {
-        throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+        throw new Exception(SR_indexOutOfBounds + " (Parameter \'index\')");
     }
     return generateIndexed(() => ofSeq(xs), (i, e) => {
         if (i < index) {
@@ -1337,14 +1337,14 @@ export function removeManyAt(index, count, xs) {
                 return some(e["System.Collections.Generic.IEnumerator`1.get_Current"]());
             }
             else {
-                throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+                throw new Exception(SR_indexOutOfBounds + " (Parameter \'index\')");
             }
         }
         else {
             if (i === index) {
                 for (let _ = 1; _ <= count; _++) {
                     if (!e["System.Collections.IEnumerator.MoveNext"]()) {
-                        throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "count");
+                        throw new Exception(SR_indexOutOfBounds + " (Parameter \'count\')");
                     }
                 }
             }
@@ -1357,7 +1357,7 @@ export function removeManyAt(index, count, xs) {
 export function updateAt(index, y, xs) {
     let isDone = false;
     if (index < 0) {
-        throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+        throw new Exception(SR_indexOutOfBounds + " (Parameter \'index\')");
     }
     return generateIndexed(() => ofSeq(xs), (i, e) => {
         if ((isDone ? true : (i < index)) && e["System.Collections.IEnumerator.MoveNext"]()) {
@@ -1369,7 +1369,7 @@ export function updateAt(index, y, xs) {
         }
         else {
             if (!isDone) {
-                throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+                throw new Exception(SR_indexOutOfBounds + " (Parameter \'index\')");
             }
             return undefined;
         }

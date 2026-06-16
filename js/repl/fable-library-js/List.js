@@ -222,7 +222,7 @@ export function FSharpList__get_Head(xs) {
         return xs.head;
     }
     else {
-        throw new Exception((SR_inputWasEmpty + "\\nParameter name: ") + "list");
+        throw new Exception(SR_inputWasEmpty + " (Parameter \'list\')");
     }
 }
 export function FSharpList__get_Tail(xs) {
@@ -231,7 +231,7 @@ export function FSharpList__get_Tail(xs) {
         return value_1(matchValue);
     }
     else {
-        throw new Exception((SR_inputWasEmpty + "\\nParameter name: ") + "list");
+        throw new Exception(SR_inputWasEmpty + " (Parameter \'list\')");
     }
 }
 export function FSharpList__get_Item_Z524259A4(xs, index) {
@@ -250,7 +250,7 @@ export function FSharpList__get_Item_Z524259A4(xs, index) {
                 }
             }
             else {
-                throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+                throw new Exception(SR_indexOutOfBounds + " (Parameter \'index\')");
             }
             break;
         }
@@ -926,7 +926,7 @@ export function exists2(f_mut, xs_mut, ys_mut) {
                     continue exists2;
                 }
             default:
-                throw new Exception((SR_differentLengths + "\\nParameter name: ") + "list2");
+                throw new Exception(SR_differentLengths + " (Parameter \'list2\')");
         }
         break;
     }
@@ -1021,7 +1021,7 @@ export function skip(count_mut, xs_mut) {
             return xs;
         }
         else if (FSharpList__get_IsEmpty(xs)) {
-            throw new Exception((SR_notEnoughElements + "\\nParameter name: ") + "list");
+            throw new Exception(SR_notEnoughElements + " (Parameter \'list\')");
         }
         else {
             count_mut = (count - 1);
@@ -1050,7 +1050,7 @@ export function skipWhile(predicate_mut, xs_mut) {
 }
 export function take(count, xs) {
     if (count < 0) {
-        throw new Exception((SR_inputMustBeNonNegative + "\\nParameter name: ") + "count");
+        throw new Exception(SR_inputMustBeNonNegative + " (Parameter \'count\')");
     }
     const loop = (i_mut, acc_mut, xs_1_mut) => {
         loop: while (true) {
@@ -1060,7 +1060,7 @@ export function take(count, xs) {
                 return acc;
             }
             else if (FSharpList__get_IsEmpty(xs_1)) {
-                throw new Exception((SR_notEnoughElements + "\\nParameter name: ") + "list");
+                throw new Exception(SR_notEnoughElements + " (Parameter \'list\')");
             }
             else {
                 i_mut = (i - 1);
@@ -1145,22 +1145,22 @@ export function getSlice(startIndex, endIndex, xs) {
 }
 export function splitAt(index, xs) {
     if (index < 0) {
-        throw new Exception((SR_inputMustBeNonNegative + "\\nParameter name: ") + "index");
+        throw new Exception(SR_inputMustBeNonNegative + " (Parameter \'index\')");
     }
     if (index > FSharpList__get_Length(xs)) {
-        throw new Exception((SR_notEnoughElements + "\\nParameter name: ") + "index");
+        throw new Exception(SR_notEnoughElements + " (Parameter \'index\')");
     }
     return [take(index, xs), skip(index, xs)];
 }
 export function exactlyOne(xs) {
     if (FSharpList__get_IsEmpty(xs)) {
-        throw new Exception((SR_inputSequenceEmpty + "\\nParameter name: ") + "list");
+        throw new Exception(SR_inputSequenceEmpty + " (Parameter \'list\')");
     }
     else if (FSharpList__get_IsEmpty(FSharpList__get_Tail(xs))) {
         return FSharpList__get_Head(xs);
     }
     else {
-        throw new Exception((SR_inputSequenceTooLong + "\\nParameter name: ") + "list");
+        throw new Exception(SR_inputSequenceTooLong + " (Parameter \'list\')");
     }
 }
 export function tryExactlyOne(xs) {
@@ -1200,7 +1200,7 @@ export function insertAt(index, y, xs) {
         }
     }, FSharpList_get_Empty(), xs);
     return reverse(isDone ? result : (((i + 1) === index) ? FSharpList_Cons_305B8EAC(y, result) : (() => {
-        throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+        throw new Exception(SR_indexOutOfBounds + " (Parameter \'index\')");
     })()));
 }
 export function insertManyAt(index, ys, xs) {
@@ -1218,7 +1218,7 @@ export function insertManyAt(index, ys, xs) {
         }
     }, FSharpList_get_Empty(), xs);
     return reverse(isDone ? result : (((i + 1) === index) ? append(ys_1, result) : (() => {
-        throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+        throw new Exception(SR_indexOutOfBounds + " (Parameter \'index\')");
     })()));
 }
 export function removeAt(index, xs) {
@@ -1235,7 +1235,7 @@ export function removeAt(index, xs) {
         }
     }, xs);
     if (!isDone) {
-        throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+        throw new Exception(SR_indexOutOfBounds + " (Parameter \'index\')");
     }
     return ys;
 }
@@ -1263,7 +1263,7 @@ export function removeManyAt(index, count, xs) {
     }, xs);
     const status_1 = (((status === 0) && ((i + 1) === (index + count))) ? 1 : status) | 0;
     if (status_1 < 1) {
-        throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + ((status_1 < 0) ? "index" : "count"));
+        throw new Exception(SR_indexOutOfBounds + ((" (Parameter \'" + ((status_1 < 0) ? "index" : "count")) + "\')"));
     }
     return ys;
 }
@@ -1279,7 +1279,7 @@ export function updateAt(index, y, xs) {
         }
     }, xs);
     if (!isDone) {
-        throw new Exception((SR_indexOutOfBounds + "\\nParameter name: ") + "index");
+        throw new Exception(SR_indexOutOfBounds + " (Parameter \'index\')");
     }
     return ys;
 }

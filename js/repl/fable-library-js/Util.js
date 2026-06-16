@@ -9,6 +9,9 @@ export class Exception {
     constructor(msg) {
         this.message = msg ?? "";
     }
+    toString() {
+        return this.message;
+    }
 }
 export function isException(x) {
     return x instanceof Exception || x instanceof Error;
