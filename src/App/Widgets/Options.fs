@@ -225,7 +225,7 @@ let private targetSetting (target : string) dispatch =
                     option "Python"
                     option "Rust"
                     option "Dart"
-                    option "Erlang/BEAM"
+                    option "BEAM"
                 ]
             ]
         ]
