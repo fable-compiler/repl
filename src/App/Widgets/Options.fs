@@ -26,7 +26,7 @@ type Model =
     member this.ToOtherFSharpOptions =
         [|
             "--define:FABLE_COMPILER"
-            "--define:FABLE_COMPILER_4"
+            "--define:FABLE_COMPILER_5"
             "--langversion:preview"
             if this.DefineDebug then "--define:DEBUG"
             match this.Target.ToLowerInvariant() with
@@ -35,6 +35,7 @@ type Model =
             | "python" -> "--define:FABLE_COMPILER_PYTHON"
             | "rust" -> "--define:FABLE_COMPILER_RUST"
             | "dart" -> "--define:FABLE_COMPILER_DART"
+            | "beam" -> "--definge:FABLE_COMPILER_BEAM"
             | _ -> ()
             "--optimize"
             if this.Optimize then "+" else "-"
@@ -224,6 +225,7 @@ let private targetSetting (target : string) dispatch =
                     option "Python"
                     option "Rust"
                     option "Dart"
+                    option "Erlang/BEAM"
                 ]
             ]
         ]
