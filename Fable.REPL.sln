@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "App", "src\App\App.fsproj", "{39F5D300-0762-421C-ACF3-6E4509E44D78}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E3285035-697D-49AA-8A30-95E349A4EBDF}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "fcs-export", "src\Export\fcs-export.fsproj", "{76A81454-3826-493A-9F19-9D0CE5C6C54E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +34,20 @@ Global
 		{39F5D300-0762-421C-ACF3-6E4509E44D78}.Release|x64.Build.0 = Release|Any CPU
 		{39F5D300-0762-421C-ACF3-6E4509E44D78}.Release|x86.ActiveCfg = Release|Any CPU
 		{39F5D300-0762-421C-ACF3-6E4509E44D78}.Release|x86.Build.0 = Release|Any CPU
+		{76A81454-3826-493A-9F19-9D0CE5C6C54E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76A81454-3826-493A-9F19-9D0CE5C6C54E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76A81454-3826-493A-9F19-9D0CE5C6C54E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{76A81454-3826-493A-9F19-9D0CE5C6C54E}.Debug|x64.Build.0 = Debug|Any CPU
+		{76A81454-3826-493A-9F19-9D0CE5C6C54E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{76A81454-3826-493A-9F19-9D0CE5C6C54E}.Debug|x86.Build.0 = Debug|Any CPU
+		{76A81454-3826-493A-9F19-9D0CE5C6C54E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76A81454-3826-493A-9F19-9D0CE5C6C54E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76A81454-3826-493A-9F19-9D0CE5C6C54E}.Release|x64.ActiveCfg = Release|Any CPU
+		{76A81454-3826-493A-9F19-9D0CE5C6C54E}.Release|x64.Build.0 = Release|Any CPU
+		{76A81454-3826-493A-9F19-9D0CE5C6C54E}.Release|x86.ActiveCfg = Release|Any CPU
+		{76A81454-3826-493A-9F19-9D0CE5C6C54E}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{76A81454-3826-493A-9F19-9D0CE5C6C54E} = {E3285035-697D-49AA-8A30-95E349A4EBDF}
 	EndGlobalSection
 EndGlobal

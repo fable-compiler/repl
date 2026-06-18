@@ -3,7 +3,7 @@ storage:none
 framework: netstandard2.0
 
 nuget FSharp.Core
-nuget Fable.Core
+nuget Fable.Core 4.3
 nuget Fable.Elmish.Browser
 nuget Fable.React
 nuget Fable.Elmish
@@ -13,14 +13,14 @@ nuget Thoth.Json
 nuget Thoth.Elmish.Toast
 nuget Fable.Fetch
 nuget Fable.FontAwesome.Free
-nuget Feliz prerelease
+nuget Feliz
 nuget Feliz.Bulma
 nuget Feliz.Bulma.Tooltip
 nuget Fable.Browser.Css
-nuget Fable.Browser.Dom == 2.4.4
-nuget Fable.Browser.Event == 1.4.5
+nuget Fable.Browser.Dom
+nuget Fable.Browser.Event
 nuget Fable.Browser.MediaQueryList
-nuget Fable.Browser.Navigator == 2.0.0
+nuget Fable.Browser.Navigator
 
 # REPL Lib
 
