@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # This expects to be run from repo root dir and have ncave's F# compiler fork
 # and Fable repos in sibling folders
 
@@ -5,13 +7,15 @@ NCAVE_FSHARP_REPO=fsharp_fable
 REPL_REPO=repl
 
 set -x # Output commands as they're executed
+set -e # Stop on first error
+set -o noglob # Disable globbing
 
 dotnet build src/Fable.Repl.Lib
 
 cd ../$NCAVE_FSHARP_REPO
 git checkout export
-dotnet build -c Release src/buildtools/buildtools.proj
-dotnet build -c Release src/fsharp/FSharp.Compiler.Service
+dotnet build -c Release buildtools/buildtools.proj
+dotnet build -c Release src/Compiler/FSharp.Compiler.Service.fsproj
 
 cd ../$REPL_REPO
 dotnet run -c Release -p src/Export

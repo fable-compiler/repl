@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <DisableImplicitFSharpCoreReference>true</DisableImplicitFSharpCoreReference>
   </PropertyGroup>
 
@@ -18,8 +18,8 @@
 
   <ItemGroup>
     <!-- <PackageReference Include="FSharp.Core" Version="5.0.1" /> -->
-    <PackageReference Include="Fable.Core" Version="3.2.6" />
-    <PackageReference Include="Dotnet.ProjInfo" Version="0.44.0" />
+    <PackageReference Include="Fable.Core" Version="4.3.0" />
+    <PackageReference Include="Ionide.ProjInfo" Version="0.67.0" />
     <PackageReference Include="Fable.Browser.Css" Version="2.*" />
     <PackageReference Include="Fable.Browser.Dom" Version="2.*" />
     <PackageReference Include="Fable.Browser.MediaQueryList" Version="1.*" />
