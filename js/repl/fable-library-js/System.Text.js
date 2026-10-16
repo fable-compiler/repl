@@ -178,6 +178,13 @@ export function StringBuilder__set_Chars_413E0D0A(x, index, value) {
         setItem(x.buf, i, (item(i, x.buf).slice(0, (pos - 1) + 1) + value) + item(i, x.buf).slice(pos + 1, item(i, x.buf).length));
     }
 }
+export function StringBuilder__get_Length(x) {
+    let len = 0;
+    for (let i = x.buf.length - 1; i >= 0; i--) {
+        len = ((len + item(i, x.buf).length) | 0);
+    }
+    return len | 0;
+}
 export function StringBuilder__Replace_Z766F94C0(x, oldValue, newValue) {
     for (let i = x.buf.length - 1; i >= 0; i--) {
         setItem(x.buf, i, replace(item(i, x.buf), oldValue, newValue));
@@ -188,13 +195,6 @@ export function StringBuilder__Replace_Z384F8060(x, oldValue, newValue) {
     const str = replace(x.toString(), oldValue, newValue);
     return StringBuilder__Append_Z721C83C5(StringBuilder__Clear(x), str);
 }
-export function StringBuilder__get_Length(x) {
-    let len = 0;
-    for (let i = x.buf.length - 1; i >= 0; i--) {
-        len = ((len + item(i, x.buf).length) | 0);
-    }
-    return len | 0;
-}
-export function StringBuilder__ToString_Z37302880(x, firstIndex, length) {
-    return substring(x.toString(), firstIndex, length);
+export function StringBuilder__ToString_Z37302880(x, startIndex, length) {
+    return substring(x.toString(), startIndex, length);
 }

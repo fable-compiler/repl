@@ -70,29 +70,12 @@ export function toArray(opt) {
 export function defaultArg(opt, defaultValue) {
     return (opt != null) ? value(opt) : defaultValue;
 }
-export function defaultArgWith(opt, defThunk) {
-    return (opt != null) ? value(opt) : defThunk();
-}
 export function orElse(opt, ifNone) {
     return opt == null ? ifNone : opt;
 }
-export function orElseWith(opt, ifNoneThunk) {
-    return opt == null ? ifNoneThunk() : opt;
-}
-export function filter(predicate, opt) {
-    return (opt != null) ? (predicate(value(opt)) ? opt : undefined) : opt;
-}
+// Only used by Replacements.Util.fs's curry/uncurry helpers, not by `Option.map` itself.
 export function map(mapping, opt) {
     return (opt != null) ? some(mapping(value(opt))) : undefined;
-}
-export function map2(mapping, opt1, opt2) {
-    return (opt1 != null && opt2 != null) ? mapping(value(opt1), value(opt2)) : undefined;
-}
-export function map3(mapping, opt1, opt2, opt3) {
-    return (opt1 != null && opt2 != null && opt3 != null) ? mapping(value(opt1), value(opt2), value(opt3)) : undefined;
-}
-export function bind(binder, opt) {
-    return opt != null ? binder(value(opt)) : undefined;
 }
 export function tryOp(op, arg) {
     try {

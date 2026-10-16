@@ -1,4 +1,4 @@
-import { Exception } from "./Util.js";
+import { defaultOf, Exception } from "./Util.js";
 import { class_type } from "./Reflection.js";
 import { SR_Arg_ArgumentOutOfRangeException, SR_ArgumentNull_Generic, SR_Arg_ArgumentException, SR_Arg_ParamName_Name, SR_Arg_TimeoutException, SR_Arg_StackOverflowException, SR_Arg_RankException, SR_Arg_OverflowException, SR_Arg_OutOfMemoryException, SR_Arg_NullReferenceException, SR_Arg_NotSupportedException, SR_Arg_NotImplementedException, SR_Arg_NotFiniteNumberException, SR_Arg_InvalidOperationException, SR_Arg_IndexOutOfRangeException, SR_Arg_FormatException, SR_Arg_DivideByZero, SR_Arg_ArithmeticException, SR_Arg_ApplicationException, SR_Arg_SystemException } from "./Global.js";
 import { isNullOrEmpty } from "./String.js";
@@ -227,29 +227,35 @@ export function TimeoutException_$ctor() {
     return TimeoutException_$ctor_Z721C83C5(SR_Arg_TimeoutException);
 }
 export class ArgumentException extends Exception {
-    constructor(message, paramName) {
-        super(isNullOrEmpty(paramName) ? message : (((message + SR_Arg_ParamName_Name) + paramName) + "\')"));
+    constructor(message, paramName, innerException) {
+        super(isNullOrEmpty(paramName) ? message : (((message + SR_Arg_ParamName_Name) + paramName) + "\')"), innerException);
         this.paramName = paramName;
     }
 }
 export function ArgumentException_$reflection() {
     return class_type("System.ArgumentException", undefined, ArgumentException, class_type("System.Exception"));
 }
-export function ArgumentException_$ctor_Z384F8060(message, paramName) {
-    return new ArgumentException(message, paramName);
+export function ArgumentException_$ctor_Z60A2B367(message, paramName, innerException) {
+    return new ArgumentException(message, paramName, innerException);
 }
 export function ArgumentException_$ctor() {
-    return ArgumentException_$ctor_Z384F8060(SR_Arg_ArgumentException, "");
+    return ArgumentException_$ctor_Z60A2B367(SR_Arg_ArgumentException, "", defaultOf());
 }
 export function ArgumentException_$ctor_Z721C83C5(message) {
-    return ArgumentException_$ctor_Z384F8060(message, "");
+    return ArgumentException_$ctor_Z60A2B367(message, "", defaultOf());
+}
+export function ArgumentException_$ctor_Z384F8060(message, paramName) {
+    return ArgumentException_$ctor_Z60A2B367(message, paramName, defaultOf());
+}
+export function ArgumentException_$ctor_68CE3CA2(message, innerException) {
+    return ArgumentException_$ctor_Z60A2B367(message, "", innerException);
 }
 export function ArgumentException__get_ParamName(_) {
     return _.paramName;
 }
 export class ArgumentNullException extends ArgumentException {
     constructor(paramName, message) {
-        super(message, paramName);
+        super(message, paramName, defaultOf());
     }
 }
 export function ArgumentNullException_$reflection() {
@@ -266,7 +272,7 @@ export function ArgumentNullException_$ctor() {
 }
 export class ArgumentOutOfRangeException extends ArgumentException {
     constructor(paramName, message) {
-        super(message, paramName);
+        super(message, paramName, defaultOf());
     }
 }
 export function ArgumentOutOfRangeException_$reflection() {

@@ -702,11 +702,15 @@ export function MapTreeModule_foldSectionOpt(comparer, lo, hi, f, m, x) {
                         return x_3;
                     }
                 }
-                else if ((comparer.Compare(lo, MapTreeLeaf$2__get_Key(m2)) <= 0) && (comparer.Compare(MapTreeLeaf$2__get_Key(m2), hi) <= 0)) {
-                    return f_1(MapTreeLeaf$2__get_Key(m2), MapTreeLeaf$2__get_Value(m2), x_1);
-                }
                 else {
-                    return x_1;
+                    const cLoKey_1 = comparer.Compare(lo, MapTreeLeaf$2__get_Key(m2)) | 0;
+                    const cKeyHi_1 = comparer.Compare(MapTreeLeaf$2__get_Key(m2), hi) | 0;
+                    if ((cLoKey_1 <= 0) && (cKeyHi_1 <= 0)) {
+                        return f_1(MapTreeLeaf$2__get_Key(m2), MapTreeLeaf$2__get_Value(m2), x_1);
+                    }
+                    else {
+                        return x_1;
+                    }
                 }
             }
             else {

@@ -18,8 +18,17 @@ export class Event$2 {
         return createEvent(h => { this._add(h); }, h => { this._remove(h); });
     }
     Trigger(senderOrValue, valueOrUndefined) {
+        // Disambiguate the overloads by arity, not by value: a two-argument call may
+        // legitimately pass `undefined` as the event value (e.g. unit events).
         let sender = null;
-        const value = valueOrUndefined === undefined ? senderOrValue : (sender = senderOrValue, valueOrUndefined);
+        let value;
+        if (arguments.length <= 1) {
+            value = senderOrValue;
+        }
+        else {
+            sender = senderOrValue;
+            value = valueOrUndefined;
+        }
         this.delegates.forEach(f => { f(sender, value); });
     }
 }

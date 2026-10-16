@@ -1,6 +1,7 @@
 import { defaultCancellationToken } from "./Async.js";
 import { fromContinuations } from "./Async.js";
 import { startImmediate } from "./Async.js";
+import { OperationCanceledException, protectedCont } from "./AsyncBuilder.js";
 import { Exception } from "./Util.js";
 class QueueCell {
     constructor(message) {
@@ -27,7 +28,9 @@ class MailboxQueue {
             else {
                 delete this.firstAndLast;
             }
-            return value;
+            // Wrap the value so falsy messages (0, false, "", null, undefined/unit)
+            // can be distinguished from an empty queue.
+            return { value };
         }
         return void 0;
     }
@@ -41,11 +44,11 @@ export class MailboxProcessor {
 }
 function __processEvents($this) {
     if ($this.continuation) {
-        const value = $this.messages.tryGet();
-        if (value) {
+        const dequeued = $this.messages.tryGet();
+        if (dequeued !== void 0) {
             const cont = $this.continuation;
             delete $this.continuation;
-            cont(value);
+            cont(dequeued.value);
         }
     }
 }
@@ -53,12 +56,27 @@ export function startInstance($this) {
     startImmediate($this.body($this), $this.cancellationToken);
 }
 export function receive($this) {
-    return fromContinuations((conts) => {
+    return protectedCont((ctx) => {
         if ($this.continuation) {
             throw new Exception("Receive can only be called once!");
         }
-        $this.continuation = conts[0];
-        __processEvents($this);
+        let tokenId;
+        const continuation = (message) => {
+            if (tokenId !== undefined) {
+                ctx.cancelToken.removeListener(tokenId);
+            }
+            ctx.onSuccess(message);
+        };
+        $this.continuation = continuation;
+        tokenId = ctx.cancelToken.addListener(() => {
+            if ($this.continuation === continuation) {
+                delete $this.continuation;
+                ctx.onCancel(new OperationCanceledException());
+            }
+        });
+        if ($this.continuation === continuation) {
+            __processEvents($this);
+        }
     });
 }
 export function post($this, message) {
@@ -67,15 +85,19 @@ export function post($this, message) {
 }
 export function postAndAsyncReply($this, buildMessage) {
     let result;
+    // Use an explicit flag because the reply value itself may be undefined
+    // (e.g. AsyncReplyChannel<unit>), which must still complete the async.
+    let replied = false;
     let continuation;
     function checkCompletion() {
-        if (result !== void 0 && continuation !== void 0) {
+        if (replied && continuation !== void 0) {
             continuation(result);
         }
     }
     const reply = {
         reply: (res) => {
             result = res;
+            replied = true;
             checkCompletion();
         },
     };

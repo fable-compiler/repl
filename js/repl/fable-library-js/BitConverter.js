@@ -77,7 +77,7 @@ export function doubleToInt64Bits(value) {
 export function toBoolean(bytes, offset) {
     const array = ArrayBuffer.isView(bytes) ? bytes : Uint8Array.from(bytes);
     const view = new DataView(array.buffer, array.byteOffset, array.byteLength);
-    return view.getUint8(offset) === 1 ? true : false;
+    return view.getUint8(offset) !== 0;
 }
 export function toChar(bytes, offset) {
     const array = ArrayBuffer.isView(bytes) ? bytes : Uint8Array.from(bytes);
@@ -134,5 +134,5 @@ export function toString(bytes, offset, count) {
     else if (offset != null) {
         buffer = buffer.subarray(offset);
     }
-    return Array.from(buffer).map((b) => ("0" + b.toString(16)).slice(-2)).join("-");
+    return Array.from(buffer).map((b) => ("0" + b.toString(16)).slice(-2).toUpperCase()).join("-");
 }

@@ -5,6 +5,7 @@
  * and pattern matching helpers compatible with Fable's option convention
  * (undefined = no match, value/tuple = match).
  */
+import { ofArray } from "./List.js";
 // ===================================================================
 // Var: represents an F# quotation variable
 // ===================================================================
@@ -74,11 +75,12 @@ export class ExprIfThenElse {
     toJSON() { return ["IfThenElse", this.guard, this.thenExpr, this.elseExpr]; }
 }
 export class ExprCall {
-    constructor(instance, method, args) {
+    constructor(instance, method, args, declaringType = "") {
         this.tag = "Call";
         this.instance = instance;
         this.method = method;
         this.args = args;
+        this.declaringType = declaringType;
     }
     toJSON() { return ["Call", this.instance, this.method, this.args]; }
 }
@@ -176,6 +178,10 @@ export class ExprVarSet {
 export function mkValue(value, type) {
     return new ExprValue(value, type);
 }
+export function mkNull(type) {
+    // A null-value node (no instance / null literal / empty option or list).
+    return new ExprValue(null, type);
+}
 export function mkVar(v) {
     return new ExprVarExpr(v);
 }
@@ -191,8 +197,8 @@ export function mkLet(v, value, body) {
 export function mkIfThenElse(guard, thenExpr, elseExpr) {
     return new ExprIfThenElse(guard, thenExpr, elseExpr);
 }
-export function mkCall(instance, method, args) {
-    return new ExprCall(instance, method, args);
+export function mkCall(instance, method, args, declaringType = "") {
+    return new ExprCall(instance, method, args, declaringType);
 }
 export function mkSequential(first, second) {
     return new ExprSequential(first, second);
@@ -273,9 +279,16 @@ export function isIfThenElse(expr) {
     return undefined;
 }
 export function isCall(expr) {
-    if (expr instanceof ExprCall)
-        return [expr.instance, expr.method, expr.args];
+    if (expr instanceof ExprCall) {
+        // "novalue" is the "no instance" sentinel, distinct from a genuine quoted null ("null").
+        const instance = (expr.instance instanceof ExprValue && expr.instance.type === "novalue") ? null : expr.instance;
+        // Must be a real FSharpList (not the raw array), same reasoning as isFieldGet below.
+        return [instance, expr.method, ofArray(expr.args)];
+    }
     return undefined;
+}
+export function callDeclaringType(expr) {
+    return expr instanceof ExprCall ? expr.declaringType : "";
 }
 export function isSequential(expr) {
     if (expr instanceof ExprSequential)
@@ -303,8 +316,12 @@ export function isTupleGet(expr) {
     return undefined;
 }
 export function isFieldGet(expr) {
-    if (expr instanceof ExprFieldGet)
-        return [expr.expr, expr.fieldName];
+    // Third element mirrors PropertyGet's indexer-args slot, always empty here (never indexed).
+    // "novalue" is the "no instance" sentinel, distinct from a genuine quoted null ("null").
+    if (expr instanceof ExprFieldGet) {
+        const instance = (expr.expr instanceof ExprValue && expr.expr.type === "novalue") ? null : expr.expr;
+        return [instance, expr.fieldName, []];
+    }
     return undefined;
 }
 // ===================================================================
@@ -555,7 +572,7 @@ export function substitute(expr, fn) {
             return new ExprIfThenElse(sub(e.guard), sub(e.thenExpr), sub(e.elseExpr));
         if (e instanceof ExprCall) {
             const newInst = e.instance != null ? sub(e.instance) : e.instance;
-            return new ExprCall(newInst, e.method, e.args.map(sub));
+            return new ExprCall(newInst, e.method, e.args.map(sub), e.declaringType);
         }
         if (e instanceof ExprSequential)
             return new ExprSequential(sub(e.first), sub(e.second));
@@ -615,4 +632,51 @@ export function exprFromJSON(json) {
         case "NewList": return new ExprNewList(exprFromJSON(fields[0]), exprFromJSON(fields[1]));
         default: return new ExprValue(json, "unknown");
     }
+}
+// ===================================================================
+// DerivedPatterns
+// F# defines these on top of Patterns. AndAlso and OrElse recover the
+// shape `&&` and `||` desugar into; SpecificCall matches a call by the
+// identity of a template quotation rather than by compiled name.
+// ===================================================================
+export function isAndAlso(expr) {
+    // a && b  ==>  if a then b else false
+    if (expr instanceof ExprIfThenElse
+        && expr.elseExpr instanceof ExprValue
+        && expr.elseExpr.value === false) {
+        return [expr.guard, expr.thenExpr];
+    }
+    return undefined;
+}
+export function isOrElse(expr) {
+    // a || b  ==>  if a then true else b
+    if (expr instanceof ExprIfThenElse
+        && expr.thenExpr instanceof ExprValue
+        && expr.thenExpr.value === true) {
+        return [expr.guard, expr.elseExpr];
+    }
+    return undefined;
+}
+/// A template such as <@ (=) @> quotes as nested lambdas around the call, so
+/// the identifying Call node has to be dug out before comparing.
+function templateCall(expr) {
+    let current = expr;
+    while (current instanceof ExprLambda) {
+        current = current.body;
+    }
+    return current instanceof ExprCall ? current : undefined;
+}
+// Takes both arguments; the partial application FSharp.Core expresses by
+// currying is built by the replacement instead.
+export function isSpecificCall(template, expr) {
+    const wanted = templateCall(template);
+    if (wanted === undefined || !(expr instanceof ExprCall))
+        return undefined;
+    if (expr.method !== wanted.method || expr.declaringType !== wanted.declaringType)
+        return undefined;
+    const instance = (expr.instance instanceof ExprValue && expr.instance.type === "novalue") ? null : expr.instance;
+    // The middle slot is F#'s generic-argument list. The runtime models types as
+    // names rather than System.Type, so it is always empty here; callers written
+    // against Fable match it with a wildcard.
+    return [instance, ofArray([]), ofArray(expr.args)];
 }

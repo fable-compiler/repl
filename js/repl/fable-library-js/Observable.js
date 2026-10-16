@@ -1,5 +1,5 @@
 import { Choice_tryValueIfChoice1Of2, Choice_tryValueIfChoice2Of2 } from "./Choice.js";
-import { value } from "./Option.js";
+import { some, value } from "./Option.js";
 export class Observer {
     constructor(onNext, onError, onCompleted) {
         this.OnNext = onNext;
@@ -29,7 +29,7 @@ export function choose(chooser, source) {
     } }, observer.OnError), observer.OnError, observer.OnCompleted)));
 }
 export function filter(predicate, source) {
-    return choose((x) => predicate(x) ? x : void 0, source);
+    return choose((x) => predicate(x) ? some(x) : undefined, source);
 }
 export function map(mapping, source) {
     return new Observable((observer) => source.Subscribe(new Observer((t) => {
@@ -84,11 +84,13 @@ export function merge(source1, source2) {
 export function pairwise(source) {
     return new Observable((observer) => {
         let last;
+        let haveLast = false;
         return source.Subscribe(new Observer((next) => {
-            if (last != null) {
+            if (haveLast) {
                 observer.OnNext([last, next]);
             }
             last = next;
+            haveLast = true;
         }, observer.OnError, observer.OnCompleted));
     });
 }

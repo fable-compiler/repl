@@ -1,7 +1,7 @@
 import { disposeSafe, getEnumerator, copyToArray, defaultOf, Exception } from "./Util.js";
 import { Helpers_allocateArrayFromCons } from "./Native.js";
 import { setItem as setItem_1, item as item_2 } from "./Array.js";
-import { value as value_2, map as map_1, defaultArg, some } from "./Option.js";
+import { value as value_2, defaultArg, some } from "./Option.js";
 import { min as min_1, max as max_1 } from "./Double.js";
 import { SR_notEnoughElements, SR_inputMustBeNonNegative, SR_inputSequenceEmpty, SR_Arg_ArgumentOutOfRangeException, SR_indexOutOfBounds } from "./Global.js";
 import { Operators_IsNull } from "./FSharp.Core.js";
@@ -183,8 +183,9 @@ export function where(predicate, array) {
     return array.filter(predicate);
 }
 export function indexOf(array, item_1, start, count, eq) {
+    let option_1 = undefined;
     const start_1 = defaultArg(start, 0) | 0;
-    const end$0027 = defaultArg(map_1((c) => ((start_1 + c) | 0), count), array.length) | 0;
+    const end$0027 = defaultArg((option_1 = count, (option_1 != null) ? (start_1 + value_2(option_1)) : undefined), array.length) | 0;
     const loop = (i_mut) => {
         loop: while (true) {
             const i = i_mut;

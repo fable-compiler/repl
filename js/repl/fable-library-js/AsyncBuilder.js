@@ -1,4 +1,12 @@
 import { Exception, ensureErrorOrException } from "./Util.js";
+// AggregateError requires ES2021; the runtime also supports ES2020 hosts.
+export class CancellationCallbackError extends Exception {
+    constructor(errors) {
+        // invariant: F# InnerException exposes the first failure without discarding the remaining errors
+        super("Cancellation callbacks failed", errors[0]);
+        this.errors = errors;
+    }
+}
 export class CancellationToken {
     constructor(cancelled = false) {
         this._id = 0;
@@ -11,14 +19,35 @@ export class CancellationToken {
     cancel() {
         if (!this._cancelled) {
             this._cancelled = true;
-            for (const [, listener] of this._listeners) {
-                listener();
+            // decision: visit newest registrations first, matching .NET; disposal can skip pending callbacks
+            const pending = Array.from(this._listeners.keys()).reverse();
+            const errors = [];
+            for (const id of pending) {
+                const listener = this._listeners.get(id);
+                this._listeners.delete(id);
+                if (listener) {
+                    try {
+                        listener();
+                    }
+                    catch (error) {
+                        errors.push(error);
+                    }
+                }
+            }
+            if (errors.length > 0) {
+                throw new CancellationCallbackError(errors);
             }
         }
     }
     addListener(f) {
         const id = this._id;
-        this._listeners.set(this._id++, f);
+        this._id++;
+        if (this._cancelled) {
+            f();
+        }
+        else {
+            this._listeners.set(id, f);
+        }
         return id;
     }
     removeListener(id) {
@@ -47,6 +76,7 @@ export class Trampoline {
     }
     constructor() {
         this.callCount = 0;
+        this.completed = false;
     }
     incrementAndCheck() {
         return this.callCount++ > Trampoline.maxTrampolineCallCount;
@@ -67,6 +97,9 @@ export function protectedCont(f) {
                     f(ctx);
                 }
                 catch (err) {
+                    if (ctx.trampoline.completed) {
+                        throw err;
+                    }
                     ctx.onError(ensureErrorOrException(err));
                 }
             });
@@ -76,6 +109,13 @@ export function protectedCont(f) {
                 f(ctx);
             }
             catch (err) {
+                // Once a terminal continuation has run the computation is complete, so
+                // an exception from user continuation code must propagate rather than be
+                // routed to onError (which would resolve the computation a second time,
+                // e.g. a succeeded try/with body re-entering its with handler).
+                if (ctx.trampoline.completed) {
+                    throw err;
+                }
                 ctx.onError(ensureErrorOrException(err));
             }
         }
@@ -85,12 +125,18 @@ export function protectedBind(computation, binder) {
     return protectedCont((ctx) => {
         computation({
             onSuccess: (x) => {
+                // Only guard the binder evaluation itself: the resulting computation
+                // is protected on its own, and re-catching what it throws would
+                // route continuation exceptions back into onError (double-resolve).
+                let bound;
                 try {
-                    binder(x)(ctx);
+                    bound = binder(x);
                 }
                 catch (err) {
                     ctx.onError(ensureErrorOrException(err));
+                    return;
                 }
+                bound(ctx);
             },
             onError: ctx.onError,
             onCancel: ctx.onCancel,
@@ -131,15 +177,31 @@ export class AsyncBuilder {
         return protectedCont((ctx) => {
             computation({
                 onSuccess: (x) => {
-                    compensation();
+                    try {
+                        compensation();
+                    }
+                    catch (error) {
+                        ctx.onError(ensureErrorOrException(error));
+                        return;
+                    }
                     ctx.onSuccess(x);
                 },
                 onError: (x) => {
-                    compensation();
+                    try {
+                        compensation();
+                    }
+                    catch (error) {
+                        ctx.onError(ensureErrorOrException(error));
+                        return;
+                    }
                     ctx.onError(x);
                 },
                 onCancel: (x) => {
-                    compensation();
+                    // decision: cancellation remains terminal when compensation throws, matching .NET Async.TryFinally
+                    try {
+                        compensation();
+                    }
+                    catch { /* Cancellation takes precedence. */ }
                     ctx.onCancel(x);
                 },
                 cancelToken: ctx.cancelToken,
@@ -155,12 +217,16 @@ export class AsyncBuilder {
                 cancelToken: ctx.cancelToken,
                 trampoline: ctx.trampoline,
                 onError: (ex) => {
+                    // See protectedBind: only guard the handler evaluation itself.
+                    let handled;
                     try {
-                        catchHandler(ex)(ctx);
+                        handled = catchHandler(ex);
                     }
                     catch (err) {
                         ctx.onError(ensureErrorOrException(err));
+                        return;
                     }
+                    handled(ctx);
                 },
             });
         });

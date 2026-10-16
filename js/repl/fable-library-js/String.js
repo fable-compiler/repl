@@ -1,8 +1,19 @@
 import { toString as dateToString } from "./Date.js";
-import { compare as numericCompare, isNumeric, isIntegral, multiply, toExponential, toFixed, toHex, toPrecision } from "./Numeric.js";
+import { compare as numericCompare, divide, isNumeric, isIntegral, multiply, toExponential, toFixed, toHex, toPrecision } from "./Numeric.js";
 import { escape } from "./RegExp.js";
 import { toString } from "./Types.js";
 import { Exception } from "./Util.js";
+// Temporal date/time values (only present under --test:js-temporal) are not JS Dates. To avoid
+// importing the side-effecting Temporal runtime modules into this core file — which would pull
+// them into every bundle — they advertise a .NET-style formatter through this well-known symbol,
+// attached to their prototype when (and only when) those modules are loaded.
+const dateTimeFormattableSymbol = Symbol.for("Fable.DateTimeFormattable");
+function isNetDateFormattable(rep) {
+    return rep != null && typeof rep[dateTimeFormattableSymbol] === "function";
+}
+function formatDateLike(rep, format) {
+    return rep instanceof Date ? dateToString(rep, format) : rep[dateTimeFormattableSymbol](format);
+}
 const fsFormatRegExp = /(^|[^%])%([0+\- ]*)(\*|\d+)?(?:\.(\d+))?(\w)/g;
 const interpolateRegExp = /(?:(^|[^%])%([0+\- ]*)(\d+)?(?:\.(\d+))?(\w))?%P\(\)/g;
 const formatRegExp = /\{(\d+)(,-?\d+)?(?:\:([a-zA-Z])(\d{0,2})|\:(.+?))?\}/g;
@@ -80,7 +91,7 @@ export function endsWith(str, pattern, ic) {
         return str.endsWith(pattern);
     }
     if (str.length >= pattern.length) {
-        return cmp(str.slice(-pattern.length), pattern, ic) === 0;
+        return cmp(str.slice(str.length - pattern.length), pattern, ic) === 0;
     }
     return false;
 }
@@ -95,6 +106,30 @@ export function contains(str, pattern, ic) {
         }
     }
     return false;
+}
+export function indexOf(str, searchValue, comparison, startIndex = 0) {
+    if (comparison === StringComparison.Ordinal) { // fast path
+        return str.indexOf(searchValue, startIndex);
+    }
+    const len = searchValue.length;
+    for (let i = Math.max(startIndex, 0); i <= str.length - len; i++) {
+        if (cmp(str.slice(i, i + len), searchValue, comparison) === 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+export function lastIndexOf(str, searchValue, comparison, startIndex = str.length - 1) {
+    if (comparison === StringComparison.Ordinal) { // fast path
+        return str.lastIndexOf(searchValue, startIndex);
+    }
+    const len = searchValue.length;
+    for (let i = Math.min(startIndex, str.length - len); i >= 0; i--) {
+        if (cmp(str.slice(i, i + len), searchValue, comparison) === 0) {
+            return i;
+        }
+    }
+    return -1;
 }
 export function indexOfAny(str, anyOf, ...args) {
     if (str == null || str === "") {
@@ -212,8 +247,11 @@ function formatReplacement(rep, flags, padLength, precision, format) {
                 break;
         }
     }
-    else if (rep instanceof Date) {
-        rep = dateToString(rep);
+    else if (rep instanceof Date || isNetDateFormattable(rep)) {
+        rep = formatDateLike(rep, undefined);
+    }
+    else if (format === "A" && typeof rep === "string") {
+        rep = "\"" + rep + "\"";
     }
     else {
         rep = toString(rep);
@@ -369,9 +407,14 @@ export function format(str, ...args) {
                     }
                     break;
                 case "e":
-                case "E":
-                    rep = precision != null ? toExponential(rep, precision) : toExponential(rep);
+                case "E": {
+                    precision = precision != null ? precision : 6;
+                    rep = String(toExponential(rep, precision));
+                    // .NET always signs the exponent and pads it to at least three digits
+                    const eIdx = rep.indexOf("e");
+                    rep = rep.slice(0, eIdx) + format + rep[eIdx + 1] + padLeft(rep.slice(eIdx + 2), 3, "0");
                     break;
+                }
                 case "f":
                 case "F":
                     precision = precision != null ? precision : 2;
@@ -395,7 +438,7 @@ export function format(str, ...args) {
                         const eChar = format === "G" ? "E" : "e";
                         rep = mantissa + eChar + expSign + paddedExpDigits;
                     }
-                    else {
+                    else if (rep.indexOf(".") >= 0) {
                         rep = trimEnd(trimEnd(rep, "0"), ".");
                     }
                     break;
@@ -446,7 +489,21 @@ export function format(str, ...args) {
                     }
                     if (pattern) {
                         let sign = "";
-                        rep = pattern.replace(/([0#,]+)(\.[0#]+)?/, (_, intPart, decimalPart) => {
+                        const patternStr = pattern;
+                        // Each `%` scales the value by 100 and is kept as a literal in the output
+                        const percents = (patternStr.match(/%/g) ?? []).length;
+                        if (percents > 0) {
+                            rep = multiply(rep, Math.pow(100, percents));
+                        }
+                        // .NET ignores commas placed after the decimal placeholders, hence the trailing group
+                        rep = patternStr.replace(/([0#,]+)(\.[0#]+)?(,*)/, (_, intPart, decimalPart) => {
+                            // Commas between the last integer placeholder and the decimal point scale the
+                            // value down by 1000 each; commas anywhere else only turn on digit grouping
+                            const scaleCommas = /,*$/.exec(intPart)[0].length;
+                            if (scaleCommas > 0) {
+                                intPart = intPart.substring(0, intPart.length - scaleCommas);
+                                rep = divide(rep, Math.pow(1000, scaleCommas));
+                            }
                             if (isLessThan(rep, 0)) {
                                 rep = multiply(rep, -1);
                                 sign = "-";
@@ -480,8 +537,8 @@ export function format(str, ...args) {
                     }
             }
         }
-        else if (rep instanceof Date) {
-            rep = dateToString(rep, pattern || format);
+        else if (rep instanceof Date || isNetDateFormattable(rep)) {
+            rep = formatDateLike(rep, pattern || format);
         }
         else {
             rep = toString(rep);

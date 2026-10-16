@@ -178,7 +178,7 @@ export function HashSet__Add_2B595(this$, k) {
             return false;
         }
         else {
-            const value = void (getItemFromDict(this$.hashMap, matchValue[1]).push(k));
+            void (getItemFromDict(this$.hashMap, matchValue[1]).push(k));
             return true;
         }
     }
@@ -224,7 +224,11 @@ export function HashSet__Remove_2B595(this$, k) {
     }
     switch (matchResult) {
         case 0: {
-            getItemFromDict(this$.hashMap, matchValue[1]).splice(matchValue[2], 1);
+            const h_1 = matchValue[1] | 0;
+            getItemFromDict(this$.hashMap, h_1).splice(matchValue[2], 1);
+            if (getItemFromDict(this$.hashMap, h_1).length === 0) {
+                this$.hashMap.delete(h_1);
+            }
             return true;
         }
         default:

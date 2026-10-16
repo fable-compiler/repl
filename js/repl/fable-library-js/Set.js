@@ -1,10 +1,9 @@
 import { record_type, bool_type, list_type, option_type, class_type } from "./Reflection.js";
 import { some, value as value_2 } from "./Option.js";
 import { structuralHash, toIterator, disposeSafe, getEnumerator, isArrayLike, Exception } from "./Util.js";
-import { Record } from "./Types.js";
+import { toString, Record } from "./Types.js";
 import { fold as fold_2, cons, singleton as singleton_1, empty as empty_1, ofArrayWithTail, tail, head, isEmpty as isEmpty_1, FSharpList } from "./List.js";
 import { fold as fold_1, fill, setItem } from "./Array.js";
-import { join } from "./String.js";
 import { NotSupportedException_$ctor_Z721C83C5 } from "./System.js";
 import { skip, truncate, iterateIndexed, exists as exists_1, forAll as forAll_1, fold as fold_3, reduce, iterate as iterate_1, map as map_1 } from "./Seq.js";
 import { HashSet__get_Comparer, HashSet_$ctor_Z6150332D, HashSet } from "./MutableSet.js";
@@ -1402,7 +1401,21 @@ export class FSharpSet {
     }
     toString() {
         const this$ = this;
-        return ("set [" + join("; ", this$)) + "]";
+        let result = "set [";
+        let first = true;
+        const enumerator = getEnumerator(this$);
+        try {
+            while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
+                let x = undefined, matchValue = undefined, s = undefined;
+                const x_1 = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
+                result = ((first ? result : (result + "; ")) + ((x = x_1, (matchValue = x, (typeof matchValue === "string") ? ((s = matchValue, ("\"" + s) + "\"")) : toString(x)))));
+                first = false;
+            }
+        }
+        finally {
+            disposeSafe(enumerator);
+        }
+        return result + "]";
     }
     get [Symbol.toStringTag]() {
         return "FSharpSet";

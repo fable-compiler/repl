@@ -66,7 +66,9 @@ export function newGuid() {
 }
 // RFC 9562 UUID v7
 export function createVersion7(timestamp) {
-    const ms = timestamp != null ? timestamp.getTime() : Date.now();
+    // A number/bigint timestamp is Unix milliseconds (used by the Temporal representation,
+    // whose DateTimeOffset is not a JS Date); a Date uses getTime().
+    const ms = timestamp == null ? Date.now() : typeof timestamp === "object" ? timestamp.getTime() : Number(timestamp);
     // 48-bit timestamp as hex
     const msHex = Math.floor(ms).toString(16).padStart(12, "0");
     // random bits

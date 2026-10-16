@@ -93,7 +93,11 @@ export function option_type(generic) {
     return t;
 }
 export function list_type(generic) {
-    return new TypeInfo("Microsoft.FSharp.Collections.FSharpList`1", [generic]);
+    const t = new TypeInfo("Microsoft.FSharp.Collections.FSharpList`1", [generic], undefined, undefined, undefined, () => [
+        new CaseInfo(t, 0, "Empty"),
+        new CaseInfo(t, 1, "Cons", [["Head", generic], ["Tail", t]])
+    ]);
+    return t;
 }
 export function array_type(generic) {
     return new TypeInfo("[]", [generic]);
@@ -377,8 +381,14 @@ export function getUnionCaseFields(uci) {
 }
 // This is used as replacement of `FSharpValue.GetRecordFields`
 // For `FSharpTypes.GetRecordFields` see `getRecordElements`
-// Object.keys returns keys in the order they were added to the object
-export function getRecordFields(v) {
+// TypeInfo is used when available to enumerate fields by name: anonymous record None fields
+// are omitted from the JS object, so Object.keys alone would miss them.
+// Boxed anonymous record would are still not covered but this is the best we can do for now
+// without adding a __fields__ to every anonymous record being created
+export function getRecordFields(v, t) {
+    if (t.fields != null) {
+        return t.fields().map(([key, _]) => v[key]);
+    }
     return Object.keys(v).map((k) => v[k]);
 }
 export function getRecordField(v, field) {

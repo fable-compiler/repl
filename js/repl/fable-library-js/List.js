@@ -1,7 +1,6 @@
-import { join } from "./String.js";
+import { isArrayLike, Exception, defaultOf, toIterator, compare, structuralHash, equals, disposeSafe, getEnumerator } from "./Util.js";
+import { Record, toString } from "./Types.js";
 import { defaultArg, some, value as value_1 } from "./Option.js";
-import { disposeSafe, isArrayLike, Exception, defaultOf, toIterator, getEnumerator, compare, structuralHash, equals } from "./Util.js";
-import { Record } from "./Types.js";
 import { class_type, record_type, option_type } from "./Reflection.js";
 import { SR_inputSequenceTooLong, SR_inputSequenceEmpty, SR_inputMustBeNonNegative, SR_notEnoughElements, SR_differentLengths, SR_keyNotFoundAlt, SR_indexOutOfBounds, SR_inputWasEmpty } from "./Global.js";
 import { KeyNotFoundException_$ctor_Z721C83C5 } from "./System.Collections.Generic.js";
@@ -15,7 +14,21 @@ export class FSharpList extends Record {
     }
     toString() {
         const xs = this;
-        return ("[" + join("; ", xs)) + "]";
+        let result = "[";
+        let first = true;
+        const enumerator = getEnumerator(xs);
+        try {
+            while (enumerator["System.Collections.IEnumerator.MoveNext"]()) {
+                let x = undefined, matchValue = undefined, s = undefined;
+                const x_1 = enumerator["System.Collections.Generic.IEnumerator`1.get_Current"]();
+                result = ((first ? result : (result + "; ")) + ((x = x_1, (matchValue = x, (typeof matchValue === "string") ? ((s = matchValue, ("\"" + s) + "\"")) : toString(x)))));
+                first = false;
+            }
+        }
+        finally {
+            disposeSafe(enumerator);
+        }
+        return result + "]";
     }
     Equals(other) {
         const xs = this;
@@ -240,12 +253,13 @@ export function FSharpList__get_Item_Z524259A4(xs, index) {
             const i = i_mut, xs_1 = xs_1_mut;
             const matchValue = xs_1.tail;
             if (matchValue != null) {
+                const t = value_1(matchValue);
                 if (i === index) {
                     return xs_1.head;
                 }
                 else {
                     i_mut = (i + 1);
-                    xs_1_mut = value_1(matchValue);
+                    xs_1_mut = t;
                     continue loop;
                 }
             }

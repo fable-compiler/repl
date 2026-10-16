@@ -277,7 +277,7 @@ export function Enumerator_unfold(f, state) {
     return Enumerator_FromFunctions$1_$ctor_58C54629(() => {
         if (curr != null) {
             const x = value_1(curr)[0];
-            const st = value_1(curr)[1];
+            value_1(curr)[1];
             return x;
         }
         else {
@@ -286,7 +286,7 @@ export function Enumerator_unfold(f, state) {
     }, () => {
         curr = f(acc);
         if (curr != null) {
-            const x_1 = value_1(curr)[0];
+            value_1(curr)[0];
             const st_1 = value_1(curr)[1];
             acc = st_1;
             return true;
@@ -456,6 +456,93 @@ export function enumerateUsing(resource, source) {
 }
 export function enumerateWhile(guard, xs) {
     return concat(unfold((i) => (guard() ? [xs, i + 1] : undefined), 0));
+}
+export function enumerateTryWith(source, catchFilter, catchHandler) {
+    return mkSeq(() => {
+        let e = undefined;
+        let caught = false;
+        let started = false;
+        let finished = false;
+        let curr = undefined;
+        const tryNext = () => {
+            try {
+                let en_2;
+                if (e == null) {
+                    const en_1 = getEnumerator(source);
+                    e = en_1;
+                    en_2 = en_1;
+                }
+                else {
+                    en_2 = value_1(e);
+                }
+                if (en_2["System.Collections.IEnumerator.MoveNext"]()) {
+                    curr = some(en_2["System.Collections.Generic.IEnumerator`1.get_Current"]());
+                    return true;
+                }
+                else {
+                    finished = true;
+                    return false;
+                }
+            }
+            catch (matchValue) {
+                if (!caught) {
+                    const ex_1 = matchValue;
+                    if (catchFilter(ex_1) !== 0) {
+                        caught = true;
+                        if (e == null) {
+                        }
+                        else {
+                            const en_3 = value_1(e);
+                            try {
+                                disposeSafe(en_3);
+                            }
+                            catch (matchValue_1) {
+                            }
+                            e = undefined;
+                        }
+                        e = getEnumerator(catchHandler(ex_1));
+                        return tryNext();
+                    }
+                    else {
+                        throw matchValue;
+                    }
+                }
+                else {
+                    throw matchValue;
+                }
+            }
+        };
+        return Enumerator_FromFunctions$1_$ctor_58C54629(() => {
+            if (!started) {
+                Enumerator_notStarted();
+            }
+            else if (finished) {
+                Enumerator_alreadyFinished();
+            }
+            if (curr != null) {
+                return value_1(curr);
+            }
+            else {
+                return Enumerator_alreadyFinished();
+            }
+        }, () => {
+            if (!started) {
+                started = true;
+            }
+            if (finished) {
+                return false;
+            }
+            else {
+                return tryNext();
+            }
+        }, () => {
+            if (e == null) {
+            }
+            else {
+                disposeSafe(value_1(e));
+            }
+        });
+    });
 }
 export function filter(f, xs) {
     return choose((x) => {

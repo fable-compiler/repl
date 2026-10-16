@@ -161,22 +161,16 @@ export function clear(col) {
     if (typeof col["System.Collections.Generic.ICollection`1.Clear"] === "function") {
         return col["System.Collections.Generic.ICollection`1.Clear"](); // collection
     }
+    else if (Array.isArray(col)) {
+        col.length = 0;
+    }
+    else if (ArrayBuffer.isView(col)) {
+        // TODO: throw for typed arrays?
+    }
+    else if (typeof col.clear === "function") {
+        col.clear(); // map, set
+    }
     else {
-        if (isArrayLike(col)) {
-            if (ArrayBuffer.isView(col)) {
-                // TODO: throw for typed arrays?
-            }
-            else {
-                col.splice(0); // array, resize array
-            }
-        }
-        else {
-            if (typeof col.clear === "function") {
-                col.clear(); // map, set
-            }
-            else {
-                // TODO: throw for other collections?
-            }
-        }
+        // TODO: throw for other collections?
     }
 }

@@ -4,18 +4,24 @@ export function seqToString(self) {
     let str = "[";
     for (const x of self) {
         if (count === 0) {
-            str += toString(x);
+            str += toStringQuoted(x);
         }
         else if (count === 100) {
             str += "; ...";
             break;
         }
         else {
-            str += "; " + toString(x);
+            str += "; " + toStringQuoted(x);
         }
         count++;
     }
     return str + "]";
+}
+// Structured (%A-style) rendering of a value used as an element/field of a
+// container. F#'s structured formatting (which records, unions, lists, etc.
+// use in their ToString) quotes strings, e.g. `["a"; "b"]` and `{ Name = "John" }`.
+function toStringQuoted(x, callStack = 0) {
+    return typeof x === "string" ? "\"" + x + "\"" : toString(x, callStack);
 }
 export function toString(x, callStack = 0) {
     if (x != null && typeof x === "object") {
@@ -29,19 +35,13 @@ export function toString(x, callStack = 0) {
             const cons = Object.getPrototypeOf(x)?.constructor;
             return cons === Object && callStack < 10
                 // Same format as recordToString
-                ? "{ " + Object.entries(x).map(([k, v]) => k + " = " + toString(v, callStack + 1)).join("\n  ") + " }"
+                ? "{ " + Object.entries(x).map(([k, v]) => k + " = " + toStringQuoted(v, callStack + 1)).join("\n  ") + " }"
                 : cons?.name ?? "";
         }
     }
     return String(x);
 }
 export function unionToString(name, fields) {
-    function unionFieldToString(x) {
-        if (typeof x === "string") {
-            return '"' + x + '"';
-        }
-        return toString(x);
-    }
     if (fields.length === 0) {
         return name;
     }
@@ -49,11 +49,11 @@ export function unionToString(name, fields) {
         let fieldStr;
         let withParens = true;
         if (fields.length === 1) {
-            fieldStr = unionFieldToString(fields[0]);
+            fieldStr = toStringQuoted(fields[0]);
             withParens = fieldStr.indexOf(" ") >= 0;
         }
         else {
-            fieldStr = fields.map((x) => unionFieldToString(x)).join(", ");
+            fieldStr = fields.map((x) => toStringQuoted(x)).join(", ");
         }
         return name + (withParens ? " (" : " ") + fieldStr + (withParens ? ")" : "");
     }
@@ -111,7 +111,7 @@ function recordToJSON(self) {
     return o;
 }
 function recordToString(self) {
-    return "{ " + Object.entries(self).map(([k, v]) => k + " = " + toString(v)).join("\n  ") + " }";
+    return "{ " + Object.entries(self).map(([k, v]) => k + " = " + toStringQuoted(v)).join("\n  ") + " }";
 }
 function recordGetHashCode(self) {
     const hashes = Object.values(self).map((v) => structuralHash(v));

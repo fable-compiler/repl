@@ -272,7 +272,7 @@ export function Dictionary__set_Item_5BDDA1(this$, k, v) {
             setItem(getItemFromDict(this$.hashMap, matchValue[1]), matchValue[2], [k, v]);
         }
         else {
-            const value = void (getItemFromDict(this$.hashMap, matchValue[1]).push([k, v]));
+            void (getItemFromDict(this$.hashMap, matchValue[1]).push([k, v]));
         }
     }
     else {
@@ -286,7 +286,7 @@ export function Dictionary__Add_5BDDA1(this$, k, v) {
             throw ArgumentException_$ctor_Z721C83C5(format("An item with the same key has already been added. Key: {0}", k));
         }
         else {
-            const value = void (getItemFromDict(this$.hashMap, matchValue[1]).push([k, v]));
+            void (getItemFromDict(this$.hashMap, matchValue[1]).push([k, v]));
         }
     }
     else {
@@ -330,7 +330,11 @@ export function Dictionary__Remove_2B595(this$, k) {
     }
     switch (matchResult) {
         case 0: {
-            getItemFromDict(this$.hashMap, matchValue[1]).splice(matchValue[2], 1);
+            const h_1 = matchValue[1] | 0;
+            getItemFromDict(this$.hashMap, h_1).splice(matchValue[2], 1);
+            if (getItemFromDict(this$.hashMap, h_1).length === 0) {
+                this$.hashMap.delete(h_1);
+            }
             return true;
         }
         default:

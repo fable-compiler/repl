@@ -6,8 +6,9 @@ export const DateTimeKind = {
 };
 // Exception is intentionally not derived from Error, for performance reasons (see #2160)
 export class Exception {
-    constructor(msg) {
+    constructor(msg, innerException) {
         this.message = msg ?? "";
+        this.innerException = innerException;
     }
     toString() {
         return this.message;
@@ -403,7 +404,18 @@ export function compareDates(x, y) {
     return xtime === ytime ? 0 : (xtime < ytime ? -1 : 1);
 }
 export function comparePrimitives(x, y) {
-    return x === y ? 0 : (x < y ? -1 : 1);
+    if (x === y) {
+        return 0;
+    }
+    if (x < y) {
+        return -1;
+    }
+    if (x > y) {
+        return 1;
+    }
+    // Neither equal nor ordered: at least one operand is NaN.
+    // Match .NET Double.CompareTo: NaN equals NaN and is less than any other value.
+    return Number.isNaN(x) ? (Number.isNaN(y) ? 0 : -1) : 1;
 }
 export function compareArraysWith(x, y, comp) {
     if (x == null) {
@@ -465,7 +477,7 @@ export function compare(x, y) {
         return isArrayLike(y) ? compareArrays(x, y) : -1;
     }
     else if (typeof x !== "object") {
-        return x < y ? -1 : 1;
+        return comparePrimitives(x, y);
     }
     else if (x instanceof Date) {
         return y instanceof Date ? compareDates(x, y) : -1;
@@ -547,11 +559,23 @@ export function count(col) {
     }
 }
 export function clear(col) {
-    if (isArrayLike(col)) {
-        col.splice(0);
+    if (Array.isArray(col)) {
+        col.length = 0;
+    }
+    else if (ArrayBuffer.isView(col)) {
+        // TODO: throw for typed arrays?
+    }
+    else if (typeof col.clear === "function") {
+        col.clear(); // map, set
+    }
+    else if (typeof col["System.Collections.Generic.ICollection`1.Clear"] === "function") {
+        col["System.Collections.Generic.ICollection`1.Clear"](); // collection
+    }
+    else if (typeof col["System.Collections.IList.Clear"] === "function") {
+        col["System.Collections.IList.Clear"](); // collection
     }
     else {
-        col.clear();
+        // TODO: throw for other collections?
     }
 }
 const curried = new WeakMap();
