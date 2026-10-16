@@ -641,7 +641,7 @@ let init () =
     let saved = loadState(Literals.STORAGE_KEY)
     let sidebarModel, sidebarCmd = Sidebar.init ()
     let worker = ObservableWorker(Worker(), WorkerAnswer.Decoder, "MAIN APP")
-    CreateChecker(Literals.METADATA_DIR, Literals.EXTRA_REFS, Some ".txt", sidebarModel.Options.ToOtherFSharpOptions)
+    CreateChecker(Literals.METADATA_DIR, Literals.EXTRA_REFS, Some ".txt", sidebarModel.Options.ToOtherFSharpOptions, None)
     |> worker.Post
     let cmd = Cmd.batch [
                 Cmd.ups MouseUp
